@@ -1,0 +1,18 @@
+destination: pkgdown
+url: https://github.com/jeksterslab/simStateSpace/
+
+template:
+  bootstrap: 5
+  bslib:
+    base_font: {google: "Roboto"}
+    heading_font: {google: "Roboto Slab"}
+    code_font: {google: "JetBrains Mono"}
+
+articles:
+- title: Examples
+  contents:
+  - var
+  - ou
+- title: Session Information
+  contents:
+  - session/session

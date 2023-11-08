@@ -1,0 +1,36 @@
+name: Make Project (make all)
+
+on:
+  workflow_run:
+    workflows: [ "Make Project" ]
+    types:
+      - completed
+  workflow_dispatch:
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: ijapesigan/docs
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+    permissions:
+      contents: write
+      packages: read
+      statuses: write
+
+    steps:
+      -
+        name: Checkout 
+        uses: actions/checkout@v4
+      -
+        name: Clean
+        run: |
+          make clean
+          make cleanpkg
+      -
+        name: Make Project
+        run: |
+          make install
+          make all

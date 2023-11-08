@@ -1,0 +1,64 @@
+---
+title: "simStateSpace: Simulate Data from Autoregressive Models"
+author: "Ivan Jacob Agaloos Pesigan"
+output: rmarkdown::html_vignette
+bibliography: "vignettes.bib"
+csl: https://raw.githubusercontent.com/citation-style-language/styles/master/apa.csl
+nocite: |
+  @RCoreTeam-2023
+  @Shumway-Stoffer-2017
+  @Chow-Losardo-Park-etal-2023
+  @Uhlenbeck-Ornstein-1930
+  @Chow-Ho-Hamaker-etal-2010
+vignette: >
+  %\VignetteIndexEntry{simStateSpace: Simulate Data from Autoregressive Models}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r}
+#| include = FALSE
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/vignettes-"
+)
+```
+
+<!-- badges: start -->
+[![R-CMD-check](https://github.com/jeksterslab/simStateSpace/workflows/R-CMD-check/badge.svg)](https://github.com/jeksterslab/simStateSpace/actions)
+[![test-coverage](https://github.com/jeksterslab/simStateSpace/actions/workflows/test-coverage.yml/badge.svg)](https://github.com/jeksterslab/simStateSpace/actions/workflows/test-coverage.yml)
+[![lint](https://github.com/jeksterslab/simStateSpace/actions/workflows/lint.yml/badge.svg)](https://github.com/jeksterslab/simStateSpace/actions/workflows/lint.yml)
+[![pkgdown](https://github.com/jeksterslab/simStateSpace/actions/workflows/pkgdown-gh-pages.yml/badge.svg)](https://github.com/jeksterslab/simStateSpace/actions/workflows/pkgdown-gh-pages.yml)
+[![codecov](https://codecov.io/gh/jeksterslab/simStateSpace/branch/main/graph/badge.svg)](https://codecov.io/gh/jeksterslab/simStateSpace)
+<!-- badges: end -->
+
+## Description
+
+Offers an efficient and user-friendly framework for simulating data in state space models
+where $n$ subjects/units is greater than one
+which is common in social and behavioral sciences.
+
+## Installation
+
+You can install the released version of
+`simStateSpace`
+from
+[GitHub](https://github.com/jeksterslab/simStateSpace) with:
+
+```r
+if (!require("remotes")) install.packages("remotes")
+remotes::install_github("jeksterslab/simStateSpace")
+```
+
+## More Information
+
+See
+[GitHub Pages](https://jeksterslab.github.io/simStateSpace)
+for package documentation.
+
+See
+[Quarto Pub](https://jeksterslab.quarto.pub/simStateSpace)
+for package wiki and other resources.
+
+## References

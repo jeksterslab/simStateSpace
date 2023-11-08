@@ -1,0 +1,26 @@
+---
+title: "Library Tags"
+author: "Ivan Jacob Agaloos Pesigan"
+---
+
+```{r}
+#| echo = FALSE
+root <- rprojroot::is_rstudio_project
+bib <- root$find_file(
+  ".setup",
+  "quarto",
+  "bib",
+  "quarto.bib"
+)
+X <- RefManageR::ReadBib(bib)
+key <- names(X)
+annotation <- lapply(X = X, function(x) x$annotation)
+keywords <- lapply(X = X, function(x) x$keywords)
+x <- cbind(
+  key = key,
+  annotation = annotation,
+  keywords = keywords
+)
+# DT::datatable(x)
+knitr::kable(x)
+```

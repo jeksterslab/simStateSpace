@@ -1,0 +1,51 @@
+name: Source Code
+
+on:
+  workflow_run:
+    workflows: [ "Make Project" ]
+    types:
+      - completed
+  workflow_dispatch:
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: ijapesigan/docs
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+    permissions:
+      contents: write
+
+    steps:
+      -
+        name: Checkout 
+        uses: actions/checkout@v4
+      -
+        name: Clean
+        run: |
+          make clean
+      -
+        name: Make Project
+        run: |
+          make push
+      -
+        name: Copy files
+        run: |
+          WD="$PWD"
+          mkdir -p r_source_code
+          tar -xf .setup/build/*.tar.gz -C r_source_code
+          DIR=$(ls r_source_code)
+          cd "r_source_code/$DIR"
+          mv ./* "$WD/r_source_code"
+          cd ..
+          rm -rf "$DIR"
+      - 
+        name: Push to the src branch
+        uses: s0/git-publish-subdir-action@develop
+        env:
+          REPO: self
+          BRANCH: src
+          FOLDER: r_source_code
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

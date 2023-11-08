@@ -1,0 +1,23 @@
+{
+    "name": "${localWorkspaceFolderBasename}",
+    "build": {
+        "dockerfile": "Dockerfile"
+    },
+
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "GitHub.codespaces",
+                "GitHub.copilot",
+                "GitHub.vscode-github-actions",
+                "ms-azuretools.vscode-docker",
+                "ms-vscode.makefile-tools",
+                "yzhang.markdown-all-in-one",
+                "quarto.quarto",
+                "REditorSupport.r",
+                "dracula-theme.theme-dracula"
+            ]
+        }
+    }
+
+}

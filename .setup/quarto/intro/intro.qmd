@@ -1,0 +1,14 @@
+---
+title: "Introduction"
+author: Ivan Jacob Agaloos Pesigan
+---
+
+```{r}
+#| include: false
+library(simStateSpace)
+library(printr)
+```
+
+```{r}
+?SimSSM0
+```

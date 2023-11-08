@@ -1,0 +1,48 @@
+name: Compile LaTeX
+
+on:
+  workflow_run:
+    workflows: [ "Make Project" ]
+    types:
+      - completed
+  workflow_dispatch:
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: ijapesigan/docs
+    # Only restrict concurrency for non-PR jobs
+    concurrency:
+      group: latex-${{ github.event_name != 'pull_request' || github.run_id }}
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+    permissions:
+      contents: write
+
+    steps:
+      -
+        name: Checkout 
+        uses: actions/checkout@v4
+      -
+        name: Make Project
+        run: make build
+      -
+        name: Make LaTeX
+        run: |
+          make bibrproject
+          make pdf
+      - 
+        name: Push to the latex branch
+        uses: s0/git-publish-subdir-action@develop
+        env:
+          REPO: self
+          BRANCH: latex
+          FOLDER: .setup/latex/pdf
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      -
+        name: Make clean
+        run: |
+          make bibrproject
+          make pdf

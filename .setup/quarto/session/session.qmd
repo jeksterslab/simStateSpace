@@ -1,0 +1,28 @@
+---
+title: "Website Build Session"
+author: "Ivan Jacob Agaloos Pesigan"
+---
+
+## Session
+
+```{r}
+sessionInfo()
+```
+
+```{r}
+#| echo: false
+build <- list.files(
+  path = "/srv/build",
+  full.names = TRUE
+)
+for (i in seq_along(build)) {
+  cat(
+    paste0(
+      build[i],
+      ": ",
+      readLines(build[i]),
+      "\n"
+    )
+  )
+}
+```
