@@ -11,21 +11,19 @@ Description: Offers an efficient and user-friendly framework
     for simulating data in state space models
     where n subjects/units is greater than one
     which is common in social and behavioral sciences.
-URL: https://github.com/jeksterslab/simStateSpace, https://jeksterslab.github.io/simStateSpace/
+URL: https://github.com/jeksterslab/simStateSpace,
+        https://jeksterslab.github.io/simStateSpace/
 BugReports: https://github.com/jeksterslab/simStateSpace/issues
 License: GPL (>= 3)
 Encoding: UTF-8
-LazyData: true
 Roxygen: list(markdown = TRUE)
-Depends:
-    R (>= 3.0.0)
-LinkingTo: 
-    Rcpp,
-    RcppArmadillo
-Imports: 
-    Rcpp
-Suggests:
-    knitr,
-    rmarkdown,
-    testthat,
-    Matrix
+Depends: R (>= 3.0.0)
+LinkingTo: Rcpp, RcppArmadillo
+Imports: Rcpp
+Suggests: knitr, rmarkdown, testthat, Matrix
+RoxygenNote: 7.2.3
+NeedsCompilation: yes
+Packaged: 2023-11-09 15:36:27 UTC; root
+Author: Ivan Jacob Agaloos Pesigan [aut, cre, cph]
+    (<https://orcid.org/0000-0003-4818-8420>)
+Maintainer: Ivan Jacob Agaloos Pesigan <r.jeksterslab@gmail.com>

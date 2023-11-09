@@ -19,7 +19,7 @@
 #'   `lambda`, and
 #'   `theta_sqrt`)
 #'   is less the `n`,
-#'   the function will cycled through the available values.
+#'   the function will cycle through the available values.
 #'
 #' @author Ivan Jacob Agaloos Pesigan
 #'
