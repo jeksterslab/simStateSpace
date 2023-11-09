@@ -8,6 +8,20 @@
 #' In this model,
 #' the parameters can vary across individuals.
 #'
+#' @details Parameters can vary across individuals
+#'   by providing a list of parameter values.
+#'   If the length of any of the parameters
+#'   (`mu0`,
+#'   `sigma0_sqrt`,
+#'   `mu`,
+#'   `phi`,
+#'   `sigma_sqrt`,
+#'   `nu`,
+#'   `lambda`,
+#'   `theta_sqrt`)
+#'   is less the `n`,
+#'   the function will cycle through the available values.
+#'
 #' @author Ivan Jacob Agaloos Pesigan
 #'
 #' @param mu List of numeric vectors.

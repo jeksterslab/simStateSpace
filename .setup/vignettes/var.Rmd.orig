@@ -75,7 +75,7 @@ $\boldsymbol{\zeta}_{i, t}$.
 ```{r}
 #| echo = FALSE
 set.seed(42)
-time <- 10000
+time <- 1000
 n <- 20
 k <- p <- 3
 I <- diag(k)

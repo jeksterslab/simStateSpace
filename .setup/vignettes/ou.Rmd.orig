@@ -94,7 +94,7 @@ which represents random fluctuations.
 ```{r}
 #| echo = FALSE
 set.seed(42)
-time <- 10000
+time <- 1000
 n <- 20
 delta_t <- 0.10
 k <- p <- 3
