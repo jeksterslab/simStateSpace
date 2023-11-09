@@ -392,6 +392,37 @@ model <- dynr::dynr.model(
 )
 ```
 
+Add lower and upper bound to aid in the optimization.
+
+```{r}
+model$lb[
+  c(
+    "phi_11",
+    "phi_12",
+    "phi_13",
+    "phi_21",
+    "phi_22",
+    "phi_23",
+    "phi_31",
+    "phi_32",
+    "phi_33"
+  )
+] <- -1.5
+model$ub[
+  c(
+    "phi_11",
+    "phi_12",
+    "phi_13",
+    "phi_21",
+    "phi_22",
+    "phi_23",
+    "phi_31",
+    "phi_32",
+    "phi_33"
+  )
+] <- +1.5
+```
+
 ```{r}
 #| eval = FALSE,
 #| echo = FALSE
