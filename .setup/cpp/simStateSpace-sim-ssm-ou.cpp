@@ -93,6 +93,10 @@
 //' @inheritParams SimSSM0
 //'
 //' @references
+//'   Chow, S.-M., Losardo, D., Park, J., & Molenaar, P. C. M. (2023).
+//'   Continuous-time dynamic models: Connections to structural equation models and other discrete-time models.
+//'   In R. H. Hoyle (Ed.), Handbook of structural equation modeling (2nd ed.). The Guilford Press.
+//'
 //'   Uhlenbeck, G. E., & Ornstein, L. S. (1930).
 //'   On the theory of the brownian motion.
 //'   *Physical Review*, *36*(5), 823–841.

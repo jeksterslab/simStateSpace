@@ -79,6 +79,8 @@ Provides a streamlined and user-friendly framework
 for simulating data in state space models,
 particularly when the number of subjects/units ($n$) exceeds one,
 a scenario commonly encountered in social and behavioral sciences.
+For an introduction to state space models in social and behavioral sciences,
+refer to \Textcite{Chow-Ho-Hamaker-etal-2010}.
 
 \section*{Installation}
 
