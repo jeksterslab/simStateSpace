@@ -100,8 +100,17 @@ Time interval (\(\delta_t\)).</p></dd>
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>Returns a list of state space parameters.</p>
-    </div>
+<p>Returns a list of state space parameters:</p><ul><li><p>alpha: Numeric vector.
+Vector of intercepts for the dynamic model
+(\(\boldsymbol{\alpha}\)).</p></li>
+<li><p>beta: Numeric matrix.
+Transition matrix relating the values of the latent variables
+at time <code>t - 1</code> to those at time <code>t</code>
+(\(\boldsymbol{\beta}\)).</p></li>
+<li><p>psi: Numeric matrix.
+The process noise covariance matrix
+(\(\boldsymbol{\Psi}\)).</p></li>
+</ul></div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>The state space parameters
