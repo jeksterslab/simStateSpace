@@ -25,6 +25,9 @@ or randomness in the process
 \item{delta_t}{Numeric.
 Time interval (\eqn{\delta_t}).}
 }
+\value{
+Returns a list of state space parameters.
+}
 \description{
 This function converts parameters from the Ornstein–Uhlenbeck model
 to state space model parameterization.

@@ -75,6 +75,8 @@
 #'
 #' @inheritParams SimSSMOU
 #'
+#' @return Returns a list of state space parameters.
+#'
 #' @examples
 #' p <- k <- 2
 #' mu <- c(5.76, 5.18)

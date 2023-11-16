@@ -6,7 +6,7 @@
 \alias{_PACKAGE}
 \title{simStateSpace: Simulate Data from State Space Models}
 \description{
-Offers an efficient and user-friendly framework for simulating data in state space models where n subjects/units is greater than one which is common in social and behavioral sciences.
+Provides a streamlined and user-friendly framework for simulating data in state space models, particularly when the number of subjects/units (n) exceeds one, a scenario commonly encountered in social and behavioral sciences. For an introduction to state space models in social and behavioral sciences, refer to Chow, Ho, Hamaker, and Dolan (2010) \doi{10.1080/10705511003661553}.
 }
 \seealso{
 Useful links:

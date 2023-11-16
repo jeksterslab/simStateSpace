@@ -20,6 +20,9 @@ Output of
 If \code{eta = TRUE}, include \code{eta}.
 If \code{eta = FALSE}, exclude \code{eta}.}
 }
+\value{
+Returns a matrix of simulated data.
+}
 \description{
 This function converts the output of
 \code{\link[=SimSSM0]{SimSSM0()}},

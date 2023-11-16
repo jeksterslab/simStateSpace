@@ -23,6 +23,8 @@
 #'   If `eta = TRUE`, include `eta`.
 #'   If `eta = FALSE`, exclude `eta`.
 #'
+#' @return Returns a matrix of simulated data.
+#'
 #' @examples
 #' # prepare parameters
 #' set.seed(42)
