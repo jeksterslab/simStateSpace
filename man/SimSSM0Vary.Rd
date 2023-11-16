@@ -141,6 +141,19 @@ str(ssm)
 
 }
 \references{
+Chow, S.-M., Ho, M. R., Hamaker, E. L., & Dolan, C. V. (2010).
+Equivalence and differences between structural equation modeling
+and state-space modeling techniques.
+\emph{Structural Equation Modeling: A Multidisciplinary Journal},
+17(2), 303–332.
+\doi{10.1080/10705511003661553}
+
+Chow, S.-M., Losardo, D., Park, J., & Molenaar, P. C. M. (2023).
+Continuous-time dynamic models: Connections to structural equation models
+and other discrete-time models.
+In R. H. Hoyle (Ed.), Handbook of structural equation modeling (2nd ed.).
+The Guilford Press.
+
 Shumway, R. H., & Stoffer, D. S. (2017).
 \emph{Time series analysis and its applications: With R examples}.
 Springer International Publishing.
@@ -165,3 +178,4 @@ Ivan Jacob Agaloos Pesigan
 \concept{Simulation of State Space Models Data Functions}
 \keyword{sim}
 \keyword{simStateSpace}
+\keyword{ssm}

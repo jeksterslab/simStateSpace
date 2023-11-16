@@ -87,7 +87,7 @@
 #' str(ssm)
 #'
 #' @family Simulation of State Space Models Data Functions
-#' @keywords simStateSpace sim
+#' @keywords simStateSpace sim ou
 #' @export
 SimSSMOUVary <- function(n,
                          mu0,

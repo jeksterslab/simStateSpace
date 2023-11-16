@@ -104,7 +104,7 @@
 #' )
 #'
 #' @family Simulation of State Space Models Data Functions
-#' @keywords simStateSpace sim
+#' @keywords simStateSpace sim ou
 #' @export
 OU2SSM <- function(mu, phi, sigma_sqrt, delta_t) {
     .Call(`_simStateSpace_OU2SSM`, mu, phi, sigma_sqrt, delta_t)
@@ -247,7 +247,7 @@ OU2SSM <- function(mu, phi, sigma_sqrt, delta_t) {
 #' str(ssm)
 #'
 #' @family Simulation of State Space Models Data Functions
-#' @keywords simStateSpace sim
+#' @keywords simStateSpace sim ssm
 #' @export
 SimSSM0Fixed <- function(n, mu0, sigma0_sqrt, alpha, beta, psi_sqrt, nu, lambda, theta_sqrt, time, burn_in) {
     .Call(`_simStateSpace_SimSSM0Fixed`, n, mu0, sigma0_sqrt, alpha, beta, psi_sqrt, nu, lambda, theta_sqrt, time, burn_in)
@@ -368,6 +368,19 @@ SimSSM0Fixed <- function(n, mu0, sigma0_sqrt, alpha, beta, psi_sqrt, nu, lambda,
 #'   Number of burn-in points to exclude before returning the results.
 #'
 #' @references
+#'   Chow, S.-M., Ho, M. R., Hamaker, E. L., & Dolan, C. V. (2010).
+#'   Equivalence and differences between structural equation modeling
+#'   and state-space modeling techniques.
+#'   *Structural Equation Modeling: A Multidisciplinary Journal*,
+#'   17(2), 303–332.
+#'   \doi{10.1080/10705511003661553}
+#'
+#'   Chow, S.-M., Losardo, D., Park, J., & Molenaar, P. C. M. (2023).
+#'   Continuous-time dynamic models: Connections to structural equation models
+#'   and other discrete-time models.
+#'   In R. H. Hoyle (Ed.), Handbook of structural equation modeling (2nd ed.).
+#'   The Guilford Press.
+#'
 #'   Shumway, R. H., & Stoffer, D. S. (2017).
 #'   *Time series analysis and its applications: With R examples*.
 #'   Springer International Publishing.
@@ -414,7 +427,7 @@ SimSSM0Fixed <- function(n, mu0, sigma0_sqrt, alpha, beta, psi_sqrt, nu, lambda,
 #' str(ssm)
 #'
 #' @family Simulation of State Space Models Data Functions
-#' @keywords simStateSpace sim
+#' @keywords simStateSpace sim ssm
 #' @export
 SimSSM0 <- function(mu0, sigma0_sqrt, alpha, beta, psi_sqrt, nu, lambda, theta_sqrt, time, burn_in) {
     .Call(`_simStateSpace_SimSSM0`, mu0, sigma0_sqrt, alpha, beta, psi_sqrt, nu, lambda, theta_sqrt, time, burn_in)
@@ -548,7 +561,7 @@ SimSSM0 <- function(mu0, sigma0_sqrt, alpha, beta, psi_sqrt, nu, lambda, theta_s
 #' str(ssm)
 #'
 #' @family Simulation of State Space Models Data Functions
-#' @keywords simStateSpace sim
+#' @keywords simStateSpace sim ou
 #' @export
 SimSSMOUFixed <- function(n, mu0, sigma0_sqrt, mu, phi, sigma_sqrt, nu, lambda, theta_sqrt, delta_t, time, burn_in) {
     .Call(`_simStateSpace_SimSSMOUFixed`, n, mu0, sigma0_sqrt, mu, phi, sigma_sqrt, nu, lambda, theta_sqrt, delta_t, time, burn_in)
@@ -641,6 +654,12 @@ SimSSMOUFixed <- function(n, mu0, sigma0_sqrt, mu, phi, sigma_sqrt, nu, lambda, 
 #' @inheritParams SimSSM0
 #'
 #' @references
+#'   Chow, S.-M., Losardo, D., Park, J., & Molenaar, P. C. M. (2023).
+#'   Continuous-time dynamic models: Connections to structural equation models
+#'   and other discrete-time models.
+#'   In R. H. Hoyle (Ed.), Handbook of structural equation modeling (2nd ed.).
+#'   The Guilford Press.
+#'
 #'   Uhlenbeck, G. E., & Ornstein, L. S. (1930).
 #'   On the theory of the brownian motion.
 #'   *Physical Review*, *36*(5), 823–841.
@@ -691,7 +710,7 @@ SimSSMOUFixed <- function(n, mu0, sigma0_sqrt, mu, phi, sigma_sqrt, nu, lambda, 
 #' str(ssm)
 #'
 #' @family Simulation of State Space Models Data Functions
-#' @keywords simStateSpace sim
+#' @keywords simStateSpace sim ou
 #' @export
 SimSSMOU <- function(mu0, sigma0_sqrt, mu, phi, sigma_sqrt, nu, lambda, theta_sqrt, delta_t, time, burn_in) {
     .Call(`_simStateSpace_SimSSMOU`, mu0, sigma0_sqrt, mu, phi, sigma_sqrt, nu, lambda, theta_sqrt, delta_t, time, burn_in)
@@ -743,7 +762,7 @@ SimSSMOU <- function(mu0, sigma0_sqrt, mu, phi, sigma_sqrt, nu, lambda, theta_sq
 #' str(ssm)
 #'
 #' @family Simulation of State Space Models Data Functions
-#' @keywords simStateSpace sim
+#' @keywords simStateSpace sim var
 #' @export
 SimSSMVARFixed <- function(n, mu0, sigma0_sqrt, alpha, beta, psi_sqrt, time, burn_in) {
     .Call(`_simStateSpace_SimSSMVARFixed`, n, mu0, sigma0_sqrt, alpha, beta, psi_sqrt, time, burn_in)
@@ -833,7 +852,7 @@ SimSSMVARFixed <- function(n, mu0, sigma0_sqrt, alpha, beta, psi_sqrt, time, bur
 #' str(ssm)
 #'
 #' @family Simulation of State Space Models Data Functions
-#' @keywords simStateSpace sim
+#' @keywords simStateSpace sim var
 #' @export
 SimSSMVAR <- function(mu0, sigma0_sqrt, alpha, beta, psi_sqrt, time, burn_in) {
     .Call(`_simStateSpace_SimSSMVAR`, mu0, sigma0_sqrt, alpha, beta, psi_sqrt, time, burn_in)

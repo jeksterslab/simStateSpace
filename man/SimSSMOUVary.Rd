@@ -152,6 +152,12 @@ str(ssm)
 
 }
 \references{
+Chow, S.-M., Losardo, D., Park, J., & Molenaar, P. C. M. (2023).
+Continuous-time dynamic models: Connections to structural equation models
+and other discrete-time models.
+In R. H. Hoyle (Ed.), Handbook of structural equation modeling (2nd ed.).
+The Guilford Press.
+
 Uhlenbeck, G. E., & Ornstein, L. S. (1930).
 On the theory of the brownian motion.
 \emph{Physical Review}, \emph{36}(5), 823–841.
@@ -174,5 +180,6 @@ Other Simulation of State Space Models Data Functions:
 Ivan Jacob Agaloos Pesigan
 }
 \concept{Simulation of State Space Models Data Functions}
+\keyword{ou}
 \keyword{sim}
 \keyword{simStateSpace}

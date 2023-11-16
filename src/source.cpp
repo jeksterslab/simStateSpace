@@ -155,7 +155,7 @@ Rcpp::List SimSSMOUFixed(const int n, const arma::vec& mu0,
 //' )
 //'
 //' @family Simulation of State Space Models Data Functions
-//' @keywords simStateSpace sim
+//' @keywords simStateSpace sim ou
 //' @export
 // [[Rcpp::export]]
 Rcpp::List OU2SSM(const arma::vec& mu, const arma::mat& phi,
@@ -329,7 +329,7 @@ Rcpp::List OU2SSM(const arma::vec& mu, const arma::mat& phi,
 //' str(ssm)
 //'
 //' @family Simulation of State Space Models Data Functions
-//' @keywords simStateSpace sim
+//' @keywords simStateSpace sim ssm
 //' @export
 // [[Rcpp::export]]
 Rcpp::List SimSSM0Fixed(const int n, const arma::vec& mu0,
@@ -507,6 +507,19 @@ Rcpp::List SimSSM0Fixed(const int n, const arma::vec& mu0,
 //'   Number of burn-in points to exclude before returning the results.
 //'
 //' @references
+//'   Chow, S.-M., Ho, M. R., Hamaker, E. L., & Dolan, C. V. (2010).
+//'   Equivalence and differences between structural equation modeling
+//'   and state-space modeling techniques.
+//'   *Structural Equation Modeling: A Multidisciplinary Journal*,
+//'   17(2), 303–332.
+//'   \doi{10.1080/10705511003661553}
+//'
+//'   Chow, S.-M., Losardo, D., Park, J., & Molenaar, P. C. M. (2023).
+//'   Continuous-time dynamic models: Connections to structural equation models
+//'   and other discrete-time models.
+//'   In R. H. Hoyle (Ed.), Handbook of structural equation modeling (2nd ed.).
+//'   The Guilford Press.
+//'
 //'   Shumway, R. H., & Stoffer, D. S. (2017).
 //'   *Time series analysis and its applications: With R examples*.
 //'   Springer International Publishing.
@@ -553,7 +566,7 @@ Rcpp::List SimSSM0Fixed(const int n, const arma::vec& mu0,
 //' str(ssm)
 //'
 //' @family Simulation of State Space Models Data Functions
-//' @keywords simStateSpace sim
+//' @keywords simStateSpace sim ssm
 //' @export
 // [[Rcpp::export]]
 Rcpp::List SimSSM0(const arma::vec& mu0, const arma::mat& sigma0_sqrt,
@@ -730,7 +743,7 @@ Rcpp::List SimSSM0(const arma::vec& mu0, const arma::mat& sigma0_sqrt,
 //' str(ssm)
 //'
 //' @family Simulation of State Space Models Data Functions
-//' @keywords simStateSpace sim
+//' @keywords simStateSpace sim ou
 //' @export
 // [[Rcpp::export]]
 Rcpp::List SimSSMOUFixed(const int n, const arma::vec& mu0,
@@ -901,6 +914,12 @@ Rcpp::List SimSSMOUFixed(const int n, const arma::vec& mu0,
 //' @inheritParams SimSSM0
 //'
 //' @references
+//'   Chow, S.-M., Losardo, D., Park, J., & Molenaar, P. C. M. (2023).
+//'   Continuous-time dynamic models: Connections to structural equation models
+//'   and other discrete-time models.
+//'   In R. H. Hoyle (Ed.), Handbook of structural equation modeling (2nd ed.).
+//'   The Guilford Press.
+//'
 //'   Uhlenbeck, G. E., & Ornstein, L. S. (1930).
 //'   On the theory of the brownian motion.
 //'   *Physical Review*, *36*(5), 823–841.
@@ -951,7 +970,7 @@ Rcpp::List SimSSMOUFixed(const int n, const arma::vec& mu0,
 //' str(ssm)
 //'
 //' @family Simulation of State Space Models Data Functions
-//' @keywords simStateSpace sim
+//' @keywords simStateSpace sim ou
 //' @export
 // [[Rcpp::export]]
 Rcpp::List SimSSMOU(const arma::vec& mu0, const arma::mat& sigma0_sqrt,
@@ -1063,7 +1082,7 @@ Rcpp::List SimSSMOU(const arma::vec& mu0, const arma::mat& sigma0_sqrt,
 //' str(ssm)
 //'
 //' @family Simulation of State Space Models Data Functions
-//' @keywords simStateSpace sim
+//' @keywords simStateSpace sim var
 //' @export
 // [[Rcpp::export]]
 Rcpp::List SimSSMVARFixed(const int n, const arma::vec& mu0,
@@ -1201,7 +1220,7 @@ Rcpp::List SimSSMVARFixed(const int n, const arma::vec& mu0,
 //' str(ssm)
 //'
 //' @family Simulation of State Space Models Data Functions
-//' @keywords simStateSpace sim
+//' @keywords simStateSpace sim var
 //' @export
 // [[Rcpp::export]]
 Rcpp::List SimSSMVAR(const arma::vec& mu0, const arma::mat& sigma0_sqrt,

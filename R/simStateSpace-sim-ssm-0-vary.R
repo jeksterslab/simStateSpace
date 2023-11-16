@@ -97,7 +97,7 @@
 #' str(ssm)
 #'
 #' @family Simulation of State Space Models Data Functions
-#' @keywords simStateSpace sim
+#' @keywords simStateSpace sim ssm
 #' @export
 SimSSM0Vary <- function(n,
                         mu0,

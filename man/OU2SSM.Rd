@@ -143,5 +143,6 @@ Other Simulation of State Space Models Data Functions:
 Ivan Jacob Agaloos Pesigan
 }
 \concept{Simulation of State Space Models Data Functions}
+\keyword{ou}
 \keyword{sim}
 \keyword{simStateSpace}
