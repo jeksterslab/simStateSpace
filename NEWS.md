@@ -1,6 +1,6 @@
 # simStateSpace 1.0.0
 
-* Initial release
+* Initial release.
 
 # simStateSpace 1.0.1
 

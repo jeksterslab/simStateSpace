@@ -126,7 +126,17 @@ Rcpp::List SimSSMOUFixed(const int n, const arma::vec& mu0,
 //'
 //' @inheritParams SimSSMOU
 //'
-//' @return Returns a list of state space parameters.
+//' @return Returns a list of state space parameters:
+//'   - alpha: Numeric vector.
+//'     Vector of intercepts for the dynamic model
+//'     (\eqn{\boldsymbol{\alpha}}).
+//'   - beta: Numeric matrix.
+//'     Transition matrix relating the values of the latent variables
+//'     at time `t - 1` to those at time `t`
+//'     (\eqn{\boldsymbol{\beta}}).
+//'   - psi: Numeric matrix.
+//'     The process noise covariance matrix
+//'     (\eqn{\boldsymbol{\Psi}}).
 //'
 //' @examples
 //' p <- k <- 2

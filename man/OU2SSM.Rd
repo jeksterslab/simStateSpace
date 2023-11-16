@@ -26,7 +26,19 @@ or randomness in the process
 Time interval (\eqn{\delta_t}).}
 }
 \value{
-Returns a list of state space parameters.
+Returns a list of state space parameters:
+\itemize{
+\item alpha: Numeric vector.
+Vector of intercepts for the dynamic model
+(\eqn{\boldsymbol{\alpha}}).
+\item beta: Numeric matrix.
+Transition matrix relating the values of the latent variables
+at time \code{t - 1} to those at time \code{t}
+(\eqn{\boldsymbol{\beta}}).
+\item psi: Numeric matrix.
+The process noise covariance matrix
+(\eqn{\boldsymbol{\Psi}}).
+}
 }
 \description{
 This function converts parameters from the Ornstein–Uhlenbeck model
