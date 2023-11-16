@@ -90,7 +90,7 @@
 //' str(ssm)
 //'
 //' @family Simulation of State Space Models Data Functions
-//' @keywords simStateSpace sim
+//' @keywords simStateSpace sim var
 //' @export
 // [[Rcpp::export]]
 Rcpp::List SimSSMVAR(const arma::vec& mu0, const arma::mat& sigma0_sqrt,

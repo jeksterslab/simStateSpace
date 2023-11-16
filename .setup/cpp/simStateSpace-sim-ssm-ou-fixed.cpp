@@ -134,7 +134,7 @@
 //' str(ssm)
 //'
 //' @family Simulation of State Space Models Data Functions
-//' @keywords simStateSpace sim
+//' @keywords simStateSpace sim ou
 //' @export
 // [[Rcpp::export]]
 Rcpp::List SimSSMOUFixed(const int n, const arma::vec& mu0,

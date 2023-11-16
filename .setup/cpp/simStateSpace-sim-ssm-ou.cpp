@@ -94,8 +94,10 @@
 //'
 //' @references
 //'   Chow, S.-M., Losardo, D., Park, J., & Molenaar, P. C. M. (2023).
-//'   Continuous-time dynamic models: Connections to structural equation models and other discrete-time models.
-//'   In R. H. Hoyle (Ed.), Handbook of structural equation modeling (2nd ed.). The Guilford Press.
+//'   Continuous-time dynamic models: Connections to structural equation models
+//'   and other discrete-time models.
+//'   In R. H. Hoyle (Ed.), Handbook of structural equation modeling (2nd ed.).
+//'   The Guilford Press.
 //'
 //'   Uhlenbeck, G. E., & Ornstein, L. S. (1930).
 //'   On the theory of the brownian motion.
@@ -147,7 +149,7 @@
 //' str(ssm)
 //'
 //' @family Simulation of State Space Models Data Functions
-//' @keywords simStateSpace sim
+//' @keywords simStateSpace sim ou
 //' @export
 // [[Rcpp::export]]
 Rcpp::List SimSSMOU(const arma::vec& mu0, const arma::mat& sigma0_sqrt,

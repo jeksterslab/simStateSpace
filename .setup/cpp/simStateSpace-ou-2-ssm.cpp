@@ -109,7 +109,7 @@
 //' )
 //'
 //' @family Simulation of State Space Models Data Functions
-//' @keywords simStateSpace sim
+//' @keywords simStateSpace sim ou
 //' @export
 // [[Rcpp::export]]
 Rcpp::List OU2SSM(const arma::vec& mu, const arma::mat& phi,

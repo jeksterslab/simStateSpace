@@ -143,7 +143,7 @@
 //' str(ssm)
 //'
 //' @family Simulation of State Space Models Data Functions
-//' @keywords simStateSpace sim
+//' @keywords simStateSpace sim ssm
 //' @export
 // [[Rcpp::export]]
 Rcpp::List SimSSM0Fixed(const int n, const arma::vec& mu0,
