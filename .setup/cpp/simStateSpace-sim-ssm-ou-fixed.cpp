@@ -165,8 +165,9 @@ Rcpp::List SimSSMOUFixed(const int n, const arma::vec& mu0,
     // 3.2.1 beta
     arma::mat beta = arma::expmat(neg_phi * delta_t);  // A(Delta t)
     // 3.2.2 alpha
-    arma::vec alpha = arma::inv(neg_phi) * (beta - I) * (phi * mu);  // b(Delta t)
-    
+    arma::vec alpha =
+        arma::inv(neg_phi) * (beta - I) * (phi * mu);  // b(Delta t)
+
     // 3.2.3 psi
     arma::mat neg_phi_hashtag = arma::kron(neg_phi, I) + arma::kron(I, neg_phi);
     arma::vec sigma_vec = arma::vectorise(sigma_sqrt * sigma_sqrt.t());
