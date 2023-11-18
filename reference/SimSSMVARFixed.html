@@ -22,7 +22,7 @@ the parameters are invariant across individuals."><!-- mathjax --><script src="h
     
     <a class="navbar-brand me-2" href="../index.html">simStateSpace</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.1.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -61,7 +61,7 @@ the parameters are invariant across individuals."><!-- mathjax --><script src="h
       <img src="" class="logo" alt=""><h1>Simulate Data from a Vector Autoregressive Model
 using a State Space Model Parameterization
 for n &gt; 1 Individuals (Fixed Parameters)</h1>
-      <small class="dont-index">Source: <a href="https://github.com/jeksterslab/simStateSpace/blob/HEAD/R/RcppExports.R"><code>R/RcppExports.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/jeksterslab/simStateSpace/blob/HEAD/R/simStateSpace-sim-ssm-var-fixed.R"><code>R/simStateSpace-sim-ssm-var-fixed.R</code></a></small>
       <div class="d-none name"><code>SimSSMVARFixed.Rd</code></div>
     </div>
 
@@ -75,7 +75,18 @@ the parameters are invariant across individuals.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">SimSSMVARFixed</span><span class="op">(</span><span class="va">n</span>, <span class="va">mu0</span>, <span class="va">sigma0_sqrt</span>, <span class="va">alpha</span>, <span class="va">beta</span>, <span class="va">psi_sqrt</span>, <span class="va">time</span>, <span class="va">burn_in</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">SimSSMVARFixed</span><span class="op">(</span></span>
+<span>  <span class="va">n</span>,</span>
+<span>  <span class="va">mu0</span>,</span>
+<span>  <span class="va">sigma0_sqrt</span>,</span>
+<span>  <span class="va">alpha</span>,</span>
+<span>  <span class="va">beta</span>,</span>
+<span>  <span class="va">psi_sqrt</span>,</span>
+<span>  gamma_eta <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  x <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  time <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  <span class="va">burn_in</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -117,6 +128,20 @@ Cholesky decomposition of the process noise covariance matrix
 (\(\boldsymbol{\Psi}\)).</p></dd>
 
 
+<dt>gamma_eta</dt>
+<dd><p>Numeric matrix.
+Matrix relating the values of the covariate matrix
+at time <code>t</code> to the latent variables at time <code>t</code>
+(\(\boldsymbol{\Gamma}_{\boldsymbol{\eta}}\)).</p></dd>
+
+
+<dt>x</dt>
+<dd><p>A list of length <code>n</code> of numeric matrices.
+Each element of the list
+is a matrix of observed covariates in <code>type = 1</code> or <code>type = 2</code>.
+The number of rows in each matrix should be equal to <code>time + burn_in</code>.</p></dd>
+
+
 <dt>time</dt>
 <dd><p>Positive integer.
 Number of time points to simulate.</p></dd>
@@ -146,29 +171,20 @@ and state-space modeling techniques.
 <em>Structural Equation Modeling: A Multidisciplinary Journal</em>,
 17(2), 303–332.
 <a href="https://doi.org/10.1080/10705511003661553" class="external-link">doi:10.1080/10705511003661553</a></p>
-<p>Chow, S.-M., Losardo, D., Park, J., &amp; Molenaar, P. C. M. (2023).
-Continuous-time dynamic models: Connections to structural equation models
-and other discrete-time models.
-In R. H. Hoyle (Ed.), Handbook of structural equation modeling (2nd ed.).
-The Guilford Press.</p>
-<p>Shumway, R. H., &amp; Stoffer, D. S. (2017).
-<em>Time series analysis and its applications: With R examples</em>.
-Springer International Publishing.
-<a href="https://doi.org/10.1007/978-3-319-52452-8" class="external-link">doi:10.1007/978-3-319-52452-8</a></p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p>Other Simulation of State Space Models Data Functions: 
 <code><a href="OU2SSM.html">OU2SSM</a>()</code>,
 <code><a href="Sim2Matrix.html">Sim2Matrix</a>()</code>,
-<code><a href="SimSSM0Fixed.html">SimSSM0Fixed</a>()</code>,
-<code><a href="SimSSM0Vary.html">SimSSM0Vary</a>()</code>,
-<code><a href="SimSSM0.html">SimSSM0</a>()</code>,
+<code><a href="SimSSMFixed.html">SimSSMFixed</a>()</code>,
 <code><a href="SimSSMOUFixed.html">SimSSMOUFixed</a>()</code>,
 <code><a href="SimSSMOUVary.html">SimSSMOUVary</a>()</code>,
 <code><a href="SimSSMOU.html">SimSSMOU</a>()</code>,
 <code><a href="SimSSMVARVary.html">SimSSMVARVary</a>()</code>,
-<code><a href="SimSSMVAR.html">SimSSMVAR</a>()</code></p></div>
+<code><a href="SimSSMVAR.html">SimSSMVAR</a>()</code>,
+<code><a href="SimSSMVary.html">SimSSMVary</a>()</code>,
+<code><a href="SimSSM.html">SimSSM</a>()</code></p></div>
     </div>
     <div class="section level2">
     <h2 id="author">Author<a class="anchor" aria-label="anchor" href="#author"></a></h2>
@@ -191,7 +207,20 @@ Springer International Publishing.
 <span class="r-in"><span><span class="va">psi_sqrt</span> <span class="op">&lt;-</span> <span class="va">iden_sqrt</span></span></span>
 <span class="r-in"><span><span class="va">time</span> <span class="op">&lt;-</span> <span class="fl">50</span></span></span>
 <span class="r-in"><span><span class="va">burn_in</span> <span class="op">&lt;-</span> <span class="fl">0</span></span></span>
+<span class="r-in"><span><span class="va">gamma_eta</span> <span class="op">&lt;-</span> <span class="fl">0.10</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/diag.html" class="external-link">diag</a></span><span class="op">(</span><span class="va">k</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  X <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="va">n</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  FUN <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">i</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>    <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>      <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>        data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span>n <span class="op">=</span> <span class="va">k</span> <span class="op">*</span> <span class="op">(</span><span class="va">time</span> <span class="op">+</span> <span class="va">burn_in</span><span class="op">)</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>        ncol <span class="op">=</span> <span class="va">k</span></span></span>
+<span class="r-in"><span>      <span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="op">}</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># No covariates</span></span></span>
 <span class="r-in"><span><span class="va">ssm</span> <span class="op">&lt;-</span> <span class="fu">SimSSMVARFixed</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  n <span class="op">=</span> <span class="va">n</span>,</span></span>
 <span class="r-in"><span>  mu0 <span class="op">=</span> <span class="va">mu0</span>,</span></span>
@@ -206,28 +235,70 @@ Springer International Publishing.
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">ssm</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> List of 5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ :List of 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ y   : num [1:50, 1:3] -0.532 0.139 -0.271 -0.195 -0.945 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ eta : num [1:50, 1:3] -0.532 0.139 -0.271 -0.195 -0.945 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ y   : num [1:50, 1:3] -0.9584 -0.6788 0.0758 1.5887 0.5055 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ eta : num [1:50, 1:3] -0.9584 -0.6788 0.0758 1.5887 0.5055 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ time: num [1:50, 1] 1 2 3 4 5 6 7 8 9 10 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ id  : num [1:50, 1] 1 1 1 1 1 1 1 1 1 1 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ :List of 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ y   : num [1:50, 1:3] 0.3738 0.187 -0.3472 0.6037 -0.0574 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ eta : num [1:50, 1:3] 0.3738 0.187 -0.3472 0.6037 -0.0574 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ y   : num [1:50, 1:3] -0.632 0.432 3.563 1.644 -0.633 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ eta : num [1:50, 1:3] -0.632 0.432 3.563 1.644 -0.633 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ time: num [1:50, 1] 1 2 3 4 5 6 7 8 9 10 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ id  : num [1:50, 1] 2 2 2 2 2 2 2 2 2 2 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ :List of 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ y   : num [1:50, 1:3] -1.846 -1.083 0.624 0.171 0.159 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ eta : num [1:50, 1:3] -1.846 -1.083 0.624 0.171 0.159 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ y   : num [1:50, 1:3] -0.3363 -0.3802 -0.0572 1.0263 1.6905 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ eta : num [1:50, 1:3] -0.3363 -0.3802 -0.0572 1.0263 1.6905 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ time: num [1:50, 1] 1 2 3 4 5 6 7 8 9 10 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ id  : num [1:50, 1] 3 3 3 3 3 3 3 3 3 3 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ :List of 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ y   : num [1:50, 1:3] 0.774 0.202 1.301 1.035 0.346 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ eta : num [1:50, 1:3] 0.774 0.202 1.301 1.035 0.346 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ y   : num [1:50, 1:3] -2.046 0.116 0.188 -0.62 -0.697 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ eta : num [1:50, 1:3] -2.046 0.116 0.188 -0.62 -0.697 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ time: num [1:50, 1] 1 2 3 4 5 6 7 8 9 10 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ id  : num [1:50, 1] 4 4 4 4 4 4 4 4 4 4 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ :List of 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ y   : num [1:50, 1:3] -0.0319 -1.4805 -0.4461 -0.9237 1.7104 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ eta : num [1:50, 1:3] -0.0319 -1.4805 -0.4461 -0.9237 1.7104 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ y   : num [1:50, 1:3] -0.308 -0.088 2.242 1.281 1.822 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ eta : num [1:50, 1:3] -0.308 -0.088 2.242 1.281 1.822 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ time: num [1:50, 1] 1 2 3 4 5 6 7 8 9 10 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ id  : num [1:50, 1] 5 5 5 5 5 5 5 5 5 5 ...</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># With covariates</span></span></span>
+<span class="r-in"><span><span class="va">ssm</span> <span class="op">&lt;-</span> <span class="fu">SimSSMVARFixed</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  n <span class="op">=</span> <span class="va">n</span>,</span></span>
+<span class="r-in"><span>  mu0 <span class="op">=</span> <span class="va">mu0</span>,</span></span>
+<span class="r-in"><span>  sigma0_sqrt <span class="op">=</span> <span class="va">sigma0_sqrt</span>,</span></span>
+<span class="r-in"><span>  alpha <span class="op">=</span> <span class="va">alpha</span>,</span></span>
+<span class="r-in"><span>  beta <span class="op">=</span> <span class="va">beta</span>,</span></span>
+<span class="r-in"><span>  psi_sqrt <span class="op">=</span> <span class="va">psi_sqrt</span>,</span></span>
+<span class="r-in"><span>  gamma_eta <span class="op">=</span> <span class="va">gamma_eta</span>,</span></span>
+<span class="r-in"><span>  x <span class="op">=</span> <span class="va">x</span>,</span></span>
+<span class="r-in"><span>  time <span class="op">=</span> <span class="va">time</span>,</span></span>
+<span class="r-in"><span>  burn_in <span class="op">=</span> <span class="va">burn_in</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">ssm</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> List of 5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ :List of 4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ y   : num [1:50, 1:3] 0.2909 0.5404 -0.0897 1.1296 -0.8006 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ eta : num [1:50, 1:3] 0.2909 0.5404 -0.0897 1.1296 -0.8006 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ time: num [1:50, 1] 1 2 3 4 5 6 7 8 9 10 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ id  : num [1:50, 1] 1 1 1 1 1 1 1 1 1 1 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ :List of 4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ y   : num [1:50, 1:3] 0.4467 -0.0504 0.1027 1.1142 0.9605 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ eta : num [1:50, 1:3] 0.4467 -0.0504 0.1027 1.1142 0.9605 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ time: num [1:50, 1] 1 2 3 4 5 6 7 8 9 10 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ id  : num [1:50, 1] 2 2 2 2 2 2 2 2 2 2 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ :List of 4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ y   : num [1:50, 1:3] -1.898 0.495 0.131 0.845 1.192 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ eta : num [1:50, 1:3] -1.898 0.495 0.131 0.845 1.192 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ time: num [1:50, 1] 1 2 3 4 5 6 7 8 9 10 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ id  : num [1:50, 1] 3 3 3 3 3 3 3 3 3 3 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ :List of 4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ y   : num [1:50, 1:3] -0.79 0.999 0.415 -0.728 -1.385 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ eta : num [1:50, 1:3] -0.79 0.999 0.415 -0.728 -1.385 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ time: num [1:50, 1] 1 2 3 4 5 6 7 8 9 10 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ id  : num [1:50, 1] 4 4 4 4 4 4 4 4 4 4 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ :List of 4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ y   : num [1:50, 1:3] -0.102 0.602 0.264 -0.031 -0.394 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ eta : num [1:50, 1:3] -0.102 0.602 0.264 -0.031 -0.394 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ time: num [1:50, 1] 1 2 3 4 5 6 7 8 9 10 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ id  : num [1:50, 1] 5 5 5 5 5 5 5 5 5 5 ...</span>
 <span class="r-in"><span></span></span>

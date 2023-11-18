@@ -37,13 +37,10 @@
     <loc>https://github.com/jeksterslab/simStateSpace/reference/Sim2Matrix.html</loc>
   </url>
   <url>
-    <loc>https://github.com/jeksterslab/simStateSpace/reference/SimSSM0.html</loc>
+    <loc>https://github.com/jeksterslab/simStateSpace/reference/SimSSM.html</loc>
   </url>
   <url>
-    <loc>https://github.com/jeksterslab/simStateSpace/reference/SimSSM0Fixed.html</loc>
-  </url>
-  <url>
-    <loc>https://github.com/jeksterslab/simStateSpace/reference/SimSSM0Vary.html</loc>
+    <loc>https://github.com/jeksterslab/simStateSpace/reference/SimSSMFixed.html</loc>
   </url>
   <url>
     <loc>https://github.com/jeksterslab/simStateSpace/reference/SimSSMOU.html</loc>
@@ -62,6 +59,9 @@
   </url>
   <url>
     <loc>https://github.com/jeksterslab/simStateSpace/reference/SimSSMVARVary.html</loc>
+  </url>
+  <url>
+    <loc>https://github.com/jeksterslab/simStateSpace/reference/SimSSMVary.html</loc>
   </url>
   <url>
     <loc>https://github.com/jeksterslab/simStateSpace/reference/index.html</loc>

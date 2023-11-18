@@ -16,7 +16,7 @@ See details for more information."><!-- mathjax --><script src="https://cdnjs.cl
     
     <a class="navbar-brand me-2" href="../index.html">simStateSpace</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.1.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -54,7 +54,7 @@ See details for more information."><!-- mathjax --><script src="https://cdnjs.cl
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>Simulate Data from the Ornstein–Uhlenbeck Model
 using a State Space Model Parameterization (n = 1)</h1>
-      <small class="dont-index">Source: <a href="https://github.com/jeksterslab/simStateSpace/blob/HEAD/R/RcppExports.R"><code>R/RcppExports.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/jeksterslab/simStateSpace/blob/HEAD/R/simStateSpace-sim-ssm-ou.R"><code>R/simStateSpace-sim-ssm-ou.R</code></a></small>
       <div class="d-none name"><code>SimSSMOU.Rd</code></div>
     </div>
 
@@ -75,6 +75,10 @@ See details for more information.</p>
 <span>  <span class="va">nu</span>,</span>
 <span>  <span class="va">lambda</span>,</span>
 <span>  <span class="va">theta_sqrt</span>,</span>
+<span>  gamma_y <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  gamma_eta <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  x <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  type <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  <span class="va">delta_t</span>,</span>
 <span>  <span class="va">time</span>,</span>
 <span>  <span class="va">burn_in</span></span>
@@ -135,6 +139,31 @@ Cholesky decomposition of the measurement error covariance matrix
 (\(\boldsymbol{\Theta}\)).</p></dd>
 
 
+<dt>gamma_y</dt>
+<dd><p>Numeric matrix.
+Matrix relating the values of the covariate matrix
+at time <code>t</code> to the observed variables at time <code>t</code>
+(\(\boldsymbol{\Gamma}_{\mathbf{y}}\)).</p></dd>
+
+
+<dt>gamma_eta</dt>
+<dd><p>Numeric matrix.
+Matrix relating the values of the covariate matrix
+at time <code>t</code> to the latent variables at time <code>t</code>
+(\(\boldsymbol{\Gamma}_{\boldsymbol{\eta}}\)).</p></dd>
+
+
+<dt>x</dt>
+<dd><p>Numeric matrix.
+The matrix of observed covariates in <code>type = 1</code> or <code>type = 2</code>.
+The number of rows should be equal to <code>time + burn_in</code>.</p></dd>
+
+
+<dt>type</dt>
+<dd><p>Integer.
+State space model type.</p></dd>
+
+
 <dt>delta_t</dt>
 <dd><p>Numeric.
 Time interval (\(\delta_t\)).</p></dd>
@@ -162,7 +191,12 @@ starting from 0 with <code>delta_t</code> increments.</p></li>
 </ul></div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>The measurement model is given by
+    
+<div class="section">
+<h3 id="type-">Type 0<a class="anchor" aria-label="anchor" href="#type-"></a></h3>
+
+
+<p>The measurement model is given by
 $$
     \mathbf{y}_{t}
     =
@@ -222,6 +256,110 @@ determining how quickly the variable returns to its mean,
 or randomness in the process, and \(\mathrm{d}\boldsymbol{W}\)
 is a Wiener process or Brownian motion,
 which represents random fluctuations.</p>
+</div>
+
+<div class="section">
+<h3 id="type--1">Type 1<a class="anchor" aria-label="anchor" href="#type--1"></a></h3>
+
+
+<p>The measurement model is given by
+$$
+    \mathbf{y}_{t}
+    =
+    \boldsymbol{\nu}
+    +
+    \boldsymbol{\Lambda}
+    \boldsymbol{\eta}_{t}
+    +
+    \boldsymbol{\varepsilon}_{t}
+    \quad
+    \mathrm{with}
+    \quad
+    \boldsymbol{\varepsilon}_{t}
+    \sim
+    \mathcal{N}
+    \left(
+    \mathbf{0},
+    \boldsymbol{\Theta}
+    \right) .
+  $$</p>
+<p>The dynamic structure is given by
+$$
+    \mathrm{d} \boldsymbol{\eta}_{t}
+    =
+    \boldsymbol{\Phi}
+    \left(
+    \boldsymbol{\mu}
+    -
+    \boldsymbol{\eta}_{t}
+    \right)
+    \mathrm{d}t
+    +
+    \boldsymbol{\Gamma}_{\boldsymbol{\eta}}
+    \mathbf{x}_{t}
+    +
+    \boldsymbol{\Sigma}^{\frac{1}{2}}
+    \mathrm{d}
+    \mathbf{W}_{t}
+  $$
+where
+\(\mathbf{x}_{t}\) is a vector of covariates at time \(t\),
+and \(\boldsymbol{\Gamma}_{\boldsymbol{\eta}}\) is the coefficient matrix
+linking the covariates to the latent variables.</p>
+</div>
+
+<div class="section">
+<h3 id="type--2">Type 2<a class="anchor" aria-label="anchor" href="#type--2"></a></h3>
+
+
+<p>The measurement model is given by
+$$
+    \mathbf{y}_{t}
+    =
+    \boldsymbol{\nu}
+    +
+    \boldsymbol{\Lambda}
+    \boldsymbol{\eta}_{t}
+    +
+    \boldsymbol{\Gamma}_{\mathbf{y}}
+    \mathbf{x}_{t}
+    +
+    \boldsymbol{\varepsilon}_{t}
+    \quad
+    \mathrm{with}
+    \quad
+    \boldsymbol{\varepsilon}_{t}
+    \sim
+    \mathcal{N}
+    \left(
+    \mathbf{0},
+    \boldsymbol{\Theta}
+    \right)
+  $$
+where
+\(\boldsymbol{\Gamma}_{\mathbf{y}}\) is the coefficient matrix
+linking the covariates to the observed variables.</p>
+<p>The dynamic structure is given by
+$$
+    \mathrm{d} \boldsymbol{\eta}_{t}
+    =
+    \boldsymbol{\Phi}
+    \left(
+    \boldsymbol{\mu}
+    -
+    \boldsymbol{\eta}_{t}
+    \right)
+    \mathrm{d}t
+    +
+    \boldsymbol{\Gamma}_{\boldsymbol{\eta}}
+    \mathbf{x}_{t}
+    +
+    \boldsymbol{\Sigma}^{\frac{1}{2}}
+    \mathrm{d}
+    \mathbf{W}_{t} .
+  $$</p>
+</div>
+
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
@@ -240,14 +378,14 @@ On the theory of the brownian motion.
     <div class="dont-index"><p>Other Simulation of State Space Models Data Functions: 
 <code><a href="OU2SSM.html">OU2SSM</a>()</code>,
 <code><a href="Sim2Matrix.html">Sim2Matrix</a>()</code>,
-<code><a href="SimSSM0Fixed.html">SimSSM0Fixed</a>()</code>,
-<code><a href="SimSSM0Vary.html">SimSSM0Vary</a>()</code>,
-<code><a href="SimSSM0.html">SimSSM0</a>()</code>,
+<code><a href="SimSSMFixed.html">SimSSMFixed</a>()</code>,
 <code><a href="SimSSMOUFixed.html">SimSSMOUFixed</a>()</code>,
 <code><a href="SimSSMOUVary.html">SimSSMOUVary</a>()</code>,
 <code><a href="SimSSMVARFixed.html">SimSSMVARFixed</a>()</code>,
 <code><a href="SimSSMVARVary.html">SimSSMVARVary</a>()</code>,
-<code><a href="SimSSMVAR.html">SimSSMVAR</a>()</code></p></div>
+<code><a href="SimSSMVAR.html">SimSSMVAR</a>()</code>,
+<code><a href="SimSSMVary.html">SimSSMVary</a>()</code>,
+<code><a href="SimSSM.html">SimSSM</a>()</code></p></div>
     </div>
     <div class="section level2">
     <h2 id="author">Author<a class="anchor" aria-label="anchor" href="#author"></a></h2>
@@ -259,10 +397,10 @@ On the theory of the brownian motion.
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># prepare parameters</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">42</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="va">k</span> <span class="op">&lt;-</span> <span class="fl">2</span></span></span>
-<span class="r-in"><span><span class="va">I</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/diag.html" class="external-link">diag</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">I_sqrt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/chol.html" class="external-link">chol</a></span><span class="op">(</span><span class="va">I</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">iden</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/diag.html" class="external-link">diag</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">iden_sqrt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/chol.html" class="external-link">chol</a></span><span class="op">(</span><span class="va">iden</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">mu0</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">3.0</span>, <span class="fl">1.5</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">sigma0_sqrt</span> <span class="op">&lt;-</span> <span class="va">I_sqrt</span></span></span>
+<span class="r-in"><span><span class="va">sigma0_sqrt</span> <span class="op">&lt;-</span> <span class="va">iden_sqrt</span></span></span>
 <span class="r-in"><span><span class="va">mu</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5.76</span>, <span class="fl">5.18</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">phi</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span>data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.10</span>, <span class="op">-</span><span class="fl">0.05</span>, <span class="op">-</span><span class="fl">0.05</span>, <span class="fl">0.10</span><span class="op">)</span>, nrow <span class="op">=</span> <span class="va">p</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">sigma_sqrt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/chol.html" class="external-link">chol</a></span><span class="op">(</span></span></span>
@@ -274,8 +412,13 @@ On the theory of the brownian motion.
 <span class="r-in"><span><span class="va">delta_t</span> <span class="op">&lt;-</span> <span class="fl">0.10</span></span></span>
 <span class="r-in"><span><span class="va">time</span> <span class="op">&lt;-</span> <span class="fl">50</span></span></span>
 <span class="r-in"><span><span class="va">burn_in</span> <span class="op">&lt;-</span> <span class="fl">0</span></span></span>
+<span class="r-in"><span><span class="va">gamma_y</span> <span class="op">&lt;-</span> <span class="va">gamma_eta</span> <span class="op">&lt;-</span> <span class="fl">0.10</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/diag.html" class="external-link">diag</a></span><span class="op">(</span><span class="va">k</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span>n <span class="op">=</span> <span class="va">k</span> <span class="op">*</span> <span class="op">(</span><span class="va">time</span> <span class="op">+</span> <span class="va">burn_in</span><span class="op">)</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  ncol <span class="op">=</span> <span class="va">k</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># generate data</span></span></span>
+<span class="r-in"><span><span class="co"># Type 0</span></span></span>
 <span class="r-in"><span><span class="va">ssm</span> <span class="op">&lt;-</span> <span class="fu">SimSSMOU</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  mu0 <span class="op">=</span> <span class="va">mu0</span>,</span></span>
 <span class="r-in"><span>  sigma0_sqrt <span class="op">=</span> <span class="va">sigma0_sqrt</span>,</span></span>
@@ -285,6 +428,7 @@ On the theory of the brownian motion.
 <span class="r-in"><span>  nu <span class="op">=</span> <span class="va">nu</span>,</span></span>
 <span class="r-in"><span>  lambda <span class="op">=</span> <span class="va">lambda</span>,</span></span>
 <span class="r-in"><span>  theta_sqrt <span class="op">=</span> <span class="va">theta_sqrt</span>,</span></span>
+<span class="r-in"><span>  type <span class="op">=</span> <span class="fl">0</span>,</span></span>
 <span class="r-in"><span>  delta_t <span class="op">=</span> <span class="va">delta_t</span>,</span></span>
 <span class="r-in"><span>  time <span class="op">=</span> <span class="va">time</span>,</span></span>
 <span class="r-in"><span>  burn_in <span class="op">=</span> <span class="va">burn_in</span></span></span>
@@ -292,8 +436,57 @@ On the theory of the brownian motion.
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">ssm</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> List of 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ y   : num [1:50, 1:2] -1.96 -2.55 -3.27 -4.04 -3.79 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ eta : num [1:50, 1:2] -3.53 -3.25 -3.33 -3.27 -3.63 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ y   : num [1:50, 1:2] -1.17 -2.19 -2.55 -3.12 -2.37 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ eta : num [1:50, 1:2] -1.98 -2.55 -2.96 -3 -2.46 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ time: num [1:50, 1] 0 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 ...</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Type 1</span></span></span>
+<span class="r-in"><span><span class="va">ssm</span> <span class="op">&lt;-</span> <span class="fu">SimSSMOU</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  mu0 <span class="op">=</span> <span class="va">mu0</span>,</span></span>
+<span class="r-in"><span>  sigma0_sqrt <span class="op">=</span> <span class="va">sigma0_sqrt</span>,</span></span>
+<span class="r-in"><span>  mu <span class="op">=</span> <span class="va">mu</span>,</span></span>
+<span class="r-in"><span>  phi <span class="op">=</span> <span class="va">phi</span>,</span></span>
+<span class="r-in"><span>  sigma_sqrt <span class="op">=</span> <span class="va">sigma_sqrt</span>,</span></span>
+<span class="r-in"><span>  nu <span class="op">=</span> <span class="va">nu</span>,</span></span>
+<span class="r-in"><span>  lambda <span class="op">=</span> <span class="va">lambda</span>,</span></span>
+<span class="r-in"><span>  theta_sqrt <span class="op">=</span> <span class="va">theta_sqrt</span>,</span></span>
+<span class="r-in"><span>  gamma_eta <span class="op">=</span> <span class="va">gamma_eta</span>,</span></span>
+<span class="r-in"><span>  x <span class="op">=</span> <span class="va">x</span>,</span></span>
+<span class="r-in"><span>  type <span class="op">=</span> <span class="fl">1</span>,</span></span>
+<span class="r-in"><span>  delta_t <span class="op">=</span> <span class="va">delta_t</span>,</span></span>
+<span class="r-in"><span>  time <span class="op">=</span> <span class="va">time</span>,</span></span>
+<span class="r-in"><span>  burn_in <span class="op">=</span> <span class="va">burn_in</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">ssm</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> List of 3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ y   : num [1:50, 1:2] -4.62 -4.49 -4.32 -4.29 -5.66 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ eta : num [1:50, 1:2] -3.8 -3.89 -4.11 -4.43 -4.62 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ time: num [1:50, 1] 0 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 ...</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Type 2</span></span></span>
+<span class="r-in"><span><span class="va">ssm</span> <span class="op">&lt;-</span> <span class="fu">SimSSMOU</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  mu0 <span class="op">=</span> <span class="va">mu0</span>,</span></span>
+<span class="r-in"><span>  sigma0_sqrt <span class="op">=</span> <span class="va">sigma0_sqrt</span>,</span></span>
+<span class="r-in"><span>  mu <span class="op">=</span> <span class="va">mu</span>,</span></span>
+<span class="r-in"><span>  phi <span class="op">=</span> <span class="va">phi</span>,</span></span>
+<span class="r-in"><span>  sigma_sqrt <span class="op">=</span> <span class="va">sigma_sqrt</span>,</span></span>
+<span class="r-in"><span>  nu <span class="op">=</span> <span class="va">nu</span>,</span></span>
+<span class="r-in"><span>  lambda <span class="op">=</span> <span class="va">lambda</span>,</span></span>
+<span class="r-in"><span>  theta_sqrt <span class="op">=</span> <span class="va">theta_sqrt</span>,</span></span>
+<span class="r-in"><span>  gamma_y <span class="op">=</span> <span class="va">gamma_y</span>,</span></span>
+<span class="r-in"><span>  gamma_eta <span class="op">=</span> <span class="va">gamma_eta</span>,</span></span>
+<span class="r-in"><span>  x <span class="op">=</span> <span class="va">x</span>,</span></span>
+<span class="r-in"><span>  type <span class="op">=</span> <span class="fl">2</span>,</span></span>
+<span class="r-in"><span>  delta_t <span class="op">=</span> <span class="va">delta_t</span>,</span></span>
+<span class="r-in"><span>  time <span class="op">=</span> <span class="va">time</span>,</span></span>
+<span class="r-in"><span>  burn_in <span class="op">=</span> <span class="va">burn_in</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">ssm</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> List of 3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ y   : num [1:50, 1:2] -5.21 -3.69 -4.87 -5.71 -6.63 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ eta : num [1:50, 1:2] -3.92 -4.25 -4.61 -5.09 -5.24 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ time: num [1:50, 1] 0 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 ...</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
