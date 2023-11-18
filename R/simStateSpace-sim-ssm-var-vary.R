@@ -14,16 +14,17 @@
 #'   (`mu0`,
 #'   `sigma0_sqrt`,
 #'   `alpha`,
-#'   `beta`, and
-#'   `psi_sqrt`)
+#'   `beta`,
+#'   `psi_sqrt`, or
+#'   `gamma_eta`)
 #'   is less the `n`,
 #'   the function will cycle through the available values.
 #'
 #' @author Ivan Jacob Agaloos Pesigan
 #'
-#' @inheritParams SimSSM0Vary
-#' @inherit SimSSM0Fixed return
-#' @inherit SimSSM0 references
+#' @inheritParams SimSSMVary
+#' @inherit SimSSMFixed return
+#' @inherit SimSSM references
 #'
 #' @examples
 #' # prepare parameters
@@ -47,7 +48,20 @@
 #' psi_sqrt <- list(iden_sqrt)
 #' time <- 50
 #' burn_in <- 0
+#' gamma_eta <- list(0.10 * diag(k))
+#' x <- lapply(
+#'   X = seq_len(n),
+#'   FUN = function(i) {
+#'     return(
+#'       matrix(
+#'         data = rnorm(n = k * (time + burn_in)),
+#'         ncol = k
+#'       )
+#'    )
+#'   }
+#' )
 #'
+#' # No covariates
 #' ssm <- SimSSMVARVary(
 #'   n = n,
 #'   mu0 = mu0,
@@ -55,6 +69,22 @@
 #'   alpha = alpha,
 #'   beta = beta,
 #'   psi_sqrt = psi_sqrt,
+#'   time = time,
+#'   burn_in = burn_in
+#' )
+#'
+#' str(ssm)
+#'
+#' # With covariates
+#' ssm <- SimSSMVARVary(
+#'   n = n,
+#'   mu0 = mu0,
+#'   sigma0_sqrt = sigma0_sqrt,
+#'   alpha = alpha,
+#'   beta = beta,
+#'   psi_sqrt = psi_sqrt,
+#'   gamma_eta = gamma_eta,
+#'   x = x,
 #'   time = time,
 #'   burn_in = burn_in
 #' )
@@ -70,56 +100,37 @@ SimSSMVARVary <- function(n,
                           alpha,
                           beta,
                           psi_sqrt,
-                          time,
+                          gamma_eta = NULL,
+                          x = NULL,
+                          time = 0,
                           burn_in) {
-  stopifnot(
-    is.list(mu0),
-    is.list(sigma0_sqrt),
-    is.list(alpha),
-    is.list(beta),
-    is.list(psi_sqrt)
-  )
-  stopifnot(
-    length(mu0) <= n,
-    length(sigma0_sqrt) <= n,
-    length(alpha) <= n,
-    length(beta) <= n,
-    length(psi_sqrt) <= n
-  )
-  foo <- function(i,
-                  mu0,
-                  sigma0_sqrt,
-                  alpha,
-                  beta,
-                  psi_sqrt) {
-    dat_i <- SimSSMVAR(
-      mu0 = mu0,
-      sigma0_sqrt = sigma0_sqrt,
-      alpha = alpha,
-      beta = beta,
-      psi_sqrt = psi_sqrt,
-      time = time,
-      burn_in = burn_in
-    )
+  if (is.null(gamma_eta) || is.null(x)) {
     return(
-      list(
-        y = dat_i$y,
-        eta = dat_i$eta,
-        time = dat_i$time,
-        id = matrix(data = i, ncol = 1, nrow = time)
+      .SimSSM0VARVary(
+        n = n,
+        mu0 = rep(x = mu0, length.out = n),
+        sigma0_sqrt = rep(x = sigma0_sqrt, length.out = n),
+        alpha = rep(x = alpha, length.out = n),
+        beta = rep(x = beta, length.out = n),
+        psi_sqrt = rep(x = psi_sqrt, length.out = n),
+        time = time,
+        burn_in = burn_in
+      )
+    )
+  } else {
+    return(
+      .SimSSM1VARVary(
+        n = n,
+        mu0 = rep(x = mu0, length.out = n),
+        sigma0_sqrt = rep(x = sigma0_sqrt, length.out = n),
+        alpha = rep(x = alpha, length.out = n),
+        beta = rep(x = beta, length.out = n),
+        psi_sqrt = rep(x = psi_sqrt, length.out = n),
+        gamma_eta = rep(x = gamma_eta, length.out = n),
+        x = x,
+        time = time,
+        burn_in = burn_in
       )
     )
   }
-  return(
-    mapply(
-      FUN = foo,
-      i = seq_len(n),
-      mu0 = mu0,
-      sigma0_sqrt = sigma0_sqrt,
-      alpha = alpha,
-      beta = beta,
-      psi_sqrt = psi_sqrt,
-      SIMPLIFY = FALSE
-    )
-  )
 }

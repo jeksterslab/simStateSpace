@@ -75,13 +75,13 @@ $\boldsymbol{\zeta}_{i, t}$.
 ```{r}
 #| echo = FALSE
 set.seed(42)
-time <- 100
-n <- 5
+time <- 1000
+n <- 20
 k <- p <- 3
-I <- diag(k)
+iden <- diag(k)
 null_vec <- rep(x = 0, times = k)
 mu0 <- null_vec
-sigma0 <- I
+sigma0 <- iden
 alpha <- null_vec
 beta <- matrix(
   data = c(
@@ -97,7 +97,7 @@ beta <- matrix(
   ),
   nrow = k
 )
-psi <- I
+psi <- iden
 ```
 
 Let $t = `r time`$ be the number of time points and $n = `r n`$ be the number of individuals.
@@ -201,7 +201,7 @@ data <- Sim2Matrix(
     beta = beta,
     psi_sqrt = chol(psi),
     time = time,
-    burn_in = 1000
+    burn_in = 0
   )
 )
 head(data)

@@ -1,4 +1,4 @@
-## ---- test-simStateSpace-sim-ssm-ou-fixed
+## ---- test-simStateSpace-sim-ssm-ou
 lapply(
   X = 1,
   FUN = function(i,
@@ -9,7 +9,6 @@ lapply(
     p <- k <- 2
     iden <- diag(p)
     iden_sqrt <- chol(iden)
-    n <- 5
     mu0 <- c(-3.0, 1.5)
     sigma0_sqrt <- iden_sqrt
     mu <- c(5.76, 5.18)
@@ -24,21 +23,13 @@ lapply(
     time <- 50
     burn_in <- 0
     gamma_y <- gamma_eta <- 0.10 * diag(k)
-    x <- lapply(
-      X = seq_len(n),
-      FUN = function(i) {
-        return(
-          matrix(
-            data = rnorm(n = k * (time + burn_in)),
-            ncol = k
-          )
-       )
-      }
+    x <- matrix(
+      data = rnorm(n = k * (time + burn_in)),
+      ncol = k
     )
 
     # Type 0
-    ssm <- SimSSMOUFixed(
-      n = n,
+    ssm <- SimSSMOU(
       mu0 = mu0,
       sigma0_sqrt = sigma0_sqrt,
       mu = mu,
@@ -53,12 +44,10 @@ lapply(
       burn_in = burn_in
     )
 
-    Sim2Matrix(ssm, eta = TRUE)
-    Sim2Matrix(ssm, eta = FALSE)
+    str(ssm)
 
     # Type 1
-    ssm <- SimSSMOUFixed(
-      n = n,
+    ssm <- SimSSMOU(
       mu0 = mu0,
       sigma0_sqrt = sigma0_sqrt,
       mu = mu,
@@ -75,12 +64,10 @@ lapply(
       burn_in = burn_in
     )
 
-    Sim2Matrix(ssm, eta = TRUE)
-    Sim2Matrix(ssm, eta = FALSE)
+    str(ssm)
 
     # Type 2
-    ssm <- SimSSMOUFixed(
-      n = n,
+    ssm <- SimSSMOU(
       mu0 = mu0,
       sigma0_sqrt = sigma0_sqrt,
       mu = mu,
@@ -98,9 +85,8 @@ lapply(
       burn_in = burn_in
     )
 
-    Sim2Matrix(ssm, eta = TRUE)
-    Sim2Matrix(ssm, eta = FALSE)
+    str(ssm)
 
   },
-  text = "test-simStateSpace-sim-ssm-ou-fixed"
+  text = "test-simStateSpace-sim-ssm-ou"
 )

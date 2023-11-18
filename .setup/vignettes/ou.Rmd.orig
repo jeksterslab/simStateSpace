@@ -94,14 +94,14 @@ which represents random fluctuations.
 ```{r}
 #| echo = FALSE
 set.seed(42)
-time <- 100
-n <- 5
+time <- 1000
+n <- 20
 delta_t <- 0.10
 k <- p <- 3
-I <- diag(k)
+iden <- diag(k)
 null_vec <- rep(x = 0, times = k)
 mu0 <- null_vec
-sigma0 <- I
+sigma0 <- iden
 mu <- null_vec
 phi <- matrix(
   data = c(
@@ -122,10 +122,10 @@ beta_var1 <- as.matrix(
     -1 * phi
   )
 )
-psi <- I
-sigma <- I
+psi <- iden
+sigma <- iden
 nu <- null_vec
-lambda <- I
+lambda <- iden
 theta <- matrix(
   data = 0,
   nrow = k,
@@ -287,7 +287,7 @@ data <- Sim2Matrix(
     theta_sqrt = chol(theta),
     delta_t = delta_t,
     time = time,
-    burn_in = 1000
+    burn_in = 0
   )
 )
 head(data)

@@ -1,8 +1,7 @@
 ---
 title: "simStateSpace"
 author: "Ivan Jacob Agaloos Pesigan"
-date: "`r Sys.Date()`"
-output: github_document
+output: rmarkdown::html_vignette
 bibliography: "vignettes.bib"
 csl: https://raw.githubusercontent.com/citation-style-language/styles/master/apa.csl
 nocite: |
@@ -15,11 +14,12 @@ nocite: |
 
 <!-- README.md is generated from .setup/readme/README.Rmd. Please edit that file -->
 
-```{r, include = FALSE}
+```{r}
+#| include = FALSE
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  fig.path = "man/figures/README-",
+  fig.path = "man/figures/vignettes-",
   out.width = "100%"
 )
 ```
@@ -49,9 +49,13 @@ refer to Chow, Ho, Hamaker, and Dolan (2010: https://doi.org/10.1080/10705511003
 
 ## Installation
 
-You can install the released version of
-`simStateSpace`
-from
+You can install the CRAN release of `simStateSpace` with:
+
+```r
+install.packages("simStateSpace")
+```
+
+You can install the development version of `simStateSpace` from
 [GitHub](https://github.com/jeksterslab/simStateSpace) with:
 
 ```r

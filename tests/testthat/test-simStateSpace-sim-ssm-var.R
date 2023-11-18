@@ -1,4 +1,4 @@
-## ---- test-simStateSpace-sim-ssm-var-fixed
+## ---- test-simStateSpace-sim-ssm-var
 lapply(
   X = 1,
   FUN = function(i,
@@ -10,7 +10,6 @@ lapply(
     iden <- diag(k)
     iden_sqrt <- chol(iden)
     null_vec <- rep(x = 0, times = k)
-    n <- 5
     mu0 <- null_vec
     sigma0_sqrt <- iden_sqrt
     alpha <- null_vec
@@ -19,21 +18,13 @@ lapply(
     time <- 50
     burn_in <- 0
     gamma_eta <- 0.10 * diag(k)
-    x <- lapply(
-      X = seq_len(n),
-      FUN = function(i) {
-        return(
-          matrix(
-            data = rnorm(n = k * (time + burn_in)),
-            ncol = k
-          )
-       )
-      }
+    x <- matrix(
+      data = rnorm(n = k * (time + burn_in)),
+      ncol = k
     )
 
     # No covariates
-    ssm <- SimSSMVARFixed(
-      n = n,
+    ssm <- SimSSMVAR(
       mu0 = mu0,
       sigma0_sqrt = sigma0_sqrt,
       alpha = alpha,
@@ -43,12 +34,10 @@ lapply(
       burn_in = burn_in
     )
 
-    Sim2Matrix(ssm, eta = TRUE)
-    Sim2Matrix(ssm, eta = FALSE)
+    str(ssm)
 
     # With covariates
-    ssm <- SimSSMVARFixed(
-      n = n,
+    ssm <- SimSSMVAR(
       mu0 = mu0,
       sigma0_sqrt = sigma0_sqrt,
       alpha = alpha,
@@ -60,9 +49,8 @@ lapply(
       burn_in = burn_in
     )
 
-    Sim2Matrix(ssm, eta = TRUE)
-    Sim2Matrix(ssm, eta = FALSE)
+    str(ssm)
 
   },
-  text = "test-simStateSpace-sim-ssm-var-fixed"
+  text = "test-simStateSpace-sim-ssm-var"
 )

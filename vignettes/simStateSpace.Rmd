@@ -21,7 +21,8 @@ vignette: >
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  fig.path = "man/figures/vignettes-"
+  fig.path = "man/figures/vignettes-",
+  out.width = "100%"
 )
 ```
 
@@ -50,9 +51,13 @@ refer to Chow, Ho, Hamaker, and Dolan (2010: https://doi.org/10.1080/10705511003
 
 ## Installation
 
-You can install the released version of
-`simStateSpace`
-from
+You can install the CRAN release of `simStateSpace` with:
+
+```r
+install.packages("simStateSpace")
+```
+
+You can install the development version of `simStateSpace` from
 [GitHub](https://github.com/jeksterslab/simStateSpace) with:
 
 ```r
