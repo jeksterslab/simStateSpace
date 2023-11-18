@@ -6,7 +6,13 @@
 #include <RcppArmadillo.h>
 // [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::export(.SimSSM2OU)]]
-Rcpp::List SimSSM2OU(const arma::vec& mu0, const arma::mat& sigma0_sqrt, const arma::vec& mu, const arma::mat& phi, const arma::mat& sigma_sqrt, const arma::vec& nu, const arma::mat& lambda, const arma::mat& theta_sqrt, const arma::mat& gamma_y, const arma::mat& gamma_eta, const arma::mat& x, const double delta_t, const int time, const int burn_in) {
+Rcpp::List SimSSM2OU(const arma::vec& mu0, const arma::mat& sigma0_sqrt,
+                     const arma::vec& mu, const arma::mat& phi,
+                     const arma::mat& sigma_sqrt, const arma::vec& nu,
+                     const arma::mat& lambda, const arma::mat& theta_sqrt,
+                     const arma::mat& gamma_y, const arma::mat& gamma_eta,
+                     const arma::mat& x, const double delta_t, const int time,
+                     const int burn_in) {
   // Step 1: Determine indices
   int total_time = time + burn_in;
   int num_latent_vars = mu0.n_elem;
@@ -19,7 +25,8 @@ Rcpp::List SimSSM2OU(const arma::vec& mu0, const arma::mat& sigma0_sqrt, const a
 
   // Step 3: Get state space parameters
   arma::mat I = arma::eye<arma::mat>(num_latent_vars, num_latent_vars);
-  arma::mat J = arma::eye<arma::mat>(num_latent_vars * num_latent_vars, num_latent_vars * num_latent_vars);
+  arma::mat J = arma::eye<arma::mat>(num_latent_vars * num_latent_vars,
+                                     num_latent_vars * num_latent_vars);
   arma::mat neg_phi = -1 * phi;
   // 3.1 beta
   arma::mat beta = arma::expmat(neg_phi * delta_t);  // A(Delta t)
@@ -28,17 +35,24 @@ Rcpp::List SimSSM2OU(const arma::vec& mu0, const arma::mat& sigma0_sqrt, const a
   // 3.3 psi
   arma::mat neg_phi_hashtag = arma::kron(neg_phi, I) + arma::kron(I, neg_phi);
   arma::vec sigma_vec = arma::vectorise(sigma_sqrt * sigma_sqrt.t());
-  arma::vec psi_vec = arma::inv(neg_phi_hashtag) * (arma::expmat(neg_phi_hashtag * delta_t) - J) * sigma_vec;
-  arma::mat psi_sqrt = arma::chol(arma::reshape(psi_vec, num_latent_vars, num_latent_vars));
+  arma::vec psi_vec = arma::inv(neg_phi_hashtag) *
+                      (arma::expmat(neg_phi_hashtag * delta_t) - J) * sigma_vec;
+  arma::mat psi_sqrt =
+      arma::chol(arma::reshape(psi_vec, num_latent_vars, num_latent_vars));
 
   // Step 4: Generate initial condition
   eta.col(0) = mu0 + sigma0_sqrt * arma::randn(num_latent_vars);
-  y.col(0) = nu + lambda * eta.col(0) + theta_sqrt * arma::randn(num_manifest_vars);
+  y.col(0) =
+      nu + lambda * eta.col(0) + theta_sqrt * arma::randn(num_manifest_vars);
 
   // Step 5: Simulate state space model data using a loop
   for (int t = 1; t < total_time; t++) {
-    eta.col(t) = alpha + beta * eta.col(t - 1) + psi_sqrt * arma::randn(num_latent_vars) + gamma_eta * x_t.col(t);
-    y.col(t) = nu + lambda * eta.col(t) + theta_sqrt * arma::randn(num_manifest_vars) + gamma_y * x_t.col(t);
+    eta.col(t) = alpha + beta * eta.col(t - 1) +
+                 psi_sqrt * arma::randn(num_latent_vars) +
+                 gamma_eta * x_t.col(t);
+    y.col(t) = nu + lambda * eta.col(t) +
+               theta_sqrt * arma::randn(num_manifest_vars) +
+               gamma_y * x_t.col(t);
   }
 
   // Step 6: If there is a burn-in period, remove it
@@ -48,5 +62,7 @@ Rcpp::List SimSSM2OU(const arma::vec& mu0, const arma::mat& sigma0_sqrt, const a
   }
 
   // Step 7: Return the transposed data matrices in a list
-  return Rcpp::List::create(Rcpp::Named("y") = y.t(), Rcpp::Named("eta") = eta.t(), Rcpp::Named("time") = arma::linspace(0, (time - 1) * delta_t, time));
+  return Rcpp::List::create(
+      Rcpp::Named("y") = y.t(), Rcpp::Named("eta") = eta.t(),
+      Rcpp::Named("time") = arma::linspace(0, (time - 1) * delta_t, time));
 }

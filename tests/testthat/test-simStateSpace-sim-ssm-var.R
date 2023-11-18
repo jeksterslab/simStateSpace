@@ -50,7 +50,6 @@ lapply(
     )
 
     str(ssm)
-
   },
   text = "test-simStateSpace-sim-ssm-var"
 )

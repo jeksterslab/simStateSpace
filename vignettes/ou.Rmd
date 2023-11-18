@@ -1,0 +1,698 @@
+---
+title: "The Ornstein–Uhlenbeck Model"
+author: "Ivan Jacob Agaloos Pesigan"
+date: "2023-11-18"
+bibliography: "vignettes.bib"
+csl: https://raw.githubusercontent.com/citation-style-language/styles/master/apa.csl
+nocite: |
+  @RCoreTeam-2023
+  @Ou-Hunter-Chow-2019
+  @Chow-Losardo-Park-etal-2023
+  @Uhlenbeck-Ornstein-1930
+  @Chow-Ho-Hamaker-etal-2010
+output:
+  rmarkdown::html_vignette:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{The Ornstein–Uhlenbeck Model}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+## Model
+
+The measurement model is given by
+
+\begin{equation}
+  \mathbf{y}_{i, t}
+  =
+  \boldsymbol{\nu}
+  +
+  \boldsymbol{\Lambda}
+  \boldsymbol{\eta}_{i, t} 
+  +
+  \boldsymbol{\varepsilon}_{i, t}
+  \quad
+  \mathrm{with}
+  \quad
+  \boldsymbol{\varepsilon}_{i, t}
+  \sim
+  \mathcal{N}
+  \left(
+  \mathbf{0},
+  \boldsymbol{\Theta}
+  \right)
+\end{equation}
+
+where $\mathbf{y}_{i, t}$, $\boldsymbol{\eta}_{i, t}$,
+and $\boldsymbol{\varepsilon}_{i, t}$
+are random variables and $\boldsymbol{\nu}$,
+$\boldsymbol{\Lambda}$,
+and $\boldsymbol{\Theta}$ are model parameters.
+$\mathbf{y}_{i, t}$ is a vector of observed random variables
+at time $t$ and individual $i$,
+$\boldsymbol{\eta}_{i, t}$ is a vector of latent random variables
+at time $t$ and individual $i$,
+and $\boldsymbol{\varepsilon}_{i, t}$
+is a vector of random measurement errors
+at time $t$ and individual $i$,
+while $\boldsymbol{\nu}$ is a vector of intercept,
+$\boldsymbol{\Lambda}$ is a matrix of factor loadings,
+and $\boldsymbol{\Theta}$ is the covariance matrix of
+$\boldsymbol{\varepsilon}$.
+
+The dynamic structure is given by
+
+\begin{equation}
+  \mathrm{d} \boldsymbol{\eta}_{i, t}
+  =
+  \boldsymbol{\Phi}
+  \left(
+  \boldsymbol{\mu}
+  -
+  \boldsymbol{\eta}_{i, t}
+  \right)
+  \mathrm{d}t
+  +
+  \boldsymbol{\Sigma}^{\frac{1}{2}}
+  \mathrm{d}
+  \mathbf{W}_{i, t}
+\end{equation}
+
+where $\boldsymbol{\mu}$ is the long-term mean or equilibrium level,
+$\boldsymbol{\Phi}$ is the rate of mean reversion,
+determining how quickly the variable returns to its mean,
+$\boldsymbol{\Sigma}$ is the matrix of volatility
+or randomness in the process, and $\mathrm{d}\boldsymbol{W}$
+is a Wiener process or Brownian motion,
+which represents random fluctuations.
+
+## Data Generation
+
+### Notation
+
+
+
+Let $t = 1000$ be the number of time points and $n = 20$ be the number of individuals.
+
+Let the measurement model intecept vector $\boldsymbol{\nu}$ be given by
+
+\begin{equation}
+\boldsymbol{\nu}
+=
+\left(
+\begin{array}{c}
+  0 \\
+  0 \\
+  0 \\
+\end{array}
+\right) .
+\end{equation}
+
+Let the factor loadings matrix $\boldsymbol{\Lambda}$ be given by
+
+\begin{equation}
+\boldsymbol{\Lambda}
+=
+\left(
+\begin{array}{ccc}
+  1 & 0 & 0 \\
+  0 & 1 & 0 \\
+  0 & 0 & 1 \\
+\end{array}
+\right) .
+\end{equation}
+
+Let the measurement error covariance matrix $\boldsymbol{\Theta}$ be given by
+
+\begin{equation}
+\boldsymbol{\Theta}
+=
+\left(
+\begin{array}{ccc}
+  0.5 & 0 & 0 \\
+  0 & 0.5 & 0 \\
+  0 & 0 & 0.5 \\
+\end{array}
+\right) .
+\end{equation}
+
+Let the initial condition
+$\boldsymbol{\eta}_{0}$
+be given by
+
+\begin{equation}
+\boldsymbol{\eta}_{0} \sim \mathcal{N} \left( \boldsymbol{\mu}_{\boldsymbol{\eta} \mid 0}, \boldsymbol{\Sigma}_{\boldsymbol{\eta} \mid 0} \right)
+\end{equation}
+
+\begin{equation}
+\boldsymbol{\mu}_{\boldsymbol{\eta} \mid 0}
+=
+\left(
+\begin{array}{c}
+  0 \\
+  0 \\
+  0 \\
+\end{array}
+\right)
+\end{equation}
+
+\begin{equation}
+\boldsymbol{\Sigma}_{\boldsymbol{\eta} \mid 0}
+=
+\left(
+\begin{array}{ccc}
+  1 & 0 & 0 \\
+  0 & 1 & 0 \\
+  0 & 0 & 1 \\
+\end{array}
+\right) .
+\end{equation}
+
+Let the long-term mean vector $\boldsymbol{\mu}$ be given by
+
+\begin{equation}
+\boldsymbol{\mu}
+=
+\left(
+\begin{array}{c}
+  0 \\
+  0 \\
+  0 \\
+\end{array}
+\right) .
+\end{equation}
+
+Let the rate of mean reversion matrix $\boldsymbol{\Phi}$ be given by
+
+\begin{equation}
+\boldsymbol{\Phi}
+=
+\left(
+\begin{array}{ccc}
+  0.357 & 0 & 0 \\
+  -0.771 & 0.511 & 0 \\
+  0.45 & -0.729 & 0.693 \\
+\end{array}
+\right) .
+\end{equation}
+
+Let the dynamic process noise covariance matrix $\boldsymbol{\Sigma}$ be given by
+
+\begin{equation}
+\boldsymbol{\Sigma}
+=
+\left(
+\begin{array}{ccc}
+  1 & 0 & 0 \\
+  0 & 1 & 0 \\
+  0 & 0 & 1 \\
+\end{array}
+\right) .
+\end{equation}
+
+Let $\Delta_{t} = 0.1$.
+
+### R Function Arguments
+
+
+```r
+n
+```
+
+```
+## [1] 20
+```
+
+```r
+time
+```
+
+```
+## [1] 1000
+```
+
+```r
+delta_t
+```
+
+```
+## [1] 0.1
+```
+
+```r
+mu0
+```
+
+```
+## [1] 0 0 0
+```
+
+```r
+sigma0
+```
+
+```
+##      [,1] [,2] [,3]
+## [1,]    1    0    0
+## [2,]    0    1    0
+## [3,]    0    0    1
+```
+
+```r
+mu
+```
+
+```
+## [1] 0 0 0
+```
+
+```r
+phi
+```
+
+```
+##        [,1]   [,2]  [,3]
+## [1,]  0.357  0.000 0.000
+## [2,] -0.771  0.511 0.000
+## [3,]  0.450 -0.729 0.693
+```
+
+```r
+sigma
+```
+
+```
+##      [,1] [,2] [,3]
+## [1,]    1    0    0
+## [2,]    0    1    0
+## [3,]    0    0    1
+```
+
+```r
+nu
+```
+
+```
+## [1] 0 0 0
+```
+
+```r
+lambda
+```
+
+```
+##      [,1] [,2] [,3]
+## [1,]    1    0    0
+## [2,]    0    1    0
+## [3,]    0    0    1
+```
+
+```r
+theta
+```
+
+```
+##      [,1] [,2] [,3]
+## [1,]  0.5  0.0  0.0
+## [2,]  0.0  0.5  0.0
+## [3,]  0.0  0.0  0.5
+```
+
+### Using the SimSSMVARFixed Function to Simulate Data
+
+
+```r
+library(simStateSpace)
+data <- Sim2Matrix(
+  SimSSMOUFixed(
+    n = n,
+    mu0 = mu0,
+    sigma0_sqrt = chol(sigma0),
+    mu = mu,
+    phi = phi,
+    sigma_sqrt = chol(sigma),
+    nu = nu,
+    lambda = lambda,
+    theta_sqrt = chol(theta),
+    delta_t = delta_t,
+    time = time,
+    burn_in = 0
+  )
+)
+head(data)
+```
+
+```
+##              y1        y2       y3 time id
+## [1,] -0.2452235 0.3791894 2.916196  0.0  1
+## [2,] -0.6408937 1.7824870 1.400803  0.1  1
+## [3,] -0.9755917 2.0512793 2.498214  0.2  1
+## [4,] -2.5120801 0.7969752 2.234649  0.3  1
+## [5,] -1.7204259 0.6404276 2.053562  0.4  1
+## [6,]  0.4753620 1.3252011 2.114403  0.5  1
+```
+
+## Model Fitting
+
+### Prepare Data
+
+
+```r
+dynr_data <- dynr::dynr.data(
+  dataframe = data,
+  id = "id",
+  time = "time",
+  observed = c("y1", "y2", "y3")
+)
+```
+
+### Prepare Initial Condition
+
+
+```r
+dynr_initial <- dynr::prep.initial(
+  values.inistate = c(0, 0, 0),
+  params.inistate = c("mu0_1", "mu0_2", "mu0_3"),
+  values.inicov = diag(3),
+  params.inicov = matrix(
+    data = c(
+      "sigma0_11", "sigma0_12", "sigma0_13",
+      "sigma0_12", "sigma0_22", "sigma0_23",
+      "sigma0_13", "sigma0_23", "sigma0_33"
+    ),
+    nrow = 3
+  )
+)
+```
+
+### Prepare Measurement Model
+
+
+```r
+dynr_measurement <- dynr::prep.measurement(
+  values.load = diag(3),
+  params.load = matrix(data = "fixed", nrow = 3, ncol = 3),
+  state.names = c("eta_1", "eta_2", "eta_3"),
+  obs.names = c("y1", "y2", "y3")
+)
+```
+
+### Prepare Dynamic Process
+
+
+```r
+dynr_dynamics <- dynr::prep.formulaDynamics(
+  formula = list(  
+    eta_1 ~ phi_11 * (mu_1 - eta_1) + phi_12 * (mu_2 - eta_2) + phi_13 * (mu_3 - eta_3),
+    eta_2 ~ phi_21 * (mu_1 - eta_1) + phi_22 * (mu_2 - eta_2) + phi_23 * (mu_3 - eta_3),
+    eta_3 ~ phi_31 * (mu_1 - eta_1) + phi_32 * (mu_2 - eta_2) + phi_33 * (mu_3 - eta_3)
+  ),
+  startval = c(
+    mu_1 = 0, mu_2 = 0, mu_3 = 0,
+    phi_11 = 0, phi_12 = 0, phi_13 = 0,
+    phi_21 = 0, phi_22 = 0, phi_23 = 0,
+    phi_31 = 0, phi_32 = 0, phi_33 = 0
+  ),
+  isContinuousTime = TRUE
+)
+```
+
+### Prepare Process Noise
+
+
+```r
+dynr_noise <- dynr::prep.noise(
+  values.latent = diag(3),
+  params.latent = matrix(
+    data = c(
+      "sigma_11", "sigma_12", "sigma_13",
+      "sigma_12", "sigma_22", "sigma_23",
+      "sigma_13", "sigma_23", "sigma_33"
+    ),
+    nrow = 3
+  ),
+  values.observed = diag(3),
+  params.observed = matrix(
+    data = c(
+      "theta_11", "fixed", "fixed",
+      "fixed", "theta_22", "fixed",
+      "fixed", "fixed", "theta_33"
+    ),
+    nrow = 3
+  )
+)
+```
+
+### Prepare the Model
+
+
+```r
+model <- dynr::dynr.model(
+  data = dynr_data,
+  initial = dynr_initial,
+  measurement = dynr_measurement,
+  dynamics = dynr_dynamics,
+  noise = dynr_noise,
+  outfile = "ou.c"
+)
+```
+
+Add lower and upper bound to aid in the optimization.
+
+
+```r
+model$lb[
+  c(
+    "phi_11",
+    "phi_12",
+    "phi_13",
+    "phi_21",
+    "phi_22",
+    "phi_23",
+    "phi_31",
+    "phi_32",
+    "phi_33"
+  )
+] <- -1.5
+model$ub[
+  c(
+    "phi_11",
+    "phi_12",
+    "phi_13",
+    "phi_21",
+    "phi_22",
+    "phi_23",
+    "phi_31",
+    "phi_32",
+    "phi_33"
+  )
+] <- +1.5
+```
+
+
+
+### Fit the Model
+
+
+```r
+results <- dynr::dynr.cook(
+  model,
+  debug_flag = TRUE,
+  verbose = FALSE
+)
+```
+
+```
+## [1] "Get ready!!!!"
+## using C compiler: ‘gcc (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0’
+## Optimization function called.
+## Starting Hessian calculation ...
+## Finished Hessian calculation.
+## Original exit flag:  3 
+## Modified exit flag:  3 
+## Optimization terminated successfully: ftol_rel or ftol_abs was reached. 
+## Original fitted parameters:  0.006015607 -0.008453502 -0.03091832 0.3060683 
+## 0.05679578 -0.05762676 -0.7200712 0.469041 0.02055753 0.4257059 -0.6825019 
+## 0.6696725 -0.04367272 0.006317558 -0.03621608 0.01299913 -0.00929351 
+## -0.06866796 -0.694614 -0.716697 -0.672929 -0.005430874 -0.001174672 0.05277914 
+## 0.3381909 0.09166534 0.01217039 0.01451212 0.1861727 -0.1414645 
+## 
+## Transformed fitted parameters:  0.006015607 -0.008453502 -0.03091832 0.3060683 
+## 0.05679578 -0.05762676 -0.7200712 0.469041 0.02055753 0.4257059 -0.6825019 
+## 0.6696725 0.9572672 0.006047591 -0.03466847 1.013122 -0.009634126 0.9349797 
+## 0.4992671 0.4883627 0.510212 -0.005430874 -0.001174672 0.05277914 1.402408 
+## 0.1285522 0.01706785 1.026402 0.1904587 0.9034607 
+## 
+## Doing end processing
+## Successful trial
+## Total Time: 18.85202 
+## Backend Time: 18.84439
+```
+
+## Summary
+
+
+```r
+summary(results)
+```
+
+```
+## Coefficients:
+##            Estimate Std. Error t value  ci.lower  ci.upper Pr(>|t|)    
+## mu_1       0.006016   0.065878   0.091 -0.123103  0.135134   0.4636    
+## mu_2      -0.008454   0.109673  -0.077 -0.223409  0.206502   0.4693    
+## mu_3      -0.030918   0.083076  -0.372 -0.193744  0.131908   0.3549    
+## phi_11     0.306068   0.037629   8.134  0.232317  0.379820   <2e-16 ***
+## phi_12     0.056796   0.030693   1.850 -0.003362  0.116953   0.0321 *  
+## phi_13    -0.057627   0.027048  -2.131 -0.110639 -0.004614   0.0166 *  
+## phi_21    -0.720071   0.036790 -19.573 -0.792177 -0.647965   <2e-16 ***
+## phi_22     0.469041   0.031815  14.743  0.406684  0.531398   <2e-16 ***
+## phi_23     0.020558   0.027969   0.735 -0.034260  0.075375   0.2312    
+## phi_31     0.425706   0.035267  12.071  0.356583  0.494829   <2e-16 ***
+## phi_32    -0.682502   0.030217 -22.587 -0.741726 -0.623278   <2e-16 ***
+## phi_33     0.669672   0.027909  23.995  0.614973  0.724372   <2e-16 ***
+## sigma_11   0.957267   0.042585  22.479  0.873803  1.040732   <2e-16 ***
+## sigma_12   0.006048   0.026627   0.227 -0.046140  0.058235   0.4102    
+## sigma_13  -0.034668   0.025507  -1.359 -0.084661  0.015324   0.0871 .  
+## sigma_22   1.013122   0.041151  24.619  0.932467  1.093777   <2e-16 ***
+## sigma_23  -0.009634   0.025339  -0.380 -0.059297  0.040029   0.3519    
+## sigma_33   0.934980   0.038412  24.341  0.859694  1.010266   <2e-16 ***
+## theta_11   0.499267   0.006865  72.727  0.485812  0.512722   <2e-16 ***
+## theta_22   0.488363   0.006711  72.766  0.475209  0.501517   <2e-16 ***
+## theta_33   0.510212   0.006837  74.626  0.496812  0.523612   <2e-16 ***
+## mu0_1     -0.005431   0.281951  -0.019 -0.558044  0.547182   0.4923    
+## mu0_2     -0.001175   0.252838  -0.005 -0.496728  0.494379   0.4981    
+## mu0_3      0.052779   0.236982   0.223 -0.411698  0.517256   0.4119    
+## sigma0_11  1.402408   0.554038   2.531  0.316514  2.488303   0.0057 ** 
+## sigma0_12  0.128552   0.313092   0.411 -0.485096  0.742201   0.3407    
+## sigma0_13  0.017068   0.294081   0.058 -0.559321  0.593456   0.4769    
+## sigma0_22  1.026402   0.437113   2.348  0.169677  1.883126   0.0094 ** 
+## sigma0_23  0.190459   0.259555   0.734 -0.318259  0.699176   0.2315    
+## sigma0_33  0.903461   0.372434   2.426  0.173504  1.633418   0.0076 ** 
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## -2 log-likelihood value at convergence = 152267.93
+## AIC = 152327.93
+## BIC = 152565.03
+```
+
+
+```
+## [1] -0.005430874 -0.001174672  0.052779135
+```
+
+### Estimated Coefficients
+
+
+```r
+mu_hat
+```
+
+```
+## [1]  0.006015607 -0.008453502 -0.030918325
+```
+
+```r
+phi_hat
+```
+
+```
+##            [,1]        [,2]        [,3]
+## [1,]  0.3060683  0.05679578 -0.05762676
+## [2,] -0.7200712  0.46904102  0.02055753
+## [3,]  0.4257059 -0.68250187  0.66967247
+```
+
+```r
+sigma_hat
+```
+
+```
+##              [,1]         [,2]         [,3]
+## [1,]  0.957267198  0.006047591 -0.034668469
+## [2,]  0.006047591  1.013122188 -0.009634126
+## [3,] -0.034668469 -0.009634126  0.934979687
+```
+
+```r
+mu0_hat
+```
+
+```
+## [1] -0.005430874 -0.001174672  0.052779135
+```
+
+```r
+sigma0_hat
+```
+
+```
+##            [,1]      [,2]       [,3]
+## [1,] 1.40240819 0.1285522 0.01706785
+## [2,] 0.12855223 1.0264017 0.19045868
+## [3,] 0.01706785 0.1904587 0.90346068
+```
+
+```r
+beta_var1_hat <- as.matrix(
+  Matrix::expm(-1 * phi_hat)
+)
+beta_var1_hat
+```
+
+```
+##            [,1]        [,2]        [,3]
+## [1,]  0.7171576 -0.02603235 0.035497658
+## [2,]  0.4862326  0.61095163 0.001269541
+## [3,] -0.1082961  0.38936299 0.503718079
+```
+
+### Discrepancy Between Estimated and Population Coefficients
+
+
+```r
+abs(mu - mu_hat)
+```
+
+```
+## [1] 0.006015607 0.008453502 0.030918325
+```
+
+```r
+abs(phi - phi_hat)
+```
+
+```
+##            [,1]       [,2]       [,3]
+## [1,] 0.05093171 0.05679578 0.05762676
+## [2,] 0.05092880 0.04195898 0.02055753
+## [3,] 0.02429411 0.04649813 0.02332753
+```
+
+```r
+abs(beta_var1 - beta_var1_hat)
+```
+
+```
+##             [,1]       [,2]        [,3]
+## [1,] 0.017385151 0.02603235 0.035497658
+## [2,] 0.013801572 0.01105625 0.001269541
+## [3,] 0.008257774 0.01047263 0.003644483
+```
+
+```r
+abs(sigma - sigma_hat)
+```
+
+```
+##             [,1]        [,2]        [,3]
+## [1,] 0.042732802 0.006047591 0.034668469
+## [2,] 0.006047591 0.013122188 0.009634126
+## [3,] 0.034668469 0.009634126 0.065020313
+```
+
+
+
+## References
