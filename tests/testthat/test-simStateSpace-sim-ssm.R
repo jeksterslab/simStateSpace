@@ -1,4 +1,4 @@
-## ---- test-simStateSpace-sim-ssm-0-fixed
+## ---- test-simStateSpace-sim-ssm
 lapply(
   X = 1,
   FUN = function(i,
@@ -10,7 +10,6 @@ lapply(
     iden <- diag(k)
     iden_sqrt <- chol(iden)
     null_vec <- rep(x = 0, times = k)
-    n <- 5
     mu0 <- null_vec
     sigma0_sqrt <- iden_sqrt
     alpha <- null_vec
@@ -20,10 +19,15 @@ lapply(
     lambda <- iden
     theta_sqrt <- chol(diag(x = 0.50, nrow = k))
     time <- 50
-    burn_in <- 10
+    burn_in <- 0
+    gamma_y <- gamma_eta <- 0.10 * diag(k)
+    x <- matrix(
+      data = rnorm(n = k * (time + burn_in)),
+      ncol = k
+    )
 
-    ssm <- SimSSM0Fixed(
-      n = n,
+    # Type 0
+    ssm <- SimSSM(
       mu0 = mu0,
       sigma0_sqrt = sigma0_sqrt,
       alpha = alpha,
@@ -32,14 +36,15 @@ lapply(
       nu = nu,
       lambda = lambda,
       theta_sqrt = theta_sqrt,
+      type = 0,
       time = time,
       burn_in = burn_in
     )
 
-    Sim2Matrix(ssm, eta = TRUE)
-    Sim2Matrix(ssm, eta = FALSE)
+    str(ssm)
 
-    ssm <- SimSSM0(
+    # Type 1
+    ssm <- SimSSM(
       mu0 = mu0,
       sigma0_sqrt = sigma0_sqrt,
       alpha = alpha,
@@ -48,12 +53,34 @@ lapply(
       nu = nu,
       lambda = lambda,
       theta_sqrt = theta_sqrt,
+      gamma_eta = gamma_eta,
+      x = x,
+      type = 1,
       time = time,
       burn_in = burn_in
     )
 
-    Sim2Matrix(ssm, eta = TRUE)
-    Sim2Matrix(ssm, eta = FALSE)
+    str(ssm)
+
+    # Type 2
+    ssm <- SimSSM(
+      mu0 = mu0,
+      sigma0_sqrt = sigma0_sqrt,
+      alpha = alpha,
+      beta = beta,
+      psi_sqrt = psi_sqrt,
+      nu = nu,
+      lambda = lambda,
+      theta_sqrt = theta_sqrt,
+      gamma_y = gamma_y,
+      gamma_eta = gamma_eta,
+      x = x,
+      type = 2,
+      time = time,
+      burn_in = burn_in
+    )
+
+    str(ssm)
   },
-  text = "test-simStateSpace-sim-ssm-0-fixed"
+  text = "test-simStateSpace-sim-ssm"
 )

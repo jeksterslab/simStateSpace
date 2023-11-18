@@ -25,6 +25,26 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// SimSSM0
+Rcpp::List SimSSM0(const arma::vec& mu0, const arma::mat& sigma0_sqrt, const arma::vec& alpha, const arma::mat& beta, const arma::mat& psi_sqrt, const arma::vec& nu, const arma::mat& lambda, const arma::mat& theta_sqrt, const int time, const int burn_in);
+RcppExport SEXP _simStateSpace_SimSSM0(SEXP mu0SEXP, SEXP sigma0_sqrtSEXP, SEXP alphaSEXP, SEXP betaSEXP, SEXP psi_sqrtSEXP, SEXP nuSEXP, SEXP lambdaSEXP, SEXP theta_sqrtSEXP, SEXP timeSEXP, SEXP burn_inSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::vec& >::type mu0(mu0SEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type sigma0_sqrt(sigma0_sqrtSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type beta(betaSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type psi_sqrt(psi_sqrtSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type nu(nuSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type lambda(lambdaSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type theta_sqrt(theta_sqrtSEXP);
+    Rcpp::traits::input_parameter< const int >::type time(timeSEXP);
+    Rcpp::traits::input_parameter< const int >::type burn_in(burn_inSEXP);
+    rcpp_result_gen = Rcpp::wrap(SimSSM0(mu0, sigma0_sqrt, alpha, beta, psi_sqrt, nu, lambda, theta_sqrt, time, burn_in));
+    return rcpp_result_gen;
+END_RCPP
+}
 // SimSSM0Fixed
 Rcpp::List SimSSM0Fixed(const int n, const arma::vec& mu0, const arma::mat& sigma0_sqrt, const arma::vec& alpha, const arma::mat& beta, const arma::mat& psi_sqrt, const arma::vec& nu, const arma::mat& lambda, const arma::mat& theta_sqrt, const int time, const int burn_in);
 RcppExport SEXP _simStateSpace_SimSSM0Fixed(SEXP nSEXP, SEXP mu0SEXP, SEXP sigma0_sqrtSEXP, SEXP alphaSEXP, SEXP betaSEXP, SEXP psi_sqrtSEXP, SEXP nuSEXP, SEXP lambdaSEXP, SEXP theta_sqrtSEXP, SEXP timeSEXP, SEXP burn_inSEXP) {
@@ -46,29 +66,30 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// SimSSM0
-Rcpp::List SimSSM0(const arma::vec& mu0, const arma::mat& sigma0_sqrt, const arma::vec& alpha, const arma::mat& beta, const arma::mat& psi_sqrt, const arma::vec& nu, const arma::mat& lambda, const arma::mat& theta_sqrt, const int time, const int burn_in);
-RcppExport SEXP _simStateSpace_SimSSM0(SEXP mu0SEXP, SEXP sigma0_sqrtSEXP, SEXP alphaSEXP, SEXP betaSEXP, SEXP psi_sqrtSEXP, SEXP nuSEXP, SEXP lambdaSEXP, SEXP theta_sqrtSEXP, SEXP timeSEXP, SEXP burn_inSEXP) {
+// SimSSM0OU
+Rcpp::List SimSSM0OU(const arma::vec& mu0, const arma::mat& sigma0_sqrt, const arma::vec& mu, const arma::mat& phi, const arma::mat& sigma_sqrt, const arma::vec& nu, const arma::mat& lambda, const arma::mat& theta_sqrt, const double delta_t, const int time, const int burn_in);
+RcppExport SEXP _simStateSpace_SimSSM0OU(SEXP mu0SEXP, SEXP sigma0_sqrtSEXP, SEXP muSEXP, SEXP phiSEXP, SEXP sigma_sqrtSEXP, SEXP nuSEXP, SEXP lambdaSEXP, SEXP theta_sqrtSEXP, SEXP delta_tSEXP, SEXP timeSEXP, SEXP burn_inSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const arma::vec& >::type mu0(mu0SEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type sigma0_sqrt(sigma0_sqrtSEXP);
-    Rcpp::traits::input_parameter< const arma::vec& >::type alpha(alphaSEXP);
-    Rcpp::traits::input_parameter< const arma::mat& >::type beta(betaSEXP);
-    Rcpp::traits::input_parameter< const arma::mat& >::type psi_sqrt(psi_sqrtSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type mu(muSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type phi(phiSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type sigma_sqrt(sigma_sqrtSEXP);
     Rcpp::traits::input_parameter< const arma::vec& >::type nu(nuSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type lambda(lambdaSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type theta_sqrt(theta_sqrtSEXP);
+    Rcpp::traits::input_parameter< const double >::type delta_t(delta_tSEXP);
     Rcpp::traits::input_parameter< const int >::type time(timeSEXP);
     Rcpp::traits::input_parameter< const int >::type burn_in(burn_inSEXP);
-    rcpp_result_gen = Rcpp::wrap(SimSSM0(mu0, sigma0_sqrt, alpha, beta, psi_sqrt, nu, lambda, theta_sqrt, time, burn_in));
+    rcpp_result_gen = Rcpp::wrap(SimSSM0OU(mu0, sigma0_sqrt, mu, phi, sigma_sqrt, nu, lambda, theta_sqrt, delta_t, time, burn_in));
     return rcpp_result_gen;
 END_RCPP
 }
-// SimSSMOUFixed
-Rcpp::List SimSSMOUFixed(const int n, const arma::vec& mu0, const arma::mat& sigma0_sqrt, const arma::vec& mu, const arma::mat& phi, const arma::mat& sigma_sqrt, const arma::vec& nu, const arma::mat& lambda, const arma::mat& theta_sqrt, const double delta_t, const int time, const int burn_in);
-RcppExport SEXP _simStateSpace_SimSSMOUFixed(SEXP nSEXP, SEXP mu0SEXP, SEXP sigma0_sqrtSEXP, SEXP muSEXP, SEXP phiSEXP, SEXP sigma_sqrtSEXP, SEXP nuSEXP, SEXP lambdaSEXP, SEXP theta_sqrtSEXP, SEXP delta_tSEXP, SEXP timeSEXP, SEXP burn_inSEXP) {
+// SimSSM0OUFixed
+Rcpp::List SimSSM0OUFixed(const int n, const arma::vec& mu0, const arma::mat& sigma0_sqrt, const arma::vec& mu, const arma::mat& phi, const arma::mat& sigma_sqrt, const arma::vec& nu, const arma::mat& lambda, const arma::mat& theta_sqrt, const double delta_t, const int time, const int burn_in);
+RcppExport SEXP _simStateSpace_SimSSM0OUFixed(SEXP nSEXP, SEXP mu0SEXP, SEXP sigma0_sqrtSEXP, SEXP muSEXP, SEXP phiSEXP, SEXP sigma_sqrtSEXP, SEXP nuSEXP, SEXP lambdaSEXP, SEXP theta_sqrtSEXP, SEXP delta_tSEXP, SEXP timeSEXP, SEXP burn_inSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -84,34 +105,52 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const double >::type delta_t(delta_tSEXP);
     Rcpp::traits::input_parameter< const int >::type time(timeSEXP);
     Rcpp::traits::input_parameter< const int >::type burn_in(burn_inSEXP);
-    rcpp_result_gen = Rcpp::wrap(SimSSMOUFixed(n, mu0, sigma0_sqrt, mu, phi, sigma_sqrt, nu, lambda, theta_sqrt, delta_t, time, burn_in));
+    rcpp_result_gen = Rcpp::wrap(SimSSM0OUFixed(n, mu0, sigma0_sqrt, mu, phi, sigma_sqrt, nu, lambda, theta_sqrt, delta_t, time, burn_in));
     return rcpp_result_gen;
 END_RCPP
 }
-// SimSSMOU
-Rcpp::List SimSSMOU(const arma::vec& mu0, const arma::mat& sigma0_sqrt, const arma::vec& mu, const arma::mat& phi, const arma::mat& sigma_sqrt, const arma::vec& nu, const arma::mat& lambda, const arma::mat& theta_sqrt, const double delta_t, const int time, const int burn_in);
-RcppExport SEXP _simStateSpace_SimSSMOU(SEXP mu0SEXP, SEXP sigma0_sqrtSEXP, SEXP muSEXP, SEXP phiSEXP, SEXP sigma_sqrtSEXP, SEXP nuSEXP, SEXP lambdaSEXP, SEXP theta_sqrtSEXP, SEXP delta_tSEXP, SEXP timeSEXP, SEXP burn_inSEXP) {
+// SimSSM0OUVary
+Rcpp::List SimSSM0OUVary(const int n, const Rcpp::List& mu0, const Rcpp::List& sigma0_sqrt, const Rcpp::List& mu, const Rcpp::List& phi, const Rcpp::List& sigma_sqrt, const Rcpp::List& nu, const Rcpp::List& lambda, const Rcpp::List& theta_sqrt, const double delta_t, const int time, const int burn_in);
+RcppExport SEXP _simStateSpace_SimSSM0OUVary(SEXP nSEXP, SEXP mu0SEXP, SEXP sigma0_sqrtSEXP, SEXP muSEXP, SEXP phiSEXP, SEXP sigma_sqrtSEXP, SEXP nuSEXP, SEXP lambdaSEXP, SEXP theta_sqrtSEXP, SEXP delta_tSEXP, SEXP timeSEXP, SEXP burn_inSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type mu0(mu0SEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type sigma0_sqrt(sigma0_sqrtSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type mu(muSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type phi(phiSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type sigma_sqrt(sigma_sqrtSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type nu(nuSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type lambda(lambdaSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type theta_sqrt(theta_sqrtSEXP);
+    Rcpp::traits::input_parameter< const double >::type delta_t(delta_tSEXP);
+    Rcpp::traits::input_parameter< const int >::type time(timeSEXP);
+    Rcpp::traits::input_parameter< const int >::type burn_in(burn_inSEXP);
+    rcpp_result_gen = Rcpp::wrap(SimSSM0OUVary(n, mu0, sigma0_sqrt, mu, phi, sigma_sqrt, nu, lambda, theta_sqrt, delta_t, time, burn_in));
+    return rcpp_result_gen;
+END_RCPP
+}
+// SimSSM0VAR
+Rcpp::List SimSSM0VAR(const arma::vec& mu0, const arma::mat& sigma0_sqrt, const arma::vec& alpha, const arma::mat& beta, const arma::mat& psi_sqrt, const int time, const int burn_in);
+RcppExport SEXP _simStateSpace_SimSSM0VAR(SEXP mu0SEXP, SEXP sigma0_sqrtSEXP, SEXP alphaSEXP, SEXP betaSEXP, SEXP psi_sqrtSEXP, SEXP timeSEXP, SEXP burn_inSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const arma::vec& >::type mu0(mu0SEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type sigma0_sqrt(sigma0_sqrtSEXP);
-    Rcpp::traits::input_parameter< const arma::vec& >::type mu(muSEXP);
-    Rcpp::traits::input_parameter< const arma::mat& >::type phi(phiSEXP);
-    Rcpp::traits::input_parameter< const arma::mat& >::type sigma_sqrt(sigma_sqrtSEXP);
-    Rcpp::traits::input_parameter< const arma::vec& >::type nu(nuSEXP);
-    Rcpp::traits::input_parameter< const arma::mat& >::type lambda(lambdaSEXP);
-    Rcpp::traits::input_parameter< const arma::mat& >::type theta_sqrt(theta_sqrtSEXP);
-    Rcpp::traits::input_parameter< const double >::type delta_t(delta_tSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type beta(betaSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type psi_sqrt(psi_sqrtSEXP);
     Rcpp::traits::input_parameter< const int >::type time(timeSEXP);
     Rcpp::traits::input_parameter< const int >::type burn_in(burn_inSEXP);
-    rcpp_result_gen = Rcpp::wrap(SimSSMOU(mu0, sigma0_sqrt, mu, phi, sigma_sqrt, nu, lambda, theta_sqrt, delta_t, time, burn_in));
+    rcpp_result_gen = Rcpp::wrap(SimSSM0VAR(mu0, sigma0_sqrt, alpha, beta, psi_sqrt, time, burn_in));
     return rcpp_result_gen;
 END_RCPP
 }
-// SimSSMVARFixed
-Rcpp::List SimSSMVARFixed(const int n, const arma::vec& mu0, const arma::mat& sigma0_sqrt, const arma::vec& alpha, const arma::mat& beta, const arma::mat& psi_sqrt, const int time, const int burn_in);
-RcppExport SEXP _simStateSpace_SimSSMVARFixed(SEXP nSEXP, SEXP mu0SEXP, SEXP sigma0_sqrtSEXP, SEXP alphaSEXP, SEXP betaSEXP, SEXP psi_sqrtSEXP, SEXP timeSEXP, SEXP burn_inSEXP) {
+// SimSSM0VARFixed
+Rcpp::List SimSSM0VARFixed(const int n, const arma::vec& mu0, const arma::mat& sigma0_sqrt, const arma::vec& alpha, const arma::mat& beta, const arma::mat& psi_sqrt, const int time, const int burn_in);
+RcppExport SEXP _simStateSpace_SimSSM0VARFixed(SEXP nSEXP, SEXP mu0SEXP, SEXP sigma0_sqrtSEXP, SEXP alphaSEXP, SEXP betaSEXP, SEXP psi_sqrtSEXP, SEXP timeSEXP, SEXP burn_inSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -123,13 +162,52 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const arma::mat& >::type psi_sqrt(psi_sqrtSEXP);
     Rcpp::traits::input_parameter< const int >::type time(timeSEXP);
     Rcpp::traits::input_parameter< const int >::type burn_in(burn_inSEXP);
-    rcpp_result_gen = Rcpp::wrap(SimSSMVARFixed(n, mu0, sigma0_sqrt, alpha, beta, psi_sqrt, time, burn_in));
+    rcpp_result_gen = Rcpp::wrap(SimSSM0VARFixed(n, mu0, sigma0_sqrt, alpha, beta, psi_sqrt, time, burn_in));
     return rcpp_result_gen;
 END_RCPP
 }
-// SimSSMVAR
-Rcpp::List SimSSMVAR(const arma::vec& mu0, const arma::mat& sigma0_sqrt, const arma::vec& alpha, const arma::mat& beta, const arma::mat& psi_sqrt, const int time, const int burn_in);
-RcppExport SEXP _simStateSpace_SimSSMVAR(SEXP mu0SEXP, SEXP sigma0_sqrtSEXP, SEXP alphaSEXP, SEXP betaSEXP, SEXP psi_sqrtSEXP, SEXP timeSEXP, SEXP burn_inSEXP) {
+// SimSSM0VARVary
+Rcpp::List SimSSM0VARVary(const int n, const Rcpp::List& mu0, const Rcpp::List& sigma0_sqrt, const Rcpp::List& alpha, const Rcpp::List& beta, const Rcpp::List& psi_sqrt, const int time, const int burn_in);
+RcppExport SEXP _simStateSpace_SimSSM0VARVary(SEXP nSEXP, SEXP mu0SEXP, SEXP sigma0_sqrtSEXP, SEXP alphaSEXP, SEXP betaSEXP, SEXP psi_sqrtSEXP, SEXP timeSEXP, SEXP burn_inSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type mu0(mu0SEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type sigma0_sqrt(sigma0_sqrtSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type beta(betaSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type psi_sqrt(psi_sqrtSEXP);
+    Rcpp::traits::input_parameter< const int >::type time(timeSEXP);
+    Rcpp::traits::input_parameter< const int >::type burn_in(burn_inSEXP);
+    rcpp_result_gen = Rcpp::wrap(SimSSM0VARVary(n, mu0, sigma0_sqrt, alpha, beta, psi_sqrt, time, burn_in));
+    return rcpp_result_gen;
+END_RCPP
+}
+// SimSSM0Vary
+Rcpp::List SimSSM0Vary(const int n, const Rcpp::List& mu0, const Rcpp::List& sigma0_sqrt, const Rcpp::List& alpha, const Rcpp::List& beta, const Rcpp::List& psi_sqrt, const Rcpp::List& nu, const Rcpp::List& lambda, const Rcpp::List& theta_sqrt, const int time, const int burn_in);
+RcppExport SEXP _simStateSpace_SimSSM0Vary(SEXP nSEXP, SEXP mu0SEXP, SEXP sigma0_sqrtSEXP, SEXP alphaSEXP, SEXP betaSEXP, SEXP psi_sqrtSEXP, SEXP nuSEXP, SEXP lambdaSEXP, SEXP theta_sqrtSEXP, SEXP timeSEXP, SEXP burn_inSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type mu0(mu0SEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type sigma0_sqrt(sigma0_sqrtSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type beta(betaSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type psi_sqrt(psi_sqrtSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type nu(nuSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type lambda(lambdaSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type theta_sqrt(theta_sqrtSEXP);
+    Rcpp::traits::input_parameter< const int >::type time(timeSEXP);
+    Rcpp::traits::input_parameter< const int >::type burn_in(burn_inSEXP);
+    rcpp_result_gen = Rcpp::wrap(SimSSM0Vary(n, mu0, sigma0_sqrt, alpha, beta, psi_sqrt, nu, lambda, theta_sqrt, time, burn_in));
+    return rcpp_result_gen;
+END_RCPP
+}
+// SimSSM1
+Rcpp::List SimSSM1(const arma::vec& mu0, const arma::mat& sigma0_sqrt, const arma::vec& alpha, const arma::mat& beta, const arma::mat& psi_sqrt, const arma::vec& nu, const arma::mat& lambda, const arma::mat& theta_sqrt, const arma::mat& gamma_eta, const arma::mat& x, const int time, const int burn_in);
+RcppExport SEXP _simStateSpace_SimSSM1(SEXP mu0SEXP, SEXP sigma0_sqrtSEXP, SEXP alphaSEXP, SEXP betaSEXP, SEXP psi_sqrtSEXP, SEXP nuSEXP, SEXP lambdaSEXP, SEXP theta_sqrtSEXP, SEXP gamma_etaSEXP, SEXP xSEXP, SEXP timeSEXP, SEXP burn_inSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -138,21 +216,365 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const arma::vec& >::type alpha(alphaSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type beta(betaSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type psi_sqrt(psi_sqrtSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type nu(nuSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type lambda(lambdaSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type theta_sqrt(theta_sqrtSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type gamma_eta(gamma_etaSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type x(xSEXP);
     Rcpp::traits::input_parameter< const int >::type time(timeSEXP);
     Rcpp::traits::input_parameter< const int >::type burn_in(burn_inSEXP);
-    rcpp_result_gen = Rcpp::wrap(SimSSMVAR(mu0, sigma0_sqrt, alpha, beta, psi_sqrt, time, burn_in));
+    rcpp_result_gen = Rcpp::wrap(SimSSM1(mu0, sigma0_sqrt, alpha, beta, psi_sqrt, nu, lambda, theta_sqrt, gamma_eta, x, time, burn_in));
+    return rcpp_result_gen;
+END_RCPP
+}
+// SimSSM1Fixed
+Rcpp::List SimSSM1Fixed(const int n, const arma::vec& mu0, const arma::mat& sigma0_sqrt, const arma::vec& alpha, const arma::mat& beta, const arma::mat& psi_sqrt, const arma::vec& nu, const arma::mat& lambda, const arma::mat& theta_sqrt, const arma::mat& gamma_eta, const Rcpp::List& x, const int time, const int burn_in);
+RcppExport SEXP _simStateSpace_SimSSM1Fixed(SEXP nSEXP, SEXP mu0SEXP, SEXP sigma0_sqrtSEXP, SEXP alphaSEXP, SEXP betaSEXP, SEXP psi_sqrtSEXP, SEXP nuSEXP, SEXP lambdaSEXP, SEXP theta_sqrtSEXP, SEXP gamma_etaSEXP, SEXP xSEXP, SEXP timeSEXP, SEXP burn_inSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type mu0(mu0SEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type sigma0_sqrt(sigma0_sqrtSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type beta(betaSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type psi_sqrt(psi_sqrtSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type nu(nuSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type lambda(lambdaSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type theta_sqrt(theta_sqrtSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type gamma_eta(gamma_etaSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const int >::type time(timeSEXP);
+    Rcpp::traits::input_parameter< const int >::type burn_in(burn_inSEXP);
+    rcpp_result_gen = Rcpp::wrap(SimSSM1Fixed(n, mu0, sigma0_sqrt, alpha, beta, psi_sqrt, nu, lambda, theta_sqrt, gamma_eta, x, time, burn_in));
+    return rcpp_result_gen;
+END_RCPP
+}
+// SimSSM1OU
+Rcpp::List SimSSM1OU(const arma::vec& mu0, const arma::mat& sigma0_sqrt, const arma::vec& mu, const arma::mat& phi, const arma::mat& sigma_sqrt, const arma::vec& nu, const arma::mat& lambda, const arma::mat& theta_sqrt, const arma::mat& gamma_eta, const arma::mat& x, const double delta_t, const int time, const int burn_in);
+RcppExport SEXP _simStateSpace_SimSSM1OU(SEXP mu0SEXP, SEXP sigma0_sqrtSEXP, SEXP muSEXP, SEXP phiSEXP, SEXP sigma_sqrtSEXP, SEXP nuSEXP, SEXP lambdaSEXP, SEXP theta_sqrtSEXP, SEXP gamma_etaSEXP, SEXP xSEXP, SEXP delta_tSEXP, SEXP timeSEXP, SEXP burn_inSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::vec& >::type mu0(mu0SEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type sigma0_sqrt(sigma0_sqrtSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type mu(muSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type phi(phiSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type sigma_sqrt(sigma_sqrtSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type nu(nuSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type lambda(lambdaSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type theta_sqrt(theta_sqrtSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type gamma_eta(gamma_etaSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const double >::type delta_t(delta_tSEXP);
+    Rcpp::traits::input_parameter< const int >::type time(timeSEXP);
+    Rcpp::traits::input_parameter< const int >::type burn_in(burn_inSEXP);
+    rcpp_result_gen = Rcpp::wrap(SimSSM1OU(mu0, sigma0_sqrt, mu, phi, sigma_sqrt, nu, lambda, theta_sqrt, gamma_eta, x, delta_t, time, burn_in));
+    return rcpp_result_gen;
+END_RCPP
+}
+// SimSSM1OUFixed
+Rcpp::List SimSSM1OUFixed(const int n, const arma::vec& mu0, const arma::mat& sigma0_sqrt, const arma::vec& mu, const arma::mat& phi, const arma::mat& sigma_sqrt, const arma::vec& nu, const arma::mat& lambda, const arma::mat& theta_sqrt, const arma::mat& gamma_eta, const Rcpp::List& x, const double delta_t, const int time, const int burn_in);
+RcppExport SEXP _simStateSpace_SimSSM1OUFixed(SEXP nSEXP, SEXP mu0SEXP, SEXP sigma0_sqrtSEXP, SEXP muSEXP, SEXP phiSEXP, SEXP sigma_sqrtSEXP, SEXP nuSEXP, SEXP lambdaSEXP, SEXP theta_sqrtSEXP, SEXP gamma_etaSEXP, SEXP xSEXP, SEXP delta_tSEXP, SEXP timeSEXP, SEXP burn_inSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type mu0(mu0SEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type sigma0_sqrt(sigma0_sqrtSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type mu(muSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type phi(phiSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type sigma_sqrt(sigma_sqrtSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type nu(nuSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type lambda(lambdaSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type theta_sqrt(theta_sqrtSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type gamma_eta(gamma_etaSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const double >::type delta_t(delta_tSEXP);
+    Rcpp::traits::input_parameter< const int >::type time(timeSEXP);
+    Rcpp::traits::input_parameter< const int >::type burn_in(burn_inSEXP);
+    rcpp_result_gen = Rcpp::wrap(SimSSM1OUFixed(n, mu0, sigma0_sqrt, mu, phi, sigma_sqrt, nu, lambda, theta_sqrt, gamma_eta, x, delta_t, time, burn_in));
+    return rcpp_result_gen;
+END_RCPP
+}
+// SimSSM1OUVary
+Rcpp::List SimSSM1OUVary(const int n, const Rcpp::List& mu0, const Rcpp::List& sigma0_sqrt, const Rcpp::List& mu, const Rcpp::List& phi, const Rcpp::List& sigma_sqrt, const Rcpp::List& nu, const Rcpp::List& lambda, const Rcpp::List& theta_sqrt, const Rcpp::List& gamma_eta, const Rcpp::List& x, const double delta_t, const int time, const int burn_in);
+RcppExport SEXP _simStateSpace_SimSSM1OUVary(SEXP nSEXP, SEXP mu0SEXP, SEXP sigma0_sqrtSEXP, SEXP muSEXP, SEXP phiSEXP, SEXP sigma_sqrtSEXP, SEXP nuSEXP, SEXP lambdaSEXP, SEXP theta_sqrtSEXP, SEXP gamma_etaSEXP, SEXP xSEXP, SEXP delta_tSEXP, SEXP timeSEXP, SEXP burn_inSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type mu0(mu0SEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type sigma0_sqrt(sigma0_sqrtSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type mu(muSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type phi(phiSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type sigma_sqrt(sigma_sqrtSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type nu(nuSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type lambda(lambdaSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type theta_sqrt(theta_sqrtSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type gamma_eta(gamma_etaSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const double >::type delta_t(delta_tSEXP);
+    Rcpp::traits::input_parameter< const int >::type time(timeSEXP);
+    Rcpp::traits::input_parameter< const int >::type burn_in(burn_inSEXP);
+    rcpp_result_gen = Rcpp::wrap(SimSSM1OUVary(n, mu0, sigma0_sqrt, mu, phi, sigma_sqrt, nu, lambda, theta_sqrt, gamma_eta, x, delta_t, time, burn_in));
+    return rcpp_result_gen;
+END_RCPP
+}
+// SimSSM1VAR
+Rcpp::List SimSSM1VAR(const arma::vec& mu0, const arma::mat& sigma0_sqrt, const arma::vec& alpha, const arma::mat& beta, const arma::mat& psi_sqrt, const arma::mat& gamma_eta, const arma::mat& x, const int time, const int burn_in);
+RcppExport SEXP _simStateSpace_SimSSM1VAR(SEXP mu0SEXP, SEXP sigma0_sqrtSEXP, SEXP alphaSEXP, SEXP betaSEXP, SEXP psi_sqrtSEXP, SEXP gamma_etaSEXP, SEXP xSEXP, SEXP timeSEXP, SEXP burn_inSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::vec& >::type mu0(mu0SEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type sigma0_sqrt(sigma0_sqrtSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type beta(betaSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type psi_sqrt(psi_sqrtSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type gamma_eta(gamma_etaSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const int >::type time(timeSEXP);
+    Rcpp::traits::input_parameter< const int >::type burn_in(burn_inSEXP);
+    rcpp_result_gen = Rcpp::wrap(SimSSM1VAR(mu0, sigma0_sqrt, alpha, beta, psi_sqrt, gamma_eta, x, time, burn_in));
+    return rcpp_result_gen;
+END_RCPP
+}
+// SimSSM1VARFixed
+Rcpp::List SimSSM1VARFixed(const int n, const arma::vec& mu0, const arma::mat& sigma0_sqrt, const arma::vec& alpha, const arma::mat& beta, const arma::mat& psi_sqrt, arma::mat& gamma_eta, const Rcpp::List& x, const int time, const int burn_in);
+RcppExport SEXP _simStateSpace_SimSSM1VARFixed(SEXP nSEXP, SEXP mu0SEXP, SEXP sigma0_sqrtSEXP, SEXP alphaSEXP, SEXP betaSEXP, SEXP psi_sqrtSEXP, SEXP gamma_etaSEXP, SEXP xSEXP, SEXP timeSEXP, SEXP burn_inSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type mu0(mu0SEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type sigma0_sqrt(sigma0_sqrtSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type beta(betaSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type psi_sqrt(psi_sqrtSEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type gamma_eta(gamma_etaSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const int >::type time(timeSEXP);
+    Rcpp::traits::input_parameter< const int >::type burn_in(burn_inSEXP);
+    rcpp_result_gen = Rcpp::wrap(SimSSM1VARFixed(n, mu0, sigma0_sqrt, alpha, beta, psi_sqrt, gamma_eta, x, time, burn_in));
+    return rcpp_result_gen;
+END_RCPP
+}
+// SimSSM1VARVary
+Rcpp::List SimSSM1VARVary(const int n, const Rcpp::List& mu0, const Rcpp::List& sigma0_sqrt, const Rcpp::List& alpha, const Rcpp::List& beta, const Rcpp::List& psi_sqrt, const Rcpp::List& gamma_eta, const Rcpp::List& x, const int time, const int burn_in);
+RcppExport SEXP _simStateSpace_SimSSM1VARVary(SEXP nSEXP, SEXP mu0SEXP, SEXP sigma0_sqrtSEXP, SEXP alphaSEXP, SEXP betaSEXP, SEXP psi_sqrtSEXP, SEXP gamma_etaSEXP, SEXP xSEXP, SEXP timeSEXP, SEXP burn_inSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type mu0(mu0SEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type sigma0_sqrt(sigma0_sqrtSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type beta(betaSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type psi_sqrt(psi_sqrtSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type gamma_eta(gamma_etaSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const int >::type time(timeSEXP);
+    Rcpp::traits::input_parameter< const int >::type burn_in(burn_inSEXP);
+    rcpp_result_gen = Rcpp::wrap(SimSSM1VARVary(n, mu0, sigma0_sqrt, alpha, beta, psi_sqrt, gamma_eta, x, time, burn_in));
+    return rcpp_result_gen;
+END_RCPP
+}
+// SimSSM1Vary
+Rcpp::List SimSSM1Vary(const int n, const Rcpp::List& mu0, const Rcpp::List& sigma0_sqrt, const Rcpp::List& alpha, const Rcpp::List& beta, const Rcpp::List& psi_sqrt, const Rcpp::List& nu, const Rcpp::List& lambda, const Rcpp::List& theta_sqrt, const Rcpp::List& gamma_eta, const Rcpp::List& x, const int time, const int burn_in);
+RcppExport SEXP _simStateSpace_SimSSM1Vary(SEXP nSEXP, SEXP mu0SEXP, SEXP sigma0_sqrtSEXP, SEXP alphaSEXP, SEXP betaSEXP, SEXP psi_sqrtSEXP, SEXP nuSEXP, SEXP lambdaSEXP, SEXP theta_sqrtSEXP, SEXP gamma_etaSEXP, SEXP xSEXP, SEXP timeSEXP, SEXP burn_inSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type mu0(mu0SEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type sigma0_sqrt(sigma0_sqrtSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type beta(betaSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type psi_sqrt(psi_sqrtSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type nu(nuSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type lambda(lambdaSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type theta_sqrt(theta_sqrtSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type gamma_eta(gamma_etaSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const int >::type time(timeSEXP);
+    Rcpp::traits::input_parameter< const int >::type burn_in(burn_inSEXP);
+    rcpp_result_gen = Rcpp::wrap(SimSSM1Vary(n, mu0, sigma0_sqrt, alpha, beta, psi_sqrt, nu, lambda, theta_sqrt, gamma_eta, x, time, burn_in));
+    return rcpp_result_gen;
+END_RCPP
+}
+// SimSSM2
+Rcpp::List SimSSM2(const arma::vec& mu0, const arma::mat& sigma0_sqrt, const arma::vec& alpha, const arma::mat& beta, const arma::mat& psi_sqrt, const arma::vec& nu, const arma::mat& lambda, const arma::mat& theta_sqrt, const arma::mat& gamma_y, const arma::mat& gamma_eta, const arma::mat& x, const int time, const int burn_in);
+RcppExport SEXP _simStateSpace_SimSSM2(SEXP mu0SEXP, SEXP sigma0_sqrtSEXP, SEXP alphaSEXP, SEXP betaSEXP, SEXP psi_sqrtSEXP, SEXP nuSEXP, SEXP lambdaSEXP, SEXP theta_sqrtSEXP, SEXP gamma_ySEXP, SEXP gamma_etaSEXP, SEXP xSEXP, SEXP timeSEXP, SEXP burn_inSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::vec& >::type mu0(mu0SEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type sigma0_sqrt(sigma0_sqrtSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type beta(betaSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type psi_sqrt(psi_sqrtSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type nu(nuSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type lambda(lambdaSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type theta_sqrt(theta_sqrtSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type gamma_y(gamma_ySEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type gamma_eta(gamma_etaSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const int >::type time(timeSEXP);
+    Rcpp::traits::input_parameter< const int >::type burn_in(burn_inSEXP);
+    rcpp_result_gen = Rcpp::wrap(SimSSM2(mu0, sigma0_sqrt, alpha, beta, psi_sqrt, nu, lambda, theta_sqrt, gamma_y, gamma_eta, x, time, burn_in));
+    return rcpp_result_gen;
+END_RCPP
+}
+// SimSSM2Fixed
+Rcpp::List SimSSM2Fixed(const int n, const arma::vec& mu0, const arma::mat& sigma0_sqrt, const arma::vec& alpha, const arma::mat& beta, const arma::mat& psi_sqrt, const arma::vec& nu, const arma::mat& lambda, const arma::mat& theta_sqrt, const arma::mat& gamma_y, const arma::mat& gamma_eta, const Rcpp::List& x, const int time, const int burn_in);
+RcppExport SEXP _simStateSpace_SimSSM2Fixed(SEXP nSEXP, SEXP mu0SEXP, SEXP sigma0_sqrtSEXP, SEXP alphaSEXP, SEXP betaSEXP, SEXP psi_sqrtSEXP, SEXP nuSEXP, SEXP lambdaSEXP, SEXP theta_sqrtSEXP, SEXP gamma_ySEXP, SEXP gamma_etaSEXP, SEXP xSEXP, SEXP timeSEXP, SEXP burn_inSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type mu0(mu0SEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type sigma0_sqrt(sigma0_sqrtSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type beta(betaSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type psi_sqrt(psi_sqrtSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type nu(nuSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type lambda(lambdaSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type theta_sqrt(theta_sqrtSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type gamma_y(gamma_ySEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type gamma_eta(gamma_etaSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const int >::type time(timeSEXP);
+    Rcpp::traits::input_parameter< const int >::type burn_in(burn_inSEXP);
+    rcpp_result_gen = Rcpp::wrap(SimSSM2Fixed(n, mu0, sigma0_sqrt, alpha, beta, psi_sqrt, nu, lambda, theta_sqrt, gamma_y, gamma_eta, x, time, burn_in));
+    return rcpp_result_gen;
+END_RCPP
+}
+// SimSSM2OU
+Rcpp::List SimSSM2OU(const arma::vec& mu0, const arma::mat& sigma0_sqrt, const arma::vec& mu, const arma::mat& phi, const arma::mat& sigma_sqrt, const arma::vec& nu, const arma::mat& lambda, const arma::mat& theta_sqrt, const arma::mat& gamma_y, const arma::mat& gamma_eta, const arma::mat& x, const double delta_t, const int time, const int burn_in);
+RcppExport SEXP _simStateSpace_SimSSM2OU(SEXP mu0SEXP, SEXP sigma0_sqrtSEXP, SEXP muSEXP, SEXP phiSEXP, SEXP sigma_sqrtSEXP, SEXP nuSEXP, SEXP lambdaSEXP, SEXP theta_sqrtSEXP, SEXP gamma_ySEXP, SEXP gamma_etaSEXP, SEXP xSEXP, SEXP delta_tSEXP, SEXP timeSEXP, SEXP burn_inSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::vec& >::type mu0(mu0SEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type sigma0_sqrt(sigma0_sqrtSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type mu(muSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type phi(phiSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type sigma_sqrt(sigma_sqrtSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type nu(nuSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type lambda(lambdaSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type theta_sqrt(theta_sqrtSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type gamma_y(gamma_ySEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type gamma_eta(gamma_etaSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const double >::type delta_t(delta_tSEXP);
+    Rcpp::traits::input_parameter< const int >::type time(timeSEXP);
+    Rcpp::traits::input_parameter< const int >::type burn_in(burn_inSEXP);
+    rcpp_result_gen = Rcpp::wrap(SimSSM2OU(mu0, sigma0_sqrt, mu, phi, sigma_sqrt, nu, lambda, theta_sqrt, gamma_y, gamma_eta, x, delta_t, time, burn_in));
+    return rcpp_result_gen;
+END_RCPP
+}
+// SimSSM2OUFixed
+Rcpp::List SimSSM2OUFixed(const int n, const arma::vec& mu0, const arma::mat& sigma0_sqrt, const arma::vec& mu, const arma::mat& phi, const arma::mat& sigma_sqrt, const arma::vec& nu, const arma::mat& lambda, const arma::mat& theta_sqrt, const arma::mat& gamma_y, const arma::mat& gamma_eta, const Rcpp::List& x, const double delta_t, const int time, const int burn_in);
+RcppExport SEXP _simStateSpace_SimSSM2OUFixed(SEXP nSEXP, SEXP mu0SEXP, SEXP sigma0_sqrtSEXP, SEXP muSEXP, SEXP phiSEXP, SEXP sigma_sqrtSEXP, SEXP nuSEXP, SEXP lambdaSEXP, SEXP theta_sqrtSEXP, SEXP gamma_ySEXP, SEXP gamma_etaSEXP, SEXP xSEXP, SEXP delta_tSEXP, SEXP timeSEXP, SEXP burn_inSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type mu0(mu0SEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type sigma0_sqrt(sigma0_sqrtSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type mu(muSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type phi(phiSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type sigma_sqrt(sigma_sqrtSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type nu(nuSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type lambda(lambdaSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type theta_sqrt(theta_sqrtSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type gamma_y(gamma_ySEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type gamma_eta(gamma_etaSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const double >::type delta_t(delta_tSEXP);
+    Rcpp::traits::input_parameter< const int >::type time(timeSEXP);
+    Rcpp::traits::input_parameter< const int >::type burn_in(burn_inSEXP);
+    rcpp_result_gen = Rcpp::wrap(SimSSM2OUFixed(n, mu0, sigma0_sqrt, mu, phi, sigma_sqrt, nu, lambda, theta_sqrt, gamma_y, gamma_eta, x, delta_t, time, burn_in));
+    return rcpp_result_gen;
+END_RCPP
+}
+// SimSSM2OUVary
+Rcpp::List SimSSM2OUVary(const int n, const Rcpp::List& mu0, const Rcpp::List& sigma0_sqrt, const Rcpp::List& mu, const Rcpp::List& phi, const Rcpp::List& sigma_sqrt, const Rcpp::List& nu, const Rcpp::List& lambda, const Rcpp::List& theta_sqrt, const Rcpp::List& gamma_y, const Rcpp::List& gamma_eta, const Rcpp::List& x, const double delta_t, const int time, const int burn_in);
+RcppExport SEXP _simStateSpace_SimSSM2OUVary(SEXP nSEXP, SEXP mu0SEXP, SEXP sigma0_sqrtSEXP, SEXP muSEXP, SEXP phiSEXP, SEXP sigma_sqrtSEXP, SEXP nuSEXP, SEXP lambdaSEXP, SEXP theta_sqrtSEXP, SEXP gamma_ySEXP, SEXP gamma_etaSEXP, SEXP xSEXP, SEXP delta_tSEXP, SEXP timeSEXP, SEXP burn_inSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type mu0(mu0SEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type sigma0_sqrt(sigma0_sqrtSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type mu(muSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type phi(phiSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type sigma_sqrt(sigma_sqrtSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type nu(nuSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type lambda(lambdaSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type theta_sqrt(theta_sqrtSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type gamma_y(gamma_ySEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type gamma_eta(gamma_etaSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const double >::type delta_t(delta_tSEXP);
+    Rcpp::traits::input_parameter< const int >::type time(timeSEXP);
+    Rcpp::traits::input_parameter< const int >::type burn_in(burn_inSEXP);
+    rcpp_result_gen = Rcpp::wrap(SimSSM2OUVary(n, mu0, sigma0_sqrt, mu, phi, sigma_sqrt, nu, lambda, theta_sqrt, gamma_y, gamma_eta, x, delta_t, time, burn_in));
+    return rcpp_result_gen;
+END_RCPP
+}
+// SimSSM2Vary
+Rcpp::List SimSSM2Vary(const int n, const Rcpp::List& mu0, const Rcpp::List& sigma0_sqrt, const Rcpp::List& alpha, const Rcpp::List& beta, const Rcpp::List& psi_sqrt, const Rcpp::List& nu, const Rcpp::List& lambda, const Rcpp::List& theta_sqrt, const Rcpp::List& gamma_y, const Rcpp::List& gamma_eta, const Rcpp::List& x, const int time, const int burn_in);
+RcppExport SEXP _simStateSpace_SimSSM2Vary(SEXP nSEXP, SEXP mu0SEXP, SEXP sigma0_sqrtSEXP, SEXP alphaSEXP, SEXP betaSEXP, SEXP psi_sqrtSEXP, SEXP nuSEXP, SEXP lambdaSEXP, SEXP theta_sqrtSEXP, SEXP gamma_ySEXP, SEXP gamma_etaSEXP, SEXP xSEXP, SEXP timeSEXP, SEXP burn_inSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type mu0(mu0SEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type sigma0_sqrt(sigma0_sqrtSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type beta(betaSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type psi_sqrt(psi_sqrtSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type nu(nuSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type lambda(lambdaSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type theta_sqrt(theta_sqrtSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type gamma_y(gamma_ySEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type gamma_eta(gamma_etaSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const int >::type time(timeSEXP);
+    Rcpp::traits::input_parameter< const int >::type burn_in(burn_inSEXP);
+    rcpp_result_gen = Rcpp::wrap(SimSSM2Vary(n, mu0, sigma0_sqrt, alpha, beta, psi_sqrt, nu, lambda, theta_sqrt, gamma_y, gamma_eta, x, time, burn_in));
     return rcpp_result_gen;
 END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
     {"_simStateSpace_OU2SSM", (DL_FUNC) &_simStateSpace_OU2SSM, 4},
-    {"_simStateSpace_SimSSM0Fixed", (DL_FUNC) &_simStateSpace_SimSSM0Fixed, 11},
     {"_simStateSpace_SimSSM0", (DL_FUNC) &_simStateSpace_SimSSM0, 10},
-    {"_simStateSpace_SimSSMOUFixed", (DL_FUNC) &_simStateSpace_SimSSMOUFixed, 12},
-    {"_simStateSpace_SimSSMOU", (DL_FUNC) &_simStateSpace_SimSSMOU, 11},
-    {"_simStateSpace_SimSSMVARFixed", (DL_FUNC) &_simStateSpace_SimSSMVARFixed, 8},
-    {"_simStateSpace_SimSSMVAR", (DL_FUNC) &_simStateSpace_SimSSMVAR, 7},
+    {"_simStateSpace_SimSSM0Fixed", (DL_FUNC) &_simStateSpace_SimSSM0Fixed, 11},
+    {"_simStateSpace_SimSSM0OU", (DL_FUNC) &_simStateSpace_SimSSM0OU, 11},
+    {"_simStateSpace_SimSSM0OUFixed", (DL_FUNC) &_simStateSpace_SimSSM0OUFixed, 12},
+    {"_simStateSpace_SimSSM0OUVary", (DL_FUNC) &_simStateSpace_SimSSM0OUVary, 12},
+    {"_simStateSpace_SimSSM0VAR", (DL_FUNC) &_simStateSpace_SimSSM0VAR, 7},
+    {"_simStateSpace_SimSSM0VARFixed", (DL_FUNC) &_simStateSpace_SimSSM0VARFixed, 8},
+    {"_simStateSpace_SimSSM0VARVary", (DL_FUNC) &_simStateSpace_SimSSM0VARVary, 8},
+    {"_simStateSpace_SimSSM0Vary", (DL_FUNC) &_simStateSpace_SimSSM0Vary, 11},
+    {"_simStateSpace_SimSSM1", (DL_FUNC) &_simStateSpace_SimSSM1, 12},
+    {"_simStateSpace_SimSSM1Fixed", (DL_FUNC) &_simStateSpace_SimSSM1Fixed, 13},
+    {"_simStateSpace_SimSSM1OU", (DL_FUNC) &_simStateSpace_SimSSM1OU, 13},
+    {"_simStateSpace_SimSSM1OUFixed", (DL_FUNC) &_simStateSpace_SimSSM1OUFixed, 14},
+    {"_simStateSpace_SimSSM1OUVary", (DL_FUNC) &_simStateSpace_SimSSM1OUVary, 14},
+    {"_simStateSpace_SimSSM1VAR", (DL_FUNC) &_simStateSpace_SimSSM1VAR, 9},
+    {"_simStateSpace_SimSSM1VARFixed", (DL_FUNC) &_simStateSpace_SimSSM1VARFixed, 10},
+    {"_simStateSpace_SimSSM1VARVary", (DL_FUNC) &_simStateSpace_SimSSM1VARVary, 10},
+    {"_simStateSpace_SimSSM1Vary", (DL_FUNC) &_simStateSpace_SimSSM1Vary, 13},
+    {"_simStateSpace_SimSSM2", (DL_FUNC) &_simStateSpace_SimSSM2, 13},
+    {"_simStateSpace_SimSSM2Fixed", (DL_FUNC) &_simStateSpace_SimSSM2Fixed, 14},
+    {"_simStateSpace_SimSSM2OU", (DL_FUNC) &_simStateSpace_SimSSM2OU, 14},
+    {"_simStateSpace_SimSSM2OUFixed", (DL_FUNC) &_simStateSpace_SimSSM2OUFixed, 15},
+    {"_simStateSpace_SimSSM2OUVary", (DL_FUNC) &_simStateSpace_SimSSM2OUVary, 15},
+    {"_simStateSpace_SimSSM2Vary", (DL_FUNC) &_simStateSpace_SimSSM2Vary, 14},
     {NULL, NULL, 0}
 };
 

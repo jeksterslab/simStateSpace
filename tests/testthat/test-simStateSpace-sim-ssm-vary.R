@@ -1,29 +1,34 @@
-## ---- test-simStateSpace-sim-ssm-ou-fixed
+## ---- test-simStateSpace-sim-ssm-vary
 lapply(
   X = 1,
   FUN = function(i,
                  text) {
     message(text)
     # prepare parameters
+    # In this example, beta varies across individuals
     set.seed(42)
-    p <- k <- 2
-    iden <- diag(p)
+    k <- p <- 3
+    iden <- diag(k)
     iden_sqrt <- chol(iden)
+    null_vec <- rep(x = 0, times = k)
     n <- 5
-    mu0 <- c(-3.0, 1.5)
-    sigma0_sqrt <- iden_sqrt
-    mu <- c(5.76, 5.18)
-    phi <- matrix(data = c(0.10, -0.05, -0.05, 0.10), nrow = p)
-    sigma_sqrt <- chol(
-      matrix(data = c(2.79, 0.06, 0.06, 3.27), nrow = p)
+    mu0 <- list(null_vec)
+    sigma0_sqrt <- list(iden_sqrt)
+    alpha <- list(null_vec)
+    beta <- list(
+      diag(x = 0.1, nrow = k),
+      diag(x = 0.2, nrow = k),
+      diag(x = 0.3, nrow = k),
+      diag(x = 0.4, nrow = k),
+      diag(x = 0.5, nrow = k)
     )
-    nu <- rep(x = 0, times = k)
-    lambda <- diag(k)
-    theta_sqrt <- chol(diag(x = 0.50, nrow = k))
-    delta_t <- 0.10
+    psi_sqrt <- list(iden_sqrt)
+    nu <- list(null_vec)
+    lambda <- list(iden)
+    theta_sqrt <- list(chol(diag(x = 0.50, nrow = k)))
     time <- 50
     burn_in <- 0
-    gamma_y <- gamma_eta <- 0.10 * diag(k)
+    gamma_y <- gamma_eta <- list(0.10 * diag(k))
     x <- lapply(
       X = seq_len(n),
       FUN = function(i) {
@@ -37,18 +42,17 @@ lapply(
     )
 
     # Type 0
-    ssm <- SimSSMOUFixed(
+    ssm <- SimSSMVary(
       n = n,
+      type = 0,
       mu0 = mu0,
       sigma0_sqrt = sigma0_sqrt,
-      mu = mu,
-      phi = phi,
-      sigma_sqrt = sigma_sqrt,
+      alpha = alpha,
+      beta = beta,
+      psi_sqrt = psi_sqrt,
       nu = nu,
       lambda = lambda,
       theta_sqrt = theta_sqrt,
-      type = 0,
-      delta_t = delta_t,
       time = time,
       burn_in = burn_in
     )
@@ -57,20 +61,19 @@ lapply(
     Sim2Matrix(ssm, eta = FALSE)
 
     # Type 1
-    ssm <- SimSSMOUFixed(
+    ssm <- SimSSMVary(
       n = n,
+      type = 1,
       mu0 = mu0,
       sigma0_sqrt = sigma0_sqrt,
-      mu = mu,
-      phi = phi,
-      sigma_sqrt = sigma_sqrt,
+      alpha = alpha,
+      beta = beta,
+      psi_sqrt = psi_sqrt,
       nu = nu,
       lambda = lambda,
       theta_sqrt = theta_sqrt,
       gamma_eta = gamma_eta,
       x = x,
-      type = 1,
-      delta_t = delta_t,
       time = time,
       burn_in = burn_in
     )
@@ -79,21 +82,20 @@ lapply(
     Sim2Matrix(ssm, eta = FALSE)
 
     # Type 2
-    ssm <- SimSSMOUFixed(
+    ssm <- SimSSMVary(
       n = n,
+      type = 2,
       mu0 = mu0,
       sigma0_sqrt = sigma0_sqrt,
-      mu = mu,
-      phi = phi,
-      sigma_sqrt = sigma_sqrt,
+      alpha = alpha,
+      beta = beta,
+      psi_sqrt = psi_sqrt,
       nu = nu,
       lambda = lambda,
       theta_sqrt = theta_sqrt,
       gamma_y = gamma_y,
       gamma_eta = gamma_eta,
       x = x,
-      type = 2,
-      delta_t = delta_t,
       time = time,
       burn_in = burn_in
     )
@@ -101,5 +103,5 @@ lapply(
     Sim2Matrix(ssm, eta = TRUE)
     Sim2Matrix(ssm, eta = FALSE)
   },
-  text = "test-simStateSpace-sim-ssm-ou-fixed"
+  text = "test-simStateSpace-sim-ssm-vary"
 )

@@ -16,6 +16,10 @@ SimSSMOUVary(
   nu,
   lambda,
   theta_sqrt,
+  gamma_y = NULL,
+  gamma_eta = NULL,
+  x = NULL,
+  type = 0,
   delta_t,
   time,
   burn_in
@@ -61,6 +65,23 @@ to the observed variables
 Cholesky decomposition of the measurement error covariance matrix
 (\eqn{\boldsymbol{\Theta}}).}
 
+\item{gamma_y}{Numeric matrix.
+Matrix relating the values of the covariate matrix
+at time \code{t} to the observed variables at time \code{t}
+(\eqn{\boldsymbol{\Gamma}_{\mathbf{y}}}).}
+
+\item{gamma_eta}{Numeric matrix.
+Matrix relating the values of the covariate matrix
+at time \code{t} to the latent variables at time \code{t}
+(\eqn{\boldsymbol{\Gamma}_{\boldsymbol{\eta}}}).}
+
+\item{x}{Numeric matrix.
+The matrix of observed covariates in \code{type = 1} or \code{type = 2}.
+The number of rows should be equal to \code{time + burn_in}.}
+
+\item{type}{Integer.
+State space model type.}
+
 \item{delta_t}{Numeric.
 Time interval (\eqn{\delta_t}).}
 
@@ -99,7 +120,9 @@ If the length of any of the parameters
 \code{sigma_sqrt},
 \code{nu},
 \code{lambda},
-\code{theta_sqrt})
+\code{theta_sqrt},
+\code{gamma_y}, or
+\code{gamma_eta})
 is less the \code{n},
 the function will cycle through the available values.
 }
@@ -132,7 +155,20 @@ theta_sqrt <- list(chol(diag(x = 0.50, nrow = k)))
 delta_t <- 0.10
 time <- 50
 burn_in <- 0
+gamma_y <- gamma_eta <- list(0.10 * diag(k))
+x <- lapply(
+  X = seq_len(n),
+  FUN = function(i) {
+    return(
+      matrix(
+        data = rnorm(n = k * (time + burn_in)),
+        ncol = k
+      )
+    )
+  }
+)
 
+# Type 0
 ssm <- SimSSMOUVary(
   n = n,
   mu0 = mu0,
@@ -143,6 +179,50 @@ ssm <- SimSSMOUVary(
   nu = nu,
   lambda = lambda,
   theta_sqrt = theta_sqrt,
+  type = 0,
+  delta_t = delta_t,
+  time = time,
+  burn_in = burn_in
+)
+
+str(ssm)
+
+# Type 1
+ssm <- SimSSMOUVary(
+  n = n,
+  mu0 = mu0,
+  sigma0_sqrt = sigma0_sqrt,
+  mu = mu,
+  phi = phi,
+  sigma_sqrt = sigma_sqrt,
+  nu = nu,
+  lambda = lambda,
+  theta_sqrt = theta_sqrt,
+  gamma_eta = gamma_eta,
+  x = x,
+  type = 1,
+  delta_t = delta_t,
+  time = time,
+  burn_in = burn_in
+)
+
+str(ssm)
+
+# Type 2
+ssm <- SimSSMOUVary(
+  n = n,
+  mu0 = mu0,
+  sigma0_sqrt = sigma0_sqrt,
+  mu = mu,
+  phi = phi,
+  sigma_sqrt = sigma_sqrt,
+  nu = nu,
+  lambda = lambda,
+  theta_sqrt = theta_sqrt,
+  gamma_y = gamma_y,
+  gamma_eta = gamma_eta,
+  x = x,
+  type = 2,
   delta_t = delta_t,
   time = time,
   burn_in = burn_in
@@ -167,14 +247,14 @@ On the theory of the brownian motion.
 Other Simulation of State Space Models Data Functions: 
 \code{\link{OU2SSM}()},
 \code{\link{Sim2Matrix}()},
-\code{\link{SimSSM0Fixed}()},
-\code{\link{SimSSM0Vary}()},
-\code{\link{SimSSM0}()},
+\code{\link{SimSSMFixed}()},
 \code{\link{SimSSMOUFixed}()},
 \code{\link{SimSSMOU}()},
 \code{\link{SimSSMVARFixed}()},
 \code{\link{SimSSMVARVary}()},
-\code{\link{SimSSMVAR}()}
+\code{\link{SimSSMVAR}()},
+\code{\link{SimSSMVary}()},
+\code{\link{SimSSM}()}
 }
 \author{
 Ivan Jacob Agaloos Pesigan

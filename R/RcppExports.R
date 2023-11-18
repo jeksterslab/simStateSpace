@@ -76,14 +76,14 @@
 #' @inheritParams SimSSMOU
 #'
 #' @return Returns a list of state space parameters:
-#'   - alpha: Numeric vector.
+#'   - `alpha`: Numeric vector.
 #'     Vector of intercepts for the dynamic model
 #'     (\eqn{\boldsymbol{\alpha}}).
-#'   - beta: Numeric matrix.
+#'   - `beta`: Numeric matrix.
 #'     Transition matrix relating the values of the latent variables
 #'     at time `t - 1` to those at time `t`
 #'     (\eqn{\boldsymbol{\beta}}).
-#'   - psi: Numeric matrix.
+#'   - `psi`: Numeric matrix.
 #'     The process noise covariance matrix
 #'     (\eqn{\boldsymbol{\Psi}}).
 #'
@@ -110,751 +110,99 @@ OU2SSM <- function(mu, phi, sigma_sqrt, delta_t) {
     .Call(`_simStateSpace_OU2SSM`, mu, phi, sigma_sqrt, delta_t)
 }
 
-#' Simulate Data using a State Space Model Parameterization
-#' for n > 1 Individuals (Fixed Parameters)
-#'
-#' This function simulates data
-#' using a state space model parameterization
-#' for `n > 1` individuals.
-#' In this model,
-#' the parameters are invariant across individuals.
-#'
-#' @details The measurement model is given by
-#'   \deqn{
-#'     \mathbf{y}_{i, t}
-#'     =
-#'     \boldsymbol{\nu}
-#'     +
-#'     \boldsymbol{\Lambda}
-#'     \boldsymbol{\eta}_{i, t}
-#'     +
-#'     \boldsymbol{\varepsilon}_{i, t}
-#'     \quad
-#'     \mathrm{with}
-#'     \quad
-#'     \boldsymbol{\varepsilon}_{i, t}
-#'     \sim
-#'     \mathcal{N}
-#'     \left(
-#'     \mathbf{0},
-#'     \boldsymbol{\Theta}
-#'     \right)
-#'   }
-#'   where \eqn{\mathbf{y}_{i, t}}, \eqn{\boldsymbol{\eta}_{i, t}},
-#'   and \eqn{\boldsymbol{\varepsilon}_{i, t}}
-#'   are random variables and \eqn{\boldsymbol{\nu}},
-#'   \eqn{\boldsymbol{\Lambda}},
-#'   and \eqn{\boldsymbol{\Theta}} are model parameters.
-#'   \eqn{\mathbf{y}_{i, t}} is a vector of observed random variables
-#'   at time \eqn{t} and individual \eqn{i},
-#'   \eqn{\boldsymbol{\eta}_{i, t}} is a vector of latent random variables
-#'   at time \eqn{t} and individual \eqn{i},
-#'   and \eqn{\boldsymbol{\varepsilon}_{i, t}}
-#'   is a vector of random measurement errors
-#'   at time \eqn{t} and individual \eqn{i},
-#'   while \eqn{\boldsymbol{\nu}} is a vector of intercept,
-#'   \eqn{\boldsymbol{\Lambda}} is a matrix of factor loadings,
-#'   and \eqn{\boldsymbol{\Theta}} is the covariance matrix of
-#'   \eqn{\boldsymbol{\varepsilon}}.
-#'
-#'   The dynamic structure is given by
-#'   \deqn{
-#'     \boldsymbol{\eta}_{i, t}
-#'     =
-#'     \boldsymbol{\alpha}
-#'     +
-#'     \boldsymbol{\beta}
-#'     \boldsymbol{\eta}_{i, t - 1}
-#'     +
-#'     \boldsymbol{\zeta}_{i, t}
-#'     \quad
-#'     \mathrm{with}
-#'     \quad
-#'     \boldsymbol{\zeta}_{i, t}
-#'     \sim
-#'     \mathcal{N}
-#'     \left(
-#'     \mathbf{0},
-#'     \boldsymbol{\Psi}
-#'     \right)
-#'   }
-#'   where \eqn{\boldsymbol{\eta}_{i, t}}, \eqn{\boldsymbol{\eta}_{i, t - 1}},
-#'   and \eqn{\boldsymbol{\zeta}_{i, t}} are random variables
-#'   and \eqn{\boldsymbol{\alpha}}, \eqn{\boldsymbol{\beta}},
-#'   and \eqn{\boldsymbol{\Psi}} are model parameters.
-#'   \eqn{\boldsymbol{\eta}_{i, t}} is a vector of latent variables
-#'   at time \eqn{t} and individual \eqn{i},
-#'   \eqn{\boldsymbol{\eta}_{i, t - 1}}
-#'   is a vector of latent variables at
-#'   time \eqn{t - 1} and individual \eqn{i},
-#'   and \eqn{\boldsymbol{\zeta}_{i, t}} is a vector of dynamic noise
-#'   at time \eqn{t} and individual \eqn{i} while \eqn{\boldsymbol{\alpha}}
-#'   is a vector of intercepts,
-#'   \eqn{\boldsymbol{\beta}} is a matrix of autoregression
-#'   and cross regression coefficients,
-#'   and \eqn{\boldsymbol{\Psi}} is the covariance matrix of
-#'   \eqn{\boldsymbol{\zeta}_{i, t}}.
-#'
-#' @author Ivan Jacob Agaloos Pesigan
-#'
-#' @param n Positive integer.
-#'   Number of individuals.
-#' @inheritParams SimSSM0
-#' @inherit SimSSM0 references
-#'
-#' @return Returns a list of length `n`.
-#'   Each element is a list with the following elements:
-#'   - `y`: A `t` by `k` matrix of values for the manifest variables.
-#'   - `eta`: A `t` by `p` matrix of values for the latent variables.
-#'   - `time`: A vector of discrete time points from 1 to `t`.
-#'   - `id`: A vector of ID numbers of length `t`.
-#'   - `n`: Number of individuals.
-#'
-#' @examples
-#' # prepare parameters
-#' set.seed(42)
-#' k <- p <- 3
-#' I <- diag(k)
-#' I_sqrt <- chol(I)
-#' null_vec <- rep(x = 0, times = k)
-#' n <- 5
-#' mu0 <- null_vec
-#' sigma0_sqrt <- I_sqrt
-#' alpha <- null_vec
-#' beta <- diag(x = 0.50, nrow = k)
-#' psi_sqrt <- I_sqrt
-#' nu <- null_vec
-#' lambda <- I
-#' theta_sqrt <- chol(diag(x = 0.50, nrow = k))
-#' time <- 50
-#' burn_in <- 0
-#'
-#' # generate data
-#' ssm <- SimSSM0Fixed(
-#'   n = n,
-#'   mu0 = mu0,
-#'   sigma0_sqrt = sigma0_sqrt,
-#'   alpha = alpha,
-#'   beta = beta,
-#'   psi_sqrt = psi_sqrt,
-#'   nu = nu,
-#'   lambda = lambda,
-#'   theta_sqrt = theta_sqrt,
-#'   time = time,
-#'   burn_in = burn_in
-#' )
-#'
-#' str(ssm)
-#'
-#' @family Simulation of State Space Models Data Functions
-#' @keywords simStateSpace sim ssm
-#' @export
-SimSSM0Fixed <- function(n, mu0, sigma0_sqrt, alpha, beta, psi_sqrt, nu, lambda, theta_sqrt, time, burn_in) {
-    .Call(`_simStateSpace_SimSSM0Fixed`, n, mu0, sigma0_sqrt, alpha, beta, psi_sqrt, nu, lambda, theta_sqrt, time, burn_in)
-}
-
-#' Simulate Data from a State Space Model (n = 1)
-#'
-#' This function simulates data from a state space model.
-#' See details for more information.
-#'
-#' @details The measurement model is given by
-#'   \deqn{
-#'     \mathbf{y}_{t}
-#'     =
-#'     \boldsymbol{\nu}
-#'     +
-#'     \boldsymbol{\Lambda}
-#'     \boldsymbol{\eta}_{t}
-#'     +
-#'     \boldsymbol{\varepsilon}_{t}
-#'     \quad
-#'     \mathrm{with}
-#'     \quad
-#'     \boldsymbol{\varepsilon}_{t}
-#'     \sim
-#'     \mathcal{N}
-#'     \left(
-#'     \mathbf{0},
-#'     \boldsymbol{\Theta}
-#'     \right)
-#'   }
-#'   where \eqn{\mathbf{y}_{t}}, \eqn{\boldsymbol{\eta}_{t}},
-#'   and \eqn{\boldsymbol{\varepsilon}_{t}}
-#'   are random variables and \eqn{\boldsymbol{\nu}},
-#'   \eqn{\boldsymbol{\Lambda}},
-#'   and \eqn{\boldsymbol{\Theta}} are model parameters.
-#'   \eqn{\mathbf{y}_{t}} is a vector of observed random variables
-#'   at time \eqn{t},
-#'   \eqn{\boldsymbol{\eta}_{t}} is a vector of latent random variables
-#'   at time \eqn{t},
-#'   and \eqn{\boldsymbol{\varepsilon}_{t}}
-#'   is a vector of random measurement errors
-#'   at time \eqn{t},
-#'   while \eqn{\boldsymbol{\nu}} is a vector of intercept,
-#'   \eqn{\boldsymbol{\Lambda}} is a matrix of factor loadings,
-#'   and \eqn{\boldsymbol{\Theta}} is the covariance matrix of
-#'   \eqn{\boldsymbol{\varepsilon}}.
-#'
-#'   The dynamic structure is given by
-#'   \deqn{
-#'     \boldsymbol{\eta}_{t}
-#'     =
-#'     \boldsymbol{\alpha}
-#'     +
-#'     \boldsymbol{\beta}
-#'     \boldsymbol{\eta}_{t - 1}
-#'     +
-#'     \boldsymbol{\zeta}_{t}
-#'     \quad
-#'     \mathrm{with}
-#'     \quad
-#'     \boldsymbol{\zeta}_{t}
-#'     \sim
-#'     \mathcal{N}
-#'     \left(
-#'     \mathbf{0},
-#'     \boldsymbol{\Psi}
-#'     \right)
-#'   }
-#'   where \eqn{\boldsymbol{\eta}_{t}}, \eqn{\boldsymbol{\eta}_{t - 1}},
-#'   and \eqn{\boldsymbol{\zeta}_{t}} are random variables
-#'   and \eqn{\boldsymbol{\alpha}}, \eqn{\boldsymbol{\beta}},
-#'   and \eqn{\boldsymbol{\Psi}} are model parameters.
-#'   \eqn{\boldsymbol{\eta}_{t}} is a vector of latent variables
-#'   at time \eqn{t}, \eqn{\boldsymbol{\eta}_{t - 1}}
-#'   is a vector of latent variables at
-#'   time \eqn{t - 1},
-#'   and \eqn{\boldsymbol{\zeta}_{t}} is a vector of dynamic noise
-#'   at time \eqn{t} while \eqn{\boldsymbol{\alpha}}
-#'   is a vector of intercepts,
-#'   \eqn{\boldsymbol{\beta}} is a matrix of autoregression
-#'   and cross regression coefficients,
-#'   and \eqn{\boldsymbol{\Psi}} is the covariance matrix of
-#'   \eqn{\boldsymbol{\zeta}_{t}}.
-#'
-#' @author Ivan Jacob Agaloos Pesigan
-#'
-#' @param mu0 Numeric vector.
-#'   Mean of initial latent variable values
-#'   (\eqn{\boldsymbol{\mu}_{\boldsymbol{\eta} \mid 0}}).
-#' @param sigma0_sqrt Numeric matrix.
-#'   Cholesky decomposition of the covariance matrix
-#'   of initial latent variable values
-#'   (\eqn{\boldsymbol{\Sigma}_{\boldsymbol{\eta} \mid 0}}).
-#' @param alpha Numeric vector.
-#'   Vector of intercepts for the dynamic model
-#'   (\eqn{\boldsymbol{\alpha}}).
-#' @param beta Numeric matrix.
-#'   Transition matrix relating the values of the latent variables
-#'   at time `t - 1` to those at time `t`
-#'   (\eqn{\boldsymbol{\beta}}).
-#' @param psi_sqrt Numeric matrix.
-#'   Cholesky decomposition of the process noise covariance matrix
-#'   (\eqn{\boldsymbol{\Psi}}).
-#' @param nu Numeric vector.
-#'   Vector of intercepts for the measurement model
-#'   (\eqn{\boldsymbol{\nu}}).
-#' @param lambda Numeric matrix.
-#'   Factor loading matrix linking the latent variables
-#'   to the observed variables
-#'   (\eqn{\boldsymbol{\Lambda}}).
-#' @param theta_sqrt Numeric matrix.
-#'   Cholesky decomposition of the measurement error covariance matrix
-#'   (\eqn{\boldsymbol{\Theta}}).
-#' @param time Positive integer.
-#'   Number of time points to simulate.
-#' @param burn_in Positive integer.
-#'   Number of burn-in points to exclude before returning the results.
-#'
-#' @references
-#'   Chow, S.-M., Ho, M. R., Hamaker, E. L., & Dolan, C. V. (2010).
-#'   Equivalence and differences between structural equation modeling
-#'   and state-space modeling techniques.
-#'   *Structural Equation Modeling: A Multidisciplinary Journal*,
-#'   17(2), 303–332.
-#'   \doi{10.1080/10705511003661553}
-#'
-#'   Chow, S.-M., Losardo, D., Park, J., & Molenaar, P. C. M. (2023).
-#'   Continuous-time dynamic models: Connections to structural equation models
-#'   and other discrete-time models.
-#'   In R. H. Hoyle (Ed.), Handbook of structural equation modeling (2nd ed.).
-#'   The Guilford Press.
-#'
-#'   Shumway, R. H., & Stoffer, D. S. (2017).
-#'   *Time series analysis and its applications: With R examples*.
-#'   Springer International Publishing.
-#'   \doi{10.1007/978-3-319-52452-8}
-#'
-#' @return Returns a list with the following elements:
-#'   - `y`: A `t` by `k` matrix of values for the manifest variables.
-#'   - `eta`: A `t` by `p` matrix of values for the latent variables.
-#'   - `time`: A vector of discrete time points from 1 to `t`.
-#'   - `n`: Number of individuals.
-#'
-#' @examples
-#' # prepare parameters
-#' set.seed(42)
-#' k <- p <- 3
-#' I <- diag(k)
-#' I_sqrt <- chol(I)
-#' null_vec <- rep(x = 0, times = k)
-#' mu0 <- null_vec
-#' sigma0_sqrt <- I_sqrt
-#' alpha <- null_vec
-#' beta <- diag(x = 0.50, nrow = k)
-#' psi_sqrt <- I_sqrt
-#' nu <- null_vec
-#' lambda <- I
-#' theta_sqrt <- chol(diag(x = 0.50, nrow = k))
-#' time <- 50
-#' burn_in <- 0
-#'
-#' # generate data
-#' ssm <- SimSSM0(
-#'   mu0 = mu0,
-#'   sigma0_sqrt = sigma0_sqrt,
-#'   alpha = alpha,
-#'   beta = beta,
-#'   psi_sqrt = psi_sqrt,
-#'   nu = nu,
-#'   lambda = lambda,
-#'   theta_sqrt = theta_sqrt,
-#'   time = time,
-#'   burn_in = burn_in
-#' )
-#'
-#' str(ssm)
-#'
-#' @family Simulation of State Space Models Data Functions
-#' @keywords simStateSpace sim ssm
-#' @export
-SimSSM0 <- function(mu0, sigma0_sqrt, alpha, beta, psi_sqrt, nu, lambda, theta_sqrt, time, burn_in) {
+.SimSSM0 <- function(mu0, sigma0_sqrt, alpha, beta, psi_sqrt, nu, lambda, theta_sqrt, time, burn_in) {
     .Call(`_simStateSpace_SimSSM0`, mu0, sigma0_sqrt, alpha, beta, psi_sqrt, nu, lambda, theta_sqrt, time, burn_in)
 }
 
-#' Simulate Data from an Ornstein–Uhlenbeck Model
-#' using a State Space Model Parameterization
-#' for n > 1 Individuals (Fixed Parameters)
-#'
-#' This function simulates data from an Ornstein–Uhlenbeck model
-#' using a state space model parameterization
-#' for `n > 1` individuals.
-#' In this model,
-#' the parameters are invariant across individuals.
-#' See details for more information.
-#'
-#' @details The measurement model is given by
-#'   \deqn{
-#'     \mathbf{y}_{i, t}
-#'     =
-#'     \boldsymbol{\nu}
-#'     +
-#'     \boldsymbol{\Lambda}
-#'     \boldsymbol{\eta}_{i, t}
-#'     +
-#'     \boldsymbol{\varepsilon}_{i, t}
-#'     \quad
-#'     \mathrm{with}
-#'     \quad
-#'     \boldsymbol{\varepsilon}_{i, t}
-#'     \sim
-#'     \mathcal{N}
-#'     \left(
-#'     \mathbf{0},
-#'     \boldsymbol{\Theta}
-#'     \right)
-#'   }
-#'   where \eqn{\mathbf{y}_{i, t}}, \eqn{\boldsymbol{\eta}_{i, t}},
-#'   and \eqn{\boldsymbol{\varepsilon}_{i, t}}
-#'   are random variables and \eqn{\boldsymbol{\nu}},
-#'   \eqn{\boldsymbol{\Lambda}},
-#'   and \eqn{\boldsymbol{\Theta}} are model parameters.
-#'   \eqn{\mathbf{y}_{i, t}} is a vector of observed random variables
-#'   at time \eqn{t} and individual \eqn{i},
-#'   \eqn{\boldsymbol{\eta}_{i, t}} is a vector of latent random variables
-#'   at time \eqn{t} and individual \eqn{i},
-#'   and \eqn{\boldsymbol{\varepsilon}_{i, t}}
-#'   is a vector of random measurement errors
-#'   at time \eqn{t} and individual \eqn{i},
-#'   while \eqn{\boldsymbol{\nu}} is a vector of intercept,
-#'   \eqn{\boldsymbol{\Lambda}} is a matrix of factor loadings,
-#'   and \eqn{\boldsymbol{\Theta}} is the covariance matrix of
-#'   \eqn{\boldsymbol{\varepsilon}}.
-#'
-#'   The dynamic structure is given by
-#'   \deqn{
-#'     \mathrm{d} \boldsymbol{\eta}_{i, t}
-#'     =
-#'     \boldsymbol{\Phi}
-#'     \left(
-#'     \boldsymbol{\mu}
-#'     -
-#'     \boldsymbol{\eta}_{i, t}
-#'     \right)
-#'     \mathrm{d}t
-#'     +
-#'     \boldsymbol{\Sigma}^{\frac{1}{2}}
-#'     \mathrm{d}
-#'     \mathbf{W}_{i, t}
-#'   }
-#'   where \eqn{\boldsymbol{\mu}} is the long-term mean or equilibrium level,
-#'   \eqn{\boldsymbol{\Phi}} is the rate of mean reversion,
-#'   determining how quickly the variable returns to its mean,
-#'   \eqn{\boldsymbol{\Sigma}} is the matrix of volatility
-#'   or randomness in the process, and \eqn{\mathrm{d}\boldsymbol{W}}
-#'   is a Wiener process or Brownian motion,
-#'   which represents random fluctuations.
-#'
-#' @author Ivan Jacob Agaloos Pesigan
-#'
-#' @inheritParams SimSSMOU
-#' @inheritParams SimSSM0Fixed
-#' @inherit SimSSMOU references
-#'
-#' @return Returns a list of length `n`.
-#'   Each element is a list with the following elements:
-#'   - `y`: A `t` by `k` matrix of values for the manifest variables.
-#'   - `eta`: A `t` by `p` matrix of values for the latent variables.
-#'   - `time`: A vector of continuous time points of length `t`
-#'      starting from 0 with `delta_t` increments.
-#'   - `id`: A vector of ID numbers of length `t`.
-#'   - `n`: Number of individuals.
-#'
-#' @examples
-#' # prepare parameters
-#' set.seed(42)
-#' p <- k <- 2
-#' I <- diag(p)
-#' I_sqrt <- chol(I)
-#' n <- 5
-#' mu0 <- c(-3.0, 1.5)
-#' sigma0_sqrt <- I_sqrt
-#' mu <- c(5.76, 5.18)
-#' phi <- matrix(data = c(0.10, -0.05, -0.05, 0.10), nrow = p)
-#' sigma_sqrt <- chol(
-#'   matrix(data = c(2.79, 0.06, 0.06, 3.27), nrow = p)
-#' )
-#' nu <- rep(x = 0, times = k)
-#' lambda <- diag(k)
-#' theta_sqrt <- chol(diag(x = 0.50, nrow = k))
-#' delta_t <- 0.10
-#' time <- 50
-#' burn_in <- 0
-#'
-#' # generate data
-#' ssm <- SimSSMOUFixed(
-#'   n = n,
-#'   mu0 = mu0,
-#'   sigma0_sqrt = sigma0_sqrt,
-#'   mu = mu,
-#'   phi = phi,
-#'   sigma_sqrt = sigma_sqrt,
-#'   nu = nu,
-#'   lambda = lambda,
-#'   theta_sqrt = theta_sqrt,
-#'   delta_t = delta_t,
-#'   time = time,
-#'   burn_in = burn_in
-#' )
-#'
-#' str(ssm)
-#'
-#' @family Simulation of State Space Models Data Functions
-#' @keywords simStateSpace sim ou
-#' @export
-SimSSMOUFixed <- function(n, mu0, sigma0_sqrt, mu, phi, sigma_sqrt, nu, lambda, theta_sqrt, delta_t, time, burn_in) {
-    .Call(`_simStateSpace_SimSSMOUFixed`, n, mu0, sigma0_sqrt, mu, phi, sigma_sqrt, nu, lambda, theta_sqrt, delta_t, time, burn_in)
+.SimSSM0Fixed <- function(n, mu0, sigma0_sqrt, alpha, beta, psi_sqrt, nu, lambda, theta_sqrt, time, burn_in) {
+    .Call(`_simStateSpace_SimSSM0Fixed`, n, mu0, sigma0_sqrt, alpha, beta, psi_sqrt, nu, lambda, theta_sqrt, time, burn_in)
 }
 
-#' Simulate Data from the Ornstein–Uhlenbeck Model
-#' using a State Space Model Parameterization (n = 1)
-#'
-#' This function simulates data from the Ornstein–Uhlenbeck model
-#' using a state space model parameterization.
-#' See details for more information.
-#'
-#' @details The measurement model is given by
-#'   \deqn{
-#'     \mathbf{y}_{t}
-#'     =
-#'     \boldsymbol{\nu}
-#'     +
-#'     \boldsymbol{\Lambda}
-#'     \boldsymbol{\eta}_{t}
-#'     +
-#'     \boldsymbol{\varepsilon}_{t}
-#'     \quad
-#'     \mathrm{with}
-#'     \quad
-#'     \boldsymbol{\varepsilon}_{t}
-#'     \sim
-#'     \mathcal{N}
-#'     \left(
-#'     \mathbf{0},
-#'     \boldsymbol{\Theta}
-#'     \right)
-#'   }
-#'   where \eqn{\mathbf{y}_{t}}, \eqn{\boldsymbol{\eta}_{t}},
-#'   and \eqn{\boldsymbol{\varepsilon}_{t}}
-#'   are random variables and \eqn{\boldsymbol{\nu}},
-#'   \eqn{\boldsymbol{\Lambda}},
-#'   and \eqn{\boldsymbol{\Theta}} are model parameters.
-#'   \eqn{\mathbf{y}_{t}} is a vector of observed random variables
-#'   at time \eqn{t},
-#'   \eqn{\boldsymbol{\eta}_{t}} is a vector of latent random variables
-#'   at time \eqn{t},
-#'   and \eqn{\boldsymbol{\varepsilon}_{t}}
-#'   is a vector of random measurement errors
-#'   at time \eqn{t},
-#'   while \eqn{\boldsymbol{\nu}} is a vector of intercept,
-#'   \eqn{\boldsymbol{\Lambda}} is a matrix of factor loadings,
-#'   and \eqn{\boldsymbol{\Theta}} is the covariance matrix of
-#'   \eqn{\boldsymbol{\varepsilon}}.
-#'
-#'   The dynamic structure is given by
-#'   \deqn{
-#'     \mathrm{d} \boldsymbol{\eta}_{t}
-#'     =
-#'     \boldsymbol{\Phi}
-#'     \left(
-#'     \boldsymbol{\mu}
-#'     -
-#'     \boldsymbol{\eta}_{t}
-#'     \right)
-#'     \mathrm{d}t
-#'     +
-#'     \boldsymbol{\Sigma}^{\frac{1}{2}}
-#'     \mathrm{d}
-#'     \mathbf{W}_{t}
-#'   }
-#'   where \eqn{\boldsymbol{\mu}} is the long-term mean or equilibrium level,
-#'   \eqn{\boldsymbol{\Phi}} is the rate of mean reversion,
-#'   determining how quickly the variable returns to its mean,
-#'   \eqn{\boldsymbol{\Sigma}} is the matrix of volatility
-#'   or randomness in the process, and \eqn{\mathrm{d}\boldsymbol{W}}
-#'   is a Wiener process or Brownian motion,
-#'   which represents random fluctuations.
-#'
-#' @author Ivan Jacob Agaloos Pesigan
-#'
-#' @param mu Numeric vector.
-#'   The long-term mean or equilibrium level
-#'   (\eqn{\boldsymbol{\mu}}).
-#' @param phi Numeric matrix.
-#'   The rate of mean reversion,
-#'   determining how quickly the variable returns to its mean
-#'   (\eqn{\boldsymbol{\Phi}}).
-#' @param sigma_sqrt Numeric matrix.
-#'   Cholesky decomposition of the matrix of volatility
-#'   or randomness in the process
-#'   (\eqn{\boldsymbol{\Sigma}}).
-#' @param delta_t Numeric.
-#'   Time interval (\eqn{\delta_t}).
-#' @inheritParams SimSSM0
-#'
-#' @references
-#'   Chow, S.-M., Losardo, D., Park, J., & Molenaar, P. C. M. (2023).
-#'   Continuous-time dynamic models: Connections to structural equation models
-#'   and other discrete-time models.
-#'   In R. H. Hoyle (Ed.), Handbook of structural equation modeling (2nd ed.).
-#'   The Guilford Press.
-#'
-#'   Uhlenbeck, G. E., & Ornstein, L. S. (1930).
-#'   On the theory of the brownian motion.
-#'   *Physical Review*, *36*(5), 823–841.
-#'   \doi{10.1103/physrev.36.823}
-#'
-#' @return Returns a list with the following elements:
-#'   - `y`: A `t` by `k` matrix of values for the manifest variables.
-#'   - `eta`: A `t` by `p` matrix of values for the latent variables.
-#'   - `time`: A vector of continuous time points of length `t`
-#'      starting from 0 with `delta_t` increments.
-#'   - `n`: Number of individuals.
-#'
-#' @examples
-#' # prepare parameters
-#' set.seed(42)
-#' p <- k <- 2
-#' I <- diag(p)
-#' I_sqrt <- chol(I)
-#' mu0 <- c(-3.0, 1.5)
-#' sigma0_sqrt <- I_sqrt
-#' mu <- c(5.76, 5.18)
-#' phi <- matrix(data = c(0.10, -0.05, -0.05, 0.10), nrow = p)
-#' sigma_sqrt <- chol(
-#'   matrix(data = c(2.79, 0.06, 0.06, 3.27), nrow = p)
-#' )
-#' nu <- rep(x = 0, times = k)
-#' lambda <- diag(k)
-#' theta_sqrt <- chol(diag(x = 0.50, nrow = k))
-#' delta_t <- 0.10
-#' time <- 50
-#' burn_in <- 0
-#'
-#' # generate data
-#' ssm <- SimSSMOU(
-#'   mu0 = mu0,
-#'   sigma0_sqrt = sigma0_sqrt,
-#'   mu = mu,
-#'   phi = phi,
-#'   sigma_sqrt = sigma_sqrt,
-#'   nu = nu,
-#'   lambda = lambda,
-#'   theta_sqrt = theta_sqrt,
-#'   delta_t = delta_t,
-#'   time = time,
-#'   burn_in = burn_in
-#' )
-#'
-#' str(ssm)
-#'
-#' @family Simulation of State Space Models Data Functions
-#' @keywords simStateSpace sim ou
-#' @export
-SimSSMOU <- function(mu0, sigma0_sqrt, mu, phi, sigma_sqrt, nu, lambda, theta_sqrt, delta_t, time, burn_in) {
-    .Call(`_simStateSpace_SimSSMOU`, mu0, sigma0_sqrt, mu, phi, sigma_sqrt, nu, lambda, theta_sqrt, delta_t, time, burn_in)
+.SimSSM0OU <- function(mu0, sigma0_sqrt, mu, phi, sigma_sqrt, nu, lambda, theta_sqrt, delta_t, time, burn_in) {
+    .Call(`_simStateSpace_SimSSM0OU`, mu0, sigma0_sqrt, mu, phi, sigma_sqrt, nu, lambda, theta_sqrt, delta_t, time, burn_in)
 }
 
-#' Simulate Data from a Vector Autoregressive Model
-#' using a State Space Model Parameterization
-#' for n > 1 Individuals (Fixed Parameters)
-#'
-#' This function simulates data from a vector autoregressive model
-#' using a state space model parameterization
-#' for `n > 1` individuals.
-#' In this model,
-#' the parameters are invariant across individuals.
-#'
-#' @author Ivan Jacob Agaloos Pesigan
-#'
-#' @inheritParams SimSSM0Fixed
-#' @inherit SimSSM0Fixed return
-#' @inherit SimSSM0 references
-#'
-#' @examples
-#' # prepare parameters
-#' set.seed(42)
-#' k <- 3
-#' iden <- diag(k)
-#' iden_sqrt <- chol(iden)
-#' null_vec <- rep(x = 0, times = k)
-#' n <- 5
-#' mu0 <- null_vec
-#' sigma0_sqrt <- iden_sqrt
-#' alpha <- null_vec
-#' beta <- diag(x = 0.5, nrow = k)
-#' psi_sqrt <- iden_sqrt
-#' time <- 50
-#' burn_in <- 0
-#'
-#' ssm <- SimSSMVARFixed(
-#'   n = n,
-#'   mu0 = mu0,
-#'   sigma0_sqrt = sigma0_sqrt,
-#'   alpha = alpha,
-#'   beta = beta,
-#'   psi_sqrt = psi_sqrt,
-#'   time = time,
-#'   burn_in = burn_in
-#' )
-#'
-#' str(ssm)
-#'
-#' @family Simulation of State Space Models Data Functions
-#' @keywords simStateSpace sim var
-#' @export
-SimSSMVARFixed <- function(n, mu0, sigma0_sqrt, alpha, beta, psi_sqrt, time, burn_in) {
-    .Call(`_simStateSpace_SimSSMVARFixed`, n, mu0, sigma0_sqrt, alpha, beta, psi_sqrt, time, burn_in)
+.SimSSM0OUFixed <- function(n, mu0, sigma0_sqrt, mu, phi, sigma_sqrt, nu, lambda, theta_sqrt, delta_t, time, burn_in) {
+    .Call(`_simStateSpace_SimSSM0OUFixed`, n, mu0, sigma0_sqrt, mu, phi, sigma_sqrt, nu, lambda, theta_sqrt, delta_t, time, burn_in)
 }
 
-#' Simulate Data from the Vector Autoregressive Model
-#' using a State Space Model Parameterization (n = 1)
-#'
-#' This function simulates data from the vector autoregressive model
-#' using a state space model parameterization.
-#' See details for more information.
-#'
-#' @details The measurement model is given by
-#'   \deqn{
-#'     \mathbf{y}_{t}
-#'     =
-#'     \boldsymbol{\eta}_{t} .
-#'   }
-#'
-#'   The dynamic structure is given by
-#'   \deqn{
-#'     \boldsymbol{\eta}_{t}
-#'     =
-#'     \boldsymbol{\alpha}
-#'     +
-#'     \boldsymbol{\beta}
-#'     \boldsymbol{\eta}_{t - 1}
-#'     +
-#'     \boldsymbol{\zeta}_{t}
-#'     \quad
-#'     \mathrm{with}
-#'     \quad
-#'     \boldsymbol{\zeta}_{t}
-#'     \sim
-#'     \mathcal{N}
-#'     \left(
-#'     \mathbf{0},
-#'     \boldsymbol{\Psi}
-#'     \right)
-#'   }
-#'   where \eqn{\boldsymbol{\eta}_{t}}, \eqn{\boldsymbol{\eta}_{t - 1}},
-#'   and \eqn{\boldsymbol{\zeta}_{t}} are random variables
-#'   and \eqn{\boldsymbol{\alpha}}, \eqn{\boldsymbol{\beta}},
-#'   and \eqn{\boldsymbol{\Psi}} are model parameters.
-#'   \eqn{\boldsymbol{\eta}_{t}} is a vector of latent variables
-#'   at time \eqn{t}, \eqn{\boldsymbol{\eta}_{t - 1}}
-#'   is a vector of latent variables at
-#'   \eqn{t - 1},
-#'   and \eqn{\boldsymbol{\zeta}_{t}} is a vector of dynamic noise
-#'   at time \eqn{t} while \eqn{\boldsymbol{\alpha}}
-#'   is a vector of intercepts,
-#'   \eqn{\boldsymbol{\beta}} is a matrix of autoregression
-#'   and cross regression coefficients,
-#'   and \eqn{\boldsymbol{\Psi}} is the covariance matrix of
-#'   \eqn{\boldsymbol{\zeta}_{t}}.
-#'
-#' @inheritParams SimSSM0
-#' @inherit SimSSM0 return
-#' @inherit SimSSM0 references
-#'
-#' @examples
-#' # prepare parameters
-#' set.seed(42)
-#' k <- 3
-#' I <- diag(k)
-#' I_sqrt <- chol(I)
-#' null_vec <- rep(x = 0, times = k)
-#' mu0 <- null_vec
-#' sigma0_sqrt <- I_sqrt
-#' alpha <- null_vec
-#' beta <- diag(x = 0.5, nrow = k)
-#' psi_sqrt <- I_sqrt
-#' time <- 50
-#' burn_in <- 0
-#'
-#' # generate data
-#' ssm <- SimSSMVAR(
-#'   mu0 = mu0,
-#'   sigma0_sqrt = sigma0_sqrt,
-#'   alpha = alpha,
-#'   beta = beta,
-#'   psi_sqrt = psi_sqrt,
-#'   time = time,
-#'   burn_in = burn_in
-#' )
-#'
-#' str(ssm)
-#'
-#' @family Simulation of State Space Models Data Functions
-#' @keywords simStateSpace sim var
-#' @export
-SimSSMVAR <- function(mu0, sigma0_sqrt, alpha, beta, psi_sqrt, time, burn_in) {
-    .Call(`_simStateSpace_SimSSMVAR`, mu0, sigma0_sqrt, alpha, beta, psi_sqrt, time, burn_in)
+.SimSSM0OUVary <- function(n, mu0, sigma0_sqrt, mu, phi, sigma_sqrt, nu, lambda, theta_sqrt, delta_t, time, burn_in) {
+    .Call(`_simStateSpace_SimSSM0OUVary`, n, mu0, sigma0_sqrt, mu, phi, sigma_sqrt, nu, lambda, theta_sqrt, delta_t, time, burn_in)
+}
+
+.SimSSM0VAR <- function(mu0, sigma0_sqrt, alpha, beta, psi_sqrt, time, burn_in) {
+    .Call(`_simStateSpace_SimSSM0VAR`, mu0, sigma0_sqrt, alpha, beta, psi_sqrt, time, burn_in)
+}
+
+.SimSSM0VARFixed <- function(n, mu0, sigma0_sqrt, alpha, beta, psi_sqrt, time, burn_in) {
+    .Call(`_simStateSpace_SimSSM0VARFixed`, n, mu0, sigma0_sqrt, alpha, beta, psi_sqrt, time, burn_in)
+}
+
+.SimSSM0VARVary <- function(n, mu0, sigma0_sqrt, alpha, beta, psi_sqrt, time, burn_in) {
+    .Call(`_simStateSpace_SimSSM0VARVary`, n, mu0, sigma0_sqrt, alpha, beta, psi_sqrt, time, burn_in)
+}
+
+.SimSSM0Vary <- function(n, mu0, sigma0_sqrt, alpha, beta, psi_sqrt, nu, lambda, theta_sqrt, time, burn_in) {
+    .Call(`_simStateSpace_SimSSM0Vary`, n, mu0, sigma0_sqrt, alpha, beta, psi_sqrt, nu, lambda, theta_sqrt, time, burn_in)
+}
+
+.SimSSM1 <- function(mu0, sigma0_sqrt, alpha, beta, psi_sqrt, nu, lambda, theta_sqrt, gamma_eta, x, time, burn_in) {
+    .Call(`_simStateSpace_SimSSM1`, mu0, sigma0_sqrt, alpha, beta, psi_sqrt, nu, lambda, theta_sqrt, gamma_eta, x, time, burn_in)
+}
+
+.SimSSM1Fixed <- function(n, mu0, sigma0_sqrt, alpha, beta, psi_sqrt, nu, lambda, theta_sqrt, gamma_eta, x, time, burn_in) {
+    .Call(`_simStateSpace_SimSSM1Fixed`, n, mu0, sigma0_sqrt, alpha, beta, psi_sqrt, nu, lambda, theta_sqrt, gamma_eta, x, time, burn_in)
+}
+
+.SimSSM1OU <- function(mu0, sigma0_sqrt, mu, phi, sigma_sqrt, nu, lambda, theta_sqrt, gamma_eta, x, delta_t, time, burn_in) {
+    .Call(`_simStateSpace_SimSSM1OU`, mu0, sigma0_sqrt, mu, phi, sigma_sqrt, nu, lambda, theta_sqrt, gamma_eta, x, delta_t, time, burn_in)
+}
+
+.SimSSM1OUFixed <- function(n, mu0, sigma0_sqrt, mu, phi, sigma_sqrt, nu, lambda, theta_sqrt, gamma_eta, x, delta_t, time, burn_in) {
+    .Call(`_simStateSpace_SimSSM1OUFixed`, n, mu0, sigma0_sqrt, mu, phi, sigma_sqrt, nu, lambda, theta_sqrt, gamma_eta, x, delta_t, time, burn_in)
+}
+
+.SimSSM1OUVary <- function(n, mu0, sigma0_sqrt, mu, phi, sigma_sqrt, nu, lambda, theta_sqrt, gamma_eta, x, delta_t, time, burn_in) {
+    .Call(`_simStateSpace_SimSSM1OUVary`, n, mu0, sigma0_sqrt, mu, phi, sigma_sqrt, nu, lambda, theta_sqrt, gamma_eta, x, delta_t, time, burn_in)
+}
+
+.SimSSM1VAR <- function(mu0, sigma0_sqrt, alpha, beta, psi_sqrt, gamma_eta, x, time, burn_in) {
+    .Call(`_simStateSpace_SimSSM1VAR`, mu0, sigma0_sqrt, alpha, beta, psi_sqrt, gamma_eta, x, time, burn_in)
+}
+
+.SimSSM1VARFixed <- function(n, mu0, sigma0_sqrt, alpha, beta, psi_sqrt, gamma_eta, x, time, burn_in) {
+    .Call(`_simStateSpace_SimSSM1VARFixed`, n, mu0, sigma0_sqrt, alpha, beta, psi_sqrt, gamma_eta, x, time, burn_in)
+}
+
+.SimSSM1VARVary <- function(n, mu0, sigma0_sqrt, alpha, beta, psi_sqrt, gamma_eta, x, time, burn_in) {
+    .Call(`_simStateSpace_SimSSM1VARVary`, n, mu0, sigma0_sqrt, alpha, beta, psi_sqrt, gamma_eta, x, time, burn_in)
+}
+
+.SimSSM1Vary <- function(n, mu0, sigma0_sqrt, alpha, beta, psi_sqrt, nu, lambda, theta_sqrt, gamma_eta, x, time, burn_in) {
+    .Call(`_simStateSpace_SimSSM1Vary`, n, mu0, sigma0_sqrt, alpha, beta, psi_sqrt, nu, lambda, theta_sqrt, gamma_eta, x, time, burn_in)
+}
+
+.SimSSM2 <- function(mu0, sigma0_sqrt, alpha, beta, psi_sqrt, nu, lambda, theta_sqrt, gamma_y, gamma_eta, x, time, burn_in) {
+    .Call(`_simStateSpace_SimSSM2`, mu0, sigma0_sqrt, alpha, beta, psi_sqrt, nu, lambda, theta_sqrt, gamma_y, gamma_eta, x, time, burn_in)
+}
+
+.SimSSM2Fixed <- function(n, mu0, sigma0_sqrt, alpha, beta, psi_sqrt, nu, lambda, theta_sqrt, gamma_y, gamma_eta, x, time, burn_in) {
+    .Call(`_simStateSpace_SimSSM2Fixed`, n, mu0, sigma0_sqrt, alpha, beta, psi_sqrt, nu, lambda, theta_sqrt, gamma_y, gamma_eta, x, time, burn_in)
+}
+
+.SimSSM2OU <- function(mu0, sigma0_sqrt, mu, phi, sigma_sqrt, nu, lambda, theta_sqrt, gamma_y, gamma_eta, x, delta_t, time, burn_in) {
+    .Call(`_simStateSpace_SimSSM2OU`, mu0, sigma0_sqrt, mu, phi, sigma_sqrt, nu, lambda, theta_sqrt, gamma_y, gamma_eta, x, delta_t, time, burn_in)
+}
+
+.SimSSM2OUFixed <- function(n, mu0, sigma0_sqrt, mu, phi, sigma_sqrt, nu, lambda, theta_sqrt, gamma_y, gamma_eta, x, delta_t, time, burn_in) {
+    .Call(`_simStateSpace_SimSSM2OUFixed`, n, mu0, sigma0_sqrt, mu, phi, sigma_sqrt, nu, lambda, theta_sqrt, gamma_y, gamma_eta, x, delta_t, time, burn_in)
+}
+
+.SimSSM2OUVary <- function(n, mu0, sigma0_sqrt, mu, phi, sigma_sqrt, nu, lambda, theta_sqrt, gamma_y, gamma_eta, x, delta_t, time, burn_in) {
+    .Call(`_simStateSpace_SimSSM2OUVary`, n, mu0, sigma0_sqrt, mu, phi, sigma_sqrt, nu, lambda, theta_sqrt, gamma_y, gamma_eta, x, delta_t, time, burn_in)
+}
+
+.SimSSM2Vary <- function(n, mu0, sigma0_sqrt, alpha, beta, psi_sqrt, nu, lambda, theta_sqrt, gamma_y, gamma_eta, x, time, burn_in) {
+    .Call(`_simStateSpace_SimSSM2Vary`, n, mu0, sigma0_sqrt, alpha, beta, psi_sqrt, nu, lambda, theta_sqrt, gamma_y, gamma_eta, x, time, burn_in)
 }
 

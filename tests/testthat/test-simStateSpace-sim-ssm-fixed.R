@@ -1,4 +1,4 @@
-## ---- test-simStateSpace-sim-ssm-var-fixed
+## ---- test-simStateSpace-sim-ssm-fixed
 lapply(
   X = 1,
   FUN = function(i,
@@ -6,7 +6,7 @@ lapply(
     message(text)
     # prepare parameters
     set.seed(42)
-    k <- 3
+    k <- p <- 3
     iden <- diag(k)
     iden_sqrt <- chol(iden)
     null_vec <- rep(x = 0, times = k)
@@ -14,11 +14,14 @@ lapply(
     mu0 <- null_vec
     sigma0_sqrt <- iden_sqrt
     alpha <- null_vec
-    beta <- diag(x = 0.5, nrow = k)
+    beta <- diag(x = 0.50, nrow = k)
     psi_sqrt <- iden_sqrt
+    nu <- null_vec
+    lambda <- iden
+    theta_sqrt <- chol(diag(x = 0.50, nrow = k))
     time <- 50
     burn_in <- 0
-    gamma_eta <- 0.10 * diag(k)
+    gamma_y <- gamma_eta <- 0.10 * diag(k)
     x <- lapply(
       X = seq_len(n),
       FUN = function(i) {
@@ -31,14 +34,18 @@ lapply(
       }
     )
 
-    # No covariates
-    ssm <- SimSSMVARFixed(
+    # Type 0
+    ssm <- SimSSMFixed(
       n = n,
       mu0 = mu0,
       sigma0_sqrt = sigma0_sqrt,
       alpha = alpha,
       beta = beta,
       psi_sqrt = psi_sqrt,
+      nu = nu,
+      lambda = lambda,
+      theta_sqrt = theta_sqrt,
+      type = 0,
       time = time,
       burn_in = burn_in
     )
@@ -46,16 +53,42 @@ lapply(
     Sim2Matrix(ssm, eta = TRUE)
     Sim2Matrix(ssm, eta = FALSE)
 
-    # With covariates
-    ssm <- SimSSMVARFixed(
+    # Type 1
+    ssm <- SimSSMFixed(
       n = n,
       mu0 = mu0,
       sigma0_sqrt = sigma0_sqrt,
       alpha = alpha,
       beta = beta,
       psi_sqrt = psi_sqrt,
+      nu = nu,
+      lambda = lambda,
+      theta_sqrt = theta_sqrt,
       gamma_eta = gamma_eta,
       x = x,
+      type = 1,
+      time = time,
+      burn_in = burn_in
+    )
+
+    Sim2Matrix(ssm, eta = TRUE)
+    Sim2Matrix(ssm, eta = FALSE)
+
+    # Type 2
+    ssm <- SimSSMFixed(
+      n = n,
+      mu0 = mu0,
+      sigma0_sqrt = sigma0_sqrt,
+      alpha = alpha,
+      beta = beta,
+      psi_sqrt = psi_sqrt,
+      nu = nu,
+      lambda = lambda,
+      theta_sqrt = theta_sqrt,
+      gamma_y = gamma_y,
+      gamma_eta = gamma_eta,
+      x = x,
+      type = 2,
       time = time,
       burn_in = burn_in
     )
@@ -63,5 +96,5 @@ lapply(
     Sim2Matrix(ssm, eta = TRUE)
     Sim2Matrix(ssm, eta = FALSE)
   },
-  text = "test-simStateSpace-sim-ssm-var-fixed"
+  text = "test-simStateSpace-sim-ssm-fixed"
 )

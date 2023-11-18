@@ -18,7 +18,9 @@
 #'   `sigma_sqrt`,
 #'   `nu`,
 #'   `lambda`,
-#'   `theta_sqrt`)
+#'   `theta_sqrt`,
+#'    `gamma_y`, or
+#'    `gamma_eta`)
 #'   is less the `n`,
 #'   the function will cycle through the available values.
 #'
@@ -36,7 +38,7 @@
 #'   or randomness in the process
 #'   (\eqn{\boldsymbol{\Sigma}}).
 #' @inheritParams SimSSMOUFixed
-#' @inherit SimSSM0Fixed return
+#' @inherit SimSSMFixed return
 #' @inherit SimSSMOU references
 #'
 #' @examples
@@ -68,7 +70,20 @@
 #' delta_t <- 0.10
 #' time <- 50
 #' burn_in <- 0
+#' gamma_y <- gamma_eta <- list(0.10 * diag(k))
+#' x <- lapply(
+#'   X = seq_len(n),
+#'   FUN = function(i) {
+#'     return(
+#'       matrix(
+#'         data = rnorm(n = k * (time + burn_in)),
+#'         ncol = k
+#'       )
+#'     )
+#'   }
+#' )
 #'
+#' # Type 0
 #' ssm <- SimSSMOUVary(
 #'   n = n,
 #'   mu0 = mu0,
@@ -79,6 +94,50 @@
 #'   nu = nu,
 #'   lambda = lambda,
 #'   theta_sqrt = theta_sqrt,
+#'   type = 0,
+#'   delta_t = delta_t,
+#'   time = time,
+#'   burn_in = burn_in
+#' )
+#'
+#' str(ssm)
+#'
+#' # Type 1
+#' ssm <- SimSSMOUVary(
+#'   n = n,
+#'   mu0 = mu0,
+#'   sigma0_sqrt = sigma0_sqrt,
+#'   mu = mu,
+#'   phi = phi,
+#'   sigma_sqrt = sigma_sqrt,
+#'   nu = nu,
+#'   lambda = lambda,
+#'   theta_sqrt = theta_sqrt,
+#'   gamma_eta = gamma_eta,
+#'   x = x,
+#'   type = 1,
+#'   delta_t = delta_t,
+#'   time = time,
+#'   burn_in = burn_in
+#' )
+#'
+#' str(ssm)
+#'
+#' # Type 2
+#' ssm <- SimSSMOUVary(
+#'   n = n,
+#'   mu0 = mu0,
+#'   sigma0_sqrt = sigma0_sqrt,
+#'   mu = mu,
+#'   phi = phi,
+#'   sigma_sqrt = sigma_sqrt,
+#'   nu = nu,
+#'   lambda = lambda,
+#'   theta_sqrt = theta_sqrt,
+#'   gamma_y = gamma_y,
+#'   gamma_eta = gamma_eta,
+#'   x = x,
+#'   type = 2,
 #'   delta_t = delta_t,
 #'   time = time,
 #'   burn_in = burn_in
@@ -98,73 +157,73 @@ SimSSMOUVary <- function(n,
                          nu,
                          lambda,
                          theta_sqrt,
+                         gamma_y = NULL,
+                         gamma_eta = NULL,
+                         x = NULL,
+                         type = 0,
                          delta_t,
                          time,
                          burn_in) {
   stopifnot(
-    is.list(mu0),
-    is.list(sigma0_sqrt),
-    is.list(mu),
-    is.list(phi),
-    is.list(sigma_sqrt),
-    is.list(nu),
-    is.list(lambda),
-    is.list(theta_sqrt)
+    type %in% 0:2
   )
-  stopifnot(
-    length(mu0) <= n,
-    length(sigma0_sqrt) <= n,
-    length(mu) <= n,
-    length(phi) <= n,
-    length(sigma_sqrt) <= n,
-    length(nu) <= n,
-    length(lambda) <= n,
-    length(theta_sqrt) <= n
-  )
-  foo <- function(i,
-                  mu0,
-                  sigma0_sqrt,
-                  mu,
-                  phi,
-                  sigma_sqrt,
-                  nu,
-                  lambda,
-                  theta_sqrt) {
-    dat_i <- SimSSMOU(
-      mu0 = mu0,
-      sigma0_sqrt = sigma0_sqrt,
-      mu = mu,
-      phi = phi,
-      sigma_sqrt = sigma_sqrt,
-      nu = nu,
-      lambda = lambda,
-      theta_sqrt = theta_sqrt,
-      delta_t = delta_t,
-      time = time,
-      burn_in = burn_in
-    )
+  if (type == 0) {
     return(
-      list(
-        y = dat_i$y,
-        eta = dat_i$eta,
-        time = dat_i$time,
-        id = matrix(data = i, ncol = 1, nrow = time)
+      .SimSSM0OUVary(
+        n = n,
+        mu0 = rep(x = mu0, length.out = n),
+        sigma0_sqrt = rep(x = sigma0_sqrt, length.out = n),
+        mu = rep(x = mu, length.out = n),
+        phi = rep(x = phi, length.out = n),
+        sigma_sqrt = rep(x = sigma_sqrt, length.out = n),
+        nu = rep(x = nu, length.out = n),
+        lambda = rep(x = lambda, length.out = n),
+        theta_sqrt = rep(x = theta_sqrt, length.out = n),
+        delta_t = delta_t,
+        time = time,
+        burn_in = burn_in
       )
     )
   }
-  return(
-    mapply(
-      FUN = foo,
-      i = seq_len(n),
-      mu0 = mu0,
-      sigma0_sqrt = sigma0_sqrt,
-      mu = mu,
-      phi = phi,
-      sigma_sqrt = sigma_sqrt,
-      nu = nu,
-      lambda = lambda,
-      theta_sqrt = theta_sqrt,
-      SIMPLIFY = FALSE
+  if (type == 1) {
+    return(
+      .SimSSM1OUVary(
+        n = n,
+        mu0 = rep(x = mu0, length.out = n),
+        sigma0_sqrt = rep(x = sigma0_sqrt, length.out = n),
+        mu = rep(x = mu, length.out = n),
+        phi = rep(x = phi, length.out = n),
+        sigma_sqrt = rep(x = sigma_sqrt, length.out = n),
+        nu = rep(x = nu, length.out = n),
+        lambda = rep(x = lambda, length.out = n),
+        theta_sqrt = rep(x = theta_sqrt, length.out = n),
+        gamma_eta = rep(x = gamma_eta, length.out = n),
+        x = x,
+        delta_t = delta_t,
+        time = time,
+        burn_in = burn_in
+      )
     )
-  )
+  }
+  if (type == 2) {
+    return(
+      .SimSSM2OUVary(
+        n = n,
+        mu0 = rep(x = mu0, length.out = n),
+        sigma0_sqrt = rep(x = sigma0_sqrt, length.out = n),
+        mu = rep(x = mu, length.out = n),
+        phi = rep(x = phi, length.out = n),
+        sigma_sqrt = rep(x = sigma_sqrt, length.out = n),
+        nu = rep(x = nu, length.out = n),
+        lambda = rep(x = lambda, length.out = n),
+        theta_sqrt = rep(x = theta_sqrt, length.out = n),
+        gamma_y = rep(x = gamma_y, length.out = n),
+        gamma_eta = rep(x = gamma_eta, length.out = n),
+        x = x,
+        delta_t = delta_t,
+        time = time,
+        burn_in = burn_in
+      )
+    )
+  }
 }

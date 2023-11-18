@@ -1,24 +1,30 @@
 #' Simulation Output to Matrix
 #'
 #' This function converts the output of
-#' [simStateSpace::SimSSM0()],
+#' [simStateSpace::SimSSM()],
 #' [simStateSpace::SimSSMOU()],
 #' [simStateSpace::SimSSMVAR()],
-#' [simStateSpace::SimSSM0Fixed()],
-#' [simStateSpace::SimSSMOUFixed()], or
-#' [simStateSpace::SimSSMVARFixed()]
+#' [simStateSpace::SimSSMFixed()],
+#' [simStateSpace::SimSSMOUFixed()],
+#' [simStateSpace::SimSSMVARFixed()],
+#' [simStateSpace::SimSSMVary()],
+#' [simStateSpace::SimSSMOUVary()], or
+#' [simStateSpace::SimSSMVARVary()]
 #' to a matrix.
 #'
 #' @author Ivan Jacob Agaloos Pesigan
 #'
 #' @param x R object.
 #'   Output of
-#'   [simStateSpace::SimSSM0()],
+#'   [simStateSpace::SimSSM()],
 #'   [simStateSpace::SimSSMOU()],
 #'   [simStateSpace::SimSSMVAR()],
-#'   [simStateSpace::SimSSM0Fixed()],
-#'   [simStateSpace::SimSSMOUFixed()], or
-#'   [simStateSpace::SimSSMVARFixed()].
+#'   [simStateSpace::SimSSMFixed()],
+#'   [simStateSpace::SimSSMOUFixed()],
+#'   [simStateSpace::SimSSMVARFixed()],
+#'   [simStateSpace::SimSSMVary()],
+#'   [simStateSpace::SimSSMOUVary()], or
+#'   [simStateSpace::SimSSMVARVary()].
 #' @param eta Logical.
 #'   If `eta = TRUE`, include `eta`.
 #'   If `eta = FALSE`, exclude `eta`.
@@ -29,23 +35,23 @@
 #' # prepare parameters
 #' set.seed(42)
 #' k <- p <- 3
-#' I <- diag(k)
-#' I_sqrt <- chol(I)
+#' iden <- diag(k)
+#' iden_sqrt <- chol(iden)
 #' null_vec <- rep(x = 0, times = k)
 #' n <- 5
 #' mu0 <- null_vec
-#' sigma0_sqrt <- I_sqrt
+#' sigma0_sqrt <- iden_sqrt
 #' alpha <- null_vec
 #' beta <- diag(x = 0.50, nrow = k)
-#' psi_sqrt <- I_sqrt
+#' psi_sqrt <- iden_sqrt
 #' nu <- null_vec
-#' lambda <- I
+#' lambda <- iden
 #' theta_sqrt <- chol(diag(x = 0.50, nrow = k))
 #' time <- 50
 #' burn_in <- 0
 #'
 #' # generate data
-#' ssm <- SimSSM0(
+#' ssm <- SimSSM(
 #'   mu0 = mu0,
 #'   sigma0_sqrt = sigma0_sqrt,
 #'   alpha = alpha,
@@ -54,6 +60,7 @@
 #'   nu = nu,
 #'   lambda = lambda,
 #'   theta_sqrt = theta_sqrt,
+#'   type = 0,
 #'   time = time,
 #'   burn_in = burn_in
 #' )
@@ -64,7 +71,7 @@
 #' head(mat)
 #'
 #' # generate data
-#' ssm <- SimSSM0Fixed(
+#' ssm <- SimSSMFixed(
 #'   n = n,
 #'   mu0 = mu0,
 #'   sigma0_sqrt = sigma0_sqrt,
@@ -74,6 +81,7 @@
 #'   nu = nu,
 #'   lambda = lambda,
 #'   theta_sqrt = theta_sqrt,
+#'   type = 0,
 #'   time = time,
 #'   burn_in = burn_in
 #' )

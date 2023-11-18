@@ -28,14 +28,14 @@ Time interval (\eqn{\delta_t}).}
 \value{
 Returns a list of state space parameters:
 \itemize{
-\item alpha: Numeric vector.
+\item \code{alpha}: Numeric vector.
 Vector of intercepts for the dynamic model
 (\eqn{\boldsymbol{\alpha}}).
-\item beta: Numeric matrix.
+\item \code{beta}: Numeric matrix.
 Transition matrix relating the values of the latent variables
 at time \code{t - 1} to those at time \code{t}
 (\eqn{\boldsymbol{\beta}}).
-\item psi: Numeric matrix.
+\item \code{psi}: Numeric matrix.
 The process noise covariance matrix
 (\eqn{\boldsymbol{\Psi}}).
 }
@@ -129,15 +129,15 @@ OU2SSM(
 \seealso{
 Other Simulation of State Space Models Data Functions: 
 \code{\link{Sim2Matrix}()},
-\code{\link{SimSSM0Fixed}()},
-\code{\link{SimSSM0Vary}()},
-\code{\link{SimSSM0}()},
+\code{\link{SimSSMFixed}()},
 \code{\link{SimSSMOUFixed}()},
 \code{\link{SimSSMOUVary}()},
 \code{\link{SimSSMOU}()},
 \code{\link{SimSSMVARFixed}()},
 \code{\link{SimSSMVARVary}()},
-\code{\link{SimSSMVAR}()}
+\code{\link{SimSSMVAR}()},
+\code{\link{SimSSMVary}()},
+\code{\link{SimSSM}()}
 }
 \author{
 Ivan Jacob Agaloos Pesigan
