@@ -33,21 +33,38 @@
 #'     \boldsymbol{\Psi}
 #'     \right)
 #'   }
-#'   where \eqn{\boldsymbol{\eta}_{t}}, \eqn{\boldsymbol{\eta}_{t - 1}},
-#'   and \eqn{\boldsymbol{\zeta}_{t}} are random variables
-#'   and \eqn{\boldsymbol{\alpha}}, \eqn{\boldsymbol{\beta}},
-#'   and \eqn{\boldsymbol{\Psi}} are model parameters.
-#'   \eqn{\boldsymbol{\eta}_{t}} is a vector of latent variables
-#'   at time \eqn{t}, \eqn{\boldsymbol{\eta}_{t - 1}}
-#'   is a vector of latent variables at
-#'   \eqn{t - 1},
-#'   and \eqn{\boldsymbol{\zeta}_{t}} is a vector of dynamic noise
-#'   at time \eqn{t} while \eqn{\boldsymbol{\alpha}}
+#'   where
+#'   \eqn{\boldsymbol{\eta}_{t}},
+#'   \eqn{\boldsymbol{\eta}_{t - 1}},
+#'   and
+#'   \eqn{\boldsymbol{\zeta}_{t}}
+#'   are random variables,
+#'   and
+#'   \eqn{\boldsymbol{\alpha}},
+#'   \eqn{\boldsymbol{\beta}},
+#'   and
+#'   \eqn{\boldsymbol{\Psi}}
+#'   are model parameters.
+#'   \eqn{\boldsymbol{\eta}_{t}}
+#'   is a vector of latent variables
+#'   at time \eqn{t},
+#'   \eqn{\boldsymbol{\eta}_{t - 1}}
+#'   is a vector of latent variables
+#'   at time \eqn{t - 1},
+#'   and
+#'   \eqn{\boldsymbol{\zeta}_{t}}
+#'   is a vector of dynamic noise
+#'   at time \eqn{t}.
+#'   \eqn{\boldsymbol{\alpha}}
 #'   is a vector of intercepts,
-#'   \eqn{\boldsymbol{\beta}} is a matrix of autoregression
+#'   \eqn{\boldsymbol{\beta}}
+#'   is a matrix of autoregression
 #'   and cross regression coefficients,
-#'   and \eqn{\boldsymbol{\Psi}} is the covariance matrix of
+#'   and
+#'   \eqn{\boldsymbol{\Psi}}
+#'   is the covariance matrix of
 #'   \eqn{\boldsymbol{\zeta}_{t}}.
+#'
 #'   Note that when `gamma_eta` and `x` are not `NULL`,
 #'   the dynamic structure is given by
 #'   \deqn{
@@ -141,7 +158,7 @@ SimSSMVAR <- function(mu0,
                       gamma_eta = NULL,
                       x = NULL,
                       time = 0,
-                      burn_in) {
+                      burn_in = 0) {
   if (is.null(gamma_eta) || is.null(x)) {
     return(
       .SimSSM0VAR(

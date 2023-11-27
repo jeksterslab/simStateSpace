@@ -12,6 +12,9 @@ reference:
 - title: State Space Model
   contents:
   - has_keyword("ssm")
+- title: Growth Curve Model
+  contents:
+  - has_keyword("growth")
 - title: Vector Autoregressive Model
   contents:
   - has_keyword("var")
@@ -28,6 +31,7 @@ reference:
 articles:
 - title: Examples
   contents:
+  - lin-growth
   - var
   - ou
 - title: Session Information

@@ -18,6 +18,20 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
+```{r}
+#| include = FALSE
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  fig.path = "fig-vignettes-var-",
+  fig.cap = "",
+  fig.width = 11,
+  fig.height = 8,
+  fig.retina = 2,
+  dpi = 300,
+  comment = "#>"
+)
+```
+
 ## Model
 
 The measurement model is given by
@@ -76,7 +90,7 @@ $\boldsymbol{\zeta}_{i, t}$.
 #| echo = FALSE
 set.seed(42)
 time <- 1000
-n <- 20
+n <- 5
 k <- p <- 3
 iden <- diag(k)
 null_vec <- rep(x = 0, times = k)
@@ -207,6 +221,36 @@ data <- Sim2Matrix(
 head(data)
 ```
 
+### Plots
+
+```{r}
+#| echo = FALSE
+obs <- paste0("y", seq_len(k))
+for (i in seq_along(obs)) {
+  plot(
+    x = 0,
+    y = 0,
+    xlim = range(data[, "time"]),
+    ylim = range(data[, obs]), 
+    type = "n",
+    xlab = "time",
+    ylab = obs[i],
+    main = obs[i]
+  )
+  for (j in unique(data[, "id"])) {
+    subset_data <- subset(
+      x = data,
+      subset = data[, "id"] == j
+    )
+    lines(
+      x = subset_data[, "time"],
+      y = subset_data[, obs[i]],
+      type = "l"
+    )
+  }
+}
+```
+
 ## Model Fitting
 
 ### Prepare Data
@@ -297,6 +341,7 @@ model <- dynr::dynr.model(
   noise = dynr_noise,
   outfile = "var.c"
 )
+model@options$maxeval <- 10000
 ```
 
 ```{r}

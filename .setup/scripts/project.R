@@ -20,7 +20,8 @@ project <- "simStateSpace"
 pkg_cran <- c(
   "Rcpp",
   "RcppArmadillo",
-  "Matrix"
+  "Matrix",
+  "lavaan"
 )
 
 # dynr has to be installed which requires more work to install

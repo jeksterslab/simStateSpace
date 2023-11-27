@@ -1,0 +1,442 @@
+---
+title: "Linear Growth Curve Model"
+author: "Ivan Jacob Agaloos Pesigan"
+date: "`r Sys.Date()`"
+bibliography: "vignettes.bib"
+csl: https://raw.githubusercontent.com/citation-style-language/styles/master/apa.csl
+nocite: |
+  @RCoreTeam-2023
+  @Ou-Hunter-Chow-2019
+  @Chow-Ho-Hamaker-etal-2010
+output:
+  rmarkdown::html_vignette:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{Linear Growth Curve Model}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r}
+#| include = FALSE
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  fig.path = "fig-vignettes-lin-growth-",
+  fig.cap = "",
+  fig.width = 11,
+  fig.height = 8,
+  fig.retina = 2,
+  dpi = 300,
+  comment = "#>"
+)
+```
+
+## Model
+
+The measurement model is given by
+\begin{equation}
+  y_{i, t}
+  =
+  \left(
+  \begin{array}{cc}
+    1 & 0 \\
+  \end{array}
+  \right)
+  \left(
+  \begin{array}{c}
+    \eta_{0_{i, t}} \\
+    \eta_{1_{i, t}} \\
+  \end{array}
+  \right)
+  +
+  \boldsymbol{\varepsilon}_{i, t}
+  \quad
+  \mathrm{with}
+  \quad
+  \boldsymbol{\varepsilon}_{i, t}
+  \sim
+  \mathcal{N}
+  \left(
+  0,
+  \theta^{2}
+  \right)
+\end{equation}
+where $y_{i, t}$, $\eta_{0_{i, t}}$,
+$\eta_{1_{i, t}}$,
+and $\boldsymbol{\varepsilon}_{i, t}$
+are random variables and
+and $\theta^{2}$ is a model parameter.
+$y_{i, t}$ is a vector of observed random variables
+at time $t$ and individual $i$,
+$\eta_{0_{i, t}}$,
+$\eta_{1_{i, t}}$ is forms a vector of latent random variables
+at time $t$ and individual $i$,
+and $\boldsymbol{\varepsilon}_{i, t}$
+is a vector of random measurement errors
+at time $t$ and individual $i$,
+and $\theta^{2}$ is the variance of
+$\boldsymbol{\varepsilon}$.
+
+The dynamic structure is given by
+\begin{equation}
+  \left(
+  \begin{array}{c}
+  \eta_{0_{i, t}} \\
+  \eta_{1_{i, t}} \\
+  \end{array}
+  \right)
+  =
+  \left(
+  \begin{array}{cc}
+    1 & 1 \\
+    0 & 1 \\
+  \end{array}
+  \right)
+  \left(
+  \begin{array}{c}
+  \eta_{0_{i, t}} \\
+  \eta_{1_{i, t}} \\
+  \end{array}
+  \right) .
+\end{equation}
+
+The mean vector and covariance matrix of the intercept and slope
+are captured in the mean vector and covariance matrix
+of the initial condition given by
+\begin{equation}
+  \boldsymbol{\mu}_{\boldsymbol{\eta} \mid 0}
+  =
+  \left(
+  \begin{array}{c}
+    \mu_{\eta_{0}} \\
+    \mu_{\eta_{1}} \\
+  \end{array}
+  \right) \quad \mathrm{and,}
+\end{equation}
+
+\begin{equation}
+  \boldsymbol{\Sigma}_{\boldsymbol{\eta} \mid 0}
+  =
+  \left(
+  \begin{array}{cc}
+    \sigma^{2}_{\eta_{0}} &
+    \sigma_{\eta_{0}, \eta_{1}} \\
+    \sigma_{\eta_{1}, \eta_{0}} &
+    \sigma^{2}_{\eta_{1}} \\
+  \end{array}
+  \right) .
+\end{equation}
+
+## Data Generation
+
+### Notation
+
+```{r}
+#| echo = FALSE
+set.seed(42)
+n <- 1000
+mu0 <- c(0.615, 1.006)
+sigma0 <- matrix(
+  data = c(
+    1.932,
+    0.618,
+    0.618,
+    0.587
+  ),
+  nrow = 2
+)
+sigma0_sqrt <- chol(sigma0)
+theta <- 0.6
+theta_sqrt <- sqrt(theta)
+time <- 5
+gamma_y <- matrix(data = 0.10, nrow = 1, ncol = 2)
+gamma_eta <- matrix(data = 0.10, nrow = 2, ncol = 2)
+x <- lapply(
+  X = seq_len(n),
+  FUN = function(i) {
+    return(
+      matrix(
+        data = rnorm(n = 2 * time),
+        ncol = 2
+      )
+    )
+  }
+)
+```
+
+Let $t = `r time`$ be the number of time points and $n = `r n`$ be the number of individuals.
+
+Let the measurement error variance $\theta^{2}$ be given by
+
+\begin{equation}
+\theta^{2}
+=
+`r theta` .
+\end{equation}
+
+Let the initial condition
+$\boldsymbol{\eta}_{0}$
+be given by
+
+\begin{equation}
+\boldsymbol{\eta}_{0} \sim \mathcal{N} \left( \boldsymbol{\mu}_{\boldsymbol{\eta} \mid 0}, \boldsymbol{\Sigma}_{\boldsymbol{\eta} \mid 0} \right)
+\end{equation}
+
+\begin{equation}
+\boldsymbol{\mu}_{\boldsymbol{\eta} \mid 0}
+=
+\left(
+\begin{array}{c}
+  `r mu0[1]` \\
+  `r mu0[2]` \\
+\end{array}
+\right)
+\end{equation}
+
+\begin{equation}
+\boldsymbol{\Sigma}_{\boldsymbol{\eta} \mid 0}
+=
+\left(
+\begin{array}{ccc}
+  `r sigma0[1, 1]` & `r sigma0[1, 2]` \\
+  `r sigma0[2, 1]` & `r sigma0[2, 2]` \\
+\end{array}
+\right) .
+\end{equation}
+
+### R Function Arguments
+
+```{r}
+n
+time
+mu0
+sigma0
+theta
+```
+
+### Using the SimSSMVARFixed Function to Simulate Data
+
+```{r}
+library(simStateSpace)
+sim <- SimSSMLinGrowth(
+  n = n,
+  mu0 = mu0,
+  sigma0_sqrt = sigma0_sqrt,
+  theta_sqrt = theta_sqrt,
+  type = 0,
+  time = time
+)
+data <- Sim2Matrix(sim)
+head(data)
+```
+
+### Plots
+
+```{r}
+#| echo = FALSE
+obs <- "y"
+for (i in seq_along(obs)) {
+  plot(
+    x = 0,
+    y = 0,
+    xlim = range(data[, "time"]),
+    ylim = range(data[, obs]), 
+    type = "n",
+    xlab = "time",
+    ylab = obs[i],
+    main = obs[i]
+  )
+  for (j in unique(data[, "id"])) {
+    subset_data <- subset(
+      x = data,
+      subset = data[, "id"] == j
+    )
+    lines(
+      x = subset_data[, "time"],
+      y = subset_data[, obs[i]],
+      type = "l"
+    )
+  }
+}
+```
+
+## Model Fitting
+
+### Prepare Data
+
+```{r}
+dynr_data <- dynr::dynr.data(
+  dataframe = data,
+  id = "id",
+  time = "time",
+  observed = "y"
+)
+```
+
+### Prepare Initial Condition
+
+```{r}
+dynr_initial <- dynr::prep.initial(
+  values.inistate = c(0, 0),
+  params.inistate = c("mu0_0", "mu0_1"),
+  values.inicov = diag(2),
+  params.inicov = matrix(
+    data = c(
+      "sigma0_00", "sigma0_01",
+      "sigma0_01", "sigma0_11"
+    ),
+    nrow = 2
+  )
+)
+```
+
+### Prepare Measurement Model
+
+```{r}
+dynr_measurement <- dynr::prep.measurement(
+  values.load = matrix(data = c(1, 0), nrow = 1),
+  params.load = matrix(data = "fixed", nrow = 1, ncol = 2),
+  state.names = c("eta_0", "eta_1"),
+  obs.names = "y"
+)
+```
+
+### Prepare Dynamic Process
+
+```{r}
+dynr_dynamics <- dynr::prep.matrixDynamics(
+  values.dyn = matrix(
+    data = c(1, 0, 1, 1),
+    nrow = 2
+  ),
+  params.dyn = matrix(
+    data = "fixed",
+    nrow = 2,
+    ncol = 2
+  ),
+  isContinuousTime = FALSE
+)
+```
+
+### Prepare Process Noise
+
+```{r}
+dynr_noise <- dynr::prep.noise(
+  values.latent = matrix(data = 0, nrow = 2, ncol = 2),
+  params.latent = matrix(data = "fixed", nrow = 2, ncol = 2),
+  values.observed = 1,
+  params.observed = "theta"
+)
+```
+
+### Prepare the Model
+
+```{r}
+model <- dynr::dynr.model(
+  data = dynr_data,
+  initial = dynr_initial,
+  measurement = dynr_measurement,
+  dynamics = dynr_dynamics,
+  noise = dynr_noise,
+  outfile = "lin-growth.c"
+)
+model@options$maxeval <- 10000
+```
+
+### Fit the Model
+
+```{r}
+results <- dynr::dynr.cook(
+  model,
+  debug_flag = TRUE,
+  verbose = FALSE
+)
+```
+
+## Summary
+
+```{r}
+summary(results)
+```
+
+```{r}
+#| echo = FALSE
+estimates <- coef(results)
+estimates_cov <- vcov(results)
+mu0_hat <- unname(
+  estimates[
+    c(
+      "mu0_0",
+      "mu0_1"
+    )
+  ]
+)
+unname(mu0_hat)
+sigma0_hat <- matrix(
+  data = estimates[
+    c(
+      "sigma0_00",
+      "sigma0_01",
+      "sigma0_01",
+      "sigma0_11"
+    )
+  ],
+  nrow = 2
+)
+```
+
+### Estimated Coefficients
+
+```{r}
+mu0_hat
+sigma0_hat
+```
+
+### Discrepancy Between Estimated and Population Coefficients
+
+```{r}
+abs(mu0 - mu0_hat)
+abs(sigma0 - sigma0_hat)
+```
+
+## Linear Growth Curve Model in Structural Equation Modeling
+
+### Wide Data Set
+
+```{r}
+data <- Sim2Matrix(sim, long = FALSE)
+head(data)
+```
+
+### Model
+
+```{r}
+model <- "
+  # factor loadings
+  eta0 =~ 1 * y_0 + 1 * y_1 + 1 * y_2 + 1 * y_3 + 1 * y_4
+  eta1 =~ 0 * y_0 + 1 * y_1 + 2 * y_2 + 3 * y_3 + 4 * y_4
+  # means of latent variables
+  eta0 ~ mu0 * 1
+  eta1 ~ mu1 * 1
+  # variances and covariances of latent variables
+  eta0 ~~ sigma00 * eta0
+  eta0 ~~ sigma01 * eta1
+  eta1 ~~ sigma11 * eta1
+  # constrain error variance theta to be equal
+  y_0 ~~ theta * y_0
+  y_1 ~~ theta * y_1
+  y_2 ~~ theta * y_2
+  y_3 ~~ theta * y_3
+  y_4 ~~ theta * y_4
+"
+```
+
+```{r}
+fit <- lavaan::growth(
+  model = model,
+  data = as.data.frame(data)
+)
+lavaan::summary(fit)
+```
+
+## References

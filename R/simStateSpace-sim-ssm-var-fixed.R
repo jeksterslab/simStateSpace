@@ -38,7 +38,7 @@
 #'         data = rnorm(n = k * (time + burn_in)),
 #'         ncol = k
 #'       )
-#'     )
+#'    )
 #'   }
 #' )
 #'
@@ -84,7 +84,7 @@ SimSSMVARFixed <- function(n,
                            gamma_eta = NULL,
                            x = NULL,
                            time = 0,
-                           burn_in) {
+                           burn_in = 0) {
   if (is.null(gamma_eta) || is.null(x)) {
     return(
       .SimSSM0VARFixed(

@@ -19,6 +19,20 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
+```{r}
+#| include = FALSE
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  fig.path = "fig-vignettes-ou-",
+  fig.cap = "",
+  fig.width = 11,
+  fig.height = 8,
+  fig.retina = 2,
+  dpi = 300,
+  comment = "#>"
+)
+```
+
 ## Model
 
 The measurement model is given by
@@ -95,7 +109,7 @@ which represents random fluctuations.
 #| echo = FALSE
 set.seed(42)
 time <- 1000
-n <- 20
+n <- 5
 delta_t <- 0.10
 k <- p <- 3
 iden <- diag(k)
@@ -293,6 +307,36 @@ data <- Sim2Matrix(
 head(data)
 ```
 
+### Plots
+
+```{r}
+#| echo = FALSE
+obs <- paste0("y", seq_len(k))
+for (i in seq_along(obs)) {
+  plot(
+    x = 0,
+    y = 0,
+    xlim = range(data[, "time"]),
+    ylim = range(data[, obs]), 
+    type = "n",
+    xlab = "time",
+    ylab = obs[i],
+    main = obs[i]
+  )
+  for (j in unique(data[, "id"])) {
+    subset_data <- subset(
+      x = data,
+      subset = data[, "id"] == j
+    )
+    lines(
+      x = subset_data[, "time"],
+      y = subset_data[, obs[i]],
+      type = "l"
+    )
+  }
+}
+```
+
 ## Model Fitting
 
 ### Prepare Data
@@ -390,6 +434,7 @@ model <- dynr::dynr.model(
   noise = dynr_noise,
   outfile = "ou.c"
 )
+model@options$maxeval <- 10000
 ```
 
 Add lower and upper bound to aid in the optimization.

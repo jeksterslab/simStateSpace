@@ -6,11 +6,7 @@
 #include <RcppArmadillo.h>
 // [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::export(.SimSSM0VARVary)]]
-Rcpp::List SimSSM0VARVary(const int n, const Rcpp::List& mu0,
-                          const Rcpp::List& sigma0_sqrt,
-                          const Rcpp::List& alpha, const Rcpp::List& beta,
-                          const Rcpp::List& psi_sqrt, const int time,
-                          const int burn_in) {
+Rcpp::List SimSSM0VARVary(const int n, const Rcpp::List& mu0, const Rcpp::List& sigma0_sqrt, const Rcpp::List& alpha, const Rcpp::List& beta, const Rcpp::List& psi_sqrt, const int time, const int burn_in) {
   // Step 1: Determine indices
   int total_time = time + burn_in;
   arma::vec mu0_temp = mu0[0];
@@ -29,13 +25,12 @@ Rcpp::List SimSSM0VARVary(const int n, const Rcpp::List& mu0,
     arma::mat beta_temp = beta[i];
     arma::mat psi_sqrt_temp = psi_sqrt[i];
 
-    // Step 3.2: Generate initial condition
+    // Step 3.2: Generate initial condition    
     eta.col(0) = mu0_temp + sigma0_sqrt_temp * arma::randn(num_latent_vars);
 
     // Step 3.3: Simulate state space model data using a loop
     for (int t = 1; t < total_time; t++) {
-      eta.col(t) = alpha_temp + beta_temp * eta.col(t - 1) +
-                   psi_sqrt_temp * arma::randn(num_latent_vars);
+      eta.col(t) = alpha_temp + beta_temp * eta.col(t - 1) + psi_sqrt_temp * arma::randn(num_latent_vars);
     }
 
     // Step 3.4: If there is a burn-in period, remove it
@@ -48,9 +43,7 @@ Rcpp::List SimSSM0VARVary(const int n, const Rcpp::List& mu0,
     id.fill(i + 1);
 
     // Step 3.6: Save the transposed data matrices in a list
-    out[i] = Rcpp::List::create(
-        Rcpp::Named("y") = eta.t(), Rcpp::Named("eta") = eta.t(),
-        Rcpp::Named("time") = arma::regspace(1, time), Rcpp::Named("id") = id);
+    out[i] = Rcpp::List::create(Rcpp::Named("y") = eta.t(), Rcpp::Named("eta") = eta.t(), Rcpp::Named("x") = 0, Rcpp::Named("time") = arma::regspace(0, time - 1), Rcpp::Named("id") = id);
   }
 
   // Step 4: Return the results

@@ -31,21 +31,33 @@
 #'     \boldsymbol{\Theta}
 #'     \right)
 #'   }
-#'   where \eqn{\mathbf{y}_{i, t}}, \eqn{\boldsymbol{\eta}_{i, t}},
-#'   and \eqn{\boldsymbol{\varepsilon}_{i, t}}
-#'   are random variables and \eqn{\boldsymbol{\nu}},
+#'   where
+#'   \eqn{\mathbf{y}_{i, t}},
+#'   \eqn{\boldsymbol{\eta}_{i, t}},
+#'   and
+#'   \eqn{\boldsymbol{\varepsilon}_{i, t}}
+#'   are random variables
+#'   and
+#'   \eqn{\boldsymbol{\nu}},
 #'   \eqn{\boldsymbol{\Lambda}},
-#'   and \eqn{\boldsymbol{\Theta}} are model parameters.
-#'   \eqn{\mathbf{y}_{i, t}} is a vector of observed random variables
-#'   at time \eqn{t} and individual \eqn{i},
-#'   \eqn{\boldsymbol{\eta}_{i, t}} is a vector of latent random variables
-#'   at time \eqn{t} and individual \eqn{i},
-#'   and \eqn{\boldsymbol{\varepsilon}_{i, t}}
-#'   is a vector of random measurement errors
-#'   at time \eqn{t} and individual \eqn{i},
-#'   while \eqn{\boldsymbol{\nu}} is a vector of intercept,
-#'   \eqn{\boldsymbol{\Lambda}} is a matrix of factor loadings,
-#'   and \eqn{\boldsymbol{\Theta}} is the covariance matrix of
+#'   and
+#'   \eqn{\boldsymbol{\Theta}}
+#'   are model parameters.
+#'   \eqn{\mathbf{y}_{i, t}}
+#'   is a vector of observed random variables,
+#'   \eqn{\boldsymbol{\eta}_{i, t}}
+#'   is a vector of latent random variables,
+#'   and
+#'   \eqn{\boldsymbol{\varepsilon}_{i, t}}
+#'   is a vector of random measurement errors,
+#'   at time \eqn{t} and individual \eqn{i}.
+#'   \eqn{\boldsymbol{\nu}}
+#'   is a vector of intercepts,
+#'   \eqn{\boldsymbol{\Lambda}}
+#'   is a matrix of factor loadings,
+#'   and
+#'   \eqn{\boldsymbol{\Theta}}
+#'   is the covariance matrix of
 #'   \eqn{\boldsymbol{\varepsilon}}.
 #'
 #'   The dynamic structure is given by
@@ -69,21 +81,36 @@
 #'     \boldsymbol{\Psi}
 #'     \right)
 #'   }
-#'   where \eqn{\boldsymbol{\eta}_{i, t}}, \eqn{\boldsymbol{\eta}_{i, t - 1}},
-#'   and \eqn{\boldsymbol{\zeta}_{i, t}} are random variables
-#'   and \eqn{\boldsymbol{\alpha}}, \eqn{\boldsymbol{\beta}},
-#'   and \eqn{\boldsymbol{\Psi}} are model parameters.
-#'   \eqn{\boldsymbol{\eta}_{i, t}} is a vector of latent variables
+#'   where
+#'   \eqn{\boldsymbol{\eta}_{i, t}},
+#'   \eqn{\boldsymbol{\eta}_{i, t - 1}},
+#'   and
+#'   \eqn{\boldsymbol{\zeta}_{i, t}}
+#'   are random variables,
+#'   and
+#'   \eqn{\boldsymbol{\alpha}},
+#'   \eqn{\boldsymbol{\beta}},
+#'   and
+#'   \eqn{\boldsymbol{\Psi}}
+#'   are model parameters.
+#'   \eqn{\boldsymbol{\eta}_{i, t}}
+#'   is a vector of latent variables
 #'   at time \eqn{t} and individual \eqn{i},
 #'   \eqn{\boldsymbol{\eta}_{i, t - 1}}
-#'   is a vector of latent variables at
-#'   time \eqn{t - 1} and individual \eqn{i},
-#'   and \eqn{\boldsymbol{\zeta}_{i, t}} is a vector of dynamic noise
-#'   at time \eqn{t} and individual \eqn{i} while \eqn{\boldsymbol{\alpha}}
+#'   is a vector of latent variables
+#'   at time \eqn{t - 1} and individual \eqn{i},
+#'   and
+#'   \eqn{\boldsymbol{\zeta}_{i, t}}
+#'   is a vector of dynamic noise
+#'   at time \eqn{t} and individual \eqn{i}.
+#'   \eqn{\boldsymbol{\alpha}}
 #'   is a vector of intercepts,
-#'   \eqn{\boldsymbol{\beta}} is a matrix of autoregression
+#'   \eqn{\boldsymbol{\beta}}
+#'   is a matrix of autoregression
 #'   and cross regression coefficients,
-#'   and \eqn{\boldsymbol{\Psi}} is the covariance matrix of
+#'   and
+#'   \eqn{\boldsymbol{\Psi}}
+#'   is the covariance matrix of
 #'   \eqn{\boldsymbol{\zeta}_{i, t}}.
 #'
 #'   ## Type 1
@@ -210,9 +237,9 @@
 #'   Each element is a list with the following elements:
 #'   - `y`: A `t` by `k` matrix of values for the manifest variables.
 #'   - `eta`: A `t` by `p` matrix of values for the latent variables.
+#'   - `x`: A `t` by `j` matrix of values for the covariates.
 #'   - `time`: A vector of discrete time points from 1 to `t`.
 #'   - `id`: A vector of ID numbers of length `t`.
-#'   - `n`: Number of individuals.
 #'
 #' @examples
 #' # prepare parameters
@@ -241,7 +268,7 @@
 #'         data = rnorm(n = k * (time + burn_in)),
 #'         ncol = k
 #'       )
-#'     )
+#'    )
 #'   }
 #' )
 #'
@@ -320,8 +347,8 @@ SimSSMFixed <- function(n,
                         gamma_eta = NULL,
                         x = NULL,
                         type = 0,
-                        time = 0,
-                        burn_in) {
+                        time,
+                        burn_in = 0) {
   stopifnot(
     type %in% 0:2
   )
