@@ -9,7 +9,7 @@ SimSSMVARFixed(),
 SimSSMVary(),
 SimSSMOUVary(), or
 SimSSMVARVary()
-to a matrix."><title>Simulation Output to Matrix — Sim2Matrix • simStateSpace</title><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><link href="../deps/Roboto-0.4.7/font.css" rel="stylesheet"><link href="../deps/JetBrains_Mono-0.4.7/font.css" rel="stylesheet"><link href="../deps/Roboto_Slab-0.4.7/font.css" rel="stylesheet"><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous"><!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Simulation Output to Matrix — Sim2Matrix"><meta property="og:description" content="This function converts the output of
+to a matrix."><title>Simulation Output to Matrix — Sim2Matrix • simStateSpace</title><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/Roboto-0.4.7/font.css" rel="stylesheet"><link href="../deps/JetBrains_Mono-0.4.7/font.css" rel="stylesheet"><link href="../deps/Roboto_Slab-0.4.7/font.css" rel="stylesheet"><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous"><!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Simulation Output to Matrix — Sim2Matrix"><meta property="og:description" content="This function converts the output of
 SimSSM(),
 SimSSMOU(),
 SimSSMVAR(),
@@ -87,7 +87,7 @@ to a matrix.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">Sim2Matrix</span><span class="op">(</span><span class="va">x</span>, eta <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">Sim2Matrix</span><span class="op">(</span><span class="va">x</span>, eta <span class="op">=</span> <span class="cn">FALSE</span>, long <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -111,6 +111,12 @@ Output of
 If <code>eta = TRUE</code>, include <code>eta</code>.
 If <code>eta = FALSE</code>, exclude <code>eta</code>.</p></dd>
 
+
+<dt>long</dt>
+<dd><p>Logical.
+If <code>long = TRUE</code>, use long format.
+If <code>long = FALSE</code>, use wide format.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -123,6 +129,7 @@ If <code>eta = FALSE</code>, exclude <code>eta</code>.</p></dd>
     <div class="dont-index"><p>Other Simulation of State Space Models Data Functions: 
 <code><a href="OU2SSM.html">OU2SSM</a>()</code>,
 <code><a href="SimSSMFixed.html">SimSSMFixed</a>()</code>,
+<code><a href="SimSSMLinGrowth.html">SimSSMLinGrowth</a>()</code>,
 <code><a href="SimSSMOUFixed.html">SimSSMOUFixed</a>()</code>,
 <code><a href="SimSSMOUVary.html">SimSSMOUVary</a>()</code>,
 <code><a href="SimSSMOU.html">SimSSMOU</a>()</code>,
@@ -173,20 +180,69 @@ If <code>eta = FALSE</code>, exclude <code>eta</code>.</p></dd>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># list to matrix</span></span></span>
-<span class="r-in"><span><span class="va">mat</span> <span class="op">&lt;-</span> <span class="fu">Sim2Matrix</span><span class="op">(</span><span class="va">ssm</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">mat</span> <span class="op">&lt;-</span> <span class="fu">Sim2Matrix</span><span class="op">(</span><span class="va">ssm</span>, long <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">mat</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  num [1:50, 1:4] -0.245 -0.648 -1.287 -2.944 -0.861 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  num [1:50, 1:5] -0.245 -0.648 -1.287 -2.944 -0.861 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - attr(*, "dimnames")=List of 2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ : NULL</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ : chr [1:4] "y1" "y2" "y3" "time"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ : chr [1:5] "y1" "y2" "y3" "time" ...</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">mat</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>              y1          y2         y3 time</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] -0.2452235 0.379189379  2.9161960    1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [2,] -0.6484821 2.670983373  0.4233589    2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [3,] -1.2868830 1.983064304  0.8050237    3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [4,] -2.9435928 1.366508000  0.9279216    4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [5,] -0.8609917 0.508276335  0.4860442    5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [6,]  1.6276009 0.006778347 -1.0285614    6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>              y1          y2         y3 time id</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] -0.2452235 0.379189379  2.9161960    0  1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [2,] -0.6484821 2.670983373  0.4233589    1  1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [3,] -1.2868830 1.983064304  0.8050237    2  1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [4,] -2.9435928 1.366508000  0.9279216    3  1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [5,] -0.8609917 0.508276335  0.4860442    4  1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [6,]  1.6276009 0.006778347 -1.0285614    5  1</span>
+<span class="r-in"><span><span class="va">mat</span> <span class="op">&lt;-</span> <span class="fu">Sim2Matrix</span><span class="op">(</span><span class="va">ssm</span>, long <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">mat</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  num [1, 1:151] 1 -0.245 0.379 2.916 -0.648 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - attr(*, "dimnames")=List of 2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ : chr "1"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ : chr [1:151] "id" "y1_0" "y2_0" "y3_0" ...</span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">mat</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   id       y1_0      y2_0     y3_0       y1_1     y2_1      y3_1      y1_2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  1 -0.2452235 0.3791894 2.916196 -0.6484821 2.670983 0.4233589 -1.286883</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       y2_2      y3_2      y1_3     y2_3      y3_3       y1_4      y2_4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 1.983064 0.8050237 -2.943593 1.366508 0.9279216 -0.8609917 0.5082763</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        y3_4     y1_5        y2_5      y3_5      y1_6      y2_6      y3_6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 0.4860442 1.627601 0.006778347 -1.028561 -1.327085 0.5629117 -0.480493</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        y1_7     y2_7     y3_7       y1_8        y2_8      y3_8      y1_9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 -1.065376 1.181075 1.383259 -0.0179771 -0.02768109 -1.837497 0.3624301</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        y2_9     y3_9    y1_10       y2_10    y3_10    y1_11    y2_11      y3_11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 0.2506716 1.024274 1.788805 0.004491763 2.025576 1.798462 2.573368 -0.4094795</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        y1_12    y2_12     y3_12    y1_13   y2_13      y3_13    y1_14     y2_14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 -0.4392344 1.807286 0.8733671 1.457506 1.87714 -0.4776517 2.205771 0.4804184</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       y3_14    y1_15      y2_15     y3_15     y1_16      y2_16    y3_16</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 0.6915832 1.680729 -0.9915152 0.7056517 -1.168308 -0.5618887 1.951182</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       y1_17      y2_17    y3_17     y1_18      y2_18     y3_18    y1_19</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 0.9227422 -0.5284282 2.353186 0.1184014 -0.9790404 0.9000463 0.206099</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        y2_19    y3_19      y1_20     y2_20    y3_20     y1_21     y2_21</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 -0.2332761 1.638052 -0.4754637 -1.232048 1.096553 0.7536424 -3.242271</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       y3_21      y1_22     y2_22   y3_22      y1_23     y2_23    y3_23    y1_24</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 0.7624435 -0.4665984 -0.921972 0.82379 -0.9574468 -0.159037 2.711305 -1.65358</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        y2_24     y3_24      y1_25     y2_25       y3_25      y1_26      y2_26</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 -0.9737275 0.4433927 -0.1053295 -1.971958 -0.06757328 0.05624375 -0.4761301</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       y3_26      y1_27     y2_27      y3_27     y1_28     y2_28     y3_28</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 -1.485783 -0.9632344 -3.074449 -0.2084237 -1.454567 -2.019354 0.3485874</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       y1_29      y2_29      y3_29     y1_30      y2_30     y3_30     y1_31</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 0.9358931 -0.2230167 -0.8050847 -1.393012 -0.5188071 -1.194037 -1.238723</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        y2_31     y3_31     y1_32     y2_32    y3_32      y1_33     y2_33</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 -0.3291806 0.5558508 -1.341417 -2.239126 2.636537 -0.6521963 -1.340461</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      y3_33    y1_34     y2_34    y3_34    y1_35     y2_35     y3_35    y1_36</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 1.054297 1.005363 -3.165402 1.752168 1.866977 -0.431361 0.3517027 3.231206</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        y2_36      y3_36    y1_37     y2_37    y3_37   y1_38     y2_38</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 -0.7224058 -0.3581565 1.602592 0.3373631 2.530729 1.95708 -1.008304</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        y3_38      y1_39      y2_39     y3_39      y1_40     y2_40     y3_40</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 -0.3265684 -0.7701148 0.02922391 -1.352556 -0.3955482 -1.154232 -1.744518</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      y1_41      y2_41       y3_41      y1_42     y2_42      y3_42     y1_43</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 1.659988 -0.7455273 -0.08183191 -0.3392568 0.5695708 -0.9849641 -1.332281</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       y2_43    y3_43    y1_44     y2_44     y3_44     y1_45     y2_45</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 -1.130282 1.258415 -1.12926 -2.046173 -1.586714 -1.625292 -3.970778</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        y3_45      y1_46      y2_46     y3_46      y1_47     y2_47     y3_47</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 -0.6568235 -0.4352329 -0.4711382 -1.561363 -0.1798845 -1.161397 0.9444263</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        y1_48     y2_48     y3_48      y1_49     y2_49     y3_49</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 -0.1562057 -1.113967 0.4732458 -0.5601609 -1.203758 -1.440787</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># generate data</span></span></span>
 <span class="r-in"><span><span class="va">ssm</span> <span class="op">&lt;-</span> <span class="fu"><a href="SimSSMFixed.html">SimSSMFixed</a></span><span class="op">(</span></span></span>
@@ -205,7 +261,7 @@ If <code>eta = FALSE</code>, exclude <code>eta</code>.</p></dd>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># list to matrix</span></span></span>
-<span class="r-in"><span><span class="va">mat</span> <span class="op">&lt;-</span> <span class="fu">Sim2Matrix</span><span class="op">(</span><span class="va">ssm</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">mat</span> <span class="op">&lt;-</span> <span class="fu">Sim2Matrix</span><span class="op">(</span><span class="va">ssm</span>, long <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">mat</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  num [1:250, 1:5] -1.959 0.143 0.682 0.781 -0.981 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - attr(*, "dimnames")=List of 2</span>
@@ -213,12 +269,157 @@ If <code>eta = FALSE</code>, exclude <code>eta</code>.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ : chr [1:5] "y1" "y2" "y3" "time" ...</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">mat</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>              y1          y2         y3 time id</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] -1.9587064 -0.25519192  1.4262815    1  1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [2,]  0.1427801  1.07730109  0.4530963    2  1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [3,]  0.6815972 -1.57297457 -0.2401384    3  1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [4,]  0.7814447 -1.01187515  1.1246787    4  1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [5,] -0.9812452 -0.38243845  1.5817904    5  1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [6,] -1.8347324 -0.04409899  3.5108866    6  1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] -1.9587064 -0.25519192  1.4262815    0  1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [2,]  0.1427801  1.07730109  0.4530963    1  1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [3,]  0.6815972 -1.57297457 -0.2401384    2  1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [4,]  0.7814447 -1.01187515  1.1246787    3  1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [5,] -0.9812452 -0.38243845  1.5817904    4  1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [6,] -1.8347324 -0.04409899  3.5108866    5  1</span>
+<span class="r-in"><span><span class="va">mat</span> <span class="op">&lt;-</span> <span class="fu">Sim2Matrix</span><span class="op">(</span><span class="va">ssm</span>, long <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">mat</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  num [1:5, 1:151] 1 2 3 4 5 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - attr(*, "dimnames")=List of 2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ : chr [1:5] "1" "2" "3" "4" ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ : chr [1:151] "id" "y1_0" "y2_0" "y3_0" ...</span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">mat</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   id         y1_0       y2_0       y3_0       y1_1      y2_1       y3_1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  1 -1.958706408 -0.2551919  1.4262815  0.1427801 1.0773011  0.4530963</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  2 -1.067488153  0.1178614  0.9152913 -0.2172485 0.9451383  0.3847604</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  3 -0.929549302 -0.7369526  0.5742822 -1.3052035 0.8741846  3.1568318</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  4  0.002350788  1.6877800 -0.1629745 -0.2096573 0.7657452 -4.1127332</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5  5 -0.478640248  0.8074488 -1.0137106 -0.2290255 0.1384506  0.7512947</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         y1_2       y2_2        y3_2       y1_3       y2_3       y3_3       y1_4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  0.6815972 -1.5729746 -0.24013838  0.7814447 -1.0118752  1.1246787 -0.9812452</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  2.6145762  0.5740187 -1.59907569  0.4398314  0.3815482 -0.3901478 -0.1591664</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 -0.9416463  3.0693875  0.02867112 -0.6236534  0.6586218  1.5530750 -0.4045360</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  0.3320875  1.3457753 -3.16170871  0.4406259  1.1562956 -0.5059416  1.2996130</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 -0.3611821 -0.5001115  1.19797033  0.7718767 -2.6497759 -0.6183218  1.1549426</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         y2_4      y3_4        y1_5        y2_5         y3_5        y1_6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 -0.3824384 1.5817904 -1.83473238 -0.04409899  3.510886580 -2.68406002</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  1.1650745 1.5757543 -1.26786590  0.77194688  0.009508414  0.13481770</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 -1.2986198 1.7175877 -0.79849644 -1.32605812  3.278538520  0.69623054</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  2.2435194 0.5542411 -0.58672291 -0.43062879  0.251384753  0.01646843</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 -2.1795545 1.1169143 -0.03336023 -1.16265387 -0.409604700 -0.84934089</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         y2_6       y3_6        y1_7      y2_7       y3_7       y1_8        y2_8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  0.4438448  1.8586123 -0.67431001 -3.446231  0.5063632 -0.2523898 -3.11019478</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 -0.6109575 -0.4817648  1.30429059 -1.324479 -0.0182625  1.0710628 -1.87831353</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 -0.6612347  1.1199929  0.01069321  1.124322 -0.6991596  1.1164665  1.56210568</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  1.1400685 -1.1594977 -0.13453052  1.510640  0.2868454  1.0216786  0.02524817</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 -1.6884346  0.5621968 -1.48041495 -1.880678 -0.4808474 -1.3292277 -1.51245553</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          y3_8      y1_9       y2_9       y3_9       y1_10      y2_10      y3_10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 -1.20968740  2.058359 -4.4522681 -0.6038776 -0.91714779 -1.1250518  0.4340061</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 -0.06548736 -1.874278  1.3492572 -0.2719563 -0.80804851  0.4663387 -2.3394191</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  1.31320726  1.261664 -1.1784225  0.3163389  0.13442981 -1.5340357 -0.2743519</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 -0.29097930  1.206240  1.0639581 -1.7223181 -1.09344960  1.5887036  0.8860007</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 -1.28611402 -1.931251  0.8030163  1.1519119 -0.07689908  0.5889963  0.1287476</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        y1_11      y2_11      y3_11     y1_12      y2_12        y3_12      y1_13</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 -0.2615191 -0.3597388 -1.8723665 0.6267302  0.5252432 -0.792041059  1.5772553</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 -1.4676704 -0.7834749  0.2276508 1.7626857 -0.7727518 -0.086076492  1.3829346</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 -0.7174130 -1.6131623  0.7192616 1.5820918 -0.5317954  0.194753514 -0.2738449</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 -0.2673206  1.3828686 -0.5295563 1.4127812 -1.5077222  0.006241441 -0.7800627</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5  0.4508069 -1.5508996 -0.4311137 0.8737489 -1.5134592  0.432157416 -2.7551793</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        y2_13      y3_13       y1_14      y2_14      y3_14      y1_15      y2_15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 -4.4613224  0.2139842 -0.53893667 -2.4287998 -0.1952464  1.3887687 -2.5094001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 -0.9662633 -1.4467361  0.04338277 -0.4262632  1.0873868  1.6671432 -0.8844541</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 -1.1022847  0.9997542 -0.51408699 -1.3184850 -0.6394841 -0.3145018 -1.1429231</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  1.5751347 -0.9725152  0.40758863  1.1431329  0.3276089  2.0591966 -0.2495438</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 -0.5796434  1.6565407 -0.66806704  2.1020872  0.3558551 -0.5487193 -0.7249282</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        y3_15      y1_16      y2_16      y3_16      y1_17      y2_17      y3_17</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  0.4327311 -0.1620074 -1.7659628 -1.3508065  1.5718056 -0.8636244 -0.1836375</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 -0.5735838  0.4195924  0.8856842 -2.4828969 -0.2842424 -0.2780693  0.9163239</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  0.6975343 -2.2701028  2.1987976  0.5172046 -1.5243186  0.4606869  1.4707203</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 -0.8084878  2.7973087  0.1580074  3.4800140  0.8233046  1.6741924 -0.1617971</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5  0.8309876 -0.1393856  2.6070154  1.0126801  2.0861997 -0.8247158 -0.4060205</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         y1_18       y2_18      y3_18      y1_19      y2_19      y3_19</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  1.04829178 -0.07746477  2.1807098 -0.5727711  0.1452645 -0.4695216</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  0.53825588  0.93280742  1.5036328  1.0037305  1.0090024 -0.3534675</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  0.32616012 -0.42191131  2.8320175 -0.7658290  1.2813944  0.5261293</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 -2.66515641  3.92214410  0.6761172 -0.3668722  2.8883060 -0.0703476</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 -0.05667282 -1.37428093 -0.2680793 -1.5129989 -0.3162390  0.9036936</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        y1_20      y2_20      y3_20      y1_21      y2_21      y3_21      y1_22</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 -1.7582198 -1.6081288 -1.6477938 -1.8919285  1.4373075 -2.5780700 -1.0993466</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  1.2001904  0.8134282  0.6025286  0.9172452  0.5464151 -0.4317398  0.4573753</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 -0.1070377 -1.0347182 -2.1117373 -2.4610028  0.5197966 -0.3390798 -1.7780042</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  0.5128413  2.3656898 -2.1350695 -0.7760729  1.2619777 -2.6613889  0.3018018</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 -0.7812027 -2.5090589  0.8581001 -1.0947304 -0.1262254 -0.7242841 -1.2359836</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        y2_22       y3_22      y1_23       y2_23      y3_23      y1_24</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  0.6221659 -1.99674873 -0.1513316  0.52926344 -0.4364484 -0.5979996</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  1.4528179  0.07733966  0.8268979  0.67551081  0.6254291  0.9559450</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 -1.2203392  3.16848474  0.1726961 -0.42958540 -0.7650229  1.8597665</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  2.2405068  0.62315986  0.5963626  0.09291902 -0.7215133 -0.3301369</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 -1.0102433 -0.29374658 -0.8710860 -1.45899444  0.1103007 -2.9864187</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        y2_24       y3_24     y1_25      y2_25      y3_25      y1_26      y2_26</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 -1.6772104  0.06749996 0.2819432 -1.2109134 -3.1090706  1.6783682  0.6591482</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  0.2704521 -0.70509252 0.4222790 -1.5458576  1.2081349  0.4084225 -1.0376728</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  1.7311375 -0.43114484 0.6782045  0.2660259  1.1131043  1.3994596  0.7824643</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 -0.2594106 -0.21548737 0.1024229 -0.6326202 -0.9973394 -0.5284965 -1.2529068</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5  1.6438517  0.17103233 1.3029542  1.9653629 -0.7577945  2.0843798  2.0454717</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        y3_26      y1_27      y2_27        y3_27       y1_28      y2_28</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 -2.5569599  1.0015322 -1.1812619  0.001861815  0.56352938 -1.1805906</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  0.2650443 -1.9281885 -1.2786410  0.329513288 -2.01748260 -0.6909880</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  1.8633081  0.4465208  0.6556145  1.873250397  0.26649509  2.0951641</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  0.2228449 -0.1152634  0.6671843  0.985276444  1.26283301 -0.6315253</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 -0.4360282  1.1009152  1.1755990 -1.059546010 -0.08612643  3.1412791</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        y3_28      y1_29      y2_29       y3_29      y1_30       y2_30</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 -1.1930842 -0.5662296  0.3567911 -0.98296938 -3.0480264  0.27641373</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  0.1797182  0.6553313  0.3199528  1.42993754  1.0124935 -0.61943200</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  1.2429903  0.7682024  1.4485905  0.02838909  2.2780395  0.54709651</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 -0.6059680 -2.5804784 -0.8016209 -0.44918061  0.5327538  1.33951021</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 -1.0262960  3.4465148 -1.0485230  0.61938865  0.5017668  0.03323269</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        y3_30      y1_31     y2_31      y3_31      y1_32     y2_32      y3_32</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  0.5499863 -2.7259587 1.2737238  0.4257284 -2.3221834 0.8452531 -0.6252302</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  1.3623526 -0.8616713 0.2159657 -0.2010320  0.6091719 1.3713823 -1.1961668</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 -0.4937231  1.3499775 0.7497495  0.4990134  2.4946477 0.3727587  1.3947155</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  0.5399515 -0.3909682 1.1141444  0.5900320  0.4802346 1.2862604  0.9578115</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5  0.7348634  1.7649523 2.3505706 -1.8028042  0.5924701 1.4482003 -1.7262284</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        y1_33      y2_33       y3_33      y1_34       y2_34      y3_34</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 -1.1991616  0.1355904 -0.06868196 -0.8389463  0.85821383 -0.6863097</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 -1.2653014  0.7472411 -2.37203174 -0.1787016  0.56744003 -2.2626478</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  0.7215381 -2.6352226  1.28427220 -0.1035422 -0.87624104  1.5848904</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  1.5183485  1.9970340 -0.76692321 -0.2362714  0.34940302  0.5801259</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 -0.7218898  0.3016054 -0.97599295 -2.4492260  0.02445116 -1.0575109</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        y1_35      y2_35      y3_35      y1_36      y2_36      y3_36     y1_37</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 -1.3264814  0.3998936  1.1301184  0.7092319 -0.4415761 -1.5083809 -0.331198</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 -2.3136417  0.6298378 -1.2091023  2.2677758 -2.3048411 -0.7150127 -1.262241</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  2.4064093 -2.4285073  1.5390759  0.9290106 -1.5205208  0.3178226  1.751254</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 -0.1399794  1.2407247  2.0959765 -0.6292083 -0.3732043  2.2770133 -1.039292</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 -1.3307852 -0.3831869  0.3006119 -1.2504557 -2.1143761 -1.9198077  3.586198</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        y2_37       y3_37     y1_38       y2_38       y3_38      y1_39</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 -0.4589392  0.49301268 -1.672443 -2.46727296  0.88106341 -1.4631765</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  0.2179804 -1.74765423 -2.862167 -0.40911080 -1.00644890 -1.3826816</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 -1.1449653 -0.04992899  2.222077  0.05736626  0.09783186  1.0814436</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  0.5900652  0.03795208  1.246582 -1.30879937  0.12721365  0.5806150</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 -1.8952149 -4.46882049 -0.665083 -3.17915981 -1.38158503  0.1440378</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        y2_39      y3_39      y1_40      y2_40      y3_40       y1_41      y2_41</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 -1.3789980 -0.3512162 -0.8792965  0.6109345 -0.2741375 -0.71490031 -0.6974662</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 -0.3535597 -0.9584086 -0.8684892 -0.6262427 -0.5544855  0.11994981  0.6610381</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  0.2896343 -1.5351888  1.2754159 -0.4151383  0.4608723  0.83322680 -0.4253694</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  0.9999237 -0.7886016  0.9616499 -0.6250160 -1.4682571  0.07246422 -2.3293815</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 -1.0607887  1.2447712  1.2393873 -0.5342560  2.1024880 -1.42553706  0.9178490</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        y3_41      y1_42      y2_42      y3_42      y1_43      y2_43      y3_43</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  0.3275619 -0.9224182  1.8783790  0.1451588 -3.1071357  1.4082374  1.6257316</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  1.6490861 -0.9748543 -1.1719960  2.0264985 -0.7501941 -1.5805715 -0.6379877</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 -0.3147378  0.9673707  0.8987038  0.6764963  0.8016409  1.1001320  1.1405859</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 -1.4752143 -1.7582351 -3.1684386 -0.5222266 -1.1137875 -0.2218037 -0.7232296</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5  0.6094981  1.2258299  1.3944362  0.3131211  1.5648721  0.2050531 -0.1694084</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          y1_44       y2_44      y3_44      y1_45      y2_45      y3_45</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 -2.312633292 -0.08226199  0.3720664 -1.1319660 -1.7437242  0.1177718</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 -2.269310824  0.30186047  1.1145951 -1.7372755 -0.7749185 -1.1504856</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  0.443175209  0.87170340 -0.2254016 -0.9227673  0.5548410 -1.9973114</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 -3.132598135  0.94677708  0.9014314 -4.6906377  2.3265271 -1.1050723</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5  0.003003359 -1.49886046  1.6640263  0.4834392  0.6881326  1.6201085</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        y1_46      y2_46       y3_46      y1_47      y2_47      y3_47      y1_48</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  0.3530651 -1.3062718 -0.04416886 -1.2382359  2.1545002 -0.8964840  0.4059509</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 -2.4993399  0.8969569  0.11505618 -0.3195227 -1.4955389  0.4903427 -0.2395496</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 -2.3253025 -0.1739174 -1.12262803 -1.0159042  0.2102860 -0.5604260 -2.7111628</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 -2.0984295  2.4610481 -0.44623677  0.7048657  2.3440190  1.5681567 -0.2020912</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 -0.9296060  0.9554702  0.75650177 -0.6401290 -0.5953301  0.1096105  0.7917768</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        y2_48      y3_48       y1_49      y2_49       y3_49</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  0.3927675 -1.6023072 -2.56369617  0.5798884 -0.06780755</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  1.5566351  1.4449241  0.02017849  2.2559166  0.63101153</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 -0.6523133  1.5601401 -1.77895217 -0.8684237  0.09197349</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  1.5987624  0.9714985  1.14967012  0.9035024 -1.97270521</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5  1.0612993  1.4594148  0.87977498  2.4035915  0.21608562</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
