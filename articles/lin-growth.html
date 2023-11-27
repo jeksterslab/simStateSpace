@@ -119,9 +119,9 @@ Agaloos Pesigan</h4>
 t}\)</span>, <span class="math inline">\(\eta_{0_{i, t}}\)</span>, <span class="math inline">\(\eta_{1_{i, t}}\)</span>, and <span class="math inline">\(\boldsymbol{\varepsilon}_{i, t}\)</span> are
 random variables and and <span class="math inline">\(\theta^{2}\)</span>
 is a model parameter. <span class="math inline">\(y_{i, t}\)</span> is a
-vector of observed random variables at time <span class="math inline">\(t\)</span> and individual <span class="math inline">\(i\)</span>, <span class="math inline">\(\eta_{0_{i, t}}\)</span>, <span class="math inline">\(\eta_{1_{i, t}}\)</span> is forms a vector of
-latent random variables at time <span class="math inline">\(t\)</span>
-and individual <span class="math inline">\(i\)</span>, and <span class="math inline">\(\boldsymbol{\varepsilon}_{i, t}\)</span> is a
+vector of observed random variables at time <span class="math inline">\(t\)</span> and individual <span class="math inline">\(i\)</span>, <span class="math inline">\(\eta_{0_{i, t}}\)</span> and <span class="math inline">\(\eta_{1_{i, t}}\)</span> form a vector of latent
+random variables at time <span class="math inline">\(t\)</span> and
+individual <span class="math inline">\(i\)</span>, and <span class="math inline">\(\boldsymbol{\varepsilon}_{i, t}\)</span> is a
 vector of random measurement errors at time <span class="math inline">\(t\)</span> and individual <span class="math inline">\(i\)</span>, and <span class="math inline">\(\theta^{2}\)</span> is the variance of <span class="math inline">\(\boldsymbol{\varepsilon}\)</span>.</p>
 <p>The dynamic structure is given by <span class="math display">\[\begin{equation}
   \left(
@@ -139,8 +139,8 @@ vector of random measurement errors at time <span class="math inline">\(t\)</spa
   \right)
   \left(
   \begin{array}{c}
-  \eta_{0_{i, t}} \\
-  \eta_{1_{i, t}} \\
+  \eta_{0_{i, t - 1}} \\
+  \eta_{1_{i, t - 1}} \\
   \end{array}
   \right) .
 \end{equation}\]</span></p>
@@ -366,8 +366,8 @@ of individuals.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Doing end processing</span></span>
 <span><span class="co">#&gt; Successful trial</span></span>
-<span><span class="co">#&gt; Total Time: 6.528885 </span></span>
-<span><span class="co">#&gt; Backend Time: 6.129898</span></span></code></pre></div>
+<span><span class="co">#&gt; Total Time: 6.482012 </span></span>
+<span><span class="co">#&gt; Backend Time: 6.082296</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
