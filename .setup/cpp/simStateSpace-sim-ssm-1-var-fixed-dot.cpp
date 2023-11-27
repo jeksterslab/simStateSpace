@@ -6,7 +6,11 @@
 #include <RcppArmadillo.h>
 // [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::export(.SimSSM1VARFixed)]]
-Rcpp::List SimSSM1VARFixed(const int n, const arma::vec& mu0, const arma::mat& sigma0_sqrt, const arma::vec& alpha, const arma::mat& beta, const arma::mat& psi_sqrt, arma::mat& gamma_eta, const Rcpp::List& x, const int time, const int burn_in) {
+Rcpp::List SimSSM1VARFixed(const int n, const arma::vec& mu0,
+                           const arma::mat& sigma0_sqrt, const arma::vec& alpha,
+                           const arma::mat& beta, const arma::mat& psi_sqrt,
+                           arma::mat& gamma_eta, const Rcpp::List& x,
+                           const int time, const int burn_in) {
   // Step 1: Determine indices
   int total_time = time + burn_in;
   int num_latent_vars = mu0.n_elem;
@@ -26,7 +30,9 @@ Rcpp::List SimSSM1VARFixed(const int n, const arma::vec& mu0, const arma::mat& s
 
     // Step 3.3: Simulate state space model data using a loop
     for (int t = 1; t < total_time; t++) {
-      eta.col(t) = alpha + beta * eta.col(t - 1) + psi_sqrt * arma::randn(num_latent_vars) + gamma_eta * x_t.col(t);
+      eta.col(t) = alpha + beta * eta.col(t - 1) +
+                   psi_sqrt * arma::randn(num_latent_vars) +
+                   gamma_eta * x_t.col(t);
     }
 
     // Step 3.4: If there is a burn-in period, remove it
@@ -40,7 +46,11 @@ Rcpp::List SimSSM1VARFixed(const int n, const arma::vec& mu0, const arma::mat& s
     id.fill(i + 1);
 
     // Step 3.6: Return the transposed data matrices in a list
-    out[i] = Rcpp::List::create(Rcpp::Named("y") = eta.t(), Rcpp::Named("eta") = eta.t(), Rcpp::Named("x") = x_t.t(), Rcpp::Named("time") = arma::regspace(0, time - 1), Rcpp::Named("id") = id);
+    out[i] = Rcpp::List::create(
+        Rcpp::Named("y") = eta.t(), Rcpp::Named("eta") = eta.t(),
+        Rcpp::Named("x") = x_t.t(),
+        Rcpp::Named("time") = arma::regspace(0, time - 1),
+        Rcpp::Named("id") = id);
   }
 
   // Step 4: Return the results
