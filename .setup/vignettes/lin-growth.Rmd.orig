@@ -68,8 +68,9 @@ are random variables and
 and $\theta^{2}$ is a model parameter.
 $y_{i, t}$ is a vector of observed random variables
 at time $t$ and individual $i$,
-$\eta_{0_{i, t}}$,
-$\eta_{1_{i, t}}$ is forms a vector of latent random variables
+$\eta_{0_{i, t}}$
+and
+$\eta_{1_{i, t}}$ form a vector of latent random variables
 at time $t$ and individual $i$,
 and $\boldsymbol{\varepsilon}_{i, t}$
 is a vector of random measurement errors
@@ -94,8 +95,8 @@ The dynamic structure is given by
   \right)
   \left(
   \begin{array}{c}
-  \eta_{0_{i, t}} \\
-  \eta_{1_{i, t}} \\
+  \eta_{0_{i, t - 1}} \\
+  \eta_{1_{i, t - 1}} \\
   \end{array}
   \right) .
 \end{equation}

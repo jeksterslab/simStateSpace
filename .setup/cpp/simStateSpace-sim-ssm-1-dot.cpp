@@ -6,12 +6,7 @@
 #include <RcppArmadillo.h>
 // [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::export(.SimSSM1)]]
-Rcpp::List SimSSM1(const arma::vec& mu0, const arma::mat& sigma0_sqrt,
-                   const arma::vec& alpha, const arma::mat& beta,
-                   const arma::mat& psi_sqrt, const arma::vec& nu,
-                   const arma::mat& lambda, const arma::mat& theta_sqrt,
-                   const arma::mat& gamma_eta, const arma::mat& x,
-                   const int time, const int burn_in) {
+Rcpp::List SimSSM1(const arma::vec& mu0, const arma::mat& sigma0_sqrt, const arma::vec& alpha, const arma::mat& beta, const arma::mat& psi_sqrt, const arma::vec& nu, const arma::mat& lambda, const arma::mat& theta_sqrt, const arma::mat& gamma_eta, const arma::mat& x, const int time, const int burn_in) {
   // Step 1: Determine indices
   int total_time = time + burn_in;
   int num_latent_vars = mu0.n_elem;
@@ -25,16 +20,12 @@ Rcpp::List SimSSM1(const arma::vec& mu0, const arma::mat& sigma0_sqrt,
 
   // Step 3: Generate initial condition
   eta.col(0) = mu0 + sigma0_sqrt * arma::randn(num_latent_vars);
-  y.col(0) =
-      nu + lambda * eta.col(0) + theta_sqrt * arma::randn(num_manifest_vars);
+  y.col(0) = nu + lambda * eta.col(0) + theta_sqrt * arma::randn(num_manifest_vars);
 
   // Step 4: Simulate state space model data using a loop
   for (int t = 1; t < total_time; t++) {
-    eta.col(t) = alpha + beta * eta.col(t - 1) +
-                 psi_sqrt * arma::randn(num_latent_vars) +
-                 gamma_eta * x_t.col(t);
-    y.col(t) =
-        nu + lambda * eta.col(t) + theta_sqrt * arma::randn(num_manifest_vars);
+    eta.col(t) = alpha + beta * eta.col(t - 1) + psi_sqrt * arma::randn(num_latent_vars) + gamma_eta * x_t.col(t);
+    y.col(t) = nu + lambda * eta.col(t) + theta_sqrt * arma::randn(num_manifest_vars);
   }
 
   // Step 5: If there is a burn-in period, remove it
@@ -46,9 +37,5 @@ Rcpp::List SimSSM1(const arma::vec& mu0, const arma::mat& sigma0_sqrt,
   }
 
   // Step 6: Return the transposed data matrices in a list
-  return Rcpp::List::create(Rcpp::Named("y") = y.t(),
-                            Rcpp::Named("eta") = eta.t(),
-                            Rcpp::Named("x") = x_t.t(),
-                            Rcpp::Named("time") = arma::regspace(0, time - 1),
-                            Rcpp::Named("id") = id);
+  return Rcpp::List::create(Rcpp::Named("y") = y.t(), Rcpp::Named("eta") = eta.t(), Rcpp::Named("x") = x_t.t(), Rcpp::Named("time") = arma::regspace(0, time - 1), Rcpp::Named("id") = id);
 }
