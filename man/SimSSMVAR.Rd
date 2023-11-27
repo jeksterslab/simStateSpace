@@ -14,7 +14,7 @@ SimSSMVAR(
   gamma_eta = NULL,
   x = NULL,
   time = 0,
-  burn_in
+  burn_in = 0
 )
 }
 \arguments{
@@ -60,8 +60,9 @@ Returns a list with the following elements:
 \itemize{
 \item \code{y}: A \code{t} by \code{k} matrix of values for the manifest variables.
 \item \code{eta}: A \code{t} by \code{p} matrix of values for the latent variables.
-\item \code{time}: A vector of discrete time points from 1 to \code{t}.
-\item \code{n}: Number of individuals.
+\item \code{x}: A \code{t} by \code{j} matrix of values for the covariates.
+\item \code{time}: A vector of discrete time points from 0 to \code{t - 1}.
+\item \code{id}: A vector of ones.
 }
 }
 \description{
@@ -98,21 +99,38 @@ The dynamic structure is given by
     \boldsymbol{\Psi}
     \right)
   }
-where \eqn{\boldsymbol{\eta}_{t}}, \eqn{\boldsymbol{\eta}_{t - 1}},
-and \eqn{\boldsymbol{\zeta}_{t}} are random variables
-and \eqn{\boldsymbol{\alpha}}, \eqn{\boldsymbol{\beta}},
-and \eqn{\boldsymbol{\Psi}} are model parameters.
-\eqn{\boldsymbol{\eta}_{t}} is a vector of latent variables
-at time \eqn{t}, \eqn{\boldsymbol{\eta}_{t - 1}}
-is a vector of latent variables at
-\eqn{t - 1},
-and \eqn{\boldsymbol{\zeta}_{t}} is a vector of dynamic noise
-at time \eqn{t} while \eqn{\boldsymbol{\alpha}}
+where
+\eqn{\boldsymbol{\eta}_{t}},
+\eqn{\boldsymbol{\eta}_{t - 1}},
+and
+\eqn{\boldsymbol{\zeta}_{t}}
+are random variables,
+and
+\eqn{\boldsymbol{\alpha}},
+\eqn{\boldsymbol{\beta}},
+and
+\eqn{\boldsymbol{\Psi}}
+are model parameters.
+\eqn{\boldsymbol{\eta}_{t}}
+is a vector of latent variables
+at time \eqn{t},
+\eqn{\boldsymbol{\eta}_{t - 1}}
+is a vector of latent variables
+at time \eqn{t - 1},
+and
+\eqn{\boldsymbol{\zeta}_{t}}
+is a vector of dynamic noise
+at time \eqn{t}.
+\eqn{\boldsymbol{\alpha}}
 is a vector of intercepts,
-\eqn{\boldsymbol{\beta}} is a matrix of autoregression
+\eqn{\boldsymbol{\beta}}
+is a matrix of autoregression
 and cross regression coefficients,
-and \eqn{\boldsymbol{\Psi}} is the covariance matrix of
+and
+\eqn{\boldsymbol{\Psi}}
+is the covariance matrix of
 \eqn{\boldsymbol{\zeta}_{t}}.
+
 Note that when \code{gamma_eta} and \code{x} are not \code{NULL},
 the dynamic structure is given by
 \deqn{
@@ -205,6 +223,7 @@ Other Simulation of State Space Models Data Functions:
 \code{\link{OU2SSM}()},
 \code{\link{Sim2Matrix}()},
 \code{\link{SimSSMFixed}()},
+\code{\link{SimSSMLinGrowth}()},
 \code{\link{SimSSMOUFixed}()},
 \code{\link{SimSSMOUVary}()},
 \code{\link{SimSSMOU}()},

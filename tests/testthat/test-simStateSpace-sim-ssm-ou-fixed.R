@@ -22,7 +22,7 @@ lapply(
     theta_sqrt <- chol(diag(x = 0.50, nrow = k))
     delta_t <- 0.10
     time <- 50
-    burn_in <- 0
+    burn_in <- 10
     gamma_y <- gamma_eta <- 0.10 * diag(k)
     x <- lapply(
       X = seq_len(n),
@@ -55,6 +55,8 @@ lapply(
 
     Sim2Matrix(ssm, eta = TRUE)
     Sim2Matrix(ssm, eta = FALSE)
+    Sim2Matrix(ssm, eta = TRUE, long = FALSE)
+    Sim2Matrix(ssm, eta = FALSE, long = FALSE)
 
     # Type 1
     ssm <- SimSSMOUFixed(
@@ -77,6 +79,8 @@ lapply(
 
     Sim2Matrix(ssm, eta = TRUE)
     Sim2Matrix(ssm, eta = FALSE)
+    Sim2Matrix(ssm, eta = TRUE, long = FALSE)
+    Sim2Matrix(ssm, eta = FALSE, long = FALSE)
 
     # Type 2
     ssm <- SimSSMOUFixed(
@@ -100,6 +104,8 @@ lapply(
 
     Sim2Matrix(ssm, eta = TRUE)
     Sim2Matrix(ssm, eta = FALSE)
+    Sim2Matrix(ssm, eta = TRUE, long = FALSE)
+    Sim2Matrix(ssm, eta = FALSE, long = FALSE)
   },
   text = "test-simStateSpace-sim-ssm-ou-fixed"
 )

@@ -1,4 +1,4 @@
-## ---- test-simStateSpace-sim-ssm-fixed
+## ---- test-simStateSpace-sim-ssm-lin-growth
 lapply(
   X = 1,
   FUN = function(i,
@@ -6,48 +6,43 @@ lapply(
     message(text)
     # prepare parameters
     set.seed(42)
-    k <- p <- 3
-    iden <- diag(k)
-    iden_sqrt <- chol(iden)
-    null_vec <- rep(x = 0, times = k)
     n <- 5
-    mu0 <- null_vec
-    sigma0_sqrt <- iden_sqrt
-    alpha <- null_vec
-    beta <- diag(x = 0.50, nrow = k)
-    psi_sqrt <- iden_sqrt
-    nu <- null_vec
-    lambda <- iden
-    theta_sqrt <- chol(diag(x = 0.50, nrow = k))
-    time <- 50
-    burn_in <- 10
-    gamma_y <- gamma_eta <- 0.10 * diag(k)
+    mu0 <- c(0.615, 1.006)
+    sigma0 <- matrix(
+      data = c(
+        1.932,
+        0.618,
+        0.618,
+        0.587
+      ),
+      nrow = 2
+    )
+    sigma0_sqrt <- chol(sigma0)
+    theta <- 0.6
+    theta_sqrt <- sqrt(theta)
+    time <- 10
+    gamma_y <- matrix(data = 0.10, nrow = 1, ncol = 2)
+    gamma_eta <- matrix(data = 0.10, nrow = 2, ncol = 2)
     x <- lapply(
       X = seq_len(n),
       FUN = function(i) {
         return(
           matrix(
-            data = rnorm(n = k * (time + burn_in)),
-            ncol = k
+            data = rnorm(n = 2 * time),
+            ncol = 2
           )
         )
       }
     )
 
     # Type 0
-    ssm <- SimSSMFixed(
+    ssm <- SimSSMLinGrowth(
       n = n,
       mu0 = mu0,
       sigma0_sqrt = sigma0_sqrt,
-      alpha = alpha,
-      beta = beta,
-      psi_sqrt = psi_sqrt,
-      nu = nu,
-      lambda = lambda,
       theta_sqrt = theta_sqrt,
       type = 0,
-      time = time,
-      burn_in = burn_in
+      time = time
     )
 
     Sim2Matrix(ssm, eta = TRUE)
@@ -56,21 +51,15 @@ lapply(
     Sim2Matrix(ssm, eta = FALSE, long = FALSE)
 
     # Type 1
-    ssm <- SimSSMFixed(
+    ssm <- SimSSMLinGrowth(
       n = n,
       mu0 = mu0,
       sigma0_sqrt = sigma0_sqrt,
-      alpha = alpha,
-      beta = beta,
-      psi_sqrt = psi_sqrt,
-      nu = nu,
-      lambda = lambda,
       theta_sqrt = theta_sqrt,
       gamma_eta = gamma_eta,
       x = x,
       type = 1,
-      time = time,
-      burn_in = burn_in
+      time = time
     )
 
     Sim2Matrix(ssm, eta = TRUE)
@@ -79,22 +68,16 @@ lapply(
     Sim2Matrix(ssm, eta = FALSE, long = FALSE)
 
     # Type 2
-    ssm <- SimSSMFixed(
+    ssm <- SimSSMLinGrowth(
       n = n,
       mu0 = mu0,
       sigma0_sqrt = sigma0_sqrt,
-      alpha = alpha,
-      beta = beta,
-      psi_sqrt = psi_sqrt,
-      nu = nu,
-      lambda = lambda,
       theta_sqrt = theta_sqrt,
       gamma_y = gamma_y,
       gamma_eta = gamma_eta,
       x = x,
       type = 2,
-      time = time,
-      burn_in = burn_in
+      time = time
     )
 
     Sim2Matrix(ssm, eta = TRUE)
@@ -102,5 +85,5 @@ lapply(
     Sim2Matrix(ssm, eta = TRUE, long = FALSE)
     Sim2Matrix(ssm, eta = FALSE, long = FALSE)
   },
-  text = "test-simStateSpace-sim-ssm-fixed"
+  text = "test-simStateSpace-sim-ssm-lin-growth"
 )

@@ -19,7 +19,7 @@ lapply(
     lambda <- iden
     theta_sqrt <- chol(diag(x = 0.50, nrow = k))
     time <- 50
-    burn_in <- 0
+    burn_in <- 10
     gamma_y <- gamma_eta <- 0.10 * diag(k)
     x <- matrix(
       data = rnorm(n = k * (time + burn_in)),
@@ -41,7 +41,10 @@ lapply(
       burn_in = burn_in
     )
 
-    str(ssm)
+    Sim2Matrix(ssm, eta = TRUE)
+    Sim2Matrix(ssm, eta = FALSE)
+    Sim2Matrix(ssm, eta = TRUE, long = FALSE)
+    Sim2Matrix(ssm, eta = FALSE, long = FALSE)
 
     # Type 1
     ssm <- SimSSM(
@@ -60,7 +63,10 @@ lapply(
       burn_in = burn_in
     )
 
-    str(ssm)
+    Sim2Matrix(ssm, eta = TRUE)
+    Sim2Matrix(ssm, eta = FALSE)
+    Sim2Matrix(ssm, eta = TRUE, long = FALSE)
+    Sim2Matrix(ssm, eta = FALSE, long = FALSE)
 
     # Type 2
     ssm <- SimSSM(
@@ -80,7 +86,10 @@ lapply(
       burn_in = burn_in
     )
 
-    str(ssm)
+    Sim2Matrix(ssm, eta = TRUE)
+    Sim2Matrix(ssm, eta = FALSE)
+    Sim2Matrix(ssm, eta = TRUE, long = FALSE)
+    Sim2Matrix(ssm, eta = FALSE, long = FALSE)
   },
   text = "test-simStateSpace-sim-ssm"
 )

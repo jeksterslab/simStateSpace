@@ -29,21 +29,33 @@
 #'     \boldsymbol{\Theta}
 #'     \right)
 #'   }
-#'   where \eqn{\mathbf{y}_{t}}, \eqn{\boldsymbol{\eta}_{t}},
-#'   and \eqn{\boldsymbol{\varepsilon}_{t}}
-#'   are random variables and \eqn{\boldsymbol{\nu}},
+#'   where
+#'   \eqn{\mathbf{y}_{t}},
+#'   \eqn{\boldsymbol{\eta}_{t}},
+#'   and
+#'   \eqn{\boldsymbol{\varepsilon}_{t}}
+#'   are random variables
+#'   and
+#'   \eqn{\boldsymbol{\nu}},
 #'   \eqn{\boldsymbol{\Lambda}},
-#'   and \eqn{\boldsymbol{\Theta}} are model parameters.
-#'   \eqn{\mathbf{y}_{t}} is a vector of observed random variables
-#'   at time \eqn{t},
-#'   \eqn{\boldsymbol{\eta}_{t}} is a vector of latent random variables
-#'   at time \eqn{t},
-#'   and \eqn{\boldsymbol{\varepsilon}_{t}}
-#'   is a vector of random measurement errors
-#'   at time \eqn{t},
-#'   while \eqn{\boldsymbol{\nu}} is a vector of intercept,
-#'   \eqn{\boldsymbol{\Lambda}} is a matrix of factor loadings,
-#'   and \eqn{\boldsymbol{\Theta}} is the covariance matrix of
+#'   and
+#'   \eqn{\boldsymbol{\Theta}}
+#'   are model parameters.
+#'   \eqn{\mathbf{y}_{t}}
+#'   is a vector of observed random variables,
+#'   \eqn{\boldsymbol{\eta}_{t}}
+#'   is a vector of latent random variables,
+#'   and
+#'   \eqn{\boldsymbol{\varepsilon}_{t}}
+#'   is a vector of random measurement errors,
+#'   at time \eqn{t}.
+#'   \eqn{\boldsymbol{\nu}}
+#'   is a vector of intercepts,
+#'   \eqn{\boldsymbol{\Lambda}}
+#'   is a matrix of factor loadings,
+#'   and
+#'   \eqn{\boldsymbol{\Theta}}
+#'   is the covariance matrix of
 #'   \eqn{\boldsymbol{\varepsilon}}.
 #'
 #'   The dynamic structure is given by
@@ -62,11 +74,16 @@
 #'     \mathrm{d}
 #'     \mathbf{W}_{t}
 #'   }
-#'   where \eqn{\boldsymbol{\mu}} is the long-term mean or equilibrium level,
-#'   \eqn{\boldsymbol{\Phi}} is the rate of mean reversion,
+#'   where
+#'   \eqn{\boldsymbol{\mu}}
+#'   is the long-term mean or equilibrium level,
+#'   \eqn{\boldsymbol{\Phi}}
+#'   is the rate of mean reversion,
 #'   determining how quickly the variable returns to its mean,
-#'   \eqn{\boldsymbol{\Sigma}} is the matrix of volatility
-#'   or randomness in the process, and \eqn{\mathrm{d}\boldsymbol{W}}
+#'   \eqn{\boldsymbol{\Sigma}}
+#'   is the matrix of volatility
+#'   or randomness in the process, and
+#'   \eqn{\mathrm{d}\boldsymbol{W}}
 #'   is a Wiener process or Brownian motion,
 #'   which represents random fluctuations.
 #'
@@ -114,8 +131,12 @@
 #'     \mathbf{W}_{t}
 #'   }
 #'   where
-#'   \eqn{\mathbf{x}_{t}} is a vector of covariates at time \eqn{t},
-#'   and \eqn{\boldsymbol{\Gamma}_{\boldsymbol{\eta}}} is the coefficient matrix
+#'   \eqn{\mathbf{x}_{t}}
+#'   is a vector of covariates
+#'   at time \eqn{t},
+#'   and
+#'   \eqn{\boldsymbol{\Gamma}_{\boldsymbol{\eta}}}
+#'   is the coefficient matrix
 #'   linking the covariates to the latent variables.
 #'
 #'   ## Type 2
@@ -145,7 +166,8 @@
 #'     \right)
 #'   }
 #'   where
-#'   \eqn{\boldsymbol{\Gamma}_{\mathbf{y}}} is the coefficient matrix
+#'   \eqn{\boldsymbol{\Gamma}_{\mathbf{y}}}
+#'   is the coefficient matrix
 #'   linking the covariates to the observed variables.
 #'
 #'   The dynamic structure is given by
@@ -202,7 +224,7 @@
 #'   - `eta`: A `t` by `p` matrix of values for the latent variables.
 #'   - `time`: A vector of continuous time points of length `t`
 #'      starting from 0 with `delta_t` increments.
-#'   - `n`: Number of individuals.
+#'   - `id`: A vector of ones.
 #'
 #' @examples
 #' # prepare parameters
@@ -305,7 +327,7 @@ SimSSMOU <- function(mu0,
                      type = 0,
                      delta_t,
                      time,
-                     burn_in) {
+                     burn_in = 0) {
   stopifnot(
     type %in% 0:2
   )

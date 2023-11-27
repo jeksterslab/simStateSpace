@@ -28,6 +28,9 @@
 #' @param eta Logical.
 #'   If `eta = TRUE`, include `eta`.
 #'   If `eta = FALSE`, exclude `eta`.
+#' @param long Logical.
+#'   If `long = TRUE`, use long format.
+#'   If `long = FALSE`, use wide format.
 #'
 #' @return Returns a matrix of simulated data.
 #'
@@ -66,7 +69,10 @@
 #' )
 #'
 #' # list to matrix
-#' mat <- Sim2Matrix(ssm)
+#' mat <- Sim2Matrix(ssm, long = TRUE)
+#' str(mat)
+#' head(mat)
+#' mat <- Sim2Matrix(ssm, long = FALSE)
 #' str(mat)
 #' head(mat)
 #'
@@ -87,7 +93,10 @@
 #' )
 #'
 #' # list to matrix
-#' mat <- Sim2Matrix(ssm)
+#' mat <- Sim2Matrix(ssm, long = TRUE)
+#' str(mat)
+#' head(mat)
+#' mat <- Sim2Matrix(ssm, long = FALSE)
 #' str(mat)
 #' head(mat)
 #'
@@ -95,12 +104,13 @@
 #' @keywords simStateSpace misc
 #' @export
 Sim2Matrix <- function(x,
-                       eta = FALSE) {
-  if (length(x) == 3) {
+                       eta = FALSE,
+                       long = TRUE) {
+  if (length(x) == 5) {
     if (
       identical(
         names(x),
-        c("y", "eta", "time")
+        c("y", "eta", "x", "time", "id")
       )
     ) {
       n1 <- TRUE
@@ -110,20 +120,42 @@ Sim2Matrix <- function(x,
   } else {
     n1 <- FALSE
   }
+  if (n1) {
+    first <- x
+  } else {
+    first <- x[[1]]
+  }
+  k <- dim(first$y)[2]
+  y_names <- paste0("y", seq_len(k))
+  if (length(y_names) == 1) {
+    y_names <- "y"
+  }
+  p <- dim(first$eta)[2]
+  eta_names <- paste0("eta", seq_len(p))
+  if (length(eta_names) == 1) {
+    eta_names <- "eta"
+  }
+  if (is.list(first$x)) {
+    covariates <- TRUE
+    j <- dim(first$x[[1]])[2]
+    x_names <- paste0("x", seq_len(j))
+  } else {
+    covariates <- FALSE
+  }
   foo <- function(x,
-                  eta,
-                  n1) {
-    k <- dim(x$y)[2]
-    colnames(x$y) <- paste0("y", seq_len(k))
+                  eta) {
+    colnames(x$y) <- y_names
     colnames(x$time) <- "time"
-    if (!n1) {
-      colnames(x$id) <- "id"
+    colnames(x$id) <- "id"
+    if (covariates) {
+      colnames(x$x) <- x_names
+    } else {
+      x$x <- NULL
     }
     if (!eta) {
       x$eta <- NULL
     } else {
-      p <- dim(x$eta)[2]
-      colnames(x$eta) <- paste0("eta", seq_len(p))
+      colnames(x$eta) <- eta_names
     }
     return(
       do.call(
@@ -133,20 +165,33 @@ Sim2Matrix <- function(x,
     )
   }
   if (n1) {
-    return(
-      foo(x, eta = eta, n1 = n1)
+    out <- foo(
+      x = x,
+      eta = eta
     )
   } else {
-    return(
-      do.call(
-        what = "rbind",
-        args = lapply(
-          X = x,
-          FUN = foo,
-          eta = eta,
-          n1 = n1
-        )
+    out <- do.call(
+      what = "rbind",
+      args = lapply(
+        X = x,
+        FUN = foo,
+        eta = eta
       )
     )
+  }
+  if (long) {
+    return(out)
+  } else {
+    out <- as.matrix(
+      stats::reshape(
+        data = as.data.frame(out),
+        timevar = "time",
+        idvar = "id",
+        direction = "wide",
+        sep = "_"
+      )
+    )
+    rownames(out) <- seq_len(dim(out)[1])
+    return(out)
   }
 }

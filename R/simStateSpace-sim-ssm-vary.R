@@ -170,7 +170,7 @@ SimSSMVary <- function(n,
                        gamma_eta = NULL,
                        x = NULL,
                        time = 0,
-                       burn_in) {
+                       burn_in = 0) {
   stopifnot(
     type %in% 0:2
   )

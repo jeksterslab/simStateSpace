@@ -33,21 +33,33 @@
 #'     \boldsymbol{\Theta}
 #'     \right)
 #'   }
-#'   where \eqn{\mathbf{y}_{i, t}}, \eqn{\boldsymbol{\eta}_{i, t}},
-#'   and \eqn{\boldsymbol{\varepsilon}_{i, t}}
-#'   are random variables and \eqn{\boldsymbol{\nu}},
+#'   where
+#'   \eqn{\mathbf{y}_{i, t}},
+#'   \eqn{\boldsymbol{\eta}_{i, t}},
+#'   and
+#'   \eqn{\boldsymbol{\varepsilon}_{i, t}}
+#'   are random variables
+#'   and
+#'   \eqn{\boldsymbol{\nu}},
 #'   \eqn{\boldsymbol{\Lambda}},
-#'   and \eqn{\boldsymbol{\Theta}} are model parameters.
-#'   \eqn{\mathbf{y}_{i, t}} is a vector of observed random variables
-#'   at time \eqn{t} and individual \eqn{i},
-#'   \eqn{\boldsymbol{\eta}_{i, t}} is a vector of latent random variables
-#'   at time \eqn{t} and individual \eqn{i},
-#'   and \eqn{\boldsymbol{\varepsilon}_{i, t}}
-#'   is a vector of random measurement errors
-#'   at time \eqn{t} and individual \eqn{i},
-#'   while \eqn{\boldsymbol{\nu}} is a vector of intercept,
-#'   \eqn{\boldsymbol{\Lambda}} is a matrix of factor loadings,
-#'   and \eqn{\boldsymbol{\Theta}} is the covariance matrix of
+#'   and
+#'   \eqn{\boldsymbol{\Theta}}
+#'   are model parameters.
+#'   \eqn{\mathbf{y}_{i, t}}
+#'   is a vector of observed random variables,
+#'   \eqn{\boldsymbol{\eta}_{i, t}}
+#'   is a vector of latent random variables,
+#'   and
+#'   \eqn{\boldsymbol{\varepsilon}_{i, t}}
+#'   is a vector of random measurement errors,
+#'   at time \eqn{t} and individual \eqn{i}.
+#'   \eqn{\boldsymbol{\nu}}
+#'   is a vector of intercepts,
+#'   \eqn{\boldsymbol{\Lambda}}
+#'   is a matrix of factor loadings,
+#'   and
+#'   \eqn{\boldsymbol{\Theta}}
+#'   is the covariance matrix of
 #'   \eqn{\boldsymbol{\varepsilon}}.
 #'
 #'   The dynamic structure is given by
@@ -66,11 +78,16 @@
 #'     \mathrm{d}
 #'     \mathbf{W}_{i, t}
 #'   }
-#'   where \eqn{\boldsymbol{\mu}} is the long-term mean or equilibrium level,
-#'   \eqn{\boldsymbol{\Phi}} is the rate of mean reversion,
+#'   where
+#'   \eqn{\boldsymbol{\mu}}
+#'   is the long-term mean or equilibrium level,
+#'   \eqn{\boldsymbol{\Phi}}
+#'   is the rate of mean reversion,
 #'   determining how quickly the variable returns to its mean,
-#'   \eqn{\boldsymbol{\Sigma}} is the matrix of volatility
-#'   or randomness in the process, and \eqn{\mathrm{d}\boldsymbol{W}}
+#'   \eqn{\boldsymbol{\Sigma}}
+#'   is the matrix of volatility
+#'   or randomness in the process, and
+#'   \eqn{\mathrm{d}\boldsymbol{W}}
 #'   is a Wiener process or Brownian motion,
 #'   which represents random fluctuations.
 #'
@@ -183,6 +200,7 @@
 #'   Each element is a list with the following elements:
 #'   - `y`: A `t` by `k` matrix of values for the manifest variables.
 #'   - `eta`: A `t` by `p` matrix of values for the latent variables.
+#'   - `x`: A `t` by `j` matrix of values for the covariates.
 #'   - `time`: A vector of continuous time points of length `t`
 #'      starting from 0 with `delta_t` increments.
 #'   - `id`: A vector of ID numbers of length `t`.
@@ -301,7 +319,7 @@ SimSSMOUFixed <- function(n,
                           type = 0,
                           delta_t,
                           time,
-                          burn_in) {
+                          burn_in = 0) {
   stopifnot(
     type %in% 0:2
   )

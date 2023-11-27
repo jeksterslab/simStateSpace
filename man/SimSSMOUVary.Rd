@@ -22,7 +22,7 @@ SimSSMOUVary(
   type = 0,
   delta_t,
   time,
-  burn_in
+  burn_in = 0
 )
 }
 \arguments{
@@ -97,9 +97,9 @@ Each element is a list with the following elements:
 \itemize{
 \item \code{y}: A \code{t} by \code{k} matrix of values for the manifest variables.
 \item \code{eta}: A \code{t} by \code{p} matrix of values for the latent variables.
+\item \code{x}: A \code{t} by \code{j} matrix of values for the covariates.
 \item \code{time}: A vector of discrete time points from 1 to \code{t}.
 \item \code{id}: A vector of ID numbers of length \code{t}.
-\item \code{n}: Number of individuals.
 }
 }
 \description{
@@ -248,6 +248,7 @@ Other Simulation of State Space Models Data Functions:
 \code{\link{OU2SSM}()},
 \code{\link{Sim2Matrix}()},
 \code{\link{SimSSMFixed}()},
+\code{\link{SimSSMLinGrowth}()},
 \code{\link{SimSSMOUFixed}()},
 \code{\link{SimSSMOU}()},
 \code{\link{SimSSMVARFixed}()},

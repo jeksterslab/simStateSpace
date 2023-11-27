@@ -19,8 +19,8 @@
 #'   `nu`,
 #'   `lambda`,
 #'   `theta_sqrt`,
-#'    `gamma_y`, or
-#'    `gamma_eta`)
+#'   `gamma_y`, or
+#'   `gamma_eta`)
 #'   is less the `n`,
 #'   the function will cycle through the available values.
 #'
@@ -163,7 +163,7 @@ SimSSMOUVary <- function(n,
                          type = 0,
                          delta_t,
                          time,
-                         burn_in) {
+                         burn_in = 0) {
   stopifnot(
     type %in% 0:2
   )

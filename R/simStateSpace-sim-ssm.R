@@ -27,21 +27,33 @@
 #'     \boldsymbol{\Theta}
 #'     \right)
 #'   }
-#'   where \eqn{\mathbf{y}_{t}}, \eqn{\boldsymbol{\eta}_{t}},
-#'   and \eqn{\boldsymbol{\varepsilon}_{t}}
-#'   are random variables and \eqn{\boldsymbol{\nu}},
+#'   where
+#'   \eqn{\mathbf{y}_{t}},
+#'   \eqn{\boldsymbol{\eta}_{t}},
+#'   and
+#'   \eqn{\boldsymbol{\varepsilon}_{t}}
+#'   are random variables
+#'   and
+#'   \eqn{\boldsymbol{\nu}},
 #'   \eqn{\boldsymbol{\Lambda}},
-#'   and \eqn{\boldsymbol{\Theta}} are model parameters.
-#'   \eqn{\mathbf{y}_{t}} is a vector of observed random variables
-#'   at time \eqn{t},
-#'   \eqn{\boldsymbol{\eta}_{t}} is a vector of latent random variables
-#'   at time \eqn{t},
-#'   and \eqn{\boldsymbol{\varepsilon}_{t}}
-#'   is a vector of random measurement errors
-#'   at time \eqn{t},
-#'   while \eqn{\boldsymbol{\nu}} is a vector of intercept,
-#'   \eqn{\boldsymbol{\Lambda}} is a matrix of factor loadings,
-#'   and \eqn{\boldsymbol{\Theta}} is the covariance matrix of
+#'   and
+#'   \eqn{\boldsymbol{\Theta}}
+#'   are model parameters.
+#'   \eqn{\mathbf{y}_{t}}
+#'   is a vector of observed random variables,
+#'   \eqn{\boldsymbol{\eta}_{t}}
+#'   is a vector of latent random variables,
+#'   and
+#'   \eqn{\boldsymbol{\varepsilon}_{t}}
+#'   is a vector of random measurement errors,
+#'   at time \eqn{t}.
+#'   \eqn{\boldsymbol{\nu}}
+#'   is a vector of intercepts,
+#'   \eqn{\boldsymbol{\Lambda}}
+#'   is a matrix of factor loadings,
+#'   and
+#'   \eqn{\boldsymbol{\Theta}}
+#'   is the covariance matrix of
 #'   \eqn{\boldsymbol{\varepsilon}}.
 #'
 #'   The dynamic structure is given by
@@ -65,20 +77,36 @@
 #'     \boldsymbol{\Psi}
 #'     \right)
 #'   }
-#'   where \eqn{\boldsymbol{\eta}_{t}}, \eqn{\boldsymbol{\eta}_{t - 1}},
-#'   and \eqn{\boldsymbol{\zeta}_{t}} are random variables
-#'   and \eqn{\boldsymbol{\alpha}}, \eqn{\boldsymbol{\beta}},
-#'   and \eqn{\boldsymbol{\Psi}} are model parameters.
-#'   \eqn{\boldsymbol{\eta}_{t}} is a vector of latent variables
-#'   at time \eqn{t}, \eqn{\boldsymbol{\eta}_{t - 1}}
-#'   is a vector of latent variables at
-#'   time \eqn{t - 1},
-#'   and \eqn{\boldsymbol{\zeta}_{t}} is a vector of dynamic noise
-#'   at time \eqn{t} while \eqn{\boldsymbol{\alpha}}
+#'   where
+#'   \eqn{\boldsymbol{\eta}_{t}},
+#'   \eqn{\boldsymbol{\eta}_{t - 1}},
+#'   and
+#'   \eqn{\boldsymbol{\zeta}_{t}}
+#'   are random variables,
+#'   and
+#'   \eqn{\boldsymbol{\alpha}},
+#'   \eqn{\boldsymbol{\beta}},
+#'   and
+#'   \eqn{\boldsymbol{\Psi}}
+#'   are model parameters.
+#'   \eqn{\boldsymbol{\eta}_{t}}
+#'   is a vector of latent variables
+#'   at time \eqn{t},
+#'   \eqn{\boldsymbol{\eta}_{t - 1}}
+#'   is a vector of latent variables
+#'   at time \eqn{t - 1},
+#'   and
+#'   \eqn{\boldsymbol{\zeta}_{t}}
+#'   is a vector of dynamic noise
+#'   at time \eqn{t}.
+#'   \eqn{\boldsymbol{\alpha}}
 #'   is a vector of intercepts,
-#'   \eqn{\boldsymbol{\beta}} is a matrix of autoregression
+#'   \eqn{\boldsymbol{\beta}}
+#'   is a matrix of autoregression
 #'   and cross regression coefficients,
-#'   and \eqn{\boldsymbol{\Psi}} is the covariance matrix of
+#'   and
+#'   \eqn{\boldsymbol{\Psi}}
+#'   is the covariance matrix of
 #'   \eqn{\boldsymbol{\zeta}_{t}}.
 #'
 #'   ## Type 1
@@ -130,8 +158,12 @@
 #'     \right)
 #'   }
 #'   where
-#'   \eqn{\mathbf{x}_{t}} is a vector of covariates at time \eqn{t},
-#'   and \eqn{\boldsymbol{\Gamma}_{\boldsymbol{\eta}}} is the coefficient matrix
+#'   \eqn{\mathbf{x}_{t}}
+#'   is a vector of covariates
+#'   at time \eqn{t},
+#'   and
+#'   \eqn{\boldsymbol{\Gamma}_{\boldsymbol{\eta}}}
+#'   is the coefficient matrix
 #'   linking the covariates to the latent variables.
 #'
 #'   ## Type 2
@@ -146,7 +178,7 @@
 #'     \boldsymbol{\eta}_{t}
 #'     +
 #'     \boldsymbol{\Gamma}_{\mathbf{y}}
-#'     \boldsymbol{x}_{t}
+#'     \mathbf{x}_{t}
 #'     +
 #'     \boldsymbol{\varepsilon}_{t}
 #'     \quad
@@ -161,7 +193,8 @@
 #'     \right)
 #'   }
 #'   where
-#'   \eqn{\boldsymbol{\Gamma}_{\mathbf{y}}} is the coefficient matrix
+#'   \eqn{\boldsymbol{\Gamma}_{\mathbf{y}}}
+#'   is the coefficient matrix
 #'   linking the covariates to the observed variables.
 #'
 #'   The dynamic structure is given by
@@ -174,7 +207,7 @@
 #'     \boldsymbol{\eta}_{t - 1}
 #'     +
 #'     \boldsymbol{\Gamma}_{\boldsymbol{\eta}}
-#'     \boldsymbol{x}_{t}
+#'     \mathbf{x}_{t}
 #'     +
 #'     \boldsymbol{\zeta}_{t}
 #'     \quad
@@ -245,8 +278,9 @@
 #' @return Returns a list with the following elements:
 #'   - `y`: A `t` by `k` matrix of values for the manifest variables.
 #'   - `eta`: A `t` by `p` matrix of values for the latent variables.
-#'   - `time`: A vector of discrete time points from 1 to `t`.
-#'   - `n`: Number of individuals.
+#'   - `x`: A `t` by `j` matrix of values for the covariates.
+#'   - `time`: A vector of discrete time points from 0 to `t - 1`.
+#'   - `id`: A vector of ones.
 #'
 #' @examples
 #' # prepare parameters
@@ -343,7 +377,7 @@ SimSSM <- function(mu0,
                    x = NULL,
                    type = 0,
                    time,
-                   burn_in) {
+                   burn_in = 0) {
   stopifnot(
     type %in% 0:2
   )

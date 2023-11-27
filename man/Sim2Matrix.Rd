@@ -4,7 +4,7 @@
 \alias{Sim2Matrix}
 \title{Simulation Output to Matrix}
 \usage{
-Sim2Matrix(x, eta = FALSE)
+Sim2Matrix(x, eta = FALSE, long = TRUE)
 }
 \arguments{
 \item{x}{R object.
@@ -22,6 +22,10 @@ Output of
 \item{eta}{Logical.
 If \code{eta = TRUE}, include \code{eta}.
 If \code{eta = FALSE}, exclude \code{eta}.}
+
+\item{long}{Logical.
+If \code{long = TRUE}, use long format.
+If \code{long = FALSE}, use wide format.}
 }
 \value{
 Returns a matrix of simulated data.
@@ -74,7 +78,10 @@ ssm <- SimSSM(
 )
 
 # list to matrix
-mat <- Sim2Matrix(ssm)
+mat <- Sim2Matrix(ssm, long = TRUE)
+str(mat)
+head(mat)
+mat <- Sim2Matrix(ssm, long = FALSE)
 str(mat)
 head(mat)
 
@@ -95,7 +102,10 @@ ssm <- SimSSMFixed(
 )
 
 # list to matrix
-mat <- Sim2Matrix(ssm)
+mat <- Sim2Matrix(ssm, long = TRUE)
+str(mat)
+head(mat)
+mat <- Sim2Matrix(ssm, long = FALSE)
 str(mat)
 head(mat)
 
@@ -104,6 +114,7 @@ head(mat)
 Other Simulation of State Space Models Data Functions: 
 \code{\link{OU2SSM}()},
 \code{\link{SimSSMFixed}()},
+\code{\link{SimSSMLinGrowth}()},
 \code{\link{SimSSMOUFixed}()},
 \code{\link{SimSSMOUVary}()},
 \code{\link{SimSSMOU}()},

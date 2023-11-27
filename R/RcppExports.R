@@ -206,3 +206,15 @@ OU2SSM <- function(mu, phi, sigma_sqrt, delta_t) {
     .Call(`_simStateSpace_SimSSM2Vary`, n, mu0, sigma0_sqrt, alpha, beta, psi_sqrt, nu, lambda, theta_sqrt, gamma_y, gamma_eta, x, time, burn_in)
 }
 
+.SimSSM0LinGrowth <- function(n, mu0, sigma0_sqrt, theta_sqrt, time) {
+    .Call(`_simStateSpace_SimSSM0LinGrowth`, n, mu0, sigma0_sqrt, theta_sqrt, time)
+}
+
+.SimSSM1LinGrowth <- function(n, mu0, sigma0_sqrt, theta_sqrt, gamma_eta, x, time) {
+    .Call(`_simStateSpace_SimSSM1LinGrowth`, n, mu0, sigma0_sqrt, theta_sqrt, gamma_eta, x, time)
+}
+
+.SimSSM2LinGrowth <- function(n, mu0, sigma0_sqrt, theta_sqrt, gamma_y, gamma_eta, x, time) {
+    .Call(`_simStateSpace_SimSSM2LinGrowth`, n, mu0, sigma0_sqrt, theta_sqrt, gamma_y, gamma_eta, x, time)
+}
+
