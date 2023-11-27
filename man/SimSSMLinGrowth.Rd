@@ -106,8 +106,9 @@ are random variables and
 and \eqn{\theta^{2}} is a model parameter.
 \eqn{y_{i, t}} is a vector of observed random variables
 at time \eqn{t} and individual \eqn{i},
-\eqn{\eta_{0_{i, t}}},
-\eqn{\eta_{1_{i, t}}} is forms a vector of latent random variables
+\eqn{\eta_{0_{i, t}}}
+and
+\eqn{\eta_{1_{i, t}}} form a vector of latent random variables
 at time \eqn{t} and individual \eqn{i},
 and \eqn{\boldsymbol{\varepsilon}_{i, t}}
 is a vector of random measurement errors
@@ -132,8 +133,8 @@ The dynamic structure is given by
     \right)
     \left(
     \begin{array}{c}
-    \eta_{0_{i, t}} \\
-    \eta_{1_{i, t}} \\
+    \eta_{0_{i, t - 1}} \\
+    \eta_{1_{i, t - 1}} \\
     \end{array}
     \right) .
   }
@@ -214,8 +215,8 @@ The dynamic structure is given by
     \right)
     \left(
     \begin{array}{c}
-    \eta_{0_{i, t}} \\
-    \eta_{1_{i, t}} \\
+    \eta_{0_{i, t - 1}} \\
+    \eta_{1_{i, t - 1}} \\
     \end{array}
     \right)
     +
@@ -283,8 +284,8 @@ The dynamic structure is given by
     \right)
     \left(
     \begin{array}{c}
-    \eta_{0_{i, t}} \\
-    \eta_{1_{i, t}} \\
+    \eta_{0_{i, t - 1}} \\
+    \eta_{1_{i, t - 1}} \\
     \end{array}
     \right)
     +
