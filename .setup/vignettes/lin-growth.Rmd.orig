@@ -1,5 +1,5 @@
 ---
-title: "Linear Growth Curve Model"
+title: "The Linear Growth Curve Model"
 author: "Ivan Jacob Agaloos Pesigan"
 date: "`r Sys.Date()`"
 bibliography: "vignettes.bib"
@@ -8,11 +8,12 @@ nocite: |
   @RCoreTeam-2023
   @Ou-Hunter-Chow-2019
   @Chow-Ho-Hamaker-etal-2010
+  @Rosseel-2012
 output:
   rmarkdown::html_vignette:
     toc: true
 vignette: >
-  %\VignetteIndexEntry{Linear Growth Curve Model}
+  %\VignetteIndexEntry{The Linear Growth Curve Model}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -68,9 +69,9 @@ are random variables and
 and $\theta^{2}$ is a model parameter.
 $y_{i, t}$ is a vector of observed random variables
 at time $t$ and individual $i$,
-$\eta_{0_{i, t}}$
+$\eta_{0_{i, t}}$ (intercept)
 and
-$\eta_{1_{i, t}}$ form a vector of latent random variables
+$\eta_{1_{i, t}}$ (slope) form a vector of latent random variables
 at time $t$ and individual $i$,
 and $\boldsymbol{\varepsilon}_{i, t}$
 is a vector of random measurement errors
@@ -215,7 +216,7 @@ sigma0
 theta
 ```
 
-### Using the SimSSMVARFixed Function to Simulate Data
+### Using the SimSSMLinGrowth Function to Simulate Data
 
 ```{r}
 library(simStateSpace)

@@ -341,7 +341,7 @@ model <- dynr::dynr.model(
   noise = dynr_noise,
   outfile = "var.c"
 )
-model@options$maxeval <- 10000
+model@options$maxeval <- 100000
 ```
 
 ```{r}

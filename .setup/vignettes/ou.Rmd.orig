@@ -284,7 +284,7 @@ lambda
 theta
 ```
 
-### Using the SimSSMVARFixed Function to Simulate Data
+### Using the SimSSMOUFixed Function to Simulate Data
 
 ```{r}
 library(simStateSpace)
@@ -434,10 +434,10 @@ model <- dynr::dynr.model(
   noise = dynr_noise,
   outfile = "ou.c"
 )
-model@options$maxeval <- 10000
+model@options$maxeval <- 100000
 ```
 
-Add lower and upper bound to aid in the optimization.
+Add lower and upper bounds to aid in the optimization.
 
 ```{r}
 model$lb[
@@ -466,6 +466,16 @@ model$ub[
     "phi_33"
   )
 ] <- +1.5
+model$lb[
+  c(
+    "sigma_11",
+    "sigma_22",
+    "sigma_33",
+    "theta_11",
+    "theta_22",
+    "theta_33"
+  )
+] <- .Machine$double.xmin
 ```
 
 ```{r}
