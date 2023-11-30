@@ -99,7 +99,7 @@
 #'         data = rnorm(n = k * (time + burn_in)),
 #'         ncol = k
 #'       )
-#'     )
+#'    )
 #'   }
 #' )
 #'
@@ -183,60 +183,63 @@ SimSSMVary <- function(n,
   stopifnot(
     type %in% 0:2
   )
-  if (type == 0) {
-    return(
-      .SimSSM0Vary(
-        n = n,
-        mu0 = rep(x = mu0, length.out = n),
-        sigma0_sqrt = rep(x = sigma0_sqrt, length.out = n),
-        alpha = rep(x = alpha, length.out = n),
-        beta = rep(x = beta, length.out = n),
-        psi_sqrt = rep(x = psi_sqrt, length.out = n),
-        nu = rep(x = nu, length.out = n),
-        lambda = rep(x = lambda, length.out = n),
-        theta_sqrt = rep(x = theta_sqrt, length.out = n),
-        time = time,
-        burn_in = burn_in
+  switch(
+    EXPR = type,
+    0 = {
+      return(
+        .SimSSM0Vary(
+          n = n,
+          mu0 = rep(x = mu0, length.out = n),
+          sigma0_sqrt = rep(x = sigma0_sqrt, length.out = n),
+          alpha = rep(x = alpha, length.out = n),
+          beta = rep(x = beta, length.out = n),
+          psi_sqrt = rep(x = psi_sqrt, length.out = n),
+          nu = rep(x = nu, length.out = n),
+          lambda = rep(x = lambda, length.out = n),
+          theta_sqrt = rep(x = theta_sqrt, length.out = n),
+          time = time,
+          burn_in = burn_in
+        )
       )
-    )
-  }
-  if (type == 1) {
-    return(
-      .SimSSM1Vary(
-        n = n,
-        mu0 = rep(x = mu0, length.out = n),
-        sigma0_sqrt = rep(x = sigma0_sqrt, length.out = n),
-        alpha = rep(x = alpha, length.out = n),
-        beta = rep(x = beta, length.out = n),
-        psi_sqrt = rep(x = psi_sqrt, length.out = n),
-        nu = rep(x = nu, length.out = n),
-        lambda = rep(x = lambda, length.out = n),
-        theta_sqrt = rep(x = theta_sqrt, length.out = n),
-        gamma_eta = rep(x = gamma_eta, length.out = n),
-        x = x,
-        time = time,
-        burn_in = burn_in
+    },
+    1 = {
+      return(
+        .SimSSM1Vary(
+          n = n,
+          mu0 = rep(x = mu0, length.out = n),
+          sigma0_sqrt = rep(x = sigma0_sqrt, length.out = n),
+          alpha = rep(x = alpha, length.out = n),
+          beta = rep(x = beta, length.out = n),
+          psi_sqrt = rep(x = psi_sqrt, length.out = n),
+          nu = rep(x = nu, length.out = n),
+          lambda = rep(x = lambda, length.out = n),
+          theta_sqrt = rep(x = theta_sqrt, length.out = n),
+          gamma_eta = rep(x = gamma_eta, length.out = n),
+          x = x,
+          time = time,
+          burn_in = burn_in
+        )
       )
-    )
-  }
-  if (type == 2) {
-    return(
-      .SimSSM2Vary(
-        n = n,
-        mu0 = rep(x = mu0, length.out = n),
-        sigma0_sqrt = rep(x = sigma0_sqrt, length.out = n),
-        alpha = rep(x = alpha, length.out = n),
-        beta = rep(x = beta, length.out = n),
-        psi_sqrt = rep(x = psi_sqrt, length.out = n),
-        nu = rep(x = nu, length.out = n),
-        lambda = rep(x = lambda, length.out = n),
-        theta_sqrt = rep(x = theta_sqrt, length.out = n),
-        gamma_y = rep(x = gamma_y, length.out = n),
-        gamma_eta = rep(x = gamma_eta, length.out = n),
-        x = x,
-        time = time,
-        burn_in = burn_in
+    },
+    2 = {
+      return(
+        .SimSSM2Vary(
+          n = n,
+          mu0 = rep(x = mu0, length.out = n),
+          sigma0_sqrt = rep(x = sigma0_sqrt, length.out = n),
+          alpha = rep(x = alpha, length.out = n),
+          beta = rep(x = beta, length.out = n),
+          psi_sqrt = rep(x = psi_sqrt, length.out = n),
+          nu = rep(x = nu, length.out = n),
+          lambda = rep(x = lambda, length.out = n),
+          theta_sqrt = rep(x = theta_sqrt, length.out = n),
+          gamma_y = rep(x = gamma_y, length.out = n),
+          gamma_eta = rep(x = gamma_eta, length.out = n),
+          x = x,
+          time = time,
+          burn_in = burn_in
+        )
       )
-    )
-  }
+    }
+  )
 }

@@ -83,7 +83,7 @@
 #'         data = rnorm(n = k * (time + burn_in)),
 #'         ncol = k
 #'       )
-#'     )
+#'    )
 #'   }
 #' )
 #'
@@ -171,63 +171,66 @@ SimSSMOUVary <- function(n,
   stopifnot(
     type %in% 0:2
   )
-  if (type == 0) {
-    return(
-      .SimSSM0OUVary(
-        n = n,
-        mu0 = rep(x = mu0, length.out = n),
-        sigma0_sqrt = rep(x = sigma0_sqrt, length.out = n),
-        mu = rep(x = mu, length.out = n),
-        phi = rep(x = phi, length.out = n),
-        sigma_sqrt = rep(x = sigma_sqrt, length.out = n),
-        nu = rep(x = nu, length.out = n),
-        lambda = rep(x = lambda, length.out = n),
-        theta_sqrt = rep(x = theta_sqrt, length.out = n),
-        delta_t = delta_t,
-        time = time,
-        burn_in = burn_in
+  switch(
+    EXPR = type,
+    0 = {
+      return(
+        .SimSSM0OUVary(
+          n = n,
+          mu0 = rep(x = mu0, length.out = n),
+          sigma0_sqrt = rep(x = sigma0_sqrt, length.out = n),
+          mu = rep(x = mu, length.out = n),
+          phi = rep(x = phi, length.out = n),
+          sigma_sqrt = rep(x = sigma_sqrt, length.out = n),
+          nu = rep(x = nu, length.out = n),
+          lambda = rep(x = lambda, length.out = n),
+          theta_sqrt = rep(x = theta_sqrt, length.out = n),
+          delta_t = delta_t,
+          time = time,
+          burn_in = burn_in
+        )
       )
-    )
-  }
-  if (type == 1) {
-    return(
-      .SimSSM1OUVary(
-        n = n,
-        mu0 = rep(x = mu0, length.out = n),
-        sigma0_sqrt = rep(x = sigma0_sqrt, length.out = n),
-        mu = rep(x = mu, length.out = n),
-        phi = rep(x = phi, length.out = n),
-        sigma_sqrt = rep(x = sigma_sqrt, length.out = n),
-        nu = rep(x = nu, length.out = n),
-        lambda = rep(x = lambda, length.out = n),
-        theta_sqrt = rep(x = theta_sqrt, length.out = n),
-        gamma_eta = rep(x = gamma_eta, length.out = n),
-        x = x,
-        delta_t = delta_t,
-        time = time,
-        burn_in = burn_in
+    },
+    1 = {
+      return(
+        .SimSSM1OUVary(
+          n = n,
+          mu0 = rep(x = mu0, length.out = n),
+          sigma0_sqrt = rep(x = sigma0_sqrt, length.out = n),
+          mu = rep(x = mu, length.out = n),
+          phi = rep(x = phi, length.out = n),
+          sigma_sqrt = rep(x = sigma_sqrt, length.out = n),
+          nu = rep(x = nu, length.out = n),
+          lambda = rep(x = lambda, length.out = n),
+          theta_sqrt = rep(x = theta_sqrt, length.out = n),
+          gamma_eta = rep(x = gamma_eta, length.out = n),
+          x = x,
+          delta_t = delta_t,
+          time = time,
+          burn_in = burn_in
+        )
       )
-    )
-  }
-  if (type == 2) {
-    return(
-      .SimSSM2OUVary(
-        n = n,
-        mu0 = rep(x = mu0, length.out = n),
-        sigma0_sqrt = rep(x = sigma0_sqrt, length.out = n),
-        mu = rep(x = mu, length.out = n),
-        phi = rep(x = phi, length.out = n),
-        sigma_sqrt = rep(x = sigma_sqrt, length.out = n),
-        nu = rep(x = nu, length.out = n),
-        lambda = rep(x = lambda, length.out = n),
-        theta_sqrt = rep(x = theta_sqrt, length.out = n),
-        gamma_y = rep(x = gamma_y, length.out = n),
-        gamma_eta = rep(x = gamma_eta, length.out = n),
-        x = x,
-        delta_t = delta_t,
-        time = time,
-        burn_in = burn_in
+    },
+    2 = {
+      return(
+        .SimSSM2OUVary(
+          n = n,
+          mu0 = rep(x = mu0, length.out = n),
+          sigma0_sqrt = rep(x = sigma0_sqrt, length.out = n),
+          mu = rep(x = mu, length.out = n),
+          phi = rep(x = phi, length.out = n),
+          sigma_sqrt = rep(x = sigma_sqrt, length.out = n),
+          nu = rep(x = nu, length.out = n),
+          lambda = rep(x = lambda, length.out = n),
+          theta_sqrt = rep(x = theta_sqrt, length.out = n),
+          gamma_y = rep(x = gamma_y, length.out = n),
+          gamma_eta = rep(x = gamma_eta, length.out = n),
+          x = x,
+          delta_t = delta_t,
+          time = time,
+          burn_in = burn_in
+        )
       )
-    )
-  }
+    }
+  )
 }

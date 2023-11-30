@@ -6,14 +6,7 @@
 #include <RcppArmadillo.h>
 // [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::export(.SimSSM1OUVary)]]
-Rcpp::List SimSSM1OUVary(const int n, const Rcpp::List& mu0,
-                         const Rcpp::List& sigma0_sqrt, const Rcpp::List& mu,
-                         const Rcpp::List& phi, const Rcpp::List& sigma_sqrt,
-                         const Rcpp::List& nu, const Rcpp::List& lambda,
-                         const Rcpp::List& theta_sqrt,
-                         const Rcpp::List& gamma_eta, const Rcpp::List& x,
-                         const double delta_t, const int time,
-                         const int burn_in) {
+Rcpp::List SimSSM1OUVary(const int n, const Rcpp::List& mu0, const Rcpp::List& sigma0_sqrt, const Rcpp::List& mu, const Rcpp::List& phi, const Rcpp::List& sigma_sqrt, const Rcpp::List& nu, const Rcpp::List& lambda, const Rcpp::List& theta_sqrt, const Rcpp::List& gamma_eta, const Rcpp::List& x, const double delta_t, const int time, const int burn_in) {
   // Step 1: Determine indices
   int total_time = time + burn_in;
   arma::vec mu0_temp = mu0[0];
@@ -43,38 +36,27 @@ Rcpp::List SimSSM1OUVary(const int n, const Rcpp::List& mu0,
 
     // Step 3.2: Get state space parameters
     arma::mat I = arma::eye<arma::mat>(num_latent_vars, num_latent_vars);
-    arma::mat J = arma::eye<arma::mat>(num_latent_vars * num_latent_vars,
-                                       num_latent_vars * num_latent_vars);
+    arma::mat J = arma::eye<arma::mat>(num_latent_vars * num_latent_vars, num_latent_vars * num_latent_vars);
     arma::mat neg_phi = -1 * phi_temp;
     // 3.2.1 beta_temp
     arma::mat beta_temp = arma::expmat(neg_phi * delta_t);  // A(Delta t)
     // 3.2.2 alpha_temp
-    arma::vec alpha_temp = arma::inv(neg_phi) * (beta_temp - I) *
-                           (phi_temp * mu_temp);  // b(Delta t)
-
+    arma::vec alpha_temp = arma::inv(neg_phi) * (beta_temp - I) * (phi_temp * mu_temp);  // b(Delta t)
+    
     // 3.2.3 psi
     arma::mat neg_phi_hashtag = arma::kron(neg_phi, I) + arma::kron(I, neg_phi);
-    arma::vec sigma_vec =
-        arma::vectorise(sigma_sqrt_temp * sigma_sqrt_temp.t());
-    arma::vec psi_vec = arma::inv(neg_phi_hashtag) *
-                        (arma::expmat(neg_phi_hashtag * delta_t) - J) *
-                        sigma_vec;
-    arma::mat psi_sqrt =
-        arma::chol(arma::reshape(psi_vec, num_latent_vars, num_latent_vars));
+    arma::vec sigma_vec = arma::vectorise(sigma_sqrt_temp * sigma_sqrt_temp.t());
+    arma::vec psi_vec = arma::inv(neg_phi_hashtag) * (arma::expmat(neg_phi_hashtag * delta_t) - J) * sigma_vec;
+    arma::mat psi_sqrt = arma::chol(arma::reshape(psi_vec, num_latent_vars, num_latent_vars));
 
     // Step 3.3: Generate initial condition
-    eta.col(0) = mu0_temp + sigma0_sqrt_temp * arma::randn(num_latent_vars) +
-                 gamma_eta_temp * x_t.col(0);
-    y.col(0) = nu_temp + lambda_temp * eta.col(0) +
-               theta_sqrt_temp * arma::randn(num_manifest_vars);
+    eta.col(0) = mu0_temp + sigma0_sqrt_temp * arma::randn(num_latent_vars) + gamma_eta_temp * x_t.col(0);
+    y.col(0) = nu_temp + lambda_temp * eta.col(0) + theta_sqrt_temp * arma::randn(num_manifest_vars);
 
     // Step 3.4: Simulate state space model data using a loop
     for (int t = 1; t < total_time; t++) {
-      eta.col(t) = alpha_temp + beta_temp * eta.col(t - 1) +
-                   psi_sqrt * arma::randn(num_latent_vars) +
-                   gamma_eta_temp * x_t.col(t);
-      y.col(t) = nu_temp + lambda_temp * eta.col(t) +
-                 theta_sqrt_temp * arma::randn(num_manifest_vars);
+      eta.col(t) = alpha_temp + beta_temp * eta.col(t - 1) + psi_sqrt * arma::randn(num_latent_vars) + gamma_eta_temp * x_t.col(t);
+      y.col(t) = nu_temp + lambda_temp * eta.col(t) + theta_sqrt_temp * arma::randn(num_manifest_vars);
     }
 
     // Step 3.5: If there is a burn-in period, remove it
@@ -89,11 +71,7 @@ Rcpp::List SimSSM1OUVary(const int n, const Rcpp::List& mu0,
     id.fill(i + 1);
 
     // Step 3.7: Return the transposed data matrices in a list
-    out[i] = Rcpp::List::create(
-        Rcpp::Named("y") = y.t(), Rcpp::Named("eta") = eta.t(),
-        Rcpp::Named("x") = x_t.t(),
-        Rcpp::Named("time") = arma::linspace(0, (time - 1) * delta_t, time),
-        Rcpp::Named("id") = id);
+    out[i] = Rcpp::List::create(Rcpp::Named("y") = y.t(), Rcpp::Named("eta") = eta.t(), Rcpp::Named("x") = x_t.t(), Rcpp::Named("time") = arma::linspace(0, (time - 1) * delta_t, time), Rcpp::Named("id") = id);
   }
 
   // Step 4: Return results

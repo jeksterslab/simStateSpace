@@ -130,42 +130,45 @@ SimSSMLinGrowthVary <- function(n,
   stopifnot(
     type %in% 0:2
   )
-  if (type == 0) {
-    return(
-      .SimSSM0LinGrowthVary(
-        n = n,
-        mu0 = rep(x = mu0, length.out = n),
-        sigma0_sqrt = rep(x = sigma0_sqrt, length.out = n),
-        theta_sqrt = rep(x = theta_sqrt, length.out = n),
-        time = time
+  switch(
+    EXPR = type,
+    0 = {
+      return(
+        .SimSSM0LinGrowthVary(
+          n = n,
+          mu0 = rep(x = mu0, length.out = n),
+          sigma0_sqrt = rep(x = sigma0_sqrt, length.out = n),
+          theta_sqrt = rep(x = theta_sqrt, length.out = n),
+          time = time
+        )
       )
-    )
-  }
-  if (type == 1) {
-    return(
-      .SimSSM1LinGrowthVary(
-        n = n,
-        mu0 = rep(x = mu0, length.out = n),
-        sigma0_sqrt = rep(x = sigma0_sqrt, length.out = n),
-        theta_sqrt = rep(x = theta_sqrt, length.out = n),
-        gamma_eta = rep(x = gamma_eta, length.out = n),
-        x = x,
-        time = time
+    },
+    1 = {
+      return(
+        .SimSSM1LinGrowthVary(
+          n = n,
+          mu0 = rep(x = mu0, length.out = n),
+          sigma0_sqrt = rep(x = sigma0_sqrt, length.out = n),
+          theta_sqrt = rep(x = theta_sqrt, length.out = n),
+          gamma_eta = rep(x = gamma_eta, length.out = n),
+          x = x,
+          time = time
+        )
       )
-    )
-  }
-  if (type == 2) {
-    return(
-      .SimSSM2LinGrowthVary(
-        n = n,
-        mu0 = rep(x = mu0, length.out = n),
-        sigma0_sqrt = rep(x = sigma0_sqrt, length.out = n),
-        theta_sqrt = rep(x = theta_sqrt, length.out = n),
-        gamma_y = rep(x = gamma_y, length.out = n),
-        gamma_eta = rep(x = gamma_eta, length.out = n),
-        x = x,
-        time = time
+    },
+    2 = {
+      return(
+        .SimSSM2LinGrowthVary(
+          n = n,
+          mu0 = rep(x = mu0, length.out = n),
+          sigma0_sqrt = rep(x = sigma0_sqrt, length.out = n),
+          theta_sqrt = rep(x = theta_sqrt, length.out = n),
+          gamma_y = rep(x = gamma_y, length.out = n),
+          gamma_eta = rep(x = gamma_eta, length.out = n),
+          x = x,
+          time = time
+        )
       )
-    )
-  }
+    }
+  )
 }
