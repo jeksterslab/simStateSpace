@@ -32,7 +32,7 @@ lapply(
             data = rnorm(n = k * (time + burn_in)),
             ncol = k
           )
-        )
+       )
       }
     )
 
@@ -106,6 +106,7 @@ lapply(
     Sim2Matrix(ssm, eta = FALSE)
     Sim2Matrix(ssm, eta = TRUE, long = FALSE)
     Sim2Matrix(ssm, eta = FALSE, long = FALSE)
+
   },
   text = "test-simStateSpace-sim-ssm-ou-fixed"
 )

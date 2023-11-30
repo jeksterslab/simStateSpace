@@ -1,7 +1,8 @@
 #' Simulate Data from a Linear Growth Curve Model
 #'
 #' This function simulates data
-#' from a linear growth curve model.
+#' from a linear growth curve model
+#' for `n > 1` individuals.
 #'
 #' @details
 #'   ## Type 0
@@ -249,6 +250,7 @@
 #'   Each element of the list
 #'   is a matrix of observed covariates in `type = 1` or `type = 2`.
 #'   The number of rows in each matrix should be equal to `time`.
+#'
 #' @inheritParams SimSSMFixed
 #' @inherit SimSSMFixed return
 #' @inherit SimSSM references
@@ -256,7 +258,7 @@
 #' @examples
 #' # prepare parameters
 #' set.seed(42)
-#' n <- 5
+#' n <- 10
 #' mu0 <- c(0.615, 1.006)
 #' sigma0 <- matrix(
 #'   data = c(

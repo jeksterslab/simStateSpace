@@ -26,32 +26,41 @@
 #' @author Ivan Jacob Agaloos Pesigan
 #'
 #' @param mu0 List of numeric vectors.
-#'   Mean of initial latent variable values
+#'   Each element of the list
+#'   is the mean of initial latent variable values
 #'   (\eqn{\boldsymbol{\mu}_{\boldsymbol{\eta} \mid 0}}).
 #' @param sigma0_sqrt List of numeric matrices.
-#'   Cholesky decomposition of the covariance matrix
+#'   Each element of the list
+#'   is the Cholesky decomposition of the covariance matrix
 #'   of initial latent variable values
 #'   (\eqn{\boldsymbol{\Sigma}_{\boldsymbol{\eta} \mid 0}}).
 #' @param alpha List of numeric vectors.
-#'   Vector of intercepts for the dynamic model
+#'   Each element of the list
+#'   is the vector of intercepts for the dynamic model
 #'   (\eqn{\boldsymbol{\alpha}}).
 #' @param beta List of numeric matrices.
-#'   Transition matrix relating the values of the latent variables
+#'   Each element of the list
+#'   is the transition matrix relating the values of the latent variables
 #'   at time `t - 1` to those at time `t`
 #'   (\eqn{\boldsymbol{\beta}}).
 #' @param psi_sqrt List of numeric matrices.
-#'   Cholesky decomposition of the process noise covariance matrix
+#'   Each element of the list
+#'   is the Cholesky decomposition of the process noise covariance matrix
 #'   (\eqn{\boldsymbol{\Psi}}).
 #' @param nu List of numeric vectors.
-#'   Vector of intercepts for the measurement model
+#'   Each element of the list
+#'   is the vector of intercepts for the measurement model
 #'   (\eqn{\boldsymbol{\nu}}).
 #' @param lambda List of numeric matrices.
-#'   Factor loading matrix linking the latent variables
+#'   Each element of the list
+#'   is the factor loading matrix linking the latent variables
 #'   to the observed variables
 #'   (\eqn{\boldsymbol{\Lambda}}).
 #' @param theta_sqrt List of numeric matrices.
-#'   Cholesky decomposition of the measurement error covariance matrix
+#'   Each element of the list
+#'   is the Cholesky decomposition of the measurement error covariance matrix
 #'   (\eqn{\boldsymbol{\Theta}}).
+#'
 #' @inheritParams SimSSMFixed
 #' @inherit SimSSMFixed return
 #' @inherit SimSSM references
@@ -90,7 +99,7 @@
 #'         data = rnorm(n = k * (time + burn_in)),
 #'         ncol = k
 #'       )
-#'     )
+#'    )
 #'   }
 #' )
 #'
