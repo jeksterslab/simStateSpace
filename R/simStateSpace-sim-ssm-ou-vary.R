@@ -1,6 +1,6 @@
 #' Simulate Data from an Ornstein–Uhlenbeck Model
 #' using a State Space Model Parameterization
-#' for n > 1 Individuals (Varying Parameters)
+#' for n > 1 Individuals (Individual-Varying Parameters)
 #'
 #' This function simulates data from an Ornstein–Uhlenbeck model
 #' using a state space model parameterization
@@ -88,7 +88,7 @@
 #' )
 #'
 #' # Type 0
-#' ssm <- SimSSMOUVary(
+#' ssm <- SimSSMOUIVary(
 #'   n = n,
 #'   mu0 = mu0,
 #'   sigma0_sqrt = sigma0_sqrt,
@@ -107,7 +107,7 @@
 #' str(ssm)
 #'
 #' # Type 1
-#' ssm <- SimSSMOUVary(
+#' ssm <- SimSSMOUIVary(
 #'   n = n,
 #'   mu0 = mu0,
 #'   sigma0_sqrt = sigma0_sqrt,
@@ -128,7 +128,7 @@
 #' str(ssm)
 #'
 #' # Type 2
-#' ssm <- SimSSMOUVary(
+#' ssm <- SimSSMOUIVary(
 #'   n = n,
 #'   mu0 = mu0,
 #'   sigma0_sqrt = sigma0_sqrt,
@@ -152,30 +152,27 @@
 #' @family Simulation of State Space Models Data Functions
 #' @keywords simStateSpace sim ou
 #' @export
-SimSSMOUVary <- function(n,
-                         mu0,
-                         sigma0_sqrt,
-                         mu,
-                         phi,
-                         sigma_sqrt,
-                         nu,
-                         lambda,
-                         theta_sqrt,
-                         gamma_y = NULL,
-                         gamma_eta = NULL,
-                         x = NULL,
-                         type = 0,
-                         delta_t,
-                         time,
-                         burn_in = 0) {
-  stopifnot(
-    type %in% 0:2
-  )
+SimSSMOUIVary <- function(n,
+                          mu0,
+                          sigma0_sqrt,
+                          mu,
+                          phi,
+                          sigma_sqrt,
+                          nu,
+                          lambda,
+                          theta_sqrt,
+                          gamma_y = NULL,
+                          gamma_eta = NULL,
+                          x = NULL,
+                          type = 0,
+                          delta_t,
+                          time,
+                          burn_in = 0) {
   switch(
     EXPR = as.character(type),
     "0" = {
       return(
-        .SimSSM0OUVary(
+        .SimSSM0OUIVary(
           n = n,
           mu0 = rep(x = mu0, length.out = n),
           sigma0_sqrt = rep(x = sigma0_sqrt, length.out = n),
@@ -193,7 +190,7 @@ SimSSMOUVary <- function(n,
     },
     "1" = {
       return(
-        .SimSSM1OUVary(
+        .SimSSM1OUIVary(
           n = n,
           mu0 = rep(x = mu0, length.out = n),
           sigma0_sqrt = rep(x = sigma0_sqrt, length.out = n),
@@ -213,7 +210,7 @@ SimSSMOUVary <- function(n,
     },
     "2" = {
       return(
-        .SimSSM2OUVary(
+        .SimSSM2OUIVary(
           n = n,
           mu0 = rep(x = mu0, length.out = n),
           sigma0_sqrt = rep(x = sigma0_sqrt, length.out = n),
@@ -231,6 +228,9 @@ SimSSMOUVary <- function(n,
           burn_in = burn_in
         )
       )
-    }
+    },
+    stop(
+      "Invalid `type`."
+    )
   )
 }

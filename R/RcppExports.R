@@ -118,12 +118,16 @@ OU2SSM <- function(mu, phi, sigma_sqrt, delta_t) {
     .Call(`_simStateSpace_SimSSM0Fixed`, n, mu0, sigma0_sqrt, alpha, beta, psi_sqrt, nu, lambda, theta_sqrt, time, burn_in)
 }
 
+.SimSSM0IVary <- function(n, mu0, sigma0_sqrt, alpha, beta, psi_sqrt, nu, lambda, theta_sqrt, time, burn_in) {
+    .Call(`_simStateSpace_SimSSM0IVary`, n, mu0, sigma0_sqrt, alpha, beta, psi_sqrt, nu, lambda, theta_sqrt, time, burn_in)
+}
+
 .SimSSM0LinGrowth <- function(n, mu0, sigma0_sqrt, theta_sqrt, time) {
     .Call(`_simStateSpace_SimSSM0LinGrowth`, n, mu0, sigma0_sqrt, theta_sqrt, time)
 }
 
-.SimSSM0LinGrowthVary <- function(n, mu0, sigma0_sqrt, theta_sqrt, time) {
-    .Call(`_simStateSpace_SimSSM0LinGrowthVary`, n, mu0, sigma0_sqrt, theta_sqrt, time)
+.SimSSM0LinGrowthIVary <- function(n, mu0, sigma0_sqrt, theta_sqrt, time) {
+    .Call(`_simStateSpace_SimSSM0LinGrowthIVary`, n, mu0, sigma0_sqrt, theta_sqrt, time)
 }
 
 .SimSSM0OU <- function(mu0, sigma0_sqrt, mu, phi, sigma_sqrt, nu, lambda, theta_sqrt, delta_t, time, burn_in) {
@@ -134,8 +138,8 @@ OU2SSM <- function(mu, phi, sigma_sqrt, delta_t) {
     .Call(`_simStateSpace_SimSSM0OUFixed`, n, mu0, sigma0_sqrt, mu, phi, sigma_sqrt, nu, lambda, theta_sqrt, delta_t, time, burn_in)
 }
 
-.SimSSM0OUVary <- function(n, mu0, sigma0_sqrt, mu, phi, sigma_sqrt, nu, lambda, theta_sqrt, delta_t, time, burn_in) {
-    .Call(`_simStateSpace_SimSSM0OUVary`, n, mu0, sigma0_sqrt, mu, phi, sigma_sqrt, nu, lambda, theta_sqrt, delta_t, time, burn_in)
+.SimSSM0OUIVary <- function(n, mu0, sigma0_sqrt, mu, phi, sigma_sqrt, nu, lambda, theta_sqrt, delta_t, time, burn_in) {
+    .Call(`_simStateSpace_SimSSM0OUIVary`, n, mu0, sigma0_sqrt, mu, phi, sigma_sqrt, nu, lambda, theta_sqrt, delta_t, time, burn_in)
 }
 
 .SimSSM0VAR <- function(mu0, sigma0_sqrt, alpha, beta, psi_sqrt, time, burn_in) {
@@ -146,12 +150,8 @@ OU2SSM <- function(mu, phi, sigma_sqrt, delta_t) {
     .Call(`_simStateSpace_SimSSM0VARFixed`, n, mu0, sigma0_sqrt, alpha, beta, psi_sqrt, time, burn_in)
 }
 
-.SimSSM0VARVary <- function(n, mu0, sigma0_sqrt, alpha, beta, psi_sqrt, time, burn_in) {
-    .Call(`_simStateSpace_SimSSM0VARVary`, n, mu0, sigma0_sqrt, alpha, beta, psi_sqrt, time, burn_in)
-}
-
-.SimSSM0Vary <- function(n, mu0, sigma0_sqrt, alpha, beta, psi_sqrt, nu, lambda, theta_sqrt, time, burn_in) {
-    .Call(`_simStateSpace_SimSSM0Vary`, n, mu0, sigma0_sqrt, alpha, beta, psi_sqrt, nu, lambda, theta_sqrt, time, burn_in)
+.SimSSM0VARIVary <- function(n, mu0, sigma0_sqrt, alpha, beta, psi_sqrt, time, burn_in) {
+    .Call(`_simStateSpace_SimSSM0VARIVary`, n, mu0, sigma0_sqrt, alpha, beta, psi_sqrt, time, burn_in)
 }
 
 .SimSSM1 <- function(mu0, sigma0_sqrt, alpha, beta, psi_sqrt, nu, lambda, theta_sqrt, gamma_eta, x, time, burn_in) {
@@ -162,12 +162,16 @@ OU2SSM <- function(mu, phi, sigma_sqrt, delta_t) {
     .Call(`_simStateSpace_SimSSM1Fixed`, n, mu0, sigma0_sqrt, alpha, beta, psi_sqrt, nu, lambda, theta_sqrt, gamma_eta, x, time, burn_in)
 }
 
+.SimSSM1IVary <- function(n, mu0, sigma0_sqrt, alpha, beta, psi_sqrt, nu, lambda, theta_sqrt, gamma_eta, x, time, burn_in) {
+    .Call(`_simStateSpace_SimSSM1IVary`, n, mu0, sigma0_sqrt, alpha, beta, psi_sqrt, nu, lambda, theta_sqrt, gamma_eta, x, time, burn_in)
+}
+
 .SimSSM1LinGrowth <- function(n, mu0, sigma0_sqrt, theta_sqrt, gamma_eta, x, time) {
     .Call(`_simStateSpace_SimSSM1LinGrowth`, n, mu0, sigma0_sqrt, theta_sqrt, gamma_eta, x, time)
 }
 
-.SimSSM1LinGrowthVary <- function(n, mu0, sigma0_sqrt, theta_sqrt, gamma_eta, x, time) {
-    .Call(`_simStateSpace_SimSSM1LinGrowthVary`, n, mu0, sigma0_sqrt, theta_sqrt, gamma_eta, x, time)
+.SimSSM1LinGrowthIVary <- function(n, mu0, sigma0_sqrt, theta_sqrt, gamma_eta, x, time) {
+    .Call(`_simStateSpace_SimSSM1LinGrowthIVary`, n, mu0, sigma0_sqrt, theta_sqrt, gamma_eta, x, time)
 }
 
 .SimSSM1OU <- function(mu0, sigma0_sqrt, mu, phi, sigma_sqrt, nu, lambda, theta_sqrt, gamma_eta, x, delta_t, time, burn_in) {
@@ -178,8 +182,8 @@ OU2SSM <- function(mu, phi, sigma_sqrt, delta_t) {
     .Call(`_simStateSpace_SimSSM1OUFixed`, n, mu0, sigma0_sqrt, mu, phi, sigma_sqrt, nu, lambda, theta_sqrt, gamma_eta, x, delta_t, time, burn_in)
 }
 
-.SimSSM1OUVary <- function(n, mu0, sigma0_sqrt, mu, phi, sigma_sqrt, nu, lambda, theta_sqrt, gamma_eta, x, delta_t, time, burn_in) {
-    .Call(`_simStateSpace_SimSSM1OUVary`, n, mu0, sigma0_sqrt, mu, phi, sigma_sqrt, nu, lambda, theta_sqrt, gamma_eta, x, delta_t, time, burn_in)
+.SimSSM1OUIVary <- function(n, mu0, sigma0_sqrt, mu, phi, sigma_sqrt, nu, lambda, theta_sqrt, gamma_eta, x, delta_t, time, burn_in) {
+    .Call(`_simStateSpace_SimSSM1OUIVary`, n, mu0, sigma0_sqrt, mu, phi, sigma_sqrt, nu, lambda, theta_sqrt, gamma_eta, x, delta_t, time, burn_in)
 }
 
 .SimSSM1VAR <- function(mu0, sigma0_sqrt, alpha, beta, psi_sqrt, gamma_eta, x, time, burn_in) {
@@ -190,12 +194,8 @@ OU2SSM <- function(mu, phi, sigma_sqrt, delta_t) {
     .Call(`_simStateSpace_SimSSM1VARFixed`, n, mu0, sigma0_sqrt, alpha, beta, psi_sqrt, gamma_eta, x, time, burn_in)
 }
 
-.SimSSM1VARVary <- function(n, mu0, sigma0_sqrt, alpha, beta, psi_sqrt, gamma_eta, x, time, burn_in) {
-    .Call(`_simStateSpace_SimSSM1VARVary`, n, mu0, sigma0_sqrt, alpha, beta, psi_sqrt, gamma_eta, x, time, burn_in)
-}
-
-.SimSSM1Vary <- function(n, mu0, sigma0_sqrt, alpha, beta, psi_sqrt, nu, lambda, theta_sqrt, gamma_eta, x, time, burn_in) {
-    .Call(`_simStateSpace_SimSSM1Vary`, n, mu0, sigma0_sqrt, alpha, beta, psi_sqrt, nu, lambda, theta_sqrt, gamma_eta, x, time, burn_in)
+.SimSSM1VARIVary <- function(n, mu0, sigma0_sqrt, alpha, beta, psi_sqrt, gamma_eta, x, time, burn_in) {
+    .Call(`_simStateSpace_SimSSM1VARIVary`, n, mu0, sigma0_sqrt, alpha, beta, psi_sqrt, gamma_eta, x, time, burn_in)
 }
 
 .SimSSM2 <- function(mu0, sigma0_sqrt, alpha, beta, psi_sqrt, nu, lambda, theta_sqrt, gamma_y, gamma_eta, x, time, burn_in) {
@@ -206,12 +206,16 @@ OU2SSM <- function(mu, phi, sigma_sqrt, delta_t) {
     .Call(`_simStateSpace_SimSSM2Fixed`, n, mu0, sigma0_sqrt, alpha, beta, psi_sqrt, nu, lambda, theta_sqrt, gamma_y, gamma_eta, x, time, burn_in)
 }
 
+.SimSSM2IVary <- function(n, mu0, sigma0_sqrt, alpha, beta, psi_sqrt, nu, lambda, theta_sqrt, gamma_y, gamma_eta, x, time, burn_in) {
+    .Call(`_simStateSpace_SimSSM2IVary`, n, mu0, sigma0_sqrt, alpha, beta, psi_sqrt, nu, lambda, theta_sqrt, gamma_y, gamma_eta, x, time, burn_in)
+}
+
 .SimSSM2LinGrowth <- function(n, mu0, sigma0_sqrt, theta_sqrt, gamma_y, gamma_eta, x, time) {
     .Call(`_simStateSpace_SimSSM2LinGrowth`, n, mu0, sigma0_sqrt, theta_sqrt, gamma_y, gamma_eta, x, time)
 }
 
-.SimSSM2LinGrowthVary <- function(n, mu0, sigma0_sqrt, theta_sqrt, gamma_y, gamma_eta, x, time) {
-    .Call(`_simStateSpace_SimSSM2LinGrowthVary`, n, mu0, sigma0_sqrt, theta_sqrt, gamma_y, gamma_eta, x, time)
+.SimSSM2LinGrowthIVary <- function(n, mu0, sigma0_sqrt, theta_sqrt, gamma_y, gamma_eta, x, time) {
+    .Call(`_simStateSpace_SimSSM2LinGrowthIVary`, n, mu0, sigma0_sqrt, theta_sqrt, gamma_y, gamma_eta, x, time)
 }
 
 .SimSSM2OU <- function(mu0, sigma0_sqrt, mu, phi, sigma_sqrt, nu, lambda, theta_sqrt, gamma_y, gamma_eta, x, delta_t, time, burn_in) {
@@ -222,11 +226,7 @@ OU2SSM <- function(mu, phi, sigma_sqrt, delta_t) {
     .Call(`_simStateSpace_SimSSM2OUFixed`, n, mu0, sigma0_sqrt, mu, phi, sigma_sqrt, nu, lambda, theta_sqrt, gamma_y, gamma_eta, x, delta_t, time, burn_in)
 }
 
-.SimSSM2OUVary <- function(n, mu0, sigma0_sqrt, mu, phi, sigma_sqrt, nu, lambda, theta_sqrt, gamma_y, gamma_eta, x, delta_t, time, burn_in) {
-    .Call(`_simStateSpace_SimSSM2OUVary`, n, mu0, sigma0_sqrt, mu, phi, sigma_sqrt, nu, lambda, theta_sqrt, gamma_y, gamma_eta, x, delta_t, time, burn_in)
-}
-
-.SimSSM2Vary <- function(n, mu0, sigma0_sqrt, alpha, beta, psi_sqrt, nu, lambda, theta_sqrt, gamma_y, gamma_eta, x, time, burn_in) {
-    .Call(`_simStateSpace_SimSSM2Vary`, n, mu0, sigma0_sqrt, alpha, beta, psi_sqrt, nu, lambda, theta_sqrt, gamma_y, gamma_eta, x, time, burn_in)
+.SimSSM2OUIVary <- function(n, mu0, sigma0_sqrt, mu, phi, sigma_sqrt, nu, lambda, theta_sqrt, gamma_y, gamma_eta, x, delta_t, time, burn_in) {
+    .Call(`_simStateSpace_SimSSM2OUIVary`, n, mu0, sigma0_sqrt, mu, phi, sigma_sqrt, nu, lambda, theta_sqrt, gamma_y, gamma_eta, x, delta_t, time, burn_in)
 }
 

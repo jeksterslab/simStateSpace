@@ -340,9 +340,6 @@ SimSSMLinGrowth <- function(n,
                             x = NULL,
                             type = 0,
                             time) {
-  stopifnot(
-    type %in% 0:2
-  )
   switch(
     EXPR = as.character(type),
     "0" = {
@@ -382,6 +379,9 @@ SimSSMLinGrowth <- function(n,
           time = time
         )
       )
-    }
+    },
+    stop(
+      "Invalid `type`."
+    )
   )
 }

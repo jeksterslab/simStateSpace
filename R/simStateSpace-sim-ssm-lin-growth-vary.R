@@ -1,5 +1,5 @@
 #' Simulate Data from a Linear Growth Curve Model
-#' (Varying Parameters)
+#' (Individual-Varying Parameters)
 #'
 #' This function simulates data
 #' from a linear growth curve model
@@ -75,7 +75,7 @@
 #' )
 #'
 #' # Type 0
-#' ssm <- SimSSMLinGrowthVary(
+#' ssm <- SimSSMLinGrowthIVary(
 #'   n = n,
 #'   mu0 = mu0,
 #'   sigma0_sqrt = sigma0_sqrt,
@@ -87,7 +87,7 @@
 #' str(ssm)
 #'
 #' # Type 1
-#' ssm <- SimSSMLinGrowthVary(
+#' ssm <- SimSSMLinGrowthIVary(
 #'   n = n,
 #'   mu0 = mu0,
 #'   sigma0_sqrt = sigma0_sqrt,
@@ -101,7 +101,7 @@
 #' str(ssm)
 #'
 #' # Type 2
-#' ssm <- SimSSMLinGrowthVary(
+#' ssm <- SimSSMLinGrowthIVary(
 #'   n = n,
 #'   mu0 = mu0,
 #'   sigma0_sqrt = sigma0_sqrt,
@@ -118,23 +118,20 @@
 #' @family Simulation of State Space Models Data Functions
 #' @keywords simStateSpace sim growth
 #' @export
-SimSSMLinGrowthVary <- function(n,
-                                mu0,
-                                sigma0_sqrt,
-                                theta_sqrt,
-                                gamma_y = NULL,
-                                gamma_eta = NULL,
-                                x = NULL,
-                                type = 0,
-                                time) {
-  stopifnot(
-    type %in% 0:2
-  )
+SimSSMLinGrowthIVary <- function(n,
+                                 mu0,
+                                 sigma0_sqrt,
+                                 theta_sqrt,
+                                 gamma_y = NULL,
+                                 gamma_eta = NULL,
+                                 x = NULL,
+                                 type = 0,
+                                 time) {
   switch(
     EXPR = as.character(type),
     "0" = {
       return(
-        .SimSSM0LinGrowthVary(
+        .SimSSM0LinGrowthIVary(
           n = n,
           mu0 = rep(x = mu0, length.out = n),
           sigma0_sqrt = rep(x = sigma0_sqrt, length.out = n),
@@ -145,7 +142,7 @@ SimSSMLinGrowthVary <- function(n,
     },
     "1" = {
       return(
-        .SimSSM1LinGrowthVary(
+        .SimSSM1LinGrowthIVary(
           n = n,
           mu0 = rep(x = mu0, length.out = n),
           sigma0_sqrt = rep(x = sigma0_sqrt, length.out = n),
@@ -158,7 +155,7 @@ SimSSMLinGrowthVary <- function(n,
     },
     "2" = {
       return(
-        .SimSSM2LinGrowthVary(
+        .SimSSM2LinGrowthIVary(
           n = n,
           mu0 = rep(x = mu0, length.out = n),
           sigma0_sqrt = rep(x = sigma0_sqrt, length.out = n),
@@ -169,6 +166,9 @@ SimSSMLinGrowthVary <- function(n,
           time = time
         )
       )
-    }
+    },
+    stop(
+      "Invalid `type`."
+    )
   )
 }

@@ -7,9 +7,9 @@
 #' [simStateSpace::SimSSMFixed()],
 #' [simStateSpace::SimSSMOUFixed()],
 #' [simStateSpace::SimSSMVARFixed()],
-#' [simStateSpace::SimSSMVary()],
-#' [simStateSpace::SimSSMOUVary()], or
-#' [simStateSpace::SimSSMVARVary()]
+#' [simStateSpace::SimSSMIVary()],
+#' [simStateSpace::SimSSMOUIVary()], or
+#' [simStateSpace::SimSSMVARIVary()]
 #' to a matrix.
 #'
 #' @author Ivan Jacob Agaloos Pesigan
@@ -22,9 +22,9 @@
 #'   [simStateSpace::SimSSMFixed()],
 #'   [simStateSpace::SimSSMOUFixed()],
 #'   [simStateSpace::SimSSMVARFixed()],
-#'   [simStateSpace::SimSSMVary()],
-#'   [simStateSpace::SimSSMOUVary()], or
-#'   [simStateSpace::SimSSMVARVary()].
+#'   [simStateSpace::SimSSMIVary()],
+#'   [simStateSpace::SimSSMOUIVary()], or
+#'   [simStateSpace::SimSSMVARIVary()].
 #' @param eta Logical.
 #'   If `eta = TRUE`, include `eta`.
 #'   If `eta = FALSE`, exclude `eta`.
