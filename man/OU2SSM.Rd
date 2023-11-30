@@ -130,6 +130,7 @@ OU2SSM(
 Other Simulation of State Space Models Data Functions: 
 \code{\link{Sim2Matrix}()},
 \code{\link{SimSSMFixed}()},
+\code{\link{SimSSMLinGrowthVary}()},
 \code{\link{SimSSMLinGrowth}()},
 \code{\link{SimSSMOUFixed}()},
 \code{\link{SimSSMOUVary}()},

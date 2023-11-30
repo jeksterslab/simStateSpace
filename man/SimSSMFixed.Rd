@@ -425,6 +425,7 @@ and state-space modeling techniques.
 Other Simulation of State Space Models Data Functions: 
 \code{\link{OU2SSM}()},
 \code{\link{Sim2Matrix}()},
+\code{\link{SimSSMLinGrowthVary}()},
 \code{\link{SimSSMLinGrowth}()},
 \code{\link{SimSSMOUFixed}()},
 \code{\link{SimSSMOUVary}()},

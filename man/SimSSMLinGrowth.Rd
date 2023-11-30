@@ -66,7 +66,8 @@ Each element is a list with the following elements:
 }
 \description{
 This function simulates data
-from a linear growth curve model.
+from a linear growth curve model
+for \code{n > 1} individuals.
 }
 \details{
 \subsection{Type 0}{
@@ -297,7 +298,7 @@ The dynamic structure is given by
 \examples{
 # prepare parameters
 set.seed(42)
-n <- 5
+n <- 10
 mu0 <- c(0.615, 1.006)
 sigma0 <- matrix(
   data = c(
@@ -381,6 +382,7 @@ Other Simulation of State Space Models Data Functions:
 \code{\link{OU2SSM}()},
 \code{\link{Sim2Matrix}()},
 \code{\link{SimSSMFixed}()},
+\code{\link{SimSSMLinGrowthVary}()},
 \code{\link{SimSSMOUFixed}()},
 \code{\link{SimSSMOUVary}()},
 \code{\link{SimSSMOU}()},

@@ -192,6 +192,23 @@ Rcpp::List SimSSM2LinGrowth(const int n, const arma::vec& mu0,
                             const double theta_sqrt, const arma::mat& gamma_y,
                             const arma::mat& gamma_eta, const Rcpp::List& x,
                             const int time);
+
+Rcpp::List SimSSM0LinGrowthVary(const int n, const Rcpp::List& mu0,
+                                const Rcpp::List& sigma0_sqrt,
+                                const Rcpp::List& theta_sqrt, const int time);
+
+Rcpp::List SimSSM1LinGrowthVary(const int n, const Rcpp::List& mu0,
+                                const Rcpp::List& sigma0_sqrt,
+                                const Rcpp::List& theta_sqrt,
+                                const Rcpp::List& gamma_eta,
+                                const Rcpp::List& x, const int time);
+
+Rcpp::List SimSSM2LinGrowthVary(const int n, const Rcpp::List& mu0,
+                                const Rcpp::List& sigma0_sqrt,
+                                const Rcpp::List& theta_sqrt,
+                                const Rcpp::List& gamma_y,
+                                const Rcpp::List& gamma_eta,
+                                const Rcpp::List& x, const int time);
 // -----------------------------------------------------------------------------
 // edit .setup/cpp/simStateSpace-ou-2-ssm.cpp
 // Ivan Jacob Agaloos Pesigan
@@ -433,6 +450,105 @@ Rcpp::List SimSSM0Fixed(const int n, const arma::vec& mu0,
     id.fill(i + 1);
 
     // Step 3.6: Save the transposed data matrices in a list
+    out[i] = Rcpp::List::create(
+        Rcpp::Named("y") = y.t(), Rcpp::Named("eta") = eta.t(),
+        Rcpp::Named("x") = 0, Rcpp::Named("time") = arma::regspace(0, time - 1),
+        Rcpp::Named("id") = id);
+  }
+
+  // Step 4: Return the results
+  return out;
+}
+// -----------------------------------------------------------------------------
+// edit .setup/cpp/simStateSpace-sim-ssm-0-lin-growth-dot.cpp
+// Ivan Jacob Agaloos Pesigan
+// -----------------------------------------------------------------------------
+
+#include <RcppArmadillo.h>
+// [[Rcpp::depends(RcppArmadillo)]]
+// [[Rcpp::export(.SimSSM0LinGrowth)]]
+Rcpp::List SimSSM0LinGrowth(const int n, const arma::vec& mu0,
+                            const arma::mat& sigma0_sqrt,
+                            const double theta_sqrt, const int time) {
+  // Step 1: Create constant vectors and matrices
+  arma::mat lambda = {{1, 0}};
+  arma::mat beta = {{1, 1}, {0, 1}};
+
+  // Step 2: Create a list of length n
+  Rcpp::List out(n);
+
+  // Step 3: Loop to iterate over n
+  for (int i = 0; i < n; i++) {
+    // Step 3.1: Create matrices to store simulated data
+    arma::mat eta(2, time);
+    arma::mat y(1, time);
+
+    // Step 3.2: Generate initial condition
+    eta.col(0) = mu0 + sigma0_sqrt * arma::randn(2);
+    y.col(0) = lambda * eta.col(0) + theta_sqrt * arma::randn(1);
+
+    // Step 3.3: Simulate state space model data using a loop
+    for (int t = 1; t < time; t++) {
+      eta.col(t) = beta * eta.col(t - 1);
+      y.col(t) = lambda * eta.col(t) + theta_sqrt * arma::randn(1);
+    }
+
+    // Step 3.4: Create a vector of ID numbers of length time
+    arma::vec id(time, arma::fill::zeros);
+    id.fill(i + 1);
+
+    // Step 3.5: Save the transposed data matrices in a list
+    out[i] = Rcpp::List::create(
+        Rcpp::Named("y") = y.t(), Rcpp::Named("eta") = eta.t(),
+        Rcpp::Named("x") = 0, Rcpp::Named("time") = arma::regspace(0, time - 1),
+        Rcpp::Named("id") = id);
+  }
+
+  // Step 4: Return the results
+  return out;
+}
+// -----------------------------------------------------------------------------
+// edit .setup/cpp/simStateSpace-sim-ssm-0-lin-growth-vary-dot.cpp
+// Ivan Jacob Agaloos Pesigan
+// -----------------------------------------------------------------------------
+
+#include <RcppArmadillo.h>
+// [[Rcpp::depends(RcppArmadillo)]]
+// [[Rcpp::export(.SimSSM0LinGrowthVary)]]
+Rcpp::List SimSSM0LinGrowthVary(const int n, const Rcpp::List& mu0,
+                                const Rcpp::List& sigma0_sqrt,
+                                const Rcpp::List& theta_sqrt, const int time) {
+  // Step 1: Create constant vectors and matrices
+  arma::mat lambda = {{1, 0}};
+  arma::mat beta = {{1, 1}, {0, 1}};
+
+  // Step 2: Create a list of length n
+  Rcpp::List out(n);
+
+  // Step 3: Loop to iterate over n
+  for (int i = 0; i < n; i++) {
+    // Step 3.1: Create matrices to store simulated data
+    arma::mat eta(2, time);
+    arma::mat y(1, time);
+    arma::vec mu0_temp = mu0[i];
+    arma::mat sigma0_sqrt_temp = sigma0_sqrt[i];
+    double theta_sqrt_temp = theta_sqrt[i];
+
+    // Step 3.2: Generate initial condition
+    eta.col(0) = mu0_temp + sigma0_sqrt_temp * arma::randn(2);
+    y.col(0) = lambda * eta.col(0) + theta_sqrt_temp * arma::randn(1);
+
+    // Step 3.3: Simulate state space model data using a loop
+    for (int t = 1; t < time; t++) {
+      eta.col(t) = beta * eta.col(t - 1);
+      y.col(t) = lambda * eta.col(t) + theta_sqrt_temp * arma::randn(1);
+    }
+
+    // Step 3.4: Create a vector of ID numbers of length time
+    arma::vec id(time, arma::fill::zeros);
+    id.fill(i + 1);
+
+    // Step 3.5: Save the transposed data matrices in a list
     out[i] = Rcpp::List::create(
         Rcpp::Named("y") = y.t(), Rcpp::Named("eta") = eta.t(),
         Rcpp::Named("x") = 0, Rcpp::Named("time") = arma::regspace(0, time - 1),
@@ -933,7 +1049,8 @@ Rcpp::List SimSSM1(const arma::vec& mu0, const arma::mat& sigma0_sqrt,
   arma::vec id(total_time, arma::fill::ones);
 
   // Step 3: Generate initial condition
-  eta.col(0) = mu0 + sigma0_sqrt * arma::randn(num_latent_vars);
+  eta.col(0) =
+      mu0 + sigma0_sqrt * arma::randn(num_latent_vars) + gamma_eta * x_t.col(0);
   y.col(0) =
       nu + lambda * eta.col(0) + theta_sqrt * arma::randn(num_manifest_vars);
 
@@ -993,7 +1110,8 @@ Rcpp::List SimSSM1Fixed(const int n, const arma::vec& mu0,
     arma::mat x_t = x_temp.t();
 
     // Step 3.2: Generate initial condition
-    eta.col(0) = mu0 + sigma0_sqrt * arma::randn(num_latent_vars);
+    eta.col(0) = mu0 + sigma0_sqrt * arma::randn(num_latent_vars) +
+                 gamma_eta * x_t.col(0);
     y.col(0) =
         nu + lambda * eta.col(0) + theta_sqrt * arma::randn(num_manifest_vars);
 
@@ -1018,6 +1136,116 @@ Rcpp::List SimSSM1Fixed(const int n, const arma::vec& mu0,
     id.fill(i + 1);
 
     // Step 3.6: Save the transposed data matrices in a list
+    out[i] = Rcpp::List::create(
+        Rcpp::Named("y") = y.t(), Rcpp::Named("eta") = eta.t(),
+        Rcpp::Named("x") = x_t.t(),
+        Rcpp::Named("time") = arma::regspace(0, time - 1),
+        Rcpp::Named("id") = id);
+  }
+
+  // Step 4: Return the results
+  return out;
+}
+// -----------------------------------------------------------------------------
+// edit .setup/cpp/simStateSpace-sim-ssm-1-lin-growth-dot.cpp
+// Ivan Jacob Agaloos Pesigan
+// -----------------------------------------------------------------------------
+
+#include <RcppArmadillo.h>
+// [[Rcpp::depends(RcppArmadillo)]]
+// [[Rcpp::export(.SimSSM1LinGrowth)]]
+Rcpp::List SimSSM1LinGrowth(const int n, const arma::vec& mu0,
+                            const arma::mat& sigma0_sqrt,
+                            const double theta_sqrt, const arma::mat& gamma_eta,
+                            const Rcpp::List& x, const int time) {
+  // Step 1: Create constant vectors and matrices
+  arma::mat lambda = {{1, 0}};
+  arma::mat beta = {{1, 1}, {0, 1}};
+
+  // Step 2: Create a list of length n
+  Rcpp::List out(n);
+
+  // Step 3: Loop to iterate over n
+  for (int i = 0; i < n; i++) {
+    // Step 3.1: Create matrices to store simulated data
+    arma::mat eta(2, time);
+    arma::mat y(1, time);
+    arma::mat x_temp = x[i];
+    arma::mat x_t = x_temp.t();
+
+    // Step 3.2: Generate initial condition
+    eta.col(0) = mu0 + sigma0_sqrt * arma::randn(2) + gamma_eta * x_t.col(0);
+    y.col(0) = lambda * eta.col(0) + theta_sqrt * arma::randn(1);
+
+    // Step 3.3: Simulate state space model data using a loop
+    for (int t = 1; t < time; t++) {
+      eta.col(t) = beta * eta.col(t - 1) + gamma_eta * x_t.col(t);
+      y.col(t) = lambda * eta.col(t) + theta_sqrt * arma::randn(1);
+    }
+
+    // Step 3.4: Create a vector of ID numbers of length time
+    arma::vec id(time, arma::fill::zeros);
+    id.fill(i + 1);
+
+    // Step 3.5: Save the transposed data matrices in a list
+    out[i] = Rcpp::List::create(
+        Rcpp::Named("y") = y.t(), Rcpp::Named("eta") = eta.t(),
+        Rcpp::Named("x") = x_t.t(),
+        Rcpp::Named("time") = arma::regspace(0, time - 1),
+        Rcpp::Named("id") = id);
+  }
+
+  // Step 4: Return the results
+  return out;
+}
+// -----------------------------------------------------------------------------
+// edit .setup/cpp/simStateSpace-sim-ssm-1-lin-growth-vary-dot.cpp
+// Ivan Jacob Agaloos Pesigan
+// -----------------------------------------------------------------------------
+
+#include <RcppArmadillo.h>
+// [[Rcpp::depends(RcppArmadillo)]]
+// [[Rcpp::export(.SimSSM1LinGrowthVary)]]
+Rcpp::List SimSSM1LinGrowthVary(const int n, const Rcpp::List& mu0,
+                                const Rcpp::List& sigma0_sqrt,
+                                const Rcpp::List& theta_sqrt,
+                                const Rcpp::List& gamma_eta,
+                                const Rcpp::List& x, const int time) {
+  // Step 1: Create constant vectors and matrices
+  arma::mat lambda = {{1, 0}};
+  arma::mat beta = {{1, 1}, {0, 1}};
+
+  // Step 2: Create a list of length n
+  Rcpp::List out(n);
+
+  // Step 3: Loop to iterate over n
+  for (int i = 0; i < n; i++) {
+    // Step 3.1: Create matrices to store simulated data
+    arma::mat eta(2, time);
+    arma::mat y(1, time);
+    arma::mat x_temp = x[i];
+    arma::mat x_t = x_temp.t();
+    arma::vec mu0_temp = mu0[i];
+    arma::mat sigma0_sqrt_temp = sigma0_sqrt[i];
+    double theta_sqrt_temp = theta_sqrt[i];
+    arma::mat gamma_eta_temp = gamma_eta[i];
+
+    // Step 3.2: Generate initial condition
+    eta.col(0) = mu0_temp + sigma0_sqrt_temp * arma::randn(2) +
+                 gamma_eta_temp * x_t.col(0);
+    y.col(0) = lambda * eta.col(0) + theta_sqrt_temp * arma::randn(1);
+
+    // Step 3.3: Simulate state space model data using a loop
+    for (int t = 1; t < time; t++) {
+      eta.col(t) = beta * eta.col(t - 1) + gamma_eta_temp * x_t.col(t);
+      y.col(t) = lambda * eta.col(t) + theta_sqrt_temp * arma::randn(1);
+    }
+
+    // Step 3.4: Create a vector of ID numbers of length time
+    arma::vec id(time, arma::fill::zeros);
+    id.fill(i + 1);
+
+    // Step 3.5: Save the transposed data matrices in a list
     out[i] = Rcpp::List::create(
         Rcpp::Named("y") = y.t(), Rcpp::Named("eta") = eta.t(),
         Rcpp::Named("x") = x_t.t(),
@@ -1071,7 +1299,8 @@ Rcpp::List SimSSM1OU(const arma::vec& mu0, const arma::mat& sigma0_sqrt,
       arma::chol(arma::reshape(psi_vec, num_latent_vars, num_latent_vars));
 
   // Step 4: Generate initial condition
-  eta.col(0) = mu0 + sigma0_sqrt * arma::randn(num_latent_vars);
+  eta.col(0) =
+      mu0 + sigma0_sqrt * arma::randn(num_latent_vars) + gamma_eta * x_t.col(0);
   y.col(0) =
       nu + lambda * eta.col(0) + theta_sqrt * arma::randn(num_manifest_vars);
 
@@ -1152,7 +1381,8 @@ Rcpp::List SimSSM1OUFixed(const int n, const arma::vec& mu0,
         arma::chol(arma::reshape(psi_vec, num_latent_vars, num_latent_vars));
 
     // Step 3.3: Generate initial condition
-    eta.col(0) = mu0 + sigma0_sqrt * arma::randn(num_latent_vars);
+    eta.col(0) = mu0 + sigma0_sqrt * arma::randn(num_latent_vars) +
+                 gamma_eta * x_t.col(0);
     y.col(0) =
         nu + lambda * eta.col(0) + theta_sqrt * arma::randn(num_manifest_vars);
 
@@ -1252,7 +1482,8 @@ Rcpp::List SimSSM1OUVary(const int n, const Rcpp::List& mu0,
         arma::chol(arma::reshape(psi_vec, num_latent_vars, num_latent_vars));
 
     // Step 3.3: Generate initial condition
-    eta.col(0) = mu0_temp + sigma0_sqrt_temp * arma::randn(num_latent_vars);
+    eta.col(0) = mu0_temp + sigma0_sqrt_temp * arma::randn(num_latent_vars) +
+                 gamma_eta_temp * x_t.col(0);
     y.col(0) = nu_temp + lambda_temp * eta.col(0) +
                theta_sqrt_temp * arma::randn(num_manifest_vars);
 
@@ -1309,7 +1540,8 @@ Rcpp::List SimSSM1VAR(const arma::vec& mu0, const arma::mat& sigma0_sqrt,
   arma::vec id(total_time, arma::fill::ones);
 
   // Step 3: Generate initial condition
-  eta.col(0) = mu0 + sigma0_sqrt * arma::randn(num_latent_vars);
+  eta.col(0) =
+      mu0 + sigma0_sqrt * arma::randn(num_latent_vars) + gamma_eta * x_t.col(0);
 
   // Step 4: Simulate state space model data using a loop
   for (int t = 1; t < total_time; t++) {
@@ -1360,7 +1592,8 @@ Rcpp::List SimSSM1VARFixed(const int n, const arma::vec& mu0,
     arma::mat x_t = x_temp.t();
 
     // Step 3.2: Generate initial condition
-    eta.col(0) = mu0 + sigma0_sqrt * arma::randn(num_latent_vars);
+    eta.col(0) = mu0 + sigma0_sqrt * arma::randn(num_latent_vars) +
+                 gamma_eta * x_t.col(0);
 
     // Step 3.3: Simulate state space model data using a loop
     for (int t = 1; t < total_time; t++) {
@@ -1426,7 +1659,8 @@ Rcpp::List SimSSM1VARVary(const int n, const Rcpp::List& mu0,
     arma::mat gamma_eta_temp = gamma_eta[i];
 
     // Step 3.2: Generate initial condition
-    eta.col(0) = mu0_temp + sigma0_sqrt_temp * arma::randn(num_latent_vars);
+    eta.col(0) = mu0_temp + sigma0_sqrt_temp * arma::randn(num_latent_vars) +
+                 gamma_eta_temp * x_t.col(0);
 
     // Step 3.3: Simulate state space model data using a loop
     for (int t = 1; t < total_time; t++) {
@@ -1499,7 +1733,8 @@ Rcpp::List SimSSM1Vary(const int n, const Rcpp::List& mu0,
     arma::mat gamma_eta_temp = gamma_eta[i];
 
     // Step 3.2: Generate initial condition
-    eta.col(0) = mu0_temp + sigma0_sqrt_temp * arma::randn(num_latent_vars);
+    eta.col(0) = mu0_temp + sigma0_sqrt_temp * arma::randn(num_latent_vars) +
+                 gamma_eta_temp * x_t.col(0);
     y.col(0) = nu_temp + lambda_temp * eta.col(0) +
                theta_sqrt_temp * arma::randn(num_manifest_vars);
 
@@ -1560,9 +1795,10 @@ Rcpp::List SimSSM2(const arma::vec& mu0, const arma::mat& sigma0_sqrt,
   arma::vec id(total_time, arma::fill::ones);
 
   // Step 3: Generate initial condition
-  eta.col(0) = mu0 + sigma0_sqrt * arma::randn(num_latent_vars);
-  y.col(0) =
-      nu + lambda * eta.col(0) + theta_sqrt * arma::randn(num_manifest_vars);
+  eta.col(0) =
+      mu0 + sigma0_sqrt * arma::randn(num_latent_vars) + gamma_eta * x_t.col(0);
+  y.col(0) = nu + lambda * eta.col(0) +
+             theta_sqrt * arma::randn(num_manifest_vars) + gamma_y * x_t.col(0);
 
   // Step 4: Simulate state space model data using a loop
   for (int t = 1; t < total_time; t++) {
@@ -1621,9 +1857,11 @@ Rcpp::List SimSSM2Fixed(const int n, const arma::vec& mu0,
     arma::mat x_t = x_temp.t();
 
     // Step 3.2: Generate initial condition
-    eta.col(0) = mu0 + sigma0_sqrt * arma::randn(num_latent_vars);
-    y.col(0) =
-        nu + lambda * eta.col(0) + theta_sqrt * arma::randn(num_manifest_vars);
+    eta.col(0) = mu0 + sigma0_sqrt * arma::randn(num_latent_vars) +
+                 gamma_eta * x_t.col(0);
+    y.col(0) = nu + lambda * eta.col(0) +
+               theta_sqrt * arma::randn(num_manifest_vars) +
+               gamma_y * x_t.col(0);
 
     // Step 3.3: Simulate state space model data using a loop
     for (int t = 1; t < total_time; t++) {
@@ -1647,6 +1885,123 @@ Rcpp::List SimSSM2Fixed(const int n, const arma::vec& mu0,
     id.fill(i + 1);
 
     // Step 3.6: Save the transposed data matrices in a list
+    out[i] = Rcpp::List::create(
+        Rcpp::Named("y") = y.t(), Rcpp::Named("eta") = eta.t(),
+        Rcpp::Named("x") = x_t.t(),
+        Rcpp::Named("time") = arma::regspace(0, time - 1),
+        Rcpp::Named("id") = id);
+  }
+
+  // Step 4: Return the results
+  return out;
+}
+// -----------------------------------------------------------------------------
+// edit .setup/cpp/simStateSpace-sim-ssm-2-lin-growth-dot.cpp
+// Ivan Jacob Agaloos Pesigan
+// -----------------------------------------------------------------------------
+
+#include <RcppArmadillo.h>
+// [[Rcpp::depends(RcppArmadillo)]]
+// [[Rcpp::export(.SimSSM2LinGrowth)]]
+Rcpp::List SimSSM2LinGrowth(const int n, const arma::vec& mu0,
+                            const arma::mat& sigma0_sqrt,
+                            const double theta_sqrt, const arma::mat& gamma_y,
+                            const arma::mat& gamma_eta, const Rcpp::List& x,
+                            const int time) {
+  // Step 1: Create constant vectors and matrices
+  arma::mat lambda = {{1, 0}};
+  arma::mat beta = {{1, 1}, {0, 1}};
+
+  // Step 2: Create a list of length n
+  Rcpp::List out(n);
+
+  // Step 3: Loop to iterate over n
+  for (int i = 0; i < n; i++) {
+    // Step 3.1: Create matrices to store simulated data
+    arma::mat eta(2, time);
+    arma::mat y(1, time);
+    arma::mat x_temp = x[i];
+    arma::mat x_t = x_temp.t();
+
+    // Step 3.2: Generate initial condition
+    eta.col(0) = mu0 + sigma0_sqrt * arma::randn(2) + gamma_eta * x_t.col(0);
+    y.col(0) = lambda * eta.col(0) + theta_sqrt * arma::randn(1) +
+               gamma_y * x_t.col(0);
+
+    // Step 3.3: Simulate state space model data using a loop
+    for (int t = 1; t < time; t++) {
+      eta.col(t) = beta * eta.col(t - 1) + gamma_eta * x_t.col(t);
+      y.col(t) = lambda * eta.col(t) + theta_sqrt * arma::randn(1) +
+                 gamma_y * x_t.col(t);
+    }
+
+    // Step 3.4: Create a vector of ID numbers of length time
+    arma::vec id(time, arma::fill::zeros);
+    id.fill(i + 1);
+
+    // Step 3.5: Save the transposed data matrices in a list
+    out[i] = Rcpp::List::create(
+        Rcpp::Named("y") = y.t(), Rcpp::Named("eta") = eta.t(),
+        Rcpp::Named("x") = x_t.t(),
+        Rcpp::Named("time") = arma::regspace(0, time - 1),
+        Rcpp::Named("id") = id);
+  }
+
+  // Step 4: Return the results
+  return out;
+}
+// -----------------------------------------------------------------------------
+// edit .setup/cpp/simStateSpace-sim-ssm-2-lin-growth-vary-dot.cpp
+// Ivan Jacob Agaloos Pesigan
+// -----------------------------------------------------------------------------
+
+#include <RcppArmadillo.h>
+// [[Rcpp::depends(RcppArmadillo)]]
+// [[Rcpp::export(.SimSSM2LinGrowthVary)]]
+Rcpp::List SimSSM2LinGrowthVary(const int n, const Rcpp::List& mu0,
+                                const Rcpp::List& sigma0_sqrt,
+                                const Rcpp::List& theta_sqrt,
+                                const Rcpp::List& gamma_y,
+                                const Rcpp::List& gamma_eta,
+                                const Rcpp::List& x, const int time) {
+  // Step 1: Create constant vectors and matrices
+  arma::mat lambda = {{1, 0}};
+  arma::mat beta = {{1, 1}, {0, 1}};
+
+  // Step 2: Create a list of length n
+  Rcpp::List out(n);
+
+  // Step 3: Loop to iterate over n
+  for (int i = 0; i < n; i++) {
+    // Step 3.1: Create matrices to store simulated data
+    arma::mat eta(2, time);
+    arma::mat y(1, time);
+    arma::mat x_temp = x[i];
+    arma::mat x_t = x_temp.t();
+    arma::vec mu0_temp = mu0[i];
+    arma::mat sigma0_sqrt_temp = sigma0_sqrt[i];
+    double theta_sqrt_temp = theta_sqrt[i];
+    arma::mat gamma_y_temp = gamma_y[i];
+    arma::mat gamma_eta_temp = gamma_eta[i];
+
+    // Step 3.2: Generate initial condition
+    eta.col(0) = mu0_temp + sigma0_sqrt_temp * arma::randn(2) +
+                 gamma_eta_temp * x_t.col(0);
+    y.col(0) = lambda * eta.col(0) + theta_sqrt_temp * arma::randn(1) +
+               gamma_y_temp * x_t.col(0);
+
+    // Step 3.3: Simulate state space model data using a loop
+    for (int t = 1; t < time; t++) {
+      eta.col(t) = beta * eta.col(t - 1) + gamma_eta_temp * x_t.col(t);
+      y.col(t) = lambda * eta.col(t) + theta_sqrt_temp * arma::randn(1) +
+                 gamma_y_temp * x_t.col(t);
+    }
+
+    // Step 3.4: Create a vector of ID numbers of length time
+    arma::vec id(time, arma::fill::zeros);
+    id.fill(i + 1);
+
+    // Step 3.5: Save the transposed data matrices in a list
     out[i] = Rcpp::List::create(
         Rcpp::Named("y") = y.t(), Rcpp::Named("eta") = eta.t(),
         Rcpp::Named("x") = x_t.t(),
@@ -1701,9 +2056,10 @@ Rcpp::List SimSSM2OU(const arma::vec& mu0, const arma::mat& sigma0_sqrt,
       arma::chol(arma::reshape(psi_vec, num_latent_vars, num_latent_vars));
 
   // Step 4: Generate initial condition
-  eta.col(0) = mu0 + sigma0_sqrt * arma::randn(num_latent_vars);
-  y.col(0) =
-      nu + lambda * eta.col(0) + theta_sqrt * arma::randn(num_manifest_vars);
+  eta.col(0) =
+      mu0 + sigma0_sqrt * arma::randn(num_latent_vars) + gamma_eta * x_t.col(0);
+  y.col(0) = nu + lambda * eta.col(0) +
+             theta_sqrt * arma::randn(num_manifest_vars) + gamma_y * x_t.col(0);
 
   // Step 5: Simulate state space model data using a loop
   for (int t = 1; t < total_time; t++) {
@@ -1783,9 +2139,11 @@ Rcpp::List SimSSM2OUFixed(const int n, const arma::vec& mu0,
         arma::chol(arma::reshape(psi_vec, num_latent_vars, num_latent_vars));
 
     // Step 3.3: Generate initial condition
-    eta.col(0) = mu0 + sigma0_sqrt * arma::randn(num_latent_vars);
-    y.col(0) =
-        nu + lambda * eta.col(0) + theta_sqrt * arma::randn(num_manifest_vars);
+    eta.col(0) = mu0 + sigma0_sqrt * arma::randn(num_latent_vars) +
+                 gamma_eta * x_t.col(0);
+    y.col(0) = nu + lambda * eta.col(0) +
+               theta_sqrt * arma::randn(num_manifest_vars) +
+               gamma_y * x_t.col(0);
 
     // Step 3.4: Simulate state space model data using a loop
     for (int t = 1; t < total_time; t++) {
@@ -1885,9 +2243,11 @@ Rcpp::List SimSSM2OUVary(const int n, const Rcpp::List& mu0,
         arma::chol(arma::reshape(psi_vec, num_latent_vars, num_latent_vars));
 
     // Step 3.3: Generate initial condition
-    eta.col(0) = mu0_temp + sigma0_sqrt_temp * arma::randn(num_latent_vars);
+    eta.col(0) = mu0_temp + sigma0_sqrt_temp * arma::randn(num_latent_vars) +
+                 gamma_eta_temp * x_t.col(0);
     y.col(0) = nu_temp + lambda_temp * eta.col(0) +
-               theta_sqrt_temp * arma::randn(num_manifest_vars);
+               theta_sqrt_temp * arma::randn(num_manifest_vars) +
+               gamma_y_temp * x_t.col(0);
 
     // Step 3.4: Simulate state space model data using a loop
     for (int t = 1; t < total_time; t++) {
@@ -1897,7 +2257,6 @@ Rcpp::List SimSSM2OUVary(const int n, const Rcpp::List& mu0,
       y.col(t) = nu_temp + lambda_temp * eta.col(t) +
                  theta_sqrt_temp * arma::randn(num_manifest_vars) +
                  gamma_y_temp * x_t.col(t);
-      ;
     }
 
     // Step 3.5: If there is a burn-in period, remove it
@@ -1966,9 +2325,11 @@ Rcpp::List SimSSM2Vary(const int n, const Rcpp::List& mu0,
     arma::mat gamma_eta_temp = gamma_eta[i];
 
     // Step 3.2: Generate initial condition
-    eta.col(0) = mu0_temp + sigma0_sqrt_temp * arma::randn(num_latent_vars);
+    eta.col(0) = mu0_temp + sigma0_sqrt_temp * arma::randn(num_latent_vars) +
+                 gamma_eta_temp * x_t.col(0);
     y.col(0) = nu_temp + lambda_temp * eta.col(0) +
-               theta_sqrt_temp * arma::randn(num_manifest_vars);
+               theta_sqrt_temp * arma::randn(num_manifest_vars) +
+               gamma_y_temp * x_t.col(0);
 
     // Step 3.3: Simulate state space model data using a loop
     for (int t = 1; t < total_time; t++) {
@@ -1992,160 +2353,6 @@ Rcpp::List SimSSM2Vary(const int n, const Rcpp::List& mu0,
     id.fill(i + 1);
 
     // Step 3.6: Save the transposed data matrices in a list
-    out[i] = Rcpp::List::create(
-        Rcpp::Named("y") = y.t(), Rcpp::Named("eta") = eta.t(),
-        Rcpp::Named("x") = x_t.t(),
-        Rcpp::Named("time") = arma::regspace(0, time - 1),
-        Rcpp::Named("id") = id);
-  }
-
-  // Step 4: Return the results
-  return out;
-}
-// -----------------------------------------------------------------------------
-// edit .setup/cpp/simStateSpace-sim-ssm-lin-growth-0.cpp
-// Ivan Jacob Agaloos Pesigan
-// -----------------------------------------------------------------------------
-
-#include <RcppArmadillo.h>
-// [[Rcpp::depends(RcppArmadillo)]]
-// [[Rcpp::export(.SimSSM0LinGrowth)]]
-Rcpp::List SimSSM0LinGrowth(const int n, const arma::vec& mu0,
-                            const arma::mat& sigma0_sqrt,
-                            const double theta_sqrt, const int time) {
-  // Step 1: Create constant vectors and matrices
-  arma::mat lambda = {{1, 0}};
-  arma::mat beta = {{1, 1}, {0, 1}};
-
-  // Step 2: Create a list of length n
-  Rcpp::List out(n);
-
-  // Step 3: Loop to iterate over n
-  for (int i = 0; i < n; i++) {
-    // Step 3.1: Create matrices to store simulated data
-    arma::mat eta(2, time);
-    arma::mat y(1, time);
-
-    // Step 3.2: Generate initial condition
-    eta.col(0) = mu0 + sigma0_sqrt * arma::randn(2);
-    y.col(0) = lambda * eta.col(0) + theta_sqrt * arma::randn(1);
-
-    // Step 3.3: Simulate state space model data using a loop
-    for (int t = 1; t < time; t++) {
-      eta.col(t) = beta * eta.col(t - 1);
-      y.col(t) = lambda * eta.col(t) + theta_sqrt * arma::randn(1);
-    }
-
-    // Step 3.4: Create a vector of ID numbers of length time
-    arma::vec id(time, arma::fill::zeros);
-    id.fill(i + 1);
-
-    // Step 3.5: Save the transposed data matrices in a list
-    out[i] = Rcpp::List::create(
-        Rcpp::Named("y") = y.t(), Rcpp::Named("eta") = eta.t(),
-        Rcpp::Named("x") = 0, Rcpp::Named("time") = arma::regspace(0, time - 1),
-        Rcpp::Named("id") = id);
-  }
-
-  // Step 4: Return the results
-  return out;
-}
-// -----------------------------------------------------------------------------
-// edit .setup/cpp/simStateSpace-sim-ssm-lin-growth-1.cpp
-// Ivan Jacob Agaloos Pesigan
-// -----------------------------------------------------------------------------
-
-#include <RcppArmadillo.h>
-// [[Rcpp::depends(RcppArmadillo)]]
-// [[Rcpp::export(.SimSSM1LinGrowth)]]
-Rcpp::List SimSSM1LinGrowth(const int n, const arma::vec& mu0,
-                            const arma::mat& sigma0_sqrt,
-                            const double theta_sqrt, const arma::mat& gamma_eta,
-                            const Rcpp::List& x, const int time) {
-  // Step 1: Create constant vectors and matrices
-  arma::mat lambda = {{1, 0}};
-  arma::mat beta = {{1, 1}, {0, 1}};
-
-  // Step 2: Create a list of length n
-  Rcpp::List out(n);
-
-  // Step 3: Loop to iterate over n
-  for (int i = 0; i < n; i++) {
-    // Step 3.1: Create matrices to store simulated data
-    arma::mat eta(2, time);
-    arma::mat y(1, time);
-    arma::mat x_temp = x[i];
-    arma::mat x_t = x_temp.t();
-
-    // Step 3.2: Generate initial condition
-    eta.col(0) = mu0 + sigma0_sqrt * arma::randn(2);
-    y.col(0) = lambda * eta.col(0) + theta_sqrt * arma::randn(1);
-
-    // Step 3.3: Simulate state space model data using a loop
-    for (int t = 1; t < time; t++) {
-      eta.col(t) = beta * eta.col(t - 1) + gamma_eta * x_t.col(t);
-      y.col(t) = lambda * eta.col(t) + theta_sqrt * arma::randn(1);
-    }
-
-    // Step 3.4: Create a vector of ID numbers of length time
-    arma::vec id(time, arma::fill::zeros);
-    id.fill(i + 1);
-
-    // Step 3.5: Save the transposed data matrices in a list
-    out[i] = Rcpp::List::create(
-        Rcpp::Named("y") = y.t(), Rcpp::Named("eta") = eta.t(),
-        Rcpp::Named("x") = x_t.t(),
-        Rcpp::Named("time") = arma::regspace(0, time - 1),
-        Rcpp::Named("id") = id);
-  }
-
-  // Step 4: Return the results
-  return out;
-}
-// -----------------------------------------------------------------------------
-// edit .setup/cpp/simStateSpace-sim-ssm-lin-growth-2.cpp
-// Ivan Jacob Agaloos Pesigan
-// -----------------------------------------------------------------------------
-
-#include <RcppArmadillo.h>
-// [[Rcpp::depends(RcppArmadillo)]]
-// [[Rcpp::export(.SimSSM2LinGrowth)]]
-Rcpp::List SimSSM2LinGrowth(const int n, const arma::vec& mu0,
-                            const arma::mat& sigma0_sqrt,
-                            const double theta_sqrt, const arma::mat& gamma_y,
-                            const arma::mat& gamma_eta, const Rcpp::List& x,
-                            const int time) {
-  // Step 1: Create constant vectors and matrices
-  arma::mat lambda = {{1, 0}};
-  arma::mat beta = {{1, 1}, {0, 1}};
-
-  // Step 2: Create a list of length n
-  Rcpp::List out(n);
-
-  // Step 3: Loop to iterate over n
-  for (int i = 0; i < n; i++) {
-    // Step 3.1: Create matrices to store simulated data
-    arma::mat eta(2, time);
-    arma::mat y(1, time);
-    arma::mat x_temp = x[i];
-    arma::mat x_t = x_temp.t();
-
-    // Step 3.2: Generate initial condition
-    eta.col(0) = mu0 + sigma0_sqrt * arma::randn(2);
-    y.col(0) = lambda * eta.col(0) + theta_sqrt * arma::randn(1);
-
-    // Step 3.3: Simulate state space model data using a loop
-    for (int t = 1; t < time; t++) {
-      eta.col(t) = beta * eta.col(t - 1) + gamma_eta * x_t.col(t);
-      y.col(t) = lambda * eta.col(t) + theta_sqrt * arma::randn(1) +
-                 gamma_y * x_t.col(t);
-    }
-
-    // Step 3.4: Create a vector of ID numbers of length time
-    arma::vec id(time, arma::fill::zeros);
-    id.fill(i + 1);
-
-    // Step 3.5: Save the transposed data matrices in a list
     out[i] = Rcpp::List::create(
         Rcpp::Named("y") = y.t(), Rcpp::Named("eta") = eta.t(),
         Rcpp::Named("x") = x_t.t(),

@@ -114,6 +114,7 @@ head(mat)
 Other Simulation of State Space Models Data Functions: 
 \code{\link{OU2SSM}()},
 \code{\link{SimSSMFixed}()},
+\code{\link{SimSSMLinGrowthVary}()},
 \code{\link{SimSSMLinGrowth}()},
 \code{\link{SimSSMOUFixed}()},
 \code{\link{SimSSMOUVary}()},

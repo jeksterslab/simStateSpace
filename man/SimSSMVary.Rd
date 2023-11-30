@@ -31,38 +31,46 @@ Number of individuals.}
 State space model type.}
 
 \item{mu0}{List of numeric vectors.
-Mean of initial latent variable values
+Each element of the list
+is the mean of initial latent variable values
 (\eqn{\boldsymbol{\mu}_{\boldsymbol{\eta} \mid 0}}).}
 
 \item{sigma0_sqrt}{List of numeric matrices.
-Cholesky decomposition of the covariance matrix
+Each element of the list
+is the Cholesky decomposition of the covariance matrix
 of initial latent variable values
 (\eqn{\boldsymbol{\Sigma}_{\boldsymbol{\eta} \mid 0}}).}
 
 \item{alpha}{List of numeric vectors.
-Vector of intercepts for the dynamic model
+Each element of the list
+is the vector of intercepts for the dynamic model
 (\eqn{\boldsymbol{\alpha}}).}
 
 \item{beta}{List of numeric matrices.
-Transition matrix relating the values of the latent variables
+Each element of the list
+is the transition matrix relating the values of the latent variables
 at time \code{t - 1} to those at time \code{t}
 (\eqn{\boldsymbol{\beta}}).}
 
 \item{psi_sqrt}{List of numeric matrices.
-Cholesky decomposition of the process noise covariance matrix
+Each element of the list
+is the Cholesky decomposition of the process noise covariance matrix
 (\eqn{\boldsymbol{\Psi}}).}
 
 \item{nu}{List of numeric vectors.
-Vector of intercepts for the measurement model
+Each element of the list
+is the vector of intercepts for the measurement model
 (\eqn{\boldsymbol{\nu}}).}
 
 \item{lambda}{List of numeric matrices.
-Factor loading matrix linking the latent variables
+Each element of the list
+is the factor loading matrix linking the latent variables
 to the observed variables
 (\eqn{\boldsymbol{\Lambda}}).}
 
 \item{theta_sqrt}{List of numeric matrices.
-Cholesky decomposition of the measurement error covariance matrix
+Each element of the list
+is the Cholesky decomposition of the measurement error covariance matrix
 (\eqn{\boldsymbol{\Theta}}).}
 
 \item{gamma_y}{Numeric matrix.
@@ -232,6 +240,7 @@ Other Simulation of State Space Models Data Functions:
 \code{\link{OU2SSM}()},
 \code{\link{Sim2Matrix}()},
 \code{\link{SimSSMFixed}()},
+\code{\link{SimSSMLinGrowthVary}()},
 \code{\link{SimSSMLinGrowth}()},
 \code{\link{SimSSMOUFixed}()},
 \code{\link{SimSSMOUVary}()},

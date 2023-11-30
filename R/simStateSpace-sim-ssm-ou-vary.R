@@ -27,16 +27,20 @@
 #' @author Ivan Jacob Agaloos Pesigan
 #'
 #' @param mu List of numeric vectors.
-#'   The long-term mean or equilibrium level
+#'   Each element of the list
+#'   is the long-term mean or equilibrium level
 #'   (\eqn{\boldsymbol{\mu}}).
 #' @param phi List of numeric matrices.
-#'   The rate of mean reversion,
+#'   Each element of the list
+#'   is the rate of mean reversion,
 #'   determining how quickly the variable returns to its mean
 #'   (\eqn{\boldsymbol{\Phi}}).
 #' @param sigma_sqrt List of numeric matrices.
-#'   Cholesky decomposition of the matrix of volatility
+#'   Each element of the list
+#'   is the Cholesky decomposition of the matrix of volatility
 #'   or randomness in the process
 #'   (\eqn{\boldsymbol{\Sigma}}).
+#'
 #' @inheritParams SimSSMOUFixed
 #' @inherit SimSSMFixed return
 #' @inherit SimSSMOU references

@@ -39,16 +39,19 @@ of initial latent variable values
 (\eqn{\boldsymbol{\Sigma}_{\boldsymbol{\eta} \mid 0}}).}
 
 \item{mu}{List of numeric vectors.
-The long-term mean or equilibrium level
+Each element of the list
+is the long-term mean or equilibrium level
 (\eqn{\boldsymbol{\mu}}).}
 
 \item{phi}{List of numeric matrices.
-The rate of mean reversion,
+Each element of the list
+is the rate of mean reversion,
 determining how quickly the variable returns to its mean
 (\eqn{\boldsymbol{\Phi}}).}
 
 \item{sigma_sqrt}{List of numeric matrices.
-Cholesky decomposition of the matrix of volatility
+Each element of the list
+is the Cholesky decomposition of the matrix of volatility
 or randomness in the process
 (\eqn{\boldsymbol{\Sigma}}).}
 
@@ -248,6 +251,7 @@ Other Simulation of State Space Models Data Functions:
 \code{\link{OU2SSM}()},
 \code{\link{Sim2Matrix}()},
 \code{\link{SimSSMFixed}()},
+\code{\link{SimSSMLinGrowthVary}()},
 \code{\link{SimSSMLinGrowth}()},
 \code{\link{SimSSMOUFixed}()},
 \code{\link{SimSSMOU}()},

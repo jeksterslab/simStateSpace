@@ -66,6 +66,36 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// SimSSM0LinGrowth
+Rcpp::List SimSSM0LinGrowth(const int n, const arma::vec& mu0, const arma::mat& sigma0_sqrt, const double theta_sqrt, const int time);
+RcppExport SEXP _simStateSpace_SimSSM0LinGrowth(SEXP nSEXP, SEXP mu0SEXP, SEXP sigma0_sqrtSEXP, SEXP theta_sqrtSEXP, SEXP timeSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type mu0(mu0SEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type sigma0_sqrt(sigma0_sqrtSEXP);
+    Rcpp::traits::input_parameter< const double >::type theta_sqrt(theta_sqrtSEXP);
+    Rcpp::traits::input_parameter< const int >::type time(timeSEXP);
+    rcpp_result_gen = Rcpp::wrap(SimSSM0LinGrowth(n, mu0, sigma0_sqrt, theta_sqrt, time));
+    return rcpp_result_gen;
+END_RCPP
+}
+// SimSSM0LinGrowthVary
+Rcpp::List SimSSM0LinGrowthVary(const int n, const Rcpp::List& mu0, const Rcpp::List& sigma0_sqrt, const Rcpp::List& theta_sqrt, const int time);
+RcppExport SEXP _simStateSpace_SimSSM0LinGrowthVary(SEXP nSEXP, SEXP mu0SEXP, SEXP sigma0_sqrtSEXP, SEXP theta_sqrtSEXP, SEXP timeSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type mu0(mu0SEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type sigma0_sqrt(sigma0_sqrtSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type theta_sqrt(theta_sqrtSEXP);
+    Rcpp::traits::input_parameter< const int >::type time(timeSEXP);
+    rcpp_result_gen = Rcpp::wrap(SimSSM0LinGrowthVary(n, mu0, sigma0_sqrt, theta_sqrt, time));
+    return rcpp_result_gen;
+END_RCPP
+}
 // SimSSM0OU
 Rcpp::List SimSSM0OU(const arma::vec& mu0, const arma::mat& sigma0_sqrt, const arma::vec& mu, const arma::mat& phi, const arma::mat& sigma_sqrt, const arma::vec& nu, const arma::mat& lambda, const arma::mat& theta_sqrt, const double delta_t, const int time, const int burn_in);
 RcppExport SEXP _simStateSpace_SimSSM0OU(SEXP mu0SEXP, SEXP sigma0_sqrtSEXP, SEXP muSEXP, SEXP phiSEXP, SEXP sigma_sqrtSEXP, SEXP nuSEXP, SEXP lambdaSEXP, SEXP theta_sqrtSEXP, SEXP delta_tSEXP, SEXP timeSEXP, SEXP burn_inSEXP) {
@@ -247,6 +277,40 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const int >::type time(timeSEXP);
     Rcpp::traits::input_parameter< const int >::type burn_in(burn_inSEXP);
     rcpp_result_gen = Rcpp::wrap(SimSSM1Fixed(n, mu0, sigma0_sqrt, alpha, beta, psi_sqrt, nu, lambda, theta_sqrt, gamma_eta, x, time, burn_in));
+    return rcpp_result_gen;
+END_RCPP
+}
+// SimSSM1LinGrowth
+Rcpp::List SimSSM1LinGrowth(const int n, const arma::vec& mu0, const arma::mat& sigma0_sqrt, const double theta_sqrt, const arma::mat& gamma_eta, const Rcpp::List& x, const int time);
+RcppExport SEXP _simStateSpace_SimSSM1LinGrowth(SEXP nSEXP, SEXP mu0SEXP, SEXP sigma0_sqrtSEXP, SEXP theta_sqrtSEXP, SEXP gamma_etaSEXP, SEXP xSEXP, SEXP timeSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type mu0(mu0SEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type sigma0_sqrt(sigma0_sqrtSEXP);
+    Rcpp::traits::input_parameter< const double >::type theta_sqrt(theta_sqrtSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type gamma_eta(gamma_etaSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const int >::type time(timeSEXP);
+    rcpp_result_gen = Rcpp::wrap(SimSSM1LinGrowth(n, mu0, sigma0_sqrt, theta_sqrt, gamma_eta, x, time));
+    return rcpp_result_gen;
+END_RCPP
+}
+// SimSSM1LinGrowthVary
+Rcpp::List SimSSM1LinGrowthVary(const int n, const Rcpp::List& mu0, const Rcpp::List& sigma0_sqrt, const Rcpp::List& theta_sqrt, const Rcpp::List& gamma_eta, const Rcpp::List& x, const int time);
+RcppExport SEXP _simStateSpace_SimSSM1LinGrowthVary(SEXP nSEXP, SEXP mu0SEXP, SEXP sigma0_sqrtSEXP, SEXP theta_sqrtSEXP, SEXP gamma_etaSEXP, SEXP xSEXP, SEXP timeSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type mu0(mu0SEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type sigma0_sqrt(sigma0_sqrtSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type theta_sqrt(theta_sqrtSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type gamma_eta(gamma_etaSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const int >::type time(timeSEXP);
+    rcpp_result_gen = Rcpp::wrap(SimSSM1LinGrowthVary(n, mu0, sigma0_sqrt, theta_sqrt, gamma_eta, x, time));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -450,6 +514,42 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// SimSSM2LinGrowth
+Rcpp::List SimSSM2LinGrowth(const int n, const arma::vec& mu0, const arma::mat& sigma0_sqrt, const double theta_sqrt, const arma::mat& gamma_y, const arma::mat& gamma_eta, const Rcpp::List& x, const int time);
+RcppExport SEXP _simStateSpace_SimSSM2LinGrowth(SEXP nSEXP, SEXP mu0SEXP, SEXP sigma0_sqrtSEXP, SEXP theta_sqrtSEXP, SEXP gamma_ySEXP, SEXP gamma_etaSEXP, SEXP xSEXP, SEXP timeSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type mu0(mu0SEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type sigma0_sqrt(sigma0_sqrtSEXP);
+    Rcpp::traits::input_parameter< const double >::type theta_sqrt(theta_sqrtSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type gamma_y(gamma_ySEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type gamma_eta(gamma_etaSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const int >::type time(timeSEXP);
+    rcpp_result_gen = Rcpp::wrap(SimSSM2LinGrowth(n, mu0, sigma0_sqrt, theta_sqrt, gamma_y, gamma_eta, x, time));
+    return rcpp_result_gen;
+END_RCPP
+}
+// SimSSM2LinGrowthVary
+Rcpp::List SimSSM2LinGrowthVary(const int n, const Rcpp::List& mu0, const Rcpp::List& sigma0_sqrt, const Rcpp::List& theta_sqrt, const Rcpp::List& gamma_y, const Rcpp::List& gamma_eta, const Rcpp::List& x, const int time);
+RcppExport SEXP _simStateSpace_SimSSM2LinGrowthVary(SEXP nSEXP, SEXP mu0SEXP, SEXP sigma0_sqrtSEXP, SEXP theta_sqrtSEXP, SEXP gamma_ySEXP, SEXP gamma_etaSEXP, SEXP xSEXP, SEXP timeSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type mu0(mu0SEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type sigma0_sqrt(sigma0_sqrtSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type theta_sqrt(theta_sqrtSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type gamma_y(gamma_ySEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type gamma_eta(gamma_etaSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const int >::type time(timeSEXP);
+    rcpp_result_gen = Rcpp::wrap(SimSSM2LinGrowthVary(n, mu0, sigma0_sqrt, theta_sqrt, gamma_y, gamma_eta, x, time));
+    return rcpp_result_gen;
+END_RCPP
+}
 // SimSSM2OU
 Rcpp::List SimSSM2OU(const arma::vec& mu0, const arma::mat& sigma0_sqrt, const arma::vec& mu, const arma::mat& phi, const arma::mat& sigma_sqrt, const arma::vec& nu, const arma::mat& lambda, const arma::mat& theta_sqrt, const arma::mat& gamma_y, const arma::mat& gamma_eta, const arma::mat& x, const double delta_t, const int time, const int burn_in);
 RcppExport SEXP _simStateSpace_SimSSM2OU(SEXP mu0SEXP, SEXP sigma0_sqrtSEXP, SEXP muSEXP, SEXP phiSEXP, SEXP sigma_sqrtSEXP, SEXP nuSEXP, SEXP lambdaSEXP, SEXP theta_sqrtSEXP, SEXP gamma_ySEXP, SEXP gamma_etaSEXP, SEXP xSEXP, SEXP delta_tSEXP, SEXP timeSEXP, SEXP burn_inSEXP) {
@@ -548,61 +648,13 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// SimSSM0LinGrowth
-Rcpp::List SimSSM0LinGrowth(const int n, const arma::vec& mu0, const arma::mat& sigma0_sqrt, const double theta_sqrt, const int time);
-RcppExport SEXP _simStateSpace_SimSSM0LinGrowth(SEXP nSEXP, SEXP mu0SEXP, SEXP sigma0_sqrtSEXP, SEXP theta_sqrtSEXP, SEXP timeSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const int >::type n(nSEXP);
-    Rcpp::traits::input_parameter< const arma::vec& >::type mu0(mu0SEXP);
-    Rcpp::traits::input_parameter< const arma::mat& >::type sigma0_sqrt(sigma0_sqrtSEXP);
-    Rcpp::traits::input_parameter< const double >::type theta_sqrt(theta_sqrtSEXP);
-    Rcpp::traits::input_parameter< const int >::type time(timeSEXP);
-    rcpp_result_gen = Rcpp::wrap(SimSSM0LinGrowth(n, mu0, sigma0_sqrt, theta_sqrt, time));
-    return rcpp_result_gen;
-END_RCPP
-}
-// SimSSM1LinGrowth
-Rcpp::List SimSSM1LinGrowth(const int n, const arma::vec& mu0, const arma::mat& sigma0_sqrt, const double theta_sqrt, const arma::mat& gamma_eta, const Rcpp::List& x, const int time);
-RcppExport SEXP _simStateSpace_SimSSM1LinGrowth(SEXP nSEXP, SEXP mu0SEXP, SEXP sigma0_sqrtSEXP, SEXP theta_sqrtSEXP, SEXP gamma_etaSEXP, SEXP xSEXP, SEXP timeSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const int >::type n(nSEXP);
-    Rcpp::traits::input_parameter< const arma::vec& >::type mu0(mu0SEXP);
-    Rcpp::traits::input_parameter< const arma::mat& >::type sigma0_sqrt(sigma0_sqrtSEXP);
-    Rcpp::traits::input_parameter< const double >::type theta_sqrt(theta_sqrtSEXP);
-    Rcpp::traits::input_parameter< const arma::mat& >::type gamma_eta(gamma_etaSEXP);
-    Rcpp::traits::input_parameter< const Rcpp::List& >::type x(xSEXP);
-    Rcpp::traits::input_parameter< const int >::type time(timeSEXP);
-    rcpp_result_gen = Rcpp::wrap(SimSSM1LinGrowth(n, mu0, sigma0_sqrt, theta_sqrt, gamma_eta, x, time));
-    return rcpp_result_gen;
-END_RCPP
-}
-// SimSSM2LinGrowth
-Rcpp::List SimSSM2LinGrowth(const int n, const arma::vec& mu0, const arma::mat& sigma0_sqrt, const double theta_sqrt, const arma::mat& gamma_y, const arma::mat& gamma_eta, const Rcpp::List& x, const int time);
-RcppExport SEXP _simStateSpace_SimSSM2LinGrowth(SEXP nSEXP, SEXP mu0SEXP, SEXP sigma0_sqrtSEXP, SEXP theta_sqrtSEXP, SEXP gamma_ySEXP, SEXP gamma_etaSEXP, SEXP xSEXP, SEXP timeSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const int >::type n(nSEXP);
-    Rcpp::traits::input_parameter< const arma::vec& >::type mu0(mu0SEXP);
-    Rcpp::traits::input_parameter< const arma::mat& >::type sigma0_sqrt(sigma0_sqrtSEXP);
-    Rcpp::traits::input_parameter< const double >::type theta_sqrt(theta_sqrtSEXP);
-    Rcpp::traits::input_parameter< const arma::mat& >::type gamma_y(gamma_ySEXP);
-    Rcpp::traits::input_parameter< const arma::mat& >::type gamma_eta(gamma_etaSEXP);
-    Rcpp::traits::input_parameter< const Rcpp::List& >::type x(xSEXP);
-    Rcpp::traits::input_parameter< const int >::type time(timeSEXP);
-    rcpp_result_gen = Rcpp::wrap(SimSSM2LinGrowth(n, mu0, sigma0_sqrt, theta_sqrt, gamma_y, gamma_eta, x, time));
-    return rcpp_result_gen;
-END_RCPP
-}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_simStateSpace_OU2SSM", (DL_FUNC) &_simStateSpace_OU2SSM, 4},
     {"_simStateSpace_SimSSM0", (DL_FUNC) &_simStateSpace_SimSSM0, 10},
     {"_simStateSpace_SimSSM0Fixed", (DL_FUNC) &_simStateSpace_SimSSM0Fixed, 11},
+    {"_simStateSpace_SimSSM0LinGrowth", (DL_FUNC) &_simStateSpace_SimSSM0LinGrowth, 5},
+    {"_simStateSpace_SimSSM0LinGrowthVary", (DL_FUNC) &_simStateSpace_SimSSM0LinGrowthVary, 5},
     {"_simStateSpace_SimSSM0OU", (DL_FUNC) &_simStateSpace_SimSSM0OU, 11},
     {"_simStateSpace_SimSSM0OUFixed", (DL_FUNC) &_simStateSpace_SimSSM0OUFixed, 12},
     {"_simStateSpace_SimSSM0OUVary", (DL_FUNC) &_simStateSpace_SimSSM0OUVary, 12},
@@ -612,6 +664,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_simStateSpace_SimSSM0Vary", (DL_FUNC) &_simStateSpace_SimSSM0Vary, 11},
     {"_simStateSpace_SimSSM1", (DL_FUNC) &_simStateSpace_SimSSM1, 12},
     {"_simStateSpace_SimSSM1Fixed", (DL_FUNC) &_simStateSpace_SimSSM1Fixed, 13},
+    {"_simStateSpace_SimSSM1LinGrowth", (DL_FUNC) &_simStateSpace_SimSSM1LinGrowth, 7},
+    {"_simStateSpace_SimSSM1LinGrowthVary", (DL_FUNC) &_simStateSpace_SimSSM1LinGrowthVary, 7},
     {"_simStateSpace_SimSSM1OU", (DL_FUNC) &_simStateSpace_SimSSM1OU, 13},
     {"_simStateSpace_SimSSM1OUFixed", (DL_FUNC) &_simStateSpace_SimSSM1OUFixed, 14},
     {"_simStateSpace_SimSSM1OUVary", (DL_FUNC) &_simStateSpace_SimSSM1OUVary, 14},
@@ -621,13 +675,12 @@ static const R_CallMethodDef CallEntries[] = {
     {"_simStateSpace_SimSSM1Vary", (DL_FUNC) &_simStateSpace_SimSSM1Vary, 13},
     {"_simStateSpace_SimSSM2", (DL_FUNC) &_simStateSpace_SimSSM2, 13},
     {"_simStateSpace_SimSSM2Fixed", (DL_FUNC) &_simStateSpace_SimSSM2Fixed, 14},
+    {"_simStateSpace_SimSSM2LinGrowth", (DL_FUNC) &_simStateSpace_SimSSM2LinGrowth, 8},
+    {"_simStateSpace_SimSSM2LinGrowthVary", (DL_FUNC) &_simStateSpace_SimSSM2LinGrowthVary, 8},
     {"_simStateSpace_SimSSM2OU", (DL_FUNC) &_simStateSpace_SimSSM2OU, 14},
     {"_simStateSpace_SimSSM2OUFixed", (DL_FUNC) &_simStateSpace_SimSSM2OUFixed, 15},
     {"_simStateSpace_SimSSM2OUVary", (DL_FUNC) &_simStateSpace_SimSSM2OUVary, 15},
     {"_simStateSpace_SimSSM2Vary", (DL_FUNC) &_simStateSpace_SimSSM2Vary, 14},
-    {"_simStateSpace_SimSSM0LinGrowth", (DL_FUNC) &_simStateSpace_SimSSM0LinGrowth, 5},
-    {"_simStateSpace_SimSSM1LinGrowth", (DL_FUNC) &_simStateSpace_SimSSM1LinGrowth, 7},
-    {"_simStateSpace_SimSSM2LinGrowth", (DL_FUNC) &_simStateSpace_SimSSM2LinGrowth, 8},
     {NULL, NULL, 0}
 };
 
