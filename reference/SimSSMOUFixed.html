@@ -418,6 +418,7 @@ On the theory of the brownian motion.
 <code><a href="OU2SSM.html">OU2SSM</a>()</code>,
 <code><a href="Sim2Matrix.html">Sim2Matrix</a>()</code>,
 <code><a href="SimSSMFixed.html">SimSSMFixed</a>()</code>,
+<code><a href="SimSSMLinGrowthVary.html">SimSSMLinGrowthVary</a>()</code>,
 <code><a href="SimSSMLinGrowth.html">SimSSMLinGrowth</a>()</code>,
 <code><a href="SimSSMOUVary.html">SimSSMOUVary</a>()</code>,
 <code><a href="SimSSMOU.html">SimSSMOU</a>()</code>,
@@ -538,20 +539,20 @@ On the theory of the brownian motion.
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">ssm</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> List of 5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ :List of 5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ y   : num [1:50, 1:2] -4.84 -2.7 -2.67 -2.93 -2.25 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ eta : num [1:50, 1:2] -3.4 -3.51 -2.76 -2.43 -1.98 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ y   : num [1:50, 1:2] -4.71 -2.57 -2.54 -2.8 -2.12 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ eta : num [1:50, 1:2] -3.26 -3.37 -2.63 -2.29 -1.85 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ x   : num [1:50, 1:2] 1.371 -0.565 0.363 0.633 0.404 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ time: num [1:50, 1] 0 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ id  : num [1:50, 1] 1 1 1 1 1 1 1 1 1 1 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ :List of 5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ y   : num [1:50, 1:2] -3.921 -2.952 -0.965 -1.809 -1.822 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ eta : num [1:50, 1:2] -3.7 -3 -2.58 -1.92 -2.66 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ y   : num [1:50, 1:2] -3.8 -2.834 -0.847 -1.692 -1.706 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ eta : num [1:50, 1:2] -3.58 -2.88 -2.46 -1.81 -2.54 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ x   : num [1:50, 1:2] 1.201 1.045 -1.003 1.848 -0.667 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ time: num [1:50, 1] 0 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ id  : num [1:50, 1] 2 2 2 2 2 2 2 2 2 2 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ :List of 5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ y   : num [1:50, 1:2] -1.661 -1.574 -2.08 -0.824 -2.852 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ eta : num [1:50, 1:2] -1.87 -1.89 -1.8 -1.61 -1.86 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ y   : num [1:50, 1:2] -1.86 -1.77 -2.28 -1.02 -3.05 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ eta : num [1:50, 1:2] -2.07 -2.09 -2 -1.81 -2.05 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ x   : num [1:50, 1:2] -2.001 0.334 1.171 2.06 -1.377 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ time: num [1:50, 1] 0 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ id  : num [1:50, 1] 3 3 3 3 3 3 3 3 3 3 ...</span>
@@ -562,8 +563,8 @@ On the theory of the brownian motion.
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ time: num [1:50, 1] 0 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ id  : num [1:50, 1] 4 4 4 4 4 4 4 4 4 4 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ :List of 5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ y   : num [1:50, 1:2] -4.165 -0.831 -3.11 -2.316 -2.174 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ eta : num [1:50, 1:2] -2.82 -1.8 -3.03 -2.81 -2.73 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ y   : num [1:50, 1:2] -4.031 -0.699 -2.981 -2.188 -2.048 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ eta : num [1:50, 1:2] -2.69 -1.67 -2.9 -2.69 -2.6 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ x   : num [1:50, 1:2] 1.3349 -0.8693 0.0555 0.0491 -0.5784 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ time: num [1:50, 1] 0 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ id  : num [1:50, 1] 5 5 5 5 5 5 5 5 5 5 ...</span>
@@ -591,20 +592,20 @@ On the theory of the brownian motion.
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">ssm</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> List of 5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ :List of 5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ y   : num [1:50, 1:2] -4.43 -3.33 -4.16 -4.55 -4.75 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ eta : num [1:50, 1:2] -3.87 -4.28 -4.12 -3.98 -4.06 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ y   : num [1:50, 1:2] -4.16 -3.19 -4.03 -4.41 -4.62 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ eta : num [1:50, 1:2] -3.74 -4.14 -3.99 -3.84 -3.93 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ x   : num [1:50, 1:2] 1.371 -0.565 0.363 0.633 0.404 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ time: num [1:50, 1] 0 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ id  : num [1:50, 1] 1 1 1 1 1 1 1 1 1 1 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ :List of 5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ y   : num [1:50, 1:2] -3.5 -2.13 -2.03 -1.82 -1.72 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ eta : num [1:50, 1:2] -3.43 -2.67 -1.83 -1.83 -1.43 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ y   : num [1:50, 1:2] -3.26 -2.02 -1.91 -1.7 -1.6 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ eta : num [1:50, 1:2] -3.31 -2.55 -1.72 -1.72 -1.31 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ x   : num [1:50, 1:2] 1.201 1.045 -1.003 1.848 -0.667 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ time: num [1:50, 1] 0 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ id  : num [1:50, 1] 2 2 2 2 2 2 2 2 2 2 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ :List of 5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ y   : num [1:50, 1:2] -2.64 -3.36 -2.28 -3.16 -4.03 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ eta : num [1:50, 1:2] -3.27 -3 -2.49 -2.74 -3.2 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ y   : num [1:50, 1:2] -3.04 -3.56 -2.48 -3.36 -4.23 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ eta : num [1:50, 1:2] -3.47 -3.19 -2.69 -2.93 -3.39 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ x   : num [1:50, 1:2] -2.001 0.334 1.171 2.06 -1.377 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ time: num [1:50, 1] 0 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ id  : num [1:50, 1] 3 3 3 3 3 3 3 3 3 3 ...</span>
@@ -615,8 +616,8 @@ On the theory of the brownian motion.
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ time: num [1:50, 1] 0 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ id  : num [1:50, 1] 4 4 4 4 4 4 4 4 4 4 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ :List of 5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ y   : num [1:50, 1:2] -4.77 -5.01 -3.63 -4.65 -2.94 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ eta : num [1:50, 1:2] -3.87 -4.09 -4.28 -3.46 -2.64 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ y   : num [1:50, 1:2] -4.5 -4.88 -3.5 -4.52 -2.81 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ eta : num [1:50, 1:2] -3.74 -3.96 -4.15 -3.34 -2.52 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ x   : num [1:50, 1:2] 1.3349 -0.8693 0.0555 0.0491 -0.5784 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ time: num [1:50, 1] 0 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ id  : num [1:50, 1] 5 5 5 5 5 5 5 5 5 5 ...</span>
