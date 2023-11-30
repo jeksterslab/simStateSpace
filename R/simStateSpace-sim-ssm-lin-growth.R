@@ -343,42 +343,45 @@ SimSSMLinGrowth <- function(n,
   stopifnot(
     type %in% 0:2
   )
-  if (type == 0) {
-    return(
-      .SimSSM0LinGrowth(
-        n = n,
-        mu0 = mu0,
-        sigma0_sqrt = sigma0_sqrt,
-        theta_sqrt = theta_sqrt,
-        time = time
+  switch(
+    EXPR = as.character(type),
+    "0" = {
+      return(
+        .SimSSM0LinGrowth(
+          n = n,
+          mu0 = mu0,
+          sigma0_sqrt = sigma0_sqrt,
+          theta_sqrt = theta_sqrt,
+          time = time
+        )
       )
-    )
-  }
-  if (type == 1) {
-    return(
-      .SimSSM1LinGrowth(
-        n = n,
-        mu0 = mu0,
-        sigma0_sqrt = sigma0_sqrt,
-        theta_sqrt = theta_sqrt,
-        gamma_eta = gamma_eta,
-        x = x,
-        time = time
+    },
+    "1" = {
+      return(
+        .SimSSM1LinGrowth(
+          n = n,
+          mu0 = mu0,
+          sigma0_sqrt = sigma0_sqrt,
+          theta_sqrt = theta_sqrt,
+          gamma_eta = gamma_eta,
+          x = x,
+          time = time
+        )
       )
-    )
-  }
-  if (type == 2) {
-    return(
-      .SimSSM2LinGrowth(
-        n = n,
-        mu0 = mu0,
-        sigma0_sqrt = sigma0_sqrt,
-        theta_sqrt = theta_sqrt,
-        gamma_y = gamma_y,
-        gamma_eta = gamma_eta,
-        x = x,
-        time = time
+    },
+    "2" = {
+      return(
+        .SimSSM2LinGrowth(
+          n = n,
+          mu0 = mu0,
+          sigma0_sqrt = sigma0_sqrt,
+          theta_sqrt = theta_sqrt,
+          gamma_y = gamma_y,
+          gamma_eta = gamma_eta,
+          x = x,
+          time = time
+        )
       )
-    )
-  }
+    }
+  )
 }

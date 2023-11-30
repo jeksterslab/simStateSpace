@@ -381,57 +381,60 @@ SimSSM <- function(mu0,
   stopifnot(
     type %in% 0:2
   )
-  if (type == 0) {
-    return(
-      .SimSSM0(
-        mu0 = mu0,
-        sigma0_sqrt = sigma0_sqrt,
-        alpha = alpha,
-        beta = beta,
-        psi_sqrt = psi_sqrt,
-        nu = nu,
-        lambda = lambda,
-        theta_sqrt = theta_sqrt,
-        time = time,
-        burn_in = burn_in
+  switch(
+    EXPR = as.character(type),
+    "0" = {
+      return(
+        .SimSSM0(
+          mu0 = mu0,
+          sigma0_sqrt = sigma0_sqrt,
+          alpha = alpha,
+          beta = beta,
+          psi_sqrt = psi_sqrt,
+          nu = nu,
+          lambda = lambda,
+          theta_sqrt = theta_sqrt,
+          time = time,
+          burn_in = burn_in
+        )
       )
-    )
-  }
-  if (type == 1) {
-    return(
-      .SimSSM1(
-        mu0 = mu0,
-        sigma0_sqrt = sigma0_sqrt,
-        alpha = alpha,
-        beta = beta,
-        psi_sqrt = psi_sqrt,
-        nu = nu,
-        lambda = lambda,
-        theta_sqrt = theta_sqrt,
-        gamma_eta = gamma_eta,
-        x = x,
-        time = time,
-        burn_in = burn_in
+    },
+    "1" = {
+      return(
+        .SimSSM1(
+          mu0 = mu0,
+          sigma0_sqrt = sigma0_sqrt,
+          alpha = alpha,
+          beta = beta,
+          psi_sqrt = psi_sqrt,
+          nu = nu,
+          lambda = lambda,
+          theta_sqrt = theta_sqrt,
+          gamma_eta = gamma_eta,
+          x = x,
+          time = time,
+          burn_in = burn_in
+        )
       )
-    )
-  }
-  if (type == 2) {
-    return(
-      .SimSSM2(
-        mu0 = mu0,
-        sigma0_sqrt = sigma0_sqrt,
-        alpha = alpha,
-        beta = beta,
-        psi_sqrt = psi_sqrt,
-        nu = nu,
-        lambda = lambda,
-        theta_sqrt = theta_sqrt,
-        gamma_y = gamma_y,
-        gamma_eta = gamma_eta,
-        x = x,
-        time = time,
-        burn_in = burn_in
+    },
+    "2" = {
+      return(
+        .SimSSM2(
+          mu0 = mu0,
+          sigma0_sqrt = sigma0_sqrt,
+          alpha = alpha,
+          beta = beta,
+          psi_sqrt = psi_sqrt,
+          nu = nu,
+          lambda = lambda,
+          theta_sqrt = theta_sqrt,
+          gamma_y = gamma_y,
+          gamma_eta = gamma_eta,
+          x = x,
+          time = time,
+          burn_in = burn_in
+        )
       )
-    )
-  }
+    }
+  )
 }
