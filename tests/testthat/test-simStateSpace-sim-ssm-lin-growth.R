@@ -84,6 +84,26 @@ lapply(
     Sim2Matrix(ssm, eta = FALSE)
     Sim2Matrix(ssm, eta = TRUE, long = FALSE)
     Sim2Matrix(ssm, eta = FALSE, long = FALSE)
+
+    # Error
+    testthat::test_that(
+      paste(text, "error"),
+      {
+        testthat::expect_error(
+          SimSSMLinGrowth(
+            n = n,
+            mu0 = mu0,
+            sigma0_sqrt = sigma0_sqrt,
+            theta_sqrt = theta_sqrt,
+            gamma_y = gamma_y,
+            gamma_eta = gamma_eta,
+            x = x,
+            type = 3,
+            time = time
+          )
+        )
+      }
+    )
   },
   text = "test-simStateSpace-sim-ssm-lin-growth"
 )

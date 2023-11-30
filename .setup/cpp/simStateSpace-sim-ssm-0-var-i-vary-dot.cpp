@@ -1,16 +1,16 @@
 // -----------------------------------------------------------------------------
-// edit .setup/cpp/simStateSpace-sim-ssm-0-var-vary-dot.cpp
+// edit .setup/cpp/simStateSpace-sim-ssm-0-var-i-vary-dot.cpp
 // Ivan Jacob Agaloos Pesigan
 // -----------------------------------------------------------------------------
 
 #include <RcppArmadillo.h>
 // [[Rcpp::depends(RcppArmadillo)]]
-// [[Rcpp::export(.SimSSM0VARVary)]]
-Rcpp::List SimSSM0VARVary(const int n, const Rcpp::List& mu0,
-                          const Rcpp::List& sigma0_sqrt,
-                          const Rcpp::List& alpha, const Rcpp::List& beta,
-                          const Rcpp::List& psi_sqrt, const int time,
-                          const int burn_in) {
+// [[Rcpp::export(.SimSSM0VARIVary)]]
+Rcpp::List SimSSM0VARIVary(const int n, const Rcpp::List& mu0,
+                           const Rcpp::List& sigma0_sqrt,
+                           const Rcpp::List& alpha, const Rcpp::List& beta,
+                           const Rcpp::List& psi_sqrt, const int time,
+                           const int burn_in) {
   // Step 1: Determine indices
   int total_time = time + burn_in;
   arma::vec mu0_temp = mu0[0];

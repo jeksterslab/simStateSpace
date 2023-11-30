@@ -12,6 +12,8 @@ jobs:
   check1:
     name: atlas
     runs-on: ubuntu-latest
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     container:
       image: ghcr.io/r-hub/containers/atlas:latest
 
@@ -38,6 +40,8 @@ jobs:
   check2:
     name: centos7
     runs-on: ubuntu-latest
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     container:
       image: ghcr.io/r-hub/containers/centos7:latest
 
@@ -64,6 +68,8 @@ jobs:
   check3:
     name: clang-asan
     runs-on: ubuntu-latest
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     container:
       image: ghcr.io/r-hub/containers/clang-asan:latest
 
@@ -90,6 +96,8 @@ jobs:
   check4:
     name: clang16
     runs-on: ubuntu-latest
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     container:
       image: ghcr.io/r-hub/containers/clang16:latest
 
@@ -116,6 +124,8 @@ jobs:
   check5:
     name: clang17
     runs-on: ubuntu-latest
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     container:
       image: ghcr.io/r-hub/containers/clang17:latest
 
@@ -142,6 +152,8 @@ jobs:
   check6:
     name: gcc13
     runs-on: ubuntu-latest
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     container:
       image: ghcr.io/r-hub/containers/gcc13:latest
 
@@ -168,6 +180,8 @@ jobs:
   check7:
     name: nold
     runs-on: ubuntu-latest
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     container:
       image: ghcr.io/r-hub/containers/nold:latest
 
@@ -194,6 +208,8 @@ jobs:
   check8:
     name: ubuntu-clang
     runs-on: ubuntu-latest
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     container:
       image: ghcr.io/r-hub/containers/ubuntu-clang:latest
 
@@ -220,6 +236,8 @@ jobs:
   check9:
     name: ubuntu-gcc12
     runs-on: ubuntu-latest
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     container:
       image: ghcr.io/r-hub/containers/ubuntu-gcc12:latest
 
@@ -246,6 +264,8 @@ jobs:
   check10:
     name: ubuntu-next
     runs-on: ubuntu-latest
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     container:
       image: ghcr.io/r-hub/containers/ubuntu-next:latest
 
@@ -272,6 +292,8 @@ jobs:
   check11:
     name: ubuntu-release
     runs-on: ubuntu-latest
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     container:
       image: ghcr.io/r-hub/containers/ubuntu-release:latest
 
@@ -298,6 +320,8 @@ jobs:
   check12:
     name: valgrind
     runs-on: ubuntu-latest
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     container:
       image: ghcr.io/r-hub/containers/valgrind:latest
 
@@ -324,6 +348,8 @@ jobs:
   check13:
     name: intel
     runs-on: ubuntu-latest
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     container:
       image: ghcr.io/r-hub/containers/intel:latest
 
@@ -350,6 +376,8 @@ jobs:
   check14:
     name: mkl
     runs-on: ubuntu-latest
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     container:
       image: ghcr.io/r-hub/containers/mkl:latest
 

@@ -1,19 +1,19 @@
 // -----------------------------------------------------------------------------
-// edit .setup/cpp/simStateSpace-sim-ssm-0-ou-vary-dot.cpp
+// edit .setup/cpp/simStateSpace-sim-ssm-0-ou-i-vary-dot.cpp
 // Ivan Jacob Agaloos Pesigan
 // -----------------------------------------------------------------------------
 
 #include <RcppArmadillo.h>
 // [[Rcpp::depends(RcppArmadillo)]]
-// [[Rcpp::export(.SimSSM1OUVary)]]
-Rcpp::List SimSSM1OUVary(const int n, const Rcpp::List& mu0,
-                         const Rcpp::List& sigma0_sqrt, const Rcpp::List& mu,
-                         const Rcpp::List& phi, const Rcpp::List& sigma_sqrt,
-                         const Rcpp::List& nu, const Rcpp::List& lambda,
-                         const Rcpp::List& theta_sqrt,
-                         const Rcpp::List& gamma_eta, const Rcpp::List& x,
-                         const double delta_t, const int time,
-                         const int burn_in) {
+// [[Rcpp::export(.SimSSM1OUIVary)]]
+Rcpp::List SimSSM1OUIVary(const int n, const Rcpp::List& mu0,
+                          const Rcpp::List& sigma0_sqrt, const Rcpp::List& mu,
+                          const Rcpp::List& phi, const Rcpp::List& sigma_sqrt,
+                          const Rcpp::List& nu, const Rcpp::List& lambda,
+                          const Rcpp::List& theta_sqrt,
+                          const Rcpp::List& gamma_eta, const Rcpp::List& x,
+                          const double delta_t, const int time,
+                          const int burn_in) {
   // Step 1: Determine indices
   int total_time = time + burn_in;
   arma::vec mu0_temp = mu0[0];

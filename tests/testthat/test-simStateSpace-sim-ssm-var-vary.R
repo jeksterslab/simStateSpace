@@ -39,7 +39,7 @@ lapply(
     )
 
     # No covariates
-    ssm <- SimSSMVARVary(
+    ssm <- SimSSMVARIVary(
       n = n,
       mu0 = mu0,
       sigma0_sqrt = sigma0_sqrt,
@@ -56,7 +56,7 @@ lapply(
     Sim2Matrix(ssm, eta = FALSE, long = FALSE)
 
     # With covariates
-    ssm <- SimSSMVARVary(
+    ssm <- SimSSMVARIVary(
       n = n,
       mu0 = mu0,
       sigma0_sqrt = sigma0_sqrt,

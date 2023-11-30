@@ -1,18 +1,18 @@
 // -----------------------------------------------------------------------------
-// edit .setup/cpp/simStateSpace-sim-ssm-1-vary-dot.cpp
+// edit .setup/cpp/simStateSpace-sim-ssm-2-i-vary-dot.cpp
 // Ivan Jacob Agaloos Pesigan
 // -----------------------------------------------------------------------------
 
 #include <RcppArmadillo.h>
 // [[Rcpp::depends(RcppArmadillo)]]
-// [[Rcpp::export(.SimSSM1Vary)]]
-Rcpp::List SimSSM1Vary(const int n, const Rcpp::List& mu0,
-                       const Rcpp::List& sigma0_sqrt, const Rcpp::List& alpha,
-                       const Rcpp::List& beta, const Rcpp::List& psi_sqrt,
-                       const Rcpp::List& nu, const Rcpp::List& lambda,
-                       const Rcpp::List& theta_sqrt,
-                       const Rcpp::List& gamma_eta, const Rcpp::List& x,
-                       const int time, const int burn_in) {
+// [[Rcpp::export(.SimSSM2IVary)]]
+Rcpp::List SimSSM2IVary(const int n, const Rcpp::List& mu0,
+                        const Rcpp::List& sigma0_sqrt, const Rcpp::List& alpha,
+                        const Rcpp::List& beta, const Rcpp::List& psi_sqrt,
+                        const Rcpp::List& nu, const Rcpp::List& lambda,
+                        const Rcpp::List& theta_sqrt, const Rcpp::List& gamma_y,
+                        const Rcpp::List& gamma_eta, const Rcpp::List& x,
+                        const int time, const int burn_in) {
   // Step 1: Determine indices
   int total_time = time + burn_in;
   arma::vec mu0_temp = mu0[0];
@@ -38,13 +38,15 @@ Rcpp::List SimSSM1Vary(const int n, const Rcpp::List& mu0,
     arma::vec nu_temp = nu[i];
     arma::mat lambda_temp = lambda[i];
     arma::mat theta_sqrt_temp = theta_sqrt[i];
+    arma::mat gamma_y_temp = gamma_y[i];
     arma::mat gamma_eta_temp = gamma_eta[i];
 
     // Step 3.2: Generate initial condition
     eta.col(0) = mu0_temp + sigma0_sqrt_temp * arma::randn(num_latent_vars) +
                  gamma_eta_temp * x_t.col(0);
     y.col(0) = nu_temp + lambda_temp * eta.col(0) +
-               theta_sqrt_temp * arma::randn(num_manifest_vars);
+               theta_sqrt_temp * arma::randn(num_manifest_vars) +
+               gamma_y_temp * x_t.col(0);
 
     // Step 3.3: Simulate state space model data using a loop
     for (int t = 1; t < total_time; t++) {
@@ -52,7 +54,8 @@ Rcpp::List SimSSM1Vary(const int n, const Rcpp::List& mu0,
                    psi_sqrt_temp * arma::randn(num_latent_vars) +
                    gamma_eta_temp * x_t.col(t);
       y.col(t) = nu_temp + lambda_temp * eta.col(t) +
-                 theta_sqrt_temp * arma::randn(num_manifest_vars);
+                 theta_sqrt_temp * arma::randn(num_manifest_vars) +
+                 gamma_y_temp * x_t.col(t);
     }
 
     // Step 3.4: If there is a burn-in period, remove it

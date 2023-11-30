@@ -1,6 +1,6 @@
 #' Simulate Data from a Vector Autoregressive Model
 #' using a State Space Model Parameterization
-#' for n > 1 Individuals (Varying Parameters)
+#' for n > 1 Individuals (Individual-Varying Parameters)
 #'
 #' This function simulates data from a vector autoregressive model
 #' using a state space model parameterization
@@ -22,7 +22,7 @@
 #'
 #' @author Ivan Jacob Agaloos Pesigan
 #'
-#' @inheritParams SimSSMVary
+#' @inheritParams SimSSMIVary
 #' @inherit SimSSMFixed return
 #' @inherit SimSSM references
 #'
@@ -62,7 +62,7 @@
 #' )
 #'
 #' # No covariates
-#' ssm <- SimSSMVARVary(
+#' ssm <- SimSSMVARIVary(
 #'   n = n,
 #'   mu0 = mu0,
 #'   sigma0_sqrt = sigma0_sqrt,
@@ -76,7 +76,7 @@
 #' str(ssm)
 #'
 #' # With covariates
-#' ssm <- SimSSMVARVary(
+#' ssm <- SimSSMVARIVary(
 #'   n = n,
 #'   mu0 = mu0,
 #'   sigma0_sqrt = sigma0_sqrt,
@@ -94,19 +94,19 @@
 #' @family Simulation of State Space Models Data Functions
 #' @keywords simStateSpace sim var
 #' @export
-SimSSMVARVary <- function(n,
-                          mu0,
-                          sigma0_sqrt,
-                          alpha,
-                          beta,
-                          psi_sqrt,
-                          gamma_eta = NULL,
-                          x = NULL,
-                          time = 0,
-                          burn_in = 0) {
+SimSSMVARIVary <- function(n,
+                           mu0,
+                           sigma0_sqrt,
+                           alpha,
+                           beta,
+                           psi_sqrt,
+                           gamma_eta = NULL,
+                           x = NULL,
+                           time = 0,
+                           burn_in = 0) {
   if (is.null(gamma_eta) || is.null(x)) {
     return(
-      .SimSSM0VARVary(
+      .SimSSM0VARIVary(
         n = n,
         mu0 = rep(x = mu0, length.out = n),
         sigma0_sqrt = rep(x = sigma0_sqrt, length.out = n),
@@ -119,7 +119,7 @@ SimSSMVARVary <- function(n,
     )
   } else {
     return(
-      .SimSSM1VARVary(
+      .SimSSM1VARIVary(
         n = n,
         mu0 = rep(x = mu0, length.out = n),
         sigma0_sqrt = rep(x = sigma0_sqrt, length.out = n),

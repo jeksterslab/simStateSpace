@@ -328,9 +328,6 @@ SimSSMOU <- function(mu0,
                      delta_t,
                      time,
                      burn_in = 0) {
-  stopifnot(
-    type %in% 0:2
-  )
   switch(
     EXPR = as.character(type),
     "0" = {
@@ -388,6 +385,9 @@ SimSSMOU <- function(mu0,
           burn_in = burn_in
         )
       )
-    }
+    },
+    stop(
+      "Invalid `type`."
+    )
   )
 }

@@ -1,5 +1,5 @@
 #' Simulate Data using a State Space Model Parameterization
-#' for n > 1 Individuals (Varying Parameters)
+#' for n > 1 Individuals (Individual-Varying Parameters)
 #'
 #' This function simulates data
 #' using a state space model parameterization
@@ -104,9 +104,8 @@
 #' )
 #'
 #' # Type 0
-#' ssm <- SimSSMVary(
+#' ssm <- SimSSMIVary(
 #'   n = n,
-#'   type = 0,
 #'   mu0 = mu0,
 #'   sigma0_sqrt = sigma0_sqrt,
 #'   alpha = alpha,
@@ -115,6 +114,7 @@
 #'   nu = nu,
 #'   lambda = lambda,
 #'   theta_sqrt = theta_sqrt,
+#'   type = 0,
 #'   time = time,
 #'   burn_in = burn_in
 #' )
@@ -122,9 +122,8 @@
 #' str(ssm)
 #'
 #' # Type 1
-#' ssm <- SimSSMVary(
+#' ssm <- SimSSMIVary(
 #'   n = n,
-#'   type = 1,
 #'   mu0 = mu0,
 #'   sigma0_sqrt = sigma0_sqrt,
 #'   alpha = alpha,
@@ -135,6 +134,7 @@
 #'   theta_sqrt = theta_sqrt,
 #'   gamma_eta = gamma_eta,
 #'   x = x,
+#'   type = 1,
 #'   time = time,
 #'   burn_in = burn_in
 #' )
@@ -142,9 +142,8 @@
 #' str(ssm)
 #'
 #' # Type 2
-#' ssm <- SimSSMVary(
+#' ssm <- SimSSMIVary(
 #'   n = n,
-#'   type = 2,
 #'   mu0 = mu0,
 #'   sigma0_sqrt = sigma0_sqrt,
 #'   alpha = alpha,
@@ -156,6 +155,7 @@
 #'   gamma_y = gamma_y,
 #'   gamma_eta = gamma_eta,
 #'   x = x,
+#'   type = 2,
 #'   time = time,
 #'   burn_in = burn_in
 #' )
@@ -165,29 +165,26 @@
 #' @family Simulation of State Space Models Data Functions
 #' @keywords simStateSpace sim ssm
 #' @export
-SimSSMVary <- function(n,
-                       type,
-                       mu0,
-                       sigma0_sqrt,
-                       alpha,
-                       beta,
-                       psi_sqrt,
-                       nu,
-                       lambda,
-                       theta_sqrt,
-                       gamma_y = NULL,
-                       gamma_eta = NULL,
-                       x = NULL,
-                       time = 0,
-                       burn_in = 0) {
-  stopifnot(
-    type %in% 0:2
-  )
+SimSSMIVary <- function(n,
+                        mu0,
+                        sigma0_sqrt,
+                        alpha,
+                        beta,
+                        psi_sqrt,
+                        nu,
+                        lambda,
+                        theta_sqrt,
+                        gamma_y = NULL,
+                        gamma_eta = NULL,
+                        x = NULL,
+                        type,
+                        time = 0,
+                        burn_in = 0) {
   switch(
     EXPR = as.character(type),
     "0" = {
       return(
-        .SimSSM0Vary(
+        .SimSSM0IVary(
           n = n,
           mu0 = rep(x = mu0, length.out = n),
           sigma0_sqrt = rep(x = sigma0_sqrt, length.out = n),
@@ -204,7 +201,7 @@ SimSSMVary <- function(n,
     },
     "1" = {
       return(
-        .SimSSM1Vary(
+        .SimSSM1IVary(
           n = n,
           mu0 = rep(x = mu0, length.out = n),
           sigma0_sqrt = rep(x = sigma0_sqrt, length.out = n),
@@ -223,7 +220,7 @@ SimSSMVary <- function(n,
     },
     "2" = {
       return(
-        .SimSSM2Vary(
+        .SimSSM2IVary(
           n = n,
           mu0 = rep(x = mu0, length.out = n),
           sigma0_sqrt = rep(x = sigma0_sqrt, length.out = n),
@@ -240,6 +237,9 @@ SimSSMVary <- function(n,
           burn_in = burn_in
         )
       )
-    }
+    },
+    stop(
+      "Invalid `type`."
+    )
   )
 }

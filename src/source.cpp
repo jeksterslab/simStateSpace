@@ -1,215 +1,4 @@
 // -----------------------------------------------------------------------------
-// edit .setup/cpp/000-forward-declarations.cpp
-// Ivan Jacob Agaloos Pesigan
-// -----------------------------------------------------------------------------
-
-#include <RcppArmadillo.h>
-// [[Rcpp::depends(RcppArmadillo)]]
-Rcpp::List OU2SSM(const arma::vec& mu, const arma::mat& phi,
-                  const arma::mat& sigma_sqrt, const double delta_t);
-
-Rcpp::List SimSSM0(const arma::vec& mu0, const arma::mat& sigma0_sqrt,
-                   const arma::vec& alpha, const arma::mat& beta,
-                   const arma::mat& psi_sqrt, const arma::vec& nu,
-                   const arma::mat& lambda, const arma::mat& theta_sqrt,
-                   const int time, const int burn_in);
-
-Rcpp::List SimSSM0Fixed(const int n, const arma::vec& mu0,
-                        const arma::mat& sigma0_sqrt, const arma::vec& alpha,
-                        const arma::mat& beta, const arma::mat& psi_sqrt,
-                        const arma::vec& nu, const arma::mat& lambda,
-                        const arma::mat& theta_sqrt, const int time,
-                        const int burn_in);
-
-Rcpp::List SimSSM0Vary(const int n, const Rcpp::List& mu0,
-                       const Rcpp::List& sigma0_sqrt, const Rcpp::List& alpha,
-                       const Rcpp::List& beta, const Rcpp::List& psi_sqrt,
-                       const Rcpp::List& nu, const Rcpp::List& lambda,
-                       const Rcpp::List& theta_sqrt, const int time,
-                       const int burn_in);
-
-Rcpp::List SimSSM0VAR(const arma::vec& mu0, const arma::mat& sigma0_sqrt,
-                      const arma::vec& alpha, const arma::mat& beta,
-                      const arma::mat& psi_sqrt, const int time,
-                      const int burn_in);
-
-Rcpp::List SimSSM0VARFixed(const int n, const arma::vec& mu0,
-                           const arma::mat& sigma0_sqrt, const arma::vec& alpha,
-                           const arma::mat& beta, const arma::mat& psi_sqrt,
-                           const int time, const int burn_in);
-
-Rcpp::List SimSSM0VARVary(const int n, const Rcpp::List& mu0,
-                          const Rcpp::List& sigma0_sqrt,
-                          const Rcpp::List& alpha, const Rcpp::List& beta,
-                          const Rcpp::List& psi_sqrt, const int time,
-                          const int burn_in);
-
-Rcpp::List SimSSM0OU(const arma::vec& mu0, const arma::mat& sigma0_sqrt,
-                     const arma::vec& mu, const arma::mat& phi,
-                     const arma::mat& sigma_sqrt, const arma::vec& nu,
-                     const arma::mat& lambda, const arma::mat& theta_sqrt,
-                     const double delta_t, const int time, const int burn_in);
-
-Rcpp::List SimSSM0OUFixed(const int n, const arma::vec& mu0,
-                          const arma::mat& sigma0_sqrt, const arma::vec& mu,
-                          const arma::mat& phi, const arma::mat& sigma_sqrt,
-                          const arma::vec& nu, const arma::mat& lambda,
-                          const arma::mat& theta_sqrt, const double delta_t,
-                          const int time, const int burn_in);
-
-Rcpp::List SimSSM0OUVary(const int n, const Rcpp::List& mu0,
-                         const Rcpp::List& sigma0_sqrt, const Rcpp::List& mu,
-                         const Rcpp::List& phi, const Rcpp::List& sigma_sqrt,
-                         const Rcpp::List& nu, const Rcpp::List& lambda,
-                         const Rcpp::List& theta_sqrt, const double delta_t,
-                         const int time, const int burn_in);
-
-Rcpp::List SimSSM1(const arma::vec& mu0, const arma::mat& sigma0_sqrt,
-                   const arma::vec& alpha, const arma::mat& beta,
-                   const arma::mat& psi_sqrt, const arma::vec& nu,
-                   const arma::mat& lambda, const arma::mat& theta_sqrt,
-                   const arma::mat& gamma_eta, const arma::mat& x,
-                   const int time, const int burn_in);
-
-Rcpp::List SimSSM1Fixed(const int n, const arma::vec& mu0,
-                        const arma::mat& sigma0_sqrt, const arma::vec& alpha,
-                        const arma::mat& beta, const arma::mat& psi_sqrt,
-                        const arma::vec& nu, const arma::mat& lambda,
-                        const arma::mat& theta_sqrt, const arma::mat& gamma_eta,
-                        const Rcpp::List& x, const int time, const int burn_in);
-
-Rcpp::List SimSSM1Vary(const int n, const Rcpp::List& mu0,
-                       const Rcpp::List& sigma0_sqrt, const Rcpp::List& alpha,
-                       const Rcpp::List& beta, const Rcpp::List& psi_sqrt,
-                       const Rcpp::List& nu, const Rcpp::List& lambda,
-                       const Rcpp::List& theta_sqrt,
-                       const Rcpp::List& gamma_eta, const Rcpp::List& x,
-                       const int time, const int burn_in);
-
-Rcpp::List SimSSM1VAR(const arma::vec& mu0, const arma::mat& sigma0_sqrt,
-                      const arma::vec& alpha, const arma::mat& beta,
-                      const arma::mat& psi_sqrt, const arma::mat& gamma_eta,
-                      const arma::mat& x, const int time, const int burn_in);
-
-Rcpp::List SimSSM1VARFixed(const int n, const arma::vec& mu0,
-                           const arma::mat& sigma0_sqrt, const arma::vec& alpha,
-                           const arma::mat& beta, const arma::mat& psi_sqrt,
-                           arma::mat& gamma_eta, const Rcpp::List& x,
-                           const int time, const int burn_in);
-
-Rcpp::List SimSSM1VARVary(const int n, const Rcpp::List& mu0,
-                          const Rcpp::List& sigma0_sqrt,
-                          const Rcpp::List& alpha, const Rcpp::List& beta,
-                          const Rcpp::List& psi_sqrt,
-                          const Rcpp::List& gamma_eta, const Rcpp::List& x,
-                          const int time, const int burn_in);
-
-Rcpp::List SimSSM1OU(const arma::vec& mu0, const arma::mat& sigma0_sqrt,
-                     const arma::vec& mu, const arma::mat& phi,
-                     const arma::mat& sigma_sqrt, const arma::vec& nu,
-                     const arma::mat& lambda, const arma::mat& theta_sqrt,
-                     const arma::mat& gamma_eta, const arma::mat& x,
-                     const double delta_t, const int time, const int burn_in);
-
-Rcpp::List SimSSM1OUFixed(const int n, const arma::vec& mu0,
-                          const arma::mat& sigma0_sqrt, const arma::vec& mu,
-                          const arma::mat& phi, const arma::mat& sigma_sqrt,
-                          const arma::vec& nu, const arma::mat& lambda,
-                          const arma::mat& theta_sqrt,
-                          const arma::mat& gamma_eta, const Rcpp::List& x,
-                          const double delta_t, const int time,
-                          const int burn_in);
-
-Rcpp::List SimSSM1OUVary(const int n, const Rcpp::List& mu0,
-                         const Rcpp::List& sigma0_sqrt, const Rcpp::List& mu,
-                         const Rcpp::List& phi, const Rcpp::List& sigma_sqrt,
-                         const Rcpp::List& nu, const Rcpp::List& lambda,
-                         const Rcpp::List& theta_sqrt,
-                         const Rcpp::List& gamma_eta, const Rcpp::List& x,
-                         const double delta_t, const int time,
-                         const int burn_in);
-
-Rcpp::List SimSSM2(const arma::vec& mu0, const arma::mat& sigma0_sqrt,
-                   const arma::vec& alpha, const arma::mat& beta,
-                   const arma::mat& psi_sqrt, const arma::vec& nu,
-                   const arma::mat& lambda, const arma::mat& theta_sqrt,
-                   const arma::mat& gamma_y, const arma::mat& gamma_eta,
-                   const arma::mat& x, const int time, const int burn_in);
-
-Rcpp::List SimSSM2Fixed(const int n, const arma::vec& mu0,
-                        const arma::mat& sigma0_sqrt, const arma::vec& alpha,
-                        const arma::mat& beta, const arma::mat& psi_sqrt,
-                        const arma::vec& nu, const arma::mat& lambda,
-                        const arma::mat& theta_sqrt, const arma::mat& gamma_y,
-                        const arma::mat& gamma_eta, const Rcpp::List& x,
-                        const int time, const int burn_in);
-
-Rcpp::List SimSSM2Vary(const int n, const Rcpp::List& mu0,
-                       const Rcpp::List& sigma0_sqrt, const Rcpp::List& alpha,
-                       const Rcpp::List& beta, const Rcpp::List& psi_sqrt,
-                       const Rcpp::List& nu, const Rcpp::List& lambda,
-                       const Rcpp::List& theta_sqrt, const Rcpp::List& gamma_y,
-                       const Rcpp::List& gamma_eta, const Rcpp::List& x,
-                       const int time, const int burn_in);
-
-Rcpp::List SimSSM2OU(const arma::vec& mu0, const arma::mat& sigma0_sqrt,
-                     const arma::vec& mu, const arma::mat& phi,
-                     const arma::mat& sigma_sqrt, const arma::vec& nu,
-                     const arma::mat& lambda, const arma::mat& theta_sqrt,
-                     const arma::mat& gamma_y, const arma::mat& gamma_eta,
-                     const arma::mat& x, const double delta_t, const int time,
-                     const int burn_in);
-
-Rcpp::List SimSSM2OUFixed(const int n, const arma::vec& mu0,
-                          const arma::mat& sigma0_sqrt, const arma::vec& mu,
-                          const arma::mat& phi, const arma::mat& sigma_sqrt,
-                          const arma::vec& nu, const arma::mat& lambda,
-                          const arma::mat& theta_sqrt, const arma::mat& gamma_y,
-                          const arma::mat& gamma_eta, const Rcpp::List& x,
-                          const double delta_t, const int time,
-                          const int burn_in);
-
-Rcpp::List SimSSM2OUVary(const int n, const Rcpp::List& mu0,
-                         const Rcpp::List& sigma0_sqrt, const Rcpp::List& mu,
-                         const Rcpp::List& phi, const Rcpp::List& sigma_sqrt,
-                         const Rcpp::List& nu, const Rcpp::List& lambda,
-                         const Rcpp::List& theta_sqrt,
-                         const Rcpp::List& gamma_y, const Rcpp::List& gamma_eta,
-                         const Rcpp::List& x, const double delta_t,
-                         const int time, const int burn_in);
-
-Rcpp::List SimSSM0LinGrowth(const int n, const arma::vec& mu0,
-                            const arma::mat& sigma0_sqrt,
-                            const double theta_sqrt, const int time);
-
-Rcpp::List SimSSM1LinGrowth(const int n, const arma::vec& mu0,
-                            const arma::mat& sigma0_sqrt,
-                            const double theta_sqrt, const arma::mat& gamma_eta,
-                            const Rcpp::List& x, const int time);
-
-Rcpp::List SimSSM2LinGrowth(const int n, const arma::vec& mu0,
-                            const arma::mat& sigma0_sqrt,
-                            const double theta_sqrt, const arma::mat& gamma_y,
-                            const arma::mat& gamma_eta, const Rcpp::List& x,
-                            const int time);
-
-Rcpp::List SimSSM0LinGrowthVary(const int n, const Rcpp::List& mu0,
-                                const Rcpp::List& sigma0_sqrt,
-                                const Rcpp::List& theta_sqrt, const int time);
-
-Rcpp::List SimSSM1LinGrowthVary(const int n, const Rcpp::List& mu0,
-                                const Rcpp::List& sigma0_sqrt,
-                                const Rcpp::List& theta_sqrt,
-                                const Rcpp::List& gamma_eta,
-                                const Rcpp::List& x, const int time);
-
-Rcpp::List SimSSM2LinGrowthVary(const int n, const Rcpp::List& mu0,
-                                const Rcpp::List& sigma0_sqrt,
-                                const Rcpp::List& theta_sqrt,
-                                const Rcpp::List& gamma_y,
-                                const Rcpp::List& gamma_eta,
-                                const Rcpp::List& x, const int time);
-// -----------------------------------------------------------------------------
 // edit .setup/cpp/simStateSpace-ou-2-ssm.cpp
 // Ivan Jacob Agaloos Pesigan
 // -----------------------------------------------------------------------------
@@ -460,6 +249,77 @@ Rcpp::List SimSSM0Fixed(const int n, const arma::vec& mu0,
   return out;
 }
 // -----------------------------------------------------------------------------
+// edit .setup/cpp/simStateSpace-sim-ssm-0-i-vary-dot.cpp
+// Ivan Jacob Agaloos Pesigan
+// -----------------------------------------------------------------------------
+
+#include <RcppArmadillo.h>
+// [[Rcpp::depends(RcppArmadillo)]]
+// [[Rcpp::export(.SimSSM0IVary)]]
+Rcpp::List SimSSM0IVary(const int n, const Rcpp::List& mu0,
+                        const Rcpp::List& sigma0_sqrt, const Rcpp::List& alpha,
+                        const Rcpp::List& beta, const Rcpp::List& psi_sqrt,
+                        const Rcpp::List& nu, const Rcpp::List& lambda,
+                        const Rcpp::List& theta_sqrt, const int time,
+                        const int burn_in) {
+  // Step 1: Determine indices
+  int total_time = time + burn_in;
+  arma::vec mu0_temp = mu0[0];
+  arma::vec nu_temp = nu[0];
+  int num_latent_vars = mu0_temp.n_elem;
+  int num_manifest_vars = nu_temp.n_elem;
+
+  // Step 2: Create a list of length n
+  Rcpp::List out(n);
+
+  // Step 3: Loop to iterate over n
+  for (int i = 0; i < n; i++) {
+    // Step 3.1: Create matrices to store simulated data
+    arma::mat eta(num_latent_vars, total_time);
+    arma::mat y(num_manifest_vars, total_time);
+    arma::vec mu0_temp = mu0[i];
+    arma::mat sigma0_sqrt_temp = sigma0_sqrt[i];
+    arma::vec alpha_temp = alpha[i];
+    arma::mat beta_temp = beta[i];
+    arma::mat psi_sqrt_temp = psi_sqrt[i];
+    arma::vec nu_temp = nu[i];
+    arma::mat lambda_temp = lambda[i];
+    arma::mat theta_sqrt_temp = theta_sqrt[i];
+
+    // Step 3.2: Generate initial condition
+    eta.col(0) = mu0_temp + sigma0_sqrt_temp * arma::randn(num_latent_vars);
+    y.col(0) = nu_temp + lambda_temp * eta.col(0) +
+               theta_sqrt_temp * arma::randn(num_manifest_vars);
+
+    // Step 3.3: Simulate state space model data using a loop
+    for (int t = 1; t < total_time; t++) {
+      eta.col(t) = alpha_temp + beta_temp * eta.col(t - 1) +
+                   psi_sqrt_temp * arma::randn(num_latent_vars);
+      y.col(t) = nu_temp + lambda_temp * eta.col(t) +
+                 theta_sqrt_temp * arma::randn(num_manifest_vars);
+    }
+
+    // Step 3.4: If there is a burn-in period, remove it
+    if (burn_in > 0) {
+      y = y.cols(burn_in, total_time - 1);
+      eta = eta.cols(burn_in, total_time - 1);
+    }
+
+    // Step 3.5: Create a vector of ID numbers of length time
+    arma::vec id(time, arma::fill::zeros);
+    id.fill(i + 1);
+
+    // Step 3.6: Save the transposed data matrices in a list
+    out[i] = Rcpp::List::create(
+        Rcpp::Named("y") = y.t(), Rcpp::Named("eta") = eta.t(),
+        Rcpp::Named("x") = 0, Rcpp::Named("time") = arma::regspace(0, time - 1),
+        Rcpp::Named("id") = id);
+  }
+
+  // Step 4: Return the results
+  return out;
+}
+// -----------------------------------------------------------------------------
 // edit .setup/cpp/simStateSpace-sim-ssm-0-lin-growth-dot.cpp
 // Ivan Jacob Agaloos Pesigan
 // -----------------------------------------------------------------------------
@@ -508,16 +368,16 @@ Rcpp::List SimSSM0LinGrowth(const int n, const arma::vec& mu0,
   return out;
 }
 // -----------------------------------------------------------------------------
-// edit .setup/cpp/simStateSpace-sim-ssm-0-lin-growth-vary-dot.cpp
+// edit .setup/cpp/simStateSpace-sim-ssm-0-lin-growth-i-vary-dot.cpp
 // Ivan Jacob Agaloos Pesigan
 // -----------------------------------------------------------------------------
 
 #include <RcppArmadillo.h>
 // [[Rcpp::depends(RcppArmadillo)]]
-// [[Rcpp::export(.SimSSM0LinGrowthVary)]]
-Rcpp::List SimSSM0LinGrowthVary(const int n, const Rcpp::List& mu0,
-                                const Rcpp::List& sigma0_sqrt,
-                                const Rcpp::List& theta_sqrt, const int time) {
+// [[Rcpp::export(.SimSSM0LinGrowthIVary)]]
+Rcpp::List SimSSM0LinGrowthIVary(const int n, const Rcpp::List& mu0,
+                                 const Rcpp::List& sigma0_sqrt,
+                                 const Rcpp::List& theta_sqrt, const int time) {
   // Step 1: Create constant vectors and matrices
   arma::mat lambda = {{1, 0}};
   arma::mat beta = {{1, 1}, {0, 1}};
@@ -708,19 +568,19 @@ Rcpp::List SimSSM0OUFixed(const int n, const arma::vec& mu0,
   return out;
 }
 // -----------------------------------------------------------------------------
-// edit .setup/cpp/simStateSpace-sim-ssm-0-ou-vary-dot.cpp
+// edit .setup/cpp/simStateSpace-sim-ssm-0-ou-i-vary-dot.cpp
 // Ivan Jacob Agaloos Pesigan
 // -----------------------------------------------------------------------------
 
 #include <RcppArmadillo.h>
 // [[Rcpp::depends(RcppArmadillo)]]
-// [[Rcpp::export(.SimSSM0OUVary)]]
-Rcpp::List SimSSM0OUVary(const int n, const Rcpp::List& mu0,
-                         const Rcpp::List& sigma0_sqrt, const Rcpp::List& mu,
-                         const Rcpp::List& phi, const Rcpp::List& sigma_sqrt,
-                         const Rcpp::List& nu, const Rcpp::List& lambda,
-                         const Rcpp::List& theta_sqrt, const double delta_t,
-                         const int time, const int burn_in) {
+// [[Rcpp::export(.SimSSM0OUIVary)]]
+Rcpp::List SimSSM0OUIVary(const int n, const Rcpp::List& mu0,
+                          const Rcpp::List& sigma0_sqrt, const Rcpp::List& mu,
+                          const Rcpp::List& phi, const Rcpp::List& sigma_sqrt,
+                          const Rcpp::List& nu, const Rcpp::List& lambda,
+                          const Rcpp::List& theta_sqrt, const double delta_t,
+                          const int time, const int burn_in) {
   // Step 1: Determine indices
   int total_time = time + burn_in;
   arma::vec mu0_temp = mu0[0];
@@ -894,18 +754,18 @@ Rcpp::List SimSSM0VARFixed(const int n, const arma::vec& mu0,
   return out;
 }
 // -----------------------------------------------------------------------------
-// edit .setup/cpp/simStateSpace-sim-ssm-0-var-vary-dot.cpp
+// edit .setup/cpp/simStateSpace-sim-ssm-0-var-i-vary-dot.cpp
 // Ivan Jacob Agaloos Pesigan
 // -----------------------------------------------------------------------------
 
 #include <RcppArmadillo.h>
 // [[Rcpp::depends(RcppArmadillo)]]
-// [[Rcpp::export(.SimSSM0VARVary)]]
-Rcpp::List SimSSM0VARVary(const int n, const Rcpp::List& mu0,
-                          const Rcpp::List& sigma0_sqrt,
-                          const Rcpp::List& alpha, const Rcpp::List& beta,
-                          const Rcpp::List& psi_sqrt, const int time,
-                          const int burn_in) {
+// [[Rcpp::export(.SimSSM0VARIVary)]]
+Rcpp::List SimSSM0VARIVary(const int n, const Rcpp::List& mu0,
+                           const Rcpp::List& sigma0_sqrt,
+                           const Rcpp::List& alpha, const Rcpp::List& beta,
+                           const Rcpp::List& psi_sqrt, const int time,
+                           const int burn_in) {
   // Step 1: Determine indices
   int total_time = time + burn_in;
   arma::vec mu0_temp = mu0[0];
@@ -945,77 +805,6 @@ Rcpp::List SimSSM0VARVary(const int n, const Rcpp::List& mu0,
     // Step 3.6: Save the transposed data matrices in a list
     out[i] = Rcpp::List::create(
         Rcpp::Named("y") = eta.t(), Rcpp::Named("eta") = eta.t(),
-        Rcpp::Named("x") = 0, Rcpp::Named("time") = arma::regspace(0, time - 1),
-        Rcpp::Named("id") = id);
-  }
-
-  // Step 4: Return the results
-  return out;
-}
-// -----------------------------------------------------------------------------
-// edit .setup/cpp/simStateSpace-sim-ssm-0-vary-dot.cpp
-// Ivan Jacob Agaloos Pesigan
-// -----------------------------------------------------------------------------
-
-#include <RcppArmadillo.h>
-// [[Rcpp::depends(RcppArmadillo)]]
-// [[Rcpp::export(.SimSSM0Vary)]]
-Rcpp::List SimSSM0Vary(const int n, const Rcpp::List& mu0,
-                       const Rcpp::List& sigma0_sqrt, const Rcpp::List& alpha,
-                       const Rcpp::List& beta, const Rcpp::List& psi_sqrt,
-                       const Rcpp::List& nu, const Rcpp::List& lambda,
-                       const Rcpp::List& theta_sqrt, const int time,
-                       const int burn_in) {
-  // Step 1: Determine indices
-  int total_time = time + burn_in;
-  arma::vec mu0_temp = mu0[0];
-  arma::vec nu_temp = nu[0];
-  int num_latent_vars = mu0_temp.n_elem;
-  int num_manifest_vars = nu_temp.n_elem;
-
-  // Step 2: Create a list of length n
-  Rcpp::List out(n);
-
-  // Step 3: Loop to iterate over n
-  for (int i = 0; i < n; i++) {
-    // Step 3.1: Create matrices to store simulated data
-    arma::mat eta(num_latent_vars, total_time);
-    arma::mat y(num_manifest_vars, total_time);
-    arma::vec mu0_temp = mu0[i];
-    arma::mat sigma0_sqrt_temp = sigma0_sqrt[i];
-    arma::vec alpha_temp = alpha[i];
-    arma::mat beta_temp = beta[i];
-    arma::mat psi_sqrt_temp = psi_sqrt[i];
-    arma::vec nu_temp = nu[i];
-    arma::mat lambda_temp = lambda[i];
-    arma::mat theta_sqrt_temp = theta_sqrt[i];
-
-    // Step 3.2: Generate initial condition
-    eta.col(0) = mu0_temp + sigma0_sqrt_temp * arma::randn(num_latent_vars);
-    y.col(0) = nu_temp + lambda_temp * eta.col(0) +
-               theta_sqrt_temp * arma::randn(num_manifest_vars);
-
-    // Step 3.3: Simulate state space model data using a loop
-    for (int t = 1; t < total_time; t++) {
-      eta.col(t) = alpha_temp + beta_temp * eta.col(t - 1) +
-                   psi_sqrt_temp * arma::randn(num_latent_vars);
-      y.col(t) = nu_temp + lambda_temp * eta.col(t) +
-                 theta_sqrt_temp * arma::randn(num_manifest_vars);
-    }
-
-    // Step 3.4: If there is a burn-in period, remove it
-    if (burn_in > 0) {
-      y = y.cols(burn_in, total_time - 1);
-      eta = eta.cols(burn_in, total_time - 1);
-    }
-
-    // Step 3.5: Create a vector of ID numbers of length time
-    arma::vec id(time, arma::fill::zeros);
-    id.fill(i + 1);
-
-    // Step 3.6: Save the transposed data matrices in a list
-    out[i] = Rcpp::List::create(
-        Rcpp::Named("y") = y.t(), Rcpp::Named("eta") = eta.t(),
         Rcpp::Named("x") = 0, Rcpp::Named("time") = arma::regspace(0, time - 1),
         Rcpp::Named("id") = id);
   }
@@ -1147,6 +936,85 @@ Rcpp::List SimSSM1Fixed(const int n, const arma::vec& mu0,
   return out;
 }
 // -----------------------------------------------------------------------------
+// edit .setup/cpp/simStateSpace-sim-ssm-1-i-vary-dot.cpp
+// Ivan Jacob Agaloos Pesigan
+// -----------------------------------------------------------------------------
+
+#include <RcppArmadillo.h>
+// [[Rcpp::depends(RcppArmadillo)]]
+// [[Rcpp::export(.SimSSM1IVary)]]
+Rcpp::List SimSSM1IVary(const int n, const Rcpp::List& mu0,
+                        const Rcpp::List& sigma0_sqrt, const Rcpp::List& alpha,
+                        const Rcpp::List& beta, const Rcpp::List& psi_sqrt,
+                        const Rcpp::List& nu, const Rcpp::List& lambda,
+                        const Rcpp::List& theta_sqrt,
+                        const Rcpp::List& gamma_eta, const Rcpp::List& x,
+                        const int time, const int burn_in) {
+  // Step 1: Determine indices
+  int total_time = time + burn_in;
+  arma::vec mu0_temp = mu0[0];
+  arma::vec nu_temp = nu[0];
+  int num_latent_vars = mu0_temp.n_elem;
+  int num_manifest_vars = nu_temp.n_elem;
+
+  // Step 2: Create a list of length n
+  Rcpp::List out(n);
+
+  // Step 3: Loop to iterate over n
+  for (int i = 0; i < n; i++) {
+    // Step 3.1: Create matrices to store simulated data
+    arma::mat eta(num_latent_vars, total_time);
+    arma::mat y(num_manifest_vars, total_time);
+    arma::mat x_temp = x[i];
+    arma::mat x_t = x_temp.t();
+    arma::vec mu0_temp = mu0[i];
+    arma::mat sigma0_sqrt_temp = sigma0_sqrt[i];
+    arma::vec alpha_temp = alpha[i];
+    arma::mat beta_temp = beta[i];
+    arma::mat psi_sqrt_temp = psi_sqrt[i];
+    arma::vec nu_temp = nu[i];
+    arma::mat lambda_temp = lambda[i];
+    arma::mat theta_sqrt_temp = theta_sqrt[i];
+    arma::mat gamma_eta_temp = gamma_eta[i];
+
+    // Step 3.2: Generate initial condition
+    eta.col(0) = mu0_temp + sigma0_sqrt_temp * arma::randn(num_latent_vars) +
+                 gamma_eta_temp * x_t.col(0);
+    y.col(0) = nu_temp + lambda_temp * eta.col(0) +
+               theta_sqrt_temp * arma::randn(num_manifest_vars);
+
+    // Step 3.3: Simulate state space model data using a loop
+    for (int t = 1; t < total_time; t++) {
+      eta.col(t) = alpha_temp + beta_temp * eta.col(t - 1) +
+                   psi_sqrt_temp * arma::randn(num_latent_vars) +
+                   gamma_eta_temp * x_t.col(t);
+      y.col(t) = nu_temp + lambda_temp * eta.col(t) +
+                 theta_sqrt_temp * arma::randn(num_manifest_vars);
+    }
+
+    // Step 3.4: If there is a burn-in period, remove it
+    if (burn_in > 0) {
+      y = y.cols(burn_in, total_time - 1);
+      eta = eta.cols(burn_in, total_time - 1);
+      x_t = x_t.cols(burn_in, total_time - 1);
+    }
+
+    // Step 3.5: Create a vector of ID numbers of length time
+    arma::vec id(time, arma::fill::zeros);
+    id.fill(i + 1);
+
+    // Step 3.6: Save the transposed data matrices in a list
+    out[i] = Rcpp::List::create(
+        Rcpp::Named("y") = y.t(), Rcpp::Named("eta") = eta.t(),
+        Rcpp::Named("x") = x_t.t(),
+        Rcpp::Named("time") = arma::regspace(0, time - 1),
+        Rcpp::Named("id") = id);
+  }
+
+  // Step 4: Return the results
+  return out;
+}
+// -----------------------------------------------------------------------------
 // edit .setup/cpp/simStateSpace-sim-ssm-1-lin-growth-dot.cpp
 // Ivan Jacob Agaloos Pesigan
 // -----------------------------------------------------------------------------
@@ -1199,18 +1067,18 @@ Rcpp::List SimSSM1LinGrowth(const int n, const arma::vec& mu0,
   return out;
 }
 // -----------------------------------------------------------------------------
-// edit .setup/cpp/simStateSpace-sim-ssm-1-lin-growth-vary-dot.cpp
+// edit .setup/cpp/simStateSpace-sim-ssm-1-lin-growth-i-vary-dot.cpp
 // Ivan Jacob Agaloos Pesigan
 // -----------------------------------------------------------------------------
 
 #include <RcppArmadillo.h>
 // [[Rcpp::depends(RcppArmadillo)]]
-// [[Rcpp::export(.SimSSM1LinGrowthVary)]]
-Rcpp::List SimSSM1LinGrowthVary(const int n, const Rcpp::List& mu0,
-                                const Rcpp::List& sigma0_sqrt,
-                                const Rcpp::List& theta_sqrt,
-                                const Rcpp::List& gamma_eta,
-                                const Rcpp::List& x, const int time) {
+// [[Rcpp::export(.SimSSM1LinGrowthIVary)]]
+Rcpp::List SimSSM1LinGrowthIVary(const int n, const Rcpp::List& mu0,
+                                 const Rcpp::List& sigma0_sqrt,
+                                 const Rcpp::List& theta_sqrt,
+                                 const Rcpp::List& gamma_eta,
+                                 const Rcpp::List& x, const int time) {
   // Step 1: Create constant vectors and matrices
   arma::mat lambda = {{1, 0}};
   arma::mat beta = {{1, 1}, {0, 1}};
@@ -1418,21 +1286,21 @@ Rcpp::List SimSSM1OUFixed(const int n, const arma::vec& mu0,
   return out;
 }
 // -----------------------------------------------------------------------------
-// edit .setup/cpp/simStateSpace-sim-ssm-0-ou-vary-dot.cpp
+// edit .setup/cpp/simStateSpace-sim-ssm-0-ou-i-vary-dot.cpp
 // Ivan Jacob Agaloos Pesigan
 // -----------------------------------------------------------------------------
 
 #include <RcppArmadillo.h>
 // [[Rcpp::depends(RcppArmadillo)]]
-// [[Rcpp::export(.SimSSM1OUVary)]]
-Rcpp::List SimSSM1OUVary(const int n, const Rcpp::List& mu0,
-                         const Rcpp::List& sigma0_sqrt, const Rcpp::List& mu,
-                         const Rcpp::List& phi, const Rcpp::List& sigma_sqrt,
-                         const Rcpp::List& nu, const Rcpp::List& lambda,
-                         const Rcpp::List& theta_sqrt,
-                         const Rcpp::List& gamma_eta, const Rcpp::List& x,
-                         const double delta_t, const int time,
-                         const int burn_in) {
+// [[Rcpp::export(.SimSSM1OUIVary)]]
+Rcpp::List SimSSM1OUIVary(const int n, const Rcpp::List& mu0,
+                          const Rcpp::List& sigma0_sqrt, const Rcpp::List& mu,
+                          const Rcpp::List& phi, const Rcpp::List& sigma_sqrt,
+                          const Rcpp::List& nu, const Rcpp::List& lambda,
+                          const Rcpp::List& theta_sqrt,
+                          const Rcpp::List& gamma_eta, const Rcpp::List& x,
+                          const double delta_t, const int time,
+                          const int burn_in) {
   // Step 1: Determine indices
   int total_time = time + burn_in;
   arma::vec mu0_temp = mu0[0];
@@ -1624,19 +1492,19 @@ Rcpp::List SimSSM1VARFixed(const int n, const arma::vec& mu0,
   return out;
 }
 // -----------------------------------------------------------------------------
-// edit .setup/cpp/simStateSpace-sim-ssm-1-var-vary-dot.cpp
+// edit .setup/cpp/simStateSpace-sim-ssm-1-var-i-vary-dot.cpp
 // Ivan Jacob Agaloos Pesigan
 // -----------------------------------------------------------------------------
 
 #include <RcppArmadillo.h>
 // [[Rcpp::depends(RcppArmadillo)]]
-// [[Rcpp::export(.SimSSM1VARVary)]]
-Rcpp::List SimSSM1VARVary(const int n, const Rcpp::List& mu0,
-                          const Rcpp::List& sigma0_sqrt,
-                          const Rcpp::List& alpha, const Rcpp::List& beta,
-                          const Rcpp::List& psi_sqrt,
-                          const Rcpp::List& gamma_eta, const Rcpp::List& x,
-                          const int time, const int burn_in) {
+// [[Rcpp::export(.SimSSM1VARIVary)]]
+Rcpp::List SimSSM1VARIVary(const int n, const Rcpp::List& mu0,
+                           const Rcpp::List& sigma0_sqrt,
+                           const Rcpp::List& alpha, const Rcpp::List& beta,
+                           const Rcpp::List& psi_sqrt,
+                           const Rcpp::List& gamma_eta, const Rcpp::List& x,
+                           const int time, const int burn_in) {
   // Step 1: Determine indices
   int total_time = time + burn_in;
   arma::vec mu0_temp = mu0[0];
@@ -1682,85 +1550,6 @@ Rcpp::List SimSSM1VARVary(const int n, const Rcpp::List& mu0,
     // Step 3.6: Save the transposed data matrices in a list
     out[i] = Rcpp::List::create(
         Rcpp::Named("y") = eta.t(), Rcpp::Named("eta") = eta.t(),
-        Rcpp::Named("x") = x_t.t(),
-        Rcpp::Named("time") = arma::regspace(0, time - 1),
-        Rcpp::Named("id") = id);
-  }
-
-  // Step 4: Return the results
-  return out;
-}
-// -----------------------------------------------------------------------------
-// edit .setup/cpp/simStateSpace-sim-ssm-1-vary-dot.cpp
-// Ivan Jacob Agaloos Pesigan
-// -----------------------------------------------------------------------------
-
-#include <RcppArmadillo.h>
-// [[Rcpp::depends(RcppArmadillo)]]
-// [[Rcpp::export(.SimSSM1Vary)]]
-Rcpp::List SimSSM1Vary(const int n, const Rcpp::List& mu0,
-                       const Rcpp::List& sigma0_sqrt, const Rcpp::List& alpha,
-                       const Rcpp::List& beta, const Rcpp::List& psi_sqrt,
-                       const Rcpp::List& nu, const Rcpp::List& lambda,
-                       const Rcpp::List& theta_sqrt,
-                       const Rcpp::List& gamma_eta, const Rcpp::List& x,
-                       const int time, const int burn_in) {
-  // Step 1: Determine indices
-  int total_time = time + burn_in;
-  arma::vec mu0_temp = mu0[0];
-  arma::vec nu_temp = nu[0];
-  int num_latent_vars = mu0_temp.n_elem;
-  int num_manifest_vars = nu_temp.n_elem;
-
-  // Step 2: Create a list of length n
-  Rcpp::List out(n);
-
-  // Step 3: Loop to iterate over n
-  for (int i = 0; i < n; i++) {
-    // Step 3.1: Create matrices to store simulated data
-    arma::mat eta(num_latent_vars, total_time);
-    arma::mat y(num_manifest_vars, total_time);
-    arma::mat x_temp = x[i];
-    arma::mat x_t = x_temp.t();
-    arma::vec mu0_temp = mu0[i];
-    arma::mat sigma0_sqrt_temp = sigma0_sqrt[i];
-    arma::vec alpha_temp = alpha[i];
-    arma::mat beta_temp = beta[i];
-    arma::mat psi_sqrt_temp = psi_sqrt[i];
-    arma::vec nu_temp = nu[i];
-    arma::mat lambda_temp = lambda[i];
-    arma::mat theta_sqrt_temp = theta_sqrt[i];
-    arma::mat gamma_eta_temp = gamma_eta[i];
-
-    // Step 3.2: Generate initial condition
-    eta.col(0) = mu0_temp + sigma0_sqrt_temp * arma::randn(num_latent_vars) +
-                 gamma_eta_temp * x_t.col(0);
-    y.col(0) = nu_temp + lambda_temp * eta.col(0) +
-               theta_sqrt_temp * arma::randn(num_manifest_vars);
-
-    // Step 3.3: Simulate state space model data using a loop
-    for (int t = 1; t < total_time; t++) {
-      eta.col(t) = alpha_temp + beta_temp * eta.col(t - 1) +
-                   psi_sqrt_temp * arma::randn(num_latent_vars) +
-                   gamma_eta_temp * x_t.col(t);
-      y.col(t) = nu_temp + lambda_temp * eta.col(t) +
-                 theta_sqrt_temp * arma::randn(num_manifest_vars);
-    }
-
-    // Step 3.4: If there is a burn-in period, remove it
-    if (burn_in > 0) {
-      y = y.cols(burn_in, total_time - 1);
-      eta = eta.cols(burn_in, total_time - 1);
-      x_t = x_t.cols(burn_in, total_time - 1);
-    }
-
-    // Step 3.5: Create a vector of ID numbers of length time
-    arma::vec id(time, arma::fill::zeros);
-    id.fill(i + 1);
-
-    // Step 3.6: Save the transposed data matrices in a list
-    out[i] = Rcpp::List::create(
-        Rcpp::Named("y") = y.t(), Rcpp::Named("eta") = eta.t(),
         Rcpp::Named("x") = x_t.t(),
         Rcpp::Named("time") = arma::regspace(0, time - 1),
         Rcpp::Named("id") = id);
@@ -1896,6 +1685,88 @@ Rcpp::List SimSSM2Fixed(const int n, const arma::vec& mu0,
   return out;
 }
 // -----------------------------------------------------------------------------
+// edit .setup/cpp/simStateSpace-sim-ssm-2-i-vary-dot.cpp
+// Ivan Jacob Agaloos Pesigan
+// -----------------------------------------------------------------------------
+
+#include <RcppArmadillo.h>
+// [[Rcpp::depends(RcppArmadillo)]]
+// [[Rcpp::export(.SimSSM2IVary)]]
+Rcpp::List SimSSM2IVary(const int n, const Rcpp::List& mu0,
+                        const Rcpp::List& sigma0_sqrt, const Rcpp::List& alpha,
+                        const Rcpp::List& beta, const Rcpp::List& psi_sqrt,
+                        const Rcpp::List& nu, const Rcpp::List& lambda,
+                        const Rcpp::List& theta_sqrt, const Rcpp::List& gamma_y,
+                        const Rcpp::List& gamma_eta, const Rcpp::List& x,
+                        const int time, const int burn_in) {
+  // Step 1: Determine indices
+  int total_time = time + burn_in;
+  arma::vec mu0_temp = mu0[0];
+  arma::vec nu_temp = nu[0];
+  int num_latent_vars = mu0_temp.n_elem;
+  int num_manifest_vars = nu_temp.n_elem;
+
+  // Step 2: Create a list of length n
+  Rcpp::List out(n);
+
+  // Step 3: Loop to iterate over n
+  for (int i = 0; i < n; i++) {
+    // Step 3.1: Create matrices to store simulated data
+    arma::mat eta(num_latent_vars, total_time);
+    arma::mat y(num_manifest_vars, total_time);
+    arma::mat x_temp = x[i];
+    arma::mat x_t = x_temp.t();
+    arma::vec mu0_temp = mu0[i];
+    arma::mat sigma0_sqrt_temp = sigma0_sqrt[i];
+    arma::vec alpha_temp = alpha[i];
+    arma::mat beta_temp = beta[i];
+    arma::mat psi_sqrt_temp = psi_sqrt[i];
+    arma::vec nu_temp = nu[i];
+    arma::mat lambda_temp = lambda[i];
+    arma::mat theta_sqrt_temp = theta_sqrt[i];
+    arma::mat gamma_y_temp = gamma_y[i];
+    arma::mat gamma_eta_temp = gamma_eta[i];
+
+    // Step 3.2: Generate initial condition
+    eta.col(0) = mu0_temp + sigma0_sqrt_temp * arma::randn(num_latent_vars) +
+                 gamma_eta_temp * x_t.col(0);
+    y.col(0) = nu_temp + lambda_temp * eta.col(0) +
+               theta_sqrt_temp * arma::randn(num_manifest_vars) +
+               gamma_y_temp * x_t.col(0);
+
+    // Step 3.3: Simulate state space model data using a loop
+    for (int t = 1; t < total_time; t++) {
+      eta.col(t) = alpha_temp + beta_temp * eta.col(t - 1) +
+                   psi_sqrt_temp * arma::randn(num_latent_vars) +
+                   gamma_eta_temp * x_t.col(t);
+      y.col(t) = nu_temp + lambda_temp * eta.col(t) +
+                 theta_sqrt_temp * arma::randn(num_manifest_vars) +
+                 gamma_y_temp * x_t.col(t);
+    }
+
+    // Step 3.4: If there is a burn-in period, remove it
+    if (burn_in > 0) {
+      y = y.cols(burn_in, total_time - 1);
+      eta = eta.cols(burn_in, total_time - 1);
+      x_t = x_t.cols(burn_in, total_time - 1);
+    }
+
+    // Step 3.5: Create a vector of ID numbers of length time
+    arma::vec id(time, arma::fill::zeros);
+    id.fill(i + 1);
+
+    // Step 3.6: Save the transposed data matrices in a list
+    out[i] = Rcpp::List::create(
+        Rcpp::Named("y") = y.t(), Rcpp::Named("eta") = eta.t(),
+        Rcpp::Named("x") = x_t.t(),
+        Rcpp::Named("time") = arma::regspace(0, time - 1),
+        Rcpp::Named("id") = id);
+  }
+
+  // Step 4: Return the results
+  return out;
+}
+// -----------------------------------------------------------------------------
 // edit .setup/cpp/simStateSpace-sim-ssm-2-lin-growth-dot.cpp
 // Ivan Jacob Agaloos Pesigan
 // -----------------------------------------------------------------------------
@@ -1951,19 +1822,19 @@ Rcpp::List SimSSM2LinGrowth(const int n, const arma::vec& mu0,
   return out;
 }
 // -----------------------------------------------------------------------------
-// edit .setup/cpp/simStateSpace-sim-ssm-2-lin-growth-vary-dot.cpp
+// edit .setup/cpp/simStateSpace-sim-ssm-2-lin-growth-i-vary-dot.cpp
 // Ivan Jacob Agaloos Pesigan
 // -----------------------------------------------------------------------------
 
 #include <RcppArmadillo.h>
 // [[Rcpp::depends(RcppArmadillo)]]
-// [[Rcpp::export(.SimSSM2LinGrowthVary)]]
-Rcpp::List SimSSM2LinGrowthVary(const int n, const Rcpp::List& mu0,
-                                const Rcpp::List& sigma0_sqrt,
-                                const Rcpp::List& theta_sqrt,
-                                const Rcpp::List& gamma_y,
-                                const Rcpp::List& gamma_eta,
-                                const Rcpp::List& x, const int time) {
+// [[Rcpp::export(.SimSSM2LinGrowthIVary)]]
+Rcpp::List SimSSM2LinGrowthIVary(const int n, const Rcpp::List& mu0,
+                                 const Rcpp::List& sigma0_sqrt,
+                                 const Rcpp::List& theta_sqrt,
+                                 const Rcpp::List& gamma_y,
+                                 const Rcpp::List& gamma_eta,
+                                 const Rcpp::List& x, const int time) {
   // Step 1: Create constant vectors and matrices
   arma::mat lambda = {{1, 0}};
   arma::mat beta = {{1, 1}, {0, 1}};
@@ -2178,21 +2049,22 @@ Rcpp::List SimSSM2OUFixed(const int n, const arma::vec& mu0,
   return out;
 }
 // -----------------------------------------------------------------------------
-// edit .setup/cpp/simStateSpace-sim-ssm-0-ou-vary-dot.cpp
+// edit .setup/cpp/simStateSpace-sim-ssm-0-ou-i-vary-dot.cpp
 // Ivan Jacob Agaloos Pesigan
 // -----------------------------------------------------------------------------
 
 #include <RcppArmadillo.h>
 // [[Rcpp::depends(RcppArmadillo)]]
-// [[Rcpp::export(.SimSSM2OUVary)]]
-Rcpp::List SimSSM2OUVary(const int n, const Rcpp::List& mu0,
-                         const Rcpp::List& sigma0_sqrt, const Rcpp::List& mu,
-                         const Rcpp::List& phi, const Rcpp::List& sigma_sqrt,
-                         const Rcpp::List& nu, const Rcpp::List& lambda,
-                         const Rcpp::List& theta_sqrt,
-                         const Rcpp::List& gamma_y, const Rcpp::List& gamma_eta,
-                         const Rcpp::List& x, const double delta_t,
-                         const int time, const int burn_in) {
+// [[Rcpp::export(.SimSSM2OUIVary)]]
+Rcpp::List SimSSM2OUIVary(const int n, const Rcpp::List& mu0,
+                          const Rcpp::List& sigma0_sqrt, const Rcpp::List& mu,
+                          const Rcpp::List& phi, const Rcpp::List& sigma_sqrt,
+                          const Rcpp::List& nu, const Rcpp::List& lambda,
+                          const Rcpp::List& theta_sqrt,
+                          const Rcpp::List& gamma_y,
+                          const Rcpp::List& gamma_eta, const Rcpp::List& x,
+                          const double delta_t, const int time,
+                          const int burn_in) {
   // Step 1: Determine indices
   int total_time = time + burn_in;
   arma::vec mu0_temp = mu0[0];
@@ -2279,87 +2151,5 @@ Rcpp::List SimSSM2OUVary(const int n, const Rcpp::List& mu0,
   }
 
   // Step 4: Return results
-  return out;
-}
-// -----------------------------------------------------------------------------
-// edit .setup/cpp/simStateSpace-sim-ssm-2-vary-dot.cpp
-// Ivan Jacob Agaloos Pesigan
-// -----------------------------------------------------------------------------
-
-#include <RcppArmadillo.h>
-// [[Rcpp::depends(RcppArmadillo)]]
-// [[Rcpp::export(.SimSSM2Vary)]]
-Rcpp::List SimSSM2Vary(const int n, const Rcpp::List& mu0,
-                       const Rcpp::List& sigma0_sqrt, const Rcpp::List& alpha,
-                       const Rcpp::List& beta, const Rcpp::List& psi_sqrt,
-                       const Rcpp::List& nu, const Rcpp::List& lambda,
-                       const Rcpp::List& theta_sqrt, const Rcpp::List& gamma_y,
-                       const Rcpp::List& gamma_eta, const Rcpp::List& x,
-                       const int time, const int burn_in) {
-  // Step 1: Determine indices
-  int total_time = time + burn_in;
-  arma::vec mu0_temp = mu0[0];
-  arma::vec nu_temp = nu[0];
-  int num_latent_vars = mu0_temp.n_elem;
-  int num_manifest_vars = nu_temp.n_elem;
-
-  // Step 2: Create a list of length n
-  Rcpp::List out(n);
-
-  // Step 3: Loop to iterate over n
-  for (int i = 0; i < n; i++) {
-    // Step 3.1: Create matrices to store simulated data
-    arma::mat eta(num_latent_vars, total_time);
-    arma::mat y(num_manifest_vars, total_time);
-    arma::mat x_temp = x[i];
-    arma::mat x_t = x_temp.t();
-    arma::vec mu0_temp = mu0[i];
-    arma::mat sigma0_sqrt_temp = sigma0_sqrt[i];
-    arma::vec alpha_temp = alpha[i];
-    arma::mat beta_temp = beta[i];
-    arma::mat psi_sqrt_temp = psi_sqrt[i];
-    arma::vec nu_temp = nu[i];
-    arma::mat lambda_temp = lambda[i];
-    arma::mat theta_sqrt_temp = theta_sqrt[i];
-    arma::mat gamma_y_temp = gamma_y[i];
-    arma::mat gamma_eta_temp = gamma_eta[i];
-
-    // Step 3.2: Generate initial condition
-    eta.col(0) = mu0_temp + sigma0_sqrt_temp * arma::randn(num_latent_vars) +
-                 gamma_eta_temp * x_t.col(0);
-    y.col(0) = nu_temp + lambda_temp * eta.col(0) +
-               theta_sqrt_temp * arma::randn(num_manifest_vars) +
-               gamma_y_temp * x_t.col(0);
-
-    // Step 3.3: Simulate state space model data using a loop
-    for (int t = 1; t < total_time; t++) {
-      eta.col(t) = alpha_temp + beta_temp * eta.col(t - 1) +
-                   psi_sqrt_temp * arma::randn(num_latent_vars) +
-                   gamma_eta_temp * x_t.col(t);
-      y.col(t) = nu_temp + lambda_temp * eta.col(t) +
-                 theta_sqrt_temp * arma::randn(num_manifest_vars) +
-                 gamma_y_temp * x_t.col(t);
-    }
-
-    // Step 3.4: If there is a burn-in period, remove it
-    if (burn_in > 0) {
-      y = y.cols(burn_in, total_time - 1);
-      eta = eta.cols(burn_in, total_time - 1);
-      x_t = x_t.cols(burn_in, total_time - 1);
-    }
-
-    // Step 3.5: Create a vector of ID numbers of length time
-    arma::vec id(time, arma::fill::zeros);
-    id.fill(i + 1);
-
-    // Step 3.6: Save the transposed data matrices in a list
-    out[i] = Rcpp::List::create(
-        Rcpp::Named("y") = y.t(), Rcpp::Named("eta") = eta.t(),
-        Rcpp::Named("x") = x_t.t(),
-        Rcpp::Named("time") = arma::regspace(0, time - 1),
-        Rcpp::Named("id") = id);
-  }
-
-  // Step 4: Return the results
   return out;
 }

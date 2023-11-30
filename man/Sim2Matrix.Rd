@@ -15,9 +15,9 @@ Output of
 \code{\link[=SimSSMFixed]{SimSSMFixed()}},
 \code{\link[=SimSSMOUFixed]{SimSSMOUFixed()}},
 \code{\link[=SimSSMVARFixed]{SimSSMVARFixed()}},
-\code{\link[=SimSSMVary]{SimSSMVary()}},
-\code{\link[=SimSSMOUVary]{SimSSMOUVary()}}, or
-\code{\link[=SimSSMVARVary]{SimSSMVARVary()}}.}
+\code{\link[=SimSSMIVary]{SimSSMIVary()}},
+\code{\link[=SimSSMOUIVary]{SimSSMOUIVary()}}, or
+\code{\link[=SimSSMVARIVary]{SimSSMVARIVary()}}.}
 
 \item{eta}{Logical.
 If \code{eta = TRUE}, include \code{eta}.
@@ -38,9 +38,9 @@ This function converts the output of
 \code{\link[=SimSSMFixed]{SimSSMFixed()}},
 \code{\link[=SimSSMOUFixed]{SimSSMOUFixed()}},
 \code{\link[=SimSSMVARFixed]{SimSSMVARFixed()}},
-\code{\link[=SimSSMVary]{SimSSMVary()}},
-\code{\link[=SimSSMOUVary]{SimSSMOUVary()}}, or
-\code{\link[=SimSSMVARVary]{SimSSMVARVary()}}
+\code{\link[=SimSSMIVary]{SimSSMIVary()}},
+\code{\link[=SimSSMOUIVary]{SimSSMOUIVary()}}, or
+\code{\link[=SimSSMVARIVary]{SimSSMVARIVary()}}
 to a matrix.
 }
 \examples{
@@ -114,15 +114,15 @@ head(mat)
 Other Simulation of State Space Models Data Functions: 
 \code{\link{OU2SSM}()},
 \code{\link{SimSSMFixed}()},
-\code{\link{SimSSMLinGrowthVary}()},
+\code{\link{SimSSMIVary}()},
+\code{\link{SimSSMLinGrowthIVary}()},
 \code{\link{SimSSMLinGrowth}()},
 \code{\link{SimSSMOUFixed}()},
-\code{\link{SimSSMOUVary}()},
+\code{\link{SimSSMOUIVary}()},
 \code{\link{SimSSMOU}()},
 \code{\link{SimSSMVARFixed}()},
-\code{\link{SimSSMVARVary}()},
+\code{\link{SimSSMVARIVary}()},
 \code{\link{SimSSMVAR}()},
-\code{\link{SimSSMVary}()},
 \code{\link{SimSSM}()}
 }
 \author{
