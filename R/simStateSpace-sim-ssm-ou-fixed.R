@@ -324,8 +324,8 @@ SimSSMOUFixed <- function(n,
     type %in% 0:2
   )
   switch(
-    EXPR = type,
-    0 = {
+    EXPR = as.character(type),
+    "0" = {
       return(
         .SimSSM0OUFixed(
           n = n,
@@ -343,7 +343,7 @@ SimSSMOUFixed <- function(n,
         )
       )
     },
-    1 = {
+    "1" = {
       return(
         .SimSSM1OUFixed(
           n = n,
@@ -363,7 +363,7 @@ SimSSMOUFixed <- function(n,
         )
       )
     },
-    2 = {
+    "2" = {
       return(
         .SimSSM2OUFixed(
           n = n,

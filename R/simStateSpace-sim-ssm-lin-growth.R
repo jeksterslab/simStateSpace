@@ -344,8 +344,8 @@ SimSSMLinGrowth <- function(n,
     type %in% 0:2
   )
   switch(
-    EXPR = type,
-    0 = {
+    EXPR = as.character(type),
+    "0" = {
       return(
         .SimSSM0LinGrowth(
           n = n,
@@ -356,7 +356,7 @@ SimSSMLinGrowth <- function(n,
         )
       )
     },
-    1 = {
+    "1" = {
       return(
         .SimSSM1LinGrowth(
           n = n,
@@ -369,7 +369,7 @@ SimSSMLinGrowth <- function(n,
         )
       )
     },
-    2 = {
+    "2" = {
       return(
         .SimSSM2LinGrowth(
           n = n,

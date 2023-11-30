@@ -332,8 +332,8 @@ SimSSMOU <- function(mu0,
     type %in% 0:2
   )
   switch(
-    EXPR = type,
-    0 = {
+    EXPR = as.character(type),
+    "0" = {
       return(
         .SimSSM0OU(
           mu0 = mu0,
@@ -350,7 +350,7 @@ SimSSMOU <- function(mu0,
         )
       )
     },
-    1 = {
+    "1" = {
       return(
         .SimSSM1OU(
           mu0 = mu0,
@@ -369,7 +369,7 @@ SimSSMOU <- function(mu0,
         )
       )
     },
-    2 = {
+    "2" = {
       return(
         .SimSSM2OU(
           mu0 = mu0,

@@ -382,8 +382,8 @@ SimSSM <- function(mu0,
     type %in% 0:2
   )
   switch(
-    EXPR = type,
-    0 = {
+    EXPR = as.character(type),
+    "0" = {
       return(
         .SimSSM0(
           mu0 = mu0,
@@ -399,7 +399,7 @@ SimSSM <- function(mu0,
         )
       )
     },
-    1 = {
+    "1" = {
       return(
         .SimSSM1(
           mu0 = mu0,
@@ -417,7 +417,7 @@ SimSSM <- function(mu0,
         )
       )
     },
-    2 = {
+    "2" = {
       return(
         .SimSSM2(
           mu0 = mu0,
