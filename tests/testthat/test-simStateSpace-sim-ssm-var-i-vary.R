@@ -1,4 +1,4 @@
-## ---- test-simStateSpace-sim-ssm-var-vary
+## ---- test-simStateSpace-sim-ssm-var-i-vary
 lapply(
   X = 1,
   FUN = function(i,
@@ -74,5 +74,5 @@ lapply(
     Sim2Matrix(ssm, eta = TRUE, long = FALSE)
     Sim2Matrix(ssm, eta = FALSE, long = FALSE)
   },
-  text = "test-simStateSpace-sim-ssm-var-vary"
+  text = "test-simStateSpace-sim-ssm-var-i-vary"
 )

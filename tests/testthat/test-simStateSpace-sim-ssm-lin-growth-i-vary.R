@@ -1,60 +1,52 @@
-## ---- test-simStateSpace-sim-ssm-vary
+## ---- test-simStateSpace-sim-ssm-lin-growth-i-vary
 lapply(
   X = 1,
   FUN = function(i,
                  text) {
     message(text)
     # prepare parameters
-    # In this example, beta varies across individuals
+    # In this example, the mean vector of the intercept and slope vary.
+    # Specifically, there are two sets of values representing two latent classes.
     set.seed(42)
-    k <- p <- 3
-    iden <- diag(k)
-    iden_sqrt <- chol(iden)
-    null_vec <- rep(x = 0, times = k)
-    n <- 5
-    mu0 <- list(null_vec)
-    sigma0_sqrt <- list(iden_sqrt)
-    alpha <- list(null_vec)
-    beta <- list(
-      diag(x = 0.1, nrow = k),
-      diag(x = 0.2, nrow = k),
-      diag(x = 0.3, nrow = k),
-      diag(x = 0.4, nrow = k),
-      diag(x = 0.5, nrow = k)
+    n <- 10
+    mu0_1 <- c(0.615, 1.006) # lower starting point, higher growth
+    mu0_2 <- c(1.000, 0.500) # higher starting point, lower growth
+    mu0 <- list(mu0_1, mu0_2)
+    sigma0 <- matrix(
+      data = c(
+        1.932,
+        0.618,
+        0.618,
+        0.587
+      ),
+      nrow = 2
     )
-    psi_sqrt <- list(iden_sqrt)
-    nu <- list(null_vec)
-    lambda <- list(iden)
-    theta_sqrt <- list(chol(diag(x = 0.50, nrow = k)))
-    time <- 50
-    burn_in <- 10
-    gamma_y <- gamma_eta <- list(0.10 * diag(k))
+    sigma0_sqrt <- list(chol(sigma0))
+    theta <- 0.6
+    theta_sqrt <- list(sqrt(theta))
+    time <- 10
+    gamma_y <- list(matrix(data = 0.10, nrow = 1, ncol = 2))
+    gamma_eta <- list(matrix(data = 0.10, nrow = 2, ncol = 2))
     x <- lapply(
       X = seq_len(n),
       FUN = function(i) {
         return(
           matrix(
-            data = rnorm(n = k * (time + burn_in)),
-            ncol = k
+            data = rnorm(n = 2 * time),
+            ncol = 2
           )
         )
       }
     )
 
     # Type 0
-    ssm <- SimSSMIVary(
+    ssm <- SimSSMLinGrowthIVary(
       n = n,
       mu0 = mu0,
       sigma0_sqrt = sigma0_sqrt,
-      alpha = alpha,
-      beta = beta,
-      psi_sqrt = psi_sqrt,
-      nu = nu,
-      lambda = lambda,
       theta_sqrt = theta_sqrt,
       type = 0,
-      time = time,
-      burn_in = burn_in
+      time = time
     )
 
     Sim2Matrix(ssm, eta = TRUE)
@@ -63,21 +55,15 @@ lapply(
     Sim2Matrix(ssm, eta = FALSE, long = FALSE)
 
     # Type 1
-    ssm <- SimSSMIVary(
+    ssm <- SimSSMLinGrowthIVary(
       n = n,
       mu0 = mu0,
       sigma0_sqrt = sigma0_sqrt,
-      alpha = alpha,
-      beta = beta,
-      psi_sqrt = psi_sqrt,
-      nu = nu,
-      lambda = lambda,
       theta_sqrt = theta_sqrt,
       gamma_eta = gamma_eta,
       x = x,
       type = 1,
-      time = time,
-      burn_in = burn_in
+      time = time
     )
 
     Sim2Matrix(ssm, eta = TRUE)
@@ -86,22 +72,16 @@ lapply(
     Sim2Matrix(ssm, eta = FALSE, long = FALSE)
 
     # Type 2
-    ssm <- SimSSMIVary(
+    ssm <- SimSSMLinGrowthIVary(
       n = n,
       mu0 = mu0,
       sigma0_sqrt = sigma0_sqrt,
-      alpha = alpha,
-      beta = beta,
-      psi_sqrt = psi_sqrt,
-      nu = nu,
-      lambda = lambda,
       theta_sqrt = theta_sqrt,
       gamma_y = gamma_y,
       gamma_eta = gamma_eta,
       x = x,
       type = 2,
-      time = time,
-      burn_in = burn_in
+      time = time
     )
 
     Sim2Matrix(ssm, eta = TRUE)
@@ -114,26 +94,20 @@ lapply(
       paste(text, "error"),
       {
         testthat::expect_error(
-          SimSSMIVary(
+          SimSSMLinGrowthIVary(
             n = n,
             mu0 = mu0,
             sigma0_sqrt = sigma0_sqrt,
-            alpha = alpha,
-            beta = beta,
-            psi_sqrt = psi_sqrt,
-            nu = nu,
-            lambda = lambda,
             theta_sqrt = theta_sqrt,
             gamma_y = gamma_y,
             gamma_eta = gamma_eta,
             x = x,
             type = 3,
-            time = time,
-            burn_in = burn_in
+            time = time
           )
         )
       }
     )
   },
-  text = "test-simStateSpace-sim-ssm-vary"
+  text = "test-simStateSpace-sim-ssm-lin-growth-i-vary"
 )
