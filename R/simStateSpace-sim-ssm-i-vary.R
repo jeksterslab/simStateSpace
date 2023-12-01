@@ -99,7 +99,7 @@
 #'         data = rnorm(n = k * (time + burn_in)),
 #'         ncol = k
 #'       )
-#'     )
+#'    )
 #'   }
 #' )
 #'
@@ -166,20 +166,20 @@
 #' @keywords simStateSpace sim ssm
 #' @export
 SimSSMIVary <- function(n,
-                        mu0,
-                        sigma0_sqrt,
-                        alpha,
-                        beta,
-                        psi_sqrt,
-                        nu,
-                        lambda,
-                        theta_sqrt,
-                        gamma_y = NULL,
-                        gamma_eta = NULL,
-                        x = NULL,
-                        type,
-                        time = 0,
-                        burn_in = 0) {
+                       mu0,
+                       sigma0_sqrt,
+                       alpha,
+                       beta,
+                       psi_sqrt,
+                       nu,
+                       lambda,
+                       theta_sqrt,
+                       gamma_y = NULL,
+                       gamma_eta = NULL,
+                       x = NULL,
+                       type,
+                       time = 0,
+                       burn_in = 0) {
   switch(
     EXPR = as.character(type),
     "0" = {
