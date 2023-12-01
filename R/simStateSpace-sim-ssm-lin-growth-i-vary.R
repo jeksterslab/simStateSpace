@@ -119,14 +119,14 @@
 #' @keywords simStateSpace sim growth
 #' @export
 SimSSMLinGrowthIVary <- function(n,
-                                 mu0,
-                                 sigma0_sqrt,
-                                 theta_sqrt,
-                                 gamma_y = NULL,
-                                 gamma_eta = NULL,
-                                 x = NULL,
-                                 type = 0,
-                                 time) {
+                                mu0,
+                                sigma0_sqrt,
+                                theta_sqrt,
+                                gamma_y = NULL,
+                                gamma_eta = NULL,
+                                x = NULL,
+                                type = 0,
+                                time) {
   switch(
     EXPR = as.character(type),
     "0" = {

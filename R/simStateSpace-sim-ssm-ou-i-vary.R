@@ -1,7 +1,8 @@
-#' Simulate Data using a State Space Model Parameterization
+#' Simulate Data from an Ornstein–Uhlenbeck Model
+#' using a State Space Model Parameterization
 #' for n > 1 Individuals (Individual-Varying Parameters)
 #'
-#' This function simulates data
+#' This function simulates data from an Ornstein–Uhlenbeck model
 #' using a state space model parameterization
 #' for `n > 1` individuals.
 #' In this model,
@@ -12,9 +13,9 @@
 #'   If the length of any of the parameters
 #'   (`mu0`,
 #'   `sigma0_sqrt`,
-#'   `alpha`,
-#'   `beta`,
-#'   `psi_sqrt`,
+#'   `mu`,
+#'   `phi`,
+#'   `sigma_sqrt`,
 #'   `nu`,
 #'   `lambda`,
 #'   `theta_sqrt`,
@@ -25,69 +26,52 @@
 #'
 #' @author Ivan Jacob Agaloos Pesigan
 #'
-#' @param mu0 List of numeric vectors.
+#' @param mu List of numeric vectors.
 #'   Each element of the list
-#'   is the mean of initial latent variable values
-#'   (\eqn{\boldsymbol{\mu}_{\boldsymbol{\eta} \mid 0}}).
-#' @param sigma0_sqrt List of numeric matrices.
+#'   is the long-term mean or equilibrium level
+#'   (\eqn{\boldsymbol{\mu}}).
+#' @param phi List of numeric matrices.
 #'   Each element of the list
-#'   is the Cholesky decomposition of the covariance matrix
-#'   of initial latent variable values
-#'   (\eqn{\boldsymbol{\Sigma}_{\boldsymbol{\eta} \mid 0}}).
-#' @param alpha List of numeric vectors.
+#'   is the rate of mean reversion,
+#'   determining how quickly the variable returns to its mean
+#'   (\eqn{\boldsymbol{\Phi}}).
+#' @param sigma_sqrt List of numeric matrices.
 #'   Each element of the list
-#'   is the vector of intercepts for the dynamic model
-#'   (\eqn{\boldsymbol{\alpha}}).
-#' @param beta List of numeric matrices.
-#'   Each element of the list
-#'   is the transition matrix relating the values of the latent variables
-#'   at time `t - 1` to those at time `t`
-#'   (\eqn{\boldsymbol{\beta}}).
-#' @param psi_sqrt List of numeric matrices.
-#'   Each element of the list
-#'   is the Cholesky decomposition of the process noise covariance matrix
-#'   (\eqn{\boldsymbol{\Psi}}).
-#' @param nu List of numeric vectors.
-#'   Each element of the list
-#'   is the vector of intercepts for the measurement model
-#'   (\eqn{\boldsymbol{\nu}}).
-#' @param lambda List of numeric matrices.
-#'   Each element of the list
-#'   is the factor loading matrix linking the latent variables
-#'   to the observed variables
-#'   (\eqn{\boldsymbol{\Lambda}}).
-#' @param theta_sqrt List of numeric matrices.
-#'   Each element of the list
-#'   is the Cholesky decomposition of the measurement error covariance matrix
-#'   (\eqn{\boldsymbol{\Theta}}).
+#'   is the Cholesky decomposition of the matrix of volatility
+#'   or randomness in the process
+#'   (\eqn{\boldsymbol{\Sigma}}).
 #'
-#' @inheritParams SimSSMFixed
+#' @inheritParams SimSSMOUFixed
 #' @inherit SimSSMFixed return
-#' @inherit SimSSM references
+#' @inherit SimSSMOU references
 #'
 #' @examples
 #' # prepare parameters
-#' # In this example, beta varies across individuals
+#' # In this example, phi varies across individuals
 #' set.seed(42)
-#' k <- p <- 3
-#' iden <- diag(k)
+#' p <- k <- 2
+#' iden <- diag(p)
 #' iden_sqrt <- chol(iden)
-#' null_vec <- rep(x = 0, times = k)
 #' n <- 5
-#' mu0 <- list(null_vec)
+#' mu0 <- list(c(-3.0, 1.5))
 #' sigma0_sqrt <- list(iden_sqrt)
-#' alpha <- list(null_vec)
-#' beta <- list(
-#'   diag(x = 0.1, nrow = k),
-#'   diag(x = 0.2, nrow = k),
-#'   diag(x = 0.3, nrow = k),
-#'   diag(x = 0.4, nrow = k),
-#'   diag(x = 0.5, nrow = k)
+#' mu <- list(c(5.76, 5.18))
+#' phi <- list(
+#'   as.matrix(Matrix::expm(diag(x = -0.1, nrow = k))),
+#'   as.matrix(Matrix::expm(diag(x = -0.2, nrow = k))),
+#'   as.matrix(Matrix::expm(diag(x = -0.3, nrow = k))),
+#'   as.matrix(Matrix::expm(diag(x = -0.4, nrow = k))),
+#'   as.matrix(Matrix::expm(diag(x = -0.5, nrow = k)))
 #' )
-#' psi_sqrt <- list(iden_sqrt)
-#' nu <- list(null_vec)
-#' lambda <- list(iden)
+#' sigma_sqrt <- list(
+#'   chol(
+#'     matrix(data = c(2.79, 0.06, 0.06, 3.27), nrow = p)
+#'   )
+#' )
+#' nu <- list(rep(x = 0, times = k))
+#' lambda <- list(diag(k))
 #' theta_sqrt <- list(chol(diag(x = 0.50, nrow = k)))
+#' delta_t <- 0.10
 #' time <- 50
 #' burn_in <- 0
 #' gamma_y <- gamma_eta <- list(0.10 * diag(k))
@@ -99,22 +83,23 @@
 #'         data = rnorm(n = k * (time + burn_in)),
 #'         ncol = k
 #'       )
-#'     )
+#'    )
 #'   }
 #' )
 #'
 #' # Type 0
-#' ssm <- SimSSMIVary(
+#' ssm <- SimSSMOUIVary(
 #'   n = n,
 #'   mu0 = mu0,
 #'   sigma0_sqrt = sigma0_sqrt,
-#'   alpha = alpha,
-#'   beta = beta,
-#'   psi_sqrt = psi_sqrt,
+#'   mu = mu,
+#'   phi = phi,
+#'   sigma_sqrt = sigma_sqrt,
 #'   nu = nu,
 #'   lambda = lambda,
 #'   theta_sqrt = theta_sqrt,
 #'   type = 0,
+#'   delta_t = delta_t,
 #'   time = time,
 #'   burn_in = burn_in
 #' )
@@ -122,19 +107,20 @@
 #' str(ssm)
 #'
 #' # Type 1
-#' ssm <- SimSSMIVary(
+#' ssm <- SimSSMOUIVary(
 #'   n = n,
 #'   mu0 = mu0,
 #'   sigma0_sqrt = sigma0_sqrt,
-#'   alpha = alpha,
-#'   beta = beta,
-#'   psi_sqrt = psi_sqrt,
+#'   mu = mu,
+#'   phi = phi,
+#'   sigma_sqrt = sigma_sqrt,
 #'   nu = nu,
 #'   lambda = lambda,
 #'   theta_sqrt = theta_sqrt,
 #'   gamma_eta = gamma_eta,
 #'   x = x,
 #'   type = 1,
+#'   delta_t = delta_t,
 #'   time = time,
 #'   burn_in = burn_in
 #' )
@@ -142,13 +128,13 @@
 #' str(ssm)
 #'
 #' # Type 2
-#' ssm <- SimSSMIVary(
+#' ssm <- SimSSMOUIVary(
 #'   n = n,
 #'   mu0 = mu0,
 #'   sigma0_sqrt = sigma0_sqrt,
-#'   alpha = alpha,
-#'   beta = beta,
-#'   psi_sqrt = psi_sqrt,
+#'   mu = mu,
+#'   phi = phi,
+#'   sigma_sqrt = sigma_sqrt,
 #'   nu = nu,
 #'   lambda = lambda,
 #'   theta_sqrt = theta_sqrt,
@@ -156,6 +142,7 @@
 #'   gamma_eta = gamma_eta,
 #'   x = x,
 #'   type = 2,
+#'   delta_t = delta_t,
 #'   time = time,
 #'   burn_in = burn_in
 #' )
@@ -163,37 +150,39 @@
 #' str(ssm)
 #'
 #' @family Simulation of State Space Models Data Functions
-#' @keywords simStateSpace sim ssm
+#' @keywords simStateSpace sim ou
 #' @export
-SimSSMIVary <- function(n,
-                        mu0,
-                        sigma0_sqrt,
-                        alpha,
-                        beta,
-                        psi_sqrt,
-                        nu,
-                        lambda,
-                        theta_sqrt,
-                        gamma_y = NULL,
-                        gamma_eta = NULL,
-                        x = NULL,
-                        type,
-                        time = 0,
-                        burn_in = 0) {
+SimSSMOUIVary <- function(n,
+                         mu0,
+                         sigma0_sqrt,
+                         mu,
+                         phi,
+                         sigma_sqrt,
+                         nu,
+                         lambda,
+                         theta_sqrt,
+                         gamma_y = NULL,
+                         gamma_eta = NULL,
+                         x = NULL,
+                         type = 0,
+                         delta_t,
+                         time,
+                         burn_in = 0) {
   switch(
     EXPR = as.character(type),
     "0" = {
       return(
-        .SimSSM0IVary(
+        .SimSSM0OUIVary(
           n = n,
           mu0 = rep(x = mu0, length.out = n),
           sigma0_sqrt = rep(x = sigma0_sqrt, length.out = n),
-          alpha = rep(x = alpha, length.out = n),
-          beta = rep(x = beta, length.out = n),
-          psi_sqrt = rep(x = psi_sqrt, length.out = n),
+          mu = rep(x = mu, length.out = n),
+          phi = rep(x = phi, length.out = n),
+          sigma_sqrt = rep(x = sigma_sqrt, length.out = n),
           nu = rep(x = nu, length.out = n),
           lambda = rep(x = lambda, length.out = n),
           theta_sqrt = rep(x = theta_sqrt, length.out = n),
+          delta_t = delta_t,
           time = time,
           burn_in = burn_in
         )
@@ -201,18 +190,19 @@ SimSSMIVary <- function(n,
     },
     "1" = {
       return(
-        .SimSSM1IVary(
+        .SimSSM1OUIVary(
           n = n,
           mu0 = rep(x = mu0, length.out = n),
           sigma0_sqrt = rep(x = sigma0_sqrt, length.out = n),
-          alpha = rep(x = alpha, length.out = n),
-          beta = rep(x = beta, length.out = n),
-          psi_sqrt = rep(x = psi_sqrt, length.out = n),
+          mu = rep(x = mu, length.out = n),
+          phi = rep(x = phi, length.out = n),
+          sigma_sqrt = rep(x = sigma_sqrt, length.out = n),
           nu = rep(x = nu, length.out = n),
           lambda = rep(x = lambda, length.out = n),
           theta_sqrt = rep(x = theta_sqrt, length.out = n),
           gamma_eta = rep(x = gamma_eta, length.out = n),
           x = x,
+          delta_t = delta_t,
           time = time,
           burn_in = burn_in
         )
@@ -220,19 +210,20 @@ SimSSMIVary <- function(n,
     },
     "2" = {
       return(
-        .SimSSM2IVary(
+        .SimSSM2OUIVary(
           n = n,
           mu0 = rep(x = mu0, length.out = n),
           sigma0_sqrt = rep(x = sigma0_sqrt, length.out = n),
-          alpha = rep(x = alpha, length.out = n),
-          beta = rep(x = beta, length.out = n),
-          psi_sqrt = rep(x = psi_sqrt, length.out = n),
+          mu = rep(x = mu, length.out = n),
+          phi = rep(x = phi, length.out = n),
+          sigma_sqrt = rep(x = sigma_sqrt, length.out = n),
           nu = rep(x = nu, length.out = n),
           lambda = rep(x = lambda, length.out = n),
           theta_sqrt = rep(x = theta_sqrt, length.out = n),
           gamma_y = rep(x = gamma_y, length.out = n),
           gamma_eta = rep(x = gamma_eta, length.out = n),
           x = x,
+          delta_t = delta_t,
           time = time,
           burn_in = burn_in
         )

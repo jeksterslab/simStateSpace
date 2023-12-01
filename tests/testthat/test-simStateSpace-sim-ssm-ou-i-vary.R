@@ -1,31 +1,35 @@
-## ---- test-simStateSpace-sim-ssm-vary
+## ---- test-simStateSpace-sim-ssm-ou-i-vary
 lapply(
   X = 1,
   FUN = function(i,
                  text) {
     message(text)
     # prepare parameters
-    # In this example, beta varies across individuals
+    # In this example, phi varies across individuals
     set.seed(42)
-    k <- p <- 3
-    iden <- diag(k)
+    p <- k <- 2
+    iden <- diag(p)
     iden_sqrt <- chol(iden)
-    null_vec <- rep(x = 0, times = k)
     n <- 5
-    mu0 <- list(null_vec)
+    mu0 <- list(c(-3.0, 1.5))
     sigma0_sqrt <- list(iden_sqrt)
-    alpha <- list(null_vec)
-    beta <- list(
-      diag(x = 0.1, nrow = k),
-      diag(x = 0.2, nrow = k),
-      diag(x = 0.3, nrow = k),
-      diag(x = 0.4, nrow = k),
-      diag(x = 0.5, nrow = k)
+    mu <- list(c(5.76, 5.18))
+    phi <- list(
+      as.matrix(Matrix::expm(diag(x = -0.1, nrow = k))),
+      as.matrix(Matrix::expm(diag(x = -0.2, nrow = k))),
+      as.matrix(Matrix::expm(diag(x = -0.3, nrow = k))),
+      as.matrix(Matrix::expm(diag(x = -0.4, nrow = k))),
+      as.matrix(Matrix::expm(diag(x = -0.5, nrow = k)))
     )
-    psi_sqrt <- list(iden_sqrt)
-    nu <- list(null_vec)
-    lambda <- list(iden)
+    sigma_sqrt <- list(
+      chol(
+        matrix(data = c(2.79, 0.06, 0.06, 3.27), nrow = p)
+      )
+    )
+    nu <- list(rep(x = 0, times = k))
+    lambda <- list(diag(k))
     theta_sqrt <- list(chol(diag(x = 0.50, nrow = k)))
+    delta_t <- 0.10
     time <- 50
     burn_in <- 10
     gamma_y <- gamma_eta <- list(0.10 * diag(k))
@@ -37,22 +41,23 @@ lapply(
             data = rnorm(n = k * (time + burn_in)),
             ncol = k
           )
-        )
+       )
       }
     )
 
     # Type 0
-    ssm <- SimSSMIVary(
+    ssm <- SimSSMOUIVary(
       n = n,
       mu0 = mu0,
       sigma0_sqrt = sigma0_sqrt,
-      alpha = alpha,
-      beta = beta,
-      psi_sqrt = psi_sqrt,
+      mu = mu,
+      phi = phi,
+      sigma_sqrt = sigma_sqrt,
       nu = nu,
       lambda = lambda,
       theta_sqrt = theta_sqrt,
       type = 0,
+      delta_t = delta_t,
       time = time,
       burn_in = burn_in
     )
@@ -63,19 +68,20 @@ lapply(
     Sim2Matrix(ssm, eta = FALSE, long = FALSE)
 
     # Type 1
-    ssm <- SimSSMIVary(
+    ssm <- SimSSMOUIVary(
       n = n,
       mu0 = mu0,
       sigma0_sqrt = sigma0_sqrt,
-      alpha = alpha,
-      beta = beta,
-      psi_sqrt = psi_sqrt,
+      mu = mu,
+      phi = phi,
+      sigma_sqrt = sigma_sqrt,
       nu = nu,
       lambda = lambda,
       theta_sqrt = theta_sqrt,
       gamma_eta = gamma_eta,
       x = x,
       type = 1,
+      delta_t = delta_t,
       time = time,
       burn_in = burn_in
     )
@@ -86,13 +92,13 @@ lapply(
     Sim2Matrix(ssm, eta = FALSE, long = FALSE)
 
     # Type 2
-    ssm <- SimSSMIVary(
+    ssm <- SimSSMOUIVary(
       n = n,
       mu0 = mu0,
       sigma0_sqrt = sigma0_sqrt,
-      alpha = alpha,
-      beta = beta,
-      psi_sqrt = psi_sqrt,
+      mu = mu,
+      phi = phi,
+      sigma_sqrt = sigma_sqrt,
       nu = nu,
       lambda = lambda,
       theta_sqrt = theta_sqrt,
@@ -100,6 +106,7 @@ lapply(
       gamma_eta = gamma_eta,
       x = x,
       type = 2,
+      delta_t = delta_t,
       time = time,
       burn_in = burn_in
     )
@@ -114,13 +121,13 @@ lapply(
       paste(text, "error"),
       {
         testthat::expect_error(
-          SimSSMIVary(
+          SimSSMOUIVary(
             n = n,
             mu0 = mu0,
             sigma0_sqrt = sigma0_sqrt,
-            alpha = alpha,
-            beta = beta,
-            psi_sqrt = psi_sqrt,
+            mu = mu,
+            phi = phi,
+            sigma_sqrt = sigma_sqrt,
             nu = nu,
             lambda = lambda,
             theta_sqrt = theta_sqrt,
@@ -128,6 +135,7 @@ lapply(
             gamma_eta = gamma_eta,
             x = x,
             type = 3,
+            delta_t = delta_t,
             time = time,
             burn_in = burn_in
           )
@@ -135,5 +143,5 @@ lapply(
       }
     )
   },
-  text = "test-simStateSpace-sim-ssm-vary"
+  text = "test-simStateSpace-sim-ssm-ou-i-vary"
 )
