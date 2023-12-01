@@ -6,7 +6,8 @@ lapply(
     message(text)
     # prepare parameters
     # In this example, the mean vector of the intercept and slope vary.
-    # Specifically, there are two sets of values representing two latent classes.
+    # Specifically, there are two sets of values
+    # representing two latent classes.
     set.seed(42)
     n <- 10
     mu0_1 <- c(0.615, 1.006) # lower starting point, higher growth
