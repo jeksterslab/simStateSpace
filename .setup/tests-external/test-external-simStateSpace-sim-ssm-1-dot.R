@@ -44,7 +44,7 @@ lapply(
       time = time,
       burn_in = burn_in
     )
- 
+
     set.seed(42)
     simssm_type1 <- simStateSpace::SimSSM(
       mu0 = mu0,
@@ -61,21 +61,21 @@ lapply(
       time = time,
       burn_in = burn_in
     )
-    
+
     testthat::test_that(
       paste(text, "type = 1"),
-        {
-          testthat::expect_true(
-            identical(
-              simssm1,
-              simssm_type1
-            )
+      {
+        testthat::expect_true(
+          identical(
+            simssm1,
+            simssm_type1
           )
-        }
+        )
+      }
     )
-    
+
     # type = 2
-    
+
     set.seed(42)
     simssm2 <- simStateSpace:::.SimSSM2(
       mu0 = mu0,
@@ -92,7 +92,7 @@ lapply(
       time = time,
       burn_in = burn_in
     )
-    
+
     set.seed(42)
     simssm_type2 <- simStateSpace::SimSSM(
       mu0 = mu0,
@@ -110,29 +110,29 @@ lapply(
       time = time,
       burn_in = burn_in
     )
-    
+
     testthat::test_that(
       paste(text, "type = 2"),
-        {
-            testthat::expect_true(
-              identical(
-                simssm2,
-                simssm_type2
-              )
-            )
-        }
-    )
-        testthat::test_that(
-          paste(text, "type 1 vs. 2"),
-          {
-            testthat::expect_true(
-              identical(
-                simssm1,
-                simssm2
-              )
-            )
-          }
+      {
+        testthat::expect_true(
+          identical(
+            simssm2,
+            simssm_type2
+          )
         )
-      },
-      text = "test-external-simStateSpace-sim-ssm-1-dot"
+      }
     )
+    testthat::test_that(
+      paste(text, "type 1 vs. 2"),
+      {
+        testthat::expect_true(
+          identical(
+            simssm1,
+            simssm2
+          )
+        )
+      }
+    )
+  },
+  text = "test-external-simStateSpace-sim-ssm-1-dot"
+)

@@ -40,7 +40,7 @@ lapply(
       theta_sqrt = theta_sqrt,
       time = time,
       burn_in = burn_in
-    ) 
+    )
 
     set.seed(42)
     simssm_type0 <- simStateSpace::SimSSM(
@@ -86,7 +86,7 @@ lapply(
       time = time,
       burn_in = burn_in
     )
- 
+
     set.seed(42)
     simssm_type1 <- simStateSpace::SimSSM(
       mu0 = mu0,
@@ -103,21 +103,21 @@ lapply(
       time = time,
       burn_in = burn_in
     )
-    
+
     testthat::test_that(
       paste(text, "type = 1"),
-        {
-          testthat::expect_true(
-            identical(
-              simssm1,
-              simssm_type1
-            )
+      {
+        testthat::expect_true(
+          identical(
+            simssm1,
+            simssm_type1
           )
-        }
+        )
+      }
     )
-    
+
     # type = 2
-    
+
     set.seed(42)
     simssm2 <- simStateSpace:::.SimSSM2(
       mu0 = mu0,
@@ -134,7 +134,7 @@ lapply(
       time = time,
       burn_in = burn_in
     )
-    
+
     set.seed(42)
     simssm_type2 <- simStateSpace::SimSSM(
       mu0 = mu0,
@@ -152,17 +152,17 @@ lapply(
       time = time,
       burn_in = burn_in
     )
-    
+
     testthat::test_that(
       paste(text, "type = 2"),
-        {
-            testthat::expect_true(
-              identical(
-                simssm2,
-                simssm_type2
-              )
-            )
-        }
+      {
+        testthat::expect_true(
+          identical(
+            simssm2,
+            simssm_type2
+          )
+        )
+      }
     )
 
     simssm0$x <- NULL
@@ -170,41 +170,41 @@ lapply(
     simssm1$x <- NULL
     simssm_type1$x <- NULL
     simssm2$x <- NULL
-    simssm_type2$x <- NULL    
-    
-        testthat::test_that(
-          paste(text, "type 0 vs. 1"),
-          {
-            testthat::expect_true(
-              identical(
-                simssm0,
-                simssm1
-              )
-            )
-          }
+    simssm_type2$x <- NULL
+
+    testthat::test_that(
+      paste(text, "type 0 vs. 1"),
+      {
+        testthat::expect_true(
+          identical(
+            simssm0,
+            simssm1
+          )
         )
-        testthat::test_that(
-          paste(text, "type 0 vs. 2"),
-          {
-            testthat::expect_true(
-              identical(
-                simssm0,
-                simssm2
-              )
-            )
-          }
-        )
-        testthat::test_that(
-          paste(text, "type 1 vs. 2"),
-          {
-            testthat::expect_true(
-              identical(
-                simssm1,
-                simssm2
-              )
-            )
-          }
-        )
-      },
-      text = "test-external-simStateSpace-sim-ssm-0-dot"
+      }
     )
+    testthat::test_that(
+      paste(text, "type 0 vs. 2"),
+      {
+        testthat::expect_true(
+          identical(
+            simssm0,
+            simssm2
+          )
+        )
+      }
+    )
+    testthat::test_that(
+      paste(text, "type 1 vs. 2"),
+      {
+        testthat::expect_true(
+          identical(
+            simssm1,
+            simssm2
+          )
+        )
+      }
+    )
+  },
+  text = "test-external-simStateSpace-sim-ssm-0-dot"
+)

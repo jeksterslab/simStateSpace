@@ -25,9 +25,9 @@ lapply(
       data = rnorm(n = k * (time + burn_in)),
       ncol = k
     )
-    
+
     # type = 2
-    
+
     set.seed(42)
     simssm2 <- simStateSpace:::.SimSSM2(
       mu0 = mu0,
@@ -44,7 +44,7 @@ lapply(
       time = time,
       burn_in = burn_in
     )
-    
+
     set.seed(42)
     simssm_type2 <- simStateSpace::SimSSM(
       mu0 = mu0,
@@ -62,18 +62,18 @@ lapply(
       time = time,
       burn_in = burn_in
     )
-    
+
     testthat::test_that(
       paste(text, "type = 2"),
-        {
-            testthat::expect_true(
-              identical(
-                simssm2,
-                simssm_type2
-              )
-            )
-        }
+      {
+        testthat::expect_true(
+          identical(
+            simssm2,
+            simssm_type2
+          )
+        )
+      }
     )
-      },
-      text = "test-external-simStateSpace-sim-ssm-2-dot"
-    )
+  },
+  text = "test-external-simStateSpace-sim-ssm-2-dot"
+)

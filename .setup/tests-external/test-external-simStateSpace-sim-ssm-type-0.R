@@ -76,7 +76,7 @@ lapply(
     )
 
     dynr_dynamics <- dynr::prep.formulaDynamics(
-      formula = list(  
+      formula = list(
         eta_1 ~ beta_11 * eta_1,
         eta_2 ~ beta_22 * eta_2,
         eta_3 ~ beta_33 * eta_3
@@ -124,71 +124,70 @@ lapply(
 
     model$lb[
       c(
-"beta_11",
-"beta_22",
-"beta_33"
+        "beta_11",
+        "beta_22",
+        "beta_33"
       )
-] <- -1
+    ] <- -1
 
-model$ub[
-c(
-"beta_11",
-"beta_22",
-"beta_33"
-)
-] <- 1
+    model$ub[
+      c(
+        "beta_11",
+        "beta_22",
+        "beta_33"
+      )
+    ] <- 1
 
-model$lb[
-c(
-"psi_11",
-"psi_22",
-"psi_33"
-)
-] <- .Machine$double.xmin
+    model$lb[
+      c(
+        "psi_11",
+        "psi_22",
+        "psi_33"
+      )
+    ] <- .Machine$double.xmin
 
-model$lb[
-c(
-"theta_11",
-"theta_22",
-"theta_33"
-)
-] <- .Machine$double.xmin
+    model$lb[
+      c(
+        "theta_11",
+        "theta_22",
+        "theta_33"
+      )
+    ] <- .Machine$double.xmin
 
-model$lb[
-c(
-"sigma0_11",
-"sigma0_22",
-"sigma0_33"
-)
-] <- .Machine$double.xmin
+    model$lb[
+      c(
+        "sigma0_11",
+        "sigma0_22",
+        "sigma0_33"
+      )
+    ] <- .Machine$double.xmin
 
-results <- dynr::dynr.cook(
-  model,
-  debug_flag = TRUE,
-  hessian_flag = FALSE,
-  verbose = FALSE
-)
+    results <- dynr::dynr.cook(
+      model,
+      debug_flag = TRUE,
+      hessian_flag = FALSE,
+      verbose = FALSE
+    )
 
-estimates <- coef(results)
-beta_hat <- matrix(
-  data = c(
-  estimates[
-  c(
-"beta_11",
-"beta_21",
-"beta_31",
-"beta_12",
-"beta_22",
-"beta_32",
-"beta_13",
-"beta_23",
-"beta_33"
-)
-  ]
-  ),
-  nrow = k
-)
-    
-    },
-    text = "test-external-simStateSpace-sim-ssm-type-0"
+    estimates <- coef(results)
+    beta_hat <- matrix(
+      data = c(
+        estimates[
+          c(
+            "beta_11",
+            "beta_21",
+            "beta_31",
+            "beta_12",
+            "beta_22",
+            "beta_32",
+            "beta_13",
+            "beta_23",
+            "beta_33"
+          )
+        ]
+      ),
+      nrow = k
+    )
+  },
+  text = "test-external-simStateSpace-sim-ssm-type-0"
 )
