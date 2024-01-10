@@ -69,7 +69,7 @@ lapply(
       model = model,
       data = as.data.frame(data)
     )
-    
+
     estimates <- lavaan::coef(fit)
     mu0_hat <- round(
       c(estimates["mu0"], estimates["mu1"]),

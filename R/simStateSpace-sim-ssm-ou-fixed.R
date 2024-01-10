@@ -235,7 +235,7 @@
 #'         data = rnorm(n = k * (time + burn_in)),
 #'         ncol = k
 #'       )
-#'    )
+#'     )
 #'   }
 #' )
 #'

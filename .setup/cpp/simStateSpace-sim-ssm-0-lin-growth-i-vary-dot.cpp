@@ -6,7 +6,9 @@
 #include <RcppArmadillo.h>
 // [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::export(.SimSSM0LinGrowthIVary)]]
-Rcpp::List SimSSM0LinGrowthIVary(const int n, const Rcpp::List& mu0, const Rcpp::List& sigma0_l, const Rcpp::List& theta_l, const int time) {
+Rcpp::List SimSSM0LinGrowthIVary(const int n, const Rcpp::List& mu0,
+                                 const Rcpp::List& sigma0_l,
+                                 const Rcpp::List& theta_l, const int time) {
   // Step 1: Create constant vectors and matrices
   arma::mat lambda = {{1, 0}};
   arma::mat beta = {{1, 1}, {0, 1}};
@@ -38,7 +40,10 @@ Rcpp::List SimSSM0LinGrowthIVary(const int n, const Rcpp::List& mu0, const Rcpp:
     id.fill(i + 1);
 
     // Step 3.5: Save the transposed data matrices in a list
-    out[i] = Rcpp::List::create(Rcpp::Named("y") = y.t(), Rcpp::Named("eta") = eta.t(), Rcpp::Named("x") = 0, Rcpp::Named("time") = arma::regspace(0, time - 1), Rcpp::Named("id") = id);
+    out[i] = Rcpp::List::create(
+        Rcpp::Named("y") = y.t(), Rcpp::Named("eta") = eta.t(),
+        Rcpp::Named("x") = 0, Rcpp::Named("time") = arma::regspace(0, time - 1),
+        Rcpp::Named("id") = id);
   }
 
   // Step 4: Return the results
