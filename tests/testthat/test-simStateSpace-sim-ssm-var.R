@@ -56,7 +56,7 @@ lapply(
     Sim2Matrix(ssm, eta = TRUE, long = FALSE)
     Sim2Matrix(ssm, eta = FALSE, long = FALSE)
 
-    # coverage - AR(1)
+    # coverage - AR
     set.seed(42)
     k <- 1
     iden <- diag(k)
