@@ -5,7 +5,7 @@
 \title{Convert Parameters from the Ornstein–Uhlenbeck Model
 to State Space Model Parameterization}
 \usage{
-OU2SSM(mu, phi, sigma_sqrt, delta_t)
+OU2SSM(mu, phi, sigma, delta_t)
 }
 \arguments{
 \item{mu}{Numeric vector.
@@ -17,8 +17,8 @@ The rate of mean reversion,
 determining how quickly the variable returns to its mean
 (\eqn{\boldsymbol{\Phi}}).}
 
-\item{sigma_sqrt}{Numeric matrix.
-Cholesky decomposition of the matrix of volatility
+\item{sigma}{Numeric matrix.
+The matrix of volatility
 or randomness in the process
 (\eqn{\boldsymbol{\Sigma}}).}
 
@@ -112,16 +112,20 @@ are given by
 \examples{
 p <- k <- 2
 mu <- c(5.76, 5.18)
-phi <- matrix(data = c(0.10, -0.05, -0.05, 0.10), nrow = p)
-sigma_sqrt <- chol(
-  matrix(data = c(2.79, 0.06, 0.06, 3.27), nrow = p)
+phi <- matrix(
+  data = c(0.10, -0.05, -0.05, 0.10),
+  nrow = p
+)
+sigma <- matrix(
+  data = c(2.79, 0.06, 0.06, 3.27),
+  nrow = p
 )
 delta_t <- 0.10
 
 OU2SSM(
   mu = mu,
   phi = phi,
-  sigma_sqrt = sigma_sqrt,
+  sigma = sigma,
   delta_t = delta_t
 )
 

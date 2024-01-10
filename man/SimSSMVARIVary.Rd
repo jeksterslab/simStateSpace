@@ -9,10 +9,10 @@ for n > 1 Individuals (Individual-Varying Parameters)}
 SimSSMVARIVary(
   n,
   mu0,
-  sigma0_sqrt,
+  sigma0,
   alpha,
   beta,
-  psi_sqrt,
+  psi,
   gamma_eta = NULL,
   x = NULL,
   time = 0,
@@ -28,9 +28,9 @@ Each element of the list
 is the mean of initial latent variable values
 (\eqn{\boldsymbol{\mu}_{\boldsymbol{\eta} \mid 0}}).}
 
-\item{sigma0_sqrt}{List of numeric matrices.
+\item{sigma0}{List of numeric matrices.
 Each element of the list
-is the Cholesky decomposition of the covariance matrix
+is the covariance matrix
 of initial latent variable values
 (\eqn{\boldsymbol{\Sigma}_{\boldsymbol{\eta} \mid 0}}).}
 
@@ -45,9 +45,9 @@ is the transition matrix relating the values of the latent variables
 at time \code{t - 1} to those at time \code{t}
 (\eqn{\boldsymbol{\beta}}).}
 
-\item{psi_sqrt}{List of numeric matrices.
+\item{psi}{List of numeric matrices.
 Each element of the list
-is the Cholesky decomposition of the process noise covariance matrix
+is the process noise covariance matrix
 (\eqn{\boldsymbol{\Psi}}).}
 
 \item{gamma_eta}{Numeric matrix.
@@ -89,10 +89,10 @@ Parameters can vary across individuals
 by providing a list of parameter values.
 If the length of any of the parameters
 (\code{mu0},
-\code{sigma0_sqrt},
+\code{sigma0},
 \code{alpha},
 \code{beta},
-\code{psi_sqrt}, or
+\code{psi}, or
 \code{gamma_eta})
 is less the \code{n},
 the function will cycle through the available values.
@@ -103,11 +103,10 @@ the function will cycle through the available values.
 set.seed(42)
 k <- 3
 iden <- diag(k)
-iden_sqrt <- chol(iden)
 null_vec <- rep(x = 0, times = k)
 n <- 5
 mu0 <- list(null_vec)
-sigma0_sqrt <- list(iden_sqrt)
+sigma0 <- list(iden)
 alpha <- list(null_vec)
 beta <- list(
   diag(x = 0.1, nrow = k),
@@ -116,7 +115,7 @@ beta <- list(
   diag(x = 0.4, nrow = k),
   diag(x = 0.5, nrow = k)
 )
-psi_sqrt <- list(iden_sqrt)
+psi <- list(iden)
 time <- 50
 burn_in <- 0
 gamma_eta <- list(0.10 * diag(k))
@@ -136,10 +135,10 @@ x <- lapply(
 ssm <- SimSSMVARIVary(
   n = n,
   mu0 = mu0,
-  sigma0_sqrt = sigma0_sqrt,
+  sigma0 = sigma0,
   alpha = alpha,
   beta = beta,
-  psi_sqrt = psi_sqrt,
+  psi = psi,
   time = time,
   burn_in = burn_in
 )
@@ -150,10 +149,10 @@ str(ssm)
 ssm <- SimSSMVARIVary(
   n = n,
   mu0 = mu0,
-  sigma0_sqrt = sigma0_sqrt,
+  sigma0 = sigma0,
   alpha = alpha,
   beta = beta,
-  psi_sqrt = psi_sqrt,
+  psi = psi,
   gamma_eta = gamma_eta,
   x = x,
   time = time,

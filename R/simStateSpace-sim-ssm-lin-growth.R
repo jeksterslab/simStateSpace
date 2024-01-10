@@ -32,14 +32,14 @@
 #'     \mathcal{N}
 #'     \left(
 #'     0,
-#'     \theta^{2}
+#'     \theta
 #'     \right)
 #'   }
 #'   where \eqn{y_{i, t}}, \eqn{\eta_{0_{i, t}}},
 #'   \eqn{\eta_{1_{i, t}}},
 #'   and \eqn{\boldsymbol{\varepsilon}_{i, t}}
 #'   are random variables and
-#'   and \eqn{\theta^{2}} is a model parameter.
+#'   \eqn{\theta} is a model parameter.
 #'   \eqn{y_{i, t}} is a vector of observed random variables
 #'   at time \eqn{t} and individual \eqn{i},
 #'   \eqn{\eta_{0_{i, t}}}
@@ -48,8 +48,8 @@
 #'   at time \eqn{t} and individual \eqn{i},
 #'   and \eqn{\boldsymbol{\varepsilon}_{i, t}}
 #'   is a vector of random measurement errors
-#'   at time \eqn{t} and individual \eqn{i},
-#'   and \eqn{\theta^{2}} is the variance of
+#'   at time \eqn{t} and individual \eqn{i}.
+#'   \eqn{\theta} is the variance of
 #'   \eqn{\boldsymbol{\varepsilon}}.
 #'
 #'   The dynamic structure is given by
@@ -129,7 +129,7 @@
 #'     \mathcal{N}
 #'     \left(
 #'     0,
-#'     \theta^{2}
+#'     \theta
 #'     \right) .
 #'   }
 #'
@@ -194,7 +194,7 @@
 #'     \mathcal{N}
 #'     \left(
 #'     0,
-#'     \theta^{2}
+#'     \theta
 #'     \right)
 #'   }
 #'   where
@@ -233,11 +233,11 @@
 #'   A vector of length two.
 #'   The first element is the mean of the intercept,
 #'   and the second element is the mean of the slope.
-#' @param sigma0_sqrt Numeric matrix.
-#'   Cholesky decomposition of the covariance matrix
+#' @param sigma0 Numeric matrix.
+#'   The covariance matrix
 #'   of the intercept and the slope.
-#' @param theta_sqrt Numeric.
-#'   Square root of the common measurement error variance.
+#' @param theta Numeric.
+#'   The common measurement error variance.
 #' @param gamma_y Numeric matrix.
 #'   Matrix relating the values of the covariate matrix
 #'   at time `t` to `y` at time `t`
@@ -269,9 +269,7 @@
 #'   ),
 #'   nrow = 2
 #' )
-#' sigma0_sqrt <- chol(sigma0)
 #' theta <- 0.6
-#' theta_sqrt <- sqrt(theta)
 #' time <- 10
 #' gamma_y <- matrix(data = 0.10, nrow = 1, ncol = 2)
 #' gamma_eta <- matrix(data = 0.10, nrow = 2, ncol = 2)
@@ -291,8 +289,8 @@
 #' ssm <- SimSSMLinGrowth(
 #'   n = n,
 #'   mu0 = mu0,
-#'   sigma0_sqrt = sigma0_sqrt,
-#'   theta_sqrt = theta_sqrt,
+#'   sigma0 = sigma0,
+#'   theta = theta,
 #'   type = 0,
 #'   time = time
 #' )
@@ -303,8 +301,8 @@
 #' ssm <- SimSSMLinGrowth(
 #'   n = n,
 #'   mu0 = mu0,
-#'   sigma0_sqrt = sigma0_sqrt,
-#'   theta_sqrt = theta_sqrt,
+#'   sigma0 = sigma0,
+#'   theta = theta,
 #'   gamma_eta = gamma_eta,
 #'   x = x,
 #'   type = 1,
@@ -317,8 +315,8 @@
 #' ssm <- SimSSMLinGrowth(
 #'   n = n,
 #'   mu0 = mu0,
-#'   sigma0_sqrt = sigma0_sqrt,
-#'   theta_sqrt = theta_sqrt,
+#'   sigma0 = sigma0,
+#'   theta = theta,
 #'   gamma_y = gamma_y,
 #'   gamma_eta = gamma_eta,
 #'   x = x,
@@ -333,13 +331,15 @@
 #' @export
 SimSSMLinGrowth <- function(n,
                             mu0,
-                            sigma0_sqrt,
-                            theta_sqrt,
+                            sigma0,
+                            theta,
                             gamma_y = NULL,
                             gamma_eta = NULL,
                             x = NULL,
                             type = 0,
                             time) {
+  sigma0_l <- t(chol(sigma0))
+  theta_l <- sqrt(theta)
   switch(
     EXPR = as.character(type),
     "0" = {
@@ -347,8 +347,8 @@ SimSSMLinGrowth <- function(n,
         .SimSSM0LinGrowth(
           n = n,
           mu0 = mu0,
-          sigma0_sqrt = sigma0_sqrt,
-          theta_sqrt = theta_sqrt,
+          sigma0_l = sigma0_l,
+          theta_l = theta_l,
           time = time
         )
       )
@@ -358,8 +358,8 @@ SimSSMLinGrowth <- function(n,
         .SimSSM1LinGrowth(
           n = n,
           mu0 = mu0,
-          sigma0_sqrt = sigma0_sqrt,
-          theta_sqrt = theta_sqrt,
+          sigma0_l = sigma0_l,
+          theta_l = theta_l,
           gamma_eta = gamma_eta,
           x = x,
           time = time
@@ -371,8 +371,8 @@ SimSSMLinGrowth <- function(n,
         .SimSSM2LinGrowth(
           n = n,
           mu0 = mu0,
-          sigma0_sqrt = sigma0_sqrt,
-          theta_sqrt = theta_sqrt,
+          sigma0_l = sigma0_l,
+          theta_l = theta_l,
           gamma_y = gamma_y,
           gamma_eta = gamma_eta,
           x = x,

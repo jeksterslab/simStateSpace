@@ -7,8 +7,8 @@
 SimSSMLinGrowth(
   n,
   mu0,
-  sigma0_sqrt,
-  theta_sqrt,
+  sigma0,
+  theta,
   gamma_y = NULL,
   gamma_eta = NULL,
   x = NULL,
@@ -25,12 +25,12 @@ A vector of length two.
 The first element is the mean of the intercept,
 and the second element is the mean of the slope.}
 
-\item{sigma0_sqrt}{Numeric matrix.
-Cholesky decomposition of the covariance matrix
+\item{sigma0}{Numeric matrix.
+The covariance matrix
 of the intercept and the slope.}
 
-\item{theta_sqrt}{Numeric.
-Square root of the common measurement error variance.}
+\item{theta}{Numeric.
+The common measurement error variance.}
 
 \item{gamma_y}{Numeric matrix.
 Matrix relating the values of the covariate matrix
@@ -97,14 +97,14 @@ The measurement model is given by
     \mathcal{N}
     \left(
     0,
-    \theta^{2}
+    \theta
     \right)
   }
 where \eqn{y_{i, t}}, \eqn{\eta_{0_{i, t}}},
 \eqn{\eta_{1_{i, t}}},
 and \eqn{\boldsymbol{\varepsilon}_{i, t}}
 are random variables and
-and \eqn{\theta^{2}} is a model parameter.
+\eqn{\theta} is a model parameter.
 \eqn{y_{i, t}} is a vector of observed random variables
 at time \eqn{t} and individual \eqn{i},
 \eqn{\eta_{0_{i, t}}}
@@ -113,8 +113,8 @@ and
 at time \eqn{t} and individual \eqn{i},
 and \eqn{\boldsymbol{\varepsilon}_{i, t}}
 is a vector of random measurement errors
-at time \eqn{t} and individual \eqn{i},
-and \eqn{\theta^{2}} is the variance of
+at time \eqn{t} and individual \eqn{i}.
+\eqn{\theta} is the variance of
 \eqn{\boldsymbol{\varepsilon}}.
 
 The dynamic structure is given by
@@ -195,7 +195,7 @@ The measurement model is given by
     \mathcal{N}
     \left(
     0,
-    \theta^{2}
+    \theta
     \right) .
   }
 
@@ -261,7 +261,7 @@ The measurement model is given by
     \mathcal{N}
     \left(
     0,
-    \theta^{2}
+    \theta
     \right)
   }
 where
@@ -309,9 +309,7 @@ sigma0 <- matrix(
   ),
   nrow = 2
 )
-sigma0_sqrt <- chol(sigma0)
 theta <- 0.6
-theta_sqrt <- sqrt(theta)
 time <- 10
 gamma_y <- matrix(data = 0.10, nrow = 1, ncol = 2)
 gamma_eta <- matrix(data = 0.10, nrow = 2, ncol = 2)
@@ -331,8 +329,8 @@ x <- lapply(
 ssm <- SimSSMLinGrowth(
   n = n,
   mu0 = mu0,
-  sigma0_sqrt = sigma0_sqrt,
-  theta_sqrt = theta_sqrt,
+  sigma0 = sigma0,
+  theta = theta,
   type = 0,
   time = time
 )
@@ -343,8 +341,8 @@ str(ssm)
 ssm <- SimSSMLinGrowth(
   n = n,
   mu0 = mu0,
-  sigma0_sqrt = sigma0_sqrt,
-  theta_sqrt = theta_sqrt,
+  sigma0 = sigma0,
+  theta = theta,
   gamma_eta = gamma_eta,
   x = x,
   type = 1,
@@ -357,8 +355,8 @@ str(ssm)
 ssm <- SimSSMLinGrowth(
   n = n,
   mu0 = mu0,
-  sigma0_sqrt = sigma0_sqrt,
-  theta_sqrt = theta_sqrt,
+  sigma0 = sigma0,
+  theta = theta,
   gamma_y = gamma_y,
   gamma_eta = gamma_eta,
   x = x,

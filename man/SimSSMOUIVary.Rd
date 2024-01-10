@@ -9,13 +9,13 @@ for n > 1 Individuals (Individual-Varying Parameters)}
 SimSSMOUIVary(
   n,
   mu0,
-  sigma0_sqrt,
+  sigma0,
   mu,
   phi,
-  sigma_sqrt,
+  sigma,
   nu,
   lambda,
-  theta_sqrt,
+  theta,
   gamma_y = NULL,
   gamma_eta = NULL,
   x = NULL,
@@ -33,8 +33,8 @@ Number of individuals.}
 Mean of initial latent variable values
 (\eqn{\boldsymbol{\mu}_{\boldsymbol{\eta} \mid 0}}).}
 
-\item{sigma0_sqrt}{Numeric matrix.
-Cholesky decomposition of the covariance matrix
+\item{sigma0}{Numeric matrix.
+The covariance matrix
 of initial latent variable values
 (\eqn{\boldsymbol{\Sigma}_{\boldsymbol{\eta} \mid 0}}).}
 
@@ -49,9 +49,9 @@ is the rate of mean reversion,
 determining how quickly the variable returns to its mean
 (\eqn{\boldsymbol{\Phi}}).}
 
-\item{sigma_sqrt}{List of numeric matrices.
+\item{sigma}{List of numeric matrices.
 Each element of the list
-is the Cholesky decomposition of the matrix of volatility
+is the matrix of volatility
 or randomness in the process
 (\eqn{\boldsymbol{\Sigma}}).}
 
@@ -64,8 +64,8 @@ Factor loading matrix linking the latent variables
 to the observed variables
 (\eqn{\boldsymbol{\Lambda}}).}
 
-\item{theta_sqrt}{Numeric matrix.
-Cholesky decomposition of the measurement error covariance matrix
+\item{theta}{Numeric matrix.
+The measurement error covariance matrix
 (\eqn{\boldsymbol{\Theta}}).}
 
 \item{gamma_y}{Numeric matrix.
@@ -117,13 +117,13 @@ Parameters can vary across individuals
 by providing a list of parameter values.
 If the length of any of the parameters
 (\code{mu0},
-\code{sigma0_sqrt},
+\code{sigma0},
 \code{mu},
 \code{phi},
-\code{sigma_sqrt},
+\code{sigma},
 \code{nu},
 \code{lambda},
-\code{theta_sqrt},
+\code{theta},
 \code{gamma_y}, or
 \code{gamma_eta})
 is less the \code{n},
@@ -135,10 +135,9 @@ the function will cycle through the available values.
 set.seed(42)
 p <- k <- 2
 iden <- diag(p)
-iden_sqrt <- chol(iden)
 n <- 5
 mu0 <- list(c(-3.0, 1.5))
-sigma0_sqrt <- list(iden_sqrt)
+sigma0 <- list(iden)
 mu <- list(c(5.76, 5.18))
 phi <- list(
   as.matrix(Matrix::expm(diag(x = -0.1, nrow = k))),
@@ -147,14 +146,12 @@ phi <- list(
   as.matrix(Matrix::expm(diag(x = -0.4, nrow = k))),
   as.matrix(Matrix::expm(diag(x = -0.5, nrow = k)))
 )
-sigma_sqrt <- list(
-  chol(
-    matrix(data = c(2.79, 0.06, 0.06, 3.27), nrow = p)
-  )
+sigma <- list(
+  matrix(data = c(2.79, 0.06, 0.06, 3.27), nrow = p)
 )
 nu <- list(rep(x = 0, times = k))
 lambda <- list(diag(k))
-theta_sqrt <- list(chol(diag(x = 0.50, nrow = k)))
+theta <- list(diag(x = 0.50, nrow = k))
 delta_t <- 0.10
 time <- 50
 burn_in <- 0
@@ -175,13 +172,13 @@ x <- lapply(
 ssm <- SimSSMOUIVary(
   n = n,
   mu0 = mu0,
-  sigma0_sqrt = sigma0_sqrt,
+  sigma0 = sigma0,
   mu = mu,
   phi = phi,
-  sigma_sqrt = sigma_sqrt,
+  sigma = sigma,
   nu = nu,
   lambda = lambda,
-  theta_sqrt = theta_sqrt,
+  theta = theta,
   type = 0,
   delta_t = delta_t,
   time = time,
@@ -194,13 +191,13 @@ str(ssm)
 ssm <- SimSSMOUIVary(
   n = n,
   mu0 = mu0,
-  sigma0_sqrt = sigma0_sqrt,
+  sigma0 = sigma0,
   mu = mu,
   phi = phi,
-  sigma_sqrt = sigma_sqrt,
+  sigma = sigma,
   nu = nu,
   lambda = lambda,
-  theta_sqrt = theta_sqrt,
+  theta = theta,
   gamma_eta = gamma_eta,
   x = x,
   type = 1,
@@ -215,13 +212,13 @@ str(ssm)
 ssm <- SimSSMOUIVary(
   n = n,
   mu0 = mu0,
-  sigma0_sqrt = sigma0_sqrt,
+  sigma0 = sigma0,
   mu = mu,
   phi = phi,
-  sigma_sqrt = sigma_sqrt,
+  sigma = sigma,
   nu = nu,
   lambda = lambda,
-  theta_sqrt = theta_sqrt,
+  theta = theta,
   gamma_y = gamma_y,
   gamma_eta = gamma_eta,
   x = x,

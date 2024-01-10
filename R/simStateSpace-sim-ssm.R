@@ -225,8 +225,8 @@
 #' @param mu0 Numeric vector.
 #'   Mean of initial latent variable values
 #'   (\eqn{\boldsymbol{\mu}_{\boldsymbol{\eta} \mid 0}}).
-#' @param sigma0_sqrt Numeric matrix.
-#'   Cholesky decomposition of the covariance matrix
+#' @param sigma0 Numeric matrix.
+#'   The covariance matrix
 #'   of initial latent variable values
 #'   (\eqn{\boldsymbol{\Sigma}_{\boldsymbol{\eta} \mid 0}}).
 #' @param alpha Numeric vector.
@@ -236,8 +236,8 @@
 #'   Transition matrix relating the values of the latent variables
 #'   at time `t - 1` to those at time `t`
 #'   (\eqn{\boldsymbol{\beta}}).
-#' @param psi_sqrt Numeric matrix.
-#'   Cholesky decomposition of the process noise covariance matrix
+#' @param psi Numeric matrix.
+#'   The process noise covariance matrix
 #'   (\eqn{\boldsymbol{\Psi}}).
 #' @param nu Numeric vector.
 #'   Vector of intercepts for the measurement model
@@ -246,8 +246,8 @@
 #'   Factor loading matrix linking the latent variables
 #'   to the observed variables
 #'   (\eqn{\boldsymbol{\Lambda}}).
-#' @param theta_sqrt Numeric matrix.
-#'   Cholesky decomposition of the measurement error covariance matrix
+#' @param theta Numeric matrix.
+#'   The measurement error covariance matrix
 #'   (\eqn{\boldsymbol{\Theta}}).
 #' @param gamma_y Numeric matrix.
 #'   Matrix relating the values of the covariate matrix
@@ -287,16 +287,15 @@
 #' set.seed(42)
 #' k <- p <- 3
 #' iden <- diag(k)
-#' iden_sqrt <- chol(iden)
 #' null_vec <- rep(x = 0, times = k)
 #' mu0 <- null_vec
-#' sigma0_sqrt <- iden_sqrt
+#' sigma0 <- iden
 #' alpha <- null_vec
 #' beta <- diag(x = 0.50, nrow = k)
-#' psi_sqrt <- iden_sqrt
+#' psi <- iden
 #' nu <- null_vec
 #' lambda <- iden
-#' theta_sqrt <- chol(diag(x = 0.50, nrow = k))
+#' theta <- diag(x = 0.50, nrow = k)
 #' time <- 50
 #' burn_in <- 0
 #' gamma_y <- gamma_eta <- 0.10 * diag(k)
@@ -308,13 +307,13 @@
 #' # Type 0
 #' ssm <- SimSSM(
 #'   mu0 = mu0,
-#'   sigma0_sqrt = sigma0_sqrt,
+#'   sigma0 = sigma0,
 #'   alpha = alpha,
 #'   beta = beta,
-#'   psi_sqrt = psi_sqrt,
+#'   psi = psi,
 #'   nu = nu,
 #'   lambda = lambda,
-#'   theta_sqrt = theta_sqrt,
+#'   theta = theta,
 #'   type = 0,
 #'   time = time,
 #'   burn_in = burn_in
@@ -325,13 +324,13 @@
 #' # Type 1
 #' ssm <- SimSSM(
 #'   mu0 = mu0,
-#'   sigma0_sqrt = sigma0_sqrt,
+#'   sigma0 = sigma0,
 #'   alpha = alpha,
 #'   beta = beta,
-#'   psi_sqrt = psi_sqrt,
+#'   psi = psi,
 #'   nu = nu,
 #'   lambda = lambda,
-#'   theta_sqrt = theta_sqrt,
+#'   theta = theta,
 #'   gamma_eta = gamma_eta,
 #'   x = x,
 #'   type = 1,
@@ -344,13 +343,13 @@
 #' # Type 2
 #' ssm <- SimSSM(
 #'   mu0 = mu0,
-#'   sigma0_sqrt = sigma0_sqrt,
+#'   sigma0 = sigma0,
 #'   alpha = alpha,
 #'   beta = beta,
-#'   psi_sqrt = psi_sqrt,
+#'   psi = psi,
 #'   nu = nu,
 #'   lambda = lambda,
-#'   theta_sqrt = theta_sqrt,
+#'   theta = theta,
 #'   gamma_y = gamma_y,
 #'   gamma_eta = gamma_eta,
 #'   x = x,
@@ -365,32 +364,35 @@
 #' @keywords simStateSpace sim ssm
 #' @export
 SimSSM <- function(mu0,
-                   sigma0_sqrt,
+                   sigma0,
                    alpha,
                    beta,
-                   psi_sqrt,
+                   psi,
                    nu,
                    lambda,
-                   theta_sqrt,
+                   theta,
                    gamma_y = NULL,
                    gamma_eta = NULL,
                    x = NULL,
                    type = 0,
                    time,
                    burn_in = 0) {
+  sigma0_l <- t(chol(sigma0))
+  psi_l <- t(chol(psi))
+  theta_l <- t(chol(theta))
   switch(
     EXPR = as.character(type),
     "0" = {
       return(
         .SimSSM0(
           mu0 = mu0,
-          sigma0_sqrt = sigma0_sqrt,
+          sigma0_l = sigma0_l,
           alpha = alpha,
           beta = beta,
-          psi_sqrt = psi_sqrt,
+          psi_l = psi_l,
           nu = nu,
           lambda = lambda,
-          theta_sqrt = theta_sqrt,
+          theta_l = theta_l,
           time = time,
           burn_in = burn_in
         )
@@ -400,13 +402,13 @@ SimSSM <- function(mu0,
       return(
         .SimSSM1(
           mu0 = mu0,
-          sigma0_sqrt = sigma0_sqrt,
+          sigma0_l = sigma0_l,
           alpha = alpha,
           beta = beta,
-          psi_sqrt = psi_sqrt,
+          psi_l = psi_l,
           nu = nu,
           lambda = lambda,
-          theta_sqrt = theta_sqrt,
+          theta_l = theta_l,
           gamma_eta = gamma_eta,
           x = x,
           time = time,
@@ -418,13 +420,13 @@ SimSSM <- function(mu0,
       return(
         .SimSSM2(
           mu0 = mu0,
-          sigma0_sqrt = sigma0_sqrt,
+          sigma0_l = sigma0_l,
           alpha = alpha,
           beta = beta,
-          psi_sqrt = psi_sqrt,
+          psi_l = psi_l,
           nu = nu,
           lambda = lambda,
-          theta_sqrt = theta_sqrt,
+          theta_l = theta_l,
           gamma_y = gamma_y,
           gamma_eta = gamma_eta,
           x = x,

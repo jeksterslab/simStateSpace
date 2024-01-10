@@ -9,11 +9,10 @@ lapply(
     set.seed(42)
     k <- 3
     iden <- diag(k)
-    iden_sqrt <- chol(iden)
     null_vec <- rep(x = 0, times = k)
     n <- 5
     mu0 <- list(null_vec)
-    sigma0_sqrt <- list(iden_sqrt)
+    sigma0 <- list(iden)
     alpha <- list(null_vec)
     beta <- list(
       diag(x = 0.1, nrow = k),
@@ -22,9 +21,9 @@ lapply(
       diag(x = 0.4, nrow = k),
       diag(x = 0.5, nrow = k)
     )
-    psi_sqrt <- list(iden_sqrt)
+    psi <- list(iden)
     time <- 50
-    burn_in <- 10
+    burn_in <- 0
     gamma_eta <- list(0.10 * diag(k))
     x <- lapply(
       X = seq_len(n),
@@ -42,10 +41,10 @@ lapply(
     ssm <- SimSSMVARIVary(
       n = n,
       mu0 = mu0,
-      sigma0_sqrt = sigma0_sqrt,
+      sigma0 = sigma0,
       alpha = alpha,
       beta = beta,
-      psi_sqrt = psi_sqrt,
+      psi = psi,
       time = time,
       burn_in = burn_in
     )
@@ -59,10 +58,10 @@ lapply(
     ssm <- SimSSMVARIVary(
       n = n,
       mu0 = mu0,
-      sigma0_sqrt = sigma0_sqrt,
+      sigma0 = sigma0,
       alpha = alpha,
       beta = beta,
-      psi_sqrt = psi_sqrt,
+      psi = psi,
       gamma_eta = gamma_eta,
       x = x,
       time = time,

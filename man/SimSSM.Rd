@@ -6,13 +6,13 @@
 \usage{
 SimSSM(
   mu0,
-  sigma0_sqrt,
+  sigma0,
   alpha,
   beta,
-  psi_sqrt,
+  psi,
   nu,
   lambda,
-  theta_sqrt,
+  theta,
   gamma_y = NULL,
   gamma_eta = NULL,
   x = NULL,
@@ -26,8 +26,8 @@ SimSSM(
 Mean of initial latent variable values
 (\eqn{\boldsymbol{\mu}_{\boldsymbol{\eta} \mid 0}}).}
 
-\item{sigma0_sqrt}{Numeric matrix.
-Cholesky decomposition of the covariance matrix
+\item{sigma0}{Numeric matrix.
+The covariance matrix
 of initial latent variable values
 (\eqn{\boldsymbol{\Sigma}_{\boldsymbol{\eta} \mid 0}}).}
 
@@ -40,8 +40,8 @@ Transition matrix relating the values of the latent variables
 at time \code{t - 1} to those at time \code{t}
 (\eqn{\boldsymbol{\beta}}).}
 
-\item{psi_sqrt}{Numeric matrix.
-Cholesky decomposition of the process noise covariance matrix
+\item{psi}{Numeric matrix.
+The process noise covariance matrix
 (\eqn{\boldsymbol{\Psi}}).}
 
 \item{nu}{Numeric vector.
@@ -53,8 +53,8 @@ Factor loading matrix linking the latent variables
 to the observed variables
 (\eqn{\boldsymbol{\Lambda}}).}
 
-\item{theta_sqrt}{Numeric matrix.
-Cholesky decomposition of the measurement error covariance matrix
+\item{theta}{Numeric matrix.
+The measurement error covariance matrix
 (\eqn{\boldsymbol{\Theta}}).}
 
 \item{gamma_y}{Numeric matrix.
@@ -321,16 +321,15 @@ The dynamic structure is given by
 set.seed(42)
 k <- p <- 3
 iden <- diag(k)
-iden_sqrt <- chol(iden)
 null_vec <- rep(x = 0, times = k)
 mu0 <- null_vec
-sigma0_sqrt <- iden_sqrt
+sigma0 <- iden
 alpha <- null_vec
 beta <- diag(x = 0.50, nrow = k)
-psi_sqrt <- iden_sqrt
+psi <- iden
 nu <- null_vec
 lambda <- iden
-theta_sqrt <- chol(diag(x = 0.50, nrow = k))
+theta <- diag(x = 0.50, nrow = k)
 time <- 50
 burn_in <- 0
 gamma_y <- gamma_eta <- 0.10 * diag(k)
@@ -342,13 +341,13 @@ x <- matrix(
 # Type 0
 ssm <- SimSSM(
   mu0 = mu0,
-  sigma0_sqrt = sigma0_sqrt,
+  sigma0 = sigma0,
   alpha = alpha,
   beta = beta,
-  psi_sqrt = psi_sqrt,
+  psi = psi,
   nu = nu,
   lambda = lambda,
-  theta_sqrt = theta_sqrt,
+  theta = theta,
   type = 0,
   time = time,
   burn_in = burn_in
@@ -359,13 +358,13 @@ str(ssm)
 # Type 1
 ssm <- SimSSM(
   mu0 = mu0,
-  sigma0_sqrt = sigma0_sqrt,
+  sigma0 = sigma0,
   alpha = alpha,
   beta = beta,
-  psi_sqrt = psi_sqrt,
+  psi = psi,
   nu = nu,
   lambda = lambda,
-  theta_sqrt = theta_sqrt,
+  theta = theta,
   gamma_eta = gamma_eta,
   x = x,
   type = 1,
@@ -378,13 +377,13 @@ str(ssm)
 # Type 2
 ssm <- SimSSM(
   mu0 = mu0,
-  sigma0_sqrt = sigma0_sqrt,
+  sigma0 = sigma0,
   alpha = alpha,
   beta = beta,
-  psi_sqrt = psi_sqrt,
+  psi = psi,
   nu = nu,
   lambda = lambda,
-  theta_sqrt = theta_sqrt,
+  theta = theta,
   gamma_y = gamma_y,
   gamma_eta = gamma_eta,
   x = x,

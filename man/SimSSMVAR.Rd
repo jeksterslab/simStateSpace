@@ -7,10 +7,10 @@ using a State Space Model Parameterization (n = 1)}
 \usage{
 SimSSMVAR(
   mu0,
-  sigma0_sqrt,
+  sigma0,
   alpha,
   beta,
-  psi_sqrt,
+  psi,
   gamma_eta = NULL,
   x = NULL,
   time = 0,
@@ -22,8 +22,8 @@ SimSSMVAR(
 Mean of initial latent variable values
 (\eqn{\boldsymbol{\mu}_{\boldsymbol{\eta} \mid 0}}).}
 
-\item{sigma0_sqrt}{Numeric matrix.
-Cholesky decomposition of the covariance matrix
+\item{sigma0}{Numeric matrix.
+The covariance matrix
 of initial latent variable values
 (\eqn{\boldsymbol{\Sigma}_{\boldsymbol{\eta} \mid 0}}).}
 
@@ -36,8 +36,8 @@ Transition matrix relating the values of the latent variables
 at time \code{t - 1} to those at time \code{t}
 (\eqn{\boldsymbol{\beta}}).}
 
-\item{psi_sqrt}{Numeric matrix.
-Cholesky decomposition of the process noise covariance matrix
+\item{psi}{Numeric matrix.
+The process noise covariance matrix
 (\eqn{\boldsymbol{\Psi}}).}
 
 \item{gamma_eta}{Numeric matrix.
@@ -166,13 +166,12 @@ linking the covariates to the latent variables.
 set.seed(42)
 k <- 3
 iden <- diag(k)
-iden_sqrt <- chol(iden)
 null_vec <- rep(x = 0, times = k)
 mu0 <- null_vec
-sigma0_sqrt <- iden_sqrt
+sigma0 <- iden
 alpha <- null_vec
 beta <- diag(x = 0.5, nrow = k)
-psi_sqrt <- iden_sqrt
+psi <- iden
 time <- 50
 burn_in <- 0
 gamma_eta <- 0.10 * diag(k)
@@ -184,10 +183,10 @@ x <- matrix(
 # No covariates
 ssm <- SimSSMVAR(
   mu0 = mu0,
-  sigma0_sqrt = sigma0_sqrt,
+  sigma0 = sigma0,
   alpha = alpha,
   beta = beta,
-  psi_sqrt = psi_sqrt,
+  psi = psi,
   time = time,
   burn_in = burn_in
 )
@@ -197,10 +196,10 @@ str(ssm)
 # With covariates
 ssm <- SimSSMVAR(
   mu0 = mu0,
-  sigma0_sqrt = sigma0_sqrt,
+  sigma0 = sigma0,
   alpha = alpha,
   beta = beta,
-  psi_sqrt = psi_sqrt,
+  psi = psi,
   gamma_eta = gamma_eta,
   x = x,
   time = time,
