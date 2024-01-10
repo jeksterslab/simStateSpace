@@ -23,7 +23,7 @@ lapply(
     )
     psi <- list(iden)
     time <- 50
-    burn_in <- 0
+    burn_in <- 10
     gamma_eta <- list(0.10 * diag(k))
     x <- lapply(
       X = seq_len(n),

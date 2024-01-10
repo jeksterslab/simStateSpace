@@ -28,7 +28,7 @@ lapply(
     theta <- list(diag(x = 0.50, nrow = k))
     delta_t <- 0.10
     time <- 50
-    burn_in <- 0
+    burn_in <- 10
     gamma_y <- gamma_eta <- list(0.10 * diag(k))
     x <- lapply(
       X = seq_len(n),
