@@ -59,14 +59,14 @@ The measurement model is given by
   \mathcal{N}
   \left(
   0,
-  \theta^{2}
+  \theta
   \right)
 \end{equation}
 where $y_{i, t}$, $\eta_{0_{i, t}}$,
 $\eta_{1_{i, t}}$,
 and $\boldsymbol{\varepsilon}_{i, t}$
 are random variables and
-and $\theta^{2}$ is a model parameter.
+$\theta$ is a model parameter.
 $y_{i, t}$ is a vector of observed random variables
 at time $t$ and individual $i$,
 $\eta_{0_{i, t}}$ (intercept)
@@ -75,8 +75,8 @@ $\eta_{1_{i, t}}$ (slope) form a vector of latent random variables
 at time $t$ and individual $i$,
 and $\boldsymbol{\varepsilon}_{i, t}$
 is a vector of random measurement errors
-at time $t$ and individual $i$,
-and $\theta^{2}$ is the variance of
+at time $t$ and individual $i$.
+$\theta$ is the variance of
 $\boldsymbol{\varepsilon}$.
 
 The dynamic structure is given by
@@ -147,9 +147,7 @@ sigma0 <- matrix(
   ),
   nrow = 2
 )
-sigma0_sqrt <- chol(sigma0)
 theta <- 0.6
-theta_sqrt <- sqrt(theta)
 time <- 5
 gamma_y <- matrix(data = 0.10, nrow = 1, ncol = 2)
 gamma_eta <- matrix(data = 0.10, nrow = 2, ncol = 2)
@@ -168,10 +166,10 @@ x <- lapply(
 
 Let $t = `r time`$ be the number of time points and $n = `r n`$ be the number of individuals.
 
-Let the measurement error variance $\theta^{2}$ be given by
+Let the measurement error variance $\theta$ be given by
 
 \begin{equation}
-\theta^{2}
+\theta
 =
 `r theta` .
 \end{equation}
@@ -223,8 +221,8 @@ library(simStateSpace)
 sim <- SimSSMLinGrowth(
   n = n,
   mu0 = mu0,
-  sigma0_sqrt = sigma0_sqrt,
-  theta_sqrt = theta_sqrt,
+  sigma0 = sigma0,
+  theta = theta,
   type = 0,
   time = time
 )
@@ -237,6 +235,16 @@ head(data)
 ```{r}
 #| echo = FALSE
 obs <- "y"
+ids <- unique(data[, "id"])
+colfunc <- colorRampPalette(
+  c(
+    "red",
+    "yellow",
+    "springgreen",
+    "royalblue"
+  )
+)
+color <- colfunc(length(ids))
 for (i in seq_along(obs)) {
   plot(
     x = 0,
@@ -248,15 +256,16 @@ for (i in seq_along(obs)) {
     ylab = obs[i],
     main = obs[i]
   )
-  for (j in unique(data[, "id"])) {
+  for (j in seq_along(ids)) {
     subset_data <- subset(
       x = data,
-      subset = data[, "id"] == j
+      subset = data[, "id"] == ids[j]
     )
     lines(
       x = subset_data[, "time"],
       y = subset_data[, obs[i]],
-      type = "l"
+      type = "l",
+      col = color[j]
     )
   }
 }
@@ -306,15 +315,10 @@ dynr_measurement <- dynr::prep.measurement(
 ### Prepare Dynamic Process
 
 ```{r}
-dynr_dynamics <- dynr::prep.matrixDynamics(
-  values.dyn = matrix(
-    data = c(1, 0, 1, 1),
-    nrow = 2
-  ),
-  params.dyn = matrix(
-    data = "fixed",
-    nrow = 2,
-    ncol = 2
+dynr_dynamics <- dynr::prep.formulaDynamics(
+  formula = list(
+    eta_0 ~ eta_0 + eta_1,
+    eta_1 ~ eta_1
   ),
   isContinuousTime = FALSE
 )
@@ -326,7 +330,7 @@ dynr_dynamics <- dynr::prep.matrixDynamics(
 dynr_noise <- dynr::prep.noise(
   values.latent = matrix(data = 0, nrow = 2, ncol = 2),
   params.latent = matrix(data = "fixed", nrow = 2, ncol = 2),
-  values.observed = 1,
+  values.observed = theta,
   params.observed = "theta"
 )
 ```
@@ -342,7 +346,16 @@ model <- dynr::dynr.model(
   noise = dynr_noise,
   outfile = "lin-growth.c"
 )
-model@options$maxeval <- 10000
+```
+
+```{r}
+#| echo = FALSE
+dynr::plotFormula(
+  dynrModel = model,
+  ParameterAs = model$"param.names",
+  printDyn = TRUE,
+  printMeas = TRUE
+)
 ```
 
 ### Fit the Model
@@ -385,20 +398,15 @@ sigma0_hat <- matrix(
   ],
   nrow = 2
 )
+theta_hat <- estimates["theta"]
 ```
 
-### Estimated Coefficients
+### Estimated Parameters
 
 ```{r}
 mu0_hat
 sigma0_hat
-```
-
-### Discrepancy Between Estimated and Population Coefficients
-
-```{r}
-abs(mu0 - mu0_hat)
-abs(sigma0 - sigma0_hat)
+theta_hat
 ```
 
 ## Linear Growth Curve Model in Structural Equation Modeling

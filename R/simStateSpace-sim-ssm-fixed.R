@@ -246,17 +246,16 @@
 #' set.seed(42)
 #' k <- p <- 3
 #' iden <- diag(k)
-#' iden_sqrt <- chol(iden)
 #' null_vec <- rep(x = 0, times = k)
 #' n <- 5
 #' mu0 <- null_vec
-#' sigma0_sqrt <- iden_sqrt
+#' sigma0 <- iden
 #' alpha <- null_vec
 #' beta <- diag(x = 0.50, nrow = k)
-#' psi_sqrt <- iden_sqrt
+#' psi <- iden
 #' nu <- null_vec
 #' lambda <- iden
-#' theta_sqrt <- chol(diag(x = 0.50, nrow = k))
+#' theta <- diag(x = 0.50, nrow = k)
 #' time <- 50
 #' burn_in <- 0
 #' gamma_y <- gamma_eta <- 0.10 * diag(k)
@@ -276,13 +275,13 @@
 #' ssm <- SimSSMFixed(
 #'   n = n,
 #'   mu0 = mu0,
-#'   sigma0_sqrt = sigma0_sqrt,
+#'   sigma0 = sigma0,
 #'   alpha = alpha,
 #'   beta = beta,
-#'   psi_sqrt = psi_sqrt,
+#'   psi = psi,
 #'   nu = nu,
 #'   lambda = lambda,
-#'   theta_sqrt = theta_sqrt,
+#'   theta = theta,
 #'   type = 0,
 #'   time = time,
 #'   burn_in = burn_in
@@ -294,13 +293,13 @@
 #' ssm <- SimSSMFixed(
 #'   n = n,
 #'   mu0 = mu0,
-#'   sigma0_sqrt = sigma0_sqrt,
+#'   sigma0 = sigma0,
 #'   alpha = alpha,
 #'   beta = beta,
-#'   psi_sqrt = psi_sqrt,
+#'   psi = psi,
 #'   nu = nu,
 #'   lambda = lambda,
-#'   theta_sqrt = theta_sqrt,
+#'   theta = theta,
 #'   gamma_eta = gamma_eta,
 #'   x = x,
 #'   type = 1,
@@ -314,13 +313,13 @@
 #' ssm <- SimSSMFixed(
 #'   n = n,
 #'   mu0 = mu0,
-#'   sigma0_sqrt = sigma0_sqrt,
+#'   sigma0 = sigma0,
 #'   alpha = alpha,
 #'   beta = beta,
-#'   psi_sqrt = psi_sqrt,
+#'   psi = psi,
 #'   nu = nu,
 #'   lambda = lambda,
-#'   theta_sqrt = theta_sqrt,
+#'   theta = theta,
 #'   gamma_y = gamma_y,
 #'   gamma_eta = gamma_eta,
 #'   x = x,
@@ -336,19 +335,22 @@
 #' @export
 SimSSMFixed <- function(n,
                         mu0,
-                        sigma0_sqrt,
+                        sigma0,
                         alpha,
                         beta,
-                        psi_sqrt,
+                        psi,
                         nu,
                         lambda,
-                        theta_sqrt,
+                        theta,
                         gamma_y = NULL,
                         gamma_eta = NULL,
                         x = NULL,
                         type = 0,
                         time,
                         burn_in = 0) {
+  sigma0_l <- t(chol(sigma0))
+  psi_l <- t(chol(psi))
+  theta_l <- t(chol(theta))
   switch(
     EXPR = as.character(type),
     "0" = {
@@ -356,13 +358,13 @@ SimSSMFixed <- function(n,
         .SimSSM0Fixed(
           n = n,
           mu0 = mu0,
-          sigma0_sqrt = sigma0_sqrt,
+          sigma0_l = sigma0_l,
           alpha = alpha,
           beta = beta,
-          psi_sqrt = psi_sqrt,
+          psi_l = psi_l,
           nu = nu,
           lambda = lambda,
-          theta_sqrt = theta_sqrt,
+          theta_l = theta_l,
           time = time,
           burn_in = burn_in
         )
@@ -373,13 +375,13 @@ SimSSMFixed <- function(n,
         .SimSSM1Fixed(
           n = n,
           mu0 = mu0,
-          sigma0_sqrt = sigma0_sqrt,
+          sigma0_l = sigma0_l,
           alpha = alpha,
           beta = beta,
-          psi_sqrt = psi_sqrt,
+          psi_l = psi_l,
           nu = nu,
           lambda = lambda,
-          theta_sqrt = theta_sqrt,
+          theta_l = theta_l,
           gamma_eta = gamma_eta,
           x = x,
           time = time,
@@ -392,13 +394,13 @@ SimSSMFixed <- function(n,
         .SimSSM2Fixed(
           n = n,
           mu0 = mu0,
-          sigma0_sqrt = sigma0_sqrt,
+          sigma0_l = sigma0_l,
           alpha = alpha,
           beta = beta,
-          psi_sqrt = psi_sqrt,
+          psi_l = psi_l,
           nu = nu,
           lambda = lambda,
-          theta_sqrt = theta_sqrt,
+          theta_l = theta_l,
           gamma_y = gamma_y,
           gamma_eta = gamma_eta,
           x = x,

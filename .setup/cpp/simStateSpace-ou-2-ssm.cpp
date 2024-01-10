@@ -95,16 +95,20 @@
 //' @examples
 //' p <- k <- 2
 //' mu <- c(5.76, 5.18)
-//' phi <- matrix(data = c(0.10, -0.05, -0.05, 0.10), nrow = p)
-//' sigma_sqrt <- chol(
-//'   matrix(data = c(2.79, 0.06, 0.06, 3.27), nrow = p)
+//' phi <- matrix(
+//'   data = c(0.10, -0.05, -0.05, 0.10),
+//'   nrow = p
+//' )
+//' sigma <- matrix(
+//'   data = c(2.79, 0.06, 0.06, 3.27),
+//'   nrow = p
 //' )
 //' delta_t <- 0.10
 //'
 //' OU2SSM(
 //'   mu = mu,
 //'   phi = phi,
-//'   sigma_sqrt = sigma_sqrt,
+//'   sigma = sigma,
 //'   delta_t = delta_t
 //' )
 //'
@@ -112,15 +116,13 @@
 //' @keywords simStateSpace sim ou
 //' @export
 // [[Rcpp::export]]
-Rcpp::List OU2SSM(const arma::vec& mu, const arma::mat& phi,
-                  const arma::mat& sigma_sqrt, const double delta_t) {
+Rcpp::List OU2SSM(const arma::vec& mu, const arma::mat& phi, const arma::mat& sigma, const double delta_t) {
   // Step 1: Determine indices
   int num_latent_vars = mu.n_elem;
 
   // Step 2: Get state space parameters
   arma::mat I = arma::eye<arma::mat>(num_latent_vars, num_latent_vars);
-  arma::mat J = arma::eye<arma::mat>(num_latent_vars * num_latent_vars,
-                                     num_latent_vars * num_latent_vars);
+  arma::mat J = arma::eye<arma::mat>(num_latent_vars * num_latent_vars, num_latent_vars * num_latent_vars);
   arma::mat neg_phi = -1 * phi;
   // 2.1 beta
   arma::mat beta = arma::expmat(neg_phi * delta_t);  // A(Delta t)
@@ -128,13 +130,10 @@ Rcpp::List OU2SSM(const arma::vec& mu, const arma::mat& phi,
   arma::vec alpha = arma::inv(neg_phi) * (beta - I) * phi * mu;  // b(Delta t)
   // 2.3 psi
   arma::mat neg_phi_hashtag = arma::kron(neg_phi, I) + arma::kron(I, neg_phi);
-  arma::vec sigma_vec = arma::vectorise(sigma_sqrt * sigma_sqrt.t());
-  arma::vec psi_vec = arma::inv(neg_phi_hashtag) *
-                      (arma::expmat(neg_phi_hashtag * delta_t) - J) * sigma_vec;
+  arma::vec sigma_vec = arma::vectorise(sigma);
+  arma::vec psi_vec = arma::inv(neg_phi_hashtag) * (arma::expmat(neg_phi_hashtag * delta_t) - J) * sigma_vec;
   arma::mat psi = arma::reshape(psi_vec, num_latent_vars, num_latent_vars);
 
   // Step 3: Return state space parameters in a list
-  return Rcpp::List::create(Rcpp::Named("alpha") = alpha,
-                            Rcpp::Named("beta") = beta,
-                            Rcpp::Named("psi") = psi);
+  return Rcpp::List::create(Rcpp::Named("alpha") = alpha, Rcpp::Named("beta") = beta, Rcpp::Named("psi") = psi);
 }

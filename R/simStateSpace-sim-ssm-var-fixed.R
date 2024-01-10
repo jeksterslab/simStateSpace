@@ -19,14 +19,13 @@
 #' set.seed(42)
 #' k <- 3
 #' iden <- diag(k)
-#' iden_sqrt <- chol(iden)
 #' null_vec <- rep(x = 0, times = k)
 #' n <- 5
 #' mu0 <- null_vec
-#' sigma0_sqrt <- iden_sqrt
+#' sigma0 <- iden
 #' alpha <- null_vec
 #' beta <- diag(x = 0.5, nrow = k)
-#' psi_sqrt <- iden_sqrt
+#' psi <- iden
 #' time <- 50
 #' burn_in <- 0
 #' gamma_eta <- 0.10 * diag(k)
@@ -46,10 +45,10 @@
 #' ssm <- SimSSMVARFixed(
 #'   n = n,
 #'   mu0 = mu0,
-#'   sigma0_sqrt = sigma0_sqrt,
+#'   sigma0 = sigma0,
 #'   alpha = alpha,
 #'   beta = beta,
-#'   psi_sqrt = psi_sqrt,
+#'   psi = psi,
 #'   time = time,
 #'   burn_in = burn_in
 #' )
@@ -60,10 +59,10 @@
 #' ssm <- SimSSMVARFixed(
 #'   n = n,
 #'   mu0 = mu0,
-#'   sigma0_sqrt = sigma0_sqrt,
+#'   sigma0 = sigma0,
 #'   alpha = alpha,
 #'   beta = beta,
-#'   psi_sqrt = psi_sqrt,
+#'   psi = psi,
 #'   gamma_eta = gamma_eta,
 #'   x = x,
 #'   time = time,
@@ -77,23 +76,25 @@
 #' @export
 SimSSMVARFixed <- function(n,
                            mu0,
-                           sigma0_sqrt,
+                           sigma0,
                            alpha,
                            beta,
-                           psi_sqrt,
+                           psi,
                            gamma_eta = NULL,
                            x = NULL,
                            time = 0,
                            burn_in = 0) {
+  sigma0_l <- t(chol(sigma0))
+  psi_l <- t(chol(psi))
   if (is.null(gamma_eta) || is.null(x)) {
     return(
       .SimSSM0VARFixed(
         n = n,
         mu0 = mu0,
-        sigma0_sqrt = sigma0_sqrt,
+        sigma0_l = sigma0_l,
         alpha = alpha,
         beta = beta,
-        psi_sqrt = psi_sqrt,
+        psi_l = psi_l,
         time = time,
         burn_in = burn_in
       )
@@ -103,10 +104,10 @@ SimSSMVARFixed <- function(n,
       .SimSSM1VARFixed(
         n = n,
         mu0 = mu0,
-        sigma0_sqrt = sigma0_sqrt,
+        sigma0_l = sigma0_l,
         alpha = alpha,
         beta = beta,
-        psi_sqrt = psi_sqrt,
+        psi_l = psi_l,
         gamma_eta = gamma_eta,
         x = x,
         time = time,

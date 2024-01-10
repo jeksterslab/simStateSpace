@@ -12,10 +12,10 @@
 #'   by providing a list of parameter values.
 #'   If the length of any of the parameters
 #'   (`mu0`,
-#'   `sigma0_sqrt`,
+#'   `sigma0`,
 #'   `alpha`,
 #'   `beta`,
-#'   `psi_sqrt`, or
+#'   `psi`, or
 #'   `gamma_eta`)
 #'   is less the `n`,
 #'   the function will cycle through the available values.
@@ -32,11 +32,10 @@
 #' set.seed(42)
 #' k <- 3
 #' iden <- diag(k)
-#' iden_sqrt <- chol(iden)
 #' null_vec <- rep(x = 0, times = k)
 #' n <- 5
 #' mu0 <- list(null_vec)
-#' sigma0_sqrt <- list(iden_sqrt)
+#' sigma0 <- list(iden)
 #' alpha <- list(null_vec)
 #' beta <- list(
 #'   diag(x = 0.1, nrow = k),
@@ -45,7 +44,7 @@
 #'   diag(x = 0.4, nrow = k),
 #'   diag(x = 0.5, nrow = k)
 #' )
-#' psi_sqrt <- list(iden_sqrt)
+#' psi <- list(iden)
 #' time <- 50
 #' burn_in <- 0
 #' gamma_eta <- list(0.10 * diag(k))
@@ -65,10 +64,10 @@
 #' ssm <- SimSSMVARIVary(
 #'   n = n,
 #'   mu0 = mu0,
-#'   sigma0_sqrt = sigma0_sqrt,
+#'   sigma0 = sigma0,
 #'   alpha = alpha,
 #'   beta = beta,
-#'   psi_sqrt = psi_sqrt,
+#'   psi = psi,
 #'   time = time,
 #'   burn_in = burn_in
 #' )
@@ -79,10 +78,10 @@
 #' ssm <- SimSSMVARIVary(
 #'   n = n,
 #'   mu0 = mu0,
-#'   sigma0_sqrt = sigma0_sqrt,
+#'   sigma0 = sigma0,
 #'   alpha = alpha,
 #'   beta = beta,
-#'   psi_sqrt = psi_sqrt,
+#'   psi = psi,
 #'   gamma_eta = gamma_eta,
 #'   x = x,
 #'   time = time,
@@ -96,23 +95,36 @@
 #' @export
 SimSSMVARIVary <- function(n,
                            mu0,
-                           sigma0_sqrt,
+                           sigma0,
                            alpha,
                            beta,
-                           psi_sqrt,
+                           psi,
                            gamma_eta = NULL,
                            x = NULL,
                            time = 0,
                            burn_in = 0) {
+  foo <- function(x) {
+    return(
+      t(chol(x))
+    )
+  }
+  sigma0_l <- lapply(
+    X = sigma0,
+    FUN = foo
+  )
+  psi_l <- lapply(
+    X = psi,
+    FUN = foo
+  )
   if (is.null(gamma_eta) || is.null(x)) {
     return(
       .SimSSM0VARIVary(
         n = n,
         mu0 = rep(x = mu0, length.out = n),
-        sigma0_sqrt = rep(x = sigma0_sqrt, length.out = n),
+        sigma0_l = rep(x = sigma0_l, length.out = n),
         alpha = rep(x = alpha, length.out = n),
         beta = rep(x = beta, length.out = n),
-        psi_sqrt = rep(x = psi_sqrt, length.out = n),
+        psi_l = rep(x = psi_l, length.out = n),
         time = time,
         burn_in = burn_in
       )
@@ -122,10 +134,10 @@ SimSSMVARIVary <- function(n,
       .SimSSM1VARIVary(
         n = n,
         mu0 = rep(x = mu0, length.out = n),
-        sigma0_sqrt = rep(x = sigma0_sqrt, length.out = n),
+        sigma0_l = rep(x = sigma0_l, length.out = n),
         alpha = rep(x = alpha, length.out = n),
         beta = rep(x = beta, length.out = n),
-        psi_sqrt = rep(x = psi_sqrt, length.out = n),
+        psi_l = rep(x = psi_l, length.out = n),
         gamma_eta = rep(x = gamma_eta, length.out = n),
         x = x,
         time = time,

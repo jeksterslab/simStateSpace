@@ -7,22 +7,23 @@ lapply(
     message(text)
     # prepare parameters
     set.seed(42)
+
     p <- k <- 2
-    iden <- diag(p)
-    iden_sqrt <- chol(iden)
-    mu0 <- c(-3.0, 1.5)
-    sigma0_sqrt <- iden_sqrt
     mu <- c(5.76, 5.18)
-    phi <- matrix(data = c(0.10, -0.05, -0.05, 0.10), nrow = p)
-    sigma_sqrt <- chol(
-      matrix(data = c(2.79, 0.06, 0.06, 3.27), nrow = p)
+    phi <- matrix(
+      data = c(0.10, -0.05, -0.05, 0.10),
+      nrow = p
+    )
+    sigma <- matrix(
+      data = c(2.79, 0.06, 0.06, 3.27),
+      nrow = p
     )
     delta_t <- 0.10
 
     ssm <- OU2SSM(
       mu = mu,
       phi = phi,
-      sigma_sqrt = sigma_sqrt,
+      sigma = sigma,
       delta_t = delta_t
     )
 
@@ -79,6 +80,6 @@ lapply(
       }
     )
   },
-  tol = 0.10,
+  tol = 0.001,
   text = "test-simStateSpace-ou-2-ssm"
 )

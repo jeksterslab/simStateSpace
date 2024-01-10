@@ -11,13 +11,13 @@
 #'   by providing a list of parameter values.
 #'   If the length of any of the parameters
 #'   (`mu0`,
-#'   `sigma0_sqrt`,
+#'   `sigma0`,
 #'   `alpha`,
 #'   `beta`,
-#'   `psi_sqrt`,
+#'   `psi`,
 #'   `nu`,
 #'   `lambda`,
-#'   `theta_sqrt`,
+#'   `theta`,
 #'   `gamma_y`, or
 #'   `gamma_eta`)
 #'   is less the `n`,
@@ -29,9 +29,9 @@
 #'   Each element of the list
 #'   is the mean of initial latent variable values
 #'   (\eqn{\boldsymbol{\mu}_{\boldsymbol{\eta} \mid 0}}).
-#' @param sigma0_sqrt List of numeric matrices.
+#' @param sigma0 List of numeric matrices.
 #'   Each element of the list
-#'   is the Cholesky decomposition of the covariance matrix
+#'   is the covariance matrix
 #'   of initial latent variable values
 #'   (\eqn{\boldsymbol{\Sigma}_{\boldsymbol{\eta} \mid 0}}).
 #' @param alpha List of numeric vectors.
@@ -43,9 +43,9 @@
 #'   is the transition matrix relating the values of the latent variables
 #'   at time `t - 1` to those at time `t`
 #'   (\eqn{\boldsymbol{\beta}}).
-#' @param psi_sqrt List of numeric matrices.
+#' @param psi List of numeric matrices.
 #'   Each element of the list
-#'   is the Cholesky decomposition of the process noise covariance matrix
+#'   is the process noise covariance matrix
 #'   (\eqn{\boldsymbol{\Psi}}).
 #' @param nu List of numeric vectors.
 #'   Each element of the list
@@ -56,9 +56,9 @@
 #'   is the factor loading matrix linking the latent variables
 #'   to the observed variables
 #'   (\eqn{\boldsymbol{\Lambda}}).
-#' @param theta_sqrt List of numeric matrices.
+#' @param theta List of numeric matrices.
 #'   Each element of the list
-#'   is the Cholesky decomposition of the measurement error covariance matrix
+#'   is the measurement error covariance matrix
 #'   (\eqn{\boldsymbol{\Theta}}).
 #'
 #' @inheritParams SimSSMFixed
@@ -71,11 +71,10 @@
 #' set.seed(42)
 #' k <- p <- 3
 #' iden <- diag(k)
-#' iden_sqrt <- chol(iden)
 #' null_vec <- rep(x = 0, times = k)
 #' n <- 5
 #' mu0 <- list(null_vec)
-#' sigma0_sqrt <- list(iden_sqrt)
+#' sigma0 <- list(iden)
 #' alpha <- list(null_vec)
 #' beta <- list(
 #'   diag(x = 0.1, nrow = k),
@@ -84,10 +83,10 @@
 #'   diag(x = 0.4, nrow = k),
 #'   diag(x = 0.5, nrow = k)
 #' )
-#' psi_sqrt <- list(iden_sqrt)
+#' psi <- list(iden)
 #' nu <- list(null_vec)
 #' lambda <- list(iden)
-#' theta_sqrt <- list(chol(diag(x = 0.50, nrow = k)))
+#' theta <- list(diag(x = 0.50, nrow = k))
 #' time <- 50
 #' burn_in <- 0
 #' gamma_y <- gamma_eta <- list(0.10 * diag(k))
@@ -107,13 +106,13 @@
 #' ssm <- SimSSMIVary(
 #'   n = n,
 #'   mu0 = mu0,
-#'   sigma0_sqrt = sigma0_sqrt,
+#'   sigma0 = sigma0,
 #'   alpha = alpha,
 #'   beta = beta,
-#'   psi_sqrt = psi_sqrt,
+#'   psi = psi,
 #'   nu = nu,
 #'   lambda = lambda,
-#'   theta_sqrt = theta_sqrt,
+#'   theta = theta,
 #'   type = 0,
 #'   time = time,
 #'   burn_in = burn_in
@@ -125,13 +124,13 @@
 #' ssm <- SimSSMIVary(
 #'   n = n,
 #'   mu0 = mu0,
-#'   sigma0_sqrt = sigma0_sqrt,
+#'   sigma0 = sigma0,
 #'   alpha = alpha,
 #'   beta = beta,
-#'   psi_sqrt = psi_sqrt,
+#'   psi = psi,
 #'   nu = nu,
 #'   lambda = lambda,
-#'   theta_sqrt = theta_sqrt,
+#'   theta = theta,
 #'   gamma_eta = gamma_eta,
 #'   x = x,
 #'   type = 1,
@@ -145,13 +144,13 @@
 #' ssm <- SimSSMIVary(
 #'   n = n,
 #'   mu0 = mu0,
-#'   sigma0_sqrt = sigma0_sqrt,
+#'   sigma0 = sigma0,
 #'   alpha = alpha,
 #'   beta = beta,
-#'   psi_sqrt = psi_sqrt,
+#'   psi = psi,
 #'   nu = nu,
 #'   lambda = lambda,
-#'   theta_sqrt = theta_sqrt,
+#'   theta = theta,
 #'   gamma_y = gamma_y,
 #'   gamma_eta = gamma_eta,
 #'   x = x,
@@ -167,19 +166,36 @@
 #' @export
 SimSSMIVary <- function(n,
                         mu0,
-                        sigma0_sqrt,
+                        sigma0,
                         alpha,
                         beta,
-                        psi_sqrt,
+                        psi,
                         nu,
                         lambda,
-                        theta_sqrt,
+                        theta,
                         gamma_y = NULL,
                         gamma_eta = NULL,
                         x = NULL,
                         type,
                         time = 0,
                         burn_in = 0) {
+  foo <- function(x) {
+    return(
+      t(chol(x))
+    )
+  }
+  sigma0_l <- lapply(
+    X = sigma0,
+    FUN = foo
+  )
+  psi_l <- lapply(
+    X = psi,
+    FUN = foo
+  )
+  theta_l <- lapply(
+    X = theta,
+    FUN = foo
+  )
   switch(
     EXPR = as.character(type),
     "0" = {
@@ -187,13 +203,13 @@ SimSSMIVary <- function(n,
         .SimSSM0IVary(
           n = n,
           mu0 = rep(x = mu0, length.out = n),
-          sigma0_sqrt = rep(x = sigma0_sqrt, length.out = n),
+          sigma0_l = rep(x = sigma0_l, length.out = n),
           alpha = rep(x = alpha, length.out = n),
           beta = rep(x = beta, length.out = n),
-          psi_sqrt = rep(x = psi_sqrt, length.out = n),
+          psi_l = rep(x = psi_l, length.out = n),
           nu = rep(x = nu, length.out = n),
           lambda = rep(x = lambda, length.out = n),
-          theta_sqrt = rep(x = theta_sqrt, length.out = n),
+          theta_l = rep(x = theta_l, length.out = n),
           time = time,
           burn_in = burn_in
         )
@@ -204,13 +220,13 @@ SimSSMIVary <- function(n,
         .SimSSM1IVary(
           n = n,
           mu0 = rep(x = mu0, length.out = n),
-          sigma0_sqrt = rep(x = sigma0_sqrt, length.out = n),
+          sigma0_l = rep(x = sigma0_l, length.out = n),
           alpha = rep(x = alpha, length.out = n),
           beta = rep(x = beta, length.out = n),
-          psi_sqrt = rep(x = psi_sqrt, length.out = n),
+          psi_l = rep(x = psi_l, length.out = n),
           nu = rep(x = nu, length.out = n),
           lambda = rep(x = lambda, length.out = n),
-          theta_sqrt = rep(x = theta_sqrt, length.out = n),
+          theta_l = rep(x = theta_l, length.out = n),
           gamma_eta = rep(x = gamma_eta, length.out = n),
           x = x,
           time = time,
@@ -223,13 +239,13 @@ SimSSMIVary <- function(n,
         .SimSSM2IVary(
           n = n,
           mu0 = rep(x = mu0, length.out = n),
-          sigma0_sqrt = rep(x = sigma0_sqrt, length.out = n),
+          sigma0_l = rep(x = sigma0_l, length.out = n),
           alpha = rep(x = alpha, length.out = n),
           beta = rep(x = beta, length.out = n),
-          psi_sqrt = rep(x = psi_sqrt, length.out = n),
+          psi_l = rep(x = psi_l, length.out = n),
           nu = rep(x = nu, length.out = n),
           lambda = rep(x = lambda, length.out = n),
-          theta_sqrt = rep(x = theta_sqrt, length.out = n),
+          theta_l = rep(x = theta_l, length.out = n),
           gamma_y = rep(x = gamma_y, length.out = n),
           gamma_eta = rep(x = gamma_eta, length.out = n),
           x = x,

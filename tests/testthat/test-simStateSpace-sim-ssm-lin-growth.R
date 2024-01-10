@@ -6,7 +6,7 @@ lapply(
     message(text)
     # prepare parameters
     set.seed(42)
-    n <- 5
+    n <- 10
     mu0 <- c(0.615, 1.006)
     sigma0 <- matrix(
       data = c(
@@ -17,9 +17,7 @@ lapply(
       ),
       nrow = 2
     )
-    sigma0_sqrt <- chol(sigma0)
     theta <- 0.6
-    theta_sqrt <- sqrt(theta)
     time <- 10
     gamma_y <- matrix(data = 0.10, nrow = 1, ncol = 2)
     gamma_eta <- matrix(data = 0.10, nrow = 2, ncol = 2)
@@ -39,8 +37,8 @@ lapply(
     ssm <- SimSSMLinGrowth(
       n = n,
       mu0 = mu0,
-      sigma0_sqrt = sigma0_sqrt,
-      theta_sqrt = theta_sqrt,
+      sigma0 = sigma0,
+      theta = theta,
       type = 0,
       time = time
     )
@@ -54,8 +52,8 @@ lapply(
     ssm <- SimSSMLinGrowth(
       n = n,
       mu0 = mu0,
-      sigma0_sqrt = sigma0_sqrt,
-      theta_sqrt = theta_sqrt,
+      sigma0 = sigma0,
+      theta = theta,
       gamma_eta = gamma_eta,
       x = x,
       type = 1,
@@ -71,8 +69,8 @@ lapply(
     ssm <- SimSSMLinGrowth(
       n = n,
       mu0 = mu0,
-      sigma0_sqrt = sigma0_sqrt,
-      theta_sqrt = theta_sqrt,
+      sigma0 = sigma0,
+      theta = theta,
       gamma_y = gamma_y,
       gamma_eta = gamma_eta,
       x = x,
@@ -93,8 +91,8 @@ lapply(
           SimSSMLinGrowth(
             n = n,
             mu0 = mu0,
-            sigma0_sqrt = sigma0_sqrt,
-            theta_sqrt = theta_sqrt,
+            sigma0 = sigma0,
+            theta = theta,
             gamma_y = gamma_y,
             gamma_eta = gamma_eta,
             x = x,

@@ -8,17 +8,16 @@ lapply(
     set.seed(42)
     k <- p <- 3
     iden <- diag(k)
-    iden_sqrt <- chol(iden)
     null_vec <- rep(x = 0, times = k)
     n <- 5
     mu0 <- null_vec
-    sigma0_sqrt <- iden_sqrt
+    sigma0 <- iden
     alpha <- null_vec
     beta <- diag(x = 0.50, nrow = k)
-    psi_sqrt <- iden_sqrt
+    psi <- iden
     nu <- null_vec
     lambda <- iden
-    theta_sqrt <- chol(diag(x = 0.50, nrow = k))
+    theta <- diag(x = 0.50, nrow = k)
     time <- 50
     burn_in <- 10
     gamma_y <- gamma_eta <- 0.10 * diag(k)
@@ -38,13 +37,13 @@ lapply(
     ssm <- SimSSMFixed(
       n = n,
       mu0 = mu0,
-      sigma0_sqrt = sigma0_sqrt,
+      sigma0 = sigma0,
       alpha = alpha,
       beta = beta,
-      psi_sqrt = psi_sqrt,
+      psi = psi,
       nu = nu,
       lambda = lambda,
-      theta_sqrt = theta_sqrt,
+      theta = theta,
       type = 0,
       time = time,
       burn_in = burn_in
@@ -59,13 +58,13 @@ lapply(
     ssm <- SimSSMFixed(
       n = n,
       mu0 = mu0,
-      sigma0_sqrt = sigma0_sqrt,
+      sigma0 = sigma0,
       alpha = alpha,
       beta = beta,
-      psi_sqrt = psi_sqrt,
+      psi = psi,
       nu = nu,
       lambda = lambda,
-      theta_sqrt = theta_sqrt,
+      theta = theta,
       gamma_eta = gamma_eta,
       x = x,
       type = 1,
@@ -82,13 +81,13 @@ lapply(
     ssm <- SimSSMFixed(
       n = n,
       mu0 = mu0,
-      sigma0_sqrt = sigma0_sqrt,
+      sigma0 = sigma0,
       alpha = alpha,
       beta = beta,
-      psi_sqrt = psi_sqrt,
+      psi = psi,
       nu = nu,
       lambda = lambda,
-      theta_sqrt = theta_sqrt,
+      theta = theta,
       gamma_y = gamma_y,
       gamma_eta = gamma_eta,
       x = x,
@@ -110,13 +109,13 @@ lapply(
           SimSSMFixed(
             n = n,
             mu0 = mu0,
-            sigma0_sqrt = sigma0_sqrt,
+            sigma0 = sigma0,
             alpha = alpha,
             beta = beta,
-            psi_sqrt = psi_sqrt,
+            psi = psi,
             nu = nu,
             lambda = lambda,
-            theta_sqrt = theta_sqrt,
+            theta = theta,
             gamma_y = gamma_y,
             gamma_eta = gamma_eta,
             x = x,

@@ -199,8 +199,8 @@
 #'   The rate of mean reversion,
 #'   determining how quickly the variable returns to its mean
 #'   (\eqn{\boldsymbol{\Phi}}).
-#' @param sigma_sqrt Numeric matrix.
-#'   Cholesky decomposition of the matrix of volatility
+#' @param sigma Numeric matrix.
+#'   The matrix of volatility
 #'   or randomness in the process
 #'   (\eqn{\boldsymbol{\Sigma}}).
 #' @param delta_t Numeric.
@@ -231,17 +231,17 @@
 #' set.seed(42)
 #' p <- k <- 2
 #' iden <- diag(p)
-#' iden_sqrt <- chol(iden)
 #' mu0 <- c(-3.0, 1.5)
-#' sigma0_sqrt <- iden_sqrt
+#' sigma0 <- iden
 #' mu <- c(5.76, 5.18)
 #' phi <- matrix(data = c(0.10, -0.05, -0.05, 0.10), nrow = p)
-#' sigma_sqrt <- chol(
-#'   matrix(data = c(2.79, 0.06, 0.06, 3.27), nrow = p)
+#' sigma <- matrix(
+#'   data = c(2.79, 0.06, 0.06, 3.27),
+#'   nrow = p
 #' )
 #' nu <- rep(x = 0, times = k)
 #' lambda <- diag(k)
-#' theta_sqrt <- chol(diag(x = 0.50, nrow = k))
+#' theta <- diag(x = 0.50, nrow = k)
 #' delta_t <- 0.10
 #' time <- 50
 #' burn_in <- 0
@@ -254,13 +254,13 @@
 #' # Type 0
 #' ssm <- SimSSMOU(
 #'   mu0 = mu0,
-#'   sigma0_sqrt = sigma0_sqrt,
+#'   sigma0 = sigma0,
 #'   mu = mu,
 #'   phi = phi,
-#'   sigma_sqrt = sigma_sqrt,
+#'   sigma = sigma,
 #'   nu = nu,
 #'   lambda = lambda,
-#'   theta_sqrt = theta_sqrt,
+#'   theta = theta,
 #'   type = 0,
 #'   delta_t = delta_t,
 #'   time = time,
@@ -272,13 +272,13 @@
 #' # Type 1
 #' ssm <- SimSSMOU(
 #'   mu0 = mu0,
-#'   sigma0_sqrt = sigma0_sqrt,
+#'   sigma0 = sigma0,
 #'   mu = mu,
 #'   phi = phi,
-#'   sigma_sqrt = sigma_sqrt,
+#'   sigma = sigma,
 #'   nu = nu,
 #'   lambda = lambda,
-#'   theta_sqrt = theta_sqrt,
+#'   theta = theta,
 #'   gamma_eta = gamma_eta,
 #'   x = x,
 #'   type = 1,
@@ -292,13 +292,13 @@
 #' # Type 2
 #' ssm <- SimSSMOU(
 #'   mu0 = mu0,
-#'   sigma0_sqrt = sigma0_sqrt,
+#'   sigma0 = sigma0,
 #'   mu = mu,
 #'   phi = phi,
-#'   sigma_sqrt = sigma_sqrt,
+#'   sigma = sigma,
 #'   nu = nu,
 #'   lambda = lambda,
-#'   theta_sqrt = theta_sqrt,
+#'   theta = theta,
 #'   gamma_y = gamma_y,
 #'   gamma_eta = gamma_eta,
 #'   x = x,
@@ -314,13 +314,13 @@
 #' @keywords simStateSpace sim ou
 #' @export
 SimSSMOU <- function(mu0,
-                     sigma0_sqrt,
+                     sigma0,
                      mu,
                      phi,
-                     sigma_sqrt,
+                     sigma,
                      nu,
                      lambda,
-                     theta_sqrt,
+                     theta,
                      gamma_y = NULL,
                      gamma_eta = NULL,
                      x = NULL,
@@ -328,19 +328,22 @@ SimSSMOU <- function(mu0,
                      delta_t,
                      time,
                      burn_in = 0) {
+  sigma0_l <- t(chol(sigma0))
+  sigma_l <- t(chol(sigma))
+  theta_l <- t(chol(theta))
   switch(
     EXPR = as.character(type),
     "0" = {
       return(
         .SimSSM0OU(
           mu0 = mu0,
-          sigma0_sqrt = sigma0_sqrt,
+          sigma0_l = sigma0_l,
           mu = mu,
           phi = phi,
-          sigma_sqrt = sigma_sqrt,
+          sigma_l = sigma_l,
           nu = nu,
           lambda = lambda,
-          theta_sqrt = theta_sqrt,
+          theta_l = theta_l,
           delta_t = delta_t,
           time = time,
           burn_in = burn_in
@@ -351,13 +354,13 @@ SimSSMOU <- function(mu0,
       return(
         .SimSSM1OU(
           mu0 = mu0,
-          sigma0_sqrt = sigma0_sqrt,
+          sigma0_l = sigma0_l,
           mu = mu,
           phi = phi,
-          sigma_sqrt = sigma_sqrt,
+          sigma_l = sigma_l,
           nu = nu,
           lambda = lambda,
-          theta_sqrt = theta_sqrt,
+          theta_l = theta_l,
           gamma_eta = gamma_eta,
           x = x,
           delta_t = delta_t,
@@ -370,13 +373,13 @@ SimSSMOU <- function(mu0,
       return(
         .SimSSM2OU(
           mu0 = mu0,
-          sigma0_sqrt = sigma0_sqrt,
+          sigma0_l = sigma0_l,
           mu = mu,
           phi = phi,
-          sigma_sqrt = sigma_sqrt,
+          sigma_l = sigma_l,
           nu = nu,
           lambda = lambda,
-          theta_sqrt = theta_sqrt,
+          theta_l = theta_l,
           gamma_y = gamma_y,
           gamma_eta = gamma_eta,
           x = x,

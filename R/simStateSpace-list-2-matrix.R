@@ -35,69 +35,103 @@
 #' @return Returns a matrix of simulated data.
 #'
 #' @examples
+#' # SimSSM Function -------------------------------------------------
 #' # prepare parameters
 #' set.seed(42)
 #' k <- p <- 3
 #' iden <- diag(k)
-#' iden_sqrt <- chol(iden)
 #' null_vec <- rep(x = 0, times = k)
-#' n <- 5
 #' mu0 <- null_vec
-#' sigma0_sqrt <- iden_sqrt
+#' sigma0 <- iden
 #' alpha <- null_vec
 #' beta <- diag(x = 0.50, nrow = k)
-#' psi_sqrt <- iden_sqrt
+#' psi <- iden
 #' nu <- null_vec
 #' lambda <- iden
-#' theta_sqrt <- chol(diag(x = 0.50, nrow = k))
+#' theta <- diag(x = 0.50, nrow = k)
 #' time <- 50
 #' burn_in <- 0
+#' gamma_y <- gamma_eta <- 0.10 * diag(k)
+#' x <- matrix(
+#'   data = rnorm(n = k * (time + burn_in)),
+#'   ncol = k
+#' )
 #'
-#' # generate data
+#' # Type 0
 #' ssm <- SimSSM(
 #'   mu0 = mu0,
-#'   sigma0_sqrt = sigma0_sqrt,
+#'   sigma0 = sigma0,
 #'   alpha = alpha,
 #'   beta = beta,
-#'   psi_sqrt = psi_sqrt,
+#'   psi = psi,
 #'   nu = nu,
 #'   lambda = lambda,
-#'   theta_sqrt = theta_sqrt,
+#'   theta = theta,
 #'   type = 0,
 #'   time = time,
 #'   burn_in = burn_in
 #' )
 #'
-#' # list to matrix
-#' mat <- Sim2Matrix(ssm, long = TRUE)
-#' str(mat)
+#' mat <- Sim2Matrix(ssm, eta = TRUE)
 #' head(mat)
-#' mat <- Sim2Matrix(ssm, long = FALSE)
-#' str(mat)
+#' mat <- Sim2Matrix(ssm, eta = FALSE)
+#' head(mat)
+#' mat <- Sim2Matrix(ssm, eta = TRUE, long = FALSE)
+#' head(mat)
+#' mat <- Sim2Matrix(ssm, eta = FALSE, long = FALSE)
 #' head(mat)
 #'
-#' # generate data
-#' ssm <- SimSSMFixed(
-#'   n = n,
+#' # Type 1
+#' ssm <- SimSSM(
 #'   mu0 = mu0,
-#'   sigma0_sqrt = sigma0_sqrt,
+#'   sigma0 = sigma0,
 #'   alpha = alpha,
 #'   beta = beta,
-#'   psi_sqrt = psi_sqrt,
+#'   psi = psi,
 #'   nu = nu,
 #'   lambda = lambda,
-#'   theta_sqrt = theta_sqrt,
-#'   type = 0,
+#'   theta = theta,
+#'   gamma_eta = gamma_eta,
+#'   x = x,
+#'   type = 1,
 #'   time = time,
 #'   burn_in = burn_in
 #' )
 #'
-#' # list to matrix
-#' mat <- Sim2Matrix(ssm, long = TRUE)
-#' str(mat)
+#' mat <- Sim2Matrix(ssm, eta = TRUE)
 #' head(mat)
-#' mat <- Sim2Matrix(ssm, long = FALSE)
-#' str(mat)
+#' mat <- Sim2Matrix(ssm, eta = FALSE)
+#' head(mat)
+#' mat <- Sim2Matrix(ssm, eta = TRUE, long = FALSE)
+#' head(mat)
+#' mat <- Sim2Matrix(ssm, eta = FALSE, long = FALSE)
+#' head(mat)
+#'
+#' # Type 2
+#' ssm <- SimSSM(
+#'   mu0 = mu0,
+#'   sigma0 = sigma0,
+#'   alpha = alpha,
+#'   beta = beta,
+#'   psi = psi,
+#'   nu = nu,
+#'   lambda = lambda,
+#'   theta = theta,
+#'   gamma_y = gamma_y,
+#'   gamma_eta = gamma_eta,
+#'   x = x,
+#'   type = 2,
+#'   time = time,
+#'   burn_in = burn_in
+#' )
+#'
+#' mat <- Sim2Matrix(ssm, eta = TRUE)
+#' head(mat)
+#' mat <- Sim2Matrix(ssm, eta = FALSE)
+#' head(mat)
+#' mat <- Sim2Matrix(ssm, eta = TRUE, long = FALSE)
+#' head(mat)
+#' mat <- Sim2Matrix(ssm, eta = FALSE, long = FALSE)
 #' head(mat)
 #'
 #' @family Simulation of State Space Models Data Functions
@@ -135,9 +169,9 @@ Sim2Matrix <- function(x,
   if (length(eta_names) == 1) {
     eta_names <- "eta"
   }
-  if (is.list(first$x)) {
+  if (is.matrix(first$x)) {
     covariates <- TRUE
-    j <- dim(first$x[[1]])[2]
+    j <- dim(first$x)[2]
     x_names <- paste0("x", seq_len(j))
   } else {
     covariates <- FALSE
