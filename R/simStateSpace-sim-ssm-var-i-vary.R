@@ -56,7 +56,7 @@
 #'         data = rnorm(n = k * (time + burn_in)),
 #'         ncol = k
 #'       )
-#'     )
+#'    )
 #'   }
 #' )
 #'
@@ -94,15 +94,15 @@
 #' @keywords simStateSpace sim var
 #' @export
 SimSSMVARIVary <- function(n,
-                           mu0,
-                           sigma0,
-                           alpha,
-                           beta,
-                           psi,
-                           gamma_eta = NULL,
-                           x = NULL,
-                           time = 0,
-                           burn_in = 0) {
+                          mu0,
+                          sigma0,
+                          alpha,
+                          beta,
+                          psi,
+                          gamma_eta = NULL,
+                          x = NULL,
+                          time = 0,
+                          burn_in = 0) {
   foo <- function(x) {
     return(
       t(chol(x))

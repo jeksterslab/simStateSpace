@@ -23,7 +23,7 @@ lapply(
     )
     psi <- list(iden)
     time <- 50
-    burn_in <- 0
+    burn_in <- 10
     gamma_eta <- list(0.10 * diag(k))
     x <- lapply(
       X = seq_len(n),
@@ -33,7 +33,7 @@ lapply(
             data = rnorm(n = k * (time + burn_in)),
             ncol = k
           )
-        )
+       )
       }
     )
 
@@ -72,6 +72,7 @@ lapply(
     Sim2Matrix(ssm, eta = FALSE)
     Sim2Matrix(ssm, eta = TRUE, long = FALSE)
     Sim2Matrix(ssm, eta = FALSE, long = FALSE)
+
   },
   text = "test-simStateSpace-sim-ssm-var-i-vary"
 )

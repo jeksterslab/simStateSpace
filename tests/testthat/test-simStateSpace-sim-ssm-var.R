@@ -15,7 +15,7 @@ lapply(
     beta <- diag(x = 0.5, nrow = k)
     psi <- iden
     time <- 50
-    burn_in <- 0
+    burn_in <- 10
     gamma_eta <- 0.10 * diag(k)
     x <- matrix(
       data = rnorm(n = k * (time + burn_in)),
@@ -55,6 +55,7 @@ lapply(
     Sim2Matrix(ssm, eta = FALSE)
     Sim2Matrix(ssm, eta = TRUE, long = FALSE)
     Sim2Matrix(ssm, eta = FALSE, long = FALSE)
+
   },
   text = "test-simStateSpace-sim-ssm-var"
 )

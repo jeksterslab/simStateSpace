@@ -6,11 +6,7 @@
 #include <RcppArmadillo.h>
 // [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::export(.SimSSM0)]]
-Rcpp::List SimSSM0(const arma::vec& mu0, const arma::mat& sigma0_l,
-                   const arma::vec& alpha, const arma::mat& beta,
-                   const arma::mat& psi_l, const arma::vec& nu,
-                   const arma::mat& lambda, const arma::mat& theta_l,
-                   const int time, const int burn_in) {
+Rcpp::List SimSSM0(const arma::vec& mu0, const arma::mat& sigma0_l, const arma::vec& alpha, const arma::mat& beta, const arma::mat& psi_l, const arma::vec& nu, const arma::mat& lambda, const arma::mat& theta_l, const int time, const int burn_in) {
   // Note:
   // sigma0_l, psi_l, and theta_l are L in A = L * L^T
   // Step 1: Determine indices
@@ -25,15 +21,12 @@ Rcpp::List SimSSM0(const arma::vec& mu0, const arma::mat& sigma0_l,
 
   // Step 3: Generate initial condition
   eta.col(0) = mu0 + (sigma0_l * arma::randn(num_latent_vars));
-  y.col(0) =
-      nu + (lambda * eta.col(0)) + (theta_l * arma::randn(num_manifest_vars));
+  y.col(0) = nu + (lambda * eta.col(0)) + (theta_l * arma::randn(num_manifest_vars));
 
   // Step 4: Simulate state space model data using a loop
   for (int t = 1; t < total_time; t++) {
-    eta.col(t) = alpha + (beta * eta.col(t - 1)) +
-                 (psi_l * arma::randn(num_latent_vars));
-    y.col(t) =
-        nu + (lambda * eta.col(t)) + (theta_l * arma::randn(num_manifest_vars));
+    eta.col(t) = alpha + (beta * eta.col(t - 1)) + (psi_l * arma::randn(num_latent_vars));
+    y.col(t) = nu + (lambda * eta.col(t)) + (theta_l * arma::randn(num_manifest_vars));
   }
 
   // Step 5: If there is a burn-in period, remove it
@@ -44,8 +37,5 @@ Rcpp::List SimSSM0(const arma::vec& mu0, const arma::mat& sigma0_l,
   }
 
   // Step 6: Return the transposed data matrices in a list
-  return Rcpp::List::create(Rcpp::Named("y") = y.t(),
-                            Rcpp::Named("eta") = eta.t(), Rcpp::Named("x") = 0,
-                            Rcpp::Named("time") = arma::regspace(0, time - 1),
-                            Rcpp::Named("id") = id);
+  return Rcpp::List::create(Rcpp::Named("y") = y.t(), Rcpp::Named("eta") = eta.t(), Rcpp::Named("x") = 0, Rcpp::Named("time") = arma::regspace(0, time - 1), Rcpp::Named("id") = id);
 }

@@ -26,7 +26,7 @@ lapply(
     lambda <- list(iden)
     theta <- list(diag(x = 0.50, nrow = k))
     time <- 50
-    burn_in <- 0
+    burn_in <- 10
     gamma_y <- gamma_eta <- list(0.10 * diag(k))
     x <- lapply(
       X = seq_len(n),
@@ -36,7 +36,7 @@ lapply(
             data = rnorm(n = k * (time + burn_in)),
             ncol = k
           )
-        )
+       )
       }
     )
 
