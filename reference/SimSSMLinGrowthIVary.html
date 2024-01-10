@@ -75,8 +75,8 @@ the parameters can vary across individuals.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">SimSSMLinGrowthIVary</span><span class="op">(</span></span>
 <span>  <span class="va">n</span>,</span>
 <span>  <span class="va">mu0</span>,</span>
-<span>  <span class="va">sigma0_sqrt</span>,</span>
-<span>  <span class="va">theta_sqrt</span>,</span>
+<span>  <span class="va">sigma0</span>,</span>
+<span>  <span class="va">theta</span>,</span>
 <span>  gamma_y <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  gamma_eta <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  x <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -100,17 +100,17 @@ The first element is the mean of the intercept,
 and the second element is the mean of the slope.</p></dd>
 
 
-<dt>sigma0_sqrt</dt>
+<dt>sigma0</dt>
 <dd><p>A list of numeric matrices.
 Each element of the list
-is the Cholesky decomposition of the covariance matrix
+is the covariance matrix
 of the intercept and the slope.</p></dd>
 
 
-<dt>theta_sqrt</dt>
+<dt>theta</dt>
 <dd><p>A list numeric values.
 Each element of the list
-is the square root of the common measurement error variance.</p></dd>
+is the common measurement error variance.</p></dd>
 
 
 <dt>gamma_y</dt>
@@ -161,9 +161,9 @@ Each element is a list with the following elements:</p><ul><li><p><code>y</code>
 by providing a list of parameter values.
 If the length of any of the parameters
 (<code>mu0</code>,
-<code>sigma0_sqrt</code>,
+<code>sigma0</code>,
 <code>mu</code>,
-<code>theta_sqrt</code>,
+<code>theta</code>,
 <code>gamma_y</code>, or
 <code>gamma_eta</code>)
 is less the <code>n</code>,
@@ -203,24 +203,25 @@ and state-space modeling techniques.
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># prepare parameters</span></span></span>
 <span class="r-in"><span><span class="co"># In this example, the mean vector of the intercept and slope vary.</span></span></span>
-<span class="r-in"><span><span class="co"># Specifically, there are two sets of values representing two latent classes.</span></span></span>
+<span class="r-in"><span><span class="co"># Specifically,</span></span></span>
+<span class="r-in"><span><span class="co"># there are two sets of values representing two latent classes.</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">42</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">10</span></span></span>
 <span class="r-in"><span><span class="va">mu0_1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.615</span>, <span class="fl">1.006</span><span class="op">)</span> <span class="co"># lower starting point, higher growth</span></span></span>
 <span class="r-in"><span><span class="va">mu0_2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1.000</span>, <span class="fl">0.500</span><span class="op">)</span> <span class="co"># higher starting point, lower growth</span></span></span>
 <span class="r-in"><span><span class="va">mu0</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">mu0_1</span>, <span class="va">mu0_2</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">sigma0</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>  data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>    <span class="fl">1.932</span>,</span></span>
-<span class="r-in"><span>    <span class="fl">0.618</span>,</span></span>
-<span class="r-in"><span>    <span class="fl">0.618</span>,</span></span>
-<span class="r-in"><span>    <span class="fl">0.587</span></span></span>
-<span class="r-in"><span>  <span class="op">)</span>,</span></span>
-<span class="r-in"><span>  nrow <span class="op">=</span> <span class="fl">2</span></span></span>
+<span class="r-in"><span><span class="va">sigma0</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>      <span class="fl">1.932</span>,</span></span>
+<span class="r-in"><span>      <span class="fl">0.618</span>,</span></span>
+<span class="r-in"><span>      <span class="fl">0.618</span>,</span></span>
+<span class="r-in"><span>      <span class="fl">0.587</span></span></span>
+<span class="r-in"><span>    <span class="op">)</span>,</span></span>
+<span class="r-in"><span>    nrow <span class="op">=</span> <span class="fl">2</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">sigma0_sqrt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/chol.html" class="external-link">chol</a></span><span class="op">(</span><span class="va">sigma0</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">theta</span> <span class="op">&lt;-</span> <span class="fl">0.6</span></span></span>
-<span class="r-in"><span><span class="va">theta_sqrt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="va">theta</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">theta</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fl">0.6</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">time</span> <span class="op">&lt;-</span> <span class="fl">10</span></span></span>
 <span class="r-in"><span><span class="va">gamma_y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span>data <span class="op">=</span> <span class="fl">0.10</span>, nrow <span class="op">=</span> <span class="fl">1</span>, ncol <span class="op">=</span> <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">gamma_eta</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span>data <span class="op">=</span> <span class="fl">0.10</span>, nrow <span class="op">=</span> <span class="fl">2</span>, ncol <span class="op">=</span> <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></span>
@@ -240,8 +241,8 @@ and state-space modeling techniques.
 <span class="r-in"><span><span class="va">ssm</span> <span class="op">&lt;-</span> <span class="fu">SimSSMLinGrowthIVary</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  n <span class="op">=</span> <span class="va">n</span>,</span></span>
 <span class="r-in"><span>  mu0 <span class="op">=</span> <span class="va">mu0</span>,</span></span>
-<span class="r-in"><span>  sigma0_sqrt <span class="op">=</span> <span class="va">sigma0_sqrt</span>,</span></span>
-<span class="r-in"><span>  theta_sqrt <span class="op">=</span> <span class="va">theta_sqrt</span>,</span></span>
+<span class="r-in"><span>  sigma0 <span class="op">=</span> <span class="va">sigma0</span>,</span></span>
+<span class="r-in"><span>  theta <span class="op">=</span> <span class="va">theta</span>,</span></span>
 <span class="r-in"><span>  type <span class="op">=</span> <span class="fl">0</span>,</span></span>
 <span class="r-in"><span>  time <span class="op">=</span> <span class="va">time</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
@@ -249,62 +250,62 @@ and state-space modeling techniques.
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">ssm</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> List of 10</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ :List of 5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ y   : num [1:10, 1] 1.452 0.462 1.272 2.337 3.977 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ eta : num [1:10, 1:2] 0.0238 1.0372 2.0506 3.0641 4.0775 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ y   : num [1:10, 1] 1.447 0.266 0.885 1.759 3.208 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ eta : num [1:10, 1:2] 0.0185 0.8411 1.6637 2.4864 3.309 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ x   : int 0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ time: num [1:10, 1] 0 1 2 3 4 5 6 7 8 9</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ id  : num [1:10, 1] 1 1 1 1 1 1 1 1 1 1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ :List of 5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ y   : num [1:10, 1] 4.53 4.3 4.62 4.83 6.33 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ eta : num [1:10, 1:2] 3.79 4.38 4.97 5.56 6.15 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ y   : num [1:10, 1] 4.46 5.1 6.3 7.38 9.75 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ eta : num [1:10, 1:2] 3.72 5.19 6.65 8.11 9.57 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ x   : int 0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ time: num [1:10, 1] 0 1 2 3 4 5 6 7 8 9</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ id  : num [1:10, 1] 2 2 2 2 2 2 2 2 2 2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ :List of 5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ y   : num [1:10, 1] 2.24 3.61 6.02 7.17 9.03 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ eta : num [1:10, 1:2] 2.86 4.51 6.16 7.82 9.47 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ y   : num [1:10, 1] 1.78 3.71 6.7 8.42 10.85 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ eta : num [1:10, 1:2] 2.4 4.62 6.84 9.07 11.29 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ x   : int 0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ time: num [1:10, 1] 0 1 2 3 4 5 6 7 8 9</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ id  : num [1:10, 1] 3 3 3 3 3 3 3 3 3 3</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ :List of 5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ y   : num [1:10, 1] 2.6 3 3.99 3.5 4.78 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ eta : num [1:10, 1:2] 2.26 2.68 3.11 3.54 3.96 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ y   : num [1:10, 1] 2.65 3.47 4.88 4.81 6.5 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ eta : num [1:10, 1:2] 2.31 3.16 4 4.84 5.69 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ x   : int 0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ time: num [1:10, 1] 0 1 2 3 4 5 6 7 8 9</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ id  : num [1:10, 1] 4 4 4 4 4 4 4 4 4 4</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ :List of 5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ y   : num [1:10, 1] -0.975 -1.162 -1.505 1.28 0.881 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ eta : num [1:10, 1:2] -1.156 -0.6158 -0.0756 0.4646 1.0048 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ y   : num [1:10, 1] -0.643 -1.291 -2.094 0.23 -0.628 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ eta : num [1:10, 1:2] -0.824 -0.744 -0.664 -0.584 -0.505 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ x   : int 0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ time: num [1:10, 1] 0 1 2 3 4 5 6 7 8 9</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ id  : num [1:10, 1] 5 5 5 5 5 5 5 5 5 5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ :List of 5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ y   : num [1:10, 1] 0.809 0.74 -0.978 -0.106 -0.413 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ eta : num [1:10, 1:2] 0.521 0.206 -0.109 -0.423 -0.738 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ y   : num [1:10, 1] 1.39 1.353 -0.333 0.572 0.298 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ eta : num [1:10, 1:2] 1.1019 0.8196 0.5373 0.255 -0.0273 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ x   : int 0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ time: num [1:10, 1] 0 1 2 3 4 5 6 7 8 9</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ id  : num [1:10, 1] 6 6 6 6 6 6 6 6 6 6</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ :List of 5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ y   : num [1:10, 1] -0.0868 2.6197 1.2629 2.6945 0.7698 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ eta : num [1:10, 1:2] 0.846 1.11 1.374 1.638 1.902 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ y   : num [1:10, 1] 0.442 3.391 2.278 3.952 2.271 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ eta : num [1:10, 1:2] 1.37 1.88 2.39 2.9 3.4 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ x   : int 0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ time: num [1:10, 1] 0 1 2 3 4 5 6 7 8 9</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ id  : num [1:10, 1] 7 7 7 7 7 7 7 7 7 7</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ :List of 5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ y   : num [1:10, 1] 0.954 1.053 -0.737 -3.822 -4.129 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ eta : num [1:10, 1:2] 0.167 -0.473 -1.112 -1.751 -2.391 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ y   : num [1:10, 1] 1.7662 1.8579 0.0608 -3.0309 -3.3449 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ eta : num [1:10, 1:2] 0.978 0.332 -0.314 -0.96 -1.606 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ x   : int 0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ time: num [1:10, 1] 0 1 2 3 4 5 6 7 8 9</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ id  : num [1:10, 1] 8 8 8 8 8 8 8 8 8 8</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ :List of 5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ y   : num [1:10, 1] -1.56 2.36 1.7 2.98 5.27 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ eta : num [1:10, 1:2] -0.314 0.98 2.274 3.567 4.861 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ y   : num [1:10, 1] -1.76 1.796 0.769 1.684 3.613 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ eta : num [1:10, 1:2] -0.519 0.412 1.343 2.274 3.205 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ x   : int 0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ time: num [1:10, 1] 0 1 2 3 4 5 6 7 8 9</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ id  : num [1:10, 1] 9 9 9 9 9 9 9 9 9 9</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ :List of 5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ y   : num [1:10, 1] 0.572 0.618 -1.806 -2.865 -3.377 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ eta : num [1:10, 1:2] 0.0109 -0.8743 -1.7594 -2.6446 -3.5298 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ y   : num [1:10, 1] 1.56 1.6 -0.82 -1.88 -2.39 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ eta : num [1:10, 1:2] 0.998 0.112 -0.774 -1.66 -2.545 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ x   : int 0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ time: num [1:10, 1] 0 1 2 3 4 5 6 7 8 9</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ id  : num [1:10, 1] 10 10 10 10 10 10 10 10 10 10</span>
@@ -313,8 +314,8 @@ and state-space modeling techniques.
 <span class="r-in"><span><span class="va">ssm</span> <span class="op">&lt;-</span> <span class="fu">SimSSMLinGrowthIVary</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  n <span class="op">=</span> <span class="va">n</span>,</span></span>
 <span class="r-in"><span>  mu0 <span class="op">=</span> <span class="va">mu0</span>,</span></span>
-<span class="r-in"><span>  sigma0_sqrt <span class="op">=</span> <span class="va">sigma0_sqrt</span>,</span></span>
-<span class="r-in"><span>  theta_sqrt <span class="op">=</span> <span class="va">theta_sqrt</span>,</span></span>
+<span class="r-in"><span>  sigma0 <span class="op">=</span> <span class="va">sigma0</span>,</span></span>
+<span class="r-in"><span>  theta <span class="op">=</span> <span class="va">theta</span>,</span></span>
 <span class="r-in"><span>  gamma_eta <span class="op">=</span> <span class="va">gamma_eta</span>,</span></span>
 <span class="r-in"><span>  x <span class="op">=</span> <span class="va">x</span>,</span></span>
 <span class="r-in"><span>  type <span class="op">=</span> <span class="fl">1</span>,</span></span>
@@ -324,62 +325,62 @@ and state-space modeling techniques.
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">ssm</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> List of 10</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ :List of 5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ y   : num [1:10, 1] -0.9384 -0.0546 2.2886 3.1674 6.178 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ eta : num [1:10, 1:2] -0.245 1.082 2.307 3.567 4.855 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ y   : num [1:10, 1] -0.854 -0.304 1.705 2.251 4.927 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ eta : num [1:10, 1:2] -0.161 0.833 1.724 2.65 3.604 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ x   : num [1:10, 1:2] 1.371 -0.565 0.363 0.633 0.404 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ time: num [1:10, 1] 0 1 2 3 4 5 6 7 8 9</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ id  : num [1:10, 1] 1 1 1 1 1 1 1 1 1 1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ :List of 5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ y   : num [1:10, 1] 0.83 0.162 0.365 2.203 4.613 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ eta : num [1:10, 1:2] 0.0632 0.8773 1.7777 2.7387 3.9397 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ y   : num [1:10, 1] 0.541 -0.525 -0.72 0.721 2.734 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ eta : num [1:10, 1:2] -0.227 0.19 0.693 1.257 2.061 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ x   : num [1:10, 1:2] -0.307 -1.781 -0.172 1.215 1.895 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ time: num [1:10, 1] 0 1 2 3 4 5 6 7 8 9</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ id  : num [1:10, 1] 2 2 2 2 2 2 2 2 2 2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ :List of 5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ y   : num [1:10, 1] -3.512 -2.273 -2.249 -1.914 -0.257 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ eta : num [1:10, 1:2] -2.56 -2.19 -1.59 -1 -0.54 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ y   : num [1:10, 1] -3.1 -2.76 -3.64 -4.2 -3.44 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ eta : num [1:10, 1:2] -2.15 -2.68 -2.98 -3.29 -3.73 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ x   : num [1:10, 1:2] 0.206 -0.361 0.758 -0.727 -1.368 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ time: num [1:10, 1] 0 1 2 3 4 5 6 7 8 9</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ id  : num [1:10, 1] 3 3 3 3 3 3 3 3 3 3</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ :List of 5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ y   : num [1:10, 1] -0.7061 -0.4834 0.0235 -0.4874 -3.277 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ eta : num [1:10, 1:2] -0.242 -0.619 -0.875 -1.087 -1.425 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ y   : num [1:10, 1] -0.175 -0.135 0.19 -0.503 -3.475 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ eta : num [1:10, 1:2] 0.289 -0.27 -0.708 -1.102 -1.623 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ x   : num [1:10, 1:2] -0.367 0.185 0.582 1.4 -0.727 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ time: num [1:10, 1] 0 1 2 3 4 5 6 7 8 9</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ id  : num [1:10, 1] 4 4 4 4 4 4 4 4 4 4</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ :List of 5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ y   : num [1:10, 1] -0.8 1.94 3.59 4.88 7.11 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ eta : num [1:10, 1:2] -0.667 1.169 3.078 5.115 6.92 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ y   : num [1:10, 1] -1.199 0.908 1.932 2.588 4.184 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ eta : num [1:10, 1:2] -1.066 0.138 1.417 2.823 3.998 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ x   : num [1:10, 1:2] 1.5127 0.2579 0.0884 -0.1209 -1.1943 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ time: num [1:10, 1] 0 1 2 3 4 5 6 7 8 9</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ id  : num [1:10, 1] 5 5 5 5 5 5 5 5 5 5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ :List of 5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ y   : num [1:10, 1] 3.03 3.56 5.44 5.59 8.7 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ eta : num [1:10, 1:2] 3.38 4.54 5.55 6.69 7.6 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ y   : num [1:10, 1] 2.72 3.89 6.4 7.17 10.91 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ eta : num [1:10, 1:2] 3.08 4.87 6.5 8.27 9.81 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ x   : num [1:10, 1:2] 1.201 1.045 -1.003 1.848 -0.667 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ time: num [1:10, 1] 0 1 2 3 4 5 6 7 8 9</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ id  : num [1:10, 1] 6 6 6 6 6 6 6 6 6 6</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ :List of 5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ y   : num [1:10, 1] 1.0181 0.0119 1.865 2.3416 2.785 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ eta : num [1:10, 1:2] 0.92 1.35 1.8 2.26 2.87 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ y   : num [1:10, 1] 1.219 0.404 2.449 3.117 3.752 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ eta : num [1:10, 1:2] 1.12 1.75 2.39 3.04 3.83 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ x   : num [1:10, 1:2] -1.49363 -1.47044 0.1247 -0.99664 -0.00182 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ time: num [1:10, 1] 0 1 2 3 4 5 6 7 8 9</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ id  : num [1:10, 1] 7 7 7 7 7 7 7 7 7 7</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ :List of 5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ y   : num [1:10, 1] 0.1036 -0.0495 0.4162 0.6153 -0.9416 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ eta : num [1:10, 1:2] -0.48032 -0.27687 -0.00116 0.24423 0.40146 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ y   : num [1:10, 1] 0.132 -0.481 -0.476 -0.737 -2.755 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ eta : num [1:10, 1:2] -0.452 -0.709 -0.893 -1.108 -1.412 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ x   : num [1:10, 1:2] -0.0861 -0.8877 -0.4447 -0.0294 -0.4139 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ time: num [1:10, 1] 0 1 2 3 4 5 6 7 8 9</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ id  : num [1:10, 1] 8 8 8 8 8 8 8 8 8 8</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ :List of 5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ y   : num [1:10, 1] 0.416 2.423 2.681 5.449 6.043 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ eta : num [1:10, 1:2] 0.995 2.337 3.521 4.838 6.3 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ y   : num [1:10, 1] 0.131 2.182 2.483 5.294 5.932 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ eta : num [1:10, 1:2] 0.71 2.1 3.32 4.68 6.19 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ x   : num [1:10, 1:2] -0.176 -1.072 0.163 -0.363 0.59 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ time: num [1:10, 1] 0 1 2 3 4 5 6 7 8 9</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ id  : num [1:10, 1] 9 9 9 9 9 9 9 9 9 9</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ :List of 5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ y   : num [1:10, 1] -0.286 0.91 3.404 3.278 2.572 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ eta : num [1:10, 1:2] 0.449 1.359 2.33 3.202 3.949 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ y   : num [1:10, 1] -0.618 0.284 2.484 2.064 1.065 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ eta : num [1:10, 1:2] 0.117 0.732 1.41 1.988 2.441 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ x   : num [1:10, 1:2] 0.151 -0.584 0.369 0.295 -0.279 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ time: num [1:10, 1] 0 1 2 3 4 5 6 7 8 9</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ id  : num [1:10, 1] 10 10 10 10 10 10 10 10 10 10</span>
@@ -388,8 +389,8 @@ and state-space modeling techniques.
 <span class="r-in"><span><span class="va">ssm</span> <span class="op">&lt;-</span> <span class="fu">SimSSMLinGrowthIVary</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  n <span class="op">=</span> <span class="va">n</span>,</span></span>
 <span class="r-in"><span>  mu0 <span class="op">=</span> <span class="va">mu0</span>,</span></span>
-<span class="r-in"><span>  sigma0_sqrt <span class="op">=</span> <span class="va">sigma0_sqrt</span>,</span></span>
-<span class="r-in"><span>  theta_sqrt <span class="op">=</span> <span class="va">theta_sqrt</span>,</span></span>
+<span class="r-in"><span>  sigma0 <span class="op">=</span> <span class="va">sigma0</span>,</span></span>
+<span class="r-in"><span>  theta <span class="op">=</span> <span class="va">theta</span>,</span></span>
 <span class="r-in"><span>  gamma_y <span class="op">=</span> <span class="va">gamma_y</span>,</span></span>
 <span class="r-in"><span>  gamma_eta <span class="op">=</span> <span class="va">gamma_eta</span>,</span></span>
 <span class="r-in"><span>  x <span class="op">=</span> <span class="va">x</span>,</span></span>
@@ -400,62 +401,62 @@ and state-space modeling techniques.
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">ssm</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> List of 10</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ :List of 5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ y   : num [1:10, 1] 0.0564 4.1086 2.166 4.6995 5.3334 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ eta : num [1:10, 1:2] 1.45 2.48 3.41 4.37 5.36 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ y   : num [1:10, 1] 0.353 4.682 3.016 5.827 6.738 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ eta : num [1:10, 1:2] 1.75 3.05 4.26 5.5 6.76 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ x   : num [1:10, 1:2] 1.371 -0.565 0.363 0.633 0.404 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ time: num [1:10, 1] 0 1 2 3 4 5 6 7 8 9</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ id  : num [1:10, 1] 1 1 1 1 1 1 1 1 1 1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ :List of 5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ y   : num [1:10, 1] 0.827 1.703 0.942 1.371 1.137 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ eta : num [1:10, 1:2] 0.814 0.792 0.856 0.981 1.346 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ y   : num [1:10, 1] 1.13 2.04 1.31 1.78 1.58 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ eta : num [1:10, 1:2] 1.12 1.13 1.23 1.39 1.79 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ x   : num [1:10, 1:2] -0.307 -1.781 -0.172 1.215 1.895 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ time: num [1:10, 1] 0 1 2 3 4 5 6 7 8 9</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ id  : num [1:10, 1] 2 2 2 2 2 2 2 2 2 2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ :List of 5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ y   : num [1:10, 1] -2.0685 -1.4004 -2.2721 -0.0673 -0.4065 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ eta : num [1:10, 1:2] -1.396 -1.249 -0.869 -0.498 -0.254 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ y   : num [1:10, 1] -1.5 -1.31 -2.66 -0.933 -1.751 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ eta : num [1:10, 1:2] -0.827 -1.159 -1.257 -1.364 -1.598 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ x   : num [1:10, 1:2] 0.206 -0.361 0.758 -0.727 -1.368 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ time: num [1:10, 1] 0 1 2 3 4 5 6 7 8 9</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ id  : num [1:10, 1] 3 3 3 3 3 3 3 3 3 3</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ :List of 5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ y   : num [1:10, 1] -0.537 2.31 0.678 2.443 1.458 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ eta : num [1:10, 1:2] 0.0368 0.6182 1.3201 2.0666 2.6862 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ y   : num [1:10, 1] -0.6885 1.847 -0.0963 1.3571 0.0605 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ eta : num [1:10, 1:2] -0.115 0.155 0.545 0.98 1.288 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ x   : num [1:10, 1:2] -0.367 0.185 0.582 1.4 -0.727 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ time: num [1:10, 1] 0 1 2 3 4 5 6 7 8 9</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ id  : num [1:10, 1] 4 4 4 4 4 4 4 4 4 4</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ :List of 5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ y   : num [1:10, 1] 2.2 4.32 3.26 6.23 7.73 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ eta : num [1:10, 1:2] 1.85 3.16 4.54 6.05 7.32 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ y   : num [1:10, 1] 2.18 4.59 3.83 7.09 8.89 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ eta : num [1:10, 1:2] 1.83 3.43 5.11 6.91 8.48 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ x   : num [1:10, 1:2] 1.5127 0.2579 0.0884 -0.1209 -1.1943 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ time: num [1:10, 1] 0 1 2 3 4 5 6 7 8 9</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ id  : num [1:10, 1] 5 5 5 5 5 5 5 5 5 5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ :List of 5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ y   : num [1:10, 1] 2.43 2.53 1.68 1.89 1.08 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ eta : num [1:10, 1:2] 2.208 1.984 1.612 1.374 0.903 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ y   : num [1:10, 1] 3.12 3.78 3.5 4.27 4.03 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ eta : num [1:10, 1:2] 2.89 3.23 3.43 3.76 3.85 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ x   : num [1:10, 1:2] 1.201 1.045 -1.003 1.848 -0.667 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ time: num [1:10, 1] 0 1 2 3 4 5 6 7 8 9</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ id  : num [1:10, 1] 6 6 6 6 6 6 6 6 6 6</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ :List of 5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ y   : num [1:10, 1] -0.0736 2.0155 4.2214 3.6664 8.4418 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ eta : num [1:10, 1:2] 0.545 2.37 4.208 6.058 8.052 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ y   : num [1:10, 1] -0.863 0.98 2.941 2.14 6.67 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ eta : num [1:10, 1:2] -0.245 1.335 2.927 4.532 6.28 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ x   : num [1:10, 1:2] -1.49363 -1.47044 0.1247 -0.99664 -0.00182 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ time: num [1:10, 1] 0 1 2 3 4 5 6 7 8 9</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ id  : num [1:10, 1] 7 7 7 7 7 7 7 7 7 7</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ :List of 5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ y   : num [1:10, 1] 1.06 1.32 2.49 3.19 1.11 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ eta : num [1:10, 1:2] 1.08 1.57 2.14 2.68 3.13 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ y   : num [1:10, 1] 0.883 1.108 2.25 2.92 0.814 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ eta : num [1:10, 1:2] 0.896 1.363 1.902 2.41 2.831 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ x   : num [1:10, 1:2] -0.0861 -0.8877 -0.4447 -0.0294 -0.4139 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ time: num [1:10, 1] 0 1 2 3 4 5 6 7 8 9</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ id  : num [1:10, 1] 8 8 8 8 8 8 8 8 8 8</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ :List of 5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ y   : num [1:10, 1] -2.4 -1.59 -3.82 -2.96 -1.26 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ eta : num [1:10, 1:2] -2.77 -2.68 -2.74 -2.67 -2.46 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ y   : num [1:10, 1] -1.79 -1.86 -4.97 -4.98 -4.16 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ eta : num [1:10, 1:2] -2.16 -2.95 -3.89 -4.7 -5.36 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ x   : num [1:10, 1:2] -0.176 -1.072 0.163 -0.363 0.59 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ time: num [1:10, 1] 0 1 2 3 4 5 6 7 8 9</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ id  : num [1:10, 1] 9 9 9 9 9 9 9 9 9 9</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ :List of 5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ y   : num [1:10, 1] 1.32 2.92 2.5 4.01 3.51 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ eta : num [1:10, 1:2] 0.29 1.26 2.3 3.24 4.05 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ y   : num [1:10, 1] 0.94 2.18 1.41 2.55 1.7 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ eta : num [1:10, 1:2] -0.089 0.526 1.203 1.78 2.234 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ x   : num [1:10, 1:2] 0.151 -0.584 0.369 0.295 -0.279 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ time: num [1:10, 1] 0 1 2 3 4 5 6 7 8 9</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ id  : num [1:10, 1] 10 10 10 10 10 10 10 10 10 10</span>

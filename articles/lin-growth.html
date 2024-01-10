@@ -78,7 +78,7 @@
                         <h4 data-toc-skip class="author">Ivan Jacob
 Agaloos Pesigan</h4>
             
-            <h4 data-toc-skip class="date">2023-12-15</h4>
+            <h4 data-toc-skip class="date">2024-01-10</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/jeksterslab/simStateSpace/blob/HEAD/vignettes/lin-growth.Rmd"><code>vignettes/lin-growth.Rmd</code></a></small>
       <div class="d-none name"><code>lin-growth.Rmd</code></div>
@@ -113,16 +113,16 @@ Agaloos Pesigan</h4>
   \mathcal{N}
   \left(
   0,
-  \theta^{2}
+  \theta
   \right)
 \end{equation}\]</span> where <span class="math inline">\(y_{i,
 t}\)</span>, <span class="math inline">\(\eta_{0_{i, t}}\)</span>, <span class="math inline">\(\eta_{1_{i, t}}\)</span>, and <span class="math inline">\(\boldsymbol{\varepsilon}_{i, t}\)</span> are
-random variables and and <span class="math inline">\(\theta^{2}\)</span>
-is a model parameter. <span class="math inline">\(y_{i, t}\)</span> is a
+random variables and <span class="math inline">\(\theta\)</span> is a
+model parameter. <span class="math inline">\(y_{i, t}\)</span> is a
 vector of observed random variables at time <span class="math inline">\(t\)</span> and individual <span class="math inline">\(i\)</span>, <span class="math inline">\(\eta_{0_{i, t}}\)</span> (intercept) and <span class="math inline">\(\eta_{1_{i, t}}\)</span> (slope) form a vector of
 latent random variables at time <span class="math inline">\(t\)</span>
 and individual <span class="math inline">\(i\)</span>, and <span class="math inline">\(\boldsymbol{\varepsilon}_{i, t}\)</span> is a
-vector of random measurement errors at time <span class="math inline">\(t\)</span> and individual <span class="math inline">\(i\)</span>, and <span class="math inline">\(\theta^{2}\)</span> is the variance of <span class="math inline">\(\boldsymbol{\varepsilon}\)</span>.</p>
+vector of random measurement errors at time <span class="math inline">\(t\)</span> and individual <span class="math inline">\(i\)</span>. <span class="math inline">\(\theta\)</span> is the variance of <span class="math inline">\(\boldsymbol{\varepsilon}\)</span>.</p>
 <p>The dynamic structure is given by <span class="math display">\[\begin{equation}
   \left(
   \begin{array}{c}
@@ -178,9 +178,9 @@ condition given by <span class="math display">\[\begin{equation}
 <p>Let <span class="math inline">\(t = 5\)</span> be the number of time
 points and <span class="math inline">\(n = 1000\)</span> be the number
 of individuals.</p>
-<p>Let the measurement error variance <span class="math inline">\(\theta^{2}\)</span> be given by</p>
+<p>Let the measurement error variance <span class="math inline">\(\theta\)</span> be given by</p>
 <p><span class="math display">\[\begin{equation}
-\theta^{2}
+\theta
 =
 0.6 .
 \end{equation}\]</span></p>
@@ -236,20 +236,20 @@ of individuals.</p>
 <span><span class="va">sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/SimSSMLinGrowth.html">SimSSMLinGrowth</a></span><span class="op">(</span></span>
 <span>  n <span class="op">=</span> <span class="va">n</span>,</span>
 <span>  mu0 <span class="op">=</span> <span class="va">mu0</span>,</span>
-<span>  sigma0_sqrt <span class="op">=</span> <span class="va">sigma0_sqrt</span>,</span>
-<span>  theta_sqrt <span class="op">=</span> <span class="va">theta_sqrt</span>,</span>
+<span>  sigma0 <span class="op">=</span> <span class="va">sigma0</span>,</span>
+<span>  theta <span class="op">=</span> <span class="va">theta</span>,</span>
 <span>  type <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  time <span class="op">=</span> <span class="va">time</span></span>
 <span><span class="op">)</span></span>
 <span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Sim2Matrix.html">Sim2Matrix</a></span><span class="op">(</span><span class="va">sim</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span>
 <span><span class="co">#&gt;             y time id</span></span>
-<span><span class="co">#&gt; [1,] 1.915757    0  1</span></span>
-<span><span class="co">#&gt; [2,] 1.305294    1  1</span></span>
-<span><span class="co">#&gt; [3,] 3.436058    2  1</span></span>
-<span><span class="co">#&gt; [4,] 6.014244    3  1</span></span>
-<span><span class="co">#&gt; [5,] 6.317083    4  1</span></span>
-<span><span class="co">#&gt; [6,] 1.305813    0  2</span></span></code></pre></div>
+<span><span class="co">#&gt; [1,] 1.970296    0  1</span></span>
+<span><span class="co">#&gt; [2,] 1.821956    1  1</span></span>
+<span><span class="co">#&gt; [3,] 4.414843    2  1</span></span>
+<span><span class="co">#&gt; [4,] 7.455151    3  1</span></span>
+<span><span class="co">#&gt; [5,] 8.220113    4  1</span></span>
+<span><span class="co">#&gt; [6,] 1.062328    0  2</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="plots">Plots<a class="anchor" aria-label="anchor" href="#plots"></a>
@@ -303,18 +303,16 @@ of individuals.</p>
 <h3 id="prepare-dynamic-process">Prepare Dynamic Process<a class="anchor" aria-label="anchor" href="#prepare-dynamic-process"></a>
 </h3>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">dynr_dynamics</span> <span class="op">&lt;-</span> <span class="fu">dynr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/dynr/man/prep.matrixDynamics.html" class="external-link">prep.matrixDynamics</a></span><span class="op">(</span></span>
-<span>  values.dyn <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span></span>
-<span>    data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span>,</span>
-<span>    nrow <span class="op">=</span> <span class="fl">2</span></span>
-<span>  <span class="op">)</span>,</span>
-<span>  params.dyn <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span></span>
-<span>    data <span class="op">=</span> <span class="st">"fixed"</span>,</span>
-<span>    nrow <span class="op">=</span> <span class="fl">2</span>,</span>
-<span>    ncol <span class="op">=</span> <span class="fl">2</span></span>
+<code class="sourceCode R"><span><span class="va">dynr_dynamics</span> <span class="op">&lt;-</span> <span class="fu">dynr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/dynr/man/prep.formulaDynamics.html" class="external-link">prep.formulaDynamics</a></span><span class="op">(</span></span>
+<span>  formula <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>    <span class="va">eta_0</span> <span class="op">~</span> <span class="va">eta_0</span> <span class="op">+</span> <span class="va">eta_1</span>,</span>
+<span>    <span class="va">eta_1</span> <span class="op">~</span> <span class="va">eta_1</span></span>
 <span>  <span class="op">)</span>,</span>
 <span>  isContinuousTime <span class="op">=</span> <span class="cn">FALSE</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning in dynr::prep.formulaDynamics(formula = list(eta_0 ~ eta_0 + eta_1, :</span></span>
+<span><span class="co">#&gt; You provided no start values: length(startval)==0. If you have no free</span></span>
+<span><span class="co">#&gt; parameters, keep calm and carry on.</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="prepare-process-noise">Prepare Process Noise<a class="anchor" aria-label="anchor" href="#prepare-process-noise"></a>
@@ -323,7 +321,7 @@ of individuals.</p>
 <code class="sourceCode R"><span><span class="va">dynr_noise</span> <span class="op">&lt;-</span> <span class="fu">dynr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/dynr/man/prep.noise.html" class="external-link">prep.noise</a></span><span class="op">(</span></span>
 <span>  values.latent <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span>data <span class="op">=</span> <span class="fl">0</span>, nrow <span class="op">=</span> <span class="fl">2</span>, ncol <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>,</span>
 <span>  params.latent <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span>data <span class="op">=</span> <span class="st">"fixed"</span>, nrow <span class="op">=</span> <span class="fl">2</span>, ncol <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>,</span>
-<span>  values.observed <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  values.observed <span class="op">=</span> <span class="va">theta</span>,</span>
 <span>  params.observed <span class="op">=</span> <span class="st">"theta"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -338,8 +336,8 @@ of individuals.</p>
 <span>  dynamics <span class="op">=</span> <span class="va">dynr_dynamics</span>,</span>
 <span>  noise <span class="op">=</span> <span class="va">dynr_noise</span>,</span>
 <span>  outfile <span class="op">=</span> <span class="st">"lin-growth.c"</span></span>
-<span><span class="op">)</span></span>
-<span><span class="va">model</span><span class="op">@</span><span class="va">options</span><span class="op">$</span><span class="va">maxeval</span> <span class="op">&lt;-</span> <span class="fl">10000</span></span></code></pre></div>
+<span><span class="op">)</span></span></code></pre></div>
+<p><img src="fig-vignettes-lin-growth-unnamed-chunk-12-1.png" width="3300"></p>
 </div>
 <div class="section level3">
 <h3 id="fit-the-model">Fit the Model<a class="anchor" aria-label="anchor" href="#fit-the-model"></a>
@@ -358,16 +356,16 @@ of individuals.</p>
 <span><span class="co">#&gt; Original exit flag:  3 </span></span>
 <span><span class="co">#&gt; Modified exit flag:  3 </span></span>
 <span><span class="co">#&gt; Optimization terminated successfully: ftol_rel or ftol_abs was reached. </span></span>
-<span><span class="co">#&gt; Original fitted parameters:  -0.4945748 0.6121045 0.9977651 0.761445 0.1499416 </span></span>
-<span><span class="co">#&gt; -1.033342 </span></span>
+<span><span class="co">#&gt; Original fitted parameters:  -0.4945785 0.6172152 0.9971762 0.6201937 0.3298925 </span></span>
+<span><span class="co">#&gt; -0.916999 </span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Transformed fitted parameters:  0.6098302 0.6121045 0.9977651 2.141368 </span></span>
-<span><span class="co">#&gt; 0.3210802 0.4039591 </span></span>
+<span><span class="co">#&gt; Transformed fitted parameters:  0.6098279 0.6172152 0.9971762 1.859288 </span></span>
+<span><span class="co">#&gt; 0.6133653 0.6020614 </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Doing end processing</span></span>
 <span><span class="co">#&gt; Successful trial</span></span>
-<span><span class="co">#&gt; Total Time: 6.481745 </span></span>
-<span><span class="co">#&gt; Backend Time: 6.073369</span></span></code></pre></div>
+<span><span class="co">#&gt; Total Time: 6.75585 </span></span>
+<span><span class="co">#&gt; Backend Time: 6.342866</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -377,40 +375,32 @@ of individuals.</p>
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">results</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Coefficients:</span></span>
 <span><span class="co">#&gt;           Estimate Std. Error t value ci.lower ci.upper Pr(&gt;|t|)    </span></span>
-<span><span class="co">#&gt; theta      0.60983    0.01574   38.74  0.57897  0.64069   &lt;2e-16 ***</span></span>
-<span><span class="co">#&gt; mu0_0      0.61210    0.05008   12.22  0.51395  0.71025   &lt;2e-16 ***</span></span>
-<span><span class="co">#&gt; mu0_1      0.99777    0.02156   46.27  0.95550  1.04003   &lt;2e-16 ***</span></span>
-<span><span class="co">#&gt; sigma0_00  2.14137    0.11245   19.04  1.92097  2.36177   &lt;2e-16 ***</span></span>
-<span><span class="co">#&gt; sigma0_01  0.32108    0.03486    9.21  0.25275  0.38941   &lt;2e-16 ***</span></span>
-<span><span class="co">#&gt; sigma0_11  0.40396    0.02085   19.37  0.36308  0.44483   &lt;2e-16 ***</span></span>
+<span><span class="co">#&gt; theta      0.60983    0.01574   38.73  0.57897  0.64069   &lt;2e-16 ***</span></span>
+<span><span class="co">#&gt; mu0_0      0.61722    0.04715   13.09  0.52480  0.70963   &lt;2e-16 ***</span></span>
+<span><span class="co">#&gt; mu0_1      0.99718    0.02574   38.73  0.94672  1.04763   &lt;2e-16 ***</span></span>
+<span><span class="co">#&gt; sigma0_00  1.85929    0.09996   18.60  1.66338  2.05520   &lt;2e-16 ***</span></span>
+<span><span class="co">#&gt; sigma0_01  0.61337    0.04155   14.76  0.53192  0.69481   &lt;2e-16 ***</span></span>
+<span><span class="co">#&gt; sigma0_11  0.60206    0.02969   20.28  0.54386  0.66026   &lt;2e-16 ***</span></span>
 <span><span class="co">#&gt; ---</span></span>
 <span><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; -2 log-likelihood value at convergence = 16736.57</span></span>
-<span><span class="co">#&gt; AIC = 16748.57</span></span>
-<span><span class="co">#&gt; BIC = 16787.67</span></span></code></pre></div>
-<pre><code><span><span class="co">#&gt; [1] 0.6121045 0.9977651</span></span></code></pre>
+<span><span class="co">#&gt; -2 log-likelihood value at convergence = 16827.97</span></span>
+<span><span class="co">#&gt; AIC = 16839.97</span></span>
+<span><span class="co">#&gt; BIC = 16879.08</span></span></code></pre></div>
+<pre><code><span><span class="co">#&gt; [1] 0.6172152 0.9971762</span></span></code></pre>
 <div class="section level3">
-<h3 id="estimated-coefficients">Estimated Coefficients<a class="anchor" aria-label="anchor" href="#estimated-coefficients"></a>
+<h3 id="estimated-parameters">Estimated Parameters<a class="anchor" aria-label="anchor" href="#estimated-parameters"></a>
 </h3>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mu0_hat</span></span>
-<span><span class="co">#&gt; [1] 0.6121045 0.9977651</span></span>
+<span><span class="co">#&gt; [1] 0.6172152 0.9971762</span></span>
 <span><span class="va">sigma0_hat</span></span>
 <span><span class="co">#&gt;           [,1]      [,2]</span></span>
-<span><span class="co">#&gt; [1,] 2.1413682 0.3210802</span></span>
-<span><span class="co">#&gt; [2,] 0.3210802 0.4039591</span></span></code></pre></div>
-</div>
-<div class="section level3">
-<h3 id="discrepancy-between-estimated-and-population-coefficients">Discrepancy Between Estimated and Population Coefficients<a class="anchor" aria-label="anchor" href="#discrepancy-between-estimated-and-population-coefficients"></a>
-</h3>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="va">mu0</span> <span class="op">-</span> <span class="va">mu0_hat</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 0.002895493 0.008234886</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="va">sigma0</span> <span class="op">-</span> <span class="va">sigma0_hat</span><span class="op">)</span></span>
-<span><span class="co">#&gt;           [,1]      [,2]</span></span>
-<span><span class="co">#&gt; [1,] 0.2093682 0.2969198</span></span>
-<span><span class="co">#&gt; [2,] 0.2969198 0.1830409</span></span></code></pre></div>
+<span><span class="co">#&gt; [1,] 1.8592882 0.6133653</span></span>
+<span><span class="co">#&gt; [2,] 0.6133653 0.6020614</span></span>
+<span><span class="va">theta_hat</span></span>
+<span><span class="co">#&gt;     theta </span></span>
+<span><span class="co">#&gt; 0.6098279</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -419,21 +409,21 @@ of individuals.</p>
 <div class="section level3">
 <h3 id="wide-data-set">Wide Data Set<a class="anchor" aria-label="anchor" href="#wide-data-set"></a>
 </h3>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Sim2Matrix.html">Sim2Matrix</a></span><span class="op">(</span><span class="va">sim</span>, long <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span>
-<span><span class="co">#&gt;   id         y_0        y_1      y_2      y_3      y_4</span></span>
-<span><span class="co">#&gt; 1  1  1.91575677  1.3052940 3.436058 6.014244 6.317083</span></span>
-<span><span class="co">#&gt; 2  2  1.30581284  3.4806749 3.839332 4.781646 7.146112</span></span>
-<span><span class="co">#&gt; 3  3  2.61808318  3.5764470 4.560234 3.987751 5.379530</span></span>
-<span><span class="co">#&gt; 4  4  0.99854759  2.4104447 2.971037 4.360065 6.022609</span></span>
-<span><span class="co">#&gt; 5  5 -0.06708377 -0.1874741 1.475034 1.919038 2.659579</span></span>
-<span><span class="co">#&gt; 6  6  2.06343882  3.1439674 4.059181 4.054417 4.392294</span></span></code></pre></div>
+<span><span class="co">#&gt;   id       y_0       y_1      y_2      y_3      y_4</span></span>
+<span><span class="co">#&gt; 1  1 1.9702957 1.8219557 4.414843 7.455151 8.220113</span></span>
+<span><span class="co">#&gt; 2  2 1.0623281 3.5056952 4.132857 5.343676 7.976648</span></span>
+<span><span class="co">#&gt; 3  3 3.0372654 4.9566830 6.901524 7.290094 9.642927</span></span>
+<span><span class="co">#&gt; 4  4 0.9393614 2.4163546 3.042043 4.496167 6.223807</span></span>
+<span><span class="co">#&gt; 5  5 0.3220574 0.2134775 1.887796 2.343611 3.095962</span></span>
+<span><span class="co">#&gt; 6  6 2.1946621 3.7583552 5.156733 5.635134 6.456176</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="model-1">Model<a class="anchor" aria-label="anchor" href="#model-1"></a>
 </h3>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="st">"</span></span>
 <span><span class="st">  # factor loadings</span></span>
 <span><span class="st">  eta0 =~ 1 * y_0 + 1 * y_1 + 1 * y_2 + 1 * y_3 + 1 * y_4</span></span>
@@ -452,13 +442,13 @@ of individuals.</p>
 <span><span class="st">  y_3 ~~ theta * y_3</span></span>
 <span><span class="st">  y_4 ~~ theta * y_4</span></span>
 <span><span class="st">"</span></span></code></pre></div>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu">lavaan</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/growth.html" class="external-link">growth</a></span><span class="op">(</span></span>
 <span>  model <span class="op">=</span> <span class="va">model</span>,</span>
 <span>  data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span><span class="fu">lavaan</span><span class="fu">::</span><span class="fu">summary</span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span>
-<span><span class="co">#&gt; lavaan 0.6.16 ended normally after 28 iterations</span></span>
+<span><span class="co">#&gt; lavaan 0.6.17 ended normally after 31 iterations</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;   Estimator                                         ML</span></span>
 <span><span class="co">#&gt;   Optimization method                           NLMINB</span></span>
@@ -469,9 +459,9 @@ of individuals.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Model Test User Model:</span></span>
 <span><span class="co">#&gt;                                                       </span></span>
-<span><span class="co">#&gt;   Test statistic                                14.846</span></span>
+<span><span class="co">#&gt;   Test statistic                                14.831</span></span>
 <span><span class="co">#&gt;   Degrees of freedom                                14</span></span>
-<span><span class="co">#&gt;   P-value (Chi-square)                           0.389</span></span>
+<span><span class="co">#&gt;   P-value (Chi-square)                           0.390</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Parameter Estimates:</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -497,22 +487,17 @@ of individuals.</p>
 <span><span class="co">#&gt; Covariances:</span></span>
 <span><span class="co">#&gt;                    Estimate  Std.Err  z-value  P(&gt;|z|)</span></span>
 <span><span class="co">#&gt;   eta0 ~~                                             </span></span>
-<span><span class="co">#&gt;     eta1    (sg01)    0.321    0.035    9.213    0.000</span></span>
+<span><span class="co">#&gt;     eta1    (sg01)    0.613    0.042   14.762    0.000</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Intercepts:</span></span>
 <span><span class="co">#&gt;                    Estimate  Std.Err  z-value  P(&gt;|z|)</span></span>
-<span><span class="co">#&gt;     eta0     (mu0)    0.612    0.050   12.226    0.000</span></span>
-<span><span class="co">#&gt;     eta1     (mu1)    0.998    0.022   46.275    0.000</span></span>
-<span><span class="co">#&gt;    .y_0               0.000                           </span></span>
-<span><span class="co">#&gt;    .y_1               0.000                           </span></span>
-<span><span class="co">#&gt;    .y_2               0.000                           </span></span>
-<span><span class="co">#&gt;    .y_3               0.000                           </span></span>
-<span><span class="co">#&gt;    .y_4               0.000                           </span></span>
+<span><span class="co">#&gt;     eta0     (mu0)    0.617    0.047   13.086    0.000</span></span>
+<span><span class="co">#&gt;     eta1     (mu1)    0.997    0.026   38.728    0.000</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variances:</span></span>
 <span><span class="co">#&gt;                    Estimate  Std.Err  z-value  P(&gt;|z|)</span></span>
-<span><span class="co">#&gt;     eta0    (sg00)    2.141    0.113   19.030    0.000</span></span>
-<span><span class="co">#&gt;     eta1    (sg11)    0.404    0.021   19.372    0.000</span></span>
+<span><span class="co">#&gt;     eta0    (sg00)    1.859    0.100   18.600    0.000</span></span>
+<span><span class="co">#&gt;     eta1    (sg11)    0.602    0.030   20.275    0.000</span></span>
 <span><span class="co">#&gt;    .y_0     (thet)    0.610    0.016   38.730    0.000</span></span>
 <span><span class="co">#&gt;    .y_1     (thet)    0.610    0.016   38.730    0.000</span></span>
 <span><span class="co">#&gt;    .y_2     (thet)    0.610    0.016   38.730    0.000</span></span>
