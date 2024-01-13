@@ -61,7 +61,7 @@
 #' )
 #'
 #' # No covariates
-#' ssm <- SimSSMVARIVary(
+#' SimSSMVARIVary(
 #'   n = n,
 #'   mu0 = mu0,
 #'   sigma0 = sigma0,
@@ -72,10 +72,8 @@
 #'   burn_in = burn_in
 #' )
 #'
-#' str(ssm)
-#'
 #' # With covariates
-#' ssm <- SimSSMVARIVary(
+#' SimSSMVARIVary(
 #'   n = n,
 #'   mu0 = mu0,
 #'   sigma0 = sigma0,
@@ -87,8 +85,6 @@
 #'   time = time,
 #'   burn_in = burn_in
 #' )
-#'
-#' str(ssm)
 #'
 #' @family Simulation of State Space Models Data Functions
 #' @keywords simStateSpace sim var
@@ -117,32 +113,63 @@ SimSSMVARIVary <- function(n,
     FUN = foo
   )
   if (is.null(gamma_eta) || is.null(x)) {
-    return(
-      .SimSSM0VARIVary(
-        n = n,
-        mu0 = rep(x = mu0, length.out = n),
-        sigma0_l = rep(x = sigma0_l, length.out = n),
-        alpha = rep(x = alpha, length.out = n),
-        beta = rep(x = beta, length.out = n),
-        psi_l = rep(x = psi_l, length.out = n),
-        time = time,
-        burn_in = burn_in
-      )
+    data <- .SimSSM0VARIVary(
+      n = n,
+      mu0 = rep(x = mu0, length.out = n),
+      sigma0_l = rep(x = sigma0_l, length.out = n),
+      alpha = rep(x = alpha, length.out = n),
+      beta = rep(x = beta, length.out = n),
+      psi_l = rep(x = psi_l, length.out = n),
+      time = time,
+      burn_in = burn_in
     )
+    covariates <- FALSE
   } else {
-    return(
-      .SimSSM1VARIVary(
-        n = n,
-        mu0 = rep(x = mu0, length.out = n),
-        sigma0_l = rep(x = sigma0_l, length.out = n),
-        alpha = rep(x = alpha, length.out = n),
-        beta = rep(x = beta, length.out = n),
-        psi_l = rep(x = psi_l, length.out = n),
-        gamma_eta = rep(x = gamma_eta, length.out = n),
-        x = x,
-        time = time,
-        burn_in = burn_in
-      )
+    data <- .SimSSM1VARIVary(
+      n = n,
+      mu0 = rep(x = mu0, length.out = n),
+      sigma0_l = rep(x = sigma0_l, length.out = n),
+      alpha = rep(x = alpha, length.out = n),
+      beta = rep(x = beta, length.out = n),
+      psi_l = rep(x = psi_l, length.out = n),
+      gamma_eta = rep(x = gamma_eta, length.out = n),
+      x = x,
+      time = time,
+      burn_in = burn_in
     )
+    covariates <- TRUE
   }
+  out <- list(
+    call = match.call(),
+    args = list(
+      n = n,
+      mu0 = mu0,
+      sigma0 = sigma0,
+      alpha = alpha,
+      beta = beta,
+      psi = psi,
+      gamma_eta = gamma_eta,
+      x = x,
+      time = time,
+      burn_in = burn_in,
+      sigma0_l = sigma0_l,
+      psi_l = psi_l
+    ),
+    model = list(
+      model = "var",
+      n1 = FALSE,
+      covariates = covariates,
+      fixed = FALSE,
+      vary_i = TRUE
+    ),
+    data = data,
+    fun = "SimSSMVARIVary"
+  )
+  class(out) <- c(
+    "ssm",
+    class(out)
+  )
+  return(
+    out
+  )
 }

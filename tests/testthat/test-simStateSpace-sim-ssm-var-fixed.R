@@ -42,10 +42,15 @@ lapply(
       burn_in = burn_in
     )
 
-    Sim2Matrix(ssm, eta = TRUE)
-    Sim2Matrix(ssm, eta = FALSE)
-    Sim2Matrix(ssm, eta = TRUE, long = FALSE)
-    Sim2Matrix(ssm, eta = FALSE, long = FALSE)
+    as.data.frame(ssm, eta = TRUE)
+    as.data.frame(ssm, eta = FALSE)
+    as.data.frame(ssm, eta = TRUE, long = FALSE)
+    as.data.frame(ssm, eta = FALSE, long = FALSE)
+    as.matrix(ssm, eta = TRUE)
+    as.matrix(ssm, eta = FALSE)
+    as.matrix(ssm, eta = TRUE, long = FALSE)
+    as.matrix(ssm, eta = FALSE, long = FALSE)
+    print(ssm)
 
     # With covariates
     ssm <- SimSSMVARFixed(
@@ -61,10 +66,15 @@ lapply(
       burn_in = burn_in
     )
 
-    Sim2Matrix(ssm, eta = TRUE)
-    Sim2Matrix(ssm, eta = FALSE)
-    Sim2Matrix(ssm, eta = TRUE, long = FALSE)
-    Sim2Matrix(ssm, eta = FALSE, long = FALSE)
+    as.data.frame(ssm, eta = TRUE)
+    as.data.frame(ssm, eta = FALSE)
+    as.data.frame(ssm, eta = TRUE, long = FALSE)
+    as.data.frame(ssm, eta = FALSE, long = FALSE)
+    as.matrix(ssm, eta = TRUE)
+    as.matrix(ssm, eta = FALSE)
+    as.matrix(ssm, eta = TRUE, long = FALSE)
+    as.matrix(ssm, eta = FALSE, long = FALSE)
+    print(ssm)
   },
   text = "test-simStateSpace-sim-ssm-var-fixed"
 )

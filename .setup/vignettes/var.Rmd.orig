@@ -206,60 +206,19 @@ psi
 
 ```{r}
 library(simStateSpace)
-data <- Sim2Matrix(
-  SimSSMVARFixed(
-    n = n,
-    mu0 = mu0,
-    sigma0 = sigma0,
-    alpha = alpha,
-    beta = beta,
-    psi = psi,
-    time = time,
-    burn_in = 0
-  )
+sim <- SimSSMVARFixed(
+  n = n,
+  mu0 = mu0,
+  sigma0 = sigma0,
+  alpha = alpha,
+  beta = beta,
+  psi = psi,
+  time = time,
+  burn_in = 0
 )
+data <- as.data.frame(sim)
 head(data)
-```
-
-### Plots
-
-```{r}
-#| echo = FALSE
-obs <- paste0("y", seq_len(k))
-ids <- unique(data[, "id"])
-colfunc <- colorRampPalette(
-  c(
-    "red",
-    "yellow",
-    "springgreen",
-    "royalblue"
-  )
-)
-color <- colfunc(length(ids))
-for (i in seq_along(obs)) {
-  plot(
-    x = 0,
-    y = 0,
-    xlim = range(data[, "time"]),
-    ylim = range(data[, obs]), 
-    type = "n",
-    xlab = "time",
-    ylab = obs[i],
-    main = obs[i]
-  )
-  for (j in seq_along(ids)) {
-    subset_data <- subset(
-      x = data,
-      subset = data[, "id"] == ids[j]
-    )
-    lines(
-      x = subset_data[, "time"],
-      y = subset_data[, obs[i]],
-      type = "l",
-      col = color[j]
-    )
-  }
-}
+plot(sim)
 ```
 
 ## Model Fitting

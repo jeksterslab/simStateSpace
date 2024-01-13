@@ -3,25 +3,47 @@ lapply(
   X = 1,
   FUN = function(i,
                  tol,
+                 n,
                  text) {
     message(text)
     # prepare parameters
-    set.seed(42)
-    n <- 100000
-    mu0 <- c(0.615, 1.006)
-    sigma0 <- matrix(
-      data = c(
-        1.932,
-        0.618,
-        0.618,
-        0.587
-      ),
-      nrow = 2
+    p <- 2
+    mu0 <- round(
+      runif(n = p),
+      digits = 3
     )
-    theta <- 0.6
+    sigma0 <- round(
+      crossprod(
+        matrix(
+          data = runif(n = p^2) * 2 - 1,
+          ncol = p
+        )
+      ),
+      digits = 3
+    )
+    theta <- round(
+      exp(
+        x = rnorm(n = 1)
+      ),
+      digits = 3
+    )
     time <- 5
-    gamma_y <- matrix(data = 0.10, nrow = 1, ncol = 2)
-    gamma_eta <- matrix(data = 0.10, nrow = 2, ncol = 2)
+    gamma_y <- round(
+      matrix(
+        data = rnorm(n = 2),
+        nrow = 1,
+        ncol = 2
+      ),
+      digits = 3
+    )
+    gamma_eta <- round(
+      matrix(
+        data = rnorm(n = 4),
+        nrow = 2,
+        ncol = 2
+      ),
+      digits = 3
+    )
     x <- lapply(
       X = seq_len(n),
       FUN = function(i) {
@@ -44,12 +66,12 @@ lapply(
       time = time
     )
 
-    data <- simStateSpace::Sim2Matrix(ssm, eta = FALSE, long = FALSE)
+    data <- simStateSpace:::.Wide(ssm, eta = FALSE)
 
     model <- "
       # factor loadings
-      eta0 =~ 1 * y_0 + 1 * y_1 + 1 * y_2 + 1 * y_3 + 1 * y_4
-      eta1 =~ 0 * y_0 + 1 * y_1 + 2 * y_2 + 3 * y_3 + 4 * y_4
+      eta0 =~ 1 * y1_0 + 1 * y1_1 + 1 * y1_2 + 1 * y1_3 + 1 * y1_4
+      eta1 =~ 0 * y1_0 + 1 * y1_1 + 2 * y1_2 + 3 * y1_3 + 4 * y1_4
       # means of latent variables
       eta0 ~ mu0 * 1
       eta1 ~ mu1 * 1
@@ -58,11 +80,11 @@ lapply(
       eta0 ~~ sigma01 * eta1
       eta1 ~~ sigma11 * eta1
       # constrain error variance theta to be equal
-      y_0 ~~ theta * y_0
-      y_1 ~~ theta * y_1
-      y_2 ~~ theta * y_2
-      y_3 ~~ theta * y_3
-      y_4 ~~ theta * y_4
+      y1_0 ~~ theta * y1_0
+      y1_1 ~~ theta * y1_1
+      y1_2 ~~ theta * y1_2
+      y1_3 ~~ theta * y1_3
+      y1_4 ~~ theta * y1_4
     "
 
     fit <- lavaan::growth(
@@ -131,5 +153,6 @@ lapply(
     )
   },
   tol = 0.01,
+  n = 100000,
   text = "test-external-simStateSpace-sim-ssm-lin-growth"
 )

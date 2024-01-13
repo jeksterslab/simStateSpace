@@ -119,7 +119,7 @@
 #' )
 #'
 #' # No covariates
-#' ssm <- SimSSMVAR(
+#' SimSSMVAR(
 #'   mu0 = mu0,
 #'   sigma0 = sigma0,
 #'   alpha = alpha,
@@ -129,10 +129,8 @@
 #'   burn_in = burn_in
 #' )
 #'
-#' str(ssm)
-#'
 #' # With covariates
-#' ssm <- SimSSMVAR(
+#' SimSSMVAR(
 #'   mu0 = mu0,
 #'   sigma0 = sigma0,
 #'   alpha = alpha,
@@ -143,8 +141,6 @@
 #'   time = time,
 #'   burn_in = burn_in
 #' )
-#'
-#' str(ssm)
 #'
 #' @family Simulation of State Space Models Data Functions
 #' @keywords simStateSpace sim var
@@ -161,30 +157,60 @@ SimSSMVAR <- function(mu0,
   sigma0_l <- t(chol(sigma0))
   psi_l <- t(chol(psi))
   if (is.null(gamma_eta) || is.null(x)) {
-    return(
-      .SimSSM0VAR(
-        mu0 = mu0,
-        sigma0_l = sigma0_l,
-        alpha = alpha,
-        beta = beta,
-        psi_l = psi_l,
-        time = time,
-        burn_in = burn_in
-      )
+    data <- .SimSSM0VAR(
+      mu0 = mu0,
+      sigma0_l = sigma0_l,
+      alpha = alpha,
+      beta = beta,
+      psi_l = psi_l,
+      time = time,
+      burn_in = burn_in
     )
+    covariates <- FALSE
   } else {
-    return(
-      .SimSSM1VAR(
-        mu0 = mu0,
-        sigma0_l = sigma0_l,
-        alpha = alpha,
-        beta = beta,
-        psi_l = psi_l,
-        gamma_eta = gamma_eta,
-        x = x,
-        time = time,
-        burn_in = burn_in
-      )
+    data <- .SimSSM1VAR(
+      mu0 = mu0,
+      sigma0_l = sigma0_l,
+      alpha = alpha,
+      beta = beta,
+      psi_l = psi_l,
+      gamma_eta = gamma_eta,
+      x = x,
+      time = time,
+      burn_in = burn_in
     )
+    covariates <- TRUE
   }
+  out <- list(
+    call = match.call(),
+    args = list(
+      mu0 = mu0,
+      sigma0 = sigma0,
+      alpha = alpha,
+      beta = beta,
+      psi = psi,
+      gamma_eta = gamma_eta,
+      x = x,
+      time = time,
+      burn_in = burn_in,
+      sigma0_l = sigma0_l,
+      psi_l = psi_l
+    ),
+    model = list(
+      model = "var",
+      n1 = TRUE,
+      covariates = covariates,
+      fixed = FALSE,
+      vary_i = FALSE
+    ),
+    data = data,
+    fun = "SimSSMVAR"
+  )
+  class(out) <- c(
+    "ssm",
+    class(out)
+  )
+  return(
+    out
+  )
 }

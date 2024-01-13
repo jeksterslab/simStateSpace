@@ -252,7 +252,7 @@
 #' )
 #'
 #' # Type 0
-#' ssm <- SimSSMOU(
+#' SimSSMOU(
 #'   mu0 = mu0,
 #'   sigma0 = sigma0,
 #'   mu = mu,
@@ -267,10 +267,8 @@
 #'   burn_in = burn_in
 #' )
 #'
-#' str(ssm)
-#'
 #' # Type 1
-#' ssm <- SimSSMOU(
+#' SimSSMOU(
 #'   mu0 = mu0,
 #'   sigma0 = sigma0,
 #'   mu = mu,
@@ -287,10 +285,8 @@
 #'   burn_in = burn_in
 #' )
 #'
-#' str(ssm)
-#'
 #' # Type 2
-#' ssm <- SimSSMOU(
+#' SimSSMOU(
 #'   mu0 = mu0,
 #'   sigma0 = sigma0,
 #'   mu = mu,
@@ -307,8 +303,6 @@
 #'   time = time,
 #'   burn_in = burn_in
 #' )
-#'
-#' str(ssm)
 #'
 #' @family Simulation of State Space Models Data Functions
 #' @keywords simStateSpace sim ou
@@ -331,66 +325,104 @@ SimSSMOU <- function(mu0,
   sigma0_l <- t(chol(sigma0))
   sigma_l <- t(chol(sigma))
   theta_l <- t(chol(theta))
-  switch(
+  data <- switch(
     EXPR = as.character(type),
     "0" = {
-      return(
-        .SimSSM0OU(
-          mu0 = mu0,
-          sigma0_l = sigma0_l,
-          mu = mu,
-          phi = phi,
-          sigma_l = sigma_l,
-          nu = nu,
-          lambda = lambda,
-          theta_l = theta_l,
-          delta_t = delta_t,
-          time = time,
-          burn_in = burn_in
-        )
+      .SimSSM0OU(
+        mu0 = mu0,
+        sigma0_l = sigma0_l,
+        mu = mu,
+        phi = phi,
+        sigma_l = sigma_l,
+        nu = nu,
+        lambda = lambda,
+        theta_l = theta_l,
+        delta_t = delta_t,
+        time = time,
+        burn_in = burn_in
       )
     },
     "1" = {
-      return(
-        .SimSSM1OU(
-          mu0 = mu0,
-          sigma0_l = sigma0_l,
-          mu = mu,
-          phi = phi,
-          sigma_l = sigma_l,
-          nu = nu,
-          lambda = lambda,
-          theta_l = theta_l,
-          gamma_eta = gamma_eta,
-          x = x,
-          delta_t = delta_t,
-          time = time,
-          burn_in = burn_in
-        )
+      .SimSSM1OU(
+        mu0 = mu0,
+        sigma0_l = sigma0_l,
+        mu = mu,
+        phi = phi,
+        sigma_l = sigma_l,
+        nu = nu,
+        lambda = lambda,
+        theta_l = theta_l,
+        gamma_eta = gamma_eta,
+        x = x,
+        delta_t = delta_t,
+        time = time,
+        burn_in = burn_in
       )
     },
     "2" = {
-      return(
-        .SimSSM2OU(
-          mu0 = mu0,
-          sigma0_l = sigma0_l,
-          mu = mu,
-          phi = phi,
-          sigma_l = sigma_l,
-          nu = nu,
-          lambda = lambda,
-          theta_l = theta_l,
-          gamma_y = gamma_y,
-          gamma_eta = gamma_eta,
-          x = x,
-          delta_t = delta_t,
-          time = time,
-          burn_in = burn_in
-        )
+      .SimSSM2OU(
+        mu0 = mu0,
+        sigma0_l = sigma0_l,
+        mu = mu,
+        phi = phi,
+        sigma_l = sigma_l,
+        nu = nu,
+        lambda = lambda,
+        theta_l = theta_l,
+        gamma_y = gamma_y,
+        gamma_eta = gamma_eta,
+        x = x,
+        delta_t = delta_t,
+        time = time,
+        burn_in = burn_in
       )
     },
     stop(
       "Invalid `type`."
     )
+  )
+  if (type > 0) {
+    covariates <- TRUE
+  } else {
+    covariates <- FALSE
+  }
+  out <- list(
+    call = match.call(),
+    args = list(
+      mu0 = mu0,
+      sigma0 = sigma0,
+      mu = mu,
+      phi = phi,
+      sigma = sigma,
+      nu = nu,
+      lambda = lambda,
+      theta = theta,
+      gamma_y = gamma_y,
+      gamma_eta = gamma_eta,
+      x = x,
+      type = type,
+      delta_t = delta_t,
+      time = time,
+      burn_in = burn_in,
+      sigma0_l = sigma0_l,
+      sigma_l = sigma_l,
+      theta_l = theta_l
+    ),
+    model = list(
+      model = "ou",
+      n1 = TRUE,
+      covariates = covariates,
+      fixed = FALSE,
+      vary_i = FALSE
+    ),
+    data = data,
+    fun = "SimSSMOUIVary"
+  )
+  class(out) <- c(
+    "ssm",
+    class(out)
+  )
+  return(
+    out
   )
 }

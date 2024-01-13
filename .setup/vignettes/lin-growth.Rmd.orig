@@ -179,7 +179,13 @@ $\boldsymbol{\eta}_{0}$
 be given by
 
 \begin{equation}
-\boldsymbol{\eta}_{0} \sim \mathcal{N} \left( \boldsymbol{\mu}_{\boldsymbol{\eta} \mid 0}, \boldsymbol{\Sigma}_{\boldsymbol{\eta} \mid 0} \right)
+\boldsymbol{\eta}_{0}
+\sim
+\mathcal{N}
+\left(
+\boldsymbol{\mu}_{\boldsymbol{\eta} \mid 0},
+\boldsymbol{\Sigma}_{\boldsymbol{\eta} \mid 0}
+\right)
 \end{equation}
 
 \begin{equation}
@@ -226,49 +232,9 @@ sim <- SimSSMLinGrowth(
   type = 0,
   time = time
 )
-data <- Sim2Matrix(sim)
+data <- as.data.frame(sim)
 head(data)
-```
-
-### Plots
-
-```{r}
-#| echo = FALSE
-obs <- "y"
-ids <- unique(data[, "id"])
-colfunc <- colorRampPalette(
-  c(
-    "red",
-    "yellow",
-    "springgreen",
-    "royalblue"
-  )
-)
-color <- colfunc(length(ids))
-for (i in seq_along(obs)) {
-  plot(
-    x = 0,
-    y = 0,
-    xlim = range(data[, "time"]),
-    ylim = range(data[, obs]), 
-    type = "n",
-    xlab = "time",
-    ylab = obs[i],
-    main = obs[i]
-  )
-  for (j in seq_along(ids)) {
-    subset_data <- subset(
-      x = data,
-      subset = data[, "id"] == ids[j]
-    )
-    lines(
-      x = subset_data[, "time"],
-      y = subset_data[, obs[i]],
-      type = "l",
-      col = color[j]
-    )
-  }
-}
+plot(sim)
 ```
 
 ## Model Fitting
@@ -280,7 +246,7 @@ dynr_data <- dynr::dynr.data(
   dataframe = data,
   id = "id",
   time = "time",
-  observed = "y"
+  observed = "y1"
 )
 ```
 
@@ -308,7 +274,7 @@ dynr_measurement <- dynr::prep.measurement(
   values.load = matrix(data = c(1, 0), nrow = 1),
   params.load = matrix(data = "fixed", nrow = 1, ncol = 2),
   state.names = c("eta_0", "eta_1"),
-  obs.names = "y"
+  obs.names = "y1"
 )
 ```
 
@@ -414,7 +380,7 @@ theta_hat
 ### Wide Data Set
 
 ```{r}
-data <- Sim2Matrix(sim, long = FALSE)
+data <- as.data.frame(sim, long = FALSE)
 head(data)
 ```
 
@@ -423,8 +389,8 @@ head(data)
 ```{r}
 model <- "
   # factor loadings
-  eta0 =~ 1 * y_0 + 1 * y_1 + 1 * y_2 + 1 * y_3 + 1 * y_4
-  eta1 =~ 0 * y_0 + 1 * y_1 + 2 * y_2 + 3 * y_3 + 4 * y_4
+  eta0 =~ 1 * y1_0 + 1 * y1_1 + 1 * y1_2 + 1 * y1_3 + 1 * y1_4
+  eta1 =~ 0 * y1_0 + 1 * y1_1 + 2 * y1_2 + 3 * y1_3 + 4 * y1_4
   # means of latent variables
   eta0 ~ mu0 * 1
   eta1 ~ mu1 * 1
@@ -433,18 +399,18 @@ model <- "
   eta0 ~~ sigma01 * eta1
   eta1 ~~ sigma11 * eta1
   # constrain error variance theta to be equal
-  y_0 ~~ theta * y_0
-  y_1 ~~ theta * y_1
-  y_2 ~~ theta * y_2
-  y_3 ~~ theta * y_3
-  y_4 ~~ theta * y_4
+  y1_0 ~~ theta * y1_0
+  y1_1 ~~ theta * y1_1
+  y1_2 ~~ theta * y1_2
+  y1_3 ~~ theta * y1_3
+  y1_4 ~~ theta * y1_4
 "
 ```
 
 ```{r}
 fit <- lavaan::growth(
   model = model,
-  data = as.data.frame(data)
+  data = data
 )
 lavaan::summary(fit)
 ```

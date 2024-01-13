@@ -103,7 +103,7 @@
 #' )
 #'
 #' # Type 0
-#' ssm <- SimSSMIVary(
+#' SimSSMIVary(
 #'   n = n,
 #'   mu0 = mu0,
 #'   sigma0 = sigma0,
@@ -118,10 +118,8 @@
 #'   burn_in = burn_in
 #' )
 #'
-#' str(ssm)
-#'
 #' # Type 1
-#' ssm <- SimSSMIVary(
+#' SimSSMIVary(
 #'   n = n,
 #'   mu0 = mu0,
 #'   sigma0 = sigma0,
@@ -138,10 +136,8 @@
 #'   burn_in = burn_in
 #' )
 #'
-#' str(ssm)
-#'
 #' # Type 2
-#' ssm <- SimSSMIVary(
+#' SimSSMIVary(
 #'   n = n,
 #'   mu0 = mu0,
 #'   sigma0 = sigma0,
@@ -158,8 +154,6 @@
 #'   time = time,
 #'   burn_in = burn_in
 #' )
-#'
-#' str(ssm)
 #'
 #' @family Simulation of State Space Models Data Functions
 #' @keywords simStateSpace sim ssm
@@ -196,66 +190,104 @@ SimSSMIVary <- function(n,
     X = theta,
     FUN = foo
   )
-  switch(
+  data <- switch(
     EXPR = as.character(type),
     "0" = {
-      return(
-        .SimSSM0IVary(
-          n = n,
-          mu0 = rep(x = mu0, length.out = n),
-          sigma0_l = rep(x = sigma0_l, length.out = n),
-          alpha = rep(x = alpha, length.out = n),
-          beta = rep(x = beta, length.out = n),
-          psi_l = rep(x = psi_l, length.out = n),
-          nu = rep(x = nu, length.out = n),
-          lambda = rep(x = lambda, length.out = n),
-          theta_l = rep(x = theta_l, length.out = n),
-          time = time,
-          burn_in = burn_in
-        )
+      .SimSSM0IVary(
+        n = n,
+        mu0 = rep(x = mu0, length.out = n),
+        sigma0_l = rep(x = sigma0_l, length.out = n),
+        alpha = rep(x = alpha, length.out = n),
+        beta = rep(x = beta, length.out = n),
+        psi_l = rep(x = psi_l, length.out = n),
+        nu = rep(x = nu, length.out = n),
+        lambda = rep(x = lambda, length.out = n),
+        theta_l = rep(x = theta_l, length.out = n),
+        time = time,
+        burn_in = burn_in
       )
     },
     "1" = {
-      return(
-        .SimSSM1IVary(
-          n = n,
-          mu0 = rep(x = mu0, length.out = n),
-          sigma0_l = rep(x = sigma0_l, length.out = n),
-          alpha = rep(x = alpha, length.out = n),
-          beta = rep(x = beta, length.out = n),
-          psi_l = rep(x = psi_l, length.out = n),
-          nu = rep(x = nu, length.out = n),
-          lambda = rep(x = lambda, length.out = n),
-          theta_l = rep(x = theta_l, length.out = n),
-          gamma_eta = rep(x = gamma_eta, length.out = n),
-          x = x,
-          time = time,
-          burn_in = burn_in
-        )
+      .SimSSM1IVary(
+        n = n,
+        mu0 = rep(x = mu0, length.out = n),
+        sigma0_l = rep(x = sigma0_l, length.out = n),
+        alpha = rep(x = alpha, length.out = n),
+        beta = rep(x = beta, length.out = n),
+        psi_l = rep(x = psi_l, length.out = n),
+        nu = rep(x = nu, length.out = n),
+        lambda = rep(x = lambda, length.out = n),
+        theta_l = rep(x = theta_l, length.out = n),
+        gamma_eta = rep(x = gamma_eta, length.out = n),
+        x = x,
+        time = time,
+        burn_in = burn_in
       )
     },
     "2" = {
-      return(
-        .SimSSM2IVary(
-          n = n,
-          mu0 = rep(x = mu0, length.out = n),
-          sigma0_l = rep(x = sigma0_l, length.out = n),
-          alpha = rep(x = alpha, length.out = n),
-          beta = rep(x = beta, length.out = n),
-          psi_l = rep(x = psi_l, length.out = n),
-          nu = rep(x = nu, length.out = n),
-          lambda = rep(x = lambda, length.out = n),
-          theta_l = rep(x = theta_l, length.out = n),
-          gamma_y = rep(x = gamma_y, length.out = n),
-          gamma_eta = rep(x = gamma_eta, length.out = n),
-          x = x,
-          time = time,
-          burn_in = burn_in
-        )
+      .SimSSM2IVary(
+        n = n,
+        mu0 = rep(x = mu0, length.out = n),
+        sigma0_l = rep(x = sigma0_l, length.out = n),
+        alpha = rep(x = alpha, length.out = n),
+        beta = rep(x = beta, length.out = n),
+        psi_l = rep(x = psi_l, length.out = n),
+        nu = rep(x = nu, length.out = n),
+        lambda = rep(x = lambda, length.out = n),
+        theta_l = rep(x = theta_l, length.out = n),
+        gamma_y = rep(x = gamma_y, length.out = n),
+        gamma_eta = rep(x = gamma_eta, length.out = n),
+        x = x,
+        time = time,
+        burn_in = burn_in
       )
     },
     stop(
       "Invalid `type`."
     )
+  )
+  if (type > 0) {
+    covariates <- TRUE
+  } else {
+    covariates <- FALSE
+  }
+  out <- list(
+    call = match.call(),
+    args = list(
+      n = n,
+      mu0 = mu0,
+      sigma0 = sigma0,
+      alpha = alpha,
+      beta = beta,
+      psi = psi,
+      nu = nu,
+      lambda = lambda,
+      theta = theta,
+      gamma_y = gamma_y,
+      gamma_eta = gamma_eta,
+      x = x,
+      type = type,
+      time = time,
+      burn_in = burn_in,
+      sigma0_l = sigma0_l,
+      psi_l = psi_l,
+      theta_l = theta_l
+    ),
+    model = list(
+      model = "ssm",
+      n1 = FALSE,
+      covariates = covariates,
+      fixed = FALSE,
+      vary_i = TRUE
+    ),
+    data = data,
+    fun = "SimSSMIVary"
+  )
+  class(out) <- c(
+    "ssm",
+    class(out)
+  )
+  return(
+    out
   )
 }

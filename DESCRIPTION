@@ -1,6 +1,6 @@
 Package: simStateSpace
 Title: Simulate Data from State Space Models
-Version: 1.0.1.9000
+Version: 1.1.0
 Authors@R: 
     person(given = "Ivan Jacob Agaloos",
            family = "Pesigan",
@@ -31,4 +31,3 @@ Suggests:
     rmarkdown,
     testthat,
     Matrix
-RoxygenNote: 7.2.3

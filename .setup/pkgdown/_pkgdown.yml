@@ -21,12 +21,9 @@ reference:
 - title: Ornstein–Uhlenbeck Model
   contents:
   - has_keyword("ou")
-- title: Utility Functions
+- title: Methods
   contents:
-  - has_keyword("misc")
-- title: All Functions
-  contents:
-  - has_keyword("simStateSpace")
+  - has_keyword("methods")
 
 articles:
 - title: Examples

@@ -240,7 +240,7 @@
 #' )
 #'
 #' # Type 0
-#' ssm <- SimSSMOUFixed(
+#' SimSSMOUFixed(
 #'   n = n,
 #'   mu0 = mu0,
 #'   sigma0 = sigma0,
@@ -256,10 +256,8 @@
 #'   burn_in = burn_in
 #' )
 #'
-#' str(ssm)
-#'
 #' # Type 1
-#' ssm <- SimSSMOUFixed(
+#' SimSSMOUFixed(
 #'   n = n,
 #'   mu0 = mu0,
 #'   sigma0 = sigma0,
@@ -277,10 +275,8 @@
 #'   burn_in = burn_in
 #' )
 #'
-#' str(ssm)
-#'
 #' # Type 2
-#' ssm <- SimSSMOUFixed(
+#' SimSSMOUFixed(
 #'   n = n,
 #'   mu0 = mu0,
 #'   sigma0 = sigma0,
@@ -298,8 +294,6 @@
 #'   time = time,
 #'   burn_in = burn_in
 #' )
-#'
-#' str(ssm)
 #'
 #' @family Simulation of State Space Models Data Functions
 #' @keywords simStateSpace sim ou
@@ -323,69 +317,108 @@ SimSSMOUFixed <- function(n,
   sigma0_l <- t(chol(sigma0))
   sigma_l <- t(chol(sigma))
   theta_l <- t(chol(theta))
-  switch(
+  data <- switch(
     EXPR = as.character(type),
     "0" = {
-      return(
-        .SimSSM0OUFixed(
-          n = n,
-          mu0 = mu0,
-          sigma0_l = sigma0_l,
-          mu = mu,
-          phi = phi,
-          sigma_l = sigma_l,
-          nu = nu,
-          lambda = lambda,
-          theta_l = theta_l,
-          delta_t = delta_t,
-          time = time,
-          burn_in = burn_in
-        )
+      .SimSSM0OUFixed(
+        n = n,
+        mu0 = mu0,
+        sigma0_l = sigma0_l,
+        mu = mu,
+        phi = phi,
+        sigma_l = sigma_l,
+        nu = nu,
+        lambda = lambda,
+        theta_l = theta_l,
+        delta_t = delta_t,
+        time = time,
+        burn_in = burn_in
       )
     },
     "1" = {
-      return(
-        .SimSSM1OUFixed(
-          n = n,
-          mu0 = mu0,
-          sigma0_l = sigma0_l,
-          mu = mu,
-          phi = phi,
-          sigma_l = sigma_l,
-          nu = nu,
-          lambda = lambda,
-          theta_l = theta_l,
-          gamma_eta = gamma_eta,
-          x = x,
-          delta_t = delta_t,
-          time = time,
-          burn_in = burn_in
-        )
+      .SimSSM1OUFixed(
+        n = n,
+        mu0 = mu0,
+        sigma0_l = sigma0_l,
+        mu = mu,
+        phi = phi,
+        sigma_l = sigma_l,
+        nu = nu,
+        lambda = lambda,
+        theta_l = theta_l,
+        gamma_eta = gamma_eta,
+        x = x,
+        delta_t = delta_t,
+        time = time,
+        burn_in = burn_in
       )
     },
     "2" = {
-      return(
-        .SimSSM2OUFixed(
-          n = n,
-          mu0 = mu0,
-          sigma0_l = sigma0_l,
-          mu = mu,
-          phi = phi,
-          sigma_l = sigma_l,
-          nu = nu,
-          lambda = lambda,
-          theta_l = theta_l,
-          gamma_y = gamma_y,
-          gamma_eta = gamma_eta,
-          x = x,
-          delta_t = delta_t,
-          time = time,
-          burn_in = burn_in
-        )
+      .SimSSM2OUFixed(
+        n = n,
+        mu0 = mu0,
+        sigma0_l = sigma0_l,
+        mu = mu,
+        phi = phi,
+        sigma_l = sigma_l,
+        nu = nu,
+        lambda = lambda,
+        theta_l = theta_l,
+        gamma_y = gamma_y,
+        gamma_eta = gamma_eta,
+        x = x,
+        delta_t = delta_t,
+        time = time,
+        burn_in = burn_in
       )
     },
     stop(
       "Invalid `type`."
     )
+  )
+  if (type > 0) {
+    covariates <- TRUE
+  } else {
+    covariates <- FALSE
+  }
+  out <- list(
+    call = match.call(),
+    args = list(
+      n = n,
+      mu0 = mu0,
+      sigma0 = sigma0,
+      mu = mu,
+      phi = phi,
+      sigma = sigma,
+      nu = nu,
+      lambda = lambda,
+      theta = theta,
+      gamma_y = gamma_y,
+      gamma_eta = gamma_eta,
+      x = x,
+      type = type,
+      delta_t = delta_t,
+      time = time,
+      burn_in = burn_in,
+      sigma0_l = sigma0_l,
+      sigma_l = sigma_l,
+      theta_l = theta_l
+    ),
+    model = list(
+      model = "ou",
+      n1 = FALSE,
+      covariates = covariates,
+      fixed = TRUE,
+      vary_i = FALSE
+    ),
+    data = data,
+    fun = "SimSSMOUFixed"
+  )
+  class(out) <- c(
+    "ssm",
+    class(out)
+  )
+  return(
+    out
   )
 }
