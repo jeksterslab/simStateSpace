@@ -83,11 +83,19 @@ Number of burn-in points to exclude before returning the results.}
 \value{
 Returns a list with the following elements:
 \itemize{
+\item \code{call}: Function call.
+\item \code{args}: Function arguments.
+\item \code{data}: Generated data which is a list of length \code{n}.
+\item \code{fun}: Function used.
+}
+
+\code{data} is a list with the following elements:
+\itemize{
+\item \code{id}: A vector of ones.
+\item \code{time}: A vector of discrete time points from 0 to \code{t - 1}.
 \item \code{y}: A \code{t} by \code{k} matrix of values for the manifest variables.
 \item \code{eta}: A \code{t} by \code{p} matrix of values for the latent variables.
 \item \code{x}: A \code{t} by \code{j} matrix of values for the covariates.
-\item \code{time}: A vector of discrete time points from 0 to \code{t - 1}.
-\item \code{id}: A vector of ones.
 }
 }
 \description{
@@ -339,7 +347,7 @@ x <- matrix(
 )
 
 # Type 0
-ssm <- SimSSM(
+SimSSM(
   mu0 = mu0,
   sigma0 = sigma0,
   alpha = alpha,
@@ -353,10 +361,8 @@ ssm <- SimSSM(
   burn_in = burn_in
 )
 
-str(ssm)
-
 # Type 1
-ssm <- SimSSM(
+SimSSM(
   mu0 = mu0,
   sigma0 = sigma0,
   alpha = alpha,
@@ -372,10 +378,8 @@ ssm <- SimSSM(
   burn_in = burn_in
 )
 
-str(ssm)
-
 # Type 2
-ssm <- SimSSM(
+SimSSM(
   mu0 = mu0,
   sigma0 = sigma0,
   alpha = alpha,
@@ -392,8 +396,6 @@ ssm <- SimSSM(
   burn_in = burn_in
 )
 
-str(ssm)
-
 }
 \references{
 Chow, S.-M., Ho, M. R., Hamaker, E. L., & Dolan, C. V. (2010).
@@ -406,7 +408,6 @@ and state-space modeling techniques.
 \seealso{
 Other Simulation of State Space Models Data Functions: 
 \code{\link{OU2SSM}()},
-\code{\link{Sim2Matrix}()},
 \code{\link{SimSSMFixed}()},
 \code{\link{SimSSMIVary}()},
 \code{\link{SimSSMLinGrowthIVary}()},

@@ -330,7 +330,7 @@ x <- lapply(
 )
 
 # Type 0
-ssm <- SimSSMOUFixed(
+SimSSMOUFixed(
   n = n,
   mu0 = mu0,
   sigma0 = sigma0,
@@ -346,10 +346,8 @@ ssm <- SimSSMOUFixed(
   burn_in = burn_in
 )
 
-str(ssm)
-
 # Type 1
-ssm <- SimSSMOUFixed(
+SimSSMOUFixed(
   n = n,
   mu0 = mu0,
   sigma0 = sigma0,
@@ -367,10 +365,8 @@ ssm <- SimSSMOUFixed(
   burn_in = burn_in
 )
 
-str(ssm)
-
 # Type 2
-ssm <- SimSSMOUFixed(
+SimSSMOUFixed(
   n = n,
   mu0 = mu0,
   sigma0 = sigma0,
@@ -389,8 +385,6 @@ ssm <- SimSSMOUFixed(
   burn_in = burn_in
 )
 
-str(ssm)
-
 }
 \references{
 Chow, S.-M., Losardo, D., Park, J., & Molenaar, P. C. M. (2023).
@@ -407,7 +401,6 @@ On the theory of the brownian motion.
 \seealso{
 Other Simulation of State Space Models Data Functions: 
 \code{\link{OU2SSM}()},
-\code{\link{Sim2Matrix}()},
 \code{\link{SimSSMFixed}()},
 \code{\link{SimSSMIVary}()},
 \code{\link{SimSSMLinGrowthIVary}()},

@@ -76,7 +76,7 @@
 #' )
 #'
 #' # Type 0
-#' ssm <- SimSSMLinGrowthIVary(
+#' SimSSMLinGrowthIVary(
 #'   n = n,
 #'   mu0 = mu0,
 #'   sigma0 = sigma0,
@@ -85,10 +85,8 @@
 #'   time = time
 #' )
 #'
-#' str(ssm)
-#'
 #' # Type 1
-#' ssm <- SimSSMLinGrowthIVary(
+#' SimSSMLinGrowthIVary(
 #'   n = n,
 #'   mu0 = mu0,
 #'   sigma0 = sigma0,
@@ -99,10 +97,8 @@
 #'   time = time
 #' )
 #'
-#' str(ssm)
-#'
 #' # Type 2
-#' ssm <- SimSSMLinGrowthIVary(
+#' SimSSMLinGrowthIVary(
 #'   n = n,
 #'   mu0 = mu0,
 #'   sigma0 = sigma0,
@@ -113,8 +109,6 @@
 #'   type = 2,
 #'   time = time
 #' )
-#'
-#' str(ssm)
 #'
 #' @family Simulation of State Space Models Data Functions
 #' @keywords simStateSpace sim growth
@@ -141,48 +135,79 @@ SimSSMLinGrowthIVary <- function(n,
     X = theta,
     FUN = sqrt
   )
-  switch(
+  data <- switch(
     EXPR = as.character(type),
     "0" = {
-      return(
-        .SimSSM0LinGrowthIVary(
-          n = n,
-          mu0 = rep(x = mu0, length.out = n),
-          sigma0_l = rep(x = sigma0_l, length.out = n),
-          theta_l = rep(x = theta_l, length.out = n),
-          time = time
-        )
+      .SimSSM0LinGrowthIVary(
+        n = n,
+        mu0 = rep(x = mu0, length.out = n),
+        sigma0_l = rep(x = sigma0_l, length.out = n),
+        theta_l = rep(x = theta_l, length.out = n),
+        time = time
       )
     },
     "1" = {
-      return(
-        .SimSSM1LinGrowthIVary(
-          n = n,
-          mu0 = rep(x = mu0, length.out = n),
-          sigma0_l = rep(x = sigma0_l, length.out = n),
-          theta_l = rep(x = theta_l, length.out = n),
-          gamma_eta = rep(x = gamma_eta, length.out = n),
-          x = x,
-          time = time
-        )
+      .SimSSM1LinGrowthIVary(
+        n = n,
+        mu0 = rep(x = mu0, length.out = n),
+        sigma0_l = rep(x = sigma0_l, length.out = n),
+        theta_l = rep(x = theta_l, length.out = n),
+        gamma_eta = rep(x = gamma_eta, length.out = n),
+        x = x,
+        time = time
       )
     },
     "2" = {
-      return(
-        .SimSSM2LinGrowthIVary(
-          n = n,
-          mu0 = rep(x = mu0, length.out = n),
-          sigma0_l = rep(x = sigma0_l, length.out = n),
-          theta_l = rep(x = theta_l, length.out = n),
-          gamma_y = rep(x = gamma_y, length.out = n),
-          gamma_eta = rep(x = gamma_eta, length.out = n),
-          x = x,
-          time = time
-        )
+      .SimSSM2LinGrowthIVary(
+        n = n,
+        mu0 = rep(x = mu0, length.out = n),
+        sigma0_l = rep(x = sigma0_l, length.out = n),
+        theta_l = rep(x = theta_l, length.out = n),
+        gamma_y = rep(x = gamma_y, length.out = n),
+        gamma_eta = rep(x = gamma_eta, length.out = n),
+        x = x,
+        time = time
       )
     },
     stop(
       "Invalid `type`."
     )
+  )
+  if (type > 0) {
+    covariates <- TRUE
+  } else {
+    covariates <- FALSE
+  }
+  out <- list(
+    call = match.call(),
+    args = list(
+      n = n,
+      mu0 = mu0,
+      sigma0 = sigma0,
+      theta = theta,
+      gamma_y = gamma_y,
+      gamma_eta = gamma_eta,
+      x = x,
+      type = type,
+      time = time,
+      sigma0_l = sigma0_l,
+      theta_l = theta_l
+    ),
+    model = list(
+      model = "lingrowth",
+      n1 = FALSE,
+      covariates = covariates,
+      fixed = FALSE,
+      vary_i = TRUE
+    ),
+    data = data,
+    fun = "SimSSMLinGrowthIVary"
+  )
+  class(out) <- c(
+    "ssm",
+    class(out)
+  )
+  return(
+    out
   )
 }

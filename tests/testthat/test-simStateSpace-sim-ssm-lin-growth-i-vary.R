@@ -50,10 +50,15 @@ lapply(
       time = time
     )
 
-    Sim2Matrix(ssm, eta = TRUE)
-    Sim2Matrix(ssm, eta = FALSE)
-    Sim2Matrix(ssm, eta = TRUE, long = FALSE)
-    Sim2Matrix(ssm, eta = FALSE, long = FALSE)
+    as.data.frame(ssm, eta = TRUE)
+    as.data.frame(ssm, eta = FALSE)
+    as.data.frame(ssm, eta = TRUE, long = FALSE)
+    as.data.frame(ssm, eta = FALSE, long = FALSE)
+    as.matrix(ssm, eta = TRUE)
+    as.matrix(ssm, eta = FALSE)
+    as.matrix(ssm, eta = TRUE, long = FALSE)
+    as.matrix(ssm, eta = FALSE, long = FALSE)
+    print(ssm)
 
     # Type 1
     ssm <- SimSSMLinGrowthIVary(
@@ -67,10 +72,15 @@ lapply(
       time = time
     )
 
-    Sim2Matrix(ssm, eta = TRUE)
-    Sim2Matrix(ssm, eta = FALSE)
-    Sim2Matrix(ssm, eta = TRUE, long = FALSE)
-    Sim2Matrix(ssm, eta = FALSE, long = FALSE)
+    as.data.frame(ssm, eta = TRUE)
+    as.data.frame(ssm, eta = FALSE)
+    as.data.frame(ssm, eta = TRUE, long = FALSE)
+    as.data.frame(ssm, eta = FALSE, long = FALSE)
+    as.matrix(ssm, eta = TRUE)
+    as.matrix(ssm, eta = FALSE)
+    as.matrix(ssm, eta = TRUE, long = FALSE)
+    as.matrix(ssm, eta = FALSE, long = FALSE)
+    print(ssm)
 
     # Type 2
     ssm <- SimSSMLinGrowthIVary(
@@ -85,10 +95,15 @@ lapply(
       time = time
     )
 
-    Sim2Matrix(ssm, eta = TRUE)
-    Sim2Matrix(ssm, eta = FALSE)
-    Sim2Matrix(ssm, eta = TRUE, long = FALSE)
-    Sim2Matrix(ssm, eta = FALSE, long = FALSE)
+    as.data.frame(ssm, eta = TRUE)
+    as.data.frame(ssm, eta = FALSE)
+    as.data.frame(ssm, eta = TRUE, long = FALSE)
+    as.data.frame(ssm, eta = FALSE, long = FALSE)
+    as.matrix(ssm, eta = TRUE)
+    as.matrix(ssm, eta = FALSE)
+    as.matrix(ssm, eta = TRUE, long = FALSE)
+    as.matrix(ssm, eta = FALSE, long = FALSE)
+    print(ssm)
 
     # Error
     testthat::test_that(

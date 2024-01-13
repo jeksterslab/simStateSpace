@@ -188,10 +188,9 @@ Rcpp::List SimSSM0(const arma::vec& mu0, const arma::mat& sigma0_l,
   }
 
   // Step 6: Return the transposed data matrices in a list
-  return Rcpp::List::create(Rcpp::Named("y") = y.t(),
-                            Rcpp::Named("eta") = eta.t(), Rcpp::Named("x") = 0,
-                            Rcpp::Named("time") = arma::regspace(0, time - 1),
-                            Rcpp::Named("id") = id);
+  return Rcpp::List::create(
+      Rcpp::Named("id") = id, Rcpp::Named("time") = arma::regspace(0, time - 1),
+      Rcpp::Named("y") = y.t(), Rcpp::Named("eta") = eta.t());
 }
 // -----------------------------------------------------------------------------
 // edit .setup/cpp/simStateSpace-sim-ssm-0-fixed-dot.cpp
@@ -246,9 +245,9 @@ Rcpp::List SimSSM0Fixed(const int n, const arma::vec& mu0,
 
     // Step 3.6: Save the transposed data matrices in a list
     out[i] = Rcpp::List::create(
-        Rcpp::Named("y") = y.t(), Rcpp::Named("eta") = eta.t(),
-        Rcpp::Named("x") = 0, Rcpp::Named("time") = arma::regspace(0, time - 1),
-        Rcpp::Named("id") = id);
+        Rcpp::Named("id") = id,
+        Rcpp::Named("time") = arma::regspace(0, time - 1),
+        Rcpp::Named("y") = y.t(), Rcpp::Named("eta") = eta.t());
   }
 
   // Step 4: Return the results
@@ -317,9 +316,9 @@ Rcpp::List SimSSM0IVary(const int n, const Rcpp::List& mu0,
 
     // Step 3.6: Save the transposed data matrices in a list
     out[i] = Rcpp::List::create(
-        Rcpp::Named("y") = y.t(), Rcpp::Named("eta") = eta.t(),
-        Rcpp::Named("x") = 0, Rcpp::Named("time") = arma::regspace(0, time - 1),
-        Rcpp::Named("id") = id);
+        Rcpp::Named("id") = id,
+        Rcpp::Named("time") = arma::regspace(0, time - 1),
+        Rcpp::Named("y") = y.t(), Rcpp::Named("eta") = eta.t());
   }
 
   // Step 4: Return the results
@@ -365,9 +364,9 @@ Rcpp::List SimSSM0LinGrowth(const int n, const arma::vec& mu0,
 
     // Step 3.5: Save the transposed data matrices in a list
     out[i] = Rcpp::List::create(
-        Rcpp::Named("y") = y.t(), Rcpp::Named("eta") = eta.t(),
-        Rcpp::Named("x") = 0, Rcpp::Named("time") = arma::regspace(0, time - 1),
-        Rcpp::Named("id") = id);
+        Rcpp::Named("id") = id,
+        Rcpp::Named("time") = arma::regspace(0, time - 1),
+        Rcpp::Named("y") = y.t(), Rcpp::Named("eta") = eta.t());
   }
 
   // Step 4: Return the results
@@ -416,9 +415,9 @@ Rcpp::List SimSSM0LinGrowthIVary(const int n, const Rcpp::List& mu0,
 
     // Step 3.5: Save the transposed data matrices in a list
     out[i] = Rcpp::List::create(
-        Rcpp::Named("y") = y.t(), Rcpp::Named("eta") = eta.t(),
-        Rcpp::Named("x") = 0, Rcpp::Named("time") = arma::regspace(0, time - 1),
-        Rcpp::Named("id") = id);
+        Rcpp::Named("id") = id,
+        Rcpp::Named("time") = arma::regspace(0, time - 1),
+        Rcpp::Named("y") = y.t(), Rcpp::Named("eta") = eta.t());
   }
 
   // Step 4: Return the results
@@ -486,10 +485,9 @@ Rcpp::List SimSSM0OU(const arma::vec& mu0, const arma::mat& sigma0_l,
 
   // Step 7: Return the transposed data matrices in a list
   return Rcpp::List::create(
-      Rcpp::Named("y") = y.t(), Rcpp::Named("eta") = eta.t(),
-      Rcpp::Named("x") = 0,
+      Rcpp::Named("id") = id,
       Rcpp::Named("time") = arma::linspace(0, (time - 1) * delta_t, time),
-      Rcpp::Named("id") = id);
+      Rcpp::Named("y") = y.t(), Rcpp::Named("eta") = eta.t());
 }
 // -----------------------------------------------------------------------------
 // edit .setup/cpp/simStateSpace-sim-ssm-0-ou-fixed-dot.cpp
@@ -564,10 +562,9 @@ Rcpp::List SimSSM0OUFixed(const int n, const arma::vec& mu0,
 
     // Step 3.7: Return the transposed data matrices in a list
     out[i] = Rcpp::List::create(
-        Rcpp::Named("y") = y.t(), Rcpp::Named("eta") = eta.t(),
-        Rcpp::Named("x") = 0,
+        Rcpp::Named("id") = id,
         Rcpp::Named("time") = arma::linspace(0, (time - 1) * delta_t, time),
-        Rcpp::Named("id") = id);
+        Rcpp::Named("y") = y.t(), Rcpp::Named("eta") = eta.t());
   }
 
   // Step 4: Return results
@@ -656,10 +653,9 @@ Rcpp::List SimSSM0OUIVary(const int n, const Rcpp::List& mu0,
 
     // Step 3.7: Return the transposed data matrices in a list
     out[i] = Rcpp::List::create(
-        Rcpp::Named("y") = y.t(), Rcpp::Named("eta") = eta.t(),
-        Rcpp::Named("x") = 0,
+        Rcpp::Named("id") = id,
         Rcpp::Named("time") = arma::linspace(0, (time - 1) * delta_t, time),
-        Rcpp::Named("id") = id);
+        Rcpp::Named("y") = y.t(), Rcpp::Named("eta") = eta.t());
   }
 
   // Step 4: Return results
@@ -701,10 +697,9 @@ Rcpp::List SimSSM0VAR(const arma::vec& mu0, const arma::mat& sigma0_l,
   }
 
   // Step 6: Return the transposed data matrices in a list
-  return Rcpp::List::create(Rcpp::Named("y") = eta.t(),
-                            Rcpp::Named("eta") = eta.t(), Rcpp::Named("x") = 0,
-                            Rcpp::Named("time") = arma::regspace(0, time - 1),
-                            Rcpp::Named("id") = id);
+  return Rcpp::List::create(
+      Rcpp::Named("id") = id, Rcpp::Named("time") = arma::regspace(0, time - 1),
+      Rcpp::Named("y") = eta.t(), Rcpp::Named("eta") = eta.t());
 }
 // -----------------------------------------------------------------------------
 // edit .setup/cpp/simStateSpace-sim-ssm-0-var-fixed-dot.cpp
@@ -750,9 +745,9 @@ Rcpp::List SimSSM0VARFixed(const int n, const arma::vec& mu0,
 
     // Step 3.6: Return the transposed data matrices in a list
     out[i] = Rcpp::List::create(
-        Rcpp::Named("y") = eta.t(), Rcpp::Named("eta") = eta.t(),
-        Rcpp::Named("x") = 0, Rcpp::Named("time") = arma::regspace(0, time - 1),
-        Rcpp::Named("id") = id);
+        Rcpp::Named("id") = id,
+        Rcpp::Named("time") = arma::regspace(0, time - 1),
+        Rcpp::Named("y") = eta.t(), Rcpp::Named("eta") = eta.t());
   }
 
   // Step 4: Return the results
@@ -808,9 +803,9 @@ Rcpp::List SimSSM0VARIVary(const int n, const Rcpp::List& mu0,
 
     // Step 3.6: Save the transposed data matrices in a list
     out[i] = Rcpp::List::create(
-        Rcpp::Named("y") = eta.t(), Rcpp::Named("eta") = eta.t(),
-        Rcpp::Named("x") = 0, Rcpp::Named("time") = arma::regspace(0, time - 1),
-        Rcpp::Named("id") = id);
+        Rcpp::Named("id") = id,
+        Rcpp::Named("time") = arma::regspace(0, time - 1),
+        Rcpp::Named("y") = eta.t(), Rcpp::Named("eta") = eta.t());
   }
 
   // Step 4: Return the results
@@ -865,11 +860,10 @@ Rcpp::List SimSSM1(const arma::vec& mu0, const arma::mat& sigma0_l,
   }
 
   // Step 6: Return the transposed data matrices in a list
-  return Rcpp::List::create(Rcpp::Named("y") = y.t(),
-                            Rcpp::Named("eta") = eta.t(),
-                            Rcpp::Named("x") = x_t.t(),
-                            Rcpp::Named("time") = arma::regspace(0, time - 1),
-                            Rcpp::Named("id") = id);
+  return Rcpp::List::create(
+      Rcpp::Named("id") = id, Rcpp::Named("time") = arma::regspace(0, time - 1),
+      Rcpp::Named("y") = y.t(), Rcpp::Named("eta") = eta.t(),
+      Rcpp::Named("x") = x_t.t());
 }
 // -----------------------------------------------------------------------------
 // edit .setup/cpp/simStateSpace-sim-ssm-1-fixed-dot.cpp
@@ -930,10 +924,10 @@ Rcpp::List SimSSM1Fixed(const int n, const arma::vec& mu0,
 
     // Step 3.6: Save the transposed data matrices in a list
     out[i] = Rcpp::List::create(
-        Rcpp::Named("y") = y.t(), Rcpp::Named("eta") = eta.t(),
-        Rcpp::Named("x") = x_t.t(),
+        Rcpp::Named("id") = id,
         Rcpp::Named("time") = arma::regspace(0, time - 1),
-        Rcpp::Named("id") = id);
+        Rcpp::Named("y") = y.t(), Rcpp::Named("eta") = eta.t(),
+        Rcpp::Named("x") = x_t.t());
   }
 
   // Step 4: Return the results
@@ -1009,10 +1003,10 @@ Rcpp::List SimSSM1IVary(const int n, const Rcpp::List& mu0,
 
     // Step 3.6: Save the transposed data matrices in a list
     out[i] = Rcpp::List::create(
-        Rcpp::Named("y") = y.t(), Rcpp::Named("eta") = eta.t(),
-        Rcpp::Named("x") = x_t.t(),
+        Rcpp::Named("id") = id,
         Rcpp::Named("time") = arma::regspace(0, time - 1),
-        Rcpp::Named("id") = id);
+        Rcpp::Named("y") = y.t(), Rcpp::Named("eta") = eta.t(),
+        Rcpp::Named("x") = x_t.t());
   }
 
   // Step 4: Return the results
@@ -1061,10 +1055,10 @@ Rcpp::List SimSSM1LinGrowth(const int n, const arma::vec& mu0,
 
     // Step 3.5: Save the transposed data matrices in a list
     out[i] = Rcpp::List::create(
-        Rcpp::Named("y") = y.t(), Rcpp::Named("eta") = eta.t(),
-        Rcpp::Named("x") = x_t.t(),
+        Rcpp::Named("id") = id,
         Rcpp::Named("time") = arma::regspace(0, time - 1),
-        Rcpp::Named("id") = id);
+        Rcpp::Named("y") = y.t(), Rcpp::Named("eta") = eta.t(),
+        Rcpp::Named("x") = x_t.t());
   }
 
   // Step 4: Return the results
@@ -1119,10 +1113,10 @@ Rcpp::List SimSSM1LinGrowthIVary(const int n, const Rcpp::List& mu0,
 
     // Step 3.5: Save the transposed data matrices in a list
     out[i] = Rcpp::List::create(
-        Rcpp::Named("y") = y.t(), Rcpp::Named("eta") = eta.t(),
-        Rcpp::Named("x") = x_t.t(),
+        Rcpp::Named("id") = id,
         Rcpp::Named("time") = arma::regspace(0, time - 1),
-        Rcpp::Named("id") = id);
+        Rcpp::Named("y") = y.t(), Rcpp::Named("eta") = eta.t(),
+        Rcpp::Named("x") = x_t.t());
   }
 
   // Step 4: Return the results
@@ -1195,10 +1189,10 @@ Rcpp::List SimSSM1OU(const arma::vec& mu0, const arma::mat& sigma0_l,
 
   // Step 7: Return the transposed data matrices in a list
   return Rcpp::List::create(
-      Rcpp::Named("y") = y.t(), Rcpp::Named("eta") = eta.t(),
-      Rcpp::Named("x") = x_t.t(),
+      Rcpp::Named("id") = id,
       Rcpp::Named("time") = arma::linspace(0, (time - 1) * delta_t, time),
-      Rcpp::Named("id") = id);
+      Rcpp::Named("y") = y.t(), Rcpp::Named("eta") = eta.t(),
+      Rcpp::Named("x") = x_t.t());
 }
 // -----------------------------------------------------------------------------
 // edit .setup/cpp/simStateSpace-sim-ssm-1-ou-fixed-dot.cpp
@@ -1279,10 +1273,10 @@ Rcpp::List SimSSM1OUFixed(const int n, const arma::vec& mu0,
 
     // Step 3.7: Return the transposed data matrices in a list
     out[i] = Rcpp::List::create(
-        Rcpp::Named("y") = y.t(), Rcpp::Named("eta") = eta.t(),
-        Rcpp::Named("x") = x_t.t(),
+        Rcpp::Named("id") = id,
         Rcpp::Named("time") = arma::linspace(0, (time - 1) * delta_t, time),
-        Rcpp::Named("id") = id);
+        Rcpp::Named("y") = y.t(), Rcpp::Named("eta") = eta.t(),
+        Rcpp::Named("x") = x_t.t());
   }
 
   // Step 4: Return results
@@ -1379,10 +1373,10 @@ Rcpp::List SimSSM1OUIVary(const int n, const Rcpp::List& mu0,
 
     // Step 3.7: Return the transposed data matrices in a list
     out[i] = Rcpp::List::create(
-        Rcpp::Named("y") = y.t(), Rcpp::Named("eta") = eta.t(),
-        Rcpp::Named("x") = x_t.t(),
+        Rcpp::Named("id") = id,
         Rcpp::Named("time") = arma::linspace(0, (time - 1) * delta_t, time),
-        Rcpp::Named("id") = id);
+        Rcpp::Named("y") = y.t(), Rcpp::Named("eta") = eta.t(),
+        Rcpp::Named("x") = x_t.t());
   }
 
   // Step 4: Return results
@@ -1428,11 +1422,10 @@ Rcpp::List SimSSM1VAR(const arma::vec& mu0, const arma::mat& sigma0_l,
   }
 
   // Step 6: Return the transposed data matrices in a list
-  return Rcpp::List::create(Rcpp::Named("y") = eta.t(),
-                            Rcpp::Named("eta") = eta.t(),
-                            Rcpp::Named("x") = x_t.t(),
-                            Rcpp::Named("time") = arma::regspace(0, time - 1),
-                            Rcpp::Named("id") = id);
+  return Rcpp::List::create(
+      Rcpp::Named("id") = id, Rcpp::Named("time") = arma::regspace(0, time - 1),
+      Rcpp::Named("y") = eta.t(), Rcpp::Named("eta") = eta.t(),
+      Rcpp::Named("x") = x_t.t());
 }
 // -----------------------------------------------------------------------------
 // edit .setup/cpp/simStateSpace-sim-ssm-1-var-fixed-dot.cpp
@@ -1484,10 +1477,10 @@ Rcpp::List SimSSM1VARFixed(const int n, const arma::vec& mu0,
 
     // Step 3.6: Return the transposed data matrices in a list
     out[i] = Rcpp::List::create(
-        Rcpp::Named("y") = eta.t(), Rcpp::Named("eta") = eta.t(),
-        Rcpp::Named("x") = x_t.t(),
+        Rcpp::Named("id") = id,
         Rcpp::Named("time") = arma::regspace(0, time - 1),
-        Rcpp::Named("id") = id);
+        Rcpp::Named("y") = eta.t(), Rcpp::Named("eta") = eta.t(),
+        Rcpp::Named("x") = x_t.t());
   }
 
   // Step 4: Return the results
@@ -1550,10 +1543,10 @@ Rcpp::List SimSSM1VARIVary(const int n, const Rcpp::List& mu0,
 
     // Step 3.6: Save the transposed data matrices in a list
     out[i] = Rcpp::List::create(
-        Rcpp::Named("y") = eta.t(), Rcpp::Named("eta") = eta.t(),
-        Rcpp::Named("x") = x_t.t(),
+        Rcpp::Named("id") = id,
         Rcpp::Named("time") = arma::regspace(0, time - 1),
-        Rcpp::Named("id") = id);
+        Rcpp::Named("y") = eta.t(), Rcpp::Named("eta") = eta.t(),
+        Rcpp::Named("x") = x_t.t());
   }
 
   // Step 4: Return the results
@@ -1610,11 +1603,10 @@ Rcpp::List SimSSM2(const arma::vec& mu0, const arma::mat& sigma0_l,
   }
 
   // Step 6: Return the transposed data matrices in a list
-  return Rcpp::List::create(Rcpp::Named("y") = y.t(),
-                            Rcpp::Named("eta") = eta.t(),
-                            Rcpp::Named("x") = x_t.t(),
-                            Rcpp::Named("time") = arma::regspace(0, time - 1),
-                            Rcpp::Named("id") = id);
+  return Rcpp::List::create(
+      Rcpp::Named("id") = id, Rcpp::Named("time") = arma::regspace(0, time - 1),
+      Rcpp::Named("y") = y.t(), Rcpp::Named("eta") = eta.t(),
+      Rcpp::Named("x") = x_t.t());
 }
 // -----------------------------------------------------------------------------
 // edit .setup/cpp/simStateSpace-sim-ssm-2-fixed-dot.cpp
@@ -1677,10 +1669,10 @@ Rcpp::List SimSSM2Fixed(const int n, const arma::vec& mu0,
 
     // Step 3.6: Save the transposed data matrices in a list
     out[i] = Rcpp::List::create(
-        Rcpp::Named("y") = y.t(), Rcpp::Named("eta") = eta.t(),
-        Rcpp::Named("x") = x_t.t(),
+        Rcpp::Named("id") = id,
         Rcpp::Named("time") = arma::regspace(0, time - 1),
-        Rcpp::Named("id") = id);
+        Rcpp::Named("y") = y.t(), Rcpp::Named("eta") = eta.t(),
+        Rcpp::Named("x") = x_t.t());
   }
 
   // Step 4: Return the results
@@ -1759,10 +1751,10 @@ Rcpp::List SimSSM2IVary(const int n, const Rcpp::List& mu0,
 
     // Step 3.6: Save the transposed data matrices in a list
     out[i] = Rcpp::List::create(
-        Rcpp::Named("y") = y.t(), Rcpp::Named("eta") = eta.t(),
-        Rcpp::Named("x") = x_t.t(),
+        Rcpp::Named("id") = id,
         Rcpp::Named("time") = arma::regspace(0, time - 1),
-        Rcpp::Named("id") = id);
+        Rcpp::Named("y") = y.t(), Rcpp::Named("eta") = eta.t(),
+        Rcpp::Named("x") = x_t.t());
   }
 
   // Step 4: Return the results
@@ -1814,10 +1806,10 @@ Rcpp::List SimSSM2LinGrowth(const int n, const arma::vec& mu0,
 
     // Step 3.5: Save the transposed data matrices in a list
     out[i] = Rcpp::List::create(
-        Rcpp::Named("y") = y.t(), Rcpp::Named("eta") = eta.t(),
-        Rcpp::Named("x") = x_t.t(),
+        Rcpp::Named("id") = id,
         Rcpp::Named("time") = arma::regspace(0, time - 1),
-        Rcpp::Named("id") = id);
+        Rcpp::Named("y") = y.t(), Rcpp::Named("eta") = eta.t(),
+        Rcpp::Named("x") = x_t.t());
   }
 
   // Step 4: Return the results
@@ -1876,10 +1868,10 @@ Rcpp::List SimSSM2LinGrowthIVary(const int n, const Rcpp::List& mu0,
 
     // Step 3.5: Save the transposed data matrices in a list
     out[i] = Rcpp::List::create(
-        Rcpp::Named("y") = y.t(), Rcpp::Named("eta") = eta.t(),
-        Rcpp::Named("x") = x_t.t(),
+        Rcpp::Named("id") = id,
         Rcpp::Named("time") = arma::regspace(0, time - 1),
-        Rcpp::Named("id") = id);
+        Rcpp::Named("y") = y.t(), Rcpp::Named("eta") = eta.t(),
+        Rcpp::Named("x") = x_t.t());
   }
 
   // Step 4: Return the results
@@ -1955,10 +1947,10 @@ Rcpp::List SimSSM2OU(const arma::vec& mu0, const arma::mat& sigma0_l,
 
   // Step 7: Return the transposed data matrices in a list
   return Rcpp::List::create(
-      Rcpp::Named("y") = y.t(), Rcpp::Named("eta") = eta.t(),
-      Rcpp::Named("x") = x_t.t(),
+      Rcpp::Named("id") = id,
       Rcpp::Named("time") = arma::linspace(0, (time - 1) * delta_t, time),
-      Rcpp::Named("id") = id);
+      Rcpp::Named("y") = y.t(), Rcpp::Named("eta") = eta.t(),
+      Rcpp::Named("x") = x_t.t());
 }
 // -----------------------------------------------------------------------------
 // edit .setup/cpp/simStateSpace-sim-ssm-2-ou-fixed-dot.cpp
@@ -2042,10 +2034,10 @@ Rcpp::List SimSSM2OUFixed(const int n, const arma::vec& mu0,
 
     // Step 3.7: Return the transposed data matrices in a list
     out[i] = Rcpp::List::create(
-        Rcpp::Named("y") = y.t(), Rcpp::Named("eta") = eta.t(),
-        Rcpp::Named("x") = x_t.t(),
+        Rcpp::Named("id") = id,
         Rcpp::Named("time") = arma::linspace(0, (time - 1) * delta_t, time),
-        Rcpp::Named("id") = id);
+        Rcpp::Named("y") = y.t(), Rcpp::Named("eta") = eta.t(),
+        Rcpp::Named("x") = x_t.t());
   }
 
   // Step 4: Return results
@@ -2145,10 +2137,10 @@ Rcpp::List SimSSM2OUIVary(const int n, const Rcpp::List& mu0,
 
     // Step 3.7: Return the transposed data matrices in a list
     out[i] = Rcpp::List::create(
-        Rcpp::Named("y") = y.t(), Rcpp::Named("eta") = eta.t(),
-        Rcpp::Named("x") = x_t.t(),
+        Rcpp::Named("id") = id,
         Rcpp::Named("time") = arma::linspace(0, (time - 1) * delta_t, time),
-        Rcpp::Named("id") = id);
+        Rcpp::Named("y") = y.t(), Rcpp::Named("eta") = eta.t(),
+        Rcpp::Named("x") = x_t.t());
   }
 
   // Step 4: Return results

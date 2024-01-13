@@ -233,13 +233,18 @@
 #' @inheritParams SimSSM
 #' @inherit SimSSM references
 #'
-#' @return Returns a list of length `n`.
-#'   Each element is a list with the following elements:
+#' @return Returns a list with the following elements:
+#'   - `call`: Function call.
+#'   - `args`: Function arguments.
+#'   - `data`: Generated data which is a list of length `n`.
+#'   - `fun`: Function used.
+#'
+#'   Each element of `data` is a list with the following elements:
+#'   - `id`: A vector of ID numbers of length `t`.
+#'   - `time`: A vector of discrete time points from 0 to `t - 1`.
 #'   - `y`: A `t` by `k` matrix of values for the manifest variables.
 #'   - `eta`: A `t` by `p` matrix of values for the latent variables.
 #'   - `x`: A `t` by `j` matrix of values for the covariates.
-#'   - `time`: A vector of discrete time points from 1 to `t`.
-#'   - `id`: A vector of ID numbers of length `t`.
 #'
 #' @examples
 #' # prepare parameters
@@ -272,7 +277,7 @@
 #' )
 #'
 #' # Type 0
-#' ssm <- SimSSMFixed(
+#' SimSSMFixed(
 #'   n = n,
 #'   mu0 = mu0,
 #'   sigma0 = sigma0,
@@ -287,10 +292,8 @@
 #'   burn_in = burn_in
 #' )
 #'
-#' str(ssm)
-#'
 #' # Type 1
-#' ssm <- SimSSMFixed(
+#' SimSSMFixed(
 #'   n = n,
 #'   mu0 = mu0,
 #'   sigma0 = sigma0,
@@ -307,10 +310,8 @@
 #'   burn_in = burn_in
 #' )
 #'
-#' str(ssm)
-#'
 #' # Type 2
-#' ssm <- SimSSMFixed(
+#' SimSSMFixed(
 #'   n = n,
 #'   mu0 = mu0,
 #'   sigma0 = sigma0,
@@ -327,8 +328,6 @@
 #'   time = time,
 #'   burn_in = burn_in
 #' )
-#'
-#' str(ssm)
 #'
 #' @family Simulation of State Space Models Data Functions
 #' @keywords simStateSpace sim ssm
@@ -351,66 +350,104 @@ SimSSMFixed <- function(n,
   sigma0_l <- t(chol(sigma0))
   psi_l <- t(chol(psi))
   theta_l <- t(chol(theta))
-  switch(
+  data <- switch(
     EXPR = as.character(type),
     "0" = {
-      return(
-        .SimSSM0Fixed(
-          n = n,
-          mu0 = mu0,
-          sigma0_l = sigma0_l,
-          alpha = alpha,
-          beta = beta,
-          psi_l = psi_l,
-          nu = nu,
-          lambda = lambda,
-          theta_l = theta_l,
-          time = time,
-          burn_in = burn_in
-        )
+      .SimSSM0Fixed(
+        n = n,
+        mu0 = mu0,
+        sigma0_l = sigma0_l,
+        alpha = alpha,
+        beta = beta,
+        psi_l = psi_l,
+        nu = nu,
+        lambda = lambda,
+        theta_l = theta_l,
+        time = time,
+        burn_in = burn_in
       )
     },
     "1" = {
-      return(
-        .SimSSM1Fixed(
-          n = n,
-          mu0 = mu0,
-          sigma0_l = sigma0_l,
-          alpha = alpha,
-          beta = beta,
-          psi_l = psi_l,
-          nu = nu,
-          lambda = lambda,
-          theta_l = theta_l,
-          gamma_eta = gamma_eta,
-          x = x,
-          time = time,
-          burn_in = burn_in
-        )
+      .SimSSM1Fixed(
+        n = n,
+        mu0 = mu0,
+        sigma0_l = sigma0_l,
+        alpha = alpha,
+        beta = beta,
+        psi_l = psi_l,
+        nu = nu,
+        lambda = lambda,
+        theta_l = theta_l,
+        gamma_eta = gamma_eta,
+        x = x,
+        time = time,
+        burn_in = burn_in
       )
     },
     "2" = {
-      return(
-        .SimSSM2Fixed(
-          n = n,
-          mu0 = mu0,
-          sigma0_l = sigma0_l,
-          alpha = alpha,
-          beta = beta,
-          psi_l = psi_l,
-          nu = nu,
-          lambda = lambda,
-          theta_l = theta_l,
-          gamma_y = gamma_y,
-          gamma_eta = gamma_eta,
-          x = x,
-          time = time,
-          burn_in = burn_in
-        )
+      .SimSSM2Fixed(
+        n = n,
+        mu0 = mu0,
+        sigma0_l = sigma0_l,
+        alpha = alpha,
+        beta = beta,
+        psi_l = psi_l,
+        nu = nu,
+        lambda = lambda,
+        theta_l = theta_l,
+        gamma_y = gamma_y,
+        gamma_eta = gamma_eta,
+        x = x,
+        time = time,
+        burn_in = burn_in
       )
     },
     stop(
       "Invalid `type`."
     )
+  )
+  if (type > 0) {
+    covariates <- TRUE
+  } else {
+    covariates <- FALSE
+  }
+  out <- list(
+    call = match.call(),
+    args = list(
+      n = n,
+      mu0 = mu0,
+      sigma0 = sigma0,
+      alpha = alpha,
+      beta = beta,
+      psi = psi,
+      nu = nu,
+      lambda = lambda,
+      theta = theta,
+      gamma_y = gamma_y,
+      gamma_eta = gamma_eta,
+      x = x,
+      type = type,
+      time = time,
+      burn_in = burn_in,
+      sigma0_l = sigma0_l,
+      psi_l = psi_l,
+      theta_l = theta_l
+    ),
+    model = list(
+      model = "ssm",
+      n1 = FALSE,
+      covariates = covariates,
+      fixed = TRUE,
+      vary_i = FALSE
+    ),
+    data = data,
+    fun = "SimSSMFixed"
+  )
+  class(out) <- c(
+    "ssm",
+    class(out)
+  )
+  return(
+    out
   )
 }

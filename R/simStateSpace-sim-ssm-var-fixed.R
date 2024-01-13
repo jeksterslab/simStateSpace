@@ -42,7 +42,7 @@
 #' )
 #'
 #' # No covariates
-#' ssm <- SimSSMVARFixed(
+#' SimSSMVARFixed(
 #'   n = n,
 #'   mu0 = mu0,
 #'   sigma0 = sigma0,
@@ -53,10 +53,8 @@
 #'   burn_in = burn_in
 #' )
 #'
-#' str(ssm)
-#'
 #' # With covariates
-#' ssm <- SimSSMVARFixed(
+#' SimSSMVARFixed(
 #'   n = n,
 #'   mu0 = mu0,
 #'   sigma0 = sigma0,
@@ -68,8 +66,6 @@
 #'   time = time,
 #'   burn_in = burn_in
 #' )
-#'
-#' str(ssm)
 #'
 #' @family Simulation of State Space Models Data Functions
 #' @keywords simStateSpace sim var
@@ -87,32 +83,63 @@ SimSSMVARFixed <- function(n,
   sigma0_l <- t(chol(sigma0))
   psi_l <- t(chol(psi))
   if (is.null(gamma_eta) || is.null(x)) {
-    return(
-      .SimSSM0VARFixed(
-        n = n,
-        mu0 = mu0,
-        sigma0_l = sigma0_l,
-        alpha = alpha,
-        beta = beta,
-        psi_l = psi_l,
-        time = time,
-        burn_in = burn_in
-      )
+    data <- .SimSSM0VARFixed(
+      n = n,
+      mu0 = mu0,
+      sigma0_l = sigma0_l,
+      alpha = alpha,
+      beta = beta,
+      psi_l = psi_l,
+      time = time,
+      burn_in = burn_in
     )
+    covariates <- FALSE
   } else {
-    return(
-      .SimSSM1VARFixed(
-        n = n,
-        mu0 = mu0,
-        sigma0_l = sigma0_l,
-        alpha = alpha,
-        beta = beta,
-        psi_l = psi_l,
-        gamma_eta = gamma_eta,
-        x = x,
-        time = time,
-        burn_in = burn_in
-      )
+    data <- .SimSSM1VARFixed(
+      n = n,
+      mu0 = mu0,
+      sigma0_l = sigma0_l,
+      alpha = alpha,
+      beta = beta,
+      psi_l = psi_l,
+      gamma_eta = gamma_eta,
+      x = x,
+      time = time,
+      burn_in = burn_in
     )
+    covariates <- TRUE
   }
+  out <- list(
+    call = match.call(),
+    args = list(
+      n = n,
+      mu0 = mu0,
+      sigma0 = sigma0,
+      alpha = alpha,
+      beta = beta,
+      psi = psi,
+      gamma_eta = gamma_eta,
+      x = x,
+      time = time,
+      burn_in = burn_in,
+      sigma0_l = sigma0_l,
+      psi_l = psi_l
+    ),
+    model = list(
+      model = "var",
+      n1 = FALSE,
+      covariates = covariates,
+      fixed = TRUE,
+      vary_i = FALSE
+    ),
+    data = data,
+    fun = "SimSSMVARFixed"
+  )
+  class(out) <- c(
+    "ssm",
+    class(out)
+  )
+  return(
+    out
+  )
 }

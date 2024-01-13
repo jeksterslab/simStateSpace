@@ -85,7 +85,7 @@
 #' )
 #'
 #' # Type 0
-#' ssm <- SimSSMOUIVary(
+#' SimSSMOUIVary(
 #'   n = n,
 #'   mu0 = mu0,
 #'   sigma0 = sigma0,
@@ -101,10 +101,8 @@
 #'   burn_in = burn_in
 #' )
 #'
-#' str(ssm)
-#'
 #' # Type 1
-#' ssm <- SimSSMOUIVary(
+#' SimSSMOUIVary(
 #'   n = n,
 #'   mu0 = mu0,
 #'   sigma0 = sigma0,
@@ -122,10 +120,8 @@
 #'   burn_in = burn_in
 #' )
 #'
-#' str(ssm)
-#'
 #' # Type 2
-#' ssm <- SimSSMOUIVary(
+#' SimSSMOUIVary(
 #'   n = n,
 #'   mu0 = mu0,
 #'   sigma0 = sigma0,
@@ -143,8 +139,6 @@
 #'   time = time,
 #'   burn_in = burn_in
 #' )
-#'
-#' str(ssm)
 #'
 #' @family Simulation of State Space Models Data Functions
 #' @keywords simStateSpace sim ou
@@ -182,69 +176,108 @@ SimSSMOUIVary <- function(n,
     X = theta,
     FUN = foo
   )
-  switch(
+  data <- switch(
     EXPR = as.character(type),
     "0" = {
-      return(
-        .SimSSM0OUIVary(
-          n = n,
-          mu0 = rep(x = mu0, length.out = n),
-          sigma0_l = rep(x = sigma0_l, length.out = n),
-          mu = rep(x = mu, length.out = n),
-          phi = rep(x = phi, length.out = n),
-          sigma_l = rep(x = sigma_l, length.out = n),
-          nu = rep(x = nu, length.out = n),
-          lambda = rep(x = lambda, length.out = n),
-          theta_l = rep(x = theta_l, length.out = n),
-          delta_t = delta_t,
-          time = time,
-          burn_in = burn_in
-        )
+      .SimSSM0OUIVary(
+        n = n,
+        mu0 = rep(x = mu0, length.out = n),
+        sigma0_l = rep(x = sigma0_l, length.out = n),
+        mu = rep(x = mu, length.out = n),
+        phi = rep(x = phi, length.out = n),
+        sigma_l = rep(x = sigma_l, length.out = n),
+        nu = rep(x = nu, length.out = n),
+        lambda = rep(x = lambda, length.out = n),
+        theta_l = rep(x = theta_l, length.out = n),
+        delta_t = delta_t,
+        time = time,
+        burn_in = burn_in
       )
     },
     "1" = {
-      return(
-        .SimSSM1OUIVary(
-          n = n,
-          mu0 = rep(x = mu0, length.out = n),
-          sigma0_l = rep(x = sigma0_l, length.out = n),
-          mu = rep(x = mu, length.out = n),
-          phi = rep(x = phi, length.out = n),
-          sigma_l = rep(x = sigma_l, length.out = n),
-          nu = rep(x = nu, length.out = n),
-          lambda = rep(x = lambda, length.out = n),
-          theta_l = rep(x = theta_l, length.out = n),
-          gamma_eta = rep(x = gamma_eta, length.out = n),
-          x = x,
-          delta_t = delta_t,
-          time = time,
-          burn_in = burn_in
-        )
+      .SimSSM1OUIVary(
+        n = n,
+        mu0 = rep(x = mu0, length.out = n),
+        sigma0_l = rep(x = sigma0_l, length.out = n),
+        mu = rep(x = mu, length.out = n),
+        phi = rep(x = phi, length.out = n),
+        sigma_l = rep(x = sigma_l, length.out = n),
+        nu = rep(x = nu, length.out = n),
+        lambda = rep(x = lambda, length.out = n),
+        theta_l = rep(x = theta_l, length.out = n),
+        gamma_eta = rep(x = gamma_eta, length.out = n),
+        x = x,
+        delta_t = delta_t,
+        time = time,
+        burn_in = burn_in
       )
     },
     "2" = {
-      return(
-        .SimSSM2OUIVary(
-          n = n,
-          mu0 = rep(x = mu0, length.out = n),
-          sigma0_l = rep(x = sigma0_l, length.out = n),
-          mu = rep(x = mu, length.out = n),
-          phi = rep(x = phi, length.out = n),
-          sigma_l = rep(x = sigma_l, length.out = n),
-          nu = rep(x = nu, length.out = n),
-          lambda = rep(x = lambda, length.out = n),
-          theta_l = rep(x = theta_l, length.out = n),
-          gamma_y = rep(x = gamma_y, length.out = n),
-          gamma_eta = rep(x = gamma_eta, length.out = n),
-          x = x,
-          delta_t = delta_t,
-          time = time,
-          burn_in = burn_in
-        )
+      .SimSSM2OUIVary(
+        n = n,
+        mu0 = rep(x = mu0, length.out = n),
+        sigma0_l = rep(x = sigma0_l, length.out = n),
+        mu = rep(x = mu, length.out = n),
+        phi = rep(x = phi, length.out = n),
+        sigma_l = rep(x = sigma_l, length.out = n),
+        nu = rep(x = nu, length.out = n),
+        lambda = rep(x = lambda, length.out = n),
+        theta_l = rep(x = theta_l, length.out = n),
+        gamma_y = rep(x = gamma_y, length.out = n),
+        gamma_eta = rep(x = gamma_eta, length.out = n),
+        x = x,
+        delta_t = delta_t,
+        time = time,
+        burn_in = burn_in
       )
     },
     stop(
       "Invalid `type`."
     )
+  )
+  if (type > 0) {
+    covariates <- TRUE
+  } else {
+    covariates <- FALSE
+  }
+  out <- list(
+    call = match.call(),
+    args = list(
+      n = n,
+      mu0 = mu0,
+      sigma0 = sigma0,
+      mu = mu,
+      phi = phi,
+      sigma = sigma,
+      nu = nu,
+      lambda = lambda,
+      theta = theta,
+      gamma_y = gamma_y,
+      gamma_eta = gamma_eta,
+      x = x,
+      type = type,
+      delta_t = delta_t,
+      time = time,
+      burn_in = burn_in,
+      sigma0_l = sigma0_l,
+      sigma_l = sigma_l,
+      theta_l = theta_l
+    ),
+    model = list(
+      model = "ou",
+      n1 = FALSE,
+      covariates = covariates,
+      fixed = FALSE,
+      vary_i = TRUE
+    ),
+    data = data,
+    fun = "SimSSMOUIVary"
+  )
+  class(out) <- c(
+    "ssm",
+    class(out)
+  )
+  return(
+    out
   )
 }
