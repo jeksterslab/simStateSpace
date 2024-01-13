@@ -37,9 +37,6 @@
     <loc>https://github.com/jeksterslab/simStateSpace/reference/OU2SSM.html</loc>
   </url>
   <url>
-    <loc>https://github.com/jeksterslab/simStateSpace/reference/Sim2Matrix.html</loc>
-  </url>
-  <url>
     <loc>https://github.com/jeksterslab/simStateSpace/reference/SimSSM.html</loc>
   </url>
   <url>
@@ -73,7 +70,19 @@
     <loc>https://github.com/jeksterslab/simStateSpace/reference/SimSSMVARIVary.html</loc>
   </url>
   <url>
+    <loc>https://github.com/jeksterslab/simStateSpace/reference/as.data.frame.ssm.html</loc>
+  </url>
+  <url>
+    <loc>https://github.com/jeksterslab/simStateSpace/reference/as.matrix.ssm.html</loc>
+  </url>
+  <url>
     <loc>https://github.com/jeksterslab/simStateSpace/reference/index.html</loc>
+  </url>
+  <url>
+    <loc>https://github.com/jeksterslab/simStateSpace/reference/plot.ssm.html</loc>
+  </url>
+  <url>
+    <loc>https://github.com/jeksterslab/simStateSpace/reference/print.ssm.html</loc>
   </url>
   <url>
     <loc>https://github.com/jeksterslab/simStateSpace/reference/simStateSpace-package.html</loc>
