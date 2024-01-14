@@ -160,8 +160,8 @@
 #'
 #' @keywords methods
 #' @export
-# nolint start: object_name_linter. Do not lint dot separators
-as.data.frame.ssm <- function(x, row.names = NULL, # nolint
+as.data.frame.ssm <- function(x,
+                              row.names = NULL,
                               optional = FALSE,
                               eta = FALSE,
                               long = TRUE,
@@ -184,12 +184,11 @@ as.data.frame.ssm <- function(x, row.names = NULL, # nolint
   return(
     as.data.frame.matrix(
       x = out,
-      row.names = row.names, # nolint
+      row.names = row.names,
       optional = optional
     )
   )
 }
-# nolint end
 
 #' Coerce an Object of Class `ssm` to a Matrix
 #'
@@ -254,7 +253,6 @@ as.data.frame.ssm <- function(x, row.names = NULL, # nolint
 #'
 #' @keywords methods
 #' @export
-# nolint start: object_name_linter. Do not lint dot separators
 as.matrix.ssm <- function(x,
                           eta = FALSE,
                           long = TRUE,
@@ -278,7 +276,6 @@ as.matrix.ssm <- function(x,
     out
   )
 }
-# nolint end
 
 #' Plot Method for an Object of Class `ssm`
 #'
