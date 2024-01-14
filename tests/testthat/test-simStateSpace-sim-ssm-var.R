@@ -44,6 +44,7 @@ lapply(
     print(ssm)
     plot(ssm)
     plot(ssm, eta = TRUE)
+    plot(ssm, id = 1:3, time = 1:10)
 
     # With covariates
     ssm <- SimSSMVAR(
@@ -69,6 +70,7 @@ lapply(
     print(ssm)
     plot(ssm)
     plot(ssm, eta = TRUE)
+    plot(ssm, id = 1:3, time = 1:10)
 
     # coverage - AR
     set.seed(42)
@@ -104,6 +106,7 @@ lapply(
     print(ssm)
     plot(ssm)
     plot(ssm, eta = TRUE)
+    plot(ssm, id = 1:3, time = 1:10)
   },
   text = "test-simStateSpace-sim-ssm-var"
 )

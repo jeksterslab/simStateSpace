@@ -76,6 +76,7 @@ ssm <- SimSSMFixed(
 )
 
 plot(ssm)
+plot(ssm, id = 1:3, time = 1:10)
 
 }
 \author{

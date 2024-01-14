@@ -70,6 +70,7 @@ lapply(
     print(ssm)
     plot(ssm)
     plot(ssm, eta = TRUE)
+    plot(ssm, id = 1:3, time = (0:4) * 0.10)
 
     # Type 1
     ssm <- SimSSMOUIVary(
@@ -101,6 +102,7 @@ lapply(
     print(ssm)
     plot(ssm)
     plot(ssm, eta = TRUE)
+    plot(ssm, id = 1:3, time = (0:4) * 0.10)
 
     # Type 2
     ssm <- SimSSMOUIVary(
@@ -133,6 +135,7 @@ lapply(
     print(ssm)
     plot(ssm)
     plot(ssm, eta = TRUE)
+    plot(ssm, id = 1:3, time = (0:4) * 0.10)
 
     # Error
     testthat::test_that(
@@ -153,6 +156,50 @@ lapply(
             gamma_eta = gamma_eta,
             x = x,
             type = 3,
+            delta_t = delta_t,
+            time = time,
+            burn_in = burn_in
+          )
+        )
+      }
+    )
+    testthat::test_that(
+      paste(text, "error type 1"),
+      {
+        testthat::expect_error(
+          SimSSMOUIVary(
+            n = n,
+            mu0 = mu0,
+            sigma0 = sigma0,
+            mu = mu,
+            phi = phi,
+            sigma = sigma,
+            nu = nu,
+            lambda = lambda,
+            theta = theta,
+            type = 1,
+            delta_t = delta_t,
+            time = time,
+            burn_in = burn_in
+          )
+        )
+      }
+    )
+    testthat::test_that(
+      paste(text, "error type 2"),
+      {
+        testthat::expect_error(
+          SimSSMOUIVary(
+            n = n,
+            mu0 = mu0,
+            sigma0 = sigma0,
+            mu = mu,
+            phi = phi,
+            sigma = sigma,
+            nu = nu,
+            lambda = lambda,
+            theta = theta,
+            type = 2,
             delta_t = delta_t,
             time = time,
             burn_in = burn_in

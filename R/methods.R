@@ -344,6 +344,7 @@ as.matrix.simstatespace <- function(x,
 #' )
 #'
 #' plot(ssm)
+#' plot(ssm, id = 1:3, time = 1:10)
 #'
 #' @keywords methods
 #' @export
@@ -364,10 +365,11 @@ plot.simstatespace <- function(x,
     n <- attributes(data)$k
     y <- paste0("y", seq_len(n))
   }
-  if (is.null(id)) {
-    ids <- unique(data[, "id"])
-  } else {
-    ids <- id
+  if (!is.null(id)) {
+    data <- data[which(data[, "id"] %in% id), , drop = FALSE]
+  }
+  if (!is.null(time)) {
+    data <- data[which(data[, "time"] %in% time), , drop = FALSE]
   }
   colfunc <- grDevices::colorRampPalette(
     c(
@@ -377,6 +379,7 @@ plot.simstatespace <- function(x,
       "royalblue"
     )
   )
+  ids <- unique(data[, "id"])
   color <- colfunc(length(ids))
   for (i in seq_along(y)) {
     plot(
