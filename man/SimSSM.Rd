@@ -72,7 +72,8 @@ The matrix of observed covariates in \code{type = 1} or \code{type = 2}.
 The number of rows should be equal to \code{time + burn_in}.}
 
 \item{type}{Integer.
-State space model type.}
+State space model type.
+See Details for more information.}
 
 \item{time}{Positive integer.
 Number of time points to simulate.}
@@ -100,7 +101,7 @@ which is a list with the following elements:
 }
 \description{
 This function simulates data from a state space model.
-See details for more information.
+See Details for more information.
 }
 \details{
 \subsection{Type 0}{

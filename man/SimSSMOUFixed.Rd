@@ -80,7 +80,8 @@ The matrix of observed covariates in \code{type = 1} or \code{type = 2}.
 The number of rows should be equal to \code{time + burn_in}.}
 
 \item{type}{Integer.
-State space model type.}
+State space model type.
+See Details for more information.}
 
 \item{delta_t}{Numeric.
 Time interval (\eqn{\delta_t}).}
@@ -115,7 +116,7 @@ using a state space model parameterization
 for \code{n > 1} individuals.
 In this model,
 the parameters are invariant across individuals.
-See details for more information.
+See Details for more information.
 }
 \details{
 \subsection{Type 0}{
