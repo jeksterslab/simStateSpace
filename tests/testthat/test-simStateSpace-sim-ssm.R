@@ -48,6 +48,8 @@ lapply(
     as.matrix(ssm, eta = TRUE, long = FALSE)
     as.matrix(ssm, eta = FALSE, long = FALSE)
     print(ssm)
+    plot(ssm)
+    plot(ssm, eta = TRUE)
 
     # Type 1
     ssm <- SimSSM(
@@ -75,6 +77,8 @@ lapply(
     as.matrix(ssm, eta = TRUE, long = FALSE)
     as.matrix(ssm, eta = FALSE, long = FALSE)
     print(ssm)
+    plot(ssm)
+    plot(ssm, eta = TRUE)
 
     # Type 2
     ssm <- SimSSM(
@@ -103,6 +107,8 @@ lapply(
     as.matrix(ssm, eta = TRUE, long = FALSE)
     as.matrix(ssm, eta = FALSE, long = FALSE)
     print(ssm)
+    plot(ssm)
+    plot(ssm, eta = TRUE)
 
     # Error
     testthat::test_that(

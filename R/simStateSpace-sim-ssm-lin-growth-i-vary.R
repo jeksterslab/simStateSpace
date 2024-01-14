@@ -76,7 +76,7 @@
 #' )
 #'
 #' # Type 0
-#' SimSSMLinGrowthIVary(
+#' ssm <- SimSSMLinGrowthIVary(
 #'   n = n,
 #'   mu0 = mu0,
 #'   sigma0 = sigma0,
@@ -85,8 +85,10 @@
 #'   time = time
 #' )
 #'
+#' plot(ssm)
+#'
 #' # Type 1
-#' SimSSMLinGrowthIVary(
+#' ssm <- SimSSMLinGrowthIVary(
 #'   n = n,
 #'   mu0 = mu0,
 #'   sigma0 = sigma0,
@@ -97,8 +99,10 @@
 #'   time = time
 #' )
 #'
+#' plot(ssm)
+#'
 #' # Type 2
-#' SimSSMLinGrowthIVary(
+#' ssm <- SimSSMLinGrowthIVary(
 #'   n = n,
 #'   mu0 = mu0,
 #'   sigma0 = sigma0,
@@ -109,6 +113,8 @@
 #'   type = 2,
 #'   time = time
 #' )
+#'
+#' plot(ssm)
 #'
 #' @family Simulation of State Space Models Data Functions
 #' @keywords simStateSpace sim growth
@@ -204,7 +210,7 @@ SimSSMLinGrowthIVary <- function(n,
     fun = "SimSSMLinGrowthIVary"
   )
   class(out) <- c(
-    "ssm",
+    "simstatespace",
     class(out)
   )
   return(

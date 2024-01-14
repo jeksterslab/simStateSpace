@@ -92,11 +92,11 @@
   return(out)
 }
 
-#' Coerce an Object of Class `ssm` to a Data Frame
+#' Coerce an Object of Class `simstatespace` to a Data Frame
 #'
 #' @author Ivan Jacob Agaloos Pesigan
 #'
-#' @param x Object of class `ssm`.
+#' @param x Object of class `simstatespace`.
 #' @param row.names `NULL` or character vector giving the row names
 #'   for the data frame.
 #'   Missing values are not allowed.
@@ -156,16 +156,17 @@
 #'   burn_in = burn_in
 #' )
 #'
-#' as.data.frame(ssm)
+#' head(as.data.frame(ssm))
+#' head(as.data.frame(ssm, long = FALSE))
 #'
 #' @keywords methods
 #' @export
-as.data.frame.ssm <- function(x,
-                              row.names = NULL,
-                              optional = FALSE,
-                              eta = FALSE,
-                              long = TRUE,
-                              ...) {
+as.data.frame.simstatespace <- function(x,
+                                        row.names = NULL,
+                                        optional = FALSE,
+                                        eta = FALSE,
+                                        long = TRUE,
+                                        ...) {
   if (long) {
     out <- .Long(
       x = x,
@@ -190,11 +191,11 @@ as.data.frame.ssm <- function(x,
   )
 }
 
-#' Coerce an Object of Class `ssm` to a Matrix
+#' Coerce an Object of Class `simstatespace` to a Matrix
 #'
 #' @author Ivan Jacob Agaloos Pesigan
 #'
-#' @param x Object of class `ssm`.
+#' @param x Object of class `simstatespace`.
 #' @param eta Logical.
 #'   If `eta = TRUE`, include `eta`.
 #'   If `eta = FALSE`, exclude `eta`.
@@ -249,14 +250,15 @@ as.data.frame.ssm <- function(x,
 #'   burn_in = burn_in
 #' )
 #'
-#' as.matrix(ssm)
+#' head(as.matrix(ssm))
+#' head(as.matrix(ssm, long = FALSE))
 #'
 #' @keywords methods
 #' @export
-as.matrix.ssm <- function(x,
-                          eta = FALSE,
-                          long = TRUE,
-                          ...) {
+as.matrix.simstatespace <- function(x,
+                                    eta = FALSE,
+                                    long = TRUE,
+                                    ...) {
   if (long) {
     out <- .Long(
       x = x,
@@ -277,11 +279,11 @@ as.matrix.ssm <- function(x,
   )
 }
 
-#' Plot Method for an Object of Class `ssm`
+#' Plot Method for an Object of Class `simstatespace`
 #'
 #' @author Ivan Jacob Agaloos Pesigan
 #'
-#' @param x Object of class `ssm`.
+#' @param x Object of class `simstatespace`.
 #' @param id Numeric vector.
 #'   Optional `id` numbers to plot.
 #'   If `id = NULL`, plot all available data.
@@ -345,12 +347,12 @@ as.matrix.ssm <- function(x,
 #'
 #' @keywords methods
 #' @export
-plot.ssm <- function(x,
-                     id = NULL,
-                     time = NULL,
-                     eta = FALSE,
-                     type = "b",
-                     ...) {
+plot.simstatespace <- function(x,
+                               id = NULL,
+                               time = NULL,
+                               eta = FALSE,
+                               type = "b",
+                               ...) {
   data <- .Long(
     x = x,
     eta = eta
@@ -403,17 +405,14 @@ plot.ssm <- function(x,
   }
 }
 
-#' Print Method for an Object of Class `ssm`
+#' Print Method for an Object of Class `simstatespace`
 #'
 #' @author Ivan Jacob Agaloos Pesigan
 #'
 #' @return Prints simulated data in long format.
 #'
-#' @param x Object of Class `ssm`.
-#' @param eta Logical.
-#'   If `eta = TRUE`, include `eta`.
-#'   If `eta = FALSE`, exclude `eta`.
-#' @param ... additional arguments.
+#' @param x Object of Class `simstatespace`.
+#' @param ... Additional arguments.
 #'
 #' @examples
 #' # prepare parameters
@@ -465,18 +464,18 @@ plot.ssm <- function(x,
 #'
 #' @keywords methods
 #' @export
-print.ssm <- function(x,
-                      eta = FALSE,
-                      ...) {
-  out <- .Long(
-    x = x,
-    eta = eta
-  )
-  attributes(out)$n <- NULL
-  attributes(out)$k <- NULL
-  attributes(out)$p <- NULL
-  attributes(out)$j <- NULL
-  base::print(
-    out
+print.simstatespace <- function(x,
+                                ...) {
+  cat("Call:\n")
+  base::print(x$call)
+  cat(
+    paste0(
+      "Use `as.data.frame` or `as.matrix` on the output of",
+      " `",
+      x$fun,
+      "` ",
+      "to convert it to a data frame or a matrix.\n",
+      "\n"
+    )
   )
 }
