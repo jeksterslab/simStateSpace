@@ -86,7 +86,6 @@ lapply(
     print(ssm)
     plot(ssm)
     plot(ssm, eta = TRUE)
-
   },
   text = "test-simStateSpace-sim-ssm-var-i-vary"
 )
