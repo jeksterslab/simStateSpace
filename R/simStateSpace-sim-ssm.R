@@ -302,7 +302,7 @@
 #' nu <- null_vec
 #' lambda <- iden
 #' theta <- diag(x = 0.50, nrow = k)
-#' time <- 50
+#' time <- 1000
 #' burn_in <- 0
 #' gamma_y <- gamma_eta <- 0.10 * diag(k)
 #' x <- matrix(
