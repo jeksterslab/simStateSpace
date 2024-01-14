@@ -81,21 +81,21 @@ Number of time points to simulate.}
 Number of burn-in points to exclude before returning the results.}
 }
 \value{
-Returns a list with the following elements:
+Returns an object of class \code{simstatespace}
+which is a list with the following elements:
 \itemize{
 \item \code{call}: Function call.
 \item \code{args}: Function arguments.
 \item \code{data}: Generated data which is a list of length \code{n}.
-\item \code{fun}: Function used.
-}
-
 \code{data} is a list with the following elements:
 \itemize{
-\item \code{id}: A vector of ones.
-\item \code{time}: A vector of discrete time points from 0 to \code{t - 1}.
+\item \code{id}: A vector of ones of length \code{t}.
+\item \code{time}: A vector of time points of length \code{t}.
 \item \code{y}: A \code{t} by \code{k} matrix of values for the manifest variables.
 \item \code{eta}: A \code{t} by \code{p} matrix of values for the latent variables.
 \item \code{x}: A \code{t} by \code{j} matrix of values for the covariates.
+}
+\item \code{fun}: Function used.
 }
 }
 \description{
@@ -347,7 +347,7 @@ x <- matrix(
 )
 
 # Type 0
-SimSSM(
+ssm <- SimSSM(
   mu0 = mu0,
   sigma0 = sigma0,
   alpha = alpha,
@@ -361,8 +361,10 @@ SimSSM(
   burn_in = burn_in
 )
 
+plot(ssm)
+
 # Type 1
-SimSSM(
+ssm <- SimSSM(
   mu0 = mu0,
   sigma0 = sigma0,
   alpha = alpha,
@@ -378,8 +380,10 @@ SimSSM(
   burn_in = burn_in
 )
 
+plot(ssm)
+
 # Type 2
-SimSSM(
+ssm <- SimSSM(
   mu0 = mu0,
   sigma0 = sigma0,
   alpha = alpha,
@@ -395,6 +399,8 @@ SimSSM(
   time = time,
   burn_in = burn_in
 )
+
+plot(ssm)
 
 }
 \references{

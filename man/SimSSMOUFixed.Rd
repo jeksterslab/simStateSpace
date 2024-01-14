@@ -92,16 +92,21 @@ Number of time points to simulate.}
 Number of burn-in points to exclude before returning the results.}
 }
 \value{
-Returns a list of length \code{n}.
-Each element is a list with the following elements:
+Returns an object of class \code{simstatespace}
+which is a list with the following elements:
 \itemize{
+\item \code{call}: Function call.
+\item \code{args}: Function arguments.
+\item \code{data}: Generated data which is a list of length \code{n}.
+Each element of \code{data} is a list with the following elements:
+\itemize{
+\item \code{id}: A vector of ID numbers of length \code{t}.
+\item \code{time}: A vector time points of length \code{t}.
 \item \code{y}: A \code{t} by \code{k} matrix of values for the manifest variables.
 \item \code{eta}: A \code{t} by \code{p} matrix of values for the latent variables.
 \item \code{x}: A \code{t} by \code{j} matrix of values for the covariates.
-\item \code{time}: A vector of continuous time points of length \code{t}
-starting from 0 with \code{delta_t} increments.
-\item \code{id}: A vector of ID numbers of length \code{t}.
-\item \code{n}: Number of individuals.
+}
+\item \code{fun}: Function used.
 }
 }
 \description{
@@ -330,7 +335,7 @@ x <- lapply(
 )
 
 # Type 0
-SimSSMOUFixed(
+ssm <- SimSSMOUFixed(
   n = n,
   mu0 = mu0,
   sigma0 = sigma0,
@@ -346,8 +351,10 @@ SimSSMOUFixed(
   burn_in = burn_in
 )
 
+plot(ssm)
+
 # Type 1
-SimSSMOUFixed(
+ssm <- SimSSMOUFixed(
   n = n,
   mu0 = mu0,
   sigma0 = sigma0,
@@ -365,8 +372,10 @@ SimSSMOUFixed(
   burn_in = burn_in
 )
 
+plot(ssm)
+
 # Type 2
-SimSSMOUFixed(
+ssm <- SimSSMOUFixed(
   n = n,
   mu0 = mu0,
   sigma0 = sigma0,
@@ -384,6 +393,8 @@ SimSSMOUFixed(
   time = time,
   burn_in = burn_in
 )
+
+plot(ssm)
 
 }
 \references{

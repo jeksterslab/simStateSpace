@@ -194,17 +194,8 @@
 #'
 #' @inheritParams SimSSMOU
 #' @inheritParams SimSSMFixed
+#' @inherit SimSSMFixed return
 #' @inherit SimSSMOU references
-#'
-#' @return Returns a list of length `n`.
-#'   Each element is a list with the following elements:
-#'   - `y`: A `t` by `k` matrix of values for the manifest variables.
-#'   - `eta`: A `t` by `p` matrix of values for the latent variables.
-#'   - `x`: A `t` by `j` matrix of values for the covariates.
-#'   - `time`: A vector of continuous time points of length `t`
-#'      starting from 0 with `delta_t` increments.
-#'   - `id`: A vector of ID numbers of length `t`.
-#'   - `n`: Number of individuals.
 #'
 #' @examples
 #' # prepare parameters
@@ -240,7 +231,7 @@
 #' )
 #'
 #' # Type 0
-#' SimSSMOUFixed(
+#' ssm <- SimSSMOUFixed(
 #'   n = n,
 #'   mu0 = mu0,
 #'   sigma0 = sigma0,
@@ -256,8 +247,10 @@
 #'   burn_in = burn_in
 #' )
 #'
+#' plot(ssm)
+#'
 #' # Type 1
-#' SimSSMOUFixed(
+#' ssm <- SimSSMOUFixed(
 #'   n = n,
 #'   mu0 = mu0,
 #'   sigma0 = sigma0,
@@ -275,8 +268,10 @@
 #'   burn_in = burn_in
 #' )
 #'
+#' plot(ssm)
+#'
 #' # Type 2
-#' SimSSMOUFixed(
+#' ssm <- SimSSMOUFixed(
 #'   n = n,
 #'   mu0 = mu0,
 #'   sigma0 = sigma0,
@@ -294,6 +289,8 @@
 #'   time = time,
 #'   burn_in = burn_in
 #' )
+#'
+#' plot(ssm)
 #'
 #' @family Simulation of State Space Models Data Functions
 #' @keywords simStateSpace sim ou
@@ -415,7 +412,7 @@ SimSSMOUFixed <- function(n,
     fun = "SimSSMOUFixed"
   )
   class(out) <- c(
-    "ssm",
+    "simstatespace",
     class(out)
   )
   return(

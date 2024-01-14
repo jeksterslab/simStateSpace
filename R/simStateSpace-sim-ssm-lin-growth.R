@@ -286,7 +286,7 @@
 #' )
 #'
 #' # Type 0
-#' SimSSMLinGrowth(
+#' ssm <- SimSSMLinGrowth(
 #'   n = n,
 #'   mu0 = mu0,
 #'   sigma0 = sigma0,
@@ -295,8 +295,10 @@
 #'   time = time
 #' )
 #'
+#' plot(ssm)
+#'
 #' # Type 1
-#' SimSSMLinGrowth(
+#' ssm <- SimSSMLinGrowth(
 #'   n = n,
 #'   mu0 = mu0,
 #'   sigma0 = sigma0,
@@ -307,8 +309,10 @@
 #'   time = time
 #' )
 #'
+#' plot(ssm)
+#'
 #' # Type 2
-#' SimSSMLinGrowth(
+#' ssm <- SimSSMLinGrowth(
 #'   n = n,
 #'   mu0 = mu0,
 #'   sigma0 = sigma0,
@@ -319,6 +323,8 @@
 #'   type = 2,
 #'   time = time
 #' )
+#'
+#' plot(ssm)
 #'
 #' @family Simulation of State Space Models Data Functions
 #' @keywords simStateSpace sim growth
@@ -403,7 +409,7 @@ SimSSMLinGrowth <- function(n,
     fun = "SimSSMLinGrowth"
   )
   class(out) <- c(
-    "ssm",
+    "simstatespace",
     class(out)
   )
   return(

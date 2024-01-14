@@ -103,7 +103,7 @@
 #' )
 #'
 #' # Type 0
-#' SimSSMIVary(
+#' ssm <- SimSSMIVary(
 #'   n = n,
 #'   mu0 = mu0,
 #'   sigma0 = sigma0,
@@ -118,8 +118,10 @@
 #'   burn_in = burn_in
 #' )
 #'
+#' plot(ssm)
+#'
 #' # Type 1
-#' SimSSMIVary(
+#' ssm <- SimSSMIVary(
 #'   n = n,
 #'   mu0 = mu0,
 #'   sigma0 = sigma0,
@@ -136,8 +138,10 @@
 #'   burn_in = burn_in
 #' )
 #'
+#' plot(ssm)
+#'
 #' # Type 2
-#' SimSSMIVary(
+#' ssm <- SimSSMIVary(
 #'   n = n,
 #'   mu0 = mu0,
 #'   sigma0 = sigma0,
@@ -154,6 +158,8 @@
 #'   time = time,
 #'   burn_in = burn_in
 #' )
+#'
+#' plot(ssm)
 #'
 #' @family Simulation of State Space Models Data Functions
 #' @keywords simStateSpace sim ssm
@@ -284,7 +290,7 @@ SimSSMIVary <- function(n,
     fun = "SimSSMIVary"
   )
   class(out) <- c(
-    "ssm",
+    "simstatespace",
     class(out)
   )
   return(

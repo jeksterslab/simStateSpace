@@ -275,18 +275,20 @@
 #'   17(2), 303–332.
 #'   \doi{10.1080/10705511003661553}
 #'
-#' @return Returns a list with the following elements:
+#' @return Returns an object of class `simstatespace`
+#'   which is a list with the following elements:
 #'   - `call`: Function call.
 #'   - `args`: Function arguments.
 #'   - `data`: Generated data which is a list of length `n`.
+#'     `data` is a list with the following elements:
+#'     * `id`: A vector of ones of length `t`.
+#'     * `time`: A vector of time points of length `t`.
+#'     * `y`: A `t` by `k` matrix of values for the manifest variables.
+#'     * `eta`: A `t` by `p` matrix of values for the latent variables.
+#'     * `x`: A `t` by `j` matrix of values for the covariates.
 #'   - `fun`: Function used.
 #'
-#'   `data` is a list with the following elements:
-#'   - `id`: A vector of ones.
-#'   - `time`: A vector of discrete time points from 0 to `t - 1`.
-#'   - `y`: A `t` by `k` matrix of values for the manifest variables.
-#'   - `eta`: A `t` by `p` matrix of values for the latent variables.
-#'   - `x`: A `t` by `j` matrix of values for the covariates.
+
 #'
 #' @examples
 #' # prepare parameters
@@ -311,7 +313,7 @@
 #' )
 #'
 #' # Type 0
-#' SimSSM(
+#' ssm <- SimSSM(
 #'   mu0 = mu0,
 #'   sigma0 = sigma0,
 #'   alpha = alpha,
@@ -325,8 +327,10 @@
 #'   burn_in = burn_in
 #' )
 #'
+#' plot(ssm)
+#'
 #' # Type 1
-#' SimSSM(
+#' ssm <- SimSSM(
 #'   mu0 = mu0,
 #'   sigma0 = sigma0,
 #'   alpha = alpha,
@@ -342,8 +346,10 @@
 #'   burn_in = burn_in
 #' )
 #'
+#' plot(ssm)
+#'
 #' # Type 2
-#' SimSSM(
+#' ssm <- SimSSM(
 #'   mu0 = mu0,
 #'   sigma0 = sigma0,
 #'   alpha = alpha,
@@ -359,6 +365,8 @@
 #'   time = time,
 #'   burn_in = burn_in
 #' )
+#'
+#' plot(ssm)
 #'
 #' @family Simulation of State Space Models Data Functions
 #' @keywords simStateSpace sim ssm
@@ -470,7 +478,7 @@ SimSSM <- function(mu0,
     fun = "SimSSM"
   )
   class(out) <- c(
-    "ssm",
+    "simstatespace",
     class(out)
   )
   return(

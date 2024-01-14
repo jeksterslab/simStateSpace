@@ -87,13 +87,21 @@ Number of time points to simulate.}
 Number of burn-in points to exclude before returning the results.}
 }
 \value{
-Returns a list with the following elements:
+Returns an object of class \code{simstatespace}
+which is a list with the following elements:
 \itemize{
+\item \code{call}: Function call.
+\item \code{args}: Function arguments.
+\item \code{data}: Generated data which is a list of length \code{n}.
+\code{data} is a list with the following elements:
+\itemize{
+\item \code{id}: A vector of ones of length \code{t}.
+\item \code{time}: A vector of time points of length \code{t}.
 \item \code{y}: A \code{t} by \code{k} matrix of values for the manifest variables.
 \item \code{eta}: A \code{t} by \code{p} matrix of values for the latent variables.
-\item \code{time}: A vector of continuous time points of length \code{t}
-starting from 0 with \code{delta_t} increments.
-\item \code{id}: A vector of ones.
+\item \code{x}: A \code{t} by \code{j} matrix of values for the covariates.
+}
+\item \code{fun}: Function used.
 }
 }
 \description{
@@ -315,7 +323,7 @@ x <- matrix(
 )
 
 # Type 0
-SimSSMOU(
+ssm <- SimSSMOU(
   mu0 = mu0,
   sigma0 = sigma0,
   mu = mu,
@@ -330,8 +338,10 @@ SimSSMOU(
   burn_in = burn_in
 )
 
+plot(ssm)
+
 # Type 1
-SimSSMOU(
+ssm <- SimSSMOU(
   mu0 = mu0,
   sigma0 = sigma0,
   mu = mu,
@@ -348,8 +358,10 @@ SimSSMOU(
   burn_in = burn_in
 )
 
+plot(ssm)
+
 # Type 2
-SimSSMOU(
+ssm <- SimSSMOU(
   mu0 = mu0,
   sigma0 = sigma0,
   mu = mu,
@@ -366,6 +378,8 @@ SimSSMOU(
   time = time,
   burn_in = burn_in
 )
+
+plot(ssm)
 
 }
 \references{

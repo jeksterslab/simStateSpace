@@ -205,6 +205,7 @@
 #'   (\eqn{\boldsymbol{\Sigma}}).
 #' @param delta_t Numeric.
 #'   Time interval (\eqn{\delta_t}).
+#' @inherit SimSSM return
 #' @inheritParams SimSSM
 #'
 #' @references
@@ -218,13 +219,6 @@
 #'   On the theory of the brownian motion.
 #'   *Physical Review*, *36*(5), 823–841.
 #'   \doi{10.1103/physrev.36.823}
-#'
-#' @return Returns a list with the following elements:
-#'   - `y`: A `t` by `k` matrix of values for the manifest variables.
-#'   - `eta`: A `t` by `p` matrix of values for the latent variables.
-#'   - `time`: A vector of continuous time points of length `t`
-#'      starting from 0 with `delta_t` increments.
-#'   - `id`: A vector of ones.
 #'
 #' @examples
 #' # prepare parameters
@@ -252,7 +246,7 @@
 #' )
 #'
 #' # Type 0
-#' SimSSMOU(
+#' ssm <- SimSSMOU(
 #'   mu0 = mu0,
 #'   sigma0 = sigma0,
 #'   mu = mu,
@@ -267,8 +261,10 @@
 #'   burn_in = burn_in
 #' )
 #'
+#' plot(ssm)
+#'
 #' # Type 1
-#' SimSSMOU(
+#' ssm <- SimSSMOU(
 #'   mu0 = mu0,
 #'   sigma0 = sigma0,
 #'   mu = mu,
@@ -285,8 +281,10 @@
 #'   burn_in = burn_in
 #' )
 #'
+#' plot(ssm)
+#'
 #' # Type 2
-#' SimSSMOU(
+#' ssm <- SimSSMOU(
 #'   mu0 = mu0,
 #'   sigma0 = sigma0,
 #'   mu = mu,
@@ -303,6 +301,8 @@
 #'   time = time,
 #'   burn_in = burn_in
 #' )
+#'
+#' plot(ssm)
 #'
 #' @family Simulation of State Space Models Data Functions
 #' @keywords simStateSpace sim ou
@@ -419,7 +419,7 @@ SimSSMOU <- function(mu0,
     fun = "SimSSMOUIVary"
   )
   class(out) <- c(
-    "ssm",
+    "simstatespace",
     class(out)
   )
   return(

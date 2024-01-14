@@ -119,7 +119,7 @@
 #' )
 #'
 #' # No covariates
-#' SimSSMVAR(
+#' ssm <- SimSSMVAR(
 #'   mu0 = mu0,
 #'   sigma0 = sigma0,
 #'   alpha = alpha,
@@ -129,8 +129,10 @@
 #'   burn_in = burn_in
 #' )
 #'
+#' plot(ssm)
+#'
 #' # With covariates
-#' SimSSMVAR(
+#' ssm <- SimSSMVAR(
 #'   mu0 = mu0,
 #'   sigma0 = sigma0,
 #'   alpha = alpha,
@@ -141,6 +143,8 @@
 #'   time = time,
 #'   burn_in = burn_in
 #' )
+#'
+#' plot(ssm)
 #'
 #' @family Simulation of State Space Models Data Functions
 #' @keywords simStateSpace sim var
@@ -207,7 +211,7 @@ SimSSMVAR <- function(mu0,
     fun = "SimSSMVAR"
   )
   class(out) <- c(
-    "ssm",
+    "simstatespace",
     class(out)
   )
   return(

@@ -233,18 +233,20 @@
 #' @inheritParams SimSSM
 #' @inherit SimSSM references
 #'
-#' @return Returns a list with the following elements:
+#' @return Returns an object of class `simstatespace`
+#'   which is a list with the following elements:
 #'   - `call`: Function call.
 #'   - `args`: Function arguments.
 #'   - `data`: Generated data which is a list of length `n`.
+#'     Each element of `data` is a list with the following elements:
+#'     * `id`: A vector of ID numbers of length `t`.
+#'     * `time`: A vector time points of length `t`.
+#'     * `y`: A `t` by `k` matrix of values for the manifest variables.
+#'     * `eta`: A `t` by `p` matrix of values for the latent variables.
+#'     * `x`: A `t` by `j` matrix of values for the covariates.
 #'   - `fun`: Function used.
 #'
-#'   Each element of `data` is a list with the following elements:
-#'   - `id`: A vector of ID numbers of length `t`.
-#'   - `time`: A vector of discrete time points from 0 to `t - 1`.
-#'   - `y`: A `t` by `k` matrix of values for the manifest variables.
-#'   - `eta`: A `t` by `p` matrix of values for the latent variables.
-#'   - `x`: A `t` by `j` matrix of values for the covariates.
+
 #'
 #' @examples
 #' # prepare parameters
@@ -277,7 +279,7 @@
 #' )
 #'
 #' # Type 0
-#' SimSSMFixed(
+#' ssm <- SimSSMFixed(
 #'   n = n,
 #'   mu0 = mu0,
 #'   sigma0 = sigma0,
@@ -292,8 +294,10 @@
 #'   burn_in = burn_in
 #' )
 #'
+#' plot(ssm)
+#'
 #' # Type 1
-#' SimSSMFixed(
+#' ssm <- SimSSMFixed(
 #'   n = n,
 #'   mu0 = mu0,
 #'   sigma0 = sigma0,
@@ -310,8 +314,10 @@
 #'   burn_in = burn_in
 #' )
 #'
+#' plot(ssm)
+#'
 #' # Type 2
-#' SimSSMFixed(
+#' ssm <- SimSSMFixed(
 #'   n = n,
 #'   mu0 = mu0,
 #'   sigma0 = sigma0,
@@ -328,6 +334,8 @@
 #'   time = time,
 #'   burn_in = burn_in
 #' )
+#'
+#' plot(ssm)
 #'
 #' @family Simulation of State Space Models Data Functions
 #' @keywords simStateSpace sim ssm
@@ -444,7 +452,7 @@ SimSSMFixed <- function(n,
     fun = "SimSSMFixed"
   )
   class(out) <- c(
-    "ssm",
+    "simstatespace",
     class(out)
   )
   return(
