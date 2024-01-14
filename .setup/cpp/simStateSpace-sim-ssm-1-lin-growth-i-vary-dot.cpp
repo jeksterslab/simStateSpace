@@ -6,7 +6,11 @@
 #include <RcppArmadillo.h>
 // [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::export(.SimSSM1LinGrowthIVary)]]
-Rcpp::List SimSSM1LinGrowthIVary(const int n, const Rcpp::List& mu0, const Rcpp::List& sigma0_l, const Rcpp::List& theta_l, const Rcpp::List& gamma_eta, const Rcpp::List& x, const int time) {
+Rcpp::List SimSSM1LinGrowthIVary(const int n, const Rcpp::List& mu0,
+                                 const Rcpp::List& sigma0_l,
+                                 const Rcpp::List& theta_l,
+                                 const Rcpp::List& gamma_eta,
+                                 const Rcpp::List& x, const int time) {
   // Step 1: Create constant vectors and matrices
   arma::mat lambda = {{1, 0}};
   arma::mat beta = {{1, 1}, {0, 1}};
@@ -27,7 +31,8 @@ Rcpp::List SimSSM1LinGrowthIVary(const int n, const Rcpp::List& mu0, const Rcpp:
     arma::mat gamma_eta_temp = gamma_eta[i];
 
     // Step 3.2: Generate initial condition
-    eta.col(0) = mu0_temp + (sigma0_l_temp * arma::randn(2)) + (gamma_eta_temp * x_t.col(0));
+    eta.col(0) = mu0_temp + (sigma0_l_temp * arma::randn(2)) +
+                 (gamma_eta_temp * x_t.col(0));
     y.col(0) = (lambda * eta.col(0)) + (theta_l_temp * arma::randn(1));
 
     // Step 3.3: Simulate state space model data using a loop
@@ -41,7 +46,11 @@ Rcpp::List SimSSM1LinGrowthIVary(const int n, const Rcpp::List& mu0, const Rcpp:
     id.fill(i + 1);
 
     // Step 3.5: Save the transposed data matrices in a list
-    out[i] = Rcpp::List::create(Rcpp::Named("id") = id, Rcpp::Named("time") = arma::regspace(0, time - 1), Rcpp::Named("y") = y.t(), Rcpp::Named("eta") = eta.t(), Rcpp::Named("x") = x_t.t());
+    out[i] = Rcpp::List::create(
+        Rcpp::Named("id") = id,
+        Rcpp::Named("time") = arma::regspace(0, time - 1),
+        Rcpp::Named("y") = y.t(), Rcpp::Named("eta") = eta.t(),
+        Rcpp::Named("x") = x_t.t());
   }
 
   // Step 4: Return the results
