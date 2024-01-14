@@ -84,7 +84,7 @@
       sep = "_"
     )
   )
-  rownames(out) <- seq_len(dim(out)[1])
+  rownames(out) <- NULL
   attributes(out)$n <- dims$n
   attributes(out)$k <- dims$k
   attributes(out)$p <- dims$p
@@ -473,8 +473,8 @@ print.simstatespace <- function(x,
       "Use `as.data.frame` or `as.matrix` on the output of",
       " `",
       x$fun,
-      "` ",
-      "to convert it to a data frame or a matrix.\n",
+      "`",
+      "\nto convert it to a data frame or a matrix.\n",
       "\n"
     )
   )
