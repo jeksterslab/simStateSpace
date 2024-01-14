@@ -60,6 +60,7 @@ lapply(
     print(ssm)
     plot(ssm)
     plot(ssm, eta = TRUE)
+    plot(ssm, id = 1:3, time = 1:10)
 
     # Type 1
     ssm <- SimSSMFixed(
@@ -90,6 +91,7 @@ lapply(
     print(ssm)
     plot(ssm)
     plot(ssm, eta = TRUE)
+    plot(ssm, id = 1:3, time = 1:10)
 
     # Type 2
     ssm <- SimSSMFixed(
@@ -121,6 +123,7 @@ lapply(
     print(ssm)
     plot(ssm)
     plot(ssm, eta = TRUE)
+    plot(ssm, id = 1:3, time = 1:10)
 
     # Error
     testthat::test_that(
@@ -141,6 +144,48 @@ lapply(
             gamma_eta = gamma_eta,
             x = x,
             type = 3,
+            time = time,
+            burn_in = burn_in
+          )
+        )
+      }
+    )
+    testthat::test_that(
+      paste(text, "error type 1"),
+      {
+        testthat::expect_error(
+          SimSSMFixed(
+            n = n,
+            mu0 = mu0,
+            sigma0 = sigma0,
+            alpha = alpha,
+            beta = beta,
+            psi = psi,
+            nu = nu,
+            lambda = lambda,
+            theta = theta,
+            type = 1,
+            time = time,
+            burn_in = burn_in
+          )
+        )
+      }
+    )
+    testthat::test_that(
+      paste(text, "error type 2"),
+      {
+        testthat::expect_error(
+          SimSSMFixed(
+            n = n,
+            mu0 = mu0,
+            sigma0 = sigma0,
+            alpha = alpha,
+            beta = beta,
+            psi = psi,
+            nu = nu,
+            lambda = lambda,
+            theta = theta,
+            type = 2,
             time = time,
             burn_in = burn_in
           )

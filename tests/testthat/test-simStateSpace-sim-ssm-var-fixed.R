@@ -53,6 +53,7 @@ lapply(
     print(ssm)
     plot(ssm)
     plot(ssm, eta = TRUE)
+    plot(ssm, id = 1:3, time = 1:10)
 
     # With covariates
     ssm <- SimSSMVARFixed(
@@ -79,6 +80,7 @@ lapply(
     print(ssm)
     plot(ssm)
     plot(ssm, eta = TRUE)
+    plot(ssm, id = 1:3, time = 1:10)
   },
   text = "test-simStateSpace-sim-ssm-var-fixed"
 )
