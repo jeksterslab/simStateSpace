@@ -468,10 +468,10 @@ plot.ssm <- function(x,
 print.ssm <- function(x,
                       eta = FALSE,
                       ...) {
-  out <-     .Long(
-      x = x,
-      eta = eta
-    )
+  out <- .Long(
+    x = x,
+    eta = eta
+  )
   attributes(out)$n <- NULL
   attributes(out)$k <- NULL
   attributes(out)$p <- NULL
