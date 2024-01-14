@@ -3,7 +3,6 @@
 #'
 #' This function simulates data from the Ornstein–Uhlenbeck model
 #' using a state space model parameterization.
-#' See Details for more information.
 #'
 #' @details
 #'   ## Type 0

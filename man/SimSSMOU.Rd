@@ -108,7 +108,6 @@ which is a list with the following elements:
 \description{
 This function simulates data from the Ornstein–Uhlenbeck model
 using a state space model parameterization.
-See Details for more information.
 }
 \details{
 \subsection{Type 0}{

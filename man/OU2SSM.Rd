@@ -43,7 +43,6 @@ The process noise covariance matrix
 \description{
 This function converts parameters from the Ornstein–Uhlenbeck model
 to state space model parameterization.
-See Details for more information.
 }
 \details{
 The state space parameters

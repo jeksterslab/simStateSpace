@@ -76,7 +76,6 @@ which is a list with the following elements:
 \description{
 This function simulates data from the vector autoregressive model
 using a state space model parameterization.
-See Details for more information.
 }
 \details{
 The measurement model is given by

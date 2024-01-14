@@ -116,7 +116,6 @@ using a state space model parameterization
 for \code{n > 1} individuals.
 In this model,
 the parameters are invariant across individuals.
-See Details for more information.
 }
 \details{
 \subsection{Type 0}{

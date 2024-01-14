@@ -101,7 +101,6 @@ which is a list with the following elements:
 }
 \description{
 This function simulates data from a state space model.
-See Details for more information.
 }
 \details{
 \subsection{Type 0}{
