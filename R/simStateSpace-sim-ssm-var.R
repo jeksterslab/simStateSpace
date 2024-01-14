@@ -3,7 +3,7 @@
 #'
 #' This function simulates data from the vector autoregressive model
 #' using a state space model parameterization.
-#' See details for more information.
+#' See Details for more information.
 #'
 #' @details The measurement model is given by
 #'   \deqn{

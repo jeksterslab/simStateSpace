@@ -1,7 +1,7 @@
 #' Simulate Data from a State Space Model (n = 1)
 #'
 #' This function simulates data from a state space model.
-#' See details for more information.
+#' See Details for more information.
 #'
 #' @details
 #'   ## Type 0
@@ -262,6 +262,7 @@
 #'   The number of rows should be equal to `time + burn_in`.
 #' @param type Integer.
 #'   State space model type.
+#'   See Details for more information.
 #' @param time Positive integer.
 #'   Number of time points to simulate.
 #' @param burn_in Positive integer.
@@ -287,8 +288,6 @@
 #'     * `eta`: A `t` by `p` matrix of values for the latent variables.
 #'     * `x`: A `t` by `j` matrix of values for the covariates.
 #'   - `fun`: Function used.
-#'
-
 #'
 #' @examples
 #' # prepare parameters
