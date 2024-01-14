@@ -176,8 +176,8 @@ SimSSMIVary <- function(n,
                         gamma_y = NULL,
                         gamma_eta = NULL,
                         x = NULL,
-                        type,
-                        time = 0,
+                        type = 0,
+                        time,
                         burn_in = 0) {
   foo <- function(x) {
     return(

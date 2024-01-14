@@ -109,7 +109,7 @@
 #' alpha <- null_vec
 #' beta <- diag(x = 0.5, nrow = k)
 #' psi <- iden
-#' time <- 50
+#' time <- 1000
 #' burn_in <- 0
 #' gamma_eta <- 0.10 * diag(k)
 #' x <- matrix(
