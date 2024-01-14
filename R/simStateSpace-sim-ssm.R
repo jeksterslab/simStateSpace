@@ -1,7 +1,6 @@
 #' Simulate Data from a State Space Model (n = 1)
 #'
 #' This function simulates data from a state space model.
-#' See Details for more information.
 #'
 #' @details
 #'   ## Type 0

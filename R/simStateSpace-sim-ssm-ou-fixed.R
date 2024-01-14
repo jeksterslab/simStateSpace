@@ -7,7 +7,6 @@
 #' for `n > 1` individuals.
 #' In this model,
 #' the parameters are invariant across individuals.
-#' See Details for more information.
 #'
 #' @details
 #'   ## Type 0

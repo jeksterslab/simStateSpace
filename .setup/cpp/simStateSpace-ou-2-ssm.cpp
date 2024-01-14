@@ -11,7 +11,6 @@
 //'
 //' This function converts parameters from the Ornstein–Uhlenbeck model
 //' to state space model parameterization.
-//' See Details for more information.
 //'
 //' @details The state space parameters
 //'   as a function of the  Ornstein–Uhlenbeck model parameters
@@ -116,15 +115,13 @@
 //' @keywords simStateSpace sim ou
 //' @export
 // [[Rcpp::export]]
-Rcpp::List OU2SSM(const arma::vec& mu, const arma::mat& phi,
-                  const arma::mat& sigma, const double delta_t) {
+Rcpp::List OU2SSM(const arma::vec& mu, const arma::mat& phi, const arma::mat& sigma, const double delta_t) {
   // Step 1: Determine indices
   int num_latent_vars = mu.n_elem;
 
   // Step 2: Get state space parameters
   arma::mat I = arma::eye<arma::mat>(num_latent_vars, num_latent_vars);
-  arma::mat J = arma::eye<arma::mat>(num_latent_vars * num_latent_vars,
-                                     num_latent_vars * num_latent_vars);
+  arma::mat J = arma::eye<arma::mat>(num_latent_vars * num_latent_vars, num_latent_vars * num_latent_vars);
   arma::mat neg_phi = -1 * phi;
   // 2.1 beta
   arma::mat beta = arma::expmat(neg_phi * delta_t);  // A(Delta t)
@@ -133,12 +130,9 @@ Rcpp::List OU2SSM(const arma::vec& mu, const arma::mat& phi,
   // 2.3 psi
   arma::mat neg_phi_hashtag = arma::kron(neg_phi, I) + arma::kron(I, neg_phi);
   arma::vec sigma_vec = arma::vectorise(sigma);
-  arma::vec psi_vec = arma::inv(neg_phi_hashtag) *
-                      (arma::expmat(neg_phi_hashtag * delta_t) - J) * sigma_vec;
+  arma::vec psi_vec = arma::inv(neg_phi_hashtag) * (arma::expmat(neg_phi_hashtag * delta_t) - J) * sigma_vec;
   arma::mat psi = arma::reshape(psi_vec, num_latent_vars, num_latent_vars);
 
   // Step 3: Return state space parameters in a list
-  return Rcpp::List::create(Rcpp::Named("alpha") = alpha,
-                            Rcpp::Named("beta") = beta,
-                            Rcpp::Named("psi") = psi);
+  return Rcpp::List::create(Rcpp::Named("alpha") = alpha, Rcpp::Named("beta") = beta, Rcpp::Named("psi") = psi);
 }
