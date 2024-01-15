@@ -50,14 +50,14 @@ lapply(
       time = time
     )
 
-    as.data.frame(ssm, eta = TRUE)
-    as.data.frame(ssm, eta = FALSE)
-    as.data.frame(ssm, eta = TRUE, long = FALSE)
-    as.data.frame(ssm, eta = FALSE, long = FALSE)
-    as.matrix(ssm, eta = TRUE)
-    as.matrix(ssm, eta = FALSE)
-    as.matrix(ssm, eta = TRUE, long = FALSE)
-    as.matrix(ssm, eta = FALSE, long = FALSE)
+    as.data.frame.simstatespace(ssm, eta = TRUE)
+    as.data.frame.simstatespace(ssm, eta = FALSE)
+    as.data.frame.simstatespace(ssm, eta = TRUE, long = FALSE)
+    as.data.frame.simstatespace(ssm, eta = FALSE, long = FALSE)
+    as.matrix.simstatespace(ssm, eta = TRUE)
+    as.matrix.simstatespace(ssm, eta = FALSE)
+    as.matrix.simstatespace(ssm, eta = TRUE, long = FALSE)
+    as.matrix.simstatespace(ssm, eta = FALSE, long = FALSE)
 
     # Type 1
     ssm <- SimSSMLinGrowthIVary(
@@ -71,14 +71,14 @@ lapply(
       time = time
     )
 
-    as.data.frame(ssm, eta = TRUE)
-    as.data.frame(ssm, eta = FALSE)
-    as.data.frame(ssm, eta = TRUE, long = FALSE)
-    as.data.frame(ssm, eta = FALSE, long = FALSE)
-    as.matrix(ssm, eta = TRUE)
-    as.matrix(ssm, eta = FALSE)
-    as.matrix(ssm, eta = TRUE, long = FALSE)
-    as.matrix(ssm, eta = FALSE, long = FALSE)
+    as.data.frame.simstatespace(ssm, eta = TRUE)
+    as.data.frame.simstatespace(ssm, eta = FALSE)
+    as.data.frame.simstatespace(ssm, eta = TRUE, long = FALSE)
+    as.data.frame.simstatespace(ssm, eta = FALSE, long = FALSE)
+    as.matrix.simstatespace(ssm, eta = TRUE)
+    as.matrix.simstatespace(ssm, eta = FALSE)
+    as.matrix.simstatespace(ssm, eta = TRUE, long = FALSE)
+    as.matrix.simstatespace(ssm, eta = FALSE, long = FALSE)
 
     # Type 2
     ssm <- SimSSMLinGrowthIVary(
@@ -93,14 +93,14 @@ lapply(
       time = time
     )
 
-    as.data.frame(ssm, eta = TRUE)
-    as.data.frame(ssm, eta = FALSE)
-    as.data.frame(ssm, eta = TRUE, long = FALSE)
-    as.data.frame(ssm, eta = FALSE, long = FALSE)
-    as.matrix(ssm, eta = TRUE)
-    as.matrix(ssm, eta = FALSE)
-    as.matrix(ssm, eta = TRUE, long = FALSE)
-    as.matrix(ssm, eta = FALSE, long = FALSE)
+    as.data.frame.simstatespace(ssm, eta = TRUE)
+    as.data.frame.simstatespace(ssm, eta = FALSE)
+    as.data.frame.simstatespace(ssm, eta = TRUE, long = FALSE)
+    as.data.frame.simstatespace(ssm, eta = FALSE, long = FALSE)
+    as.matrix.simstatespace(ssm, eta = TRUE)
+    as.matrix.simstatespace(ssm, eta = FALSE)
+    as.matrix.simstatespace(ssm, eta = TRUE, long = FALSE)
+    as.matrix.simstatespace(ssm, eta = FALSE, long = FALSE)
 
     # Error
     testthat::test_that(
