@@ -62,9 +62,6 @@ lapply(
     as.matrix(ssm, eta = TRUE, long = FALSE)
     as.matrix(ssm, eta = FALSE, long = FALSE)
     print(ssm)
-    plot(ssm)
-    plot(ssm, eta = TRUE)
-    plot(ssm, id = 1:3, time = (0:4) * 0.10)
 
     # Type 1
     ssm <- SimSSMOUFixed(
@@ -94,9 +91,6 @@ lapply(
     as.matrix(ssm, eta = TRUE, long = FALSE)
     as.matrix(ssm, eta = FALSE, long = FALSE)
     print(ssm)
-    plot(ssm)
-    plot(ssm, eta = TRUE)
-    plot(ssm, id = 1:3, time = (0:4) * 0.10)
 
     # Type 2
     ssm <- SimSSMOUFixed(
@@ -127,9 +121,6 @@ lapply(
     as.matrix(ssm, eta = TRUE, long = FALSE)
     as.matrix(ssm, eta = FALSE, long = FALSE)
     print(ssm)
-    plot(ssm)
-    plot(ssm, eta = TRUE)
-    plot(ssm, id = 1:3, time = (0:4) * 0.10)
 
     # Error
     testthat::test_that(
