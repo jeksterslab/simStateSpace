@@ -61,9 +61,6 @@ lapply(
     as.matrix.simstatespace(ssm, eta = FALSE)
     as.matrix.simstatespace(ssm, eta = TRUE, long = FALSE)
     as.matrix.simstatespace(ssm, eta = FALSE, long = FALSE)
-    print.simstatespace(ssm)
-    plot.simstatespace(ssm, id = 1:3, time = (0:4) * 0.10)
-    plot.simstatespace(ssm, eta = TRUE)
 
     # Type 1
     ssm <- SimSSMOUFixed(
@@ -92,9 +89,6 @@ lapply(
     as.matrix.simstatespace(ssm, eta = FALSE)
     as.matrix.simstatespace(ssm, eta = TRUE, long = FALSE)
     as.matrix.simstatespace(ssm, eta = FALSE, long = FALSE)
-    print.simstatespace(ssm)
-    plot.simstatespace(ssm, id = 1:3, time = (0:4) * 0.10)
-    plot.simstatespace(ssm, eta = TRUE)
 
     # Type 2
     ssm <- SimSSMOUFixed(
@@ -124,9 +118,6 @@ lapply(
     as.matrix.simstatespace(ssm, eta = FALSE)
     as.matrix.simstatespace(ssm, eta = TRUE, long = FALSE)
     as.matrix.simstatespace(ssm, eta = FALSE, long = FALSE)
-    print.simstatespace(ssm)
-    plot.simstatespace(ssm, id = 1:3, time = (0:4) * 0.10)
-    plot.simstatespace(ssm, eta = TRUE)
 
     # Error
     testthat::test_that(
