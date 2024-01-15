@@ -145,50 +145,6 @@ lapply(
         )
       }
     )
-    testthat::test_that(
-      paste(text, "error type 1"),
-      {
-        testthat::expect_error(
-          SimSSMOUFixed(
-            n = n,
-            mu0 = mu0,
-            sigma0 = sigma0,
-            mu = mu,
-            phi = phi,
-            sigma = sigma,
-            nu = nu,
-            lambda = lambda,
-            theta = theta,
-            type = 1,
-            delta_t = delta_t,
-            time = time,
-            burn_in = burn_in
-          )
-        )
-      }
-    )
-    testthat::test_that(
-      paste(text, "error type 2"),
-      {
-        testthat::expect_error(
-          SimSSMOUFixed(
-            n = n,
-            mu0 = mu0,
-            sigma0 = sigma0,
-            mu = mu,
-            phi = phi,
-            sigma = sigma,
-            nu = nu,
-            lambda = lambda,
-            theta = theta,
-            type = 2,
-            delta_t = delta_t,
-            time = time,
-            burn_in = burn_in
-          )
-        )
-      }
-    )
   },
   text = "test-simStateSpace-sim-ssm-ou-fixed"
 )

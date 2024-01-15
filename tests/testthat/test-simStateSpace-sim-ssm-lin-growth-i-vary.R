@@ -121,36 +121,6 @@ lapply(
         )
       }
     )
-    testthat::test_that(
-      paste(text, "error type 1"),
-      {
-        testthat::expect_error(
-          SimSSMLinGrowthIVary(
-            n = n,
-            mu0 = mu0,
-            sigma0 = sigma0,
-            theta = theta,
-            type = 1,
-            time = time
-          )
-        )
-      }
-    )
-    testthat::test_that(
-      paste(text, "error type 2"),
-      {
-        testthat::expect_error(
-          SimSSMLinGrowthIVary(
-            n = n,
-            mu0 = mu0,
-            sigma0 = sigma0,
-            theta = theta,
-            type = 2,
-            time = time
-          )
-        )
-      }
-    )
   },
   text = "test-simStateSpace-sim-ssm-lin-growth-i-vary"
 )

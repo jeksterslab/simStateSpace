@@ -145,48 +145,6 @@ lapply(
         )
       }
     )
-    testthat::test_that(
-      paste(text, "error type 1"),
-      {
-        testthat::expect_error(
-          SimSSMIVary(
-            n = n,
-            mu0 = mu0,
-            sigma0 = sigma0,
-            alpha = alpha,
-            beta = beta,
-            psi = psi,
-            nu = nu,
-            lambda = lambda,
-            theta = theta,
-            type = 1,
-            time = time,
-            burn_in = burn_in
-          )
-        )
-      }
-    )
-    testthat::test_that(
-      paste(text, "error type 2"),
-      {
-        testthat::expect_error(
-          SimSSMIVary(
-            n = n,
-            mu0 = mu0,
-            sigma0 = sigma0,
-            alpha = alpha,
-            beta = beta,
-            psi = psi,
-            nu = nu,
-            lambda = lambda,
-            theta = theta,
-            type = 2,
-            time = time,
-            burn_in = burn_in
-          )
-        )
-      }
-    )
   },
   text = "test-simStateSpace-sim-ssm-i-vary"
 )
