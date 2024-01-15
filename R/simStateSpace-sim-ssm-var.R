@@ -159,7 +159,10 @@ SimSSMVAR <- function(mu0,
                       burn_in = 0) {
   sigma0_l <- t(chol(sigma0))
   psi_l <- t(chol(psi))
-  if (is.null(gamma_eta) || is.null(x)) {
+  if (is.null(x)) {
+    stopifnot(
+      is.null(gamma_eta)
+    )
     data <- .SimSSM0VAR(
       mu0 = mu0,
       sigma0_l = sigma0_l,
@@ -171,6 +174,9 @@ SimSSMVAR <- function(mu0,
     )
     covariates <- FALSE
   } else {
+    stopifnot(
+      !is.null(gamma_eta)
+    )
     data <- .SimSSM1VAR(
       mu0 = mu0,
       sigma0_l = sigma0_l,

@@ -352,6 +352,10 @@ SimSSMLinGrowth <- function(n,
       )
     },
     "1" = {
+      stopifnot(
+        !is.null(x),
+        !is.null(gamma_eta)
+      )
       .SimSSM1LinGrowth(
         n = n,
         mu0 = mu0,
@@ -363,6 +367,11 @@ SimSSMLinGrowth <- function(n,
       )
     },
     "2" = {
+      stopifnot(
+        !is.null(x),
+        !is.null(gamma_y),
+        !is.null(gamma_eta)
+      )
       .SimSSM2LinGrowth(
         n = n,
         mu0 = mu0,

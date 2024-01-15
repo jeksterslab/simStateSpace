@@ -51,6 +51,9 @@ lapply(
     as.matrix.simstatespace(ssm, eta = FALSE)
     as.matrix.simstatespace(ssm, eta = TRUE, long = FALSE)
     as.matrix.simstatespace(ssm, eta = FALSE, long = FALSE)
+    print.simstatespace(ssm)
+    plot.simstatespace(ssm, id = 1:3, time = 0:4)
+    plot.simstatespace(ssm, eta = TRUE)
 
     # Type 1
     ssm <- SimSSMLinGrowth(
@@ -72,6 +75,9 @@ lapply(
     as.matrix.simstatespace(ssm, eta = FALSE)
     as.matrix.simstatespace(ssm, eta = TRUE, long = FALSE)
     as.matrix.simstatespace(ssm, eta = FALSE, long = FALSE)
+    print.simstatespace(ssm)
+    plot.simstatespace(ssm, id = 1:3, time = 0:4)
+    plot.simstatespace(ssm, eta = TRUE)
 
     # Type 2
     ssm <- SimSSMLinGrowth(
@@ -94,6 +100,9 @@ lapply(
     as.matrix.simstatespace(ssm, eta = FALSE)
     as.matrix.simstatespace(ssm, eta = TRUE, long = FALSE)
     as.matrix.simstatespace(ssm, eta = FALSE, long = FALSE)
+    print.simstatespace(ssm)
+    plot.simstatespace(ssm, id = 1:3, time = 0:4)
+    plot.simstatespace(ssm, eta = TRUE)
 
     # Error
     testthat::test_that(
@@ -109,6 +118,36 @@ lapply(
             gamma_eta = gamma_eta,
             x = x,
             type = 3,
+            time = time
+          )
+        )
+      }
+    )
+    testthat::test_that(
+      paste(text, "error type 1"),
+      {
+        testthat::expect_error(
+          SimSSMLinGrowth(
+            n = n,
+            mu0 = mu0,
+            sigma0 = sigma0,
+            theta = theta,
+            type = 1,
+            time = time
+          )
+        )
+      }
+    )
+    testthat::test_that(
+      paste(text, "error type 2"),
+      {
+        testthat::expect_error(
+          SimSSMLinGrowth(
+            n = n,
+            mu0 = mu0,
+            sigma0 = sigma0,
+            theta = theta,
+            type = 2,
             time = time
           )
         )

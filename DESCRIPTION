@@ -32,4 +32,3 @@ Suggests:
     rmarkdown,
     testthat,
     Matrix
-RoxygenNote: 7.3.0

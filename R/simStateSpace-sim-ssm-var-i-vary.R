@@ -116,7 +116,10 @@ SimSSMVARIVary <- function(n,
     X = psi,
     FUN = foo
   )
-  if (is.null(gamma_eta) || is.null(x)) {
+  if (is.null(x)) {
+    stopifnot(
+      is.null(gamma_eta)
+    )
     data <- .SimSSM0VARIVary(
       n = n,
       mu0 = rep(x = mu0, length.out = n),
@@ -129,6 +132,9 @@ SimSSMVARIVary <- function(n,
     )
     covariates <- FALSE
   } else {
+    stopifnot(
+      !is.null(gamma_eta)
+    )
     data <- .SimSSM1VARIVary(
       n = n,
       mu0 = rep(x = mu0, length.out = n),
