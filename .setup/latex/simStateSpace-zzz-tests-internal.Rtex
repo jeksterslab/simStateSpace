@@ -79,6 +79,14 @@
 
 %% begin.rcode
 % #| file = root$find_file(
+% #|   "tests",
+% #|   "testthat.R"
+% #| ),
+% #| echo = FALSE
+%% end.rcode
+
+%% begin.rcode
+% #| file = root$find_file(
 % #|   ".setup",
 % #|   "latex",
 % #|   "r-scripts",
