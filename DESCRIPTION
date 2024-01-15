@@ -25,8 +25,7 @@ LinkingTo:
     Rcpp,
     RcppArmadillo
 Imports: 
-    Rcpp,
-    graphics
+    Rcpp
 Suggests:
     knitr,
     rmarkdown,
