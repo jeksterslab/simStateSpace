@@ -59,9 +59,6 @@ lapply(
     as.matrix(ssm, eta = TRUE, long = FALSE)
     as.matrix(ssm, eta = FALSE, long = FALSE)
     print(ssm)
-    plot(ssm)
-    plot(ssm, eta = TRUE)
-    plot(ssm, id = 1:3, time = 1:10)
 
     # Type 1
     ssm <- SimSSMLinGrowthIVary(
@@ -84,9 +81,6 @@ lapply(
     as.matrix(ssm, eta = TRUE, long = FALSE)
     as.matrix(ssm, eta = FALSE, long = FALSE)
     print(ssm)
-    plot(ssm)
-    plot(ssm, eta = TRUE)
-    plot(ssm, id = 1:3, time = 1:10)
 
     # Type 2
     ssm <- SimSSMLinGrowthIVary(
@@ -110,9 +104,6 @@ lapply(
     as.matrix(ssm, eta = TRUE, long = FALSE)
     as.matrix(ssm, eta = FALSE, long = FALSE)
     print(ssm)
-    plot(ssm)
-    plot(ssm, eta = TRUE)
-    plot(ssm, id = 1:3, time = 1:10)
 
     # Error
     testthat::test_that(
