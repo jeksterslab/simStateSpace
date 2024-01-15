@@ -49,14 +49,17 @@ lapply(
       burn_in = burn_in
     )
 
-    as.data.frame(ssm, eta = TRUE)
-    as.data.frame(ssm, eta = FALSE)
-    as.data.frame(ssm, eta = TRUE, long = FALSE)
-    as.data.frame(ssm, eta = FALSE, long = FALSE)
-    as.matrix(ssm, eta = TRUE)
-    as.matrix(ssm, eta = FALSE)
-    as.matrix(ssm, eta = TRUE, long = FALSE)
-    as.matrix(ssm, eta = FALSE, long = FALSE)
+    simStateSpace::as.data.frame.simstatespace(ssm, eta = TRUE)
+    simStateSpace::as.data.frame.simstatespace(ssm, eta = FALSE)
+    simStateSpace::as.data.frame.simstatespace(ssm, eta = TRUE, long = FALSE)
+    simStateSpace::as.data.frame.simstatespace(ssm, eta = FALSE, long = FALSE)
+    simStateSpace::as.matrix.simstatespace(ssm, eta = TRUE)
+    simStateSpace::as.matrix.simstatespace(ssm, eta = FALSE)
+    simStateSpace::as.matrix.simstatespace(ssm, eta = TRUE, long = FALSE)
+    simStateSpace::as.matrix.simstatespace(ssm, eta = FALSE, long = FALSE)
+    simStateSpace::print.simstatespace(ssm)
+    simStateSpace::plot.simstatespace(ssm, id = 1:3, time = 1:10)
+    simStateSpace::plot.simstatespace(ssm, eta = TRUE)
 
     # With covariates
     ssm <- SimSSMVARIVary(
@@ -72,14 +75,17 @@ lapply(
       burn_in = burn_in
     )
 
-    as.data.frame(ssm, eta = TRUE)
-    as.data.frame(ssm, eta = FALSE)
-    as.data.frame(ssm, eta = TRUE, long = FALSE)
-    as.data.frame(ssm, eta = FALSE, long = FALSE)
-    as.matrix(ssm, eta = TRUE)
-    as.matrix(ssm, eta = FALSE)
-    as.matrix(ssm, eta = TRUE, long = FALSE)
-    as.matrix(ssm, eta = FALSE, long = FALSE)
+    simStateSpace::as.data.frame.simstatespace(ssm, eta = TRUE)
+    simStateSpace::as.data.frame.simstatespace(ssm, eta = FALSE)
+    simStateSpace::as.data.frame.simstatespace(ssm, eta = TRUE, long = FALSE)
+    simStateSpace::as.data.frame.simstatespace(ssm, eta = FALSE, long = FALSE)
+    simStateSpace::as.matrix.simstatespace(ssm, eta = TRUE)
+    simStateSpace::as.matrix.simstatespace(ssm, eta = FALSE)
+    simStateSpace::as.matrix.simstatespace(ssm, eta = TRUE, long = FALSE)
+    simStateSpace::as.matrix.simstatespace(ssm, eta = FALSE, long = FALSE)
+    simStateSpace::print.simstatespace(ssm)
+    simStateSpace::plot.simstatespace(ssm, id = 1:3, time = 1:10)
+    simStateSpace::plot.simstatespace(ssm, eta = TRUE)
   },
   text = "test-simStateSpace-sim-ssm-var-i-vary"
 )
