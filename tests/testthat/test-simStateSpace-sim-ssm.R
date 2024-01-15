@@ -48,8 +48,6 @@ lapply(
     as.matrix(ssm, eta = TRUE, long = FALSE)
     as.matrix(ssm, eta = FALSE, long = FALSE)
     print(ssm)
-    plot(ssm, id = 1:3, time = 1:10)
-    plot(ssm, eta = TRUE)
 
     # Type 1
     ssm <- SimSSM(
