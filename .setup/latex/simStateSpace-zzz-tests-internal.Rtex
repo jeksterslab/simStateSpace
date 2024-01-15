@@ -78,11 +78,7 @@
 \section*{Tests}
 
 %% begin.rcode
-% #| file = root$find_file(
-% #|   "tests",
-% #|   "testthat.R"
-% #| ),
-% #| echo = FALSE
+% library(simStateSpace)
 %% end.rcode
 
 %% begin.rcode
