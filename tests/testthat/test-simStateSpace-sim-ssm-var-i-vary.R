@@ -38,7 +38,7 @@ lapply(
     )
 
     # No covariates
-    ssm <- SimSSMVARIVary(
+    ssm <- simStateSpace::SimSSMVARIVary(
       n = n,
       mu0 = mu0,
       sigma0 = sigma0,
@@ -62,7 +62,7 @@ lapply(
     plot.simstatespace(ssm, eta = TRUE)
 
     # With covariates
-    ssm <- SimSSMVARIVary(
+    ssm <- simStateSpace::SimSSMVARIVary(
       n = n,
       mu0 = mu0,
       sigma0 = sigma0,

@@ -41,7 +41,7 @@ lapply(
     )
 
     # Type 0
-    ssm <- SimSSMLinGrowthIVary(
+    ssm <- simStateSpace::SimSSMLinGrowthIVary(
       n = n,
       mu0 = mu0,
       sigma0 = sigma0,
@@ -63,7 +63,7 @@ lapply(
     plot.simstatespace(ssm, eta = TRUE)
 
     # Type 1
-    ssm <- SimSSMLinGrowthIVary(
+    ssm <- simStateSpace::SimSSMLinGrowthIVary(
       n = n,
       mu0 = mu0,
       sigma0 = sigma0,
@@ -87,7 +87,7 @@ lapply(
     plot.simstatespace(ssm, eta = TRUE)
 
     # Type 2
-    ssm <- SimSSMLinGrowthIVary(
+    ssm <- simStateSpace::SimSSMLinGrowthIVary(
       n = n,
       mu0 = mu0,
       sigma0 = sigma0,
@@ -116,7 +116,7 @@ lapply(
       paste(text, "error"),
       {
         testthat::expect_error(
-          SimSSMLinGrowthIVary(
+          simStateSpace::SimSSMLinGrowthIVary(
             n = n,
             mu0 = mu0,
             sigma0 = sigma0,
@@ -134,7 +134,7 @@ lapply(
       paste(text, "error type 1"),
       {
         testthat::expect_error(
-          SimSSMLinGrowthIVary(
+          simStateSpace::SimSSMLinGrowthIVary(
             n = n,
             mu0 = mu0,
             sigma0 = sigma0,
@@ -149,7 +149,7 @@ lapply(
       paste(text, "error type 2"),
       {
         testthat::expect_error(
-          SimSSMLinGrowthIVary(
+          simStateSpace::SimSSMLinGrowthIVary(
             n = n,
             mu0 = mu0,
             sigma0 = sigma0,

@@ -23,7 +23,7 @@ lapply(
     )
 
     # No covariates
-    ssm <- SimSSMVAR(
+    ssm <- simStateSpace::SimSSMVAR(
       mu0 = mu0,
       sigma0 = sigma0,
       alpha = alpha,
@@ -46,7 +46,7 @@ lapply(
     plot.simstatespace(ssm, eta = TRUE)
 
     # With covariates
-    ssm <- SimSSMVAR(
+    ssm <- simStateSpace::SimSSMVAR(
       mu0 = mu0,
       sigma0 = sigma0,
       alpha = alpha,
@@ -83,7 +83,7 @@ lapply(
     time <- 50
     burn_in <- 10
 
-    ssm <- SimSSMVAR(
+    ssm <- simStateSpace::SimSSMVAR(
       mu0 = mu0,
       sigma0 = sigma0,
       alpha = alpha,
