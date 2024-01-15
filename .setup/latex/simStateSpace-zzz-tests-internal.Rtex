@@ -78,10 +78,6 @@
 \section*{Tests}
 
 %% begin.rcode
-% library(simStateSpace)
-%% end.rcode
-
-%% begin.rcode
 % #| file = root$find_file(
 % #|   ".setup",
 % #|   "latex",

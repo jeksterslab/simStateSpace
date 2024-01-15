@@ -25,7 +25,7 @@ lapply(
     )
 
     # Type 0
-    ssm <- SimSSM(
+    ssm <- simStateSpace::SimSSM(
       mu0 = mu0,
       sigma0 = sigma0,
       alpha = alpha,
@@ -52,7 +52,7 @@ lapply(
     plot.simstatespace(ssm, eta = TRUE)
 
     # Type 1
-    ssm <- SimSSM(
+    ssm <- simStateSpace::SimSSM(
       mu0 = mu0,
       sigma0 = sigma0,
       alpha = alpha,
@@ -81,7 +81,7 @@ lapply(
     plot.simstatespace(ssm, eta = TRUE)
 
     # Type 2
-    ssm <- SimSSM(
+    ssm <- simStateSpace::SimSSM(
       mu0 = mu0,
       sigma0 = sigma0,
       alpha = alpha,
@@ -115,7 +115,7 @@ lapply(
       paste(text, "error"),
       {
         testthat::expect_error(
-          SimSSM(
+          simStateSpace::SimSSM(
             mu0 = mu0,
             sigma0 = sigma0,
             alpha = alpha,
@@ -138,7 +138,7 @@ lapply(
       paste(text, "error type 1"),
       {
         testthat::expect_error(
-          SimSSM(
+          simStateSpace::SimSSM(
             mu0 = mu0,
             sigma0 = sigma0,
             alpha = alpha,
@@ -158,7 +158,7 @@ lapply(
       paste(text, "error type 2"),
       {
         testthat::expect_error(
-          SimSSM(
+          simStateSpace::SimSSM(
             mu0 = mu0,
             sigma0 = sigma0,
             alpha = alpha,

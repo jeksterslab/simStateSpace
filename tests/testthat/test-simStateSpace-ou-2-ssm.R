@@ -20,7 +20,7 @@ lapply(
     )
     delta_t <- 0.10
 
-    ssm <- OU2SSM(
+    ssm <- simStateSpace::OU2SSM(
       mu = mu,
       phi = phi,
       sigma = sigma,
