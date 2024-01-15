@@ -382,7 +382,7 @@ plot.simstatespace <- function(x,
   ids <- unique(data[, "id"])
   color <- colfunc(length(ids))
   for (i in seq_along(y)) {
-    plot(
+    graphics::plot.default(
       x = 0,
       y = 0,
       xlim = range(data[, "time"]),

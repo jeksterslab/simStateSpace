@@ -25,10 +25,10 @@ LinkingTo:
     Rcpp,
     RcppArmadillo
 Imports: 
-    Rcpp
+    Rcpp,
+    graphics
 Suggests:
     knitr,
     rmarkdown,
     testthat,
     Matrix
-RoxygenNote: 7.3.0
