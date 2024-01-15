@@ -332,6 +332,10 @@ SimSSMOUFixed <- function(n,
       )
     },
     "1" = {
+      stopifnot(
+        !is.null(x),
+        !is.null(gamma_eta)
+      )
       .SimSSM1OUFixed(
         n = n,
         mu0 = mu0,
@@ -350,6 +354,11 @@ SimSSMOUFixed <- function(n,
       )
     },
     "2" = {
+      stopifnot(
+        !is.null(x),
+        !is.null(gamma_y),
+        !is.null(gamma_eta)
+      )
       .SimSSM2OUFixed(
         n = n,
         mu0 = mu0,

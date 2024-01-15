@@ -50,6 +50,9 @@ lapply(
     as.matrix.simstatespace(ssm, eta = FALSE)
     as.matrix.simstatespace(ssm, eta = TRUE, long = FALSE)
     as.matrix.simstatespace(ssm, eta = FALSE, long = FALSE)
+    print.simstatespace(ssm)
+    plot.simstatespace(ssm, id = 1:3, time = 0:4)
+    plot.simstatespace(ssm, eta = TRUE)
 
     # With covariates
     ssm <- SimSSMVARFixed(
@@ -73,6 +76,9 @@ lapply(
     as.matrix.simstatespace(ssm, eta = FALSE)
     as.matrix.simstatespace(ssm, eta = TRUE, long = FALSE)
     as.matrix.simstatespace(ssm, eta = FALSE, long = FALSE)
+    print.simstatespace(ssm)
+    plot.simstatespace(ssm, id = 1:3, time = 0:4)
+    plot.simstatespace(ssm, eta = TRUE)
   },
   text = "test-simStateSpace-sim-ssm-var-fixed"
 )

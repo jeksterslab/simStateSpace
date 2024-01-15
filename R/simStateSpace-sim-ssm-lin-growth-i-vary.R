@@ -153,6 +153,10 @@ SimSSMLinGrowthIVary <- function(n,
       )
     },
     "1" = {
+      stopifnot(
+        !is.null(x),
+        !is.null(gamma_eta)
+      )
       .SimSSM1LinGrowthIVary(
         n = n,
         mu0 = rep(x = mu0, length.out = n),
@@ -164,6 +168,11 @@ SimSSMLinGrowthIVary <- function(n,
       )
     },
     "2" = {
+      stopifnot(
+        !is.null(x),
+        !is.null(gamma_y),
+        !is.null(gamma_eta)
+      )
       .SimSSM2LinGrowthIVary(
         n = n,
         mu0 = rep(x = mu0, length.out = n),

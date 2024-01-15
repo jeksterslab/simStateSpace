@@ -214,6 +214,10 @@ SimSSMIVary <- function(n,
       )
     },
     "1" = {
+      stopifnot(
+        !is.null(x),
+        !is.null(gamma_eta)
+      )
       .SimSSM1IVary(
         n = n,
         mu0 = rep(x = mu0, length.out = n),
@@ -231,6 +235,11 @@ SimSSMIVary <- function(n,
       )
     },
     "2" = {
+      stopifnot(
+        !is.null(x),
+        !is.null(gamma_y),
+        !is.null(gamma_eta)
+      )
       .SimSSM2IVary(
         n = n,
         mu0 = rep(x = mu0, length.out = n),

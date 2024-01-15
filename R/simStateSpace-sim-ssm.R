@@ -403,6 +403,10 @@ SimSSM <- function(mu0,
       )
     },
     "1" = {
+      stopifnot(
+        !is.null(x),
+        !is.null(gamma_eta)
+      )
       .SimSSM1(
         mu0 = mu0,
         sigma0_l = sigma0_l,
@@ -419,6 +423,11 @@ SimSSM <- function(mu0,
       )
     },
     "2" = {
+      stopifnot(
+        !is.null(x),
+        !is.null(gamma_y),
+        !is.null(gamma_eta)
+      )
       .SimSSM2(
         mu0 = mu0,
         sigma0_l = sigma0_l,

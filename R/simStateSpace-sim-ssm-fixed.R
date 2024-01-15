@@ -376,6 +376,10 @@ SimSSMFixed <- function(n,
       )
     },
     "1" = {
+      stopifnot(
+        !is.null(x),
+        !is.null(gamma_eta)
+      )
       .SimSSM1Fixed(
         n = n,
         mu0 = mu0,
@@ -393,6 +397,11 @@ SimSSMFixed <- function(n,
       )
     },
     "2" = {
+      stopifnot(
+        !is.null(x),
+        !is.null(gamma_y),
+        !is.null(gamma_eta)
+      )
       .SimSSM2Fixed(
         n = n,
         mu0 = mu0,

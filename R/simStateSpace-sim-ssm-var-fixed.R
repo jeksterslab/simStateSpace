@@ -86,7 +86,10 @@ SimSSMVARFixed <- function(n,
                            burn_in = 0) {
   sigma0_l <- t(chol(sigma0))
   psi_l <- t(chol(psi))
-  if (is.null(gamma_eta) || is.null(x)) {
+  if (is.null(x)) {
+    stopifnot(
+      is.null(gamma_eta)
+    )
     data <- .SimSSM0VARFixed(
       n = n,
       mu0 = mu0,
@@ -99,6 +102,9 @@ SimSSMVARFixed <- function(n,
     )
     covariates <- FALSE
   } else {
+    stopifnot(
+      !is.null(gamma_eta)
+    )
     data <- .SimSSM1VARFixed(
       n = n,
       mu0 = mu0,
