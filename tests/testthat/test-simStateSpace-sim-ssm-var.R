@@ -41,7 +41,6 @@ lapply(
     as.matrix(ssm, eta = FALSE)
     as.matrix(ssm, eta = TRUE, long = FALSE)
     as.matrix(ssm, eta = FALSE, long = FALSE)
-    print(ssm)
 
     # With covariates
     ssm <- SimSSMVAR(
@@ -64,7 +63,6 @@ lapply(
     as.matrix(ssm, eta = FALSE)
     as.matrix(ssm, eta = TRUE, long = FALSE)
     as.matrix(ssm, eta = FALSE, long = FALSE)
-    print(ssm)
 
     # coverage - AR
     set.seed(42)
@@ -97,7 +95,6 @@ lapply(
     as.matrix(ssm, eta = FALSE)
     as.matrix(ssm, eta = TRUE, long = FALSE)
     as.matrix(ssm, eta = FALSE, long = FALSE)
-    print(ssm)
   },
   text = "test-simStateSpace-sim-ssm-var"
 )

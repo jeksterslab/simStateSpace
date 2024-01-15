@@ -57,7 +57,6 @@ lapply(
     as.matrix(ssm, eta = FALSE)
     as.matrix(ssm, eta = TRUE, long = FALSE)
     as.matrix(ssm, eta = FALSE, long = FALSE)
-    print(ssm)
 
     # With covariates
     ssm <- SimSSMVARIVary(
@@ -81,7 +80,6 @@ lapply(
     as.matrix(ssm, eta = FALSE)
     as.matrix(ssm, eta = TRUE, long = FALSE)
     as.matrix(ssm, eta = FALSE, long = FALSE)
-    print(ssm)
   },
   text = "test-simStateSpace-sim-ssm-var-i-vary"
 )

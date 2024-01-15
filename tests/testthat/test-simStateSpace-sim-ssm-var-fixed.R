@@ -50,7 +50,6 @@ lapply(
     as.matrix(ssm, eta = FALSE)
     as.matrix(ssm, eta = TRUE, long = FALSE)
     as.matrix(ssm, eta = FALSE, long = FALSE)
-    print(ssm)
 
     # With covariates
     ssm <- SimSSMVARFixed(
@@ -74,7 +73,6 @@ lapply(
     as.matrix(ssm, eta = FALSE)
     as.matrix(ssm, eta = TRUE, long = FALSE)
     as.matrix(ssm, eta = FALSE, long = FALSE)
-    print(ssm)
   },
   text = "test-simStateSpace-sim-ssm-var-fixed"
 )

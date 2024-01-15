@@ -51,7 +51,6 @@ lapply(
     as.matrix(ssm, eta = FALSE)
     as.matrix(ssm, eta = TRUE, long = FALSE)
     as.matrix(ssm, eta = FALSE, long = FALSE)
-    print(ssm)
 
     # Type 1
     ssm <- SimSSMLinGrowth(
@@ -73,7 +72,6 @@ lapply(
     as.matrix(ssm, eta = FALSE)
     as.matrix(ssm, eta = TRUE, long = FALSE)
     as.matrix(ssm, eta = FALSE, long = FALSE)
-    print(ssm)
 
     # Type 2
     ssm <- SimSSMLinGrowth(
@@ -96,7 +94,6 @@ lapply(
     as.matrix(ssm, eta = FALSE)
     as.matrix(ssm, eta = TRUE, long = FALSE)
     as.matrix(ssm, eta = FALSE, long = FALSE)
-    print(ssm)
 
     # Error
     testthat::test_that(
