@@ -1,3 +1,7 @@
+# simStateSpace 1.1.0.9000
+
+* Latest development version.
+
 # simStateSpace 1.1.0
 
 * Added functions to generate data for models with covariates.
