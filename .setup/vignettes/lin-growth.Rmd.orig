@@ -254,9 +254,9 @@ dynr_data <- dynr::dynr.data(
 
 ```{r}
 dynr_initial <- dynr::prep.initial(
-  values.inistate = c(0, 0),
+  values.inistate = mu0,
   params.inistate = c("mu0_0", "mu0_1"),
-  values.inicov = diag(2),
+  values.inicov = sigma0,
   params.inicov = matrix(
     data = c(
       "sigma0_00", "sigma0_01",
