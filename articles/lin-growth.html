@@ -277,9 +277,9 @@ of individuals.</p>
 </h3>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dynr_initial</span> <span class="op">&lt;-</span> <span class="fu">dynr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/dynr/man/prep.initial.html" class="external-link">prep.initial</a></span><span class="op">(</span></span>
-<span>  values.inistate <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span>,</span>
+<span>  values.inistate <span class="op">=</span> <span class="va">mu0</span>,</span>
 <span>  params.inistate <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mu0_0"</span>, <span class="st">"mu0_1"</span><span class="op">)</span>,</span>
-<span>  values.inicov <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/diag.html" class="external-link">diag</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span>,</span>
+<span>  values.inicov <span class="op">=</span> <span class="va">sigma0</span>,</span>
 <span>  params.inicov <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span></span>
 <span>    data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
 <span>      <span class="st">"sigma0_00"</span>, <span class="st">"sigma0_01"</span>,</span>
@@ -357,16 +357,16 @@ of individuals.</p>
 <span><span class="co">#&gt; Original exit flag:  3 </span></span>
 <span><span class="co">#&gt; Modified exit flag:  3 </span></span>
 <span><span class="co">#&gt; Optimization terminated successfully: ftol_rel or ftol_abs was reached. </span></span>
-<span><span class="co">#&gt; Original fitted parameters:  -0.4945785 0.6172152 0.9971762 0.6201937 0.3298925 </span></span>
-<span><span class="co">#&gt; -0.916999 </span></span>
+<span><span class="co">#&gt; Original fitted parameters:  -0.4945857 0.617213 0.9971604 0.6201962 0.3298718 </span></span>
+<span><span class="co">#&gt; -0.9171075 </span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Transformed fitted parameters:  0.6098279 0.6172152 0.9971762 1.859288 </span></span>
-<span><span class="co">#&gt; 0.6133653 0.6020614 </span></span>
+<span><span class="co">#&gt; Transformed fitted parameters:  0.6098235 0.617213 0.9971604 1.859293 0.6133282 </span></span>
+<span><span class="co">#&gt; 0.6019931 </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Doing end processing</span></span>
 <span><span class="co">#&gt; Successful trial</span></span>
-<span><span class="co">#&gt; Total Time: 6.822503 </span></span>
-<span><span class="co">#&gt; Backend Time: 6.412093</span></span></code></pre></div>
+<span><span class="co">#&gt; Total Time: 4.871637 </span></span>
+<span><span class="co">#&gt; Backend Time: 4.444515</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -376,32 +376,32 @@ of individuals.</p>
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">results</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Coefficients:</span></span>
 <span><span class="co">#&gt;           Estimate Std. Error t value ci.lower ci.upper Pr(&gt;|t|)    </span></span>
-<span><span class="co">#&gt; theta      0.60983    0.01574   38.73  0.57897  0.64069   &lt;2e-16 ***</span></span>
-<span><span class="co">#&gt; mu0_0      0.61722    0.04715   13.09  0.52480  0.70963   &lt;2e-16 ***</span></span>
-<span><span class="co">#&gt; mu0_1      0.99718    0.02574   38.73  0.94672  1.04763   &lt;2e-16 ***</span></span>
+<span><span class="co">#&gt; theta      0.60982    0.01575   38.73  0.57896  0.64069   &lt;2e-16 ***</span></span>
+<span><span class="co">#&gt; mu0_0      0.61721    0.04717   13.08  0.52475  0.70967   &lt;2e-16 ***</span></span>
+<span><span class="co">#&gt; mu0_1      0.99716    0.02575   38.73  0.94670  1.04762   &lt;2e-16 ***</span></span>
 <span><span class="co">#&gt; sigma0_00  1.85929    0.09996   18.60  1.66338  2.05520   &lt;2e-16 ***</span></span>
-<span><span class="co">#&gt; sigma0_01  0.61337    0.04155   14.76  0.53192  0.69481   &lt;2e-16 ***</span></span>
-<span><span class="co">#&gt; sigma0_11  0.60206    0.02969   20.28  0.54386  0.66026   &lt;2e-16 ***</span></span>
+<span><span class="co">#&gt; sigma0_01  0.61333    0.04156   14.76  0.53188  0.69478   &lt;2e-16 ***</span></span>
+<span><span class="co">#&gt; sigma0_11  0.60199    0.02969   20.27  0.54379  0.66019   &lt;2e-16 ***</span></span>
 <span><span class="co">#&gt; ---</span></span>
 <span><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; -2 log-likelihood value at convergence = 16827.97</span></span>
 <span><span class="co">#&gt; AIC = 16839.97</span></span>
 <span><span class="co">#&gt; BIC = 16879.08</span></span></code></pre></div>
-<pre><code><span><span class="co">#&gt; [1] 0.6172152 0.9971762</span></span></code></pre>
+<pre><code><span><span class="co">#&gt; [1] 0.6172130 0.9971604</span></span></code></pre>
 <div class="section level3">
 <h3 id="estimated-parameters">Estimated Parameters<a class="anchor" aria-label="anchor" href="#estimated-parameters"></a>
 </h3>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mu0_hat</span></span>
-<span><span class="co">#&gt; [1] 0.6172152 0.9971762</span></span>
+<span><span class="co">#&gt; [1] 0.6172130 0.9971604</span></span>
 <span><span class="va">sigma0_hat</span></span>
 <span><span class="co">#&gt;           [,1]      [,2]</span></span>
-<span><span class="co">#&gt; [1,] 1.8592882 0.6133653</span></span>
-<span><span class="co">#&gt; [2,] 0.6133653 0.6020614</span></span>
+<span><span class="co">#&gt; [1,] 1.8592928 0.6133282</span></span>
+<span><span class="co">#&gt; [2,] 0.6133282 0.6019931</span></span>
 <span><span class="va">theta_hat</span></span>
 <span><span class="co">#&gt;     theta </span></span>
-<span><span class="co">#&gt; 0.6098279</span></span></code></pre></div>
+<span><span class="co">#&gt; 0.6098235</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
