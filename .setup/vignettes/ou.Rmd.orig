@@ -108,8 +108,8 @@ which represents random fluctuations.
 ```{r}
 #| echo = FALSE
 set.seed(42)
-time <- 1000
-n <- 5
+time <- 10000
+n <- 10000
 delta_t <- 0.10
 k <- p <- 3
 iden <- diag(k)

@@ -136,7 +136,7 @@ of the initial condition given by
 ```{r}
 #| echo = FALSE
 set.seed(42)
-n <- 1000
+n <- 10000
 mu0 <- c(0.615, 1.006)
 sigma0 <- matrix(
   data = c(
