@@ -136,7 +136,7 @@ of the initial condition given by
 ```{r}
 #| echo = FALSE
 set.seed(42)
-n <- 10000
+n <- 1000
 mu0 <- c(0.615, 1.006)
 sigma0 <- matrix(
   data = c(
@@ -439,7 +439,9 @@ sigma0_hat <- matrix(
   ],
   nrow = 2
 )
-theta_hat <- estimates["theta"]
+theta_hat <- unname(
+  estimates["theta"]
+)
 ```
 
 ### Estimated Parameters
