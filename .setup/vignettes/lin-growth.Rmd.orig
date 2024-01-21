@@ -415,4 +415,39 @@ fit <- lavaan::growth(
 lavaan::summary(fit)
 ```
 
+```{r}
+#| echo = FALSE
+estimates <- lavaan::coef(results)
+estimates_cov <- lavaan::vcov(results)
+mu0_hat <- unname(
+  estimates[
+    c(
+      "mu0",
+      "mu1"
+    )
+  ]
+)
+unname(mu0_hat)
+sigma0_hat <- matrix(
+  data = estimates[
+    c(
+      "sigma00",
+      "sigma01",
+      "sigma01",
+      "sigma11"
+    )
+  ],
+  nrow = 2
+)
+theta_hat <- estimates["theta"]
+```
+
+### Estimated Parameters
+
+```{r}
+mu0_hat
+sigma0_hat
+theta_hat
+```
+
 ## References

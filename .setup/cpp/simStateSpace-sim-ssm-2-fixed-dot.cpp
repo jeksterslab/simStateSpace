@@ -6,13 +6,7 @@
 #include <RcppArmadillo.h>
 // [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::export(.SimSSM2Fixed)]]
-Rcpp::List SimSSM2Fixed(const int n, const arma::vec& mu0,
-                        const arma::mat& sigma0_l, const arma::vec& alpha,
-                        const arma::mat& beta, const arma::mat& psi_l,
-                        const arma::vec& nu, const arma::mat& lambda,
-                        const arma::mat& theta_l, const arma::mat& gamma_y,
-                        const arma::mat& gamma_eta, const Rcpp::List& x,
-                        const int time, const int burn_in) {
+Rcpp::List SimSSM2Fixed(const int n, const arma::vec& mu0, const arma::mat& sigma0_l, const arma::vec& alpha, const arma::mat& beta, const arma::mat& psi_l, const arma::vec& nu, const arma::mat& lambda, const arma::mat& theta_l, const arma::mat& gamma_y, const arma::mat& gamma_eta, const Rcpp::List& x, const int time, const int burn_in) {
   // Step 1: Determine indices
   int total_time = time + burn_in;
   int num_latent_vars = mu0.n_elem;
@@ -30,20 +24,13 @@ Rcpp::List SimSSM2Fixed(const int n, const arma::vec& mu0,
     arma::mat x_t = x_temp.t();
 
     // Step 3.2: Generate initial condition
-    eta.col(0) = mu0 + (sigma0_l * arma::randn(num_latent_vars)) +
-                 (gamma_eta * x_t.col(0));
-    y.col(0) = nu + (lambda * eta.col(0)) +
-               (theta_l * arma::randn(num_manifest_vars)) +
-               (gamma_y * x_t.col(0));
+    eta.col(0) = mu0 + (sigma0_l * arma::randn(num_latent_vars)) + (gamma_eta * x_t.col(0));
+    y.col(0) = nu + (lambda * eta.col(0)) + (theta_l * arma::randn(num_manifest_vars)) + (gamma_y * x_t.col(0));
 
     // Step 3.3: Simulate state space model data using a loop
     for (int t = 1; t < total_time; t++) {
-      eta.col(t) = alpha + (beta * eta.col(t - 1)) +
-                   (psi_l * arma::randn(num_latent_vars)) +
-                   (gamma_eta * x_t.col(t));
-      y.col(t) = nu + (lambda * eta.col(t)) +
-                 (theta_l * arma::randn(num_manifest_vars)) +
-                 (gamma_y * x_t.col(t));
+      eta.col(t) = alpha + (beta * eta.col(t - 1)) + (psi_l * arma::randn(num_latent_vars)) + (gamma_eta * x_t.col(t));
+      y.col(t) = nu + (lambda * eta.col(t)) + (theta_l * arma::randn(num_manifest_vars)) + (gamma_y * x_t.col(t));
     }
 
     // Step 3.4: If there is a burn-in period, remove it
@@ -58,11 +45,7 @@ Rcpp::List SimSSM2Fixed(const int n, const arma::vec& mu0,
     id.fill(i + 1);
 
     // Step 3.6: Save the transposed data matrices in a list
-    out[i] = Rcpp::List::create(
-        Rcpp::Named("id") = id,
-        Rcpp::Named("time") = arma::regspace(0, time - 1),
-        Rcpp::Named("y") = y.t(), Rcpp::Named("eta") = eta.t(),
-        Rcpp::Named("x") = x_t.t());
+    out[i] = Rcpp::List::create(Rcpp::Named("id") = id, Rcpp::Named("time") = arma::regspace(0, time - 1), Rcpp::Named("y") = y.t(), Rcpp::Named("eta") = eta.t(), Rcpp::Named("x") = x_t.t());
   }
 
   // Step 4: Return the results
