@@ -416,6 +416,8 @@ psi_hat <- matrix(
 alpha_hat
 beta_hat
 psi_hat
+mu0_hat
+sigma0_hat
 ```
 
 ## References
