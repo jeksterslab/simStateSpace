@@ -366,8 +366,8 @@ Simulate Data<a class="anchor" aria-label="anchor" href="#using-the-simssmlingro
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Doing end processing</span></span>
 <span><span class="co">#&gt; Successful trial</span></span>
-<span><span class="co">#&gt; Total Time: 4.891943 </span></span>
-<span><span class="co">#&gt; Backend Time: 4.467941</span></span></code></pre></div>
+<span><span class="co">#&gt; Total Time: 4.822624 </span></span>
+<span><span class="co">#&gt; Backend Time: 4.423112</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -431,12 +431,12 @@ Simulate Data<a class="anchor" aria-label="anchor" href="#using-the-simssmlingro
 <span><span class="st">  eta0 =~ 1 * y1_0 + 1 * y1_1 + 1 * y1_2 + 1 * y1_3 + 1 * y1_4</span></span>
 <span><span class="st">  eta1 =~ 0 * y1_0 + 1 * y1_1 + 2 * y1_2 + 3 * y1_3 + 4 * y1_4</span></span>
 <span><span class="st">  # means of latent variables</span></span>
-<span><span class="st">  eta0 ~ mu0 * 1</span></span>
-<span><span class="st">  eta1 ~ mu1 * 1</span></span>
+<span><span class="st">  eta0 ~ mu0_0 * 1</span></span>
+<span><span class="st">  eta1 ~ mu0_1 * 1</span></span>
 <span><span class="st">  # variances and covariances of latent variables</span></span>
-<span><span class="st">  eta0 ~~ sigma00 * eta0</span></span>
-<span><span class="st">  eta0 ~~ sigma01 * eta1</span></span>
-<span><span class="st">  eta1 ~~ sigma11 * eta1</span></span>
+<span><span class="st">  eta0 ~~ sigma0_00 * eta0</span></span>
+<span><span class="st">  eta0 ~~ sigma0_01 * eta1</span></span>
+<span><span class="st">  eta1 ~~ sigma0_11 * eta1</span></span>
 <span><span class="st">  # constrain error variance theta to be equal</span></span>
 <span><span class="st">  y1_0 ~~ theta * y1_0</span></span>
 <span><span class="st">  y1_1 ~~ theta * y1_1</span></span>
@@ -489,34 +489,34 @@ Simulate Data<a class="anchor" aria-label="anchor" href="#using-the-simssmlingro
 <span><span class="co">#&gt; Covariances:</span></span>
 <span><span class="co">#&gt;                    Estimate  Std.Err  z-value  P(&gt;|z|)</span></span>
 <span><span class="co">#&gt;   eta0 ~~                                             </span></span>
-<span><span class="co">#&gt;     eta1    (sg01)    0.613    0.042   14.762    0.000</span></span>
+<span><span class="co">#&gt;     eta1    (s0_0)    0.613    0.042   14.762    0.000</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Intercepts:</span></span>
 <span><span class="co">#&gt;                    Estimate  Std.Err  z-value  P(&gt;|z|)</span></span>
-<span><span class="co">#&gt;     eta0     (mu0)    0.617    0.047   13.086    0.000</span></span>
-<span><span class="co">#&gt;     eta1     (mu1)    0.997    0.026   38.728    0.000</span></span>
+<span><span class="co">#&gt;     eta0    (m0_0)    0.617    0.047   13.086    0.000</span></span>
+<span><span class="co">#&gt;     eta1    (m0_1)    0.997    0.026   38.728    0.000</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variances:</span></span>
 <span><span class="co">#&gt;                    Estimate  Std.Err  z-value  P(&gt;|z|)</span></span>
-<span><span class="co">#&gt;     eta0    (sg00)    1.859    0.100   18.600    0.000</span></span>
-<span><span class="co">#&gt;     eta1    (sg11)    0.602    0.030   20.275    0.000</span></span>
+<span><span class="co">#&gt;     eta0    (s0_0)    1.859    0.100   18.600    0.000</span></span>
+<span><span class="co">#&gt;     eta1    (s0_1)    0.602    0.030   20.275    0.000</span></span>
 <span><span class="co">#&gt;    .y1_0    (thet)    0.610    0.016   38.730    0.000</span></span>
 <span><span class="co">#&gt;    .y1_1    (thet)    0.610    0.016   38.730    0.000</span></span>
 <span><span class="co">#&gt;    .y1_2    (thet)    0.610    0.016   38.730    0.000</span></span>
 <span><span class="co">#&gt;    .y1_3    (thet)    0.610    0.016   38.730    0.000</span></span>
 <span><span class="co">#&gt;    .y1_4    (thet)    0.610    0.016   38.730    0.000</span></span></code></pre></div>
-<pre><code><span><span class="co">#&gt; [1] NA NA</span></span></code></pre>
+<pre><code><span><span class="co">#&gt; [1] 0.6172130 0.9971604</span></span></code></pre>
 </div>
 <div class="section level3">
 <h3 id="estimated-parameters-1">Estimated Parameters<a class="anchor" aria-label="anchor" href="#estimated-parameters-1"></a>
 </h3>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mu0_hat</span></span>
-<span><span class="co">#&gt; [1] NA NA</span></span>
+<span><span class="co">#&gt; [1] 0.6172130 0.9971604</span></span>
 <span><span class="va">sigma0_hat</span></span>
-<span><span class="co">#&gt;      [,1] [,2]</span></span>
-<span><span class="co">#&gt; [1,]   NA   NA</span></span>
-<span><span class="co">#&gt; [2,]   NA   NA</span></span>
+<span><span class="co">#&gt;           [,1]      [,2]</span></span>
+<span><span class="co">#&gt; [1,] 1.8592928 0.6133282</span></span>
+<span><span class="co">#&gt; [2,] 0.6133282 0.6019931</span></span>
 <span><span class="va">theta_hat</span></span>
 <span><span class="co">#&gt;     theta </span></span>
 <span><span class="co">#&gt; 0.6098235</span></span></code></pre></div>
