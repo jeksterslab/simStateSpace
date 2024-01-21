@@ -88,9 +88,15 @@ $\boldsymbol{\zeta}_{i, t}$.
 
 ```{r}
 #| echo = FALSE
+production <- FALSE
+if (production) {
+  time <- 1000
+  n <- 1000
+} else {
+  time <- 1000
+  n <- 5
+}
 set.seed(42)
-time <- 1000
-n <- 100
 k <- p <- 3
 iden <- diag(k)
 null_vec <- rep(x = 0, times = k)
