@@ -392,12 +392,12 @@ model <- "
   eta0 =~ 1 * y1_0 + 1 * y1_1 + 1 * y1_2 + 1 * y1_3 + 1 * y1_4
   eta1 =~ 0 * y1_0 + 1 * y1_1 + 2 * y1_2 + 3 * y1_3 + 4 * y1_4
   # means of latent variables
-  eta0 ~ mu0 * 1
-  eta1 ~ mu1 * 1
+  eta0 ~ mu0_0 * 1
+  eta1 ~ mu0_1 * 1
   # variances and covariances of latent variables
-  eta0 ~~ sigma00 * eta0
-  eta0 ~~ sigma01 * eta1
-  eta1 ~~ sigma11 * eta1
+  eta0 ~~ sigma0_00 * eta0
+  eta0 ~~ sigma0_01 * eta1
+  eta1 ~~ sigma0_11 * eta1
   # constrain error variance theta to be equal
   y1_0 ~~ theta * y1_0
   y1_1 ~~ theta * y1_1
@@ -422,8 +422,8 @@ estimates_cov <- lavaan::vcov(results)
 mu0_hat <- unname(
   estimates[
     c(
-      "mu0",
-      "mu1"
+      "mu0_0",
+      "mu0_1"
     )
   ]
 )
@@ -431,10 +431,10 @@ unname(mu0_hat)
 sigma0_hat <- matrix(
   data = estimates[
     c(
-      "sigma00",
-      "sigma01",
-      "sigma01",
-      "sigma11"
+      "sigma0_00",
+      "sigma0_01",
+      "sigma0_01",
+      "sigma0_11"
     )
   ],
   nrow = 2
