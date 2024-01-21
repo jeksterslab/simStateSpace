@@ -220,7 +220,7 @@ sigma0
 theta
 ```
 
-### Using the SimSSMLinGrowth Function to Simulate Data
+### Using the SimSSMLinGrowth Function from the simStateSpace Package to Simulate Data
 
 ```{r}
 library(simStateSpace)

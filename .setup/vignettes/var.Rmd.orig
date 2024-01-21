@@ -202,7 +202,7 @@ beta
 psi
 ```
 
-### Using the SimSSMVARFixed Function to Simulate Data
+### Using the SimSSMVARFixed Function from the simStateSpace Package to Simulate Data
 
 ```{r}
 library(simStateSpace)

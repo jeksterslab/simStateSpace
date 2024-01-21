@@ -279,7 +279,7 @@ lambda
 theta
 ```
 
-### Using the SimSSMOUFixed Function to Simulate Data
+### Using the SimSSMOUFixed Function from the simStateSpace Package to Simulate Data
 
 ```{r}
 library(simStateSpace)
