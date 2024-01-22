@@ -246,8 +246,6 @@
 #'     * `x`: A `t` by `j` matrix of values for the covariates.
 #'   - `fun`: Function used.
 #'
-
-#'
 #' @examples
 #' # prepare parameters
 #' set.seed(42)
