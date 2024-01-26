@@ -1,9 +1,25 @@
 #' Convert Parameters from the Ornstein–Uhlenbeck Model
 #' to the Structural Vector Autoregressive Model
 #'
+#' This function converts parameters from the Ornstein–Uhlenbeck model
+#' to the structural vector autoregressive model parameterization.
+#'
 #' @author Ivan Jacob Agaloos Pesigan
 #'
 #' @inheritParams OU2VAR
+#'
+#' @return Returns a list of structural vector autoregressive model parameters:
+#'   - `alphastar`: Numeric vector.
+#'     Vector of intercepts for the dynamic model
+#'     (\eqn{\boldsymbol{\alpha}^{\ast}}).
+#'   - `betastar`: Numeric matrix.
+#'     Transition matrix relating the values of the latent variables
+#'     at time `t - delta_t` to those at time `t`
+#'     where `delta_t` is a positive integer.
+#'     (\eqn{\boldsymbol{\beta}^{\ast}}).
+#'   - `psistar`: Numeric matrix.
+#'     The process noise covariance matrix
+#'     (\eqn{\boldsymbol{\Psi}^{\ast}}).
 #'
 #' @examples
 #' p <- k <- 2

@@ -20,7 +20,7 @@
 #'     \boldsymbol{\Lambda}
 #'     \boldsymbol{\eta}_{i, t}
 #'     +
-#'     \boldsymbol{\varepsilon}_{i, t}
+#'     \boldsymbol{\varepsilon}_{i, t},
 #'     \quad
 #'     \mathrm{with}
 #'     \quad
@@ -101,7 +101,7 @@
 #'     \boldsymbol{\Lambda}
 #'     \boldsymbol{\eta}_{i, t}
 #'     +
-#'     \boldsymbol{\varepsilon}_{i, t}
+#'     \boldsymbol{\varepsilon}_{i, t},
 #'     \quad
 #'     \mathrm{with}
 #'     \quad
@@ -153,7 +153,7 @@
 #'     \boldsymbol{\Gamma}_{\mathbf{y}}
 #'     \mathbf{x}_{i, t}
 #'     +
-#'     \boldsymbol{\varepsilon}_{i, t}
+#'     \boldsymbol{\varepsilon}_{i, t},
 #'     \quad
 #'     \mathrm{with}
 #'     \quad

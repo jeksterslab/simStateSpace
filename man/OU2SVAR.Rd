@@ -22,12 +22,28 @@ The matrix of volatility
 or randomness in the process
 (\eqn{\boldsymbol{\Sigma}}).}
 
-\item{delta_t}{Numeric.
+\item{delta_t}{Positive integer.
 Discrete time interval (\eqn{\delta_t}).}
 }
+\value{
+Returns a list of structural vector autoregressive model parameters:
+\itemize{
+\item \code{alphastar}: Numeric vector.
+Vector of intercepts for the dynamic model
+(\eqn{\boldsymbol{\alpha}^{\ast}}).
+\item \code{betastar}: Numeric matrix.
+Transition matrix relating the values of the latent variables
+at time \code{t - delta_t} to those at time \code{t}
+where \code{delta_t} is a positive integer.
+(\eqn{\boldsymbol{\beta}^{\ast}}).
+\item \code{psistar}: Numeric matrix.
+The process noise covariance matrix
+(\eqn{\boldsymbol{\Psi}^{\ast}}).
+}
+}
 \description{
-Convert Parameters from the Ornstein–Uhlenbeck Model
-to the Structural Vector Autoregressive Model
+This function converts parameters from the Ornstein–Uhlenbeck model
+to the structural vector autoregressive model parameterization.
 }
 \examples{
 p <- k <- 2
@@ -54,17 +70,17 @@ OU2SVAR(
 Other Simulation of State Space Models Data Functions: 
 \code{\link{OU2SSM}()},
 \code{\link{OU2VAR}()},
+\code{\link{SimSSM}()},
 \code{\link{SimSSMFixed}()},
 \code{\link{SimSSMIVary}()},
-\code{\link{SimSSMLinGrowthIVary}()},
 \code{\link{SimSSMLinGrowth}()},
+\code{\link{SimSSMLinGrowthIVary}()},
+\code{\link{SimSSMOU}()},
 \code{\link{SimSSMOUFixed}()},
 \code{\link{SimSSMOUIVary}()},
-\code{\link{SimSSMOU}()},
-\code{\link{SimSSMVARFixed}()},
-\code{\link{SimSSMVARIVary}()},
 \code{\link{SimSSMVAR}()},
-\code{\link{SimSSM}()}
+\code{\link{SimSSMVARFixed}()},
+\code{\link{SimSSMVARIVary}()}
 }
 \author{
 Ivan Jacob Agaloos Pesigan

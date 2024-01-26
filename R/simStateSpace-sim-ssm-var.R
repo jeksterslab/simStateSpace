@@ -20,7 +20,7 @@
 #'     \boldsymbol{\beta}
 #'     \boldsymbol{\eta}_{t - 1}
 #'     +
-#'     \boldsymbol{\zeta}_{t}
+#'     \boldsymbol{\zeta}_{t},
 #'     \quad
 #'     \mathrm{with}
 #'     \quad
@@ -77,7 +77,7 @@
 #'     \boldsymbol{\Gamma}_{\boldsymbol{\eta}}
 #'     \mathbf{x}_{t}
 #'     +
-#'     \boldsymbol{\zeta}_{t}
+#'     \boldsymbol{\zeta}_{t},
 #'     \quad
 #'     \mathrm{with}
 #'     \quad

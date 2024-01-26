@@ -182,16 +182,16 @@ Other Simulation of State Space Models Data Functions:
 \code{\link{OU2SSM}()},
 \code{\link{OU2SVAR}()},
 \code{\link{OU2VAR}()},
+\code{\link{SimSSM}()},
 \code{\link{SimSSMFixed}()},
 \code{\link{SimSSMIVary}()},
-\code{\link{SimSSMLinGrowthIVary}()},
 \code{\link{SimSSMLinGrowth}()},
+\code{\link{SimSSMLinGrowthIVary}()},
+\code{\link{SimSSMOU}()},
 \code{\link{SimSSMOUFixed}()},
 \code{\link{SimSSMOUIVary}()},
-\code{\link{SimSSMOU}()},
-\code{\link{SimSSMVARFixed}()},
 \code{\link{SimSSMVAR}()},
-\code{\link{SimSSM}()}
+\code{\link{SimSSMVARFixed}()}
 }
 \author{
 Ivan Jacob Agaloos Pesigan

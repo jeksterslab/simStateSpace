@@ -96,7 +96,7 @@ The measurement model is given by
     \end{array}
     \right)
     +
-    \boldsymbol{\varepsilon}_{i, t}
+    \boldsymbol{\varepsilon}_{i, t},
     \quad
     \mathrm{with}
     \quad
@@ -194,7 +194,7 @@ The measurement model is given by
     \end{array}
     \right)
     +
-    \boldsymbol{\varepsilon}_{i, t}
+    \boldsymbol{\varepsilon}_{i, t},
     \quad
     \mathrm{with}
     \quad
@@ -260,7 +260,7 @@ The measurement model is given by
     \boldsymbol{\Gamma}_{\mathbf{y}}
     \mathbf{x}_{i, t}
     +
-    \boldsymbol{\varepsilon}_{i, t}
+    \boldsymbol{\varepsilon}_{i, t},
     \quad
     \mathrm{with}
     \quad
@@ -388,16 +388,16 @@ Other Simulation of State Space Models Data Functions:
 \code{\link{OU2SSM}()},
 \code{\link{OU2SVAR}()},
 \code{\link{OU2VAR}()},
+\code{\link{SimSSM}()},
 \code{\link{SimSSMFixed}()},
 \code{\link{SimSSMIVary}()},
 \code{\link{SimSSMLinGrowthIVary}()},
+\code{\link{SimSSMOU}()},
 \code{\link{SimSSMOUFixed}()},
 \code{\link{SimSSMOUIVary}()},
-\code{\link{SimSSMOU}()},
-\code{\link{SimSSMVARFixed}()},
-\code{\link{SimSSMVARIVary}()},
 \code{\link{SimSSMVAR}()},
-\code{\link{SimSSM}()}
+\code{\link{SimSSMVARFixed}()},
+\code{\link{SimSSMVARIVary}()}
 }
 \author{
 Ivan Jacob Agaloos Pesigan

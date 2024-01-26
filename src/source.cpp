@@ -128,7 +128,7 @@ Rcpp::List OU2SSM(const arma::vec& mu, const arma::mat& phi,
   // 2.1 beta
   arma::mat beta = arma::expmat(neg_phi * delta_t);  // A(Delta t)
   // 2.2 alpha
-  arma::vec alpha = arma::inv(neg_phi) * (beta - I) * phi * mu;  // b(Delta t)
+  arma::vec alpha = arma::inv(neg_phi) * (beta - I) * (phi * mu);  // b(Delta t)
   // 2.3 psi
   arma::mat neg_phi_hashtag = arma::kron(neg_phi, I) + arma::kron(I, neg_phi);
   arma::vec sigma_vec = arma::vectorise(sigma);

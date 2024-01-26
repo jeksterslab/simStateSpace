@@ -23,7 +23,7 @@
 #'     \end{array}
 #'     \right)
 #'     +
-#'     \boldsymbol{\varepsilon}_{i, t}
+#'     \boldsymbol{\varepsilon}_{i, t},
 #'     \quad
 #'     \mathrm{with}
 #'     \quad
@@ -120,7 +120,7 @@
 #'     \end{array}
 #'     \right)
 #'     +
-#'     \boldsymbol{\varepsilon}_{i, t}
+#'     \boldsymbol{\varepsilon}_{i, t},
 #'     \quad
 #'     \mathrm{with}
 #'     \quad
@@ -185,7 +185,7 @@
 #'     \boldsymbol{\Gamma}_{\mathbf{y}}
 #'     \mathbf{x}_{i, t}
 #'     +
-#'     \boldsymbol{\varepsilon}_{i, t}
+#'     \boldsymbol{\varepsilon}_{i, t},
 #'     \quad
 #'     \mathrm{with}
 #'     \quad

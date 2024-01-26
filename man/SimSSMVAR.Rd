@@ -94,7 +94,7 @@ The dynamic structure is given by
     \boldsymbol{\beta}
     \boldsymbol{\eta}_{t - 1}
     +
-    \boldsymbol{\zeta}_{t}
+    \boldsymbol{\zeta}_{t},
     \quad
     \mathrm{with}
     \quad
@@ -151,7 +151,7 @@ the dynamic structure is given by
     \boldsymbol{\Gamma}_{\boldsymbol{\eta}}
     \mathbf{x}_{t}
     +
-    \boldsymbol{\zeta}_{t}
+    \boldsymbol{\zeta}_{t},
     \quad
     \mathrm{with}
     \quad
@@ -229,16 +229,16 @@ Other Simulation of State Space Models Data Functions:
 \code{\link{OU2SSM}()},
 \code{\link{OU2SVAR}()},
 \code{\link{OU2VAR}()},
+\code{\link{SimSSM}()},
 \code{\link{SimSSMFixed}()},
 \code{\link{SimSSMIVary}()},
-\code{\link{SimSSMLinGrowthIVary}()},
 \code{\link{SimSSMLinGrowth}()},
+\code{\link{SimSSMLinGrowthIVary}()},
+\code{\link{SimSSMOU}()},
 \code{\link{SimSSMOUFixed}()},
 \code{\link{SimSSMOUIVary}()},
-\code{\link{SimSSMOU}()},
 \code{\link{SimSSMVARFixed}()},
-\code{\link{SimSSMVARIVary}()},
-\code{\link{SimSSM}()}
+\code{\link{SimSSMVARIVary}()}
 }
 \concept{Simulation of State Space Models Data Functions}
 \keyword{sim}
