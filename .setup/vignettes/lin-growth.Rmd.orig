@@ -50,7 +50,7 @@ The measurement model is given by
   \end{array}
   \right)
   +
-  \boldsymbol{\varepsilon}_{i, t}
+  \boldsymbol{\varepsilon}_{i, t},
   \quad
   \mathrm{with}
   \quad

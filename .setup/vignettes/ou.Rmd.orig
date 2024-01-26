@@ -45,7 +45,7 @@ The measurement model is given by
   \boldsymbol{\Lambda}
   \boldsymbol{\eta}_{i, t} 
   +
-  \boldsymbol{\varepsilon}_{i, t}
+  \boldsymbol{\varepsilon}_{i, t},
   \quad
   \mathrm{with}
   \quad
@@ -115,6 +115,11 @@ if (production) {
   time <- 1000
   n <- 5
 }
+time_ct <- seq(from = 0, to = 1000, by = 0.10)
+time_var <- time_ct[
+  which(time_ct %in% seq(from = 0, to = 1000, by = 1.00))
+]
+time <- length(time_ct)
 set.seed(42)
 delta_t <- 0.10
 k <- p <- 3

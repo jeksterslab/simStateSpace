@@ -52,7 +52,7 @@ The dynamic structure is given by
   \boldsymbol{\beta}
   \boldsymbol{\eta}_{i, t - 1}
   +
-  \boldsymbol{\zeta}_{i, t}
+  \boldsymbol{\zeta}_{i, t},
   \quad
   \mathrm{with}
   \quad

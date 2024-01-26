@@ -19,7 +19,7 @@
 #'     \boldsymbol{\Lambda}
 #'     \boldsymbol{\eta}_{i, t}
 #'     +
-#'     \boldsymbol{\varepsilon}_{i, t}
+#'     \boldsymbol{\varepsilon}_{i, t},
 #'     \quad
 #'     \mathrm{with}
 #'     \quad
@@ -69,7 +69,7 @@
 #'     \boldsymbol{\beta}
 #'     \boldsymbol{\eta}_{i, t - 1}
 #'     +
-#'     \boldsymbol{\zeta}_{i, t}
+#'     \boldsymbol{\zeta}_{i, t},
 #'     \quad
 #'     \mathrm{with}
 #'     \quad
@@ -124,7 +124,7 @@
 #'     \boldsymbol{\Lambda}
 #'     \boldsymbol{\eta}_{i, t}
 #'     +
-#'     \boldsymbol{\varepsilon}_{i, t}
+#'     \boldsymbol{\varepsilon}_{i, t},
 #'     \quad
 #'     \mathrm{with}
 #'     \quad
@@ -149,7 +149,7 @@
 #'     \boldsymbol{\Gamma}_{\boldsymbol{\eta}}
 #'     \mathbf{x}_{i, t}
 #'     +
-#'     \boldsymbol{\zeta}_{i, t}
+#'     \boldsymbol{\zeta}_{i, t},
 #'     \quad
 #'     \mathrm{with}
 #'     \quad
@@ -181,7 +181,7 @@
 #'     \boldsymbol{\Gamma}_{\mathbf{y}}
 #'     \mathbf{x}_{i, t}
 #'     +
-#'     \boldsymbol{\varepsilon}_{i, t}
+#'     \boldsymbol{\varepsilon}_{i, t},
 #'     \quad
 #'     \mathrm{with}
 #'     \quad
@@ -209,7 +209,7 @@
 #'     \boldsymbol{\Gamma}_{\boldsymbol{\eta}}
 #'     \mathbf{x}_{i, t}
 #'     +
-#'     \boldsymbol{\zeta}_{i, t}
+#'     \boldsymbol{\zeta}_{i, t},
 #'     \quad
 #'     \mathrm{with}
 #'     \quad
