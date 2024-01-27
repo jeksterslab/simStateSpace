@@ -10,6 +10,7 @@ nocite: |
   @Chow-Losardo-Park-etal-2023
   @Uhlenbeck-Ornstein-1930
   @Chow-Ho-Hamaker-etal-2010
+  @Deboeck-Preacher-2015
 output:
   rmarkdown::html_vignette:
     toc: true
@@ -109,19 +110,29 @@ which represents random fluctuations.
 #| echo = FALSE
 production <- FALSE
 if (production) {
-  time <- 1000
+  time_max <- 1000 - 1
   n <- 100
 } else {
-  time <- 1000
+  time_max <- 100 - 1
   n <- 5
 }
-time_ct <- seq(from = 0, to = 1000, by = 0.10)
-time_var <- time_ct[
-  which(time_ct %in% seq(from = 0, to = 1000, by = 1.00))
-]
-time <- length(time_ct)
 set.seed(42)
 delta_t <- 0.10
+time_ct <- seq(
+  from = 0,
+  to = time_max,
+  by = delta_t
+)
+time_discrete <- time_ct[
+  which(
+    time_ct %in% seq(
+      from = 0,
+      to = time_max,
+      by = 1.00
+    )
+  )
+]
+time <- length(time_ct)
 k <- p <- 3
 iden <- diag(k)
 null_vec <- rep(x = 0, times = k)

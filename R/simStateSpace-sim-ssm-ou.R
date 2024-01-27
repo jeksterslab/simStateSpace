@@ -227,7 +227,10 @@
 #' mu0 <- c(-3.0, 1.5)
 #' sigma0 <- iden
 #' mu <- c(5.76, 5.18)
-#' phi <- matrix(data = c(0.10, -0.05, -0.05, 0.10), nrow = p)
+#' phi <- matrix(
+#'   data = c(0.10, -0.05, -0.05, 0.10),
+#'   nrow = p
+#' )
 #' sigma <- matrix(
 #'   data = c(2.79, 0.06, 0.06, 3.27),
 #'   nrow = p
@@ -424,7 +427,7 @@ SimSSMOU <- function(mu0,
       vary_i = FALSE
     ),
     data = data,
-    fun = "SimSSMOUIVary"
+    fun = "SimSSMOU"
   )
   class(out) <- c(
     "simstatespace",
