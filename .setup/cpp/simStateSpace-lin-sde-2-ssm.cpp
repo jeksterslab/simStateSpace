@@ -123,13 +123,15 @@
 //' @keywords simStateSpace sim linsde
 //' @export
 // [[Rcpp::export]]
-Rcpp::List LinSDE2SSM(const arma::vec& b, const arma::mat& a, const arma::mat& q, const double delta_t) {
+Rcpp::List LinSDE2SSM(const arma::vec& b, const arma::mat& a,
+                      const arma::mat& q, const double delta_t) {
   // Step 1: Determine indices
   int num_latent_vars = b.n_elem;
 
   // Step 2: Get state space parameters
   arma::mat I = arma::eye<arma::mat>(num_latent_vars, num_latent_vars);
-  arma::mat J = arma::eye<arma::mat>(num_latent_vars * num_latent_vars, num_latent_vars * num_latent_vars);
+  arma::mat J = arma::eye<arma::mat>(num_latent_vars * num_latent_vars,
+                                     num_latent_vars * num_latent_vars);
   // 2.1 beta
   arma::mat beta = arma::expmat(a * delta_t);
   // 2.2 alpha
@@ -137,9 +139,13 @@ Rcpp::List LinSDE2SSM(const arma::vec& b, const arma::mat& a, const arma::mat& q
   // 2.3 psi
   arma::mat a_hashtag = arma::kron(a, I) + arma::kron(I, a);
   arma::vec q_vec = arma::vectorise(q);
-  arma::vec psi_vec = arma::inv(a_hashtag) * (arma::expmat(a_hashtag * delta_t) - J) * q_vec;
-  arma::mat psi = arma::chol(arma::reshape(psi_vec, num_latent_vars, num_latent_vars));
+  arma::vec psi_vec =
+      arma::inv(a_hashtag) * (arma::expmat(a_hashtag * delta_t) - J) * q_vec;
+  arma::mat psi =
+      arma::chol(arma::reshape(psi_vec, num_latent_vars, num_latent_vars));
 
   // Step 3: Return state space parameters in a list
-  return Rcpp::List::create(Rcpp::Named("alpha") = alpha, Rcpp::Named("beta") = beta, Rcpp::Named("psi") = psi);
+  return Rcpp::List::create(Rcpp::Named("alpha") = alpha,
+                            Rcpp::Named("beta") = beta,
+                            Rcpp::Named("psi") = psi);
 }

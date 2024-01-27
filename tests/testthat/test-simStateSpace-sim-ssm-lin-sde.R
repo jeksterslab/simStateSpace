@@ -12,12 +12,12 @@ lapply(
     sigma0 <- iden
     a <- matrix(
       data = c(
-       -0.10,
-       0.05,
-       0.05,
-       -0.10
-     ),
-     nrow = p
+        -0.10,
+        0.05,
+        0.05,
+        -0.10
+      ),
+      nrow = p
     )
     b <- c(0.317, 0.230)
     q <- matrix(
