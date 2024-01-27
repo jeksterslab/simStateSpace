@@ -102,7 +102,7 @@ Vector of intercepts for the dynamic model
 (\(\boldsymbol{\alpha}\)).</p></li>
 <li><p><code>beta</code>: Numeric matrix.
 Transition matrix relating the values of the latent variables
-at time <code>t - 1</code> to those at time <code>t</code>
+at time <code>t_k - 1</code> to those at time <code>t_k</code>
 (\(\boldsymbol{\beta}\)).</p></li>
 <li><p><code>psi</code>: Numeric matrix.
 The process noise covariance matrix
@@ -130,6 +130,8 @@ $$
       \left(
         \boldsymbol{\beta} - \mathbf{I}_{p}
       \right)
+      \boldsymbol{\Phi}
+      \boldsymbol{\mu}
   $$</p>
 <p>$$
       \mathrm{vec}
@@ -174,6 +176,7 @@ $$
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p>Other Simulation of State Space Models Data Functions: 
+<code><a href="LinSDE2SSM.html">LinSDE2SSM</a>()</code>,
 <code><a href="OU2SVAR.html">OU2SVAR</a>()</code>,
 <code><a href="OU2VAR.html">OU2VAR</a>()</code>,
 <code><a href="SimSSM.html">SimSSM</a>()</code>,
@@ -181,6 +184,7 @@ $$
 <code><a href="SimSSMIVary.html">SimSSMIVary</a>()</code>,
 <code><a href="SimSSMLinGrowth.html">SimSSMLinGrowth</a>()</code>,
 <code><a href="SimSSMLinGrowthIVary.html">SimSSMLinGrowthIVary</a>()</code>,
+<code><a href="SimSSMLinSDE.html">SimSSMLinSDE</a>()</code>,
 <code><a href="SimSSMOU.html">SimSSMOU</a>()</code>,
 <code><a href="SimSSMOUFixed.html">SimSSMOUFixed</a>()</code>,
 <code><a href="SimSSMOUIVary.html">SimSSMOUIVary</a>()</code>,

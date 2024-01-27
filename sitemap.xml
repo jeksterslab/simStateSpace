@@ -13,6 +13,9 @@
     <loc>https://github.com/jeksterslab/simStateSpace/articles/lin-growth.html</loc>
   </url>
   <url>
+    <loc>https://github.com/jeksterslab/simStateSpace/articles/ou-discrete.html</loc>
+  </url>
+  <url>
     <loc>https://github.com/jeksterslab/simStateSpace/articles/ou.html</loc>
   </url>
   <url>
@@ -32,6 +35,9 @@
   </url>
   <url>
     <loc>https://github.com/jeksterslab/simStateSpace/news/index.html</loc>
+  </url>
+  <url>
+    <loc>https://github.com/jeksterslab/simStateSpace/reference/LinSDE2SSM.html</loc>
   </url>
   <url>
     <loc>https://github.com/jeksterslab/simStateSpace/reference/OU2SSM.html</loc>
@@ -56,6 +62,9 @@
   </url>
   <url>
     <loc>https://github.com/jeksterslab/simStateSpace/reference/SimSSMLinGrowthIVary.html</loc>
+  </url>
+  <url>
+    <loc>https://github.com/jeksterslab/simStateSpace/reference/SimSSMLinSDE.html</loc>
   </url>
   <url>
     <loc>https://github.com/jeksterslab/simStateSpace/reference/SimSSMOU.html</loc>
