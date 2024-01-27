@@ -253,6 +253,7 @@ On the theory of the brownian motion.
 }
 \seealso{
 Other Simulation of State Space Models Data Functions: 
+\code{\link{LinSDE2SSM}()},
 \code{\link{OU2SSM}()},
 \code{\link{OU2SVAR}()},
 \code{\link{OU2VAR}()},
@@ -261,6 +262,7 @@ Other Simulation of State Space Models Data Functions:
 \code{\link{SimSSMIVary}()},
 \code{\link{SimSSMLinGrowth}()},
 \code{\link{SimSSMLinGrowthIVary}()},
+\code{\link{SimSSMLinSDE}()},
 \code{\link{SimSSMOU}()},
 \code{\link{SimSSMOUFixed}()},
 \code{\link{SimSSMVAR}()},

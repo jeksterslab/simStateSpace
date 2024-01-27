@@ -1,4 +1,155 @@
 // -----------------------------------------------------------------------------
+// edit .setup/cpp/simStateSpace-linear-sde-2-ssm.cpp
+// Ivan Jacob Agaloos Pesigan
+// -----------------------------------------------------------------------------
+
+#include <RcppArmadillo.h>
+// [[Rcpp::depends(RcppArmadillo)]]
+
+//' Convert Parameters from the Linear Stochastic Differential Equation Model
+//' to State Space Model Parameterization
+//'
+//' This function converts parameters from
+//' the linear stochastic differential equation model
+//' to state space model parameterization.
+//'
+//' @details The state space parameters
+//'   as a function of the linear stochastic differential equation model
+//'   parameters
+//'   are given by
+//'   \deqn{
+//'       \boldsymbol{\beta}
+//'       =
+//'       \exp{
+//'         \left(
+//'           \mathbf{A}
+//'           \Delta_{t}
+//'         \right)
+//'       }
+//'   }
+//'
+//'   \deqn{
+//'       \boldsymbol{\alpha}
+//'       =
+//'       \mathbf{A}^{-1}
+//'       \left(
+//'         \boldsymbol{\beta} - \mathbf{I}_{p}
+//'       \right)
+//'       \mathbf{b}
+//'   }
+//'
+//'   \deqn{
+//'       \mathrm{vec}
+//'       \left(
+//'         \boldsymbol{\Psi}
+//'       \right)
+//'       =
+//'       \left\{
+//'         \left[
+//'           \left(
+//'             \mathbf{A} \otimes \mathbf{I}_{p}
+//'           \right)
+//'           +
+//'           \left(
+//'             \mathbf{I}_{p} \otimes \mathbf{A}
+//'           \right)
+//'         \right]
+//'         \left[
+//'           \exp
+//'           \left(
+//'             \left[
+//'               \left(
+//'                 \mathbf{A} \otimes \mathbf{I}_{p}
+//'               \right)
+//'               +
+//'               \left(
+//'                 \mathbf{I}_{p} \otimes \mathbf{A}
+//'               \right)
+//'             \right]
+//'             \Delta_{t}
+//'         \right)
+//'         -
+//'         \mathbf{I}_{p \times p}
+//'       \right]
+//'       \mathrm{vec}
+//'       \left(
+//'         \mathbf{Q}
+//'       \right)
+//'     \right\}
+//'   }
+//'
+//' @author Ivan Jacob Agaloos Pesigan
+//'
+//' @inheritParams SimSSMLinSDE
+//'
+//' @return Returns a list of state space parameters:
+//'   - `alpha`: Numeric vector.
+//'     Vector of intercepts for the dynamic model
+//'     (\eqn{\boldsymbol{\alpha}}).
+//'   - `beta`: Numeric matrix.
+//'     Transition matrix relating the values of the latent variables
+//'     at time `t_k - 1` to those at time `t_k`
+//'     (\eqn{\boldsymbol{\beta}}).
+//'   - `psi`: Numeric matrix.
+//'     The process noise covariance matrix
+//'     (\eqn{\boldsymbol{\Psi}}).
+//'
+//' @examples
+//' p <- k <- 2
+//' a <- matrix(
+//'   data = c(
+//'    -0.10,
+//'    0.05,
+//'    0.05,
+//'    -0.10
+//'  ),
+//'  nrow = p
+//' )
+//' b <- c(0.317, 0.230)
+//' q <- matrix(
+//'   data = c(2.79, 0.06, 0.06, 3.27),
+//'   nrow = p
+//' )
+//' delta_t <- 0.10
+//'
+//' LinSDE2SSM(
+//'   b = b,
+//'   a = a,
+//'   q = q,
+//'   delta_t = delta_t
+//' )
+//'
+//' @family Simulation of State Space Models Data Functions
+//' @keywords simStateSpace sim linsde
+//' @export
+// [[Rcpp::export]]
+Rcpp::List LinSDE2SSM(const arma::vec& b, const arma::mat& a,
+                      const arma::mat& q, const double delta_t) {
+  // Step 1: Determine indices
+  int num_latent_vars = b.n_elem;
+
+  // Step 2: Get state space parameters
+  arma::mat I = arma::eye<arma::mat>(num_latent_vars, num_latent_vars);
+  arma::mat J = arma::eye<arma::mat>(num_latent_vars * num_latent_vars,
+                                     num_latent_vars * num_latent_vars);
+  // 2.1 beta
+  arma::mat beta = arma::expmat(a * delta_t);
+  // 2.2 alpha
+  arma::vec alpha = arma::inv(a) * (beta - I) * b;
+  // 2.3 psi
+  arma::mat a_hashtag = arma::kron(a, I) + arma::kron(I, a);
+  arma::vec q_vec = arma::vectorise(q);
+  arma::vec psi_vec =
+      arma::inv(a_hashtag) * (arma::expmat(a_hashtag * delta_t) - J) * q_vec;
+  arma::mat psi =
+      arma::chol(arma::reshape(psi_vec, num_latent_vars, num_latent_vars));
+
+  // Step 3: Return state space parameters in a list
+  return Rcpp::List::create(Rcpp::Named("alpha") = alpha,
+                            Rcpp::Named("beta") = beta,
+                            Rcpp::Named("psi") = psi);
+}
+// -----------------------------------------------------------------------------
 // edit .setup/cpp/simStateSpace-ou-2-ssm.cpp
 // Ivan Jacob Agaloos Pesigan
 // -----------------------------------------------------------------------------
@@ -33,6 +184,8 @@
 //'       \left(
 //'         \boldsymbol{\beta} - \mathbf{I}_{p}
 //'       \right)
+//'       \boldsymbol{\Phi}
+//'       \boldsymbol{\mu}
 //'   }
 //'
 //'   \deqn{
@@ -85,7 +238,7 @@
 //'     (\eqn{\boldsymbol{\alpha}}).
 //'   - `beta`: Numeric matrix.
 //'     Transition matrix relating the values of the latent variables
-//'     at time `t - 1` to those at time `t`
+//'     at time `t_k - 1` to those at time `t_k`
 //'     (\eqn{\boldsymbol{\beta}}).
 //'   - `psi`: Numeric matrix.
 //'     The process noise covariance matrix
@@ -421,6 +574,72 @@ Rcpp::List SimSSM0LinGrowthIVary(const int n, const Rcpp::List& mu0,
 
   // Step 4: Return the results
   return out;
+}
+// -----------------------------------------------------------------------------
+// edit .setup/cpp/simStateSpace-sim-ssm-0-lin-sde-dot.cpp
+// Ivan Jacob Agaloos Pesigan
+// -----------------------------------------------------------------------------
+
+#include <RcppArmadillo.h>
+// [[Rcpp::depends(RcppArmadillo)]]
+// [[Rcpp::export(.SimSSM0LinSDE)]]
+Rcpp::List SimSSM0LinSDE(const arma::vec& mu0, const arma::mat& sigma0_l,
+                         const arma::vec& b, const arma::mat& a,
+                         const arma::mat& q_l, const arma::vec& nu,
+                         const arma::mat& lambda, const arma::mat& theta_l,
+                         const double delta_t, const int time,
+                         const int burn_in) {
+  // Step 1: Determine indices
+  int total_time = time + burn_in;
+  int num_latent_vars = mu0.n_elem;
+  int num_manifest_vars = nu.n_elem;
+
+  // Step 2: Create matrices to store simulated data
+  arma::mat eta(num_latent_vars, total_time);
+  arma::mat y(num_manifest_vars, total_time);
+  arma::vec id(total_time, arma::fill::ones);
+
+  // Step 3: Get state space parameters
+  arma::mat I = arma::eye<arma::mat>(num_latent_vars, num_latent_vars);
+  arma::mat J = arma::eye<arma::mat>(num_latent_vars * num_latent_vars,
+                                     num_latent_vars * num_latent_vars);
+  // 3.1 beta
+  arma::mat beta = arma::expmat(a * delta_t);
+  // 3.2 alpha
+  arma::vec alpha = arma::inv(a) * (beta - I) * b;
+  // 3.3 psi
+  arma::mat a_hashtag = arma::kron(a, I) + arma::kron(I, a);
+  arma::vec q_vec = arma::vectorise(q_l * q_l.t());
+  arma::vec psi_vec =
+      arma::inv(a_hashtag) * (arma::expmat(a_hashtag * delta_t) - J) * q_vec;
+  arma::mat psi_l =
+      arma::chol(arma::reshape(psi_vec, num_latent_vars, num_latent_vars));
+
+  // Step 4: Generate initial condition
+  eta.col(0) = mu0 + (sigma0_l * arma::randn(num_latent_vars));
+  y.col(0) =
+      nu + (lambda * eta.col(0)) + (theta_l * arma::randn(num_manifest_vars));
+
+  // Step 5: Simulate state space model data using a loop
+  for (int t = 1; t < total_time; t++) {
+    eta.col(t) = alpha + (beta * eta.col(t - 1)) +
+                 (psi_l * arma::randn(num_latent_vars));
+    y.col(t) =
+        nu + (lambda * eta.col(t)) + (theta_l * arma::randn(num_manifest_vars));
+  }
+
+  // Step 6: If there is a burn-in period, remove it
+  if (burn_in > 0) {
+    y = y.cols(burn_in, total_time - 1);
+    eta = eta.cols(burn_in, total_time - 1);
+    id = id.subvec(burn_in, total_time - 1);
+  }
+
+  // Step 7: Return the transposed data matrices in a list
+  return Rcpp::List::create(
+      Rcpp::Named("id") = id,
+      Rcpp::Named("time") = arma::linspace(0, (time - 1) * delta_t, time),
+      Rcpp::Named("y") = y.t(), Rcpp::Named("eta") = eta.t());
 }
 // -----------------------------------------------------------------------------
 // edit .setup/cpp/simStateSpace-sim-ssm-0-ou-dot.cpp
@@ -1120,6 +1339,78 @@ Rcpp::List SimSSM1LinGrowthIVary(const int n, const Rcpp::List& mu0,
 
   // Step 4: Return the results
   return out;
+}
+// -----------------------------------------------------------------------------
+// edit .setup/cpp/simStateSpace-sim-ssm-1-lin-sde-dot.cpp
+// Ivan Jacob Agaloos Pesigan
+// -----------------------------------------------------------------------------
+
+#include <RcppArmadillo.h>
+// [[Rcpp::depends(RcppArmadillo)]]
+// [[Rcpp::export(.SimSSM1LinSDE)]]
+Rcpp::List SimSSM1LinSDE(const arma::vec& mu0, const arma::mat& sigma0_l,
+                         const arma::vec& b, const arma::mat& a,
+                         const arma::mat& q_l, const arma::vec& nu,
+                         const arma::mat& lambda, const arma::mat& theta_l,
+                         const arma::mat& gamma_eta, const arma::mat& x,
+                         const double delta_t, const int time,
+                         const int burn_in) {
+  // Step 1: Determine indices
+  int total_time = time + burn_in;
+  int num_latent_vars = mu0.n_elem;
+  int num_manifest_vars = nu.n_elem;
+
+  // Step 2: Create matrices to store simulated data
+  arma::mat eta(num_latent_vars, total_time);
+  arma::mat y(num_manifest_vars, total_time);
+  arma::mat x_t = x.t();
+  arma::vec id(total_time, arma::fill::ones);
+
+  // Step 3: Get state space parameters
+  arma::mat I = arma::eye<arma::mat>(num_latent_vars, num_latent_vars);
+  arma::mat J = arma::eye<arma::mat>(num_latent_vars * num_latent_vars,
+                                     num_latent_vars * num_latent_vars);
+  // 3.1 beta
+  arma::mat beta = arma::expmat(a * delta_t);
+  // 3.2 alpha
+  arma::vec alpha = arma::inv(a) * (beta - I) * b;
+  // 3.3 psi
+  arma::mat a_hashtag = arma::kron(a, I) + arma::kron(I, a);
+  arma::vec q_vec = arma::vectorise(q_l * q_l.t());
+  arma::vec psi_vec =
+      arma::inv(a_hashtag) * (arma::expmat(a_hashtag * delta_t) - J) * q_vec;
+  arma::mat psi_l =
+      arma::chol(arma::reshape(psi_vec, num_latent_vars, num_latent_vars));
+
+  // Step 4: Generate initial condition
+  eta.col(0) = mu0 + (sigma0_l * arma::randn(num_latent_vars)) +
+               (gamma_eta * x_t.col(0));
+  y.col(0) =
+      nu + (lambda * eta.col(0)) + (theta_l * arma::randn(num_manifest_vars));
+
+  // Step 5: Simulate state space model data using a loop
+  for (int t = 1; t < total_time; t++) {
+    eta.col(t) = alpha + (beta * eta.col(t - 1)) +
+                 (psi_l * arma::randn(num_latent_vars)) +
+                 (gamma_eta * x_t.col(t));
+    y.col(t) =
+        nu + (lambda * eta.col(t)) + (theta_l * arma::randn(num_manifest_vars));
+  }
+
+  // Step 6: If there is a burn-in period, remove it
+  if (burn_in > 0) {
+    y = y.cols(burn_in, total_time - 1);
+    eta = eta.cols(burn_in, total_time - 1);
+    x_t = x_t.cols(burn_in, total_time - 1);
+    id = id.subvec(burn_in, total_time - 1);
+  }
+
+  // Step 7: Return the transposed data matrices in a list
+  return Rcpp::List::create(
+      Rcpp::Named("id") = id,
+      Rcpp::Named("time") = arma::linspace(0, (time - 1) * delta_t, time),
+      Rcpp::Named("y") = y.t(), Rcpp::Named("eta") = eta.t(),
+      Rcpp::Named("x") = x_t.t());
 }
 // -----------------------------------------------------------------------------
 // edit .setup/cpp/simStateSpace-sim-ssm-1-ou-dot.cpp
@@ -1875,6 +2166,80 @@ Rcpp::List SimSSM2LinGrowthIVary(const int n, const Rcpp::List& mu0,
 
   // Step 4: Return the results
   return out;
+}
+// -----------------------------------------------------------------------------
+// edit .setup/cpp/simStateSpace-sim-ssm-2-lin-sde-dot.cpp
+// Ivan Jacob Agaloos Pesigan
+// -----------------------------------------------------------------------------
+
+#include <RcppArmadillo.h>
+// [[Rcpp::depends(RcppArmadillo)]]
+// [[Rcpp::export(.SimSSM2LinSDE)]]
+Rcpp::List SimSSM2LinSDE(const arma::vec& mu0, const arma::mat& sigma0_l,
+                         const arma::vec& b, const arma::mat& a,
+                         const arma::mat& q_l, const arma::vec& nu,
+                         const arma::mat& lambda, const arma::mat& theta_l,
+                         const arma::mat& gamma_y, const arma::mat& gamma_eta,
+                         const arma::mat& x, const double delta_t,
+                         const int time, const int burn_in) {
+  // Step 1: Determine indices
+  int total_time = time + burn_in;
+  int num_latent_vars = mu0.n_elem;
+  int num_manifest_vars = nu.n_elem;
+
+  // Step 2: Create matrices to store simulated data
+  arma::mat eta(num_latent_vars, total_time);
+  arma::mat y(num_manifest_vars, total_time);
+  arma::mat x_t = x.t();
+  arma::vec id(total_time, arma::fill::ones);
+
+  // Step 3: Get state space parameters
+  arma::mat I = arma::eye<arma::mat>(num_latent_vars, num_latent_vars);
+  arma::mat J = arma::eye<arma::mat>(num_latent_vars * num_latent_vars,
+                                     num_latent_vars * num_latent_vars);
+  // 3.1 beta
+  arma::mat beta = arma::expmat(a * delta_t);
+  // 3.2 alpha
+  arma::vec alpha = arma::inv(a) * (beta - I) * b;
+  // 3.3 psi
+  arma::mat a_hashtag = arma::kron(a, I) + arma::kron(I, a);
+  arma::vec q_vec = arma::vectorise(q_l * q_l.t());
+  arma::vec psi_vec =
+      arma::inv(a_hashtag) * (arma::expmat(a_hashtag * delta_t) - J) * q_vec;
+  arma::mat psi_l =
+      arma::chol(arma::reshape(psi_vec, num_latent_vars, num_latent_vars));
+
+  // Step 4: Generate initial condition
+  eta.col(0) = mu0 + (sigma0_l * arma::randn(num_latent_vars)) +
+               (gamma_eta * x_t.col(0));
+  y.col(0) = nu + (lambda * eta.col(0)) +
+             (theta_l * arma::randn(num_manifest_vars)) +
+             (gamma_y * x_t.col(0));
+
+  // Step 5: Simulate state space model data using a loop
+  for (int t = 1; t < total_time; t++) {
+    eta.col(t) = alpha + (beta * eta.col(t - 1)) +
+                 (psi_l * arma::randn(num_latent_vars)) +
+                 (gamma_eta * x_t.col(t));
+    y.col(t) = nu + (lambda * eta.col(t)) +
+               (theta_l * arma::randn(num_manifest_vars)) +
+               (gamma_y * x_t.col(t));
+  }
+
+  // Step 6: If there is a burn-in period, remove it
+  if (burn_in > 0) {
+    y = y.cols(burn_in, total_time - 1);
+    eta = eta.cols(burn_in, total_time - 1);
+    x_t = x_t.cols(burn_in, total_time - 1);
+    id = id.subvec(burn_in, total_time - 1);
+  }
+
+  // Step 7: Return the transposed data matrices in a list
+  return Rcpp::List::create(
+      Rcpp::Named("id") = id,
+      Rcpp::Named("time") = arma::linspace(0, (time - 1) * delta_t, time),
+      Rcpp::Named("y") = y.t(), Rcpp::Named("eta") = eta.t(),
+      Rcpp::Named("x") = x_t.t());
 }
 // -----------------------------------------------------------------------------
 // edit .setup/cpp/simStateSpace-sim-ssm-2-ou-dot.cpp

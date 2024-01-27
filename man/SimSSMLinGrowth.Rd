@@ -385,6 +385,7 @@ and state-space modeling techniques.
 }
 \seealso{
 Other Simulation of State Space Models Data Functions: 
+\code{\link{LinSDE2SSM}()},
 \code{\link{OU2SSM}()},
 \code{\link{OU2SVAR}()},
 \code{\link{OU2VAR}()},
@@ -392,6 +393,7 @@ Other Simulation of State Space Models Data Functions:
 \code{\link{SimSSMFixed}()},
 \code{\link{SimSSMIVary}()},
 \code{\link{SimSSMLinGrowthIVary}()},
+\code{\link{SimSSMLinSDE}()},
 \code{\link{SimSSMOU}()},
 \code{\link{SimSSMOUFixed}()},
 \code{\link{SimSSMOUIVary}()},

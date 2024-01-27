@@ -305,7 +305,10 @@ iden <- diag(p)
 mu0 <- c(-3.0, 1.5)
 sigma0 <- iden
 mu <- c(5.76, 5.18)
-phi <- matrix(data = c(0.10, -0.05, -0.05, 0.10), nrow = p)
+phi <- matrix(
+  data = c(0.10, -0.05, -0.05, 0.10),
+  nrow = p
+)
 sigma <- matrix(
   data = c(2.79, 0.06, 0.06, 3.27),
   nrow = p
@@ -396,6 +399,7 @@ On the theory of the brownian motion.
 }
 \seealso{
 Other Simulation of State Space Models Data Functions: 
+\code{\link{LinSDE2SSM}()},
 \code{\link{OU2SSM}()},
 \code{\link{OU2SVAR}()},
 \code{\link{OU2VAR}()},
@@ -404,6 +408,7 @@ Other Simulation of State Space Models Data Functions:
 \code{\link{SimSSMIVary}()},
 \code{\link{SimSSMLinGrowth}()},
 \code{\link{SimSSMLinGrowthIVary}()},
+\code{\link{SimSSMLinSDE}()},
 \code{\link{SimSSMOUFixed}()},
 \code{\link{SimSSMOUIVary}()},
 \code{\link{SimSSMVAR}()},
