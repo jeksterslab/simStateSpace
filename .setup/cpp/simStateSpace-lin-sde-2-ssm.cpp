@@ -163,15 +163,19 @@
 //' @keywords simStateSpace sim linsde
 //' @export
 // [[Rcpp::export]]
-Rcpp::List LinSDE2SSM(const arma::vec& gamma, const arma::mat& phi, const arma::mat& sigma_l, const double delta_t) {
+Rcpp::List LinSDE2SSM(const arma::vec& gamma, const arma::mat& phi,
+                      const arma::mat& sigma_l, const double delta_t) {
   int p = gamma.n_elem;
   arma::mat I = arma::eye<arma::mat>(p, p);
   arma::mat J = arma::eye<arma::mat>(p * p, p * p);
   arma::mat phi_hashtag = arma::kron(phi, I) + arma::kron(I, phi);
   arma::vec sigma_vec = arma::vectorise(sigma_l * sigma_l.t());
-  arma::vec psi_vec = arma::inv(phi_hashtag) * (arma::expmat(phi_hashtag * delta_t) - J) * sigma_vec;
+  arma::vec psi_vec = arma::inv(phi_hashtag) *
+                      (arma::expmat(phi_hashtag * delta_t) - J) * sigma_vec;
   arma::mat psi_l = arma::chol(arma::reshape(psi_vec, p, p), "lower");
   arma::mat beta = arma::expmat(phi * delta_t);
   arma::vec alpha = arma::inv(phi) * (beta - I) * gamma;
-  return Rcpp::List::create(Rcpp::Named("alpha") = alpha, Rcpp::Named("beta") = beta, Rcpp::Named("psi_l") = psi_l);
+  return Rcpp::List::create(Rcpp::Named("alpha") = alpha,
+                            Rcpp::Named("beta") = beta,
+                            Rcpp::Named("psi_l") = psi_l);
 }
