@@ -1,10 +1,10 @@
 #' Simulate Data from the
-#' Ornstein–Uhlenbeck Model
+#' Linear Stochastic Differential Equation Model
 #' using a State Space Model Parameterization
 #' (Individual-Varying Parameters)
 #'
 #' This function simulates data from the
-#' Ornstein–Uhlenbeck model
+#' linear stochastic differential equation model
 #' using a state space model parameterization.
 #' In this model,
 #' the parameters can vary across individuals.
@@ -14,7 +14,7 @@
 #'   If the length of any of the parameters
 #'   (`mu0`,
 #'   `sigma0_l`,
-#'   `mu`,
+#'   `gamma`,
 #'   `phi`,
 #'   `sigma_l`,
 #'   `nu`,
@@ -28,19 +28,16 @@
 #' @author Ivan Jacob Agaloos Pesigan
 #'
 #' @inheritParams SimSSMIVary
-#' @param mu List of numeric vectors.
+#' @param gamma List of numeric vectors.
 #'   Each element of the list
-#'   is the long-term mean or equilibrium level
-#'   (\eqn{\boldsymbol{\mu}}).
+#'   is an unobserved term that is constant over time
+#'   (\eqn{\boldsymbol{\gamma}}).
 #' @param phi List of numeric matrix.
 #'   Each element of the list
 #'   is the drift matrix
 #'   which represents the rate of change of the solution
 #'   in the absence of any random fluctuations
 #'   (\eqn{\boldsymbol{\Phi}}).
-#'   The negative value of `phi` is the rate of mean reversion,
-#'   determining how quickly the variable returns to its mean
-#'   (\eqn{- \boldsymbol{\Phi}}).
 #' @param sigma_l List of numeric matrix.
 #'   Each element of the list
 #'   is the Cholesky factorization (`t(chol(sigma))`)
@@ -49,7 +46,6 @@
 #'   \eqn{\boldsymbol{\Sigma}}.
 #'
 #' @inherit SimSSMFixed references return
-#' @inheritParams SimSSMLinSDEIVary
 #'
 #' @examples
 #' # prepare parameters
@@ -69,8 +65,8 @@
 #' sigma0_l <- list(
 #'   t(chol(sigma0))
 #' )
-#' mu <- list(
-#'   c(5.76, 5.18)
+#' gamma <- list(
+#'   c(0.317, 0.230)
 #' )
 #' phi <- list(
 #'   -0.1 * diag(p),
@@ -123,13 +119,13 @@
 #' )
 #'
 #' # Type 0
-#' ssm <- SimSSMOUIVary(
+#' ssm <- SimSSMLinSDEIVary(
 #'   n = n,
 #'   time = time,
 #'   delta_t = delta_t,
 #'   mu0 = mu0,
 #'   sigma0_l = sigma0_l,
-#'   mu = mu,
+#'   gamma = gamma,
 #'   phi = phi,
 #'   sigma_l = sigma_l,
 #'   nu = nu,
@@ -141,13 +137,13 @@
 #' plot(ssm)
 #'
 #' # Type 1
-#' ssm <- SimSSMOUIVary(
+#' ssm <- SimSSMLinSDEIVary(
 #'   n = n,
 #'   time = time,
 #'   delta_t = delta_t,
 #'   mu0 = mu0,
 #'   sigma0_l = sigma0_l,
-#'   mu = mu,
+#'   gamma = gamma,
 #'   phi = phi,
 #'   sigma_l = sigma_l,
 #'   nu = nu,
@@ -161,13 +157,13 @@
 #' plot(ssm)
 #'
 #' # Type 2
-#' ssm <- SimSSMOUIVary(
+#' ssm <- SimSSMLinSDEIVary(
 #'   n = n,
 #'   time = time,
 #'   delta_t = delta_t,
 #'   mu0 = mu0,
 #'   sigma0_l = sigma0_l,
-#'   mu = mu,
+#'   gamma = gamma,
 #'   phi = phi,
 #'   sigma_l = sigma_l,
 #'   nu = nu,
@@ -182,14 +178,14 @@
 #' plot(ssm)
 #'
 #' @family Simulation of State Space Models Data Functions
-#' @keywords simStateSpace sim ou
+#' @keywords simStateSpace sim linsde
 #' @export
-SimSSMOUIVary <- function(n, time, delta_t = 1.0,
-                          mu0, sigma0_l,
-                          mu, phi, sigma_l,
-                          nu, lambda, theta_l,
-                          type = 0,
-                          x = NULL, gamma_eta = NULL, gamma_y = NULL) {
+SimSSMLinSDEIVary <- function(n, time, delta_t = 1.0,
+                              mu0, sigma0_l,
+                              gamma, phi, sigma_l,
+                              nu, lambda, theta_l,
+                              type = 0,
+                              x = NULL, gamma_eta = NULL, gamma_y = NULL) {
   stopifnot(type %in% c(0, 1, 2))
   covariates <- FALSE
   if (type > 0) {
@@ -202,13 +198,13 @@ SimSSMOUIVary <- function(n, time, delta_t = 1.0,
       delta_t = 1.0,
       mu0 = rep(x = mu0, length.out = n),
       sigma0_l = rep(x = sigma0_l, length.out = n),
-      gamma = rep(x = mu, length.out = n),
+      gamma = rep(x = gamma, length.out = n),
       phi = rep(x = phi, length.out = n),
       sigma_l = rep(x = sigma_l, length.out = n),
       nu = rep(x = nu, length.out = n),
       lambda = rep(x = lambda, length.out = n),
       theta_l = rep(x = theta_l, length.out = n),
-      ou = TRUE
+      ou = FALSE
     )
   }
   if (type == 1) {
@@ -222,7 +218,7 @@ SimSSMOUIVary <- function(n, time, delta_t = 1.0,
       delta_t = 1.0,
       mu0 = rep(x = mu0, length.out = n),
       sigma0_l = rep(x = sigma0_l, length.out = n),
-      gamma = rep(x = mu, length.out = n),
+      gamma = rep(x = gamma, length.out = n),
       phi = rep(x = phi, length.out = n),
       sigma_l = rep(x = sigma_l, length.out = n),
       nu = rep(x = nu, length.out = n),
@@ -230,7 +226,7 @@ SimSSMOUIVary <- function(n, time, delta_t = 1.0,
       theta_l = rep(x = theta_l, length.out = n),
       x = rep(x = x, length.out = n),
       gamma_eta = rep(x = gamma_eta, length.out = n),
-      ou = TRUE
+      ou = FALSE
     )
   }
   if (type == 2) {
@@ -245,7 +241,7 @@ SimSSMOUIVary <- function(n, time, delta_t = 1.0,
       delta_t = 1.0,
       mu0 = rep(x = mu0, length.out = n),
       sigma0_l = rep(x = sigma0_l, length.out = n),
-      gamma = rep(x = mu, length.out = n),
+      gamma = rep(x = gamma, length.out = n),
       phi = rep(x = phi, length.out = n),
       sigma_l = rep(x = sigma_l, length.out = n),
       nu = rep(x = nu, length.out = n),
@@ -254,7 +250,7 @@ SimSSMOUIVary <- function(n, time, delta_t = 1.0,
       x = rep(x = x, length.out = n),
       gamma_eta = rep(x = gamma_eta, length.out = n),
       gamma_y = rep(x = gamma_y, length.out = n),
-      ou = TRUE
+      ou = FALSE
     )
   }
   out <- list(
@@ -266,16 +262,16 @@ SimSSMOUIVary <- function(n, time, delta_t = 1.0,
       nu = nu, lambda = lambda, theta_l = theta_l,
       type = type,
       x = x, gamma_eta = gamma_eta, gamma_y = gamma_y,
-      ou = TRUE
+      ou = FALSE
     ),
     model = list(
-      model = "ou",
+      model = "linsde",
       covariates = covariates,
       fixed = FALSE,
       vary_i = TRUE
     ),
     data = data,
-    fun = "SimSSMOUIVary"
+    fun = "SimSSMLinSDEIVary"
   )
   class(out) <- c(
     "simstatespace",

@@ -6,40 +6,43 @@ lapply(
     message(text)
     # prepare parameters
     set.seed(42)
-    k <- 3
-    iden <- diag(k)
-    null_vec <- rep(x = 0, times = k)
+    ## number of individuals
     n <- 5
-    mu0 <- null_vec
-    sigma0 <- iden
-    alpha <- null_vec
-    beta <- diag(x = 0.5, nrow = k)
-    psi <- iden
+    ## time points
     time <- 50
-    burn_in <- 10
-    gamma_eta <- 0.10 * diag(k)
+    ## dynamic structure
+    p <- 3
+    mu0 <- rep(x = 0, times = p)
+    sigma0 <- diag(p)
+    sigma0_l <- t(chol(sigma0))
+    alpha <- rep(x = 0, times = p)
+    beta <- 0.50 * diag(p)
+    psi <- diag(p)
+    psi_l <- t(chol(psi))
+    ## covariates
+    j <- 2
     x <- lapply(
       X = seq_len(n),
       FUN = function(i) {
-        return(
-          matrix(
-            data = rnorm(n = k * (time + burn_in)),
-            ncol = k
-          )
+        matrix(
+          data = stats::rnorm(n = time * j),
+          nrow = j,
+          ncol = time
         )
       }
     )
+    gamma_eta <- diag(x = 0.10, nrow = p, ncol = j)
 
-    # No covariates
-    ssm <- simStateSpace::SimSSMVARFixed(
+    # Type 0
+    ssm <- SimSSMVARFixed(
       n = n,
+      time = time,
       mu0 = mu0,
-      sigma0 = sigma0,
+      sigma0_l = sigma0_l,
       alpha = alpha,
       beta = beta,
-      psi = psi,
-      time = time,
-      burn_in = burn_in
+      psi_l = psi_l,
+      type = 0
     )
 
     as.data.frame.simstatespace(ssm, eta = TRUE)
@@ -54,18 +57,18 @@ lapply(
     plot.simstatespace(ssm, id = 1:3, time = 0:4)
     plot.simstatespace(ssm, eta = TRUE)
 
-    # With covariates
-    ssm <- simStateSpace::SimSSMVARFixed(
+    # Type 1
+    ssm <- SimSSMVARFixed(
       n = n,
+      time = time,
       mu0 = mu0,
-      sigma0 = sigma0,
+      sigma0_l = sigma0_l,
       alpha = alpha,
       beta = beta,
-      psi = psi,
-      gamma_eta = gamma_eta,
+      psi_l = psi_l,
+      type = 1,
       x = x,
-      time = time,
-      burn_in = burn_in
+      gamma_eta = gamma_eta
     )
 
     as.data.frame.simstatespace(ssm, eta = TRUE)

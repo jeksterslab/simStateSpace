@@ -2,24 +2,28 @@
 % Please edit documentation in R/simStateSpace-sim-ssm-lin-growth-i-vary.R
 \name{SimSSMLinGrowthIVary}
 \alias{SimSSMLinGrowthIVary}
-\title{Simulate Data from a Linear Growth Curve Model
+\title{Simulate Data from the
+Linear Growth Curve Model
 (Individual-Varying Parameters)}
 \usage{
 SimSSMLinGrowthIVary(
   n,
+  time,
   mu0,
-  sigma0,
-  theta,
-  gamma_y = NULL,
-  gamma_eta = NULL,
-  x = NULL,
+  sigma0_l,
+  theta_l,
   type = 0,
-  time
+  x = NULL,
+  gamma_eta = NULL,
+  gamma_y = NULL
 )
 }
 \arguments{
 \item{n}{Positive integer.
 Number of individuals.}
+
+\item{time}{Positive integer.
+Number of time points.}
 
 \item{mu0}{A list of numeric vectors.
 Each element of the list
@@ -27,36 +31,37 @@ is a vector of length two.
 The first element is the mean of the intercept,
 and the second element is the mean of the slope.}
 
-\item{sigma0}{A list of numeric matrices.
-Each element of the list
-is the covariance matrix
+\item{sigma0_l}{A list of numeric matrices.
+Each element of the list is the
+Cholesky factorization (\code{t(chol(sigma0))})
+of the covariance matrix
 of the intercept and the slope.}
 
-\item{theta}{A list numeric values.
+\item{theta_l}{A list numeric values.
 Each element of the list
-is the common measurement error variance.}
-
-\item{gamma_y}{Numeric matrix.
-Matrix relating the values of the covariate matrix
-at time \code{t} to \code{y} at time \code{t}
-(\eqn{\boldsymbol{\Gamma}_{\mathbf{y}}}).}
-
-\item{gamma_eta}{Numeric matrix.
-Matrix relating the values of the covariate matrix
-at time \code{t} to the latent variables (intercept and slope) at time \code{t}
-(\eqn{\boldsymbol{\Gamma}_{\boldsymbol{\eta}}}).}
-
-\item{x}{A list of length \code{n} of numeric matrices.
-Each element of the list
-is a matrix of observed covariates in \code{type = 1} or \code{type = 2}.
-The number of rows in each matrix should be equal to \code{time}.}
+is the square root of the common measurement error variance.}
 
 \item{type}{Integer.
 State space model type.
 See Details for more information.}
 
-\item{time}{Positive integer.
-Number of time points to simulate.}
+\item{x}{List.
+Each element of the list is a matrix of covariates
+for each individual \code{i} in \code{n}.
+The number of columns in each matrix
+should be equal to \code{time}.}
+
+\item{gamma_eta}{List of numeric matrices.
+Each element of the list
+is the matrix linking the covariates to the latent variables
+at current time point
+(\eqn{\boldsymbol{\Gamma}_{\boldsymbol{\eta}}}).}
+
+\item{gamma_y}{List of numeric matrices.
+Each element of the list
+is the matrix linking the covariates to the observed variables
+at current time point
+(\eqn{\boldsymbol{\Gamma}_{\mathbf{y}}}).}
 }
 \value{
 Returns an object of class \code{simstatespace}
@@ -67,19 +72,20 @@ which is a list with the following elements:
 \item \code{data}: Generated data which is a list of length \code{n}.
 Each element of \code{data} is a list with the following elements:
 \itemize{
-\item \code{id}: A vector of ID numbers of length \code{t}.
+\item \code{id}: A vector of ID numbers with length \code{t},
+where \code{t} is the value of the function argument \code{time}.
 \item \code{time}: A vector time points of length \code{t}.
 \item \code{y}: A \code{t} by \code{k} matrix of values for the manifest variables.
 \item \code{eta}: A \code{t} by \code{p} matrix of values for the latent variables.
-\item \code{x}: A \code{t} by \code{j} matrix of values for the covariates.
+\item \code{x}: A \code{t} by \code{j} matrix of values for the covariates
+(when covariates are included).
 }
 \item \code{fun}: Function used.
 }
 }
 \description{
-This function simulates data
-from a linear growth curve model
-for \code{n > 1} individuals.
+This function simulates data from the
+linear growth curve model.
 In this model,
 the parameters can vary across individuals.
 }
@@ -90,9 +96,9 @@ If the length of any of the parameters
 (\code{mu0},
 \code{sigma0},
 \code{mu},
-\code{theta},
-\code{gamma_y}, or
-\code{gamma_eta})
+\code{theta_l},
+\code{gamma_eta}, or
+\code{gamma_y})
 is less the \code{n},
 the function will cycle through the available values.
 }
@@ -102,45 +108,56 @@ the function will cycle through the available values.
 # Specifically,
 # there are two sets of values representing two latent classes.
 set.seed(42)
+## number of individuals
 n <- 10
+## time points
+time <- 50
+## dynamic structure
+p <- 2
 mu0_1 <- c(0.615, 1.006) # lower starting point, higher growth
 mu0_2 <- c(1.000, 0.500) # higher starting point, lower growth
 mu0 <- list(mu0_1, mu0_2)
-sigma0 <- list(
-  matrix(
-    data = c(
-      1.932,
-      0.618,
-      0.618,
-      0.587
-    ),
-    nrow = 2
-  )
+sigma0 <- matrix(
+  data = c(
+    1.932,
+    0.618,
+    0.618,
+    0.587
+  ),
+  nrow = p
 )
-theta <- list(0.6)
-time <- 10
-gamma_y <- list(matrix(data = 0.10, nrow = 1, ncol = 2))
-gamma_eta <- list(matrix(data = 0.10, nrow = 2, ncol = 2))
+sigma0_l <- list(t(chol(sigma0)))
+## measurement model
+k <- 1
+theta <- 0.50
+theta_l <- list(sqrt(theta))
+## covariates
+j <- 2
 x <- lapply(
   X = seq_len(n),
   FUN = function(i) {
-    return(
-      matrix(
-        data = rnorm(n = 2 * time),
-        ncol = 2
-      )
+    matrix(
+      data = stats::rnorm(n = time * j),
+      nrow = j,
+      ncol = time
     )
   }
+)
+gamma_eta <- list(
+  diag(x = 0.10, nrow = p, ncol = j)
+)
+gamma_y <- list(
+  diag(x = 0.10, nrow = k, ncol = j)
 )
 
 # Type 0
 ssm <- SimSSMLinGrowthIVary(
   n = n,
+  time = time,
   mu0 = mu0,
-  sigma0 = sigma0,
-  theta = theta,
-  type = 0,
-  time = time
+  sigma0_l = sigma0_l,
+  theta_l = theta_l,
+  type = 0
 )
 
 plot(ssm)
@@ -148,13 +165,13 @@ plot(ssm)
 # Type 1
 ssm <- SimSSMLinGrowthIVary(
   n = n,
+  time = time,
   mu0 = mu0,
-  sigma0 = sigma0,
-  theta = theta,
-  gamma_eta = gamma_eta,
-  x = x,
+  sigma0_l = sigma0_l,
+  theta_l = theta_l,
   type = 1,
-  time = time
+  x = x,
+  gamma_eta = gamma_eta
 )
 
 plot(ssm)
@@ -162,14 +179,14 @@ plot(ssm)
 # Type 2
 ssm <- SimSSMLinGrowthIVary(
   n = n,
+  time = time,
   mu0 = mu0,
-  sigma0 = sigma0,
-  theta = theta,
-  gamma_y = gamma_y,
-  gamma_eta = gamma_eta,
-  x = x,
+  sigma0_l = sigma0_l,
+  theta_l = theta_l,
   type = 2,
-  time = time
+  x = x,
+  gamma_eta = gamma_eta,
+  gamma_y = gamma_y
 )
 
 plot(ssm)
@@ -186,18 +203,25 @@ and state-space modeling techniques.
 \seealso{
 Other Simulation of State Space Models Data Functions: 
 \code{\link{LinSDE2SSM}()},
-\code{\link{OU2SSM}()},
-\code{\link{OU2SVAR}()},
-\code{\link{OU2VAR}()},
-\code{\link{SimSSM}()},
 \code{\link{SimSSMFixed}()},
 \code{\link{SimSSMIVary}()},
 \code{\link{SimSSMLinGrowth}()},
-\code{\link{SimSSMLinSDE}()},
-\code{\link{SimSSMOU}()},
+\code{\link{SimSSMLinSDEFixed}()},
+\code{\link{SimSSMLinSDEIVary}()},
 \code{\link{SimSSMOUFixed}()},
 \code{\link{SimSSMOUIVary}()},
-\code{\link{SimSSMVAR}()},
+\code{\link{SimSSMVARFixed}()},
+\code{\link{SimSSMVARIVary}()}
+
+Other Simulation of State Space Models Data Functions: 
+\code{\link{LinSDE2SSM}()},
+\code{\link{SimSSMFixed}()},
+\code{\link{SimSSMIVary}()},
+\code{\link{SimSSMLinGrowth}()},
+\code{\link{SimSSMLinSDEFixed}()},
+\code{\link{SimSSMLinSDEIVary}()},
+\code{\link{SimSSMOUFixed}()},
+\code{\link{SimSSMOUIVary}()},
 \code{\link{SimSSMVARFixed}()},
 \code{\link{SimSSMVARIVary}()}
 }

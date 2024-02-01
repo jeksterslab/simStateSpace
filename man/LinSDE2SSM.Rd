@@ -5,40 +5,43 @@
 \title{Convert Parameters from the Linear Stochastic Differential Equation Model
 to State Space Model Parameterization}
 \usage{
-LinSDE2SSM(b, a, q, delta_t)
+LinSDE2SSM(gamma, phi, sigma_l, delta_t)
 }
 \arguments{
-\item{b}{Numeric vector.
-A term which is unobserved and constant over time
-(\eqn{\mathbf{b}}).}
+\item{gamma}{Numeric vector.
+An unobserved term that is constant over time
+(\eqn{\boldsymbol{\gamma}}).}
 
-\item{a}{Numeric matrix.
+\item{phi}{Numeric matrix.
 The drift matrix
 which represents the rate of change of the solution
 in the absence of any random fluctuations
-(\eqn{\mathbf{A}}).}
+(\eqn{\boldsymbol{\Phi}}).}
 
-\item{q}{Numeric matrix.
-The matrix of volatility
+\item{sigma_l}{Numeric matrix.
+Cholesky factorization (\code{t(chol(sigma))})
+of the covariance matrix of volatility
 or randomness in the process
-(\eqn{\mathbf{Q}}).}
+\eqn{\boldsymbol{\Sigma}}.}
 
 \item{delta_t}{Numeric.
-Time interval (\eqn{\delta_t}).}
+Time interval
+(\eqn{\Delta_t}).}
 }
 \value{
 Returns a list of state space parameters:
 \itemize{
 \item \code{alpha}: Numeric vector.
-Vector of intercepts for the dynamic model
+Vector of constant values for the dynamic model
 (\eqn{\boldsymbol{\alpha}}).
 \item \code{beta}: Numeric matrix.
 Transition matrix relating the values of the latent variables
-at time \code{t_k - 1} to those at time \code{t_k}
+from the previous time point to the current time point.
 (\eqn{\boldsymbol{\beta}}).
-\item \code{psi}: Numeric matrix.
-The process noise covariance matrix
-(\eqn{\boldsymbol{\Psi}}).
+\item \code{psi_l}: Numeric matrix.
+Cholesky factorization (\code{t(chol(psi))})
+of the process noise covariance matrix
+\eqn{\boldsymbol{\Psi}}.
 }
 }
 \description{
@@ -47,6 +50,24 @@ the linear stochastic differential equation model
 to state space model parameterization.
 }
 \details{
+Let the linear stochastic equation model be given by
+\deqn{
+    \mathrm{d}
+    \boldsymbol{\eta}_{i, t}
+    =
+    \left(
+      \boldsymbol{\gamma}
+      +
+      \boldsymbol{\Phi}
+      \boldsymbol{\eta}_{i, t}
+    \right)
+    \mathrm{d} t
+    +
+    \boldsymbol{\Sigma}^{\frac{1}{2}}
+    \mathrm{d}
+    \mathbf{W}_{i, t}
+  }
+for individual \eqn{i} and time {t}.
 The state space parameters
 as a function of the linear stochastic differential equation model
 parameters
@@ -56,7 +77,7 @@ are given by
       =
       \exp{
         \left(
-          \mathbf{A}
+          \boldsymbol{\Phi}
           \Delta_{t}
         \right)
       }
@@ -65,11 +86,11 @@ are given by
 \deqn{
       \boldsymbol{\alpha}
       =
-      \mathbf{A}^{-1}
+      \boldsymbol{\Phi}^{-1}
       \left(
         \boldsymbol{\beta} - \mathbf{I}_{p}
       \right)
-      \mathbf{b}
+      \boldsymbol{\gamma}
   }
 
 \deqn{
@@ -78,43 +99,44 @@ are given by
         \boldsymbol{\Psi}
       \right)
       =
-      \left\{
-        \left[
-          \left(
-            \mathbf{A} \otimes \mathbf{I}_{p}
-          \right)
-          +
-          \left(
-            \mathbf{I}_{p} \otimes \mathbf{A}
-          \right)
-        \right]
-        \left[
-          \exp
-          \left(
-            \left[
-              \left(
-                \mathbf{A} \otimes \mathbf{I}_{p}
-              \right)
-              +
-              \left(
-                \mathbf{I}_{p} \otimes \mathbf{A}
-              \right)
-            \right]
-            \Delta_{t}
+      \left[
+        \left(
+          \boldsymbol{\Phi} \otimes \mathbf{I}_{p}
+        \right)
+        +
+        \left(
+          \mathbf{I}_{p} \otimes \boldsymbol{\Phi}
+        \right)
+      \right]
+      \left[
+        \exp
+        \left(
+          \left[
+            \left(
+              \boldsymbol{\Phi} \otimes \mathbf{I}_{p}
+            \right)
+            +
+            \left(
+              \mathbf{I}_{p} \otimes \boldsymbol{\Phi}
+            \right)
+          \right]
+          \Delta_{t}
         \right)
         -
         \mathbf{I}_{p \times p}
       \right]
       \mathrm{vec}
       \left(
-        \mathbf{Q}
+        \boldsymbol{\Sigma}
       \right)
-    \right\}
   }
+where \eqn{p} is the number of latent variables and
+\eqn{\Delta_{t}} is the time interval.
 }
 \examples{
-p <- k <- 2
-a <- matrix(
+p <- 2
+gamma <- c(0.317, 0.230)
+phi <- matrix(
   data = c(
    -0.10,
    0.05,
@@ -123,36 +145,36 @@ a <- matrix(
  ),
  nrow = p
 )
-b <- c(0.317, 0.230)
-q <- matrix(
-  data = c(2.79, 0.06, 0.06, 3.27),
+sigma <- matrix(
+  data = c(
+    2.79,
+    0.06,
+    0.06,
+    3.27
+  ),
   nrow = p
 )
+sigma_l <- t(chol(sigma))
 delta_t <- 0.10
 
 LinSDE2SSM(
-  b = b,
-  a = a,
-  q = q,
+  gamma = gamma,
+  phi = phi,
+  sigma_l = sigma_l,
   delta_t = delta_t
 )
 
 }
 \seealso{
 Other Simulation of State Space Models Data Functions: 
-\code{\link{OU2SSM}()},
-\code{\link{OU2SVAR}()},
-\code{\link{OU2VAR}()},
-\code{\link{SimSSM}()},
 \code{\link{SimSSMFixed}()},
 \code{\link{SimSSMIVary}()},
 \code{\link{SimSSMLinGrowth}()},
 \code{\link{SimSSMLinGrowthIVary}()},
-\code{\link{SimSSMLinSDE}()},
-\code{\link{SimSSMOU}()},
+\code{\link{SimSSMLinSDEFixed}()},
+\code{\link{SimSSMLinSDEIVary}()},
 \code{\link{SimSSMOUFixed}()},
 \code{\link{SimSSMOUIVary}()},
-\code{\link{SimSSMVAR}()},
 \code{\link{SimSSMVARFixed}()},
 \code{\link{SimSSMVARIVary}()}
 }

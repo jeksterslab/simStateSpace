@@ -2,55 +2,69 @@
 % Please edit documentation in R/simStateSpace-sim-ssm-fixed.R
 \name{SimSSMFixed}
 \alias{SimSSMFixed}
-\title{Simulate Data using a State Space Model Parameterization
-for n > 1 Individuals (Fixed Parameters)}
+\title{Simulate Data from the State Space Model
+(Fixed Parameters)}
 \usage{
 SimSSMFixed(
   n,
+  time,
+  delta_t = 1,
   mu0,
-  sigma0,
+  sigma0_l,
   alpha,
   beta,
-  psi,
+  psi_l,
   nu,
   lambda,
-  theta,
-  gamma_y = NULL,
-  gamma_eta = NULL,
-  x = NULL,
+  theta_l,
   type = 0,
-  time,
-  burn_in = 0
+  x = NULL,
+  gamma_eta = NULL,
+  gamma_y = NULL
 )
 }
 \arguments{
 \item{n}{Positive integer.
 Number of individuals.}
 
+\item{time}{Positive integer.
+Number of time points.}
+
+\item{delta_t}{Numeric.
+Time interval.
+The default value is \code{1.0}
+with an option to use a numeric value
+for the discretized state space model
+parameterization of the
+linear stochastic differential equation model.}
+
 \item{mu0}{Numeric vector.
 Mean of initial latent variable values
 (\eqn{\boldsymbol{\mu}_{\boldsymbol{\eta} \mid 0}}).}
 
-\item{sigma0}{Numeric matrix.
-The covariance matrix
+\item{sigma0_l}{Numeric matrix.
+Cholesky factorization (\code{t(chol(sigma0))})
+of the covariance matrix
 of initial latent variable values
 (\eqn{\boldsymbol{\Sigma}_{\boldsymbol{\eta} \mid 0}}).}
 
 \item{alpha}{Numeric vector.
-Vector of intercepts for the dynamic model
+Vector of constant values for the dynamic model
 (\eqn{\boldsymbol{\alpha}}).}
 
 \item{beta}{Numeric matrix.
 Transition matrix relating the values of the latent variables
-at time \code{t - 1} to those at time \code{t}
+at the previous to the current time point
 (\eqn{\boldsymbol{\beta}}).}
 
-\item{psi}{Numeric matrix.
-The process noise covariance matrix
+\item{psi_l}{Numeric matrix.
+Cholesky factorization (\code{t(chol(psi))})
+of the covariance matrix
+of the process noise
 (\eqn{\boldsymbol{\Psi}}).}
 
 \item{nu}{Numeric vector.
-Vector of intercepts for the measurement model
+Vector of intercept values for the measurement model
 (\eqn{\boldsymbol{\nu}}).}
 
 \item{lambda}{Numeric matrix.
@@ -58,34 +72,31 @@ Factor loading matrix linking the latent variables
 to the observed variables
 (\eqn{\boldsymbol{\Lambda}}).}
 
-\item{theta}{Numeric matrix.
-The measurement error covariance matrix
+\item{theta_l}{Numeric matrix.
+Cholesky factorization (\code{t(chol(theta))})
+of the covariance matrix
+of the measurement error
 (\eqn{\boldsymbol{\Theta}}).}
-
-\item{gamma_y}{Numeric matrix.
-Matrix relating the values of the covariate matrix
-at time \code{t} to the observed variables at time \code{t}
-(\eqn{\boldsymbol{\Gamma}_{\mathbf{y}}}).}
-
-\item{gamma_eta}{Numeric matrix.
-Matrix relating the values of the covariate matrix
-at time \code{t} to the latent variables at time \code{t}
-(\eqn{\boldsymbol{\Gamma}_{\boldsymbol{\eta}}}).}
-
-\item{x}{A list of length \code{n} of numeric matrices.
-Each element of the list
-is a matrix of observed covariates in \code{type = 1} or \code{type = 2}.
-The number of rows in each matrix should be equal to \code{time + burn_in}.}
 
 \item{type}{Integer.
 State space model type.
 See Details for more information.}
 
-\item{time}{Positive integer.
-Number of time points to simulate.}
+\item{x}{List.
+Each element of the list is a matrix of covariates
+for each individual \code{i} in \code{n}.
+The number of columns in each matrix
+should be equal to \code{time}.}
 
-\item{burn_in}{Positive integer.
-Number of burn-in points to exclude before returning the results.}
+\item{gamma_eta}{Numeric matrix.
+Matrix linking the covariates to the latent variables
+at current time point
+(\eqn{\boldsymbol{\Gamma}_{\boldsymbol{\eta}}}).}
+
+\item{gamma_y}{Numeric matrix.
+Matrix linking the covariates to the observed variables
+at current time point
+(\eqn{\boldsymbol{\Gamma}_{\mathbf{y}}}).}
 }
 \value{
 Returns an object of class \code{simstatespace}
@@ -96,21 +107,22 @@ which is a list with the following elements:
 \item \code{data}: Generated data which is a list of length \code{n}.
 Each element of \code{data} is a list with the following elements:
 \itemize{
-\item \code{id}: A vector of ID numbers of length \code{t}.
+\item \code{id}: A vector of ID numbers with length \code{t},
+where \code{t} is the value of the function argument \code{time}.
 \item \code{time}: A vector time points of length \code{t}.
 \item \code{y}: A \code{t} by \code{k} matrix of values for the manifest variables.
 \item \code{eta}: A \code{t} by \code{p} matrix of values for the latent variables.
-\item \code{x}: A \code{t} by \code{j} matrix of values for the covariates.
+\item \code{x}: A \code{t} by \code{j} matrix of values for the covariates
+(when covariates are included).
 }
 \item \code{fun}: Function used.
 }
 }
 \description{
-This function simulates data
-using a state space model parameterization
-for \code{n > 1} individuals.
+This function simulates data from the
+state space model.
 In this model,
-the parameters are invariant across individuals.
+the parameters are invariant cross individuals and across time.
 }
 \details{
 \subsection{Type 0}{
@@ -165,6 +177,34 @@ and
 is the covariance matrix of
 \eqn{\boldsymbol{\varepsilon}}.
 
+An alternative representation of the measurement error
+is given by
+\deqn{
+    \boldsymbol{\varepsilon}_{i, t}
+    =
+    \boldsymbol{\Theta}^{\frac{1}{2}}
+    \mathbf{z}_{i, t},
+    \quad
+    \mathrm{with}
+    \quad
+    \mathbf{z}_{i, t}
+    \sim
+    \mathcal{N}
+    \left(
+    \mathbf{0},
+    \mathbf{I}
+    \right)
+  }
+where
+\eqn{\mathbf{z}_{i, t}} is a vector of
+independent standard normal random variables and
+\eqn{
+    \left( \boldsymbol{\Theta}^{\frac{1}{2}} \right)
+    \left( \boldsymbol{\Theta}^{\frac{1}{2}} \right)^{\prime}
+    =
+    \boldsymbol{\Theta} .
+  }
+
 The dynamic structure is given by
 \deqn{
     \boldsymbol{\eta}_{i, t}
@@ -217,6 +257,32 @@ and
 \eqn{\boldsymbol{\Psi}}
 is the covariance matrix of
 \eqn{\boldsymbol{\zeta}_{i, t}}.
+
+An alternative representation of the dynamic noise
+is given by
+\deqn{
+    \boldsymbol{\zeta}_{i, t}
+    =
+    \boldsymbol{\Psi}^{\frac{1}{2}}
+    \mathbf{z}_{i, t},
+    \quad
+    \mathrm{with}
+    \quad
+    \mathbf{z}_{i, t}
+    \sim
+    \mathcal{N}
+    \left(
+    \mathbf{0},
+    \mathbf{I}
+    \right)
+  }
+where
+\eqn{
+    \left( \boldsymbol{\Psi}^{\frac{1}{2}} \right)
+    \left( \boldsymbol{\Psi}^{\frac{1}{2}} \right)^{\prime}
+    =
+    \boldsymbol{\Psi} .
+  }
 }
 
 \subsection{Type 1}{
@@ -333,47 +399,53 @@ The dynamic structure is given by
 \examples{
 # prepare parameters
 set.seed(42)
-k <- p <- 3
-iden <- diag(k)
-null_vec <- rep(x = 0, times = k)
+## number of individuals
 n <- 5
-mu0 <- null_vec
-sigma0 <- iden
-alpha <- null_vec
-beta <- diag(x = 0.50, nrow = k)
-psi <- iden
-nu <- null_vec
-lambda <- iden
-theta <- diag(x = 0.50, nrow = k)
+## time points
 time <- 50
-burn_in <- 0
-gamma_y <- gamma_eta <- 0.10 * diag(k)
+## dynamic structure
+p <- 3
+mu0 <- rep(x = 0, times = p)
+sigma0 <- diag(p)
+sigma0_l <- t(chol(sigma0))
+alpha <- rep(x = 0, times = p)
+beta <- 0.50 * diag(p)
+psi <- diag(p)
+psi_l <- t(chol(psi))
+## measurement model
+k <- 3
+nu <- rep(x = 0, times = k)
+lambda <- diag(k)
+theta <- 0.50 * diag(k)
+theta_l <- t(chol(theta))
+## covariates
+j <- 2
 x <- lapply(
   X = seq_len(n),
   FUN = function(i) {
-    return(
-      matrix(
-        data = rnorm(n = k * (time + burn_in)),
-        ncol = k
-      )
+    matrix(
+      data = stats::rnorm(n = time * j),
+      nrow = j,
+      ncol = time
     )
   }
 )
+gamma_eta <- diag(x = 0.10, nrow = p, ncol = j)
+gamma_y <- diag(x = 0.10, nrow = k, ncol = j)
 
 # Type 0
 ssm <- SimSSMFixed(
   n = n,
+  time = time,
   mu0 = mu0,
-  sigma0 = sigma0,
+  sigma0_l = sigma0_l,
   alpha = alpha,
   beta = beta,
-  psi = psi,
+  psi_l = psi_l,
   nu = nu,
   lambda = lambda,
-  theta = theta,
-  type = 0,
-  time = time,
-  burn_in = burn_in
+  theta_l = theta_l,
+  type = 0
 )
 
 plot(ssm)
@@ -381,19 +453,18 @@ plot(ssm)
 # Type 1
 ssm <- SimSSMFixed(
   n = n,
+  time = time,
   mu0 = mu0,
-  sigma0 = sigma0,
+  sigma0_l = sigma0_l,
   alpha = alpha,
   beta = beta,
-  psi = psi,
+  psi_l = psi_l,
   nu = nu,
   lambda = lambda,
-  theta = theta,
-  gamma_eta = gamma_eta,
-  x = x,
+  theta_l = theta_l,
   type = 1,
-  time = time,
-  burn_in = burn_in
+  x = x,
+  gamma_eta = gamma_eta
 )
 
 plot(ssm)
@@ -401,20 +472,19 @@ plot(ssm)
 # Type 2
 ssm <- SimSSMFixed(
   n = n,
+  time = time,
   mu0 = mu0,
-  sigma0 = sigma0,
+  sigma0_l = sigma0_l,
   alpha = alpha,
   beta = beta,
-  psi = psi,
+  psi_l = psi_l,
   nu = nu,
   lambda = lambda,
-  theta = theta,
-  gamma_y = gamma_y,
-  gamma_eta = gamma_eta,
-  x = x,
+  theta_l = theta_l,
   type = 2,
-  time = time,
-  burn_in = burn_in
+  x = x,
+  gamma_eta = gamma_eta,
+  gamma_y = gamma_y
 )
 
 plot(ssm)
@@ -431,18 +501,13 @@ and state-space modeling techniques.
 \seealso{
 Other Simulation of State Space Models Data Functions: 
 \code{\link{LinSDE2SSM}()},
-\code{\link{OU2SSM}()},
-\code{\link{OU2SVAR}()},
-\code{\link{OU2VAR}()},
-\code{\link{SimSSM}()},
 \code{\link{SimSSMIVary}()},
 \code{\link{SimSSMLinGrowth}()},
 \code{\link{SimSSMLinGrowthIVary}()},
-\code{\link{SimSSMLinSDE}()},
-\code{\link{SimSSMOU}()},
+\code{\link{SimSSMLinSDEFixed}()},
+\code{\link{SimSSMLinSDEIVary}()},
 \code{\link{SimSSMOUFixed}()},
 \code{\link{SimSSMOUIVary}()},
-\code{\link{SimSSMVAR}()},
 \code{\link{SimSSMVARFixed}()},
 \code{\link{SimSSMVARIVary}()}
 }

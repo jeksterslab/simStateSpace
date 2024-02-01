@@ -1,9 +1,9 @@
-#' Simulate Data from a Linear Growth Curve Model
+#' Simulate Data from the
+#' Linear Growth Curve Model
 #' (Individual-Varying Parameters)
 #'
-#' This function simulates data
-#' from a linear growth curve model
-#' for `n > 1` individuals.
+#' This function simulates data from the
+#' linear growth curve model.
 #' In this model,
 #' the parameters can vary across individuals.
 #'
@@ -13,9 +13,9 @@
 #'   (`mu0`,
 #'   `sigma0`,
 #'   `mu`,
-#'   `theta`,
-#'   `gamma_y`, or
-#'   `gamma_eta`)
+#'   `theta_l`,
+#'   `gamma_eta`, or
+#'   `gamma_y`)
 #'   is less the `n`,
 #'   the function will cycle through the available values.
 #'
@@ -26,17 +26,17 @@
 #'   is a vector of length two.
 #'   The first element is the mean of the intercept,
 #'   and the second element is the mean of the slope.
-#' @param sigma0 A list of numeric matrices.
-#'   Each element of the list
-#'   is the covariance matrix
+#' @param sigma0_l A list of numeric matrices.
+#'   Each element of the list is the
+#'   Cholesky factorization (`t(chol(sigma0))`)
+#'   of the covariance matrix
 #'   of the intercept and the slope.
-#' @param theta A list numeric values.
+#' @param theta_l A list numeric values.
 #'   Each element of the list
-#'   is the common measurement error variance.
+#'   is the square root of the common measurement error variance.
+#' @inheritParams SimSSMIVary
 #'
-#' @inheritParams SimSSMLinGrowth
-#' @inherit SimSSMFixed return
-#' @inherit SimSSM references
+#' @inherit SimSSMFixed references return
 #'
 #' @examples
 #' # prepare parameters
@@ -44,45 +44,56 @@
 #' # Specifically,
 #' # there are two sets of values representing two latent classes.
 #' set.seed(42)
+#' ## number of individuals
 #' n <- 10
+#' ## time points
+#' time <- 50
+#' ## dynamic structure
+#' p <- 2
 #' mu0_1 <- c(0.615, 1.006) # lower starting point, higher growth
 #' mu0_2 <- c(1.000, 0.500) # higher starting point, lower growth
 #' mu0 <- list(mu0_1, mu0_2)
-#' sigma0 <- list(
-#'   matrix(
-#'     data = c(
-#'       1.932,
-#'       0.618,
-#'       0.618,
-#'       0.587
-#'     ),
-#'     nrow = 2
-#'   )
+#' sigma0 <- matrix(
+#'   data = c(
+#'     1.932,
+#'     0.618,
+#'     0.618,
+#'     0.587
+#'   ),
+#'   nrow = p
 #' )
-#' theta <- list(0.6)
-#' time <- 10
-#' gamma_y <- list(matrix(data = 0.10, nrow = 1, ncol = 2))
-#' gamma_eta <- list(matrix(data = 0.10, nrow = 2, ncol = 2))
+#' sigma0_l <- list(t(chol(sigma0)))
+#' ## measurement model
+#' k <- 1
+#' theta <- 0.50
+#' theta_l <- list(sqrt(theta))
+#' ## covariates
+#' j <- 2
 #' x <- lapply(
 #'   X = seq_len(n),
 #'   FUN = function(i) {
-#'     return(
-#'       matrix(
-#'         data = rnorm(n = 2 * time),
-#'         ncol = 2
-#'       )
+#'     matrix(
+#'       data = stats::rnorm(n = time * j),
+#'       nrow = j,
+#'       ncol = time
 #'     )
 #'   }
+#' )
+#' gamma_eta <- list(
+#'   diag(x = 0.10, nrow = p, ncol = j)
+#' )
+#' gamma_y <- list(
+#'   diag(x = 0.10, nrow = k, ncol = j)
 #' )
 #'
 #' # Type 0
 #' ssm <- SimSSMLinGrowthIVary(
 #'   n = n,
+#'   time = time,
 #'   mu0 = mu0,
-#'   sigma0 = sigma0,
-#'   theta = theta,
-#'   type = 0,
-#'   time = time
+#'   sigma0_l = sigma0_l,
+#'   theta_l = theta_l,
+#'   type = 0
 #' )
 #'
 #' plot(ssm)
@@ -90,13 +101,13 @@
 #' # Type 1
 #' ssm <- SimSSMLinGrowthIVary(
 #'   n = n,
+#'   time = time,
 #'   mu0 = mu0,
-#'   sigma0 = sigma0,
-#'   theta = theta,
-#'   gamma_eta = gamma_eta,
-#'   x = x,
+#'   sigma0_l = sigma0_l,
+#'   theta_l = theta_l,
 #'   type = 1,
-#'   time = time
+#'   x = x,
+#'   gamma_eta = gamma_eta
 #' )
 #'
 #' plot(ssm)
@@ -104,14 +115,14 @@
 #' # Type 2
 #' ssm <- SimSSMLinGrowthIVary(
 #'   n = n,
+#'   time = time,
 #'   mu0 = mu0,
-#'   sigma0 = sigma0,
-#'   theta = theta,
-#'   gamma_y = gamma_y,
-#'   gamma_eta = gamma_eta,
-#'   x = x,
+#'   sigma0_l = sigma0_l,
+#'   theta_l = theta_l,
 #'   type = 2,
-#'   time = time
+#'   x = x,
+#'   gamma_eta = gamma_eta,
+#'   gamma_y = gamma_y
 #' )
 #'
 #' plot(ssm)
@@ -119,98 +130,127 @@
 #' @family Simulation of State Space Models Data Functions
 #' @keywords simStateSpace sim growth
 #' @export
-SimSSMLinGrowthIVary <- function(n,
-                                 mu0,
-                                 sigma0,
-                                 theta,
-                                 gamma_y = NULL,
-                                 gamma_eta = NULL,
-                                 x = NULL,
+#' @family Simulation of State Space Models Data Functions
+#' @keywords simStateSpace sim growth
+#' @export
+SimSSMLinGrowthIVary <- function(n, time,
+                                 mu0, sigma0_l, theta_l,
                                  type = 0,
-                                 time) {
-  foo <- function(x) {
-    return(
-      t(chol(x))
-    )
-  }
-  sigma0_l <- lapply(
-    X = sigma0,
-    FUN = foo
+                                 x = NULL, gamma_eta = NULL, gamma_y = NULL) {
+  stopifnot(type %in% c(0, 1, 2))
+  p <- 2
+  k <- 1
+  stopifnot(
+    length(mu0[[1]]) == p,
+    dim(sigma0_l[[1]]) == c(p, p)
   )
   theta_l <- lapply(
-    X = theta,
-    FUN = sqrt
+    X = theta_l,
+    FUN = as.matrix
   )
-  data <- switch(
-    EXPR = as.character(type),
-    "0" = {
-      .SimSSM0LinGrowthIVary(
-        n = n,
-        mu0 = rep(x = mu0, length.out = n),
-        sigma0_l = rep(x = sigma0_l, length.out = n),
-        theta_l = rep(x = theta_l, length.out = n),
-        time = time
-      )
-    },
-    "1" = {
-      stopifnot(
-        !is.null(x),
-        !is.null(gamma_eta)
-      )
-      .SimSSM1LinGrowthIVary(
-        n = n,
-        mu0 = rep(x = mu0, length.out = n),
-        sigma0_l = rep(x = sigma0_l, length.out = n),
-        theta_l = rep(x = theta_l, length.out = n),
-        gamma_eta = rep(x = gamma_eta, length.out = n),
-        x = x,
-        time = time
-      )
-    },
-    "2" = {
-      stopifnot(
-        !is.null(x),
-        !is.null(gamma_y),
-        !is.null(gamma_eta)
-      )
-      .SimSSM2LinGrowthIVary(
-        n = n,
-        mu0 = rep(x = mu0, length.out = n),
-        sigma0_l = rep(x = sigma0_l, length.out = n),
-        theta_l = rep(x = theta_l, length.out = n),
-        gamma_y = rep(x = gamma_y, length.out = n),
-        gamma_eta = rep(x = gamma_eta, length.out = n),
-        x = x,
-        time = time
-      )
-    },
-    stop(
-      "Invalid `type`."
-    )
+  stopifnot(
+    dim(theta_l[[1]]) == c(k, k)
   )
+  covariates <- FALSE
   if (type > 0) {
     covariates <- TRUE
-  } else {
-    covariates <- FALSE
+  }
+  alpha <- list(
+    rep(x = 0, times = p)
+  )
+  beta <- list(
+    matrix(
+      data = c(1, 0, 1, 1),
+      nrow = p
+    )
+  )
+  psi_l <- list(
+    matrix(
+      data = 0,
+      nrow = p,
+      ncol = p
+    )
+  )
+  nu <- list(
+    rep(x = 0, times = k)
+  )
+  lambda <- list(
+    matrix(
+      data = c(1, 0),
+      nrow = k
+    )
+  )
+  if (type == 0) {
+    data <- .SimSSMIVary0(
+      n = n,
+      time = time,
+      delta_t = 1.0,
+      mu0 = rep(x = mu0, length.out = n),
+      sigma0_l = rep(x = sigma0_l, length.out = n),
+      alpha = rep(x = alpha, length.out = n),
+      beta = rep(x = beta, length.out = n),
+      psi_l = rep(x = psi_l, length.out = n),
+      nu = rep(x = nu, length.out = n),
+      lambda = rep(x = lambda, length.out = n),
+      theta_l = rep(x = theta_l, length.out = n)
+    )
+  }
+  if (type == 1) {
+    stopifnot(
+      !is.null(x),
+      !is.null(gamma_eta)
+    )
+    data <- .SimSSMIVary1(
+      n = n,
+      time = time,
+      delta_t = 1.0,
+      mu0 = rep(x = mu0, length.out = n),
+      sigma0_l = rep(x = sigma0_l, length.out = n),
+      alpha = rep(x = alpha, length.out = n),
+      beta = rep(x = beta, length.out = n),
+      psi_l = rep(x = psi_l, length.out = n),
+      nu = rep(x = nu, length.out = n),
+      lambda = rep(x = lambda, length.out = n),
+      theta_l = rep(x = theta_l, length.out = n),
+      x = rep(x = x, length.out = n),
+      gamma_eta = rep(x = gamma_eta, length.out = n)
+    )
+  }
+  if (type == 2) {
+    stopifnot(
+      !is.null(x),
+      !is.null(gamma_eta),
+      !is.null(gamma_y)
+    )
+    data <- .SimSSMIVary2(
+      n = n,
+      time = time,
+      delta_t = 1.0,
+      mu0 = rep(x = mu0, length.out = n),
+      sigma0_l = rep(x = sigma0_l, length.out = n),
+      alpha = rep(x = alpha, length.out = n),
+      beta = rep(x = beta, length.out = n),
+      psi_l = rep(x = psi_l, length.out = n),
+      nu = rep(x = nu, length.out = n),
+      lambda = rep(x = lambda, length.out = n),
+      theta_l = rep(x = theta_l, length.out = n),
+      x = rep(x = x, length.out = n),
+      gamma_eta = rep(x = gamma_eta, length.out = n),
+      gamma_y = rep(x = gamma_y, length.out = n)
+    )
   }
   out <- list(
     call = match.call(),
     args = list(
-      n = n,
-      mu0 = mu0,
-      sigma0 = sigma0,
-      theta = theta,
-      gamma_y = gamma_y,
-      gamma_eta = gamma_eta,
-      x = x,
+      n = n, time = time,
+      mu0 = mu0, sigma0_l = sigma0_l,
+      alpha = alpha, beta = beta, psi_l = psi_l,
+      nu = nu, lambda = lambda, theta_l = theta_l,
       type = type,
-      time = time,
-      sigma0_l = sigma0_l,
-      theta_l = theta_l
+      x = x, gamma_eta = gamma_eta, gamma_y = gamma_y
     ),
     model = list(
       model = "lingrowth",
-      n1 = FALSE,
       covariates = covariates,
       fixed = FALSE,
       vary_i = TRUE

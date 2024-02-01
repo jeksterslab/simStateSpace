@@ -2,64 +2,68 @@
 % Please edit documentation in R/simStateSpace-sim-ssm-var-fixed.R
 \name{SimSSMVARFixed}
 \alias{SimSSMVARFixed}
-\title{Simulate Data from a Vector Autoregressive Model
-using a State Space Model Parameterization
-for n > 1 Individuals (Fixed Parameters)}
+\title{Simulate Data from the Vector Autoregressive Model
+(Fixed Parameters)}
 \usage{
 SimSSMVARFixed(
   n,
+  time,
   mu0,
-  sigma0,
+  sigma0_l,
   alpha,
   beta,
-  psi,
-  gamma_eta = NULL,
+  psi_l,
+  type = 0,
   x = NULL,
-  time = 0,
-  burn_in = 0
+  gamma_eta = NULL
 )
 }
 \arguments{
 \item{n}{Positive integer.
 Number of individuals.}
 
+\item{time}{Positive integer.
+Number of time points.}
+
 \item{mu0}{Numeric vector.
 Mean of initial latent variable values
 (\eqn{\boldsymbol{\mu}_{\boldsymbol{\eta} \mid 0}}).}
 
-\item{sigma0}{Numeric matrix.
-The covariance matrix
+\item{sigma0_l}{Numeric matrix.
+Cholesky factorization (\code{t(chol(sigma0))})
+of the covariance matrix
 of initial latent variable values
 (\eqn{\boldsymbol{\Sigma}_{\boldsymbol{\eta} \mid 0}}).}
 
 \item{alpha}{Numeric vector.
-Vector of intercepts for the dynamic model
+Vector of constant values for the dynamic model
 (\eqn{\boldsymbol{\alpha}}).}
 
 \item{beta}{Numeric matrix.
 Transition matrix relating the values of the latent variables
-at time \code{t - 1} to those at time \code{t}
+at the previous to the current time point
 (\eqn{\boldsymbol{\beta}}).}
 
-\item{psi}{Numeric matrix.
-The process noise covariance matrix
+\item{psi_l}{Numeric matrix.
+Cholesky factorization (\code{t(chol(psi))})
+of the covariance matrix
+of the process noise
 (\eqn{\boldsymbol{\Psi}}).}
 
+\item{type}{Integer.
+State space model type.
+See Details for more information.}
+
+\item{x}{List.
+Each element of the list is a matrix of covariates
+for each individual \code{i} in \code{n}.
+The number of columns in each matrix
+should be equal to \code{time}.}
+
 \item{gamma_eta}{Numeric matrix.
-Matrix relating the values of the covariate matrix
-at time \code{t} to the latent variables at time \code{t}
+Matrix linking the covariates to the latent variables
+at current time point
 (\eqn{\boldsymbol{\Gamma}_{\boldsymbol{\eta}}}).}
-
-\item{x}{A list of length \code{n} of numeric matrices.
-Each element of the list
-is a matrix of observed covariates in \code{type = 1} or \code{type = 2}.
-The number of rows in each matrix should be equal to \code{time + burn_in}.}
-
-\item{time}{Positive integer.
-Number of time points to simulate.}
-
-\item{burn_in}{Positive integer.
-Number of burn-in points to exclude before returning the results.}
 }
 \value{
 Returns an object of class \code{simstatespace}
@@ -70,75 +74,212 @@ which is a list with the following elements:
 \item \code{data}: Generated data which is a list of length \code{n}.
 Each element of \code{data} is a list with the following elements:
 \itemize{
-\item \code{id}: A vector of ID numbers of length \code{t}.
+\item \code{id}: A vector of ID numbers with length \code{t},
+where \code{t} is the value of the function argument \code{time}.
 \item \code{time}: A vector time points of length \code{t}.
 \item \code{y}: A \code{t} by \code{k} matrix of values for the manifest variables.
 \item \code{eta}: A \code{t} by \code{p} matrix of values for the latent variables.
-\item \code{x}: A \code{t} by \code{j} matrix of values for the covariates.
+\item \code{x}: A \code{t} by \code{j} matrix of values for the covariates
+(when covariates are included).
 }
 \item \code{fun}: Function used.
 }
 }
 \description{
-This function simulates data from a vector autoregressive model
-using a state space model parameterization
-for \code{n > 1} individuals.
+This function simulates data from the
+vector autoregressive model
+using a state space model parameterization.
 In this model,
-the parameters are invariant across individuals.
+the parameters are invariant cross individuals and across time.
+}
+\details{
+\subsection{Type 0}{
+
+The measurement model is given by
+\deqn{
+    \mathbf{y}_{i, t}
+    =
+    \boldsymbol{\eta}_{i, t} .
+  }
+
+The dynamic structure is given by
+\deqn{
+    \boldsymbol{\eta}_{i, t}
+    =
+    \boldsymbol{\alpha}
+    +
+    \boldsymbol{\beta}
+    \boldsymbol{\eta}_{i, t - 1}
+    +
+    \boldsymbol{\zeta}_{i, t},
+    \quad
+    \mathrm{with}
+    \quad
+    \boldsymbol{\zeta}_{i, t}
+    \sim
+    \mathcal{N}
+    \left(
+    \mathbf{0},
+    \boldsymbol{\Psi}
+    \right)
+  }
+where
+\eqn{\boldsymbol{\eta}_{i, t}},
+\eqn{\boldsymbol{\eta}_{i, t - 1}},
+and
+\eqn{\boldsymbol{\zeta}_{i, t}}
+are random variables,
+and
+\eqn{\boldsymbol{\alpha}},
+\eqn{\boldsymbol{\beta}},
+and
+\eqn{\boldsymbol{\Psi}}
+are model parameters.
+\eqn{\boldsymbol{\eta}_{i, t}}
+is a vector of latent variables
+at time \eqn{t} and individual \eqn{i},
+\eqn{\boldsymbol{\eta}_{i, t - 1}}
+is a vector of latent variables
+at time \eqn{t - 1} and individual \eqn{i},
+and
+\eqn{\boldsymbol{\zeta}_{i, t}}
+is a vector of dynamic noise
+at time \eqn{t} and individual \eqn{i}.
+\eqn{\boldsymbol{\alpha}}
+is a vector of intercepts,
+\eqn{\boldsymbol{\beta}}
+is a matrix of autoregression
+and cross regression coefficients,
+and
+\eqn{\boldsymbol{\Psi}}
+is the covariance matrix of
+\eqn{\boldsymbol{\zeta}_{i, t}}.
+
+An alternative representation of the dynamic noise
+is given by
+\deqn{
+    \boldsymbol{\zeta}_{i, t}
+    =
+    \boldsymbol{\Psi}^{\frac{1}{2}}
+    \mathbf{z}_{i, t},
+    \quad
+    \mathrm{with}
+    \quad
+    \mathbf{z}_{i, t}
+    \sim
+    \mathcal{N}
+    \left(
+    \mathbf{0},
+    \mathbf{I}
+    \right)
+  }
+where
+\eqn{\mathbf{z}_{i, t}} is a vector of
+independent standard normal random variables and
+\eqn{
+    \left( \boldsymbol{\Psi}^{\frac{1}{2}} \right)
+    \left( \boldsymbol{\Psi}^{\frac{1}{2}} \right)^{\prime}
+    =
+    \boldsymbol{\Psi} .
+  }
+}
+
+\subsection{Type 1}{
+
+The measurement model is given by
+\deqn{
+    \mathbf{y}_{i, t}
+    =
+    \boldsymbol{\eta}_{i, t} .
+  }
+
+The dynamic structure is given by
+\deqn{
+    \boldsymbol{\eta}_{i, t}
+    =
+    \boldsymbol{\alpha}
+    +
+    \boldsymbol{\beta}
+    \boldsymbol{\eta}_{i, t - 1}
+    +
+    \boldsymbol{\Gamma}_{\boldsymbol{\eta}}
+    \mathbf{x}_{i, t}
+    +
+    \boldsymbol{\zeta}_{i, t},
+    \quad
+    \mathrm{with}
+    \quad
+    \boldsymbol{\zeta}_{i, t}
+    \sim
+    \mathcal{N}
+    \left(
+    \mathbf{0},
+    \boldsymbol{\Psi}
+    \right)
+  }
+where
+\eqn{\mathbf{x}_{i, t}} is a vector of covariates
+at time \eqn{t} and individual \eqn{i},
+and \eqn{\boldsymbol{\Gamma}_{\boldsymbol{\eta}}} is the coefficient matrix
+linking the covariates to the latent variables.
+}
 }
 \examples{
 # prepare parameters
 set.seed(42)
-k <- 3
-iden <- diag(k)
-null_vec <- rep(x = 0, times = k)
+## number of individuals
 n <- 5
-mu0 <- null_vec
-sigma0 <- iden
-alpha <- null_vec
-beta <- diag(x = 0.5, nrow = k)
-psi <- iden
+## time points
 time <- 50
-burn_in <- 0
-gamma_eta <- 0.10 * diag(k)
+## dynamic structure
+p <- 3
+mu0 <- rep(x = 0, times = p)
+sigma0 <- diag(p)
+sigma0_l <- t(chol(sigma0))
+alpha <- rep(x = 0, times = p)
+beta <- 0.50 * diag(p)
+psi <- diag(p)
+psi_l <- t(chol(psi))
+## covariates
+j <- 2
 x <- lapply(
   X = seq_len(n),
   FUN = function(i) {
-    return(
-      matrix(
-        data = rnorm(n = k * (time + burn_in)),
-        ncol = k
-      )
+    matrix(
+      data = stats::rnorm(n = time * j),
+      nrow = j,
+      ncol = time
     )
   }
 )
+gamma_eta <- diag(x = 0.10, nrow = p, ncol = j)
 
-# No covariates
+# Type 0
 ssm <- SimSSMVARFixed(
   n = n,
+  time = time,
   mu0 = mu0,
-  sigma0 = sigma0,
+  sigma0_l = sigma0_l,
   alpha = alpha,
   beta = beta,
-  psi = psi,
-  time = time,
-  burn_in = burn_in
+  psi_l = psi_l,
+  type = 0
 )
 
 plot(ssm)
 
-# With covariates
+# Type 1
 ssm <- SimSSMVARFixed(
   n = n,
+  time = time,
   mu0 = mu0,
-  sigma0 = sigma0,
+  sigma0_l = sigma0_l,
   alpha = alpha,
   beta = beta,
-  psi = psi,
-  gamma_eta = gamma_eta,
+  psi_l = psi_l,
+  type = 1,
   x = x,
-  time = time,
-  burn_in = burn_in
+  gamma_eta = gamma_eta
 )
 
 plot(ssm)
@@ -155,19 +296,14 @@ and state-space modeling techniques.
 \seealso{
 Other Simulation of State Space Models Data Functions: 
 \code{\link{LinSDE2SSM}()},
-\code{\link{OU2SSM}()},
-\code{\link{OU2SVAR}()},
-\code{\link{OU2VAR}()},
-\code{\link{SimSSM}()},
 \code{\link{SimSSMFixed}()},
 \code{\link{SimSSMIVary}()},
 \code{\link{SimSSMLinGrowth}()},
 \code{\link{SimSSMLinGrowthIVary}()},
-\code{\link{SimSSMLinSDE}()},
-\code{\link{SimSSMOU}()},
+\code{\link{SimSSMLinSDEFixed}()},
+\code{\link{SimSSMLinSDEIVary}()},
 \code{\link{SimSSMOUFixed}()},
 \code{\link{SimSSMOUIVary}()},
-\code{\link{SimSSMVAR}()},
 \code{\link{SimSSMVARIVary}()}
 }
 \author{

@@ -1,15 +1,15 @@
-#' Simulate Data from a Linear Growth Curve Model
+#' Simulate Data from the
+#' Linear Growth Curve Model
 #'
-#' This function simulates data
-#' from a linear growth curve model
-#' for `n > 1` individuals.
+#' This function simulates data from the
+#' linear growth curve model.
 #'
 #' @details
 #'   ## Type 0
 #'
 #'   The measurement model is given by
 #'   \deqn{
-#'     y_{i, t}
+#'     Y_{i, t}
 #'     =
 #'     \left(
 #'     \begin{array}{cc}
@@ -35,12 +35,12 @@
 #'     \theta
 #'     \right)
 #'   }
-#'   where \eqn{y_{i, t}}, \eqn{\eta_{0_{i, t}}},
+#'   where \eqn{Y_{i, t}}, \eqn{\eta_{0_{i, t}}},
 #'   \eqn{\eta_{1_{i, t}}},
 #'   and \eqn{\boldsymbol{\varepsilon}_{i, t}}
 #'   are random variables and
 #'   \eqn{\theta} is a model parameter.
-#'   \eqn{y_{i, t}} is a vector of observed random variables
+#'   \eqn{Y_{i, t}} is the observed random variable
 #'   at time \eqn{t} and individual \eqn{i},
 #'   \eqn{\eta_{0_{i, t}}}
 #'   and
@@ -106,7 +106,7 @@
 #'
 #'   The measurement model is given by
 #'   \deqn{
-#'     y_{i, t}
+#'     Y_{i, t}
 #'     =
 #'     \left(
 #'     \begin{array}{cc}
@@ -168,7 +168,7 @@
 #'
 #'   The measurement model is given by
 #'   \deqn{
-#'     y_{i, t}
+#'     Y_{i, t}
 #'     =
 #'     \left(
 #'     \begin{array}{cc}
@@ -233,32 +233,26 @@
 #'   A vector of length two.
 #'   The first element is the mean of the intercept,
 #'   and the second element is the mean of the slope.
-#' @param sigma0 Numeric matrix.
-#'   The covariance matrix
+#' @param sigma0_l Numeric matrix.
+#'   Cholesky factorization (`t(chol(sigma0))`)
+#'   of the covariance matrix
 #'   of the intercept and the slope.
-#' @param theta Numeric.
-#'   The common measurement error variance.
-#' @param gamma_y Numeric matrix.
-#'   Matrix relating the values of the covariate matrix
-#'   at time `t` to `y` at time `t`
-#'   (\eqn{\boldsymbol{\Gamma}_{\mathbf{y}}}).
-#' @param gamma_eta Numeric matrix.
-#'   Matrix relating the values of the covariate matrix
-#'   at time `t` to the latent variables (intercept and slope) at time `t`
-#'   (\eqn{\boldsymbol{\Gamma}_{\boldsymbol{\eta}}}).
-#' @param x A list of length `n` of numeric matrices.
-#'   Each element of the list
-#'   is a matrix of observed covariates in `type = 1` or `type = 2`.
-#'   The number of rows in each matrix should be equal to `time`.
+#' @param theta_l Numeric.
+#'   Square root of the common measurement error variance.
 #'
 #' @inheritParams SimSSMFixed
-#' @inherit SimSSMFixed return
-#' @inherit SimSSM references
+#'
+#' @inherit SimSSMFixed references return
 #'
 #' @examples
 #' # prepare parameters
 #' set.seed(42)
-#' n <- 10
+#' ## number of individuals
+#' n <- 5
+#' ## time points
+#' time <- 50
+#' ## dynamic structure
+#' p <- 2
 #' mu0 <- c(0.615, 1.006)
 #' sigma0 <- matrix(
 #'   data = c(
@@ -267,32 +261,37 @@
 #'     0.618,
 #'     0.587
 #'   ),
-#'   nrow = 2
+#'   nrow = p
 #' )
-#' theta <- 0.6
-#' time <- 10
-#' gamma_y <- matrix(data = 0.10, nrow = 1, ncol = 2)
-#' gamma_eta <- matrix(data = 0.10, nrow = 2, ncol = 2)
+#' sigma0_l <- t(chol(sigma0))
+#' ## measurement model
+#' k <- 1
+#' theta <- 0.50
+#' theta_l <- sqrt(theta)
+#' ## covariates
+#' j <- 2
 #' x <- lapply(
 #'   X = seq_len(n),
 #'   FUN = function(i) {
 #'     return(
 #'       matrix(
-#'         data = rnorm(n = 2 * time),
-#'         ncol = 2
+#'         data = rnorm(n = j * time),
+#'         nrow = j
 #'       )
 #'     )
 #'   }
 #' )
+#' gamma_eta <- diag(x = 0.10, nrow = p, ncol = j)
+#' gamma_y <- diag(x = 0.10, nrow = k, ncol = j)
 #'
 #' # Type 0
 #' ssm <- SimSSMLinGrowth(
 #'   n = n,
+#'   time = time,
 #'   mu0 = mu0,
-#'   sigma0 = sigma0,
-#'   theta = theta,
-#'   type = 0,
-#'   time = time
+#'   sigma0_l = sigma0_l,
+#'   theta_l = theta_l,
+#'   type = 0
 #' )
 #'
 #' plot(ssm)
@@ -300,13 +299,13 @@
 #' # Type 1
 #' ssm <- SimSSMLinGrowth(
 #'   n = n,
+#'   time = time,
 #'   mu0 = mu0,
-#'   sigma0 = sigma0,
-#'   theta = theta,
-#'   gamma_eta = gamma_eta,
-#'   x = x,
+#'   sigma0_l = sigma0_l,
+#'   theta_l = theta_l,
 #'   type = 1,
-#'   time = time
+#'   x = x,
+#'   gamma_eta = gamma_eta
 #' )
 #'
 #' plot(ssm)
@@ -314,14 +313,14 @@
 #' # Type 2
 #' ssm <- SimSSMLinGrowth(
 #'   n = n,
+#'   time = time,
 #'   mu0 = mu0,
-#'   sigma0 = sigma0,
-#'   theta = theta,
-#'   gamma_y = gamma_y,
-#'   gamma_eta = gamma_eta,
-#'   x = x,
+#'   sigma0_l = sigma0_l,
+#'   theta_l = theta_l,
 #'   type = 2,
-#'   time = time
+#'   x = x,
+#'   gamma_eta = gamma_eta,
+#'   gamma_y = gamma_y
 #' )
 #'
 #' plot(ssm)
@@ -329,87 +328,95 @@
 #' @family Simulation of State Space Models Data Functions
 #' @keywords simStateSpace sim growth
 #' @export
-SimSSMLinGrowth <- function(n,
-                            mu0,
-                            sigma0,
-                            theta,
-                            gamma_y = NULL,
-                            gamma_eta = NULL,
-                            x = NULL,
+SimSSMLinGrowth <- function(n, time,
+                            mu0, sigma0_l, theta_l,
                             type = 0,
-                            time) {
-  sigma0_l <- t(chol(sigma0))
-  theta_l <- sqrt(theta)
-  data <- switch(
-    EXPR = as.character(type),
-    "0" = {
-      .SimSSM0LinGrowth(
-        n = n,
-        mu0 = mu0,
-        sigma0_l = sigma0_l,
-        theta_l = theta_l,
-        time = time
-      )
-    },
-    "1" = {
-      stopifnot(
-        !is.null(x),
-        !is.null(gamma_eta)
-      )
-      .SimSSM1LinGrowth(
-        n = n,
-        mu0 = mu0,
-        sigma0_l = sigma0_l,
-        theta_l = theta_l,
-        gamma_eta = gamma_eta,
-        x = x,
-        time = time
-      )
-    },
-    "2" = {
-      stopifnot(
-        !is.null(x),
-        !is.null(gamma_y),
-        !is.null(gamma_eta)
-      )
-      .SimSSM2LinGrowth(
-        n = n,
-        mu0 = mu0,
-        sigma0_l = sigma0_l,
-        theta_l = theta_l,
-        gamma_y = gamma_y,
-        gamma_eta = gamma_eta,
-        x = x,
-        time = time
-      )
-    },
-    stop(
-      "Invalid `type`."
-    )
+                            x = NULL, gamma_eta = NULL, gamma_y = NULL) {
+  stopifnot(type %in% c(0, 1, 2))
+  p <- 2
+  k <- 1
+  stopifnot(
+    length(mu0) == p,
+    dim(sigma0_l) == c(p, p)
   )
+  theta_l <- as.matrix(
+    theta_l
+  )
+  stopifnot(
+    dim(theta_l) == c(k, k)
+  )
+  covariates <- FALSE
   if (type > 0) {
     covariates <- TRUE
-  } else {
-    covariates <- FALSE
+  }
+  alpha <- rep(x = 0, times = p)
+  beta <- matrix(
+    data = c(1, 0, 1, 1),
+    nrow = p
+  )
+  psi_l <- matrix(
+    data = 0,
+    nrow = p,
+    ncol = p
+  )
+  nu <- rep(x = 0, times = k)
+  lambda <- matrix(
+    data = c(1, 0),
+    nrow = k
+  )
+  if (type == 0) {
+    data <- .SimSSMFixed0(
+      n = n,
+      time = time,
+      delta_t = 1.0,
+      mu0 = mu0, sigma0_l = sigma0_l,
+      alpha = alpha, beta = beta, psi_l = psi_l,
+      nu = nu, lambda = lambda, theta_l = theta_l
+    )
+  }
+  if (type == 1) {
+    stopifnot(
+      !is.null(x),
+      !is.null(gamma_eta)
+    )
+    data <- .SimSSMFixed1(
+      n = n,
+      time = time,
+      delta_t = 1.0,
+      mu0 = mu0, sigma0_l = sigma0_l,
+      alpha = alpha, beta = beta, psi_l = psi_l,
+      nu = nu, lambda = lambda, theta_l = theta_l,
+      x = x, gamma_eta = gamma_eta
+    )
+  }
+  if (type == 2) {
+    stopifnot(
+      !is.null(x),
+      !is.null(gamma_eta),
+      !is.null(gamma_y)
+    )
+    data <- .SimSSMFixed2(
+      n = n,
+      time = time,
+      delta_t = 1.0,
+      mu0 = mu0, sigma0_l = sigma0_l,
+      alpha = alpha, beta = beta, psi_l = psi_l,
+      nu = nu, lambda = lambda, theta_l = theta_l,
+      x = x, gamma_eta = gamma_eta, gamma_y = gamma_y
+    )
   }
   out <- list(
     call = match.call(),
     args = list(
-      n = n,
-      mu0 = mu0,
-      sigma0 = sigma0,
-      theta = theta,
-      gamma_y = gamma_y,
-      gamma_eta = gamma_eta,
-      x = x,
+      n = n, time = time,
+      mu0 = mu0, sigma0_l = sigma0_l,
+      alpha = alpha, beta = beta, psi_l = psi_l,
+      nu = nu, lambda = lambda, theta_l = theta_l,
       type = type,
-      time = time,
-      sigma0_l = sigma0_l,
-      theta_l = theta_l
+      x = x, gamma_eta = gamma_eta, gamma_y = gamma_y
     ),
     model = list(
       model = "lingrowth",
-      n1 = FALSE,
       covariates = covariates,
       fixed = TRUE,
       vary_i = FALSE

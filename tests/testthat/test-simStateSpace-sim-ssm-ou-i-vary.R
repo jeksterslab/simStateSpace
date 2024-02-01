@@ -5,58 +5,89 @@ lapply(
                  text) {
     message(text)
     # prepare parameters
-    # In this example, phi varies across individuals
+    # In this example, phi varies across individuals.
     set.seed(42)
-    p <- k <- 2
-    iden <- diag(p)
+    ## number of individuals
     n <- 5
-    mu0 <- list(c(-3.0, 1.5))
-    sigma0 <- list(iden)
-    mu <- list(c(5.76, 5.18))
-    phi <- list(
-      as.matrix(Matrix::expm(diag(x = -0.1, nrow = k))),
-      as.matrix(Matrix::expm(diag(x = -0.2, nrow = k))),
-      as.matrix(Matrix::expm(diag(x = -0.3, nrow = k))),
-      as.matrix(Matrix::expm(diag(x = -0.4, nrow = k))),
-      as.matrix(Matrix::expm(diag(x = -0.5, nrow = k)))
-    )
-    sigma <- list(
-      matrix(data = c(2.79, 0.06, 0.06, 3.27), nrow = p)
-    )
-    nu <- list(rep(x = 0, times = k))
-    lambda <- list(diag(k))
-    theta <- list(diag(x = 0.50, nrow = k))
-    delta_t <- 0.10
+    ## time points
     time <- 50
-    burn_in <- 10
-    gamma_y <- gamma_eta <- list(0.10 * diag(k))
+    delta_t <- 0.10
+    ## dynamic structure
+    p <- 2
+    mu0 <- list(
+      c(-3.0, 1.5)
+    )
+    sigma0 <- diag(p)
+    sigma0_l <- list(
+      t(chol(sigma0))
+    )
+    mu <- list(
+      c(5.76, 5.18)
+    )
+    phi <- list(
+      -0.1 * diag(p),
+      -0.2 * diag(p),
+      -0.3 * diag(p),
+      -0.4 * diag(p),
+      -0.5 * diag(p)
+    )
+    sigma <- matrix(
+      data = c(
+        2.79,
+        0.06,
+        0.06,
+        3.27
+      ),
+      nrow = p
+    )
+    sigma_l <- list(
+      t(chol(sigma))
+    )
+    ## measurement model
+    k <- 2
+    nu <- list(
+      rep(x = 0, times = k)
+    )
+    lambda <- list(
+      diag(k)
+    )
+    theta <- 0.50 * diag(k)
+    theta_l <- list(
+      t(chol(theta))
+    )
+    ## covariates
+    j <- 2
     x <- lapply(
       X = seq_len(n),
       FUN = function(i) {
-        return(
-          matrix(
-            data = rnorm(n = k * (time + burn_in)),
-            ncol = k
-          )
+        matrix(
+          data = stats::rnorm(n = time * j),
+          nrow = j,
+          ncol = time
         )
       }
     )
+    gamma_eta <- list(
+      diag(x = 0.10, nrow = p, ncol = j)
+    )
+    gamma_y <- list(
+      diag(x = 0.10, nrow = k, ncol = j)
+    )
 
     # Type 0
-    ssm <- simStateSpace::SimSSMOUIVary(
+    ssm <- SimSSMOUIVary(
       n = n,
+      time = time,
+      delta_t = delta_t,
       mu0 = mu0,
-      sigma0 = sigma0,
+      sigma0_l = sigma0_l,
       mu = mu,
       phi = phi,
-      sigma = sigma,
+      sigma_l = sigma_l,
       nu = nu,
       lambda = lambda,
-      theta = theta,
-      type = 0,
-      delta_t = delta_t,
-      time = time,
-      burn_in = burn_in
+      theta_l = theta_l,
+      type = 0
     )
 
     as.data.frame.simstatespace(ssm, eta = TRUE)
@@ -72,22 +103,21 @@ lapply(
     plot.simstatespace(ssm, eta = TRUE)
 
     # Type 1
-    ssm <- simStateSpace::SimSSMOUIVary(
+    ssm <- SimSSMOUIVary(
       n = n,
+      time = time,
+      delta_t = delta_t,
       mu0 = mu0,
-      sigma0 = sigma0,
+      sigma0_l = sigma0_l,
       mu = mu,
       phi = phi,
-      sigma = sigma,
+      sigma_l = sigma_l,
       nu = nu,
       lambda = lambda,
-      theta = theta,
-      gamma_eta = gamma_eta,
-      x = x,
+      theta_l = theta_l,
       type = 1,
-      delta_t = delta_t,
-      time = time,
-      burn_in = burn_in
+      x = x,
+      gamma_eta = gamma_eta
     )
 
     as.data.frame.simstatespace(ssm, eta = TRUE)
@@ -103,23 +133,22 @@ lapply(
     plot.simstatespace(ssm, eta = TRUE)
 
     # Type 2
-    ssm <- simStateSpace::SimSSMOUIVary(
+    ssm <- SimSSMOUIVary(
       n = n,
+      time = time,
+      delta_t = delta_t,
       mu0 = mu0,
-      sigma0 = sigma0,
+      sigma0_l = sigma0_l,
       mu = mu,
       phi = phi,
-      sigma = sigma,
+      sigma_l = sigma_l,
       nu = nu,
       lambda = lambda,
-      theta = theta,
-      gamma_y = gamma_y,
-      gamma_eta = gamma_eta,
-      x = x,
+      theta_l = theta_l,
       type = 2,
-      delta_t = delta_t,
-      time = time,
-      burn_in = burn_in
+      x = x,
+      gamma_eta = gamma_eta,
+      gamma_y = gamma_y
     )
 
     as.data.frame.simstatespace(ssm, eta = TRUE)
@@ -133,77 +162,6 @@ lapply(
     print.simstatespace(ssm)
     plot.simstatespace(ssm, id = 1:3, time = (0:4) * 0.10)
     plot.simstatespace(ssm, eta = TRUE)
-
-    # Error
-    testthat::test_that(
-      paste(text, "error"),
-      {
-        testthat::expect_error(
-          simStateSpace::SimSSMOUIVary(
-            n = n,
-            mu0 = mu0,
-            sigma0 = sigma0,
-            mu = mu,
-            phi = phi,
-            sigma = sigma,
-            nu = nu,
-            lambda = lambda,
-            theta = theta,
-            gamma_y = gamma_y,
-            gamma_eta = gamma_eta,
-            x = x,
-            type = 3,
-            delta_t = delta_t,
-            time = time,
-            burn_in = burn_in
-          )
-        )
-      }
-    )
-    testthat::test_that(
-      paste(text, "error type 1"),
-      {
-        testthat::expect_error(
-          simStateSpace::SimSSMOUIVary(
-            n = n,
-            mu0 = mu0,
-            sigma0 = sigma0,
-            mu = mu,
-            phi = phi,
-            sigma = sigma,
-            nu = nu,
-            lambda = lambda,
-            theta = theta,
-            type = 1,
-            delta_t = delta_t,
-            time = time,
-            burn_in = burn_in
-          )
-        )
-      }
-    )
-    testthat::test_that(
-      paste(text, "error type 2"),
-      {
-        testthat::expect_error(
-          simStateSpace::SimSSMOUIVary(
-            n = n,
-            mu0 = mu0,
-            sigma0 = sigma0,
-            mu = mu,
-            phi = phi,
-            sigma = sigma,
-            nu = nu,
-            lambda = lambda,
-            theta = theta,
-            type = 2,
-            delta_t = delta_t,
-            time = time,
-            burn_in = burn_in
-          )
-        )
-      }
-    )
   },
   text = "test-simStateSpace-sim-ssm-ou-i-vary"
 )

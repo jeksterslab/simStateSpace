@@ -32,51 +32,98 @@ Plot Method for an Object of Class \code{simstatespace}
 \examples{
 # prepare parameters
 set.seed(42)
-k <- p <- 3
-iden <- diag(k)
-null_vec <- rep(x = 0, times = k)
+## number of individuals
 n <- 5
-mu0 <- null_vec
-sigma0 <- iden
-alpha <- null_vec
-beta <- diag(x = 0.50, nrow = k)
-psi <- iden
-nu <- null_vec
-lambda <- iden
-theta <- diag(x = 0.50, nrow = k)
+## time points
 time <- 50
-burn_in <- 0
-gamma_y <- gamma_eta <- 0.10 * diag(k)
+## dynamic structure
+p <- 3
+mu0 <- rep(x = 0, times = p)
+sigma0 <- diag(p)
+sigma0_l <- t(chol(sigma0))
+alpha <- rep(x = 0, times = p)
+beta <- 0.50 * diag(p)
+psi <- diag(p)
+psi_l <- t(chol(psi))
+## measurement model
+k <- 3
+nu <- rep(x = 0, times = k)
+lambda <- diag(k)
+theta <- 0.50 * diag(k)
+theta_l <- t(chol(theta))
+## covariates
+j <- 2
 x <- lapply(
   X = seq_len(n),
   FUN = function(i) {
-    return(
-      matrix(
-        data = rnorm(n = k * (time + burn_in)),
-        ncol = k
-      )
+    matrix(
+      data = stats::rnorm(n = time * j),
+      nrow = j,
+      ncol = time
     )
   }
 )
+gamma_eta <- diag(x = 0.10, nrow = p, ncol = j)
+gamma_y <- diag(x = 0.10, nrow = k, ncol = j)
 
 # Type 0
 ssm <- SimSSMFixed(
   n = n,
+  time = time,
   mu0 = mu0,
-  sigma0 = sigma0,
+  sigma0_l = sigma0_l,
   alpha = alpha,
   beta = beta,
-  psi = psi,
+  psi_l = psi_l,
   nu = nu,
   lambda = lambda,
-  theta = theta,
-  type = 0,
-  time = time,
-  burn_in = burn_in
+  theta_l = theta_l,
+  type = 0
 )
 
 plot(ssm)
-plot(ssm, id = 1:3, time = 1:10)
+plot(ssm, id = 1:3, time = 0:9)
+
+# Type 1
+ssm <- SimSSMFixed(
+  n = n,
+  time = time,
+  mu0 = mu0,
+  sigma0_l = sigma0_l,
+  alpha = alpha,
+  beta = beta,
+  psi_l = psi_l,
+  nu = nu,
+  lambda = lambda,
+  theta_l = theta_l,
+  type = 1,
+  x = x,
+  gamma_eta = gamma_eta
+)
+
+plot(ssm)
+plot(ssm, id = 1:3, time = 0:9)
+
+# Type 2
+ssm <- SimSSMFixed(
+  n = n,
+  time = time,
+  mu0 = mu0,
+  sigma0_l = sigma0_l,
+  alpha = alpha,
+  beta = beta,
+  psi_l = psi_l,
+  nu = nu,
+  lambda = lambda,
+  theta_l = theta_l,
+  type = 2,
+  x = x,
+  gamma_eta = gamma_eta,
+  gamma_y = gamma_y
+)
+
+plot(ssm)
+plot(ssm, id = 1:3, time = 0:9)
 
 }
 \author{

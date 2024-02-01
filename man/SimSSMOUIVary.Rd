@@ -2,39 +2,53 @@
 % Please edit documentation in R/simStateSpace-sim-ssm-ou-i-vary.R
 \name{SimSSMOUIVary}
 \alias{SimSSMOUIVary}
-\title{Simulate Data from an Ornstein–Uhlenbeck Model
+\title{Simulate Data from the
+Ornstein–Uhlenbeck Model
 using a State Space Model Parameterization
-for n > 1 Individuals (Individual-Varying Parameters)}
+(Individual-Varying Parameters)}
 \usage{
 SimSSMOUIVary(
   n,
+  time,
+  delta_t = 1,
   mu0,
-  sigma0,
+  sigma0_l,
   mu,
   phi,
-  sigma,
+  sigma_l,
   nu,
   lambda,
-  theta,
-  gamma_y = NULL,
-  gamma_eta = NULL,
-  x = NULL,
+  theta_l,
   type = 0,
-  delta_t,
-  time,
-  burn_in = 0
+  x = NULL,
+  gamma_eta = NULL,
+  gamma_y = NULL
 )
 }
 \arguments{
 \item{n}{Positive integer.
 Number of individuals.}
 
-\item{mu0}{Numeric vector.
-Mean of initial latent variable values
+\item{time}{Positive integer.
+Number of time points.}
+
+\item{delta_t}{Numeric.
+Time interval.
+The default value is \code{1.0}
+with an option to use a numeric value
+for the discretized state space model
+parameterization of the
+linear stochastic differential equation model.}
+
+\item{mu0}{List of numeric vectors.
+Each element of the list
+is the mean of initial latent variable values
 (\eqn{\boldsymbol{\mu}_{\boldsymbol{\eta} \mid 0}}).}
 
-\item{sigma0}{Numeric matrix.
-The covariance matrix
+\item{sigma0_l}{List of numeric matrices.
+Each element of the list
+is the Cholesky factorization (\code{t(chol(sigma0))})
+of the covariance matrix
 of initial latent variable values
 (\eqn{\boldsymbol{\Sigma}_{\boldsymbol{\eta} \mid 0}}).}
 
@@ -43,57 +57,62 @@ Each element of the list
 is the long-term mean or equilibrium level
 (\eqn{\boldsymbol{\mu}}).}
 
-\item{phi}{List of numeric matrices.
+\item{phi}{List of numeric matrix.
 Each element of the list
-is the rate of mean reversion,
+is the drift matrix
+which represents the rate of change of the solution
+in the absence of any random fluctuations
+(\eqn{\boldsymbol{\Phi}}).
+The negative value of \code{phi} is the rate of mean reversion,
 determining how quickly the variable returns to its mean
-(\eqn{\boldsymbol{\Phi}}).}
+(\eqn{- \boldsymbol{\Phi}}).}
 
-\item{sigma}{List of numeric matrices.
+\item{sigma_l}{List of numeric matrix.
 Each element of the list
-is the matrix of volatility
+is the Cholesky factorization (\code{t(chol(sigma))})
+of the covariance matrix of volatility
 or randomness in the process
-(\eqn{\boldsymbol{\Sigma}}).}
+\eqn{\boldsymbol{\Sigma}}.}
 
-\item{nu}{Numeric vector.
-Vector of intercepts for the measurement model
+\item{nu}{List of numeric vectors.
+Each element of the list
+is the vector of intercept values for the measurement model
 (\eqn{\boldsymbol{\nu}}).}
 
-\item{lambda}{Numeric matrix.
-Factor loading matrix linking the latent variables
+\item{lambda}{List of numeric matrices.
+Each element of the list
+is the factor loading matrix linking the latent variables
 to the observed variables
 (\eqn{\boldsymbol{\Lambda}}).}
 
-\item{theta}{Numeric matrix.
-The measurement error covariance matrix
+\item{theta_l}{List of numeric matrices.
+Each element of the list
+is the Cholesky factorization (\code{t(chol(theta))})
+of the covariance matrix
+of the measurement error
 (\eqn{\boldsymbol{\Theta}}).}
-
-\item{gamma_y}{Numeric matrix.
-Matrix relating the values of the covariate matrix
-at time \code{t} to the observed variables at time \code{t}
-(\eqn{\boldsymbol{\Gamma}_{\mathbf{y}}}).}
-
-\item{gamma_eta}{Numeric matrix.
-Matrix relating the values of the covariate matrix
-at time \code{t} to the latent variables at time \code{t}
-(\eqn{\boldsymbol{\Gamma}_{\boldsymbol{\eta}}}).}
-
-\item{x}{Numeric matrix.
-The matrix of observed covariates in \code{type = 1} or \code{type = 2}.
-The number of rows should be equal to \code{time + burn_in}.}
 
 \item{type}{Integer.
 State space model type.
 See Details for more information.}
 
-\item{delta_t}{Numeric.
-Time interval (\eqn{\delta_t}).}
+\item{x}{List.
+Each element of the list is a matrix of covariates
+for each individual \code{i} in \code{n}.
+The number of columns in each matrix
+should be equal to \code{time}.}
 
-\item{time}{Positive integer.
-Number of time points to simulate.}
+\item{gamma_eta}{List of numeric matrices.
+Each element of the list
+is the matrix linking the covariates to the latent variables
+at current time point
+(\eqn{\boldsymbol{\Gamma}_{\boldsymbol{\eta}}}).}
 
-\item{burn_in}{Positive integer.
-Number of burn-in points to exclude before returning the results.}
+\item{gamma_y}{List of numeric matrices.
+Each element of the list
+is the matrix linking the covariates to the observed variables
+at current time point
+(\eqn{\boldsymbol{\Gamma}_{\mathbf{y}}}).}
 }
 \value{
 Returns an object of class \code{simstatespace}
@@ -104,19 +123,21 @@ which is a list with the following elements:
 \item \code{data}: Generated data which is a list of length \code{n}.
 Each element of \code{data} is a list with the following elements:
 \itemize{
-\item \code{id}: A vector of ID numbers of length \code{t}.
+\item \code{id}: A vector of ID numbers with length \code{t},
+where \code{t} is the value of the function argument \code{time}.
 \item \code{time}: A vector time points of length \code{t}.
 \item \code{y}: A \code{t} by \code{k} matrix of values for the manifest variables.
 \item \code{eta}: A \code{t} by \code{p} matrix of values for the latent variables.
-\item \code{x}: A \code{t} by \code{j} matrix of values for the covariates.
+\item \code{x}: A \code{t} by \code{j} matrix of values for the covariates
+(when covariates are included).
 }
 \item \code{fun}: Function used.
 }
 }
 \description{
-This function simulates data from an Ornstein–Uhlenbeck model
-using a state space model parameterization
-for \code{n > 1} individuals.
+This function simulates data from the
+Ornstein–Uhlenbeck model
+using a state space model parameterization.
 In this model,
 the parameters can vary across individuals.
 }
@@ -125,72 +146,103 @@ Parameters can vary across individuals
 by providing a list of parameter values.
 If the length of any of the parameters
 (\code{mu0},
-\code{sigma0},
+\code{sigma0_l},
 \code{mu},
 \code{phi},
-\code{sigma},
+\code{sigma_l},
 \code{nu},
 \code{lambda},
-\code{theta},
-\code{gamma_y}, or
-\code{gamma_eta})
+\code{theta_l},
+\code{gamma_eta}, or
+\code{gamma_y})
 is less the \code{n},
 the function will cycle through the available values.
 }
 \examples{
 # prepare parameters
-# In this example, phi varies across individuals
+# In this example, phi varies across individuals.
 set.seed(42)
-p <- k <- 2
-iden <- diag(p)
+## number of individuals
 n <- 5
-mu0 <- list(c(-3.0, 1.5))
-sigma0 <- list(iden)
-mu <- list(c(5.76, 5.18))
-phi <- list(
-  as.matrix(Matrix::expm(diag(x = -0.1, nrow = k))),
-  as.matrix(Matrix::expm(diag(x = -0.2, nrow = k))),
-  as.matrix(Matrix::expm(diag(x = -0.3, nrow = k))),
-  as.matrix(Matrix::expm(diag(x = -0.4, nrow = k))),
-  as.matrix(Matrix::expm(diag(x = -0.5, nrow = k)))
-)
-sigma <- list(
-  matrix(data = c(2.79, 0.06, 0.06, 3.27), nrow = p)
-)
-nu <- list(rep(x = 0, times = k))
-lambda <- list(diag(k))
-theta <- list(diag(x = 0.50, nrow = k))
-delta_t <- 0.10
+## time points
 time <- 50
-burn_in <- 0
-gamma_y <- gamma_eta <- list(0.10 * diag(k))
+delta_t <- 0.10
+## dynamic structure
+p <- 2
+mu0 <- list(
+  c(-3.0, 1.5)
+)
+sigma0 <- diag(p)
+sigma0_l <- list(
+  t(chol(sigma0))
+)
+mu <- list(
+  c(5.76, 5.18)
+)
+phi <- list(
+  -0.1 * diag(p),
+  -0.2 * diag(p),
+  -0.3 * diag(p),
+  -0.4 * diag(p),
+  -0.5 * diag(p)
+)
+sigma <- matrix(
+  data = c(
+    2.79,
+    0.06,
+    0.06,
+    3.27
+  ),
+  nrow = p
+)
+sigma_l <- list(
+  t(chol(sigma))
+)
+## measurement model
+k <- 2
+nu <- list(
+  rep(x = 0, times = k)
+)
+lambda <- list(
+  diag(k)
+)
+theta <- 0.50 * diag(k)
+theta_l <- list(
+  t(chol(theta))
+)
+## covariates
+j <- 2
 x <- lapply(
   X = seq_len(n),
   FUN = function(i) {
-    return(
-      matrix(
-        data = rnorm(n = k * (time + burn_in)),
-        ncol = k
-      )
+    matrix(
+      data = stats::rnorm(n = time * j),
+      nrow = j,
+      ncol = time
     )
   }
+)
+gamma_eta <- list(
+  diag(x = 0.10, nrow = p, ncol = j)
+)
+gamma_y <- list(
+  diag(x = 0.10, nrow = k, ncol = j)
 )
 
 # Type 0
 ssm <- SimSSMOUIVary(
   n = n,
+  time = time,
+  delta_t = delta_t,
   mu0 = mu0,
-  sigma0 = sigma0,
+  sigma0_l = sigma0_l,
   mu = mu,
   phi = phi,
-  sigma = sigma,
+  sigma_l = sigma_l,
   nu = nu,
   lambda = lambda,
-  theta = theta,
-  type = 0,
-  delta_t = delta_t,
-  time = time,
-  burn_in = burn_in
+  theta_l = theta_l,
+  type = 0
 )
 
 plot(ssm)
@@ -198,20 +250,19 @@ plot(ssm)
 # Type 1
 ssm <- SimSSMOUIVary(
   n = n,
+  time = time,
+  delta_t = delta_t,
   mu0 = mu0,
-  sigma0 = sigma0,
+  sigma0_l = sigma0_l,
   mu = mu,
   phi = phi,
-  sigma = sigma,
+  sigma_l = sigma_l,
   nu = nu,
   lambda = lambda,
-  theta = theta,
-  gamma_eta = gamma_eta,
-  x = x,
+  theta_l = theta_l,
   type = 1,
-  delta_t = delta_t,
-  time = time,
-  burn_in = burn_in
+  x = x,
+  gamma_eta = gamma_eta
 )
 
 plot(ssm)
@@ -219,53 +270,43 @@ plot(ssm)
 # Type 2
 ssm <- SimSSMOUIVary(
   n = n,
+  time = time,
+  delta_t = delta_t,
   mu0 = mu0,
-  sigma0 = sigma0,
+  sigma0_l = sigma0_l,
   mu = mu,
   phi = phi,
-  sigma = sigma,
+  sigma_l = sigma_l,
   nu = nu,
   lambda = lambda,
-  theta = theta,
-  gamma_y = gamma_y,
-  gamma_eta = gamma_eta,
-  x = x,
+  theta_l = theta_l,
   type = 2,
-  delta_t = delta_t,
-  time = time,
-  burn_in = burn_in
+  x = x,
+  gamma_eta = gamma_eta,
+  gamma_y = gamma_y
 )
 
 plot(ssm)
 
 }
 \references{
-Chow, S.-M., Losardo, D., Park, J., & Molenaar, P. C. M. (2023).
-Continuous-time dynamic models: Connections to structural equation models
-and other discrete-time models.
-In R. H. Hoyle (Ed.), Handbook of structural equation modeling (2nd ed.).
-The Guilford Press.
-
-Uhlenbeck, G. E., & Ornstein, L. S. (1930).
-On the theory of the brownian motion.
-\emph{Physical Review}, \emph{36}(5), 823–841.
-\doi{10.1103/physrev.36.823}
+Chow, S.-M., Ho, M. R., Hamaker, E. L., & Dolan, C. V. (2010).
+Equivalence and differences between structural equation modeling
+and state-space modeling techniques.
+\emph{Structural Equation Modeling: A Multidisciplinary Journal},
+17(2), 303–332.
+\doi{10.1080/10705511003661553}
 }
 \seealso{
 Other Simulation of State Space Models Data Functions: 
 \code{\link{LinSDE2SSM}()},
-\code{\link{OU2SSM}()},
-\code{\link{OU2SVAR}()},
-\code{\link{OU2VAR}()},
-\code{\link{SimSSM}()},
 \code{\link{SimSSMFixed}()},
 \code{\link{SimSSMIVary}()},
 \code{\link{SimSSMLinGrowth}()},
 \code{\link{SimSSMLinGrowthIVary}()},
-\code{\link{SimSSMLinSDE}()},
-\code{\link{SimSSMOU}()},
+\code{\link{SimSSMLinSDEFixed}()},
+\code{\link{SimSSMLinSDEIVary}()},
 \code{\link{SimSSMOUFixed}()},
-\code{\link{SimSSMVAR}()},
 \code{\link{SimSSMVARFixed}()},
 \code{\link{SimSSMVARIVary}()}
 }

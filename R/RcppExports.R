@@ -8,7 +8,25 @@
 #' the linear stochastic differential equation model
 #' to state space model parameterization.
 #'
-#' @details The state space parameters
+#' @details Let the linear stochastic equation model be given by
+#'   \deqn{
+#'     \mathrm{d}
+#'     \boldsymbol{\eta}_{i, t}
+#'     =
+#'     \left(
+#'       \boldsymbol{\gamma}
+#'       +
+#'       \boldsymbol{\Phi}
+#'       \boldsymbol{\eta}_{i, t}
+#'     \right)
+#'     \mathrm{d} t
+#'     +
+#'     \boldsymbol{\Sigma}^{\frac{1}{2}}
+#'     \mathrm{d}
+#'     \mathbf{W}_{i, t}
+#'   }
+#'   for individual \eqn{i} and time {t}.
+#'   The state space parameters
 #'   as a function of the linear stochastic differential equation model
 #'   parameters
 #'   are given by
@@ -17,7 +35,7 @@
 #'       =
 #'       \exp{
 #'         \left(
-#'           \mathbf{A}
+#'           \boldsymbol{\Phi}
 #'           \Delta_{t}
 #'         \right)
 #'       }
@@ -26,11 +44,11 @@
 #'   \deqn{
 #'       \boldsymbol{\alpha}
 #'       =
-#'       \mathbf{A}^{-1}
+#'       \boldsymbol{\Phi}^{-1}
 #'       \left(
 #'         \boldsymbol{\beta} - \mathbf{I}_{p}
 #'       \right)
-#'       \mathbf{b}
+#'       \boldsymbol{\gamma}
 #'   }
 #'
 #'   \deqn{
@@ -39,148 +57,28 @@
 #'         \boldsymbol{\Psi}
 #'       \right)
 #'       =
-#'       \left\{
-#'         \left[
-#'           \left(
-#'             \mathbf{A} \otimes \mathbf{I}_{p}
-#'           \right)
-#'           +
-#'           \left(
-#'             \mathbf{I}_{p} \otimes \mathbf{A}
-#'           \right)
-#'         \right]
-#'         \left[
-#'           \exp
-#'           \left(
-#'             \left[
-#'               \left(
-#'                 \mathbf{A} \otimes \mathbf{I}_{p}
-#'               \right)
-#'               +
-#'               \left(
-#'                 \mathbf{I}_{p} \otimes \mathbf{A}
-#'               \right)
-#'             \right]
-#'             \Delta_{t}
-#'         \right)
-#'         -
-#'         \mathbf{I}_{p \times p}
-#'       \right]
-#'       \mathrm{vec}
-#'       \left(
-#'         \mathbf{Q}
-#'       \right)
-#'     \right\}
-#'   }
-#'
-#' @author Ivan Jacob Agaloos Pesigan
-#'
-#' @inheritParams SimSSMLinSDE
-#'
-#' @return Returns a list of state space parameters:
-#'   - `alpha`: Numeric vector.
-#'     Vector of intercepts for the dynamic model
-#'     (\eqn{\boldsymbol{\alpha}}).
-#'   - `beta`: Numeric matrix.
-#'     Transition matrix relating the values of the latent variables
-#'     at time `t_k - 1` to those at time `t_k`
-#'     (\eqn{\boldsymbol{\beta}}).
-#'   - `psi`: Numeric matrix.
-#'     The process noise covariance matrix
-#'     (\eqn{\boldsymbol{\Psi}}).
-#'
-#' @examples
-#' p <- k <- 2
-#' a <- matrix(
-#'   data = c(
-#'    -0.10,
-#'    0.05,
-#'    0.05,
-#'    -0.10
-#'  ),
-#'  nrow = p
-#' )
-#' b <- c(0.317, 0.230)
-#' q <- matrix(
-#'   data = c(2.79, 0.06, 0.06, 3.27),
-#'   nrow = p
-#' )
-#' delta_t <- 0.10
-#'
-#' LinSDE2SSM(
-#'   b = b,
-#'   a = a,
-#'   q = q,
-#'   delta_t = delta_t
-#' )
-#'
-#' @family Simulation of State Space Models Data Functions
-#' @keywords simStateSpace sim linsde
-#' @export
-LinSDE2SSM <- function(b, a, q, delta_t) {
-    .Call(`_simStateSpace_LinSDE2SSM`, b, a, q, delta_t)
-}
-
-#' Convert Parameters from the Ornstein–Uhlenbeck Model
-#' to State Space Model Parameterization
-#'
-#' This function converts parameters from the Ornstein–Uhlenbeck model
-#' to state space model parameterization.
-#'
-#' @details The state space parameters
-#'   as a function of the  Ornstein–Uhlenbeck model parameters
-#'   are given by
-#'   \deqn{
-#'       \boldsymbol{\beta}
-#'       =
-#'       \exp{
+#'       \left[
 #'         \left(
-#'           - \boldsymbol{\Phi}
-#'           \Delta_{t}
+#'           \boldsymbol{\Phi} \otimes \mathbf{I}_{p}
 #'         \right)
-#'       }
-#'   }
-#'
-#'   \deqn{
-#'       \boldsymbol{\alpha}
-#'       =
-#'       - \boldsymbol{\Phi}^{-1}
-#'       \left(
-#'         \boldsymbol{\beta} - \mathbf{I}_{p}
-#'       \right)
-#'       \boldsymbol{\Phi}
-#'       \boldsymbol{\mu}
-#'   }
-#'
-#'   \deqn{
-#'       \mathrm{vec}
-#'       \left(
-#'         \boldsymbol{\Psi}
-#'       \right)
-#'       =
-#'       \left\{
-#'         \left[
-#'           \left(
-#'             - \boldsymbol{\Phi} \otimes \mathbf{I}_{p}
-#'           \right)
-#'           +
-#'           \left(
-#'             \mathbf{I}_{p} \otimes - \boldsymbol{\Phi}
-#'           \right)
-#'         \right]
-#'         \left[
-#'           \exp
-#'           \left(
-#'             \left[
-#'               \left(
-#'                 - \boldsymbol{\Phi} \otimes \mathbf{I}_{p}
-#'               \right)
-#'               +
-#'               \left(
-#'                 \mathbf{I}_{p} \otimes - \boldsymbol{\Phi}
-#'               \right)
-#'             \right]
-#'             \Delta_{t}
+#'         +
+#'         \left(
+#'           \mathbf{I}_{p} \otimes \boldsymbol{\Phi}
+#'         \right)
+#'       \right]
+#'       \left[
+#'         \exp
+#'         \left(
+#'           \left[
+#'             \left(
+#'               \boldsymbol{\Phi} \otimes \mathbf{I}_{p}
+#'             \right)
+#'             +
+#'             \left(
+#'               \mathbf{I}_{p} \otimes \boldsymbol{\Phi}
+#'             \right)
+#'           \right]
+#'           \Delta_{t}
 #'         \right)
 #'         -
 #'         \mathbf{I}_{p \times p}
@@ -189,181 +87,129 @@ LinSDE2SSM <- function(b, a, q, delta_t) {
 #'       \left(
 #'         \boldsymbol{\Sigma}
 #'       \right)
-#'     \right\}
 #'   }
+#'   where \eqn{p} is the number of latent variables and
+#'   \eqn{\Delta_{t}} is the time interval.
 #'
 #' @author Ivan Jacob Agaloos Pesigan
 #'
-#' @inheritParams SimSSMOU
+#' @param gamma Numeric vector.
+#'   An unobserved term that is constant over time
+#'   (\eqn{\boldsymbol{\gamma}}).
+#' @param phi Numeric matrix.
+#'   The drift matrix
+#'   which represents the rate of change of the solution
+#'   in the absence of any random fluctuations
+#'   (\eqn{\boldsymbol{\Phi}}).
+#' @param sigma_l Numeric matrix.
+#'   Cholesky factorization (`t(chol(sigma))`)
+#'   of the covariance matrix of volatility
+#'   or randomness in the process
+#'   \eqn{\boldsymbol{\Sigma}}.
+#' @param delta_t Numeric.
+#'   Time interval
+#'   (\eqn{\Delta_t}).
 #'
 #' @return Returns a list of state space parameters:
 #'   - `alpha`: Numeric vector.
-#'     Vector of intercepts for the dynamic model
+#'     Vector of constant values for the dynamic model
 #'     (\eqn{\boldsymbol{\alpha}}).
 #'   - `beta`: Numeric matrix.
 #'     Transition matrix relating the values of the latent variables
-#'     at time `t_k - 1` to those at time `t_k`
+#'     from the previous time point to the current time point.
 #'     (\eqn{\boldsymbol{\beta}}).
-#'   - `psi`: Numeric matrix.
-#'     The process noise covariance matrix
-#'     (\eqn{\boldsymbol{\Psi}}).
+#'   - `psi_l`: Numeric matrix.
+#'     Cholesky factorization (`t(chol(psi))`)
+#'     of the process noise covariance matrix
+#'     \eqn{\boldsymbol{\Psi}}.
 #'
 #' @examples
-#' p <- k <- 2
-#' mu <- c(5.76, 5.18)
+#' p <- 2
+#' gamma <- c(0.317, 0.230)
 #' phi <- matrix(
-#'   data = c(0.10, -0.05, -0.05, 0.10),
-#'   nrow = p
+#'   data = c(
+#'    -0.10,
+#'    0.05,
+#'    0.05,
+#'    -0.10
+#'  ),
+#'  nrow = p
 #' )
 #' sigma <- matrix(
-#'   data = c(2.79, 0.06, 0.06, 3.27),
+#'   data = c(
+#'     2.79,
+#'     0.06,
+#'     0.06,
+#'     3.27
+#'   ),
 #'   nrow = p
 #' )
+#' sigma_l <- t(chol(sigma))
 #' delta_t <- 0.10
 #'
-#' OU2SSM(
-#'   mu = mu,
+#' LinSDE2SSM(
+#'   gamma = gamma,
 #'   phi = phi,
-#'   sigma = sigma,
+#'   sigma_l = sigma_l,
 #'   delta_t = delta_t
 #' )
 #'
 #' @family Simulation of State Space Models Data Functions
-#' @keywords simStateSpace sim ou
+#' @keywords simStateSpace sim linsde
 #' @export
-OU2SSM <- function(mu, phi, sigma, delta_t) {
-    .Call(`_simStateSpace_OU2SSM`, mu, phi, sigma, delta_t)
+LinSDE2SSM <- function(gamma, phi, sigma_l, delta_t) {
+    .Call(`_simStateSpace_LinSDE2SSM`, gamma, phi, sigma_l, delta_t)
 }
 
-.SimSSM0 <- function(mu0, sigma0_l, alpha, beta, psi_l, nu, lambda, theta_l, time, burn_in) {
-    .Call(`_simStateSpace_SimSSM0`, mu0, sigma0_l, alpha, beta, psi_l, nu, lambda, theta_l, time, burn_in)
+.SimSSMFixed0 <- function(n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l, nu, lambda, theta_l) {
+    .Call(`_simStateSpace_SimSSMFixed0`, n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l, nu, lambda, theta_l)
 }
 
-.SimSSM0Fixed <- function(n, mu0, sigma0_l, alpha, beta, psi_l, nu, lambda, theta_l, time, burn_in) {
-    .Call(`_simStateSpace_SimSSM0Fixed`, n, mu0, sigma0_l, alpha, beta, psi_l, nu, lambda, theta_l, time, burn_in)
+.SimSSMFixed1 <- function(n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l, nu, lambda, theta_l, x, gamma_eta) {
+    .Call(`_simStateSpace_SimSSMFixed1`, n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l, nu, lambda, theta_l, x, gamma_eta)
 }
 
-.SimSSM0IVary <- function(n, mu0, sigma0_l, alpha, beta, psi_l, nu, lambda, theta_l, time, burn_in) {
-    .Call(`_simStateSpace_SimSSM0IVary`, n, mu0, sigma0_l, alpha, beta, psi_l, nu, lambda, theta_l, time, burn_in)
+.SimSSMFixed2 <- function(n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l, nu, lambda, theta_l, x, gamma_eta, gamma_y) {
+    .Call(`_simStateSpace_SimSSMFixed2`, n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l, nu, lambda, theta_l, x, gamma_eta, gamma_y)
 }
 
-.SimSSM0LinGrowth <- function(n, mu0, sigma0_l, theta_l, time) {
-    .Call(`_simStateSpace_SimSSM0LinGrowth`, n, mu0, sigma0_l, theta_l, time)
+.SimSSMIVary0 <- function(n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l, nu, lambda, theta_l) {
+    .Call(`_simStateSpace_SimSSMIVary0`, n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l, nu, lambda, theta_l)
 }
 
-.SimSSM0LinGrowthIVary <- function(n, mu0, sigma0_l, theta_l, time) {
-    .Call(`_simStateSpace_SimSSM0LinGrowthIVary`, n, mu0, sigma0_l, theta_l, time)
+.SimSSMIVary1 <- function(n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l, nu, lambda, theta_l, x, gamma_eta) {
+    .Call(`_simStateSpace_SimSSMIVary1`, n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l, nu, lambda, theta_l, x, gamma_eta)
 }
 
-.SimSSM0LinSDE <- function(mu0, sigma0_l, b, a, q_l, nu, lambda, theta_l, delta_t, time, burn_in) {
-    .Call(`_simStateSpace_SimSSM0LinSDE`, mu0, sigma0_l, b, a, q_l, nu, lambda, theta_l, delta_t, time, burn_in)
+.SimSSMIVary2 <- function(n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l, nu, lambda, theta_l, x, gamma_eta, gamma_y) {
+    .Call(`_simStateSpace_SimSSMIVary2`, n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l, nu, lambda, theta_l, x, gamma_eta, gamma_y)
 }
 
-.SimSSM0OU <- function(mu0, sigma0_l, mu, phi, sigma_l, nu, lambda, theta_l, delta_t, time, burn_in) {
-    .Call(`_simStateSpace_SimSSM0OU`, mu0, sigma0_l, mu, phi, sigma_l, nu, lambda, theta_l, delta_t, time, burn_in)
+.SimSSMLatFixed0 <- function(n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l) {
+    .Call(`_simStateSpace_SimSSMLatFixed0`, n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l)
 }
 
-.SimSSM0OUFixed <- function(n, mu0, sigma0_l, mu, phi, sigma_l, nu, lambda, theta_l, delta_t, time, burn_in) {
-    .Call(`_simStateSpace_SimSSM0OUFixed`, n, mu0, sigma0_l, mu, phi, sigma_l, nu, lambda, theta_l, delta_t, time, burn_in)
+.SimSSMLatFixed1 <- function(n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l, x, gamma_eta) {
+    .Call(`_simStateSpace_SimSSMLatFixed1`, n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l, x, gamma_eta)
 }
 
-.SimSSM0OUIVary <- function(n, mu0, sigma0_l, mu, phi, sigma_l, nu, lambda, theta_l, delta_t, time, burn_in) {
-    .Call(`_simStateSpace_SimSSM0OUIVary`, n, mu0, sigma0_l, mu, phi, sigma_l, nu, lambda, theta_l, delta_t, time, burn_in)
+.SimSSMLatIVary0 <- function(n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l) {
+    .Call(`_simStateSpace_SimSSMLatIVary0`, n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l)
 }
 
-.SimSSM0VAR <- function(mu0, sigma0_l, alpha, beta, psi_l, time, burn_in) {
-    .Call(`_simStateSpace_SimSSM0VAR`, mu0, sigma0_l, alpha, beta, psi_l, time, burn_in)
+.SimSSMLatIVary1 <- function(n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l, x, gamma_eta) {
+    .Call(`_simStateSpace_SimSSMLatIVary1`, n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l, x, gamma_eta)
 }
 
-.SimSSM0VARFixed <- function(n, mu0, sigma0_l, alpha, beta, psi_l, time, burn_in) {
-    .Call(`_simStateSpace_SimSSM0VARFixed`, n, mu0, sigma0_l, alpha, beta, psi_l, time, burn_in)
+.SimSSMLinSDEIVary0 <- function(n, time, delta_t, mu0, sigma0_l, gamma, phi, sigma_l, nu, lambda, theta_l, ou = FALSE) {
+    .Call(`_simStateSpace_SimSSMLinSDEIVary0`, n, time, delta_t, mu0, sigma0_l, gamma, phi, sigma_l, nu, lambda, theta_l, ou)
 }
 
-.SimSSM0VARIVary <- function(n, mu0, sigma0_l, alpha, beta, psi_l, time, burn_in) {
-    .Call(`_simStateSpace_SimSSM0VARIVary`, n, mu0, sigma0_l, alpha, beta, psi_l, time, burn_in)
+.SimSSMLinSDEIVary1 <- function(n, time, delta_t, mu0, sigma0_l, gamma, phi, sigma_l, nu, lambda, theta_l, x, gamma_eta, ou = FALSE) {
+    .Call(`_simStateSpace_SimSSMLinSDEIVary1`, n, time, delta_t, mu0, sigma0_l, gamma, phi, sigma_l, nu, lambda, theta_l, x, gamma_eta, ou)
 }
 
-.SimSSM1 <- function(mu0, sigma0_l, alpha, beta, psi_l, nu, lambda, theta_l, gamma_eta, x, time, burn_in) {
-    .Call(`_simStateSpace_SimSSM1`, mu0, sigma0_l, alpha, beta, psi_l, nu, lambda, theta_l, gamma_eta, x, time, burn_in)
-}
-
-.SimSSM1Fixed <- function(n, mu0, sigma0_l, alpha, beta, psi_l, nu, lambda, theta_l, gamma_eta, x, time, burn_in) {
-    .Call(`_simStateSpace_SimSSM1Fixed`, n, mu0, sigma0_l, alpha, beta, psi_l, nu, lambda, theta_l, gamma_eta, x, time, burn_in)
-}
-
-.SimSSM1IVary <- function(n, mu0, sigma0_l, alpha, beta, psi_l, nu, lambda, theta_l, gamma_eta, x, time, burn_in) {
-    .Call(`_simStateSpace_SimSSM1IVary`, n, mu0, sigma0_l, alpha, beta, psi_l, nu, lambda, theta_l, gamma_eta, x, time, burn_in)
-}
-
-.SimSSM1LinGrowth <- function(n, mu0, sigma0_l, theta_l, gamma_eta, x, time) {
-    .Call(`_simStateSpace_SimSSM1LinGrowth`, n, mu0, sigma0_l, theta_l, gamma_eta, x, time)
-}
-
-.SimSSM1LinGrowthIVary <- function(n, mu0, sigma0_l, theta_l, gamma_eta, x, time) {
-    .Call(`_simStateSpace_SimSSM1LinGrowthIVary`, n, mu0, sigma0_l, theta_l, gamma_eta, x, time)
-}
-
-.SimSSM1LinSDE <- function(mu0, sigma0_l, b, a, q_l, nu, lambda, theta_l, gamma_eta, x, delta_t, time, burn_in) {
-    .Call(`_simStateSpace_SimSSM1LinSDE`, mu0, sigma0_l, b, a, q_l, nu, lambda, theta_l, gamma_eta, x, delta_t, time, burn_in)
-}
-
-.SimSSM1OU <- function(mu0, sigma0_l, mu, phi, sigma_l, nu, lambda, theta_l, gamma_eta, x, delta_t, time, burn_in) {
-    .Call(`_simStateSpace_SimSSM1OU`, mu0, sigma0_l, mu, phi, sigma_l, nu, lambda, theta_l, gamma_eta, x, delta_t, time, burn_in)
-}
-
-.SimSSM1OUFixed <- function(n, mu0, sigma0_l, mu, phi, sigma_l, nu, lambda, theta_l, gamma_eta, x, delta_t, time, burn_in) {
-    .Call(`_simStateSpace_SimSSM1OUFixed`, n, mu0, sigma0_l, mu, phi, sigma_l, nu, lambda, theta_l, gamma_eta, x, delta_t, time, burn_in)
-}
-
-.SimSSM1OUIVary <- function(n, mu0, sigma0_l, mu, phi, sigma_l, nu, lambda, theta_l, gamma_eta, x, delta_t, time, burn_in) {
-    .Call(`_simStateSpace_SimSSM1OUIVary`, n, mu0, sigma0_l, mu, phi, sigma_l, nu, lambda, theta_l, gamma_eta, x, delta_t, time, burn_in)
-}
-
-.SimSSM1VAR <- function(mu0, sigma0_l, alpha, beta, psi_l, gamma_eta, x, time, burn_in) {
-    .Call(`_simStateSpace_SimSSM1VAR`, mu0, sigma0_l, alpha, beta, psi_l, gamma_eta, x, time, burn_in)
-}
-
-.SimSSM1VARFixed <- function(n, mu0, sigma0_l, alpha, beta, psi_l, gamma_eta, x, time, burn_in) {
-    .Call(`_simStateSpace_SimSSM1VARFixed`, n, mu0, sigma0_l, alpha, beta, psi_l, gamma_eta, x, time, burn_in)
-}
-
-.SimSSM1VARIVary <- function(n, mu0, sigma0_l, alpha, beta, psi_l, gamma_eta, x, time, burn_in) {
-    .Call(`_simStateSpace_SimSSM1VARIVary`, n, mu0, sigma0_l, alpha, beta, psi_l, gamma_eta, x, time, burn_in)
-}
-
-.SimSSM2 <- function(mu0, sigma0_l, alpha, beta, psi_l, nu, lambda, theta_l, gamma_y, gamma_eta, x, time, burn_in) {
-    .Call(`_simStateSpace_SimSSM2`, mu0, sigma0_l, alpha, beta, psi_l, nu, lambda, theta_l, gamma_y, gamma_eta, x, time, burn_in)
-}
-
-.SimSSM2Fixed <- function(n, mu0, sigma0_l, alpha, beta, psi_l, nu, lambda, theta_l, gamma_y, gamma_eta, x, time, burn_in) {
-    .Call(`_simStateSpace_SimSSM2Fixed`, n, mu0, sigma0_l, alpha, beta, psi_l, nu, lambda, theta_l, gamma_y, gamma_eta, x, time, burn_in)
-}
-
-.SimSSM2IVary <- function(n, mu0, sigma0_l, alpha, beta, psi_l, nu, lambda, theta_l, gamma_y, gamma_eta, x, time, burn_in) {
-    .Call(`_simStateSpace_SimSSM2IVary`, n, mu0, sigma0_l, alpha, beta, psi_l, nu, lambda, theta_l, gamma_y, gamma_eta, x, time, burn_in)
-}
-
-.SimSSM2LinGrowth <- function(n, mu0, sigma0_l, theta_l, gamma_y, gamma_eta, x, time) {
-    .Call(`_simStateSpace_SimSSM2LinGrowth`, n, mu0, sigma0_l, theta_l, gamma_y, gamma_eta, x, time)
-}
-
-.SimSSM2LinGrowthIVary <- function(n, mu0, sigma0_l, theta_l, gamma_y, gamma_eta, x, time) {
-    .Call(`_simStateSpace_SimSSM2LinGrowthIVary`, n, mu0, sigma0_l, theta_l, gamma_y, gamma_eta, x, time)
-}
-
-.SimSSM2LinSDE <- function(mu0, sigma0_l, b, a, q_l, nu, lambda, theta_l, gamma_y, gamma_eta, x, delta_t, time, burn_in) {
-    .Call(`_simStateSpace_SimSSM2LinSDE`, mu0, sigma0_l, b, a, q_l, nu, lambda, theta_l, gamma_y, gamma_eta, x, delta_t, time, burn_in)
-}
-
-.SimSSM2OU <- function(mu0, sigma0_l, mu, phi, sigma_l, nu, lambda, theta_l, gamma_y, gamma_eta, x, delta_t, time, burn_in) {
-    .Call(`_simStateSpace_SimSSM2OU`, mu0, sigma0_l, mu, phi, sigma_l, nu, lambda, theta_l, gamma_y, gamma_eta, x, delta_t, time, burn_in)
-}
-
-.SimSSM2OUFixed <- function(n, mu0, sigma0_l, mu, phi, sigma_l, nu, lambda, theta_l, gamma_y, gamma_eta, x, delta_t, time, burn_in) {
-    .Call(`_simStateSpace_SimSSM2OUFixed`, n, mu0, sigma0_l, mu, phi, sigma_l, nu, lambda, theta_l, gamma_y, gamma_eta, x, delta_t, time, burn_in)
-}
-
-.SimSSM2OUIVary <- function(n, mu0, sigma0_l, mu, phi, sigma_l, nu, lambda, theta_l, gamma_y, gamma_eta, x, delta_t, time, burn_in) {
-    .Call(`_simStateSpace_SimSSM2OUIVary`, n, mu0, sigma0_l, mu, phi, sigma_l, nu, lambda, theta_l, gamma_y, gamma_eta, x, delta_t, time, burn_in)
+.SimSSMLinSDEIVary2 <- function(n, time, delta_t, mu0, sigma0_l, gamma, phi, sigma_l, nu, lambda, theta_l, x, gamma_eta, gamma_y, ou = FALSE) {
+    .Call(`_simStateSpace_SimSSMLinSDEIVary2`, n, time, delta_t, mu0, sigma0_l, gamma, phi, sigma_l, nu, lambda, theta_l, x, gamma_eta, gamma_y, ou)
 }
 
