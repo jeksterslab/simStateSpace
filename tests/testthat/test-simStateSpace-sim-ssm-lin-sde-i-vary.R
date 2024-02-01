@@ -1,30 +1,60 @@
-## ---- test-simStateSpace-sim-ssm-fixed
+## ---- test-simStateSpace-sim-ssm-lin-sde-i-vary
 lapply(
   X = 1,
   FUN = function(i,
                  text) {
     message(text)
     # prepare parameters
+    # In this example, phi varies across individuals.
     set.seed(42)
     ## number of individuals
     n <- 5
     ## time points
     time <- 50
+    delta_t <- 0.10
     ## dynamic structure
-    p <- 3
-    mu0 <- rep(x = 0, times = p)
+    p <- 2
+    mu0 <- list(
+      c(-3.0, 1.5)
+    )
     sigma0 <- diag(p)
-    sigma0_l <- t(chol(sigma0))
-    alpha <- rep(x = 0, times = p)
-    beta <- 0.50 * diag(p)
-    psi <- diag(p)
-    psi_l <- t(chol(psi))
+    sigma0_l <- list(
+      t(chol(sigma0))
+    )
+    gamma <- list(
+      c(0.317, 0.230)
+    )
+    phi <- list(
+      -0.1 * diag(p),
+      -0.2 * diag(p),
+      -0.3 * diag(p),
+      -0.4 * diag(p),
+      -0.5 * diag(p)
+    )
+    sigma <- matrix(
+      data = c(
+        2.79,
+        0.06,
+        0.06,
+        3.27
+      ),
+      nrow = p
+    )
+    sigma_l <- list(
+      t(chol(sigma))
+    )
     ## measurement model
-    k <- 3
-    nu <- rep(x = 0, times = k)
-    lambda <- diag(k)
+    k <- 2
+    nu <- list(
+      rep(x = 0, times = k)
+    )
+    lambda <- list(
+      diag(k)
+    )
     theta <- 0.50 * diag(k)
-    theta_l <- t(chol(theta))
+    theta_l <- list(
+      t(chol(theta))
+    )
     ## covariates
     j <- 2
     x <- lapply(
@@ -37,18 +67,23 @@ lapply(
         )
       }
     )
-    gamma_eta <- diag(x = 0.10, nrow = p, ncol = j)
-    gamma_y <- diag(x = 0.10, nrow = k, ncol = j)
+    gamma_eta <- list(
+      diag(x = 0.10, nrow = p, ncol = j)
+    )
+    gamma_y <- list(
+      diag(x = 0.10, nrow = k, ncol = j)
+    )
 
     # Type 0
-    ssm <- SimSSMFixed(
+    ssm <- SimSSMLinSDEIVary(
       n = n,
       time = time,
+      delta_t = delta_t,
       mu0 = mu0,
       sigma0_l = sigma0_l,
-      alpha = alpha,
-      beta = beta,
-      psi_l = psi_l,
+      gamma = gamma,
+      phi = phi,
+      sigma_l = sigma_l,
       nu = nu,
       lambda = lambda,
       theta_l = theta_l,
@@ -64,18 +99,19 @@ lapply(
     as.matrix.simstatespace(ssm, eta = TRUE, long = FALSE)
     as.matrix.simstatespace(ssm, eta = FALSE, long = FALSE)
     print.simstatespace(ssm)
-    plot.simstatespace(ssm, id = 1:3, time = 0:4)
+    plot.simstatespace(ssm, id = 1:3, time = (0:4) * 0.10)
     plot.simstatespace(ssm, eta = TRUE)
 
     # Type 1
-    ssm <- SimSSMFixed(
+    ssm <- SimSSMLinSDEIVary(
       n = n,
       time = time,
+      delta_t = delta_t,
       mu0 = mu0,
       sigma0_l = sigma0_l,
-      alpha = alpha,
-      beta = beta,
-      psi_l = psi_l,
+      gamma = gamma,
+      phi = phi,
+      sigma_l = sigma_l,
       nu = nu,
       lambda = lambda,
       theta_l = theta_l,
@@ -93,18 +129,19 @@ lapply(
     as.matrix.simstatespace(ssm, eta = TRUE, long = FALSE)
     as.matrix.simstatespace(ssm, eta = FALSE, long = FALSE)
     print.simstatespace(ssm)
-    plot.simstatespace(ssm, id = 1:3, time = 0:4)
+    plot.simstatespace(ssm, id = 1:3, time = (0:4) * 0.10)
     plot.simstatespace(ssm, eta = TRUE)
 
     # Type 2
-    ssm <- SimSSMFixed(
+    ssm <- SimSSMLinSDEIVary(
       n = n,
       time = time,
+      delta_t = delta_t,
       mu0 = mu0,
       sigma0_l = sigma0_l,
-      alpha = alpha,
-      beta = beta,
-      psi_l = psi_l,
+      gamma = gamma,
+      phi = phi,
+      sigma_l = sigma_l,
       nu = nu,
       lambda = lambda,
       theta_l = theta_l,
@@ -123,8 +160,8 @@ lapply(
     as.matrix.simstatespace(ssm, eta = TRUE, long = FALSE)
     as.matrix.simstatespace(ssm, eta = FALSE, long = FALSE)
     print.simstatespace(ssm)
-    plot.simstatespace(ssm, id = 1:3, time = 0:4)
+    plot.simstatespace(ssm, id = 1:3, time = (0:4) * 0.10)
     plot.simstatespace(ssm, eta = TRUE)
   },
-  text = "test-simStateSpace-sim-ssm-fixed"
+  text = "test-simStateSpace-sim-ssm-lin-sde-i-vary"
 )

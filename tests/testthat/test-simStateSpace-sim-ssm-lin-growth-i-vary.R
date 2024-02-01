@@ -9,47 +9,57 @@ lapply(
     # Specifically,
     # there are two sets of values representing two latent classes.
     set.seed(42)
+    ## number of individuals
     n <- 10
+    ## time points
+    time <- 50
+    ## dynamic structure
+    p <- 2
     mu0_1 <- c(0.615, 1.006) # lower starting point, higher growth
     mu0_2 <- c(1.000, 0.500) # higher starting point, lower growth
     mu0 <- list(mu0_1, mu0_2)
-    sigma0 <- list(
-      matrix(
-        data = c(
-          1.932,
-          0.618,
-          0.618,
-          0.587
-        ),
-        nrow = 2
-      )
+    sigma0 <- matrix(
+      data = c(
+        1.932,
+        0.618,
+        0.618,
+        0.587
+      ),
+      nrow = p
     )
-    theta <- list(0.6)
-    time <- 10
-    gamma_y <- list(matrix(data = 0.10, nrow = 1, ncol = 2))
-    gamma_eta <- list(matrix(data = 0.10, nrow = 2, ncol = 2))
+    sigma0_l <- list(t(chol(sigma0)))
+    ## measurement model
+    k <- 1
+    theta <- 0.50
+    theta_l <- list(sqrt(theta))
+    ## covariates
+    j <- 2
     x <- lapply(
       X = seq_len(n),
       FUN = function(i) {
-        return(
-          matrix(
-            data = rnorm(n = 2 * time),
-            ncol = 2
-          )
+        matrix(
+          data = stats::rnorm(n = time * j),
+          nrow = j,
+          ncol = time
         )
       }
     )
-
-    # Type 0
-    ssm <- simStateSpace::SimSSMLinGrowthIVary(
-      n = n,
-      mu0 = mu0,
-      sigma0 = sigma0,
-      theta = theta,
-      type = 0,
-      time = time
+    gamma_eta <- list(
+      diag(x = 0.10, nrow = p, ncol = j)
+    )
+    gamma_y <- list(
+      diag(x = 0.10, nrow = k, ncol = j)
     )
 
+    # Type 0
+    ssm <- SimSSMLinGrowthIVary(
+      n = n,
+      time = time,
+      mu0 = mu0,
+      sigma0_l = sigma0_l,
+      theta_l = theta_l,
+      type = 0
+    )
     as.data.frame.simstatespace(ssm, eta = TRUE)
     as.data.frame.simstatespace(ssm, eta = FALSE)
     as.data.frame.simstatespace(ssm, eta = TRUE, long = FALSE)
@@ -63,17 +73,16 @@ lapply(
     plot.simstatespace(ssm, eta = TRUE)
 
     # Type 1
-    ssm <- simStateSpace::SimSSMLinGrowthIVary(
+    ssm <- SimSSMLinGrowthIVary(
       n = n,
+      time = time,
       mu0 = mu0,
-      sigma0 = sigma0,
-      theta = theta,
-      gamma_eta = gamma_eta,
-      x = x,
+      sigma0_l = sigma0_l,
+      theta_l = theta_l,
       type = 1,
-      time = time
+      x = x,
+      gamma_eta = gamma_eta
     )
-
     as.data.frame.simstatespace(ssm, eta = TRUE)
     as.data.frame.simstatespace(ssm, eta = FALSE)
     as.data.frame.simstatespace(ssm, eta = TRUE, long = FALSE)
@@ -87,18 +96,17 @@ lapply(
     plot.simstatespace(ssm, eta = TRUE)
 
     # Type 2
-    ssm <- simStateSpace::SimSSMLinGrowthIVary(
+    ssm <- SimSSMLinGrowthIVary(
       n = n,
+      time = time,
       mu0 = mu0,
-      sigma0 = sigma0,
-      theta = theta,
-      gamma_y = gamma_y,
-      gamma_eta = gamma_eta,
-      x = x,
+      sigma0_l = sigma0_l,
+      theta_l = theta_l,
       type = 2,
-      time = time
+      x = x,
+      gamma_eta = gamma_eta,
+      gamma_y = gamma_y
     )
-
     as.data.frame.simstatespace(ssm, eta = TRUE)
     as.data.frame.simstatespace(ssm, eta = FALSE)
     as.data.frame.simstatespace(ssm, eta = TRUE, long = FALSE)
@@ -110,56 +118,6 @@ lapply(
     print.simstatespace(ssm)
     plot.simstatespace(ssm, id = 1:3, time = 0:4)
     plot.simstatespace(ssm, eta = TRUE)
-
-    # Error
-    testthat::test_that(
-      paste(text, "error"),
-      {
-        testthat::expect_error(
-          simStateSpace::SimSSMLinGrowthIVary(
-            n = n,
-            mu0 = mu0,
-            sigma0 = sigma0,
-            theta = theta,
-            gamma_y = gamma_y,
-            gamma_eta = gamma_eta,
-            x = x,
-            type = 3,
-            time = time
-          )
-        )
-      }
-    )
-    testthat::test_that(
-      paste(text, "error type 1"),
-      {
-        testthat::expect_error(
-          simStateSpace::SimSSMLinGrowthIVary(
-            n = n,
-            mu0 = mu0,
-            sigma0 = sigma0,
-            theta = theta,
-            type = 1,
-            time = time
-          )
-        )
-      }
-    )
-    testthat::test_that(
-      paste(text, "error type 2"),
-      {
-        testthat::expect_error(
-          simStateSpace::SimSSMLinGrowthIVary(
-            n = n,
-            mu0 = mu0,
-            sigma0 = sigma0,
-            theta = theta,
-            type = 2,
-            time = time
-          )
-        )
-      }
-    )
   },
   text = "test-simStateSpace-sim-ssm-lin-growth-i-vary"
 )

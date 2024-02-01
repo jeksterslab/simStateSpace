@@ -18,7 +18,7 @@ reference:
 - title: Vector Autoregressive Model
   contents:
   - has_keyword("var")
-- title: Linear Stochastic Differential Equations Model
+- title: Linear Stochastic Differential Equation Model
   contents:
   - has_keyword("linsde")
 - title: Ornstein–Uhlenbeck Model
@@ -33,8 +33,8 @@ articles:
   contents:
   - lin-growth
   - var
+  - lin-sde
   - ou
-  - ou-discrete
 - title: Session Information
   contents:
   - session/session

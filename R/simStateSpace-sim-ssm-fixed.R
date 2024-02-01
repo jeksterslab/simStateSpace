@@ -1,11 +1,10 @@
-#' Simulate Data using a State Space Model Parameterization
-#' for n > 1 Individuals (Fixed Parameters)
+#' Simulate Data from the State Space Model
+#' (Fixed Parameters)
 #'
-#' This function simulates data
-#' using a state space model parameterization
-#' for `n > 1` individuals.
+#' This function simulates data from the
+#' state space model.
 #' In this model,
-#' the parameters are invariant across individuals.
+#' the parameters are invariant cross individuals and across time.
 #'
 #' @details
 #'   ## Type 0
@@ -60,6 +59,34 @@
 #'   is the covariance matrix of
 #'   \eqn{\boldsymbol{\varepsilon}}.
 #'
+#'   An alternative representation of the measurement error
+#'   is given by
+#'   \deqn{
+#'     \boldsymbol{\varepsilon}_{i, t}
+#'     =
+#'     \boldsymbol{\Theta}^{\frac{1}{2}}
+#'     \mathbf{z}_{i, t},
+#'     \quad
+#'     \mathrm{with}
+#'     \quad
+#'     \mathbf{z}_{i, t}
+#'     \sim
+#'     \mathcal{N}
+#'     \left(
+#'     \mathbf{0},
+#'     \mathbf{I}
+#'     \right)
+#'   }
+#'   where
+#'   \eqn{\mathbf{z}_{i, t}} is a vector of
+#'   independent standard normal random variables and
+#'   \eqn{
+#'     \left( \boldsymbol{\Theta}^{\frac{1}{2}} \right)
+#'     \left( \boldsymbol{\Theta}^{\frac{1}{2}} \right)^{\prime}
+#'     =
+#'     \boldsymbol{\Theta} .
+#'   }
+#'
 #'   The dynamic structure is given by
 #'   \deqn{
 #'     \boldsymbol{\eta}_{i, t}
@@ -112,6 +139,32 @@
 #'   \eqn{\boldsymbol{\Psi}}
 #'   is the covariance matrix of
 #'   \eqn{\boldsymbol{\zeta}_{i, t}}.
+#'
+#'   An alternative representation of the dynamic noise
+#'   is given by
+#'   \deqn{
+#'     \boldsymbol{\zeta}_{i, t}
+#'     =
+#'     \boldsymbol{\Psi}^{\frac{1}{2}}
+#'     \mathbf{z}_{i, t},
+#'     \quad
+#'     \mathrm{with}
+#'     \quad
+#'     \mathbf{z}_{i, t}
+#'     \sim
+#'     \mathcal{N}
+#'     \left(
+#'     \mathbf{0},
+#'     \mathbf{I}
+#'     \right)
+#'   }
+#'   where
+#'   \eqn{
+#'     \left( \boldsymbol{\Psi}^{\frac{1}{2}} \right)
+#'     \left( \boldsymbol{\Psi}^{\frac{1}{2}} \right)^{\prime}
+#'     =
+#'     \boldsymbol{\Psi} .
+#'   }
 #'
 #'   ## Type 1
 #'
@@ -226,12 +279,71 @@
 #'
 #' @param n Positive integer.
 #'   Number of individuals.
-#' @param x A list of length `n` of numeric matrices.
-#'   Each element of the list
-#'   is a matrix of observed covariates in `type = 1` or `type = 2`.
-#'   The number of rows in each matrix should be equal to `time + burn_in`.
-#' @inheritParams SimSSM
-#' @inherit SimSSM references
+#' @param time Positive integer.
+#'   Number of time points.
+#' @param delta_t Numeric.
+#'   Time interval.
+#'   The default value is `1.0`
+#'   with an option to use a numeric value
+#'   for the discretized state space model
+#'   parameterization of the
+#'   linear stochastic differential equation model.
+#' @param mu0 Numeric vector.
+#'   Mean of initial latent variable values
+#'   (\eqn{\boldsymbol{\mu}_{\boldsymbol{\eta} \mid 0}}).
+#' @param sigma0_l Numeric matrix.
+#'   Cholesky factorization (`t(chol(sigma0))`)
+#'   of the covariance matrix
+#'   of initial latent variable values
+#'   (\eqn{\boldsymbol{\Sigma}_{\boldsymbol{\eta} \mid 0}}).
+#' @param alpha Numeric vector.
+#'   Vector of constant values for the dynamic model
+#'   (\eqn{\boldsymbol{\alpha}}).
+#' @param beta Numeric matrix.
+#'   Transition matrix relating the values of the latent variables
+#'   at the previous to the current time point
+#'   (\eqn{\boldsymbol{\beta}}).
+#' @param psi_l Numeric matrix.
+#'   Cholesky factorization (`t(chol(psi))`)
+#'   of the covariance matrix
+#'   of the process noise
+#'   (\eqn{\boldsymbol{\Psi}}).
+#' @param nu Numeric vector.
+#'   Vector of intercept values for the measurement model
+#'   (\eqn{\boldsymbol{\nu}}).
+#' @param lambda Numeric matrix.
+#'   Factor loading matrix linking the latent variables
+#'   to the observed variables
+#'   (\eqn{\boldsymbol{\Lambda}}).
+#' @param theta_l Numeric matrix.
+#'   Cholesky factorization (`t(chol(theta))`)
+#'   of the covariance matrix
+#'   of the measurement error
+#'   (\eqn{\boldsymbol{\Theta}}).
+#' @param type Integer.
+#'   State space model type.
+#'   See Details for more information.
+#' @param x List.
+#'   Each element of the list is a matrix of covariates
+#'   for each individual `i` in `n`.
+#'   The number of columns in each matrix
+#'   should be equal to `time`.
+#' @param gamma_eta Numeric matrix.
+#'   Matrix linking the covariates to the latent variables
+#'   at current time point
+#'   (\eqn{\boldsymbol{\Gamma}_{\boldsymbol{\eta}}}).
+#' @param gamma_y Numeric matrix.
+#'   Matrix linking the covariates to the observed variables
+#'   at current time point
+#'   (\eqn{\boldsymbol{\Gamma}_{\mathbf{y}}}).
+#'
+#' @references
+#'   Chow, S.-M., Ho, M. R., Hamaker, E. L., & Dolan, C. V. (2010).
+#'   Equivalence and differences between structural equation modeling
+#'   and state-space modeling techniques.
+#'   *Structural Equation Modeling: A Multidisciplinary Journal*,
+#'   17(2), 303–332.
+#'   \doi{10.1080/10705511003661553}
 #'
 #' @return Returns an object of class `simstatespace`
 #'   which is a list with the following elements:
@@ -239,57 +351,65 @@
 #'   - `args`: Function arguments.
 #'   - `data`: Generated data which is a list of length `n`.
 #'     Each element of `data` is a list with the following elements:
-#'     * `id`: A vector of ID numbers of length `t`.
+#'     * `id`: A vector of ID numbers with length `t`,
+#'       where `t` is the value of the function argument `time`.
 #'     * `time`: A vector time points of length `t`.
 #'     * `y`: A `t` by `k` matrix of values for the manifest variables.
 #'     * `eta`: A `t` by `p` matrix of values for the latent variables.
-#'     * `x`: A `t` by `j` matrix of values for the covariates.
+#'     * `x`: A `t` by `j` matrix of values for the covariates
+#'       (when covariates are included).
 #'   - `fun`: Function used.
 #'
 #' @examples
 #' # prepare parameters
 #' set.seed(42)
-#' k <- p <- 3
-#' iden <- diag(k)
-#' null_vec <- rep(x = 0, times = k)
+#' ## number of individuals
 #' n <- 5
-#' mu0 <- null_vec
-#' sigma0 <- iden
-#' alpha <- null_vec
-#' beta <- diag(x = 0.50, nrow = k)
-#' psi <- iden
-#' nu <- null_vec
-#' lambda <- iden
-#' theta <- diag(x = 0.50, nrow = k)
+#' ## time points
 #' time <- 50
-#' burn_in <- 0
-#' gamma_y <- gamma_eta <- 0.10 * diag(k)
+#' ## dynamic structure
+#' p <- 3
+#' mu0 <- rep(x = 0, times = p)
+#' sigma0 <- diag(p)
+#' sigma0_l <- t(chol(sigma0))
+#' alpha <- rep(x = 0, times = p)
+#' beta <- 0.50 * diag(p)
+#' psi <- diag(p)
+#' psi_l <- t(chol(psi))
+#' ## measurement model
+#' k <- 3
+#' nu <- rep(x = 0, times = k)
+#' lambda <- diag(k)
+#' theta <- 0.50 * diag(k)
+#' theta_l <- t(chol(theta))
+#' ## covariates
+#' j <- 2
 #' x <- lapply(
 #'   X = seq_len(n),
 #'   FUN = function(i) {
-#'     return(
-#'       matrix(
-#'         data = rnorm(n = k * (time + burn_in)),
-#'         ncol = k
-#'       )
+#'     matrix(
+#'       data = stats::rnorm(n = time * j),
+#'       nrow = j,
+#'       ncol = time
 #'     )
 #'   }
 #' )
+#' gamma_eta <- diag(x = 0.10, nrow = p, ncol = j)
+#' gamma_y <- diag(x = 0.10, nrow = k, ncol = j)
 #'
 #' # Type 0
 #' ssm <- SimSSMFixed(
 #'   n = n,
+#'   time = time,
 #'   mu0 = mu0,
-#'   sigma0 = sigma0,
+#'   sigma0_l = sigma0_l,
 #'   alpha = alpha,
 #'   beta = beta,
-#'   psi = psi,
+#'   psi_l = psi_l,
 #'   nu = nu,
 #'   lambda = lambda,
-#'   theta = theta,
-#'   type = 0,
-#'   time = time,
-#'   burn_in = burn_in
+#'   theta_l = theta_l,
+#'   type = 0
 #' )
 #'
 #' plot(ssm)
@@ -297,19 +417,18 @@
 #' # Type 1
 #' ssm <- SimSSMFixed(
 #'   n = n,
+#'   time = time,
 #'   mu0 = mu0,
-#'   sigma0 = sigma0,
+#'   sigma0_l = sigma0_l,
 #'   alpha = alpha,
 #'   beta = beta,
-#'   psi = psi,
+#'   psi_l = psi_l,
 #'   nu = nu,
 #'   lambda = lambda,
-#'   theta = theta,
-#'   gamma_eta = gamma_eta,
-#'   x = x,
+#'   theta_l = theta_l,
 #'   type = 1,
-#'   time = time,
-#'   burn_in = burn_in
+#'   x = x,
+#'   gamma_eta = gamma_eta
 #' )
 #'
 #' plot(ssm)
@@ -317,20 +436,19 @@
 #' # Type 2
 #' ssm <- SimSSMFixed(
 #'   n = n,
+#'   time = time,
 #'   mu0 = mu0,
-#'   sigma0 = sigma0,
+#'   sigma0_l = sigma0_l,
 #'   alpha = alpha,
 #'   beta = beta,
-#'   psi = psi,
+#'   psi_l = psi_l,
 #'   nu = nu,
 #'   lambda = lambda,
-#'   theta = theta,
-#'   gamma_y = gamma_y,
-#'   gamma_eta = gamma_eta,
-#'   x = x,
+#'   theta_l = theta_l,
 #'   type = 2,
-#'   time = time,
-#'   burn_in = burn_in
+#'   x = x,
+#'   gamma_eta = gamma_eta,
+#'   gamma_y = gamma_y
 #' )
 #'
 #' plot(ssm)
@@ -338,119 +456,70 @@
 #' @family Simulation of State Space Models Data Functions
 #' @keywords simStateSpace sim ssm
 #' @export
-SimSSMFixed <- function(n,
-                        mu0,
-                        sigma0,
-                        alpha,
-                        beta,
-                        psi,
-                        nu,
-                        lambda,
-                        theta,
-                        gamma_y = NULL,
-                        gamma_eta = NULL,
-                        x = NULL,
+SimSSMFixed <- function(n, time, delta_t = 1.0,
+                        mu0, sigma0_l,
+                        alpha, beta, psi_l,
+                        nu, lambda, theta_l,
                         type = 0,
-                        time,
-                        burn_in = 0) {
-  sigma0_l <- t(chol(sigma0))
-  psi_l <- t(chol(psi))
-  theta_l <- t(chol(theta))
-  data <- switch(
-    EXPR = as.character(type),
-    "0" = {
-      .SimSSM0Fixed(
-        n = n,
-        mu0 = mu0,
-        sigma0_l = sigma0_l,
-        alpha = alpha,
-        beta = beta,
-        psi_l = psi_l,
-        nu = nu,
-        lambda = lambda,
-        theta_l = theta_l,
-        time = time,
-        burn_in = burn_in
-      )
-    },
-    "1" = {
-      stopifnot(
-        !is.null(x),
-        !is.null(gamma_eta)
-      )
-      .SimSSM1Fixed(
-        n = n,
-        mu0 = mu0,
-        sigma0_l = sigma0_l,
-        alpha = alpha,
-        beta = beta,
-        psi_l = psi_l,
-        nu = nu,
-        lambda = lambda,
-        theta_l = theta_l,
-        gamma_eta = gamma_eta,
-        x = x,
-        time = time,
-        burn_in = burn_in
-      )
-    },
-    "2" = {
-      stopifnot(
-        !is.null(x),
-        !is.null(gamma_y),
-        !is.null(gamma_eta)
-      )
-      .SimSSM2Fixed(
-        n = n,
-        mu0 = mu0,
-        sigma0_l = sigma0_l,
-        alpha = alpha,
-        beta = beta,
-        psi_l = psi_l,
-        nu = nu,
-        lambda = lambda,
-        theta_l = theta_l,
-        gamma_y = gamma_y,
-        gamma_eta = gamma_eta,
-        x = x,
-        time = time,
-        burn_in = burn_in
-      )
-    },
-    stop(
-      "Invalid `type`."
-    )
-  )
+                        x = NULL, gamma_eta = NULL, gamma_y = NULL) {
+  stopifnot(type %in% c(0, 1, 2))
+  covariates <- FALSE
   if (type > 0) {
     covariates <- TRUE
-  } else {
-    covariates <- FALSE
+  }
+  if (type == 0) {
+    data <- .SimSSMFixed0(
+      n = n,
+      time = time,
+      delta_t = delta_t,
+      mu0 = mu0, sigma0_l = sigma0_l,
+      alpha = alpha, beta = beta, psi_l = psi_l,
+      nu = nu, lambda = lambda, theta_l = theta_l
+    )
+  }
+  if (type == 1) {
+    stopifnot(
+      !is.null(x),
+      !is.null(gamma_eta)
+    )
+    data <- .SimSSMFixed1(
+      n = n,
+      time = time,
+      delta_t = delta_t,
+      mu0 = mu0, sigma0_l = sigma0_l,
+      alpha = alpha, beta = beta, psi_l = psi_l,
+      nu = nu, lambda = lambda, theta_l = theta_l,
+      x = x, gamma_eta = gamma_eta
+    )
+  }
+  if (type == 2) {
+    stopifnot(
+      !is.null(x),
+      !is.null(gamma_eta),
+      !is.null(gamma_y)
+    )
+    data <- .SimSSMFixed2(
+      n = n,
+      time = time,
+      delta_t = delta_t,
+      mu0 = mu0, sigma0_l = sigma0_l,
+      alpha = alpha, beta = beta, psi_l = psi_l,
+      nu = nu, lambda = lambda, theta_l = theta_l,
+      x = x, gamma_eta = gamma_eta, gamma_y = gamma_y
+    )
   }
   out <- list(
     call = match.call(),
     args = list(
-      n = n,
-      mu0 = mu0,
-      sigma0 = sigma0,
-      alpha = alpha,
-      beta = beta,
-      psi = psi,
-      nu = nu,
-      lambda = lambda,
-      theta = theta,
-      gamma_y = gamma_y,
-      gamma_eta = gamma_eta,
-      x = x,
+      n = n, time = time,
+      mu0 = mu0, sigma0_l = sigma0_l,
+      alpha = alpha, beta = beta, psi_l = psi_l,
+      nu = nu, lambda = lambda, theta_l = theta_l,
       type = type,
-      time = time,
-      burn_in = burn_in,
-      sigma0_l = sigma0_l,
-      psi_l = psi_l,
-      theta_l = theta_l
+      x = x, gamma_eta = gamma_eta, gamma_y = gamma_y
     ),
     model = list(
       model = "ssm",
-      n1 = FALSE,
       covariates = covariates,
       fixed = TRUE,
       vary_i = FALSE

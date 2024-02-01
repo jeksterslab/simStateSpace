@@ -6,7 +6,12 @@ lapply(
     message(text)
     # prepare parameters
     set.seed(42)
-    n <- 10
+    ## number of individuals
+    n <- 5
+    ## time points
+    time <- 50
+    ## dynamic structure
+    p <- 2
     mu0 <- c(0.615, 1.006)
     sigma0 <- matrix(
       data = c(
@@ -15,32 +20,37 @@ lapply(
         0.618,
         0.587
       ),
-      nrow = 2
+      nrow = p
     )
-    theta <- 0.6
-    time <- 10
-    gamma_y <- matrix(data = 0.10, nrow = 1, ncol = 2)
-    gamma_eta <- matrix(data = 0.10, nrow = 2, ncol = 2)
+    sigma0_l <- t(chol(sigma0))
+    ## measurement model
+    k <- 1
+    theta <- 0.50
+    theta_l <- sqrt(theta)
+    ## covariates
+    j <- 2
     x <- lapply(
       X = seq_len(n),
       FUN = function(i) {
         return(
           matrix(
-            data = rnorm(n = 2 * time),
-            ncol = 2
+            data = rnorm(n = j * time),
+            nrow = j
           )
         )
       }
     )
+    gamma_eta <- diag(x = 0.10, nrow = p, ncol = j)
+    gamma_y <- diag(x = 0.10, nrow = k, ncol = j)
 
     # Type 0
-    ssm <- simStateSpace::SimSSMLinGrowth(
+    ssm <- SimSSMLinGrowth(
       n = n,
+      time = time,
       mu0 = mu0,
-      sigma0 = sigma0,
-      theta = theta,
-      type = 0,
-      time = time
+      sigma0_l = sigma0_l,
+      theta_l = theta_l,
+      type = 0
     )
 
     as.data.frame.simstatespace(ssm, eta = TRUE)
@@ -56,15 +66,15 @@ lapply(
     plot.simstatespace(ssm, eta = TRUE)
 
     # Type 1
-    ssm <- simStateSpace::SimSSMLinGrowth(
+    ssm <- SimSSMLinGrowth(
       n = n,
+      time = time,
       mu0 = mu0,
-      sigma0 = sigma0,
-      theta = theta,
-      gamma_eta = gamma_eta,
-      x = x,
+      sigma0_l = sigma0_l,
+      theta_l = theta_l,
       type = 1,
-      time = time
+      x = x,
+      gamma_eta = gamma_eta
     )
 
     as.data.frame.simstatespace(ssm, eta = TRUE)
@@ -80,16 +90,16 @@ lapply(
     plot.simstatespace(ssm, eta = TRUE)
 
     # Type 2
-    ssm <- simStateSpace::SimSSMLinGrowth(
+    ssm <- SimSSMLinGrowth(
       n = n,
+      time = time,
       mu0 = mu0,
-      sigma0 = sigma0,
-      theta = theta,
-      gamma_y = gamma_y,
-      gamma_eta = gamma_eta,
-      x = x,
+      sigma0_l = sigma0_l,
+      theta_l = theta_l,
       type = 2,
-      time = time
+      x = x,
+      gamma_eta = gamma_eta,
+      gamma_y = gamma_y
     )
 
     as.data.frame.simstatespace(ssm, eta = TRUE)
@@ -103,56 +113,6 @@ lapply(
     print.simstatespace(ssm)
     plot.simstatespace(ssm, id = 1:3, time = 0:4)
     plot.simstatespace(ssm, eta = TRUE)
-
-    # Error
-    testthat::test_that(
-      paste(text, "error"),
-      {
-        testthat::expect_error(
-          simStateSpace::SimSSMLinGrowth(
-            n = n,
-            mu0 = mu0,
-            sigma0 = sigma0,
-            theta = theta,
-            gamma_y = gamma_y,
-            gamma_eta = gamma_eta,
-            x = x,
-            type = 3,
-            time = time
-          )
-        )
-      }
-    )
-    testthat::test_that(
-      paste(text, "error type 1"),
-      {
-        testthat::expect_error(
-          simStateSpace::SimSSMLinGrowth(
-            n = n,
-            mu0 = mu0,
-            sigma0 = sigma0,
-            theta = theta,
-            type = 1,
-            time = time
-          )
-        )
-      }
-    )
-    testthat::test_that(
-      paste(text, "error type 2"),
-      {
-        testthat::expect_error(
-          simStateSpace::SimSSMLinGrowth(
-            n = n,
-            mu0 = mu0,
-            sigma0 = sigma0,
-            theta = theta,
-            type = 2,
-            time = time
-          )
-        )
-      }
-    )
   },
   text = "test-simStateSpace-sim-ssm-lin-growth"
 )

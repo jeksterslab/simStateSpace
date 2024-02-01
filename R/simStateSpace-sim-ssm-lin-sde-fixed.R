@@ -1,13 +1,14 @@
 #' Simulate Data from the
-#' Ornstein–Uhlenbeck Model
+#' Linear Stochastic Differential Equation Model
 #' using a State Space Model Parameterization
 #' (Fixed Parameters)
 #'
 #' This function simulates data from the
-#' Ornstein–Uhlenbeck model
+#' linear stochastic differential equation model
 #' using a state space model parameterization.
 #' In this model,
 #' the parameters are invariant across individuals and across time.
+#'
 #' @details
 #'   ## Type 0
 #'
@@ -93,10 +94,10 @@
 #'   \deqn{
 #'     \mathrm{d} \boldsymbol{\eta}_{i, t}
 #'     =
-#'     - \boldsymbol{\Phi}
 #'     \left(
-#'     \boldsymbol{\mu}
-#'     -
+#'     \boldsymbol{\gamma}
+#'     +
+#'     \boldsymbol{\Phi}
 #'     \boldsymbol{\eta}_{i, t}
 #'     \right)
 #'     \mathrm{d}t
@@ -106,11 +107,12 @@
 #'     \mathbf{W}_{i, t}
 #'   }
 #'   where
-#'   \eqn{\boldsymbol{\mu}}
-#'   is the long-term mean or equilibrium level,
-#'   \eqn{- \boldsymbol{\Phi}}
-#'   is the rate of mean reversion,
-#'   determining how quickly the variable returns to its mean,
+#'   \eqn{\boldsymbol{\gamma}}
+#'   is a term which is unobserved and constant over time,
+#'   \eqn{\boldsymbol{\Phi}}
+#'   is the drift matrix
+#'   which represents the rate of change of the solution
+#'   in the absence of any random fluctuations,
 #'   \eqn{\boldsymbol{\Sigma}}
 #'   is the matrix of volatility
 #'   or randomness in the process, and
@@ -146,10 +148,10 @@
 #'   \deqn{
 #'     \mathrm{d} \boldsymbol{\eta}_{i, t}
 #'     =
-#'     - \boldsymbol{\Phi}
 #'     \left(
-#'     \boldsymbol{\mu}
-#'     -
+#'     \boldsymbol{\gamma}
+#'     +
+#'     \boldsymbol{\Phi}
 #'     \boldsymbol{\eta}_{i, t}
 #'     \right)
 #'     \mathrm{d}t
@@ -201,10 +203,10 @@
 #'   \deqn{
 #'     \mathrm{d} \boldsymbol{\eta}_{i, t}
 #'     =
-#'     - \boldsymbol{\Phi}
 #'     \left(
-#'     \boldsymbol{\mu}
-#'     -
+#'     \boldsymbol{\gamma}
+#'     +
+#'     \boldsymbol{\Phi}
 #'     \boldsymbol{\eta}_{i, t}
 #'     \right)
 #'     \mathrm{d}t
@@ -219,18 +221,8 @@
 #'
 #' @author Ivan Jacob Agaloos Pesigan
 #'
-#' @param mu Numeric vector.
-#'   The long-term mean or equilibrium level
-#'   (\eqn{\boldsymbol{\mu}}).
-#' @param phi Numeric matrix.
-#'   The drift matrix
-#'   which represents the rate of change of the solution
-#'   in the absence of any random fluctuations
-#'   (\eqn{\boldsymbol{\Phi}}).
-#'   The negative value of `phi` is the rate of mean reversion,
-#'   determining how quickly the variable returns to its mean
-#'   (\eqn{- \boldsymbol{\Phi}}).
-#' @inheritParams SimSSMLinSDEFixed
+#' @inheritParams LinSDE2SSM
+#' @inheritParams SimSSMFixed
 #' @inherit SimSSMFixed references return
 #'
 #' @examples
@@ -246,7 +238,7 @@
 #' mu0 <- c(-3.0, 1.5)
 #' sigma0 <- diag(p)
 #' sigma0_l <- t(chol(sigma0))
-#' mu <- c(5.76, 5.18)
+#' gamma <- c(0.317, 0.230)
 #' phi <- matrix(
 #'   data = c(
 #'     -0.10,
@@ -288,13 +280,13 @@
 #' gamma_y <- diag(x = 0.10, nrow = k, ncol = j)
 #'
 #' # Type 0
-#' ssm <- SimSSMOUFixed(
+#' ssm <- SimSSMLinSDEFixed(
 #'   n = n,
 #'   time = time,
 #'   delta_t = delta_t,
 #'   mu0 = mu0,
 #'   sigma0_l = sigma0_l,
-#'   mu = mu,
+#'   gamma = gamma,
 #'   phi = phi,
 #'   sigma_l = sigma_l,
 #'   nu = nu,
@@ -306,13 +298,13 @@
 #' plot(ssm)
 #'
 #' # Type 1
-#' ssm <- SimSSMOUFixed(
+#' ssm <- SimSSMLinSDEFixed(
 #'   n = n,
 #'   time = time,
 #'   delta_t = delta_t,
 #'   mu0 = mu0,
 #'   sigma0_l = sigma0_l,
-#'   mu = mu,
+#'   gamma = gamma,
 #'   phi = phi,
 #'   sigma_l = sigma_l,
 #'   nu = nu,
@@ -326,13 +318,13 @@
 #' plot(ssm)
 #'
 #' # Type 2
-#' ssm <- SimSSMOUFixed(
+#' ssm <- SimSSMLinSDEFixed(
 #'   n = n,
 #'   time = time,
 #'   delta_t = delta_t,
 #'   mu0 = mu0,
 #'   sigma0_l = sigma0_l,
-#'   mu = mu,
+#'   gamma = gamma,
 #'   phi = phi,
 #'   sigma_l = sigma_l,
 #'   nu = nu,
@@ -347,15 +339,14 @@
 #' plot(ssm)
 #'
 #' @family Simulation of State Space Models Data Functions
-#' @keywords simStateSpace sim ou
+#' @keywords simStateSpace sim linsde
 #' @export
-SimSSMOUFixed <- function(n, time, delta_t = 1.0,
-                          mu0, sigma0_l,
-                          mu, phi, sigma_l,
-                          nu, lambda, theta_l,
-                          type = 0,
-                          x = NULL, gamma_eta = NULL, gamma_y = NULL) {
-  gamma <- phi %*% mu
+SimSSMLinSDEFixed <- function(n, time, delta_t = 1.0,
+                              mu0, sigma0_l,
+                              gamma, phi, sigma_l,
+                              nu, lambda, theta_l,
+                              type = 0,
+                              x = NULL, gamma_eta = NULL, gamma_y = NULL) {
   ssm <- LinSDE2SSM(
     gamma = gamma,
     phi = phi,
@@ -372,12 +363,11 @@ SimSSMOUFixed <- function(n, time, delta_t = 1.0,
   )
   out$args <- c(
     out$args,
-    mu = mu,
     gamma = gamma,
     phi = phi,
     sigma_l = sigma_l
   )
-  out$model$model <- "ou"
-  out$fun <- "SimSSMOUFixed"
+  out$model$model <- "linsde"
+  out$fun <- "SimSSMLinSDEFixed"
   return(out)
 }

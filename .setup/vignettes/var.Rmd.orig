@@ -35,7 +35,6 @@ knitr::opts_chunk$set(
 ## Model
 
 The measurement model is given by
-
 \begin{equation}
   \mathbf{y}_{i, t}
   =
@@ -43,7 +42,6 @@ The measurement model is given by
 \end{equation}
 
 The dynamic structure is given by
-
 \begin{equation}
   \boldsymbol{\eta}_{i, t}
   =
@@ -64,23 +62,59 @@ The dynamic structure is given by
   \boldsymbol{\Psi}
   \right)
 \end{equation}
-
-where $\boldsymbol{\eta}_{i, t}$, $\boldsymbol{\eta}_{i, t - 1}$,
-and $\boldsymbol{\zeta}_{i, t}$ are random variables
-and $\boldsymbol{\alpha}$, $\boldsymbol{\beta}$,
-and $\boldsymbol{\Psi}$ are model parameters.
-$\boldsymbol{\eta}_{i, t}$ is a vector of latent variables
-at time $t$ and individual $i$, $\boldsymbol{\eta}_{i, t - 1}$
-is a vector of latent variables at
-$t - 1$ and individual $i$,
-and $\boldsymbol{\zeta}_{i, t}$ is a vector of dynamic noise
+where
+$\boldsymbol{\eta}_{i, t}$,
+$\boldsymbol{\eta}_{i, t - 1}$,
+and
+$\boldsymbol{\zeta}_{i, t}$
+are random variables,
+and
+$\boldsymbol{\alpha}$,
+$\boldsymbol{\beta}$,
+and
+$\boldsymbol{\Psi}$
+are model parameters.
+$\boldsymbol{\eta}_{i, t}$
+is a vector of latent variables
 at time $t$ and individual $i$,
-while $\boldsymbol{\alpha}$
+$\boldsymbol{\eta}_{i, t - 1}$
+is a vector of latent variables
+at time $t - 1$ and individual $i$,
+and
+$\boldsymbol{\zeta}_{i, t}$
+is a vector of dynamic noise
+at time $t$ and individual $i$.
+$\boldsymbol{\alpha}$
 is a vector of intercepts,
-$\boldsymbol{\beta}$ is a matrix of autoregression
+$\boldsymbol{\beta}$
+is a matrix of autoregression
 and cross regression coefficients,
-and $\boldsymbol{\Psi}$ is the covariance matrix of
+and
+$\boldsymbol{\Psi}$
+is the covariance matrix of
 $\boldsymbol{\zeta}_{i, t}$.
+An alternative representation of the dynamic noise
+is given by
+\begin{equation}
+  \boldsymbol{\zeta}_{i, t}
+  =
+  \boldsymbol{\Psi}^{\frac{1}{2}}
+  \mathbf{z}_{i, t},
+  \quad
+  \mathrm{with}
+  \quad
+  \mathbf{z}_{i, t}
+  \sim
+  \mathcal{N}
+  \left(
+  \mathbf{0},
+  \mathbf{I}
+  \right)
+\end{equation}
+where
+$\mathbf{z}_{i, t}$ is a vector of
+independent standard normal random variables and
+$\left( \boldsymbol{\Psi}^{\frac{1}{2}} \right) \left( \boldsymbol{\Psi}^{\frac{1}{2}} \right)^{\prime} = \boldsymbol{\Psi}.$
 
 ## Data Generation
 
@@ -102,6 +136,7 @@ iden <- diag(k)
 null_vec <- rep(x = 0, times = k)
 mu0 <- null_vec
 sigma0 <- iden
+sigma0_l <- t(chol(sigma0))
 alpha <- null_vec
 beta <- matrix(
   data = c(
@@ -118,6 +153,7 @@ beta <- matrix(
   nrow = k
 )
 psi <- iden
+psi_l <- t(chol(psi))
 ```
 
 Let $t = `r time`$ be the number of time points and $n = `r n`$ be the number of individuals.
@@ -203,9 +239,11 @@ n
 time
 mu0
 sigma0
+sigma0_l
 alpha
 beta
 psi
+psi_l
 ```
 
 ### Using the SimSSMVARFixed Function from the simStateSpace Package to Simulate Data
@@ -214,13 +252,12 @@ psi
 library(simStateSpace)
 sim <- SimSSMVARFixed(
   n = n,
+  time = time,
   mu0 = mu0,
-  sigma0 = sigma0,
+  sigma0_l = sigma0_l,
   alpha = alpha,
   beta = beta,
-  psi = psi,
-  time = time,
-  burn_in = 0
+  psi_l = psi_l
 )
 data <- as.data.frame(sim)
 head(data)

@@ -21,7 +21,8 @@ pkg_cran <- c(
   "Rcpp",
   "RcppArmadillo",
   "Matrix",
-  "lavaan"
+  "lavaan",
+  "betaDelta"
 )
 
 # dynr has to be installed which requires more work to install

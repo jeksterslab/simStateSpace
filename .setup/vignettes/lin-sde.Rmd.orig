@@ -1,5 +1,5 @@
 ---
-title: "The Ornstein–Uhlenbeck Model"
+title: "The Linear Stochastic Differential Equation Model"
 author: "Ivan Jacob Agaloos Pesigan"
 date: "`r Sys.Date()`"
 bibliography: "vignettes.bib"
@@ -15,7 +15,7 @@ output:
   rmarkdown::html_vignette:
     toc: true
 vignette: >
-  %\VignetteIndexEntry{The Ornstein–Uhlenbeck Model}
+  %\VignetteIndexEntry{The Linear Stochastic Differential Equation Model}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -24,7 +24,7 @@ vignette: >
 #| include = FALSE
 knitr::opts_chunk$set(
   collapse = TRUE,
-  fig.path = "fig-vignettes-ou-",
+  fig.path = "fig-vignettes-lin-sde-",
   fig.cap = "",
   fig.width = 11,
   fig.height = 8,
@@ -105,10 +105,10 @@ The dynamic structure is given by
 \begin{equation}
   \mathrm{d} \boldsymbol{\eta}_{i, t}
   =
-  - \boldsymbol{\Phi}
   \left(
-  \boldsymbol{\mu}
-  -
+  \boldsymbol{\gamma}
+  +
+  \boldsymbol{\Phi}
   \boldsymbol{\eta}_{i, t}
   \right)
   \mathrm{d}t
@@ -118,11 +118,17 @@ The dynamic structure is given by
   \mathbf{W}_{i, t}
 \end{equation}
 
-where $\boldsymbol{\mu}$ is the long-term mean or equilibrium level,
-$- \boldsymbol{\Phi}$ is the rate of mean reversion,
-determining how quickly the variable returns to its mean,
-$\boldsymbol{\Sigma}$ is the matrix of volatility
-or randomness in the process, and $\mathrm{d}\boldsymbol{W}$
+where
+$\boldsymbol{\gamma}$
+is a term which is unobserved and constant over time,
+$\boldsymbol{\Phi}$
+is the drift matrix
+which represents the rate of change of the solution
+in the absence of any random fluctuations,
+$\boldsymbol{\Sigma}$
+is the matrix of volatility
+or randomness in the process, and
+$\mathrm{d}\boldsymbol{W}$
 is a Wiener process or Brownian motion,
 which represents random fluctuations.
 
@@ -163,7 +169,7 @@ null_vec <- rep(x = 0, times = k)
 mu0 <- null_vec
 sigma0 <- iden
 sigma0_l <- t(chol(sigma0))
-mu <- null_vec
+gamma <- null_vec
 phi <- matrix(
   data = c(
     -0.357,
@@ -267,30 +273,30 @@ be given by
 \right) .
 \end{equation}
 
-Let the long-term mean vector $\boldsymbol{\mu}$ be given by
+Let the constant vector $\boldsymbol{\gamma}$ be given by
 
 \begin{equation}
-\boldsymbol{\mu}
+\boldsymbol{\gamma}
 =
 \left(
 \begin{array}{c}
-  `r mu[1]` \\
-  `r mu[2]` \\
-  `r mu[3]` \\
+  `r gamma[1]` \\
+  `r gamma[2]` \\
+  `r gamma[3]` \\
 \end{array}
 \right) .
 \end{equation}
 
-Let the rate of mean reversion matrix $- \boldsymbol{\Phi}$ be given by
+Let the drift matrix $\boldsymbol{\Phi}$ be given by
 
 \begin{equation}
 - \boldsymbol{\Phi}
 =
 \left(
 \begin{array}{ccc}
-  `r -phi[1, 1]` & `r -phi[1, 2]` & `r -phi[1, 3]` \\
-  `r -phi[2, 1]` & `r -phi[2, 2]` & `r -phi[2, 3]` \\
-  `r -phi[3, 1]` & `r -phi[3, 2]` & `r -phi[3, 3]` \\
+  `r phi[1, 1]` & `r phi[1, 2]` & `r phi[1, 3]` \\
+  `r phi[2, 1]` & `r phi[2, 2]` & `r phi[2, 3]` \\
+  `r phi[3, 1]` & `r phi[3, 2]` & `r phi[3, 3]` \\
 \end{array}
 \right) .
 \end{equation}
@@ -319,7 +325,7 @@ time
 delta_t
 mu0
 sigma0
-mu
+gamma
 phi
 sigma
 nu
@@ -331,13 +337,13 @@ theta
 
 ```{r}
 library(simStateSpace)
-sim <- SimSSMOUFixed(
+sim <- SimSSMLinSDEFixed(
   n = n,
   time = time,
   delta_t = delta_t,
   mu0 = mu0,
   sigma0_l = sigma0_l,
-  mu = mu,
+  gamma = gamma,
   phi = phi,
   sigma_l = sigma_l,
   nu = nu,
@@ -397,12 +403,12 @@ dynr_measurement <- dynr::prep.measurement(
 ```{r}
 dynr_dynamics <- dynr::prep.formulaDynamics(
   formula = list(  
-    eta_1 ~ (-phi_11 * (mu_1 - eta_1)) + (-phi_12 * (mu_2 - eta_2)) + (-phi_13 * (mu_3 - eta_3)),
-    eta_2 ~ (-phi_21 * (mu_1 - eta_1)) + (-phi_22 * (mu_2 - eta_2)) + (-phi_23 * (mu_3 - eta_3)),
-    eta_3 ~ (-phi_31 * (mu_1 - eta_1)) + (-phi_32 * (mu_2 - eta_2)) + (-phi_33 * (mu_3 - eta_3))
+    eta_1 ~ (gamma_1 + phi_11 * eta_1) + (gamma_2 + phi_12 * eta_2) + (gamma_3 + phi_13 * eta_3),
+    eta_2 ~ (gamma_1 + phi_21 * eta_1) + (gamma_2 + phi_22 * eta_2) + (gamma_3 + phi_23 * eta_3),
+    eta_3 ~ (gamma_1 + phi_31 * eta_1) + (gamma_2 + phi_32 * eta_2) + (gamma_3 + phi_33 * eta_3)
   ),
   startval = c(
-    mu_1 = 0, mu_2 = 0, mu_3 = 0,
+    gamma_1 = 0, gamma_2 = 0, gamma_3 = 0,
     phi_11 = 0, phi_12 = 0, phi_13 = 0,
     phi_21 = 0, phi_22 = 0, phi_23 = 0,
     phi_31 = 0, phi_32 = 0, phi_33 = 0
@@ -445,7 +451,7 @@ model <- dynr::dynr.model(
   measurement = dynr_measurement,
   dynamics = dynr_dynamics,
   noise = dynr_noise,
-  outfile = "ou.c"
+  outfile = "linsde.c"
 )
 ```
 
@@ -546,12 +552,12 @@ sigma0_hat <- matrix(
   ],
   nrow = 3
 )
-mu_hat <- unname(
+gamma_hat <- unname(
   estimates[
     c(
-      "mu_1",
-      "mu_2",
-      "mu_3"
+      "gamma_1",
+      "gamma_2",
+      "gamma_3"
     )
   ]
 )
@@ -592,7 +598,7 @@ sigma_hat <- matrix(
 ### Parameter Estimates
 
 ```{r}
-mu_hat
+gamma_hat
 phi_hat
 sigma_hat
 mu0_hat

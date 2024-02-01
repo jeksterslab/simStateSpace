@@ -1,9 +1,8 @@
-#' Simulate Data using a State Space Model Parameterization
-#' for n > 1 Individuals (Individual-Varying Parameters)
+#' Simulate Data from the State Space Model
+#' (Individual-Varying Parameters)
 #'
-#' This function simulates data
-#' using a state space model parameterization
-#' for `n > 1` individuals.
+#' This function simulates data from the
+#' state space model.
 #' In this model,
 #' the parameters can vary across individuals.
 #'
@@ -11,111 +10,154 @@
 #'   by providing a list of parameter values.
 #'   If the length of any of the parameters
 #'   (`mu0`,
-#'   `sigma0`,
+#'   `sigma0_l`,
 #'   `alpha`,
 #'   `beta`,
-#'   `psi`,
+#'   `psi_l`,
 #'   `nu`,
 #'   `lambda`,
-#'   `theta`,
-#'   `gamma_y`, or
-#'   `gamma_eta`)
+#'   `theta_l`,
+#'   `gamma_eta`, or
+#'   `gamma_y`)
 #'   is less the `n`,
 #'   the function will cycle through the available values.
 #'
 #' @author Ivan Jacob Agaloos Pesigan
 #'
+#' @inheritParams SimSSMFixed
 #' @param mu0 List of numeric vectors.
 #'   Each element of the list
 #'   is the mean of initial latent variable values
 #'   (\eqn{\boldsymbol{\mu}_{\boldsymbol{\eta} \mid 0}}).
-#' @param sigma0 List of numeric matrices.
+#' @param sigma0_l List of numeric matrices.
 #'   Each element of the list
-#'   is the covariance matrix
+#'   is the Cholesky factorization (`t(chol(sigma0))`)
+#'   of the covariance matrix
 #'   of initial latent variable values
 #'   (\eqn{\boldsymbol{\Sigma}_{\boldsymbol{\eta} \mid 0}}).
 #' @param alpha List of numeric vectors.
 #'   Each element of the list
-#'   is the vector of intercepts for the dynamic model
+#'   is the vector of constant values for the dynamic model
 #'   (\eqn{\boldsymbol{\alpha}}).
 #' @param beta List of numeric matrices.
 #'   Each element of the list
 #'   is the transition matrix relating the values of the latent variables
-#'   at time `t - 1` to those at time `t`
+#'   at the previous to the current time point
 #'   (\eqn{\boldsymbol{\beta}}).
-#' @param psi List of numeric matrices.
+#' @param psi_l List of numeric matrices.
 #'   Each element of the list
-#'   is the process noise covariance matrix
+#'   is the Cholesky factorization (`t(chol(psi))`)
+#'   of the covariance matrix
+#'   of the process noise
 #'   (\eqn{\boldsymbol{\Psi}}).
 #' @param nu List of numeric vectors.
 #'   Each element of the list
-#'   is the vector of intercepts for the measurement model
+#'   is the vector of intercept values for the measurement model
 #'   (\eqn{\boldsymbol{\nu}}).
 #' @param lambda List of numeric matrices.
 #'   Each element of the list
 #'   is the factor loading matrix linking the latent variables
 #'   to the observed variables
 #'   (\eqn{\boldsymbol{\Lambda}}).
-#' @param theta List of numeric matrices.
+#' @param theta_l List of numeric matrices.
 #'   Each element of the list
-#'   is the measurement error covariance matrix
+#'   is the Cholesky factorization (`t(chol(theta))`)
+#'   of the covariance matrix
+#'   of the measurement error
 #'   (\eqn{\boldsymbol{\Theta}}).
+#' @param x List.
+#'   Each element of the list is a matrix of covariates
+#'   for each individual `i` in `n`.
+#'   The number of columns in each matrix
+#'   should be equal to `time`.
+#' @param gamma_eta List of numeric matrices.
+#'   Each element of the list
+#'   is the matrix linking the covariates to the latent variables
+#'   at current time point
+#'   (\eqn{\boldsymbol{\Gamma}_{\boldsymbol{\eta}}}).
+#' @param gamma_y List of numeric matrices.
+#'   Each element of the list
+#'   is the matrix linking the covariates to the observed variables
+#'   at current time point
+#'   (\eqn{\boldsymbol{\Gamma}_{\mathbf{y}}}).
 #'
-#' @inheritParams SimSSMFixed
-#' @inherit SimSSMFixed return
-#' @inherit SimSSM references
+#' @inherit SimSSMFixed references return
 #'
 #' @examples
 #' # prepare parameters
-#' # In this example, beta varies across individuals
+#' # In this example, beta varies across individuals.
 #' set.seed(42)
-#' k <- p <- 3
-#' iden <- diag(k)
-#' null_vec <- rep(x = 0, times = k)
+#' ## number of individuals
 #' n <- 5
-#' mu0 <- list(null_vec)
-#' sigma0 <- list(iden)
-#' alpha <- list(null_vec)
-#' beta <- list(
-#'   diag(x = 0.1, nrow = k),
-#'   diag(x = 0.2, nrow = k),
-#'   diag(x = 0.3, nrow = k),
-#'   diag(x = 0.4, nrow = k),
-#'   diag(x = 0.5, nrow = k)
-#' )
-#' psi <- list(iden)
-#' nu <- list(null_vec)
-#' lambda <- list(iden)
-#' theta <- list(diag(x = 0.50, nrow = k))
+#' ## time points
 #' time <- 50
-#' burn_in <- 0
-#' gamma_y <- gamma_eta <- list(0.10 * diag(k))
+#' ## dynamic structure
+#' p <- 3
+#' mu0 <- list(
+#'   rep(x = 0, times = p)
+#' )
+#' sigma0 <- diag(p)
+#' sigma0_l <- list(
+#'   t(chol(sigma0))
+#' )
+#' alpha <- list(
+#'   rep(x = 0, times = p)
+#' )
+#' beta <- list(
+#'   0.1 * diag(p),
+#'   0.2 * diag(p),
+#'   0.3 * diag(p),
+#'   0.4 * diag(p),
+#'   0.5 * diag(p)
+#' )
+#' psi <- diag(p)
+#' psi_l <- list(
+#'   t(chol(psi))
+#' )
+#' ## measurement model
+#' k <- 3
+#' nu <- list(
+#'   rep(x = 0, times = k)
+#' )
+#' lambda <- list(
+#'   diag(k)
+#' )
+#' theta <- 0.50 * diag(k)
+#' theta_l <- list(
+#'   t(chol(theta))
+#' )
+#' ## covariates
+#' j <- 2
 #' x <- lapply(
 #'   X = seq_len(n),
 #'   FUN = function(i) {
-#'     return(
-#'       matrix(
-#'         data = rnorm(n = k * (time + burn_in)),
-#'         ncol = k
-#'       )
+#'     matrix(
+#'       data = stats::rnorm(n = time * j),
+#'       nrow = j,
+#'       ncol = time
 #'     )
 #'   }
+#' )
+#' gamma_eta <- list(
+#'   diag(x = 0.10, nrow = p, ncol = j)
+#' )
+#' gamma_y <- list(
+#'   diag(x = 0.10, nrow = k, ncol = j)
 #' )
 #'
 #' # Type 0
 #' ssm <- SimSSMIVary(
 #'   n = n,
+#'   time = time,
 #'   mu0 = mu0,
-#'   sigma0 = sigma0,
+#'   sigma0_l = sigma0_l,
 #'   alpha = alpha,
 #'   beta = beta,
-#'   psi = psi,
+#'   psi_l = psi_l,
 #'   nu = nu,
 #'   lambda = lambda,
-#'   theta = theta,
-#'   type = 0,
-#'   time = time,
-#'   burn_in = burn_in
+#'   theta_l = theta_l,
+#'   type = 0
 #' )
 #'
 #' plot(ssm)
@@ -123,19 +165,18 @@
 #' # Type 1
 #' ssm <- SimSSMIVary(
 #'   n = n,
+#'   time = time,
 #'   mu0 = mu0,
-#'   sigma0 = sigma0,
+#'   sigma0_l = sigma0_l,
 #'   alpha = alpha,
 #'   beta = beta,
-#'   psi = psi,
+#'   psi_l = psi_l,
 #'   nu = nu,
 #'   lambda = lambda,
-#'   theta = theta,
-#'   gamma_eta = gamma_eta,
-#'   x = x,
+#'   theta_l = theta_l,
 #'   type = 1,
-#'   time = time,
-#'   burn_in = burn_in
+#'   x = x,
+#'   gamma_eta = gamma_eta
 #' )
 #'
 #' plot(ssm)
@@ -143,20 +184,19 @@
 #' # Type 2
 #' ssm <- SimSSMIVary(
 #'   n = n,
+#'   time = time,
 #'   mu0 = mu0,
-#'   sigma0 = sigma0,
+#'   sigma0_l = sigma0_l,
 #'   alpha = alpha,
 #'   beta = beta,
-#'   psi = psi,
+#'   psi_l = psi_l,
 #'   nu = nu,
 #'   lambda = lambda,
-#'   theta = theta,
-#'   gamma_y = gamma_y,
-#'   gamma_eta = gamma_eta,
-#'   x = x,
+#'   theta_l = theta_l,
 #'   type = 2,
-#'   time = time,
-#'   burn_in = burn_in
+#'   x = x,
+#'   gamma_eta = gamma_eta,
+#'   gamma_y = gamma_y
 #' )
 #'
 #' plot(ssm)
@@ -164,133 +204,88 @@
 #' @family Simulation of State Space Models Data Functions
 #' @keywords simStateSpace sim ssm
 #' @export
-SimSSMIVary <- function(n,
-                        mu0,
-                        sigma0,
-                        alpha,
-                        beta,
-                        psi,
-                        nu,
-                        lambda,
-                        theta,
-                        gamma_y = NULL,
-                        gamma_eta = NULL,
-                        x = NULL,
+SimSSMIVary <- function(n, time, delta_t = 1.0,
+                        mu0, sigma0_l,
+                        alpha, beta, psi_l,
+                        nu, lambda, theta_l,
                         type = 0,
-                        time,
-                        burn_in = 0) {
-  foo <- function(x) {
-    return(
-      t(chol(x))
-    )
-  }
-  sigma0_l <- lapply(
-    X = sigma0,
-    FUN = foo
-  )
-  psi_l <- lapply(
-    X = psi,
-    FUN = foo
-  )
-  theta_l <- lapply(
-    X = theta,
-    FUN = foo
-  )
-  data <- switch(
-    EXPR = as.character(type),
-    "0" = {
-      .SimSSM0IVary(
-        n = n,
-        mu0 = rep(x = mu0, length.out = n),
-        sigma0_l = rep(x = sigma0_l, length.out = n),
-        alpha = rep(x = alpha, length.out = n),
-        beta = rep(x = beta, length.out = n),
-        psi_l = rep(x = psi_l, length.out = n),
-        nu = rep(x = nu, length.out = n),
-        lambda = rep(x = lambda, length.out = n),
-        theta_l = rep(x = theta_l, length.out = n),
-        time = time,
-        burn_in = burn_in
-      )
-    },
-    "1" = {
-      stopifnot(
-        !is.null(x),
-        !is.null(gamma_eta)
-      )
-      .SimSSM1IVary(
-        n = n,
-        mu0 = rep(x = mu0, length.out = n),
-        sigma0_l = rep(x = sigma0_l, length.out = n),
-        alpha = rep(x = alpha, length.out = n),
-        beta = rep(x = beta, length.out = n),
-        psi_l = rep(x = psi_l, length.out = n),
-        nu = rep(x = nu, length.out = n),
-        lambda = rep(x = lambda, length.out = n),
-        theta_l = rep(x = theta_l, length.out = n),
-        gamma_eta = rep(x = gamma_eta, length.out = n),
-        x = x,
-        time = time,
-        burn_in = burn_in
-      )
-    },
-    "2" = {
-      stopifnot(
-        !is.null(x),
-        !is.null(gamma_y),
-        !is.null(gamma_eta)
-      )
-      .SimSSM2IVary(
-        n = n,
-        mu0 = rep(x = mu0, length.out = n),
-        sigma0_l = rep(x = sigma0_l, length.out = n),
-        alpha = rep(x = alpha, length.out = n),
-        beta = rep(x = beta, length.out = n),
-        psi_l = rep(x = psi_l, length.out = n),
-        nu = rep(x = nu, length.out = n),
-        lambda = rep(x = lambda, length.out = n),
-        theta_l = rep(x = theta_l, length.out = n),
-        gamma_y = rep(x = gamma_y, length.out = n),
-        gamma_eta = rep(x = gamma_eta, length.out = n),
-        x = x,
-        time = time,
-        burn_in = burn_in
-      )
-    },
-    stop(
-      "Invalid `type`."
-    )
-  )
+                        x = NULL, gamma_eta = NULL, gamma_y = NULL) {
+  stopifnot(type %in% c(0, 1, 2))
+  covariates <- FALSE
   if (type > 0) {
     covariates <- TRUE
-  } else {
-    covariates <- FALSE
+  }
+  if (type == 0) {
+    data <- .SimSSMIVary0(
+      n = n,
+      time = time,
+      delta_t = 1.0,
+      mu0 = rep(x = mu0, length.out = n),
+      sigma0_l = rep(x = sigma0_l, length.out = n),
+      alpha = rep(x = alpha, length.out = n),
+      beta = rep(x = beta, length.out = n),
+      psi_l = rep(x = psi_l, length.out = n),
+      nu = rep(x = nu, length.out = n),
+      lambda = rep(x = lambda, length.out = n),
+      theta_l = rep(x = theta_l, length.out = n)
+    )
+  }
+  if (type == 1) {
+    stopifnot(
+      !is.null(x),
+      !is.null(gamma_eta)
+    )
+    data <- .SimSSMIVary1(
+      n = n,
+      time = time,
+      delta_t = 1.0,
+      mu0 = rep(x = mu0, length.out = n),
+      sigma0_l = rep(x = sigma0_l, length.out = n),
+      alpha = rep(x = alpha, length.out = n),
+      beta = rep(x = beta, length.out = n),
+      psi_l = rep(x = psi_l, length.out = n),
+      nu = rep(x = nu, length.out = n),
+      lambda = rep(x = lambda, length.out = n),
+      theta_l = rep(x = theta_l, length.out = n),
+      x = rep(x = x, length.out = n),
+      gamma_eta = rep(x = gamma_eta, length.out = n)
+    )
+  }
+  if (type == 2) {
+    stopifnot(
+      !is.null(x),
+      !is.null(gamma_eta),
+      !is.null(gamma_y)
+    )
+    data <- .SimSSMIVary2(
+      n = n,
+      time = time,
+      delta_t = 1.0,
+      mu0 = rep(x = mu0, length.out = n),
+      sigma0_l = rep(x = sigma0_l, length.out = n),
+      alpha = rep(x = alpha, length.out = n),
+      beta = rep(x = beta, length.out = n),
+      psi_l = rep(x = psi_l, length.out = n),
+      nu = rep(x = nu, length.out = n),
+      lambda = rep(x = lambda, length.out = n),
+      theta_l = rep(x = theta_l, length.out = n),
+      x = rep(x = x, length.out = n),
+      gamma_eta = rep(x = gamma_eta, length.out = n),
+      gamma_y = rep(x = gamma_y, length.out = n)
+    )
   }
   out <- list(
     call = match.call(),
     args = list(
-      n = n,
-      mu0 = mu0,
-      sigma0 = sigma0,
-      alpha = alpha,
-      beta = beta,
-      psi = psi,
-      nu = nu,
-      lambda = lambda,
-      theta = theta,
-      gamma_y = gamma_y,
-      gamma_eta = gamma_eta,
-      x = x,
+      n = n, time = time,
+      mu0 = mu0, sigma0_l = sigma0_l,
+      alpha = alpha, beta = beta, psi_l = psi_l,
+      nu = nu, lambda = lambda, theta_l = theta_l,
       type = type,
-      time = time,
-      burn_in = burn_in,
-      sigma0_l = sigma0_l,
-      psi_l = psi_l,
-      theta_l = theta_l
+      x = x, gamma_eta = gamma_eta, gamma_y = gamma_y
     ),
     model = list(
       model = "ssm",
-      n1 = FALSE,
       covariates = covariates,
       fixed = FALSE,
       vary_i = TRUE
