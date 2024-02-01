@@ -66,35 +66,37 @@ to state space model parameterization.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">LinSDE2SSM</span><span class="op">(</span><span class="va">b</span>, <span class="va">a</span>, <span class="va">q</span>, <span class="va">delta_t</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">LinSDE2SSM</span><span class="op">(</span><span class="va">gamma</span>, <span class="va">phi</span>, <span class="va">sigma_l</span>, <span class="va">delta_t</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>b</dt>
+    <dl><dt>gamma</dt>
 <dd><p>Numeric vector.
-A term which is unobserved and constant over time
-(\(\mathbf{b}\)).</p></dd>
+An unobserved term that is constant over time
+(\(\boldsymbol{\gamma}\)).</p></dd>
 
 
-<dt>a</dt>
+<dt>phi</dt>
 <dd><p>Numeric matrix.
 The drift matrix
 which represents the rate of change of the solution
 in the absence of any random fluctuations
-(\(\mathbf{A}\)).</p></dd>
+(\(\boldsymbol{\Phi}\)).</p></dd>
 
 
-<dt>q</dt>
+<dt>sigma_l</dt>
 <dd><p>Numeric matrix.
-The matrix of volatility
+Cholesky factorization (<code>t(chol(sigma))</code>)
+of the covariance matrix of volatility
 or randomness in the process
-(\(\mathbf{Q}\)).</p></dd>
+\(\boldsymbol{\Sigma}\).</p></dd>
 
 
 <dt>delta_t</dt>
 <dd><p>Numeric.
-Time interval (\(\delta_t\)).</p></dd>
+Time interval
+(\(\Delta_t\)).</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -102,19 +104,38 @@ Time interval (\(\delta_t\)).</p></dd>
     
 
 <p>Returns a list of state space parameters:</p><ul><li><p><code>alpha</code>: Numeric vector.
-Vector of intercepts for the dynamic model
+Vector of constant values for the dynamic model
 (\(\boldsymbol{\alpha}\)).</p></li>
 <li><p><code>beta</code>: Numeric matrix.
 Transition matrix relating the values of the latent variables
-at time <code>t_k - 1</code> to those at time <code>t_k</code>
+from the previous time point to the current time point.
 (\(\boldsymbol{\beta}\)).</p></li>
-<li><p><code>psi</code>: Numeric matrix.
-The process noise covariance matrix
-(\(\boldsymbol{\Psi}\)).</p></li>
+<li><p><code>psi_l</code>: Numeric matrix.
+Cholesky factorization (<code>t(chol(psi))</code>)
+of the process noise covariance matrix
+\(\boldsymbol{\Psi}\).</p></li>
 </ul></div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>The state space parameters
+    <p>Let the linear stochastic equation model be given by
+$$
+    \mathrm{d}
+    \boldsymbol{\eta}_{i, t}
+    =
+    \left(
+      \boldsymbol{\gamma}
+      +
+      \boldsymbol{\Phi}
+      \boldsymbol{\eta}_{i, t}
+    \right)
+    \mathrm{d} t
+    +
+    \boldsymbol{\Sigma}^{\frac{1}{2}}
+    \mathrm{d}
+    \mathbf{W}_{i, t}
+  $$
+for individual \(i\) and time t.
+The state space parameters
 as a function of the linear stochastic differential equation model
 parameters
 are given by
@@ -123,7 +144,7 @@ $$
       =
       \exp{
         \left(
-          \mathbf{A}
+          \boldsymbol{\Phi}
           \Delta_{t}
         \right)
       }
@@ -131,11 +152,11 @@ $$
 <p>$$
       \boldsymbol{\alpha}
       =
-      \mathbf{A}^{-1}
+      \boldsymbol{\Phi}^{-1}
       \left(
         \boldsymbol{\beta} - \mathbf{I}_{p}
       \right)
-      \mathbf{b}
+      \boldsymbol{\gamma}
   $$</p>
 <p>$$
       \mathrm{vec}
@@ -143,56 +164,51 @@ $$
         \boldsymbol{\Psi}
       \right)
       =
-      \left\{
-        \left[
-          \left(
-            \mathbf{A} \otimes \mathbf{I}_{p}
-          \right)
-          +
-          \left(
-            \mathbf{I}_{p} \otimes \mathbf{A}
-          \right)
-        \right]
-        \left[
-          \exp
-          \left(
-            \left[
-              \left(
-                \mathbf{A} \otimes \mathbf{I}_{p}
-              \right)
-              +
-              \left(
-                \mathbf{I}_{p} \otimes \mathbf{A}
-              \right)
-            \right]
-            \Delta_{t}
+      \left[
+        \left(
+          \boldsymbol{\Phi} \otimes \mathbf{I}_{p}
+        \right)
+        +
+        \left(
+          \mathbf{I}_{p} \otimes \boldsymbol{\Phi}
+        \right)
+      \right]
+      \left[
+        \exp
+        \left(
+          \left[
+            \left(
+              \boldsymbol{\Phi} \otimes \mathbf{I}_{p}
+            \right)
+            +
+            \left(
+              \mathbf{I}_{p} \otimes \boldsymbol{\Phi}
+            \right)
+          \right]
+          \Delta_{t}
         \right)
         -
         \mathbf{I}_{p \times p}
       \right]
       \mathrm{vec}
       \left(
-        \mathbf{Q}
+        \boldsymbol{\Sigma}
       \right)
-    \right\}
-  $$</p>
+  $$
+where \(p\) is the number of latent variables and
+\(\Delta_{t}\) is the time interval.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p>Other Simulation of State Space Models Data Functions: 
-<code><a href="OU2SSM.html">OU2SSM</a>()</code>,
-<code><a href="OU2SVAR.html">OU2SVAR</a>()</code>,
-<code><a href="OU2VAR.html">OU2VAR</a>()</code>,
-<code><a href="SimSSM.html">SimSSM</a>()</code>,
 <code><a href="SimSSMFixed.html">SimSSMFixed</a>()</code>,
 <code><a href="SimSSMIVary.html">SimSSMIVary</a>()</code>,
 <code><a href="SimSSMLinGrowth.html">SimSSMLinGrowth</a>()</code>,
 <code><a href="SimSSMLinGrowthIVary.html">SimSSMLinGrowthIVary</a>()</code>,
-<code><a href="SimSSMLinSDE.html">SimSSMLinSDE</a>()</code>,
-<code><a href="SimSSMOU.html">SimSSMOU</a>()</code>,
+<code><a href="SimSSMLinSDEFixed.html">SimSSMLinSDEFixed</a>()</code>,
+<code><a href="SimSSMLinSDEIVary.html">SimSSMLinSDEIVary</a>()</code>,
 <code><a href="SimSSMOUFixed.html">SimSSMOUFixed</a>()</code>,
 <code><a href="SimSSMOUIVary.html">SimSSMOUIVary</a>()</code>,
-<code><a href="SimSSMVAR.html">SimSSMVAR</a>()</code>,
 <code><a href="SimSSMVARFixed.html">SimSSMVARFixed</a>()</code>,
 <code><a href="SimSSMVARIVary.html">SimSSMVARIVary</a>()</code></p></div>
     </div>
@@ -203,8 +219,9 @@ $$
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="va">k</span> <span class="op">&lt;-</span> <span class="fl">2</span></span></span>
-<span class="r-in"><span><span class="va">a</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fl">2</span></span></span>
+<span class="r-in"><span><span class="va">gamma</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.317</span>, <span class="fl">0.230</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">phi</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>  data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>   <span class="op">-</span><span class="fl">0.10</span>,</span></span>
 <span class="r-in"><span>   <span class="fl">0.05</span>,</span></span>
@@ -213,17 +230,22 @@ $$
 <span class="r-in"><span> <span class="op">)</span>,</span></span>
 <span class="r-in"><span> nrow <span class="op">=</span> <span class="va">p</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">b</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.317</span>, <span class="fl">0.230</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">q</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>  data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2.79</span>, <span class="fl">0.06</span>, <span class="fl">0.06</span>, <span class="fl">3.27</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span><span class="va">sigma</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    <span class="fl">2.79</span>,</span></span>
+<span class="r-in"><span>    <span class="fl">0.06</span>,</span></span>
+<span class="r-in"><span>    <span class="fl">0.06</span>,</span></span>
+<span class="r-in"><span>    <span class="fl">3.27</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span>,</span></span>
 <span class="r-in"><span>  nrow <span class="op">=</span> <span class="va">p</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">sigma_l</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/chol.html" class="external-link">chol</a></span><span class="op">(</span><span class="va">sigma</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">delta_t</span> <span class="op">&lt;-</span> <span class="fl">0.10</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">LinSDE2SSM</span><span class="op">(</span></span></span>
-<span class="r-in"><span>  b <span class="op">=</span> <span class="va">b</span>,</span></span>
-<span class="r-in"><span>  a <span class="op">=</span> <span class="va">a</span>,</span></span>
-<span class="r-in"><span>  q <span class="op">=</span> <span class="va">q</span>,</span></span>
+<span class="r-in"><span>  gamma <span class="op">=</span> <span class="va">gamma</span>,</span></span>
+<span class="r-in"><span>  phi <span class="op">=</span> <span class="va">phi</span>,</span></span>
+<span class="r-in"><span>  sigma_l <span class="op">=</span> <span class="va">sigma_l</span>,</span></span>
 <span class="r-in"><span>  delta_t <span class="op">=</span> <span class="va">delta_t</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $alpha</span>
@@ -236,10 +258,10 @@ $$
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 0.99006221 0.00495027</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [2,] 0.00495027 0.99006221</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $psi</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>           [,1]       [,2]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 0.5256073 0.01414641</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [2,] 0.0000000 0.56884633</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $psi_l</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            [,1]      [,2]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 0.52560735 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [2,] 0.01414641 0.5688463</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

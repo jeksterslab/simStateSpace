@@ -78,7 +78,7 @@
                         <h4 data-toc-skip class="author">Ivan Jacob
 Agaloos Pesigan</h4>
             
-            <h4 data-toc-skip class="date">2024-01-27</h4>
+            <h4 data-toc-skip class="date">2024-02-01</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/jeksterslab/simStateSpace/blob/HEAD/vignettes/var.Rmd"><code>vignettes/var.Rmd</code></a></small>
       <div class="d-none name"><code>var.Rmd</code></div>
@@ -89,14 +89,12 @@ Agaloos Pesigan</h4>
 <div class="section level2">
 <h2 id="model">Model<a class="anchor" aria-label="anchor" href="#model"></a>
 </h2>
-<p>The measurement model is given by</p>
-<p><span class="math display">\[\begin{equation}
+<p>The measurement model is given by <span class="math display">\[\begin{equation}
   \mathbf{y}_{i, t}
   =
   \boldsymbol{\eta}_{i, t} .
 \end{equation}\]</span></p>
-<p>The dynamic structure is given by</p>
-<p><span class="math display">\[\begin{equation}
+<p>The dynamic structure is given by <span class="math display">\[\begin{equation}
   \boldsymbol{\eta}_{i, t}
   =
   \boldsymbol{\alpha}
@@ -115,21 +113,39 @@ Agaloos Pesigan</h4>
   \mathbf{0},
   \boldsymbol{\Psi}
   \right)
-\end{equation}\]</span></p>
-<p>where <span class="math inline">\(\boldsymbol{\eta}_{i, t}\)</span>,
-<span class="math inline">\(\boldsymbol{\eta}_{i, t - 1}\)</span>, and
-<span class="math inline">\(\boldsymbol{\zeta}_{i, t}\)</span> are
-random variables and <span class="math inline">\(\boldsymbol{\alpha}\)</span>, <span class="math inline">\(\boldsymbol{\beta}\)</span>, and <span class="math inline">\(\boldsymbol{\Psi}\)</span> are model parameters.
+\end{equation}\]</span> where <span class="math inline">\(\boldsymbol{\eta}_{i, t}\)</span>, <span class="math inline">\(\boldsymbol{\eta}_{i, t - 1}\)</span>, and <span class="math inline">\(\boldsymbol{\zeta}_{i, t}\)</span> are random
+variables, and <span class="math inline">\(\boldsymbol{\alpha}\)</span>,
+<span class="math inline">\(\boldsymbol{\beta}\)</span>, and <span class="math inline">\(\boldsymbol{\Psi}\)</span> are model parameters.
 <span class="math inline">\(\boldsymbol{\eta}_{i, t}\)</span> is a
 vector of latent variables at time <span class="math inline">\(t\)</span> and individual <span class="math inline">\(i\)</span>, <span class="math inline">\(\boldsymbol{\eta}_{i, t - 1}\)</span> is a vector
-of latent variables at <span class="math inline">\(t - 1\)</span> and
-individual <span class="math inline">\(i\)</span>, and <span class="math inline">\(\boldsymbol{\zeta}_{i, t}\)</span> is a vector of
+of latent variables at time <span class="math inline">\(t - 1\)</span>
+and individual <span class="math inline">\(i\)</span>, and <span class="math inline">\(\boldsymbol{\zeta}_{i, t}\)</span> is a vector of
 dynamic noise at time <span class="math inline">\(t\)</span> and
-individual <span class="math inline">\(i\)</span>, while <span class="math inline">\(\boldsymbol{\alpha}\)</span> is a vector of
+individual <span class="math inline">\(i\)</span>. <span class="math inline">\(\boldsymbol{\alpha}\)</span> is a vector of
 intercepts, <span class="math inline">\(\boldsymbol{\beta}\)</span> is a
 matrix of autoregression and cross regression coefficients, and <span class="math inline">\(\boldsymbol{\Psi}\)</span> is the covariance
 matrix of <span class="math inline">\(\boldsymbol{\zeta}_{i,
-t}\)</span>.</p>
+t}\)</span>. An alternative representation of the dynamic noise is given
+by <span class="math display">\[\begin{equation}
+  \boldsymbol{\zeta}_{i, t}
+  =
+  \boldsymbol{\Psi}^{\frac{1}{2}}
+  \mathbf{z}_{i, t},
+  \quad
+  \mathrm{with}
+  \quad
+  \mathbf{z}_{i, t}
+  \sim
+  \mathcal{N}
+  \left(
+  \mathbf{0},
+  \mathbf{I}
+  \right)
+\end{equation}\]</span> where <span class="math inline">\(\mathbf{z}_{i,
+t}\)</span> is a vector of independent standard normal random variables
+and <span class="math inline">\(\left( \boldsymbol{\Psi}^{\frac{1}{2}}
+\right) \left( \boldsymbol{\Psi}^{\frac{1}{2}} \right)^{\prime} =
+\boldsymbol{\Psi}.\)</span></p>
 </div>
 <div class="section level2">
 <h2 id="data-generation">Data Generation<a class="anchor" aria-label="anchor" href="#data-generation"></a>
@@ -220,6 +236,11 @@ of individuals.</p>
 <span><span class="co">#&gt; [1,]    1    0    0</span></span>
 <span><span class="co">#&gt; [2,]    0    1    0</span></span>
 <span><span class="co">#&gt; [3,]    0    0    1</span></span>
+<span><span class="va">sigma0_l</span></span>
+<span><span class="co">#&gt;      [,1] [,2] [,3]</span></span>
+<span><span class="co">#&gt; [1,]    1    0    0</span></span>
+<span><span class="co">#&gt; [2,]    0    1    0</span></span>
+<span><span class="co">#&gt; [3,]    0    0    1</span></span>
 <span><span class="va">alpha</span></span>
 <span><span class="co">#&gt; [1] 0 0 0</span></span>
 <span><span class="va">beta</span></span>
@@ -228,6 +249,11 @@ of individuals.</p>
 <span><span class="co">#&gt; [2,]  0.5  0.6  0.0</span></span>
 <span><span class="co">#&gt; [3,] -0.1  0.4  0.5</span></span>
 <span><span class="va">psi</span></span>
+<span><span class="co">#&gt;      [,1] [,2] [,3]</span></span>
+<span><span class="co">#&gt; [1,]    1    0    0</span></span>
+<span><span class="co">#&gt; [2,]    0    1    0</span></span>
+<span><span class="co">#&gt; [3,]    0    0    1</span></span>
+<span><span class="va">psi_l</span></span>
 <span><span class="co">#&gt;      [,1] [,2] [,3]</span></span>
 <span><span class="co">#&gt; [1,]    1    0    0</span></span>
 <span><span class="co">#&gt; [2,]    0    1    0</span></span>
@@ -241,13 +267,12 @@ Simulate Data<a class="anchor" aria-label="anchor" href="#using-the-simssmvarfix
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/jeksterslab/simStateSpace">simStateSpace</a></span><span class="op">)</span></span>
 <span><span class="va">sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/SimSSMVARFixed.html">SimSSMVARFixed</a></span><span class="op">(</span></span>
 <span>  n <span class="op">=</span> <span class="va">n</span>,</span>
+<span>  time <span class="op">=</span> <span class="va">time</span>,</span>
 <span>  mu0 <span class="op">=</span> <span class="va">mu0</span>,</span>
-<span>  sigma0 <span class="op">=</span> <span class="va">sigma0</span>,</span>
+<span>  sigma0_l <span class="op">=</span> <span class="va">sigma0_l</span>,</span>
 <span>  alpha <span class="op">=</span> <span class="va">alpha</span>,</span>
 <span>  beta <span class="op">=</span> <span class="va">beta</span>,</span>
-<span>  psi <span class="op">=</span> <span class="va">psi</span>,</span>
-<span>  time <span class="op">=</span> <span class="va">time</span>,</span>
-<span>  burn_in <span class="op">=</span> <span class="fl">0</span></span>
+<span>  psi_l <span class="op">=</span> <span class="va">psi_l</span></span>
 <span><span class="op">)</span></span>
 <span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">sim</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span>
@@ -387,8 +412,8 @@ Simulate Data<a class="anchor" aria-label="anchor" href="#using-the-simssmvarfix
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Doing end processing</span></span>
 <span><span class="co">#&gt; Successful trial</span></span>
-<span><span class="co">#&gt; Total Time: 2.05179 </span></span>
-<span><span class="co">#&gt; Backend Time: 2.044346</span></span></code></pre></div>
+<span><span class="co">#&gt; Total Time: 2.105387 </span></span>
+<span><span class="co">#&gt; Backend Time: 2.097492</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">

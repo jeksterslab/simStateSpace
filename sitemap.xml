@@ -13,7 +13,7 @@
     <loc>https://github.com/jeksterslab/simStateSpace/articles/lin-growth.html</loc>
   </url>
   <url>
-    <loc>https://github.com/jeksterslab/simStateSpace/articles/ou-discrete.html</loc>
+    <loc>https://github.com/jeksterslab/simStateSpace/articles/lin-sde.html</loc>
   </url>
   <url>
     <loc>https://github.com/jeksterslab/simStateSpace/articles/ou.html</loc>
@@ -40,18 +40,6 @@
     <loc>https://github.com/jeksterslab/simStateSpace/reference/LinSDE2SSM.html</loc>
   </url>
   <url>
-    <loc>https://github.com/jeksterslab/simStateSpace/reference/OU2SSM.html</loc>
-  </url>
-  <url>
-    <loc>https://github.com/jeksterslab/simStateSpace/reference/OU2SVAR.html</loc>
-  </url>
-  <url>
-    <loc>https://github.com/jeksterslab/simStateSpace/reference/OU2VAR.html</loc>
-  </url>
-  <url>
-    <loc>https://github.com/jeksterslab/simStateSpace/reference/SimSSM.html</loc>
-  </url>
-  <url>
     <loc>https://github.com/jeksterslab/simStateSpace/reference/SimSSMFixed.html</loc>
   </url>
   <url>
@@ -64,19 +52,16 @@
     <loc>https://github.com/jeksterslab/simStateSpace/reference/SimSSMLinGrowthIVary.html</loc>
   </url>
   <url>
-    <loc>https://github.com/jeksterslab/simStateSpace/reference/SimSSMLinSDE.html</loc>
+    <loc>https://github.com/jeksterslab/simStateSpace/reference/SimSSMLinSDEFixed.html</loc>
   </url>
   <url>
-    <loc>https://github.com/jeksterslab/simStateSpace/reference/SimSSMOU.html</loc>
+    <loc>https://github.com/jeksterslab/simStateSpace/reference/SimSSMLinSDEIVary.html</loc>
   </url>
   <url>
     <loc>https://github.com/jeksterslab/simStateSpace/reference/SimSSMOUFixed.html</loc>
   </url>
   <url>
     <loc>https://github.com/jeksterslab/simStateSpace/reference/SimSSMOUIVary.html</loc>
-  </url>
-  <url>
-    <loc>https://github.com/jeksterslab/simStateSpace/reference/SimSSMVAR.html</loc>
   </url>
   <url>
     <loc>https://github.com/jeksterslab/simStateSpace/reference/SimSSMVARFixed.html</loc>
