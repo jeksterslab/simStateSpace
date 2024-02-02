@@ -1,7 +1,7 @@
 # simStateSpace 1.1.0.9000
 
 * Latest development version.
-* Added the `OU2VAR()` and `OU2SVAR()` functions.
+* Added functions to generate linear stochastic differential equation models.
 
 # simStateSpace 1.1.0
 
