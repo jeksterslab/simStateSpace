@@ -134,29 +134,13 @@ which represents random fluctuations.
 #| echo = FALSE
 production <- FALSE
 if (production) {
-  time_max <- 1000 - 1
   n <- 100
 } else {
-  time_max <- 100 - 1
   n <- 5
 }
 set.seed(42)
+time <- 1000
 delta_t <- 0.10
-time_ct <- seq(
-  from = 0,
-  to = time_max,
-  by = delta_t
-)
-time_discrete <- time_ct[
-  which(
-    time_ct %in% seq(
-      from = 0,
-      to = time_max,
-      by = 1.00
-    )
-  )
-]
-time <- length(time_ct)
 k <- p <- 3
 iden <- diag(k)
 null_vec <- rep(x = 0, times = k)
