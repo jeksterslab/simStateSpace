@@ -117,8 +117,8 @@
 <span class="r-in"><span>    <span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="op">}</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">gamma_eta</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/diag.html" class="external-link">diag</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fl">0.10</span>, nrow <span class="op">=</span> <span class="va">p</span>, ncol <span class="op">=</span> <span class="va">j</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">gamma_y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/diag.html" class="external-link">diag</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fl">0.10</span>, nrow <span class="op">=</span> <span class="va">k</span>, ncol <span class="op">=</span> <span class="va">j</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">gamma</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/diag.html" class="external-link">diag</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fl">0.10</span>, nrow <span class="op">=</span> <span class="va">p</span>, ncol <span class="op">=</span> <span class="va">j</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">kappa</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/diag.html" class="external-link">diag</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fl">0.10</span>, nrow <span class="op">=</span> <span class="va">k</span>, ncol <span class="op">=</span> <span class="va">j</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Type 0</span></span></span>
 <span class="r-in"><span><span class="va">ssm</span> <span class="op">&lt;-</span> <span class="fu"><a href="SimSSMFixed.html">SimSSMFixed</a></span><span class="op">(</span></span></span>
@@ -158,14 +158,14 @@
 <span class="r-in"><span>  theta_l <span class="op">=</span> <span class="va">theta_l</span>,</span></span>
 <span class="r-in"><span>  type <span class="op">=</span> <span class="fl">1</span>,</span></span>
 <span class="r-in"><span>  x <span class="op">=</span> <span class="va">x</span>,</span></span>
-<span class="r-in"><span>  gamma_eta <span class="op">=</span> <span class="va">gamma_eta</span></span></span>
+<span class="r-in"><span>  gamma <span class="op">=</span> <span class="va">gamma</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">ssm</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Call:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> SimSSMFixed(n = n, time = time, mu0 = mu0, sigma0_l = sigma0_l, </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     alpha = alpha, beta = beta, psi_l = psi_l, nu = nu, lambda = lambda, </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     theta_l = theta_l, type = 1, x = x, gamma_eta = gamma_eta)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     theta_l = theta_l, type = 1, x = x, gamma = gamma)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Use `as.data.frame` or `as.matrix` on the output of `SimSSMFixed`</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> to convert it to a data frame or a matrix.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -184,16 +184,15 @@
 <span class="r-in"><span>  theta_l <span class="op">=</span> <span class="va">theta_l</span>,</span></span>
 <span class="r-in"><span>  type <span class="op">=</span> <span class="fl">2</span>,</span></span>
 <span class="r-in"><span>  x <span class="op">=</span> <span class="va">x</span>,</span></span>
-<span class="r-in"><span>  gamma_eta <span class="op">=</span> <span class="va">gamma_eta</span>,</span></span>
-<span class="r-in"><span>  gamma_y <span class="op">=</span> <span class="va">gamma_y</span></span></span>
+<span class="r-in"><span>  gamma <span class="op">=</span> <span class="va">gamma</span>,</span></span>
+<span class="r-in"><span>  kappa <span class="op">=</span> <span class="va">kappa</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">ssm</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Call:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> SimSSMFixed(n = n, time = time, mu0 = mu0, sigma0_l = sigma0_l, </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     alpha = alpha, beta = beta, psi_l = psi_l, nu = nu, lambda = lambda, </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     theta_l = theta_l, type = 2, x = x, gamma_eta = gamma_eta, </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     gamma_y = gamma_y)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     theta_l = theta_l, type = 2, x = x, gamma = gamma, kappa = kappa)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Use `as.data.frame` or `as.matrix` on the output of `SimSSMFixed`</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> to convert it to a data frame or a matrix.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>

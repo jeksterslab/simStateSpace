@@ -66,15 +66,15 @@ to state space model parameterization.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">LinSDE2SSM</span><span class="op">(</span><span class="va">gamma</span>, <span class="va">phi</span>, <span class="va">sigma_l</span>, <span class="va">delta_t</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">LinSDE2SSM</span><span class="op">(</span><span class="va">iota</span>, <span class="va">phi</span>, <span class="va">sigma_l</span>, <span class="va">delta_t</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>gamma</dt>
+    <dl><dt>iota</dt>
 <dd><p>Numeric vector.
 An unobserved term that is constant over time
-(\(\boldsymbol{\gamma}\)).</p></dd>
+(\(\boldsymbol{\iota}\)).</p></dd>
 
 
 <dt>phi</dt>
@@ -123,7 +123,7 @@ $$
     \boldsymbol{\eta}_{i, t}
     =
     \left(
-      \boldsymbol{\gamma}
+      \boldsymbol{\iota}
       +
       \boldsymbol{\Phi}
       \boldsymbol{\eta}_{i, t}
@@ -156,7 +156,7 @@ $$
       \left(
         \boldsymbol{\beta} - \mathbf{I}_{p}
       \right)
-      \boldsymbol{\gamma}
+      \boldsymbol{\iota}
   $$</p>
 <p>$$
       \mathrm{vec}
@@ -220,7 +220,7 @@ where \(p\) is the number of latent variables and
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fl">2</span></span></span>
-<span class="r-in"><span><span class="va">gamma</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.317</span>, <span class="fl">0.230</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">iota</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.317</span>, <span class="fl">0.230</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">phi</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>  data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>   <span class="op">-</span><span class="fl">0.10</span>,</span></span>
@@ -243,7 +243,7 @@ where \(p\) is the number of latent variables and
 <span class="r-in"><span><span class="va">delta_t</span> <span class="op">&lt;-</span> <span class="fl">0.10</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">LinSDE2SSM</span><span class="op">(</span></span></span>
-<span class="r-in"><span>  gamma <span class="op">=</span> <span class="va">gamma</span>,</span></span>
+<span class="r-in"><span>  iota <span class="op">=</span> <span class="va">iota</span>,</span></span>
 <span class="r-in"><span>  phi <span class="op">=</span> <span class="va">phi</span>,</span></span>
 <span class="r-in"><span>  sigma_l <span class="op">=</span> <span class="va">sigma_l</span>,</span></span>
 <span class="r-in"><span>  delta_t <span class="op">=</span> <span class="va">delta_t</span></span></span>

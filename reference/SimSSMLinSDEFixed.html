@@ -84,7 +84,7 @@ the parameters are invariant across individuals and across time.</p>
 <span>  delta_t <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  <span class="va">mu0</span>,</span>
 <span>  <span class="va">sigma0_l</span>,</span>
-<span>  <span class="va">gamma</span>,</span>
+<span>  <span class="va">iota</span>,</span>
 <span>  <span class="va">phi</span>,</span>
 <span>  <span class="va">sigma_l</span>,</span>
 <span>  <span class="va">nu</span>,</span>
@@ -92,8 +92,8 @@ the parameters are invariant across individuals and across time.</p>
 <span>  <span class="va">theta_l</span>,</span>
 <span>  type <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  x <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  gamma_eta <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  gamma_y <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  gamma <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  kappa <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -129,10 +129,10 @@ of initial latent variable values
 (\(\boldsymbol{\Sigma}_{\boldsymbol{\eta} \mid 0}\)).</p></dd>
 
 
-<dt>gamma</dt>
+<dt>iota</dt>
 <dd><p>Numeric vector.
 An unobserved term that is constant over time
-(\(\boldsymbol{\gamma}\)).</p></dd>
+(\(\boldsymbol{\iota}\)).</p></dd>
 
 
 <dt>phi</dt>
@@ -186,18 +186,18 @@ The number of columns in each matrix
 should be equal to <code>time</code>.</p></dd>
 
 
-<dt>gamma_eta</dt>
+<dt>gamma</dt>
 <dd><p>Numeric matrix.
 Matrix linking the covariates to the latent variables
 at current time point
-(\(\boldsymbol{\Gamma}_{\boldsymbol{\eta}}\)).</p></dd>
+(\(\boldsymbol{\Gamma}\)).</p></dd>
 
 
-<dt>gamma_y</dt>
+<dt>kappa</dt>
 <dd><p>Numeric matrix.
 Matrix linking the covariates to the observed variables
 at current time point
-(\(\boldsymbol{\Gamma}_{\mathbf{y}}\)).</p></dd>
+(\(\boldsymbol{\Kappa}\)).</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -308,7 +308,7 @@ $$
     \mathrm{d} \boldsymbol{\eta}_{i, t}
     =
     \left(
-    \boldsymbol{\gamma}
+    \boldsymbol{\iota}
     +
     \boldsymbol{\Phi}
     \boldsymbol{\eta}_{i, t}
@@ -320,7 +320,7 @@ $$
     \mathbf{W}_{i, t}
   $$
 where
-\(\boldsymbol{\gamma}\)
+\(\boldsymbol{\iota}\)
 is a term which is unobserved and constant over time,
 \(\boldsymbol{\Phi}\)
 is the drift matrix
@@ -364,14 +364,14 @@ $$
     \mathrm{d} \boldsymbol{\eta}_{i, t}
     =
     \left(
-    \boldsymbol{\gamma}
+    \boldsymbol{\iota}
     +
     \boldsymbol{\Phi}
     \boldsymbol{\eta}_{i, t}
     \right)
     \mathrm{d}t
     +
-    \boldsymbol{\Gamma}_{\boldsymbol{\eta}}
+    \boldsymbol{\Gamma}
     \mathbf{x}_{i, t}
     +
     \boldsymbol{\Sigma}^{\frac{1}{2}}
@@ -381,7 +381,7 @@ $$
 where
 \(\mathbf{x}_{i, t}\) is a vector of covariates
 at time \(t\) and individual \(i\),
-and \(\boldsymbol{\Gamma}_{\boldsymbol{\eta}}\) is the coefficient matrix
+and \(\boldsymbol{\Gamma}\) is the coefficient matrix
 linking the covariates to the latent variables.</p>
 </div>
 
@@ -398,7 +398,7 @@ $$
     \boldsymbol{\Lambda}
     \boldsymbol{\eta}_{i, t}
     +
-    \boldsymbol{\Gamma}_{\mathbf{y}}
+    \boldsymbol{\Kappa}
     \mathbf{x}_{i, t}
     +
     \boldsymbol{\varepsilon}_{i, t},
@@ -414,21 +414,21 @@ $$
     \right)
   $$
 where
-\(\boldsymbol{\Gamma}_{\mathbf{y}}\) is the coefficient matrix
+\(\boldsymbol{\Kappa}\) is the coefficient matrix
 linking the covariates to the observed variables.</p>
 <p>The dynamic structure is given by
 $$
     \mathrm{d} \boldsymbol{\eta}_{i, t}
     =
     \left(
-    \boldsymbol{\gamma}
+    \boldsymbol{\iota}
     +
     \boldsymbol{\Phi}
     \boldsymbol{\eta}_{i, t}
     \right)
     \mathrm{d}t
     +
-    \boldsymbol{\Gamma}_{\boldsymbol{\eta}}
+    \boldsymbol{\Gamma}
     \mathbf{x}_{i, t}
     +
     \boldsymbol{\Sigma}^{\frac{1}{2}}
@@ -480,7 +480,7 @@ and state-space modeling techniques.
 <span class="r-in"><span><span class="va">mu0</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">3.0</span>, <span class="fl">1.5</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">sigma0</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/diag.html" class="external-link">diag</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">sigma0_l</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/chol.html" class="external-link">chol</a></span><span class="op">(</span><span class="va">sigma0</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">gamma</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.317</span>, <span class="fl">0.230</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">iota</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.317</span>, <span class="fl">0.230</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">phi</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>  data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>    <span class="op">-</span><span class="fl">0.10</span>,</span></span>
@@ -518,8 +518,8 @@ and state-space modeling techniques.
 <span class="r-in"><span>    <span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="op">}</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">gamma_eta</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/diag.html" class="external-link">diag</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fl">0.10</span>, nrow <span class="op">=</span> <span class="va">p</span>, ncol <span class="op">=</span> <span class="va">j</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">gamma_y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/diag.html" class="external-link">diag</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fl">0.10</span>, nrow <span class="op">=</span> <span class="va">k</span>, ncol <span class="op">=</span> <span class="va">j</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">gamma</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/diag.html" class="external-link">diag</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fl">0.10</span>, nrow <span class="op">=</span> <span class="va">p</span>, ncol <span class="op">=</span> <span class="va">j</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">kappa</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/diag.html" class="external-link">diag</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fl">0.10</span>, nrow <span class="op">=</span> <span class="va">k</span>, ncol <span class="op">=</span> <span class="va">j</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Type 0</span></span></span>
 <span class="r-in"><span><span class="va">ssm</span> <span class="op">&lt;-</span> <span class="fu">SimSSMLinSDEFixed</span><span class="op">(</span></span></span>
@@ -528,7 +528,7 @@ and state-space modeling techniques.
 <span class="r-in"><span>  delta_t <span class="op">=</span> <span class="va">delta_t</span>,</span></span>
 <span class="r-in"><span>  mu0 <span class="op">=</span> <span class="va">mu0</span>,</span></span>
 <span class="r-in"><span>  sigma0_l <span class="op">=</span> <span class="va">sigma0_l</span>,</span></span>
-<span class="r-in"><span>  gamma <span class="op">=</span> <span class="va">gamma</span>,</span></span>
+<span class="r-in"><span>  iota <span class="op">=</span> <span class="va">iota</span>,</span></span>
 <span class="r-in"><span>  phi <span class="op">=</span> <span class="va">phi</span>,</span></span>
 <span class="r-in"><span>  sigma_l <span class="op">=</span> <span class="va">sigma_l</span>,</span></span>
 <span class="r-in"><span>  nu <span class="op">=</span> <span class="va">nu</span>,</span></span>
@@ -548,7 +548,7 @@ and state-space modeling techniques.
 <span class="r-in"><span>  delta_t <span class="op">=</span> <span class="va">delta_t</span>,</span></span>
 <span class="r-in"><span>  mu0 <span class="op">=</span> <span class="va">mu0</span>,</span></span>
 <span class="r-in"><span>  sigma0_l <span class="op">=</span> <span class="va">sigma0_l</span>,</span></span>
-<span class="r-in"><span>  gamma <span class="op">=</span> <span class="va">gamma</span>,</span></span>
+<span class="r-in"><span>  iota <span class="op">=</span> <span class="va">iota</span>,</span></span>
 <span class="r-in"><span>  phi <span class="op">=</span> <span class="va">phi</span>,</span></span>
 <span class="r-in"><span>  sigma_l <span class="op">=</span> <span class="va">sigma_l</span>,</span></span>
 <span class="r-in"><span>  nu <span class="op">=</span> <span class="va">nu</span>,</span></span>
@@ -556,7 +556,7 @@ and state-space modeling techniques.
 <span class="r-in"><span>  theta_l <span class="op">=</span> <span class="va">theta_l</span>,</span></span>
 <span class="r-in"><span>  type <span class="op">=</span> <span class="fl">1</span>,</span></span>
 <span class="r-in"><span>  x <span class="op">=</span> <span class="va">x</span>,</span></span>
-<span class="r-in"><span>  gamma_eta <span class="op">=</span> <span class="va">gamma_eta</span></span></span>
+<span class="r-in"><span>  gamma <span class="op">=</span> <span class="va">gamma</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">ssm</span><span class="op">)</span></span></span>
@@ -570,7 +570,7 @@ and state-space modeling techniques.
 <span class="r-in"><span>  delta_t <span class="op">=</span> <span class="va">delta_t</span>,</span></span>
 <span class="r-in"><span>  mu0 <span class="op">=</span> <span class="va">mu0</span>,</span></span>
 <span class="r-in"><span>  sigma0_l <span class="op">=</span> <span class="va">sigma0_l</span>,</span></span>
-<span class="r-in"><span>  gamma <span class="op">=</span> <span class="va">gamma</span>,</span></span>
+<span class="r-in"><span>  iota <span class="op">=</span> <span class="va">iota</span>,</span></span>
 <span class="r-in"><span>  phi <span class="op">=</span> <span class="va">phi</span>,</span></span>
 <span class="r-in"><span>  sigma_l <span class="op">=</span> <span class="va">sigma_l</span>,</span></span>
 <span class="r-in"><span>  nu <span class="op">=</span> <span class="va">nu</span>,</span></span>
@@ -578,8 +578,8 @@ and state-space modeling techniques.
 <span class="r-in"><span>  theta_l <span class="op">=</span> <span class="va">theta_l</span>,</span></span>
 <span class="r-in"><span>  type <span class="op">=</span> <span class="fl">2</span>,</span></span>
 <span class="r-in"><span>  x <span class="op">=</span> <span class="va">x</span>,</span></span>
-<span class="r-in"><span>  gamma_eta <span class="op">=</span> <span class="va">gamma_eta</span>,</span></span>
-<span class="r-in"><span>  gamma_y <span class="op">=</span> <span class="va">gamma_y</span></span></span>
+<span class="r-in"><span>  gamma <span class="op">=</span> <span class="va">gamma</span>,</span></span>
+<span class="r-in"><span>  kappa <span class="op">=</span> <span class="va">kappa</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">ssm</span><span class="op">)</span></span></span>
