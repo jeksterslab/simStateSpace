@@ -106,7 +106,7 @@ The dynamic structure is given by
   \mathrm{d} \boldsymbol{\eta}_{i, t}
   =
   \left(
-  \boldsymbol{\gamma}
+  \boldsymbol{\iota}
   +
   \boldsymbol{\Phi}
   \boldsymbol{\eta}_{i, t}
@@ -119,7 +119,7 @@ The dynamic structure is given by
 \end{equation}
 
 where
-$\boldsymbol{\gamma}$
+$\boldsymbol{\iota}$
 is a term which is unobserved and constant over time,
 $\boldsymbol{\Phi}$
 is the drift matrix
@@ -140,12 +140,13 @@ which represents random fluctuations.
 #| echo = FALSE
 production <- FALSE
 if (production) {
-  n <- 100
+  n <- 1000
+  time <- 10000
 } else {
   n <- 5
+  time <- 1000
 }
 set.seed(42)
-time <- 1000
 delta_t <- 0.10
 k <- p <- 3
 iden <- diag(k)
@@ -153,7 +154,7 @@ null_vec <- rep(x = 0, times = k)
 mu0 <- null_vec
 sigma0 <- iden
 sigma0_l <- t(chol(sigma0))
-gamma <- null_vec
+iota <- null_vec
 phi <- matrix(
   data = c(
     -0.357,
@@ -257,16 +258,16 @@ be given by
 \right) .
 \end{equation}
 
-Let the constant vector $\boldsymbol{\gamma}$ be given by
+Let the constant vector $\boldsymbol{\iota}$ be given by
 
 \begin{equation}
-\boldsymbol{\gamma}
+\boldsymbol{\iota}
 =
 \left(
 \begin{array}{c}
-  `r gamma[1]` \\
-  `r gamma[2]` \\
-  `r gamma[3]` \\
+  `r iota[1]` \\
+  `r iota[2]` \\
+  `r iota[3]` \\
 \end{array}
 \right) .
 \end{equation}
@@ -309,7 +310,7 @@ time
 delta_t
 mu0
 sigma0
-gamma
+iota
 phi
 sigma
 nu
@@ -327,7 +328,7 @@ sim <- SimSSMLinSDEFixed(
   delta_t = delta_t,
   mu0 = mu0,
   sigma0_l = sigma0_l,
-  gamma = gamma,
+  iota = iota,
   phi = phi,
   sigma_l = sigma_l,
   nu = nu,
@@ -387,12 +388,12 @@ dynr_measurement <- dynr::prep.measurement(
 ```{r}
 dynr_dynamics <- dynr::prep.formulaDynamics(
   formula = list(  
-    eta_1 ~ (gamma_1 + phi_11 * eta_1) + (gamma_2 + phi_12 * eta_2) + (gamma_3 + phi_13 * eta_3),
-    eta_2 ~ (gamma_1 + phi_21 * eta_1) + (gamma_2 + phi_22 * eta_2) + (gamma_3 + phi_23 * eta_3),
-    eta_3 ~ (gamma_1 + phi_31 * eta_1) + (gamma_2 + phi_32 * eta_2) + (gamma_3 + phi_33 * eta_3)
+    eta_1 ~ (iota_1 + phi_11 * eta_1) + (iota_2 + phi_12 * eta_2) + (iota_3 + phi_13 * eta_3),
+    eta_2 ~ (iota_1 + phi_21 * eta_1) + (iota_2 + phi_22 * eta_2) + (iota_3 + phi_23 * eta_3),
+    eta_3 ~ (iota_1 + phi_31 * eta_1) + (iota_2 + phi_32 * eta_2) + (iota_3 + phi_33 * eta_3)
   ),
   startval = c(
-    gamma_1 = 0, gamma_2 = 0, gamma_3 = 0,
+    iota_1 = 0, iota_2 = 0, iota_3 = 0,
     phi_11 = 0, phi_12 = 0, phi_13 = 0,
     phi_21 = 0, phi_22 = 0, phi_23 = 0,
     phi_31 = 0, phi_32 = 0, phi_33 = 0
@@ -468,16 +469,6 @@ model$ub[
     "phi_33"
   )
 ] <- +1.5
-model$lb[
-  c(
-    "sigma_11",
-    "sigma_22",
-    "sigma_33",
-    "theta_11",
-    "theta_22",
-    "theta_33"
-  )
-] <- .Machine$double.xmin
 ```
 
 ```{r}
@@ -536,12 +527,12 @@ sigma0_hat <- matrix(
   ],
   nrow = 3
 )
-gamma_hat <- unname(
+iota_hat <- unname(
   estimates[
     c(
-      "gamma_1",
-      "gamma_2",
-      "gamma_3"
+      "iota_1",
+      "iota_2",
+      "iota_3"
     )
   ]
 )
@@ -582,7 +573,7 @@ sigma_hat <- matrix(
 ### Parameter Estimates
 
 ```{r}
-gamma_hat
+iota_hat
 phi_hat
 sigma_hat
 mu0_hat

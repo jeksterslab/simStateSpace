@@ -154,7 +154,7 @@
 #'     \right)
 #'     \mathrm{d}t
 #'     +
-#'     \boldsymbol{\Gamma}_{\boldsymbol{\eta}}
+#'     \boldsymbol{\Gamma}
 #'     \mathbf{x}_{i, t}
 #'     +
 #'     \boldsymbol{\Sigma}^{\frac{1}{2}}
@@ -164,7 +164,7 @@
 #'   where
 #'   \eqn{\mathbf{x}_{i, t}} is a vector of covariates
 #'   at time \eqn{t} and individual \eqn{i},
-#'   and \eqn{\boldsymbol{\Gamma}_{\boldsymbol{\eta}}} is the coefficient matrix
+#'   and \eqn{\boldsymbol{\Gamma}} is the coefficient matrix
 #'   linking the covariates to the latent variables.
 #'
 #'   ## Type 2
@@ -178,7 +178,7 @@
 #'     \boldsymbol{\Lambda}
 #'     \boldsymbol{\eta}_{i, t}
 #'     +
-#'     \boldsymbol{\Gamma}_{\mathbf{y}}
+#'     \boldsymbol{\Kappa}
 #'     \mathbf{x}_{i, t}
 #'     +
 #'     \boldsymbol{\varepsilon}_{i, t},
@@ -194,7 +194,7 @@
 #'     \right)
 #'   }
 #'   where
-#'   \eqn{\boldsymbol{\Gamma}_{\mathbf{y}}} is the coefficient matrix
+#'   \eqn{\boldsymbol{\Kappa}} is the coefficient matrix
 #'   linking the covariates to the observed variables.
 #'
 #'   The dynamic structure is given by
@@ -209,7 +209,7 @@
 #'     \right)
 #'     \mathrm{d}t
 #'     +
-#'     \boldsymbol{\Gamma}_{\boldsymbol{\eta}}
+#'     \boldsymbol{\Gamma}
 #'     \mathbf{x}_{i, t}
 #'     +
 #'     \boldsymbol{\Sigma}^{\frac{1}{2}}
@@ -284,8 +284,8 @@
 #'     )
 #'   }
 #' )
-#' gamma_eta <- diag(x = 0.10, nrow = p, ncol = j)
-#' gamma_y <- diag(x = 0.10, nrow = k, ncol = j)
+#' gamma <- diag(x = 0.10, nrow = p, ncol = j)
+#' kappa <- diag(x = 0.10, nrow = k, ncol = j)
 #'
 #' # Type 0
 #' ssm <- SimSSMOUFixed(
@@ -320,7 +320,7 @@
 #'   theta_l = theta_l,
 #'   type = 1,
 #'   x = x,
-#'   gamma_eta = gamma_eta
+#'   gamma = gamma
 #' )
 #'
 #' plot(ssm)
@@ -340,8 +340,8 @@
 #'   theta_l = theta_l,
 #'   type = 2,
 #'   x = x,
-#'   gamma_eta = gamma_eta,
-#'   gamma_y = gamma_y
+#'   gamma = gamma,
+#'   kappa = kappa
 #' )
 #'
 #' plot(ssm)
@@ -354,10 +354,10 @@ SimSSMOUFixed <- function(n, time, delta_t = 1.0,
                           mu, phi, sigma_l,
                           nu, lambda, theta_l,
                           type = 0,
-                          x = NULL, gamma_eta = NULL, gamma_y = NULL) {
-  gamma <- phi %*% mu
+                          x = NULL, gamma = NULL, kappa = NULL) {
+  iota <- phi %*% mu
   ssm <- LinSDE2SSM(
-    gamma = gamma,
+    iota = iota,
     phi = phi,
     sigma_l = sigma_l,
     delta_t = delta_t
@@ -368,12 +368,12 @@ SimSSMOUFixed <- function(n, time, delta_t = 1.0,
     alpha = ssm$alpha, beta = ssm$beta, psi_l = ssm$psi_l,
     nu = nu, lambda = lambda, theta_l = theta_l,
     type = type,
-    x = x, gamma_eta = gamma_eta, gamma_y = gamma_y
+    x = x, gamma = gamma, kappa = kappa
   )
   out$args <- c(
     out$args,
     mu = mu,
-    gamma = gamma,
+    iota = iota,
     phi = phi,
     sigma_l = sigma_l
   )

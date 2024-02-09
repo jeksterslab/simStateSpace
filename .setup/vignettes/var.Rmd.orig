@@ -124,12 +124,13 @@ $\left( \boldsymbol{\Psi}^{\frac{1}{2}} \right) \left( \boldsymbol{\Psi}^{\frac{
 #| echo = FALSE
 production <- FALSE
 if (production) {
-  n <- 100
+  n <- 1000
+  time <- 10000
 } else {
   n <- 5
+  time <- 1000
 }
 set.seed(42)
-time <- 1000
 k <- p <- 3
 iden <- diag(k)
 null_vec <- rep(x = 0, times = k)

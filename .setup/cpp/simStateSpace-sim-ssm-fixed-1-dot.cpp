@@ -11,7 +11,7 @@ Rcpp::List SimSSMFixed1(const int n, const int time, const double delta_t,
                         const arma::vec& alpha, const arma::mat& beta,
                         const arma::mat& psi_l, const arma::vec& nu,
                         const arma::mat& lambda, const arma::mat& theta_l,
-                        const Rcpp::List& x, const arma::mat& gamma_eta) {
+                        const Rcpp::List& x, const arma::mat& gamma) {
   // Step 1: Determine dimensions
   int p = mu0.n_elem;  // number of latent variables
   int k = nu.n_elem;   // number of observed variables
@@ -31,12 +31,12 @@ Rcpp::List SimSSMFixed1(const int n, const int time, const double delta_t,
     arma::vec id(time, arma::fill::zeros);
     id.fill(i + 1);
     // Step 3.2: Generate initial condition
-    eta.col(0) = mu0 + (sigma0_l * arma::randn(p)) + (gamma_eta * x_i.col(0));
+    eta.col(0) = mu0 + (sigma0_l * arma::randn(p)) + (gamma * x_i.col(0));
     y.col(0) = nu + (lambda * eta.col(0)) + (theta_l * arma::randn(k));
     // Step 3.3: Data generation loop
     for (int t = 1; t < time; t++) {
       eta.col(t) = alpha + (beta * eta.col(t - 1)) + (psi_l * arma::randn(p)) +
-                   (gamma_eta * x_i.col(t));
+                   (gamma * x_i.col(t));
       y.col(t) = nu + (lambda * eta.col(t)) + (theta_l * arma::randn(k));
     }
     // Step 3.4 Save results in a list

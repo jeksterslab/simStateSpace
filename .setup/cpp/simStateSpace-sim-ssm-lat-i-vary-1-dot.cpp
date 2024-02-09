@@ -10,7 +10,7 @@ Rcpp::List SimSSMLatIVary1(const int n, const int time, const double delta_t,
                            const Rcpp::List& mu0, const Rcpp::List& sigma0_l,
                            const Rcpp::List& alpha, const Rcpp::List& beta,
                            const Rcpp::List& psi_l, const Rcpp::List& x,
-                           const Rcpp::List& gamma_eta) {
+                           const Rcpp::List& gamma) {
   // Step 1: Determine dimensions
   arma::vec mu0_i = mu0[0];
   int p = mu0_i.n_elem;  // number of latent variables
@@ -37,16 +37,15 @@ Rcpp::List SimSSMLatIVary1(const int n, const int time, const double delta_t,
     arma::vec alpha_i = alpha[i];
     arma::mat beta_i = beta[i];
     arma::mat psi_l_i = psi_l[i];
-    arma::mat gamma_eta_i = gamma_eta[i];
+    arma::mat gamma_i = gamma[i];
 
     // Step 3.3: Generate initial condition
-    eta.col(0) =
-        mu0_i + (sigma0_l_i * arma::randn(p)) + (gamma_eta_i * x_i.col(0));
+    eta.col(0) = mu0_i + (sigma0_l_i * arma::randn(p)) + (gamma_i * x_i.col(0));
     y.col(0) = eta.col(0);
     // Step 3.4: Data generation loop
     for (int t = 1; t < time; t++) {
       eta.col(t) = alpha_i + (beta_i * eta.col(t - 1)) +
-                   (psi_l_i * arma::randn(p)) + (gamma_eta_i * x_i.col(t));
+                   (psi_l_i * arma::randn(p)) + (gamma_i * x_i.col(t));
       y.col(t) = eta.col(t);
     }
     // Step 3.5 Save results in a list

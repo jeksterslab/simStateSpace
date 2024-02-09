@@ -19,7 +19,7 @@
 //'     \boldsymbol{\eta}_{i, t}
 //'     =
 //'     \left(
-//'       \boldsymbol{\gamma}
+//'       \boldsymbol{\iota}
 //'       +
 //'       \boldsymbol{\Phi}
 //'       \boldsymbol{\eta}_{i, t}
@@ -53,7 +53,7 @@
 //'       \left(
 //'         \boldsymbol{\beta} - \mathbf{I}_{p}
 //'       \right)
-//'       \boldsymbol{\gamma}
+//'       \boldsymbol{\iota}
 //'   }
 //'
 //'   \deqn{
@@ -98,9 +98,9 @@
 //'
 //' @author Ivan Jacob Agaloos Pesigan
 //'
-//' @param gamma Numeric vector.
+//' @param iota Numeric vector.
 //'   An unobserved term that is constant over time
-//'   (\eqn{\boldsymbol{\gamma}}).
+//'   (\eqn{\boldsymbol{\iota}}).
 //' @param phi Numeric matrix.
 //'   The drift matrix
 //'   which represents the rate of change of the solution
@@ -130,7 +130,7 @@
 //'
 //' @examples
 //' p <- 2
-//' gamma <- c(0.317, 0.230)
+//' iota <- c(0.317, 0.230)
 //' phi <- matrix(
 //'   data = c(
 //'    -0.10,
@@ -153,7 +153,7 @@
 //' delta_t <- 0.10
 //'
 //' LinSDE2SSM(
-//'   gamma = gamma,
+//'   iota = iota,
 //'   phi = phi,
 //'   sigma_l = sigma_l,
 //'   delta_t = delta_t
@@ -163,9 +163,9 @@
 //' @keywords simStateSpace sim linsde
 //' @export
 // [[Rcpp::export]]
-Rcpp::List LinSDE2SSM(const arma::vec& gamma, const arma::mat& phi,
+Rcpp::List LinSDE2SSM(const arma::vec& iota, const arma::mat& phi,
                       const arma::mat& sigma_l, const double delta_t) {
-  int p = gamma.n_elem;
+  int p = iota.n_elem;
   arma::mat I = arma::eye<arma::mat>(p, p);
   arma::mat J = arma::eye<arma::mat>(p * p, p * p);
   arma::mat phi_hashtag = arma::kron(phi, I) + arma::kron(I, phi);
@@ -174,7 +174,7 @@ Rcpp::List LinSDE2SSM(const arma::vec& gamma, const arma::mat& phi,
                       (arma::expmat(phi_hashtag * delta_t) - J) * sigma_vec;
   arma::mat psi_l = arma::chol(arma::reshape(psi_vec, p, p), "lower");
   arma::mat beta = arma::expmat(phi * delta_t);
-  arma::vec alpha = arma::inv(phi) * (beta - I) * gamma;
+  arma::vec alpha = arma::inv(phi) * (beta - I) * iota;
   return Rcpp::List::create(Rcpp::Named("alpha") = alpha,
                             Rcpp::Named("beta") = beta,
                             Rcpp::Named("psi_l") = psi_l);

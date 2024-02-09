@@ -46,7 +46,7 @@ lapply(
         )
       }
     )
-    gamma_eta <- list(
+    gamma <- list(
       diag(x = 0.10, nrow = p, ncol = j)
     )
 
@@ -85,7 +85,7 @@ lapply(
       psi_l = psi_l,
       type = 1,
       x = x,
-      gamma_eta = gamma_eta
+      gamma = gamma
     )
 
     as.data.frame.simstatespace(ssm, eta = TRUE)

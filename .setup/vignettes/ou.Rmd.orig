@@ -134,12 +134,13 @@ which represents random fluctuations.
 #| echo = FALSE
 production <- FALSE
 if (production) {
-  n <- 100
+  n <- 1000
+  time <- 10000
 } else {
   n <- 5
+  time <- 1000
 }
 set.seed(42)
-time <- 1000
 delta_t <- 0.10
 k <- p <- 3
 iden <- diag(k)
@@ -462,16 +463,6 @@ model$ub[
     "phi_33"
   )
 ] <- +1.5
-model$lb[
-  c(
-    "sigma_11",
-    "sigma_22",
-    "sigma_33",
-    "theta_11",
-    "theta_22",
-    "theta_33"
-  )
-] <- .Machine$double.xmin
 ```
 
 ```{r}

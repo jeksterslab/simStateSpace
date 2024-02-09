@@ -11,7 +11,7 @@ Rcpp::List SimSSMIVary1(const int n, const int time, const double delta_t,
                         const Rcpp::List& alpha, const Rcpp::List& beta,
                         const Rcpp::List& psi_l, const Rcpp::List& nu,
                         const Rcpp::List& lambda, const Rcpp::List& theta_l,
-                        const Rcpp::List& x, const Rcpp::List& gamma_eta) {
+                        const Rcpp::List& x, const Rcpp::List& gamma) {
   // Step 1: Determine dimensions
   arma::vec mu0_i = mu0[0];
   arma::vec nu_i = nu[0];
@@ -42,16 +42,15 @@ Rcpp::List SimSSMIVary1(const int n, const int time, const double delta_t,
     arma::vec nu_i = nu[i];
     arma::mat lambda_i = lambda[i];
     arma::mat theta_l_i = theta_l[i];
-    arma::mat gamma_eta_i = gamma_eta[i];
+    arma::mat gamma_i = gamma[i];
 
     // Step 3.3: Generate initial condition
-    eta.col(0) =
-        mu0_i + (sigma0_l_i * arma::randn(p)) + (gamma_eta_i * x_i.col(0));
+    eta.col(0) = mu0_i + (sigma0_l_i * arma::randn(p)) + (gamma_i * x_i.col(0));
     y.col(0) = nu_i + (lambda_i * eta.col(0)) + (theta_l_i * arma::randn(k));
     // Step 3.4: Data generation loop
     for (int t = 1; t < time; t++) {
       eta.col(t) = alpha_i + (beta_i * eta.col(t - 1)) +
-                   (psi_l_i * arma::randn(p)) + (gamma_eta_i * x_i.col(t));
+                   (psi_l_i * arma::randn(p)) + (gamma_i * x_i.col(t));
       y.col(t) = nu_i + (lambda_i * eta.col(t)) + (theta_l_i * arma::randn(k));
     }
     // Step 3.5 Save results in a list

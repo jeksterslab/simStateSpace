@@ -1,7 +1,7 @@
 ---
 title: "The Ornstein–Uhlenbeck Model"
 author: "Ivan Jacob Agaloos Pesigan"
-date: "2024-02-06"
+date: "2024-02-08"
 bibliography: "vignettes.bib"
 csl: https://raw.githubusercontent.com/citation-style-language/styles/master/apa.csl
 nocite: |
@@ -451,16 +451,6 @@ model$ub[
     "phi_33"
   )
 ] <- +1.5
-model$lb[
-  c(
-    "sigma_11",
-    "sigma_22",
-    "sigma_33",
-    "theta_11",
-    "theta_22",
-    "theta_33"
-  )
-] <- .Machine$double.xmin
 ```
 
 <img src="fig-vignettes-ou-unnamed-chunk-12-1.png" width="3300" />
@@ -496,8 +486,8 @@ results <- dynr::dynr.cook(
 #> 
 #> Doing end processing
 #> Successful trial
-#> Total Time: 3.838016 
-#> Backend Time: 3.82997
+#> Total Time: 3.770189 
+#> Backend Time: 3.751352
 ```
 
 ## Summary

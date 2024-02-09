@@ -1,5 +1,5 @@
 ---
-title: "simStateSpace: Simulate Data from Autoregressive Models"
+title: "simStateSpace: Simulate Data from State Space Models"
 author: "Ivan Jacob Agaloos Pesigan"
 output: rmarkdown::html_vignette
 bibliography: "vignettes.bib"
@@ -11,7 +11,7 @@ nocite: |
   @Uhlenbeck-Ornstein-1930
   @Chow-Ho-Hamaker-etal-2010
 vignette: >
-  %\VignetteIndexEntry{simStateSpace: Simulate Data from Autoregressive Models}
+  %\VignetteIndexEntry{simStateSpace: Simulate Data from State Space Models}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

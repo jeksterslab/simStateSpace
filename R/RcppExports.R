@@ -14,7 +14,7 @@
 #'     \boldsymbol{\eta}_{i, t}
 #'     =
 #'     \left(
-#'       \boldsymbol{\gamma}
+#'       \boldsymbol{\iota}
 #'       +
 #'       \boldsymbol{\Phi}
 #'       \boldsymbol{\eta}_{i, t}
@@ -48,7 +48,7 @@
 #'       \left(
 #'         \boldsymbol{\beta} - \mathbf{I}_{p}
 #'       \right)
-#'       \boldsymbol{\gamma}
+#'       \boldsymbol{\iota}
 #'   }
 #'
 #'   \deqn{
@@ -93,9 +93,9 @@
 #'
 #' @author Ivan Jacob Agaloos Pesigan
 #'
-#' @param gamma Numeric vector.
+#' @param iota Numeric vector.
 #'   An unobserved term that is constant over time
-#'   (\eqn{\boldsymbol{\gamma}}).
+#'   (\eqn{\boldsymbol{\iota}}).
 #' @param phi Numeric matrix.
 #'   The drift matrix
 #'   which represents the rate of change of the solution
@@ -125,7 +125,7 @@
 #'
 #' @examples
 #' p <- 2
-#' gamma <- c(0.317, 0.230)
+#' iota <- c(0.317, 0.230)
 #' phi <- matrix(
 #'   data = c(
 #'    -0.10,
@@ -148,7 +148,7 @@
 #' delta_t <- 0.10
 #'
 #' LinSDE2SSM(
-#'   gamma = gamma,
+#'   iota = iota,
 #'   phi = phi,
 #'   sigma_l = sigma_l,
 #'   delta_t = delta_t
@@ -157,59 +157,59 @@
 #' @family Simulation of State Space Models Data Functions
 #' @keywords simStateSpace sim linsde
 #' @export
-LinSDE2SSM <- function(gamma, phi, sigma_l, delta_t) {
-    .Call(`_simStateSpace_LinSDE2SSM`, gamma, phi, sigma_l, delta_t)
+LinSDE2SSM <- function(iota, phi, sigma_l, delta_t) {
+    .Call(`_simStateSpace_LinSDE2SSM`, iota, phi, sigma_l, delta_t)
 }
 
 .SimSSMFixed0 <- function(n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l, nu, lambda, theta_l) {
     .Call(`_simStateSpace_SimSSMFixed0`, n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l, nu, lambda, theta_l)
 }
 
-.SimSSMFixed1 <- function(n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l, nu, lambda, theta_l, x, gamma_eta) {
-    .Call(`_simStateSpace_SimSSMFixed1`, n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l, nu, lambda, theta_l, x, gamma_eta)
+.SimSSMFixed1 <- function(n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l, nu, lambda, theta_l, x, gamma) {
+    .Call(`_simStateSpace_SimSSMFixed1`, n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l, nu, lambda, theta_l, x, gamma)
 }
 
-.SimSSMFixed2 <- function(n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l, nu, lambda, theta_l, x, gamma_eta, gamma_y) {
-    .Call(`_simStateSpace_SimSSMFixed2`, n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l, nu, lambda, theta_l, x, gamma_eta, gamma_y)
+.SimSSMFixed2 <- function(n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l, nu, lambda, theta_l, x, gamma, kappa) {
+    .Call(`_simStateSpace_SimSSMFixed2`, n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l, nu, lambda, theta_l, x, gamma, kappa)
 }
 
 .SimSSMIVary0 <- function(n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l, nu, lambda, theta_l) {
     .Call(`_simStateSpace_SimSSMIVary0`, n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l, nu, lambda, theta_l)
 }
 
-.SimSSMIVary1 <- function(n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l, nu, lambda, theta_l, x, gamma_eta) {
-    .Call(`_simStateSpace_SimSSMIVary1`, n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l, nu, lambda, theta_l, x, gamma_eta)
+.SimSSMIVary1 <- function(n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l, nu, lambda, theta_l, x, gamma) {
+    .Call(`_simStateSpace_SimSSMIVary1`, n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l, nu, lambda, theta_l, x, gamma)
 }
 
-.SimSSMIVary2 <- function(n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l, nu, lambda, theta_l, x, gamma_eta, gamma_y) {
-    .Call(`_simStateSpace_SimSSMIVary2`, n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l, nu, lambda, theta_l, x, gamma_eta, gamma_y)
+.SimSSMIVary2 <- function(n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l, nu, lambda, theta_l, x, gamma, kappa) {
+    .Call(`_simStateSpace_SimSSMIVary2`, n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l, nu, lambda, theta_l, x, gamma, kappa)
 }
 
 .SimSSMLatFixed0 <- function(n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l) {
     .Call(`_simStateSpace_SimSSMLatFixed0`, n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l)
 }
 
-.SimSSMLatFixed1 <- function(n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l, x, gamma_eta) {
-    .Call(`_simStateSpace_SimSSMLatFixed1`, n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l, x, gamma_eta)
+.SimSSMLatFixed1 <- function(n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l, x, gamma) {
+    .Call(`_simStateSpace_SimSSMLatFixed1`, n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l, x, gamma)
 }
 
 .SimSSMLatIVary0 <- function(n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l) {
     .Call(`_simStateSpace_SimSSMLatIVary0`, n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l)
 }
 
-.SimSSMLatIVary1 <- function(n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l, x, gamma_eta) {
-    .Call(`_simStateSpace_SimSSMLatIVary1`, n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l, x, gamma_eta)
+.SimSSMLatIVary1 <- function(n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l, x, gamma) {
+    .Call(`_simStateSpace_SimSSMLatIVary1`, n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l, x, gamma)
 }
 
-.SimSSMLinSDEIVary0 <- function(n, time, delta_t, mu0, sigma0_l, gamma, phi, sigma_l, nu, lambda, theta_l, ou = FALSE) {
-    .Call(`_simStateSpace_SimSSMLinSDEIVary0`, n, time, delta_t, mu0, sigma0_l, gamma, phi, sigma_l, nu, lambda, theta_l, ou)
+.SimSSMLinSDEIVary0 <- function(n, time, delta_t, mu0, sigma0_l, iota, phi, sigma_l, nu, lambda, theta_l, ou = FALSE) {
+    .Call(`_simStateSpace_SimSSMLinSDEIVary0`, n, time, delta_t, mu0, sigma0_l, iota, phi, sigma_l, nu, lambda, theta_l, ou)
 }
 
-.SimSSMLinSDEIVary1 <- function(n, time, delta_t, mu0, sigma0_l, gamma, phi, sigma_l, nu, lambda, theta_l, x, gamma_eta, ou = FALSE) {
-    .Call(`_simStateSpace_SimSSMLinSDEIVary1`, n, time, delta_t, mu0, sigma0_l, gamma, phi, sigma_l, nu, lambda, theta_l, x, gamma_eta, ou)
+.SimSSMLinSDEIVary1 <- function(n, time, delta_t, mu0, sigma0_l, iota, phi, sigma_l, nu, lambda, theta_l, x, gamma, ou = FALSE) {
+    .Call(`_simStateSpace_SimSSMLinSDEIVary1`, n, time, delta_t, mu0, sigma0_l, iota, phi, sigma_l, nu, lambda, theta_l, x, gamma, ou)
 }
 
-.SimSSMLinSDEIVary2 <- function(n, time, delta_t, mu0, sigma0_l, gamma, phi, sigma_l, nu, lambda, theta_l, x, gamma_eta, gamma_y, ou = FALSE) {
-    .Call(`_simStateSpace_SimSSMLinSDEIVary2`, n, time, delta_t, mu0, sigma0_l, gamma, phi, sigma_l, nu, lambda, theta_l, x, gamma_eta, gamma_y, ou)
+.SimSSMLinSDEIVary2 <- function(n, time, delta_t, mu0, sigma0_l, iota, phi, sigma_l, nu, lambda, theta_l, x, gamma, kappa, ou = FALSE) {
+    .Call(`_simStateSpace_SimSSMLinSDEIVary2`, n, time, delta_t, mu0, sigma0_l, iota, phi, sigma_l, nu, lambda, theta_l, x, gamma, kappa, ou)
 }
 

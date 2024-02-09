@@ -14,24 +14,24 @@
 #'   If the length of any of the parameters
 #'   (`mu0`,
 #'   `sigma0_l`,
-#'   `gamma`,
+#'   `iota`,
 #'   `phi`,
 #'   `sigma_l`,
 #'   `nu`,
 #'   `lambda`,
 #'   `theta_l`,
-#'   `gamma_eta`, or
-#'   `gamma_y`)
+#'   `gamma`, or
+#'   `kappa`)
 #'   is less the `n`,
 #'   the function will cycle through the available values.
 #'
 #' @author Ivan Jacob Agaloos Pesigan
 #'
 #' @inheritParams SimSSMIVary
-#' @param gamma List of numeric vectors.
+#' @param iota List of numeric vectors.
 #'   Each element of the list
 #'   is an unobserved term that is constant over time
-#'   (\eqn{\boldsymbol{\gamma}}).
+#'   (\eqn{\boldsymbol{\iota}}).
 #' @param phi List of numeric matrix.
 #'   Each element of the list
 #'   is the drift matrix
@@ -65,7 +65,7 @@
 #' sigma0_l <- list(
 #'   t(chol(sigma0))
 #' )
-#' gamma <- list(
+#' iota <- list(
 #'   c(0.317, 0.230)
 #' )
 #' phi <- list(
@@ -111,10 +111,10 @@
 #'     )
 #'   }
 #' )
-#' gamma_eta <- list(
+#' gamma <- list(
 #'   diag(x = 0.10, nrow = p, ncol = j)
 #' )
-#' gamma_y <- list(
+#' kappa <- list(
 #'   diag(x = 0.10, nrow = k, ncol = j)
 #' )
 #'
@@ -125,7 +125,7 @@
 #'   delta_t = delta_t,
 #'   mu0 = mu0,
 #'   sigma0_l = sigma0_l,
-#'   gamma = gamma,
+#'   iota = iota,
 #'   phi = phi,
 #'   sigma_l = sigma_l,
 #'   nu = nu,
@@ -143,7 +143,7 @@
 #'   delta_t = delta_t,
 #'   mu0 = mu0,
 #'   sigma0_l = sigma0_l,
-#'   gamma = gamma,
+#'   iota = iota,
 #'   phi = phi,
 #'   sigma_l = sigma_l,
 #'   nu = nu,
@@ -151,7 +151,7 @@
 #'   theta_l = theta_l,
 #'   type = 1,
 #'   x = x,
-#'   gamma_eta = gamma_eta
+#'   gamma = gamma
 #' )
 #'
 #' plot(ssm)
@@ -163,7 +163,7 @@
 #'   delta_t = delta_t,
 #'   mu0 = mu0,
 #'   sigma0_l = sigma0_l,
-#'   gamma = gamma,
+#'   iota = iota,
 #'   phi = phi,
 #'   sigma_l = sigma_l,
 #'   nu = nu,
@@ -171,8 +171,8 @@
 #'   theta_l = theta_l,
 #'   type = 2,
 #'   x = x,
-#'   gamma_eta = gamma_eta,
-#'   gamma_y = gamma_y
+#'   gamma = gamma,
+#'   kappa = kappa
 #' )
 #'
 #' plot(ssm)
@@ -182,10 +182,10 @@
 #' @export
 SimSSMLinSDEIVary <- function(n, time, delta_t = 1.0,
                               mu0, sigma0_l,
-                              gamma, phi, sigma_l,
+                              iota, phi, sigma_l,
                               nu, lambda, theta_l,
                               type = 0,
-                              x = NULL, gamma_eta = NULL, gamma_y = NULL) {
+                              x = NULL, gamma = NULL, kappa = NULL) {
   stopifnot(type %in% c(0, 1, 2))
   covariates <- FALSE
   if (type > 0) {
@@ -198,7 +198,7 @@ SimSSMLinSDEIVary <- function(n, time, delta_t = 1.0,
       delta_t = 1.0,
       mu0 = rep(x = mu0, length.out = n),
       sigma0_l = rep(x = sigma0_l, length.out = n),
-      gamma = rep(x = gamma, length.out = n),
+      iota = rep(x = iota, length.out = n),
       phi = rep(x = phi, length.out = n),
       sigma_l = rep(x = sigma_l, length.out = n),
       nu = rep(x = nu, length.out = n),
@@ -210,7 +210,7 @@ SimSSMLinSDEIVary <- function(n, time, delta_t = 1.0,
   if (type == 1) {
     stopifnot(
       !is.null(x),
-      !is.null(gamma_eta)
+      !is.null(gamma)
     )
     data <- .SimSSMLinSDEIVary1(
       n = n,
@@ -218,22 +218,22 @@ SimSSMLinSDEIVary <- function(n, time, delta_t = 1.0,
       delta_t = 1.0,
       mu0 = rep(x = mu0, length.out = n),
       sigma0_l = rep(x = sigma0_l, length.out = n),
-      gamma = rep(x = gamma, length.out = n),
+      iota = rep(x = iota, length.out = n),
       phi = rep(x = phi, length.out = n),
       sigma_l = rep(x = sigma_l, length.out = n),
       nu = rep(x = nu, length.out = n),
       lambda = rep(x = lambda, length.out = n),
       theta_l = rep(x = theta_l, length.out = n),
       x = rep(x = x, length.out = n),
-      gamma_eta = rep(x = gamma_eta, length.out = n),
+      gamma = rep(x = gamma, length.out = n),
       ou = FALSE
     )
   }
   if (type == 2) {
     stopifnot(
       !is.null(x),
-      !is.null(gamma_eta),
-      !is.null(gamma_y)
+      !is.null(gamma),
+      !is.null(kappa)
     )
     data <- .SimSSMLinSDEIVary2(
       n = n,
@@ -241,15 +241,15 @@ SimSSMLinSDEIVary <- function(n, time, delta_t = 1.0,
       delta_t = 1.0,
       mu0 = rep(x = mu0, length.out = n),
       sigma0_l = rep(x = sigma0_l, length.out = n),
-      gamma = rep(x = gamma, length.out = n),
+      iota = rep(x = iota, length.out = n),
       phi = rep(x = phi, length.out = n),
       sigma_l = rep(x = sigma_l, length.out = n),
       nu = rep(x = nu, length.out = n),
       lambda = rep(x = lambda, length.out = n),
       theta_l = rep(x = theta_l, length.out = n),
       x = rep(x = x, length.out = n),
-      gamma_eta = rep(x = gamma_eta, length.out = n),
-      gamma_y = rep(x = gamma_y, length.out = n),
+      gamma = rep(x = gamma, length.out = n),
+      kappa = rep(x = kappa, length.out = n),
       ou = FALSE
     )
   }
@@ -258,10 +258,10 @@ SimSSMLinSDEIVary <- function(n, time, delta_t = 1.0,
     args = list(
       n = n, time = time,
       mu0 = mu0, sigma0_l = sigma0_l,
-      gamma = gamma, phi = phi, sigma_l = sigma_l,
+      iota = iota, phi = phi, sigma_l = sigma_l,
       nu = nu, lambda = lambda, theta_l = theta_l,
       type = type,
-      x = x, gamma_eta = gamma_eta, gamma_y = gamma_y,
+      x = x, gamma = gamma, kappa = kappa,
       ou = FALSE
     ),
     model = list(

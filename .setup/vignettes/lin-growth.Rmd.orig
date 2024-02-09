@@ -156,19 +156,6 @@ sigma0_l <- t(chol(sigma0))
 theta <- 0.6
 theta_l <- sqrt(theta)
 time <- 5
-gamma_y <- matrix(data = 0.10, nrow = 1, ncol = 2)
-gamma_eta <- matrix(data = 0.10, nrow = 2, ncol = 2)
-x <- lapply(
-  X = seq_len(n),
-  FUN = function(i) {
-    return(
-      matrix(
-        data = rnorm(n = 2 * time),
-        nrow = 2
-      )
-    )
-  }
-)
 ```
 
 Let $t = `r time`$ be the number of time points and $n = `r n`$ be the number of individuals.

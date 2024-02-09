@@ -21,8 +21,8 @@ SimSSMOUIVary(
   theta_l,
   type = 0,
   x = NULL,
-  gamma_eta = NULL,
-  gamma_y = NULL
+  gamma = NULL,
+  kappa = NULL
 )
 }
 \arguments{
@@ -102,17 +102,17 @@ for each individual \code{i} in \code{n}.
 The number of columns in each matrix
 should be equal to \code{time}.}
 
-\item{gamma_eta}{List of numeric matrices.
+\item{gamma}{List of numeric matrices.
 Each element of the list
 is the matrix linking the covariates to the latent variables
 at current time point
-(\eqn{\boldsymbol{\Gamma}_{\boldsymbol{\eta}}}).}
+(\eqn{\boldsymbol{\Gamma}}).}
 
-\item{gamma_y}{List of numeric matrices.
+\item{kappa}{List of numeric matrices.
 Each element of the list
 is the matrix linking the covariates to the observed variables
 at current time point
-(\eqn{\boldsymbol{\Gamma}_{\mathbf{y}}}).}
+(\eqn{\boldsymbol{\Kappa}}).}
 }
 \value{
 Returns an object of class \code{simstatespace}
@@ -153,8 +153,8 @@ If the length of any of the parameters
 \code{nu},
 \code{lambda},
 \code{theta_l},
-\code{gamma_eta}, or
-\code{gamma_y})
+\code{gamma}, or
+\code{kappa})
 is less the \code{n},
 the function will cycle through the available values.
 }
@@ -222,10 +222,10 @@ x <- lapply(
     )
   }
 )
-gamma_eta <- list(
+gamma <- list(
   diag(x = 0.10, nrow = p, ncol = j)
 )
-gamma_y <- list(
+kappa <- list(
   diag(x = 0.10, nrow = k, ncol = j)
 )
 
@@ -262,7 +262,7 @@ ssm <- SimSSMOUIVary(
   theta_l = theta_l,
   type = 1,
   x = x,
-  gamma_eta = gamma_eta
+  gamma = gamma
 )
 
 plot(ssm)
@@ -282,8 +282,8 @@ ssm <- SimSSMOUIVary(
   theta_l = theta_l,
   type = 2,
   x = x,
-  gamma_eta = gamma_eta,
-  gamma_y = gamma_y
+  gamma = gamma,
+  kappa = kappa
 )
 
 plot(ssm)

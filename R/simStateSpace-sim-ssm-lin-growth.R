@@ -155,13 +155,13 @@
 #'     \end{array}
 #'     \right)
 #'     +
-#'     \boldsymbol{\Gamma}_{\boldsymbol{\eta}}
+#'     \boldsymbol{\Gamma}
 #'     \mathbf{x}_{i, t}
 #'   }
 #'   where
 #'   \eqn{\mathbf{x}_{i, t}} is a vector of covariates
 #'   at time \eqn{t} and individual \eqn{i},
-#'   and \eqn{\boldsymbol{\Gamma}_{\boldsymbol{\eta}}} is the coefficient matrix
+#'   and \eqn{\boldsymbol{\Gamma}} is the coefficient matrix
 #'   linking the covariates to the latent variables.
 #'
 #'   ## Type 2
@@ -182,7 +182,7 @@
 #'     \end{array}
 #'     \right)
 #'     +
-#'     \boldsymbol{\Gamma}_{\mathbf{y}}
+#'     \boldsymbol{\Kappa}
 #'     \mathbf{x}_{i, t}
 #'     +
 #'     \boldsymbol{\varepsilon}_{i, t},
@@ -198,7 +198,7 @@
 #'     \right)
 #'   }
 #'   where
-#'   \eqn{\boldsymbol{\Gamma}_{\mathbf{y}}} is the coefficient matrix
+#'   \eqn{\boldsymbol{\Kappa}} is the coefficient matrix
 #'   linking the covariates to the observed variables.
 #'
 #'   The dynamic structure is given by
@@ -223,7 +223,7 @@
 #'     \end{array}
 #'     \right)
 #'     +
-#'     \boldsymbol{\Gamma}_{\boldsymbol{\eta}}
+#'     \boldsymbol{\Gamma}
 #'     \mathbf{x}_{i, t} .
 #'   }
 #'
@@ -281,8 +281,8 @@
 #'     )
 #'   }
 #' )
-#' gamma_eta <- diag(x = 0.10, nrow = p, ncol = j)
-#' gamma_y <- diag(x = 0.10, nrow = k, ncol = j)
+#' gamma <- diag(x = 0.10, nrow = p, ncol = j)
+#' kappa <- diag(x = 0.10, nrow = k, ncol = j)
 #'
 #' # Type 0
 #' ssm <- SimSSMLinGrowth(
@@ -305,7 +305,7 @@
 #'   theta_l = theta_l,
 #'   type = 1,
 #'   x = x,
-#'   gamma_eta = gamma_eta
+#'   gamma = gamma
 #' )
 #'
 #' plot(ssm)
@@ -319,8 +319,8 @@
 #'   theta_l = theta_l,
 #'   type = 2,
 #'   x = x,
-#'   gamma_eta = gamma_eta,
-#'   gamma_y = gamma_y
+#'   gamma = gamma,
+#'   kappa = kappa
 #' )
 #'
 #' plot(ssm)
@@ -331,7 +331,7 @@
 SimSSMLinGrowth <- function(n, time,
                             mu0, sigma0_l, theta_l,
                             type = 0,
-                            x = NULL, gamma_eta = NULL, gamma_y = NULL) {
+                            x = NULL, gamma = NULL, kappa = NULL) {
   stopifnot(type %in% c(0, 1, 2))
   p <- 2
   k <- 1
@@ -377,7 +377,7 @@ SimSSMLinGrowth <- function(n, time,
   if (type == 1) {
     stopifnot(
       !is.null(x),
-      !is.null(gamma_eta)
+      !is.null(gamma)
     )
     data <- .SimSSMFixed1(
       n = n,
@@ -386,14 +386,14 @@ SimSSMLinGrowth <- function(n, time,
       mu0 = mu0, sigma0_l = sigma0_l,
       alpha = alpha, beta = beta, psi_l = psi_l,
       nu = nu, lambda = lambda, theta_l = theta_l,
-      x = x, gamma_eta = gamma_eta
+      x = x, gamma = gamma
     )
   }
   if (type == 2) {
     stopifnot(
       !is.null(x),
-      !is.null(gamma_eta),
-      !is.null(gamma_y)
+      !is.null(gamma),
+      !is.null(kappa)
     )
     data <- .SimSSMFixed2(
       n = n,
@@ -402,7 +402,7 @@ SimSSMLinGrowth <- function(n, time,
       mu0 = mu0, sigma0_l = sigma0_l,
       alpha = alpha, beta = beta, psi_l = psi_l,
       nu = nu, lambda = lambda, theta_l = theta_l,
-      x = x, gamma_eta = gamma_eta, gamma_y = gamma_y
+      x = x, gamma = gamma, kappa = kappa
     )
   }
   out <- list(
@@ -413,7 +413,7 @@ SimSSMLinGrowth <- function(n, time,
       alpha = alpha, beta = beta, psi_l = psi_l,
       nu = nu, lambda = lambda, theta_l = theta_l,
       type = type,
-      x = x, gamma_eta = gamma_eta, gamma_y = gamma_y
+      x = x, gamma = gamma, kappa = kappa
     ),
     model = list(
       model = "lingrowth",
