@@ -13,7 +13,7 @@ SimSSMLinSDEFixed(
   delta_t = 1,
   mu0,
   sigma0_l,
-  gamma,
+  iota,
   phi,
   sigma_l,
   nu,
@@ -21,8 +21,8 @@ SimSSMLinSDEFixed(
   theta_l,
   type = 0,
   x = NULL,
-  gamma_eta = NULL,
-  gamma_y = NULL
+  gamma = NULL,
+  kappa = NULL
 )
 }
 \arguments{
@@ -46,9 +46,9 @@ of the covariance matrix
 of initial latent variable values
 (\eqn{\boldsymbol{\Sigma}_{\boldsymbol{\eta} \mid 0}}).}
 
-\item{gamma}{Numeric vector.
+\item{iota}{Numeric vector.
 An unobserved term that is constant over time
-(\eqn{\boldsymbol{\gamma}}).}
+(\eqn{\boldsymbol{\iota}}).}
 
 \item{phi}{Numeric matrix.
 The drift matrix
@@ -87,15 +87,15 @@ for each individual \code{i} in \code{n}.
 The number of columns in each matrix
 should be equal to \code{time}.}
 
-\item{gamma_eta}{Numeric matrix.
+\item{gamma}{Numeric matrix.
 Matrix linking the covariates to the latent variables
 at current time point
-(\eqn{\boldsymbol{\Gamma}_{\boldsymbol{\eta}}}).}
+(\eqn{\boldsymbol{\Gamma}}).}
 
-\item{gamma_y}{Numeric matrix.
+\item{kappa}{Numeric matrix.
 Matrix linking the covariates to the observed variables
 at current time point
-(\eqn{\boldsymbol{\Gamma}_{\mathbf{y}}}).}
+(\eqn{\boldsymbol{\Kappa}}).}
 }
 \value{
 Returns an object of class \code{simstatespace}
@@ -210,7 +210,7 @@ The dynamic structure is given by
     \mathrm{d} \boldsymbol{\eta}_{i, t}
     =
     \left(
-    \boldsymbol{\gamma}
+    \boldsymbol{\iota}
     +
     \boldsymbol{\Phi}
     \boldsymbol{\eta}_{i, t}
@@ -222,7 +222,7 @@ The dynamic structure is given by
     \mathbf{W}_{i, t}
   }
 where
-\eqn{\boldsymbol{\gamma}}
+\eqn{\boldsymbol{\iota}}
 is a term which is unobserved and constant over time,
 \eqn{\boldsymbol{\Phi}}
 is the drift matrix
@@ -265,14 +265,14 @@ The dynamic structure is given by
     \mathrm{d} \boldsymbol{\eta}_{i, t}
     =
     \left(
-    \boldsymbol{\gamma}
+    \boldsymbol{\iota}
     +
     \boldsymbol{\Phi}
     \boldsymbol{\eta}_{i, t}
     \right)
     \mathrm{d}t
     +
-    \boldsymbol{\Gamma}_{\boldsymbol{\eta}}
+    \boldsymbol{\Gamma}
     \mathbf{x}_{i, t}
     +
     \boldsymbol{\Sigma}^{\frac{1}{2}}
@@ -282,7 +282,7 @@ The dynamic structure is given by
 where
 \eqn{\mathbf{x}_{i, t}} is a vector of covariates
 at time \eqn{t} and individual \eqn{i},
-and \eqn{\boldsymbol{\Gamma}_{\boldsymbol{\eta}}} is the coefficient matrix
+and \eqn{\boldsymbol{\Gamma}} is the coefficient matrix
 linking the covariates to the latent variables.
 }
 
@@ -297,7 +297,7 @@ The measurement model is given by
     \boldsymbol{\Lambda}
     \boldsymbol{\eta}_{i, t}
     +
-    \boldsymbol{\Gamma}_{\mathbf{y}}
+    \boldsymbol{\Kappa}
     \mathbf{x}_{i, t}
     +
     \boldsymbol{\varepsilon}_{i, t},
@@ -313,7 +313,7 @@ The measurement model is given by
     \right)
   }
 where
-\eqn{\boldsymbol{\Gamma}_{\mathbf{y}}} is the coefficient matrix
+\eqn{\boldsymbol{\Kappa}} is the coefficient matrix
 linking the covariates to the observed variables.
 
 The dynamic structure is given by
@@ -321,14 +321,14 @@ The dynamic structure is given by
     \mathrm{d} \boldsymbol{\eta}_{i, t}
     =
     \left(
-    \boldsymbol{\gamma}
+    \boldsymbol{\iota}
     +
     \boldsymbol{\Phi}
     \boldsymbol{\eta}_{i, t}
     \right)
     \mathrm{d}t
     +
-    \boldsymbol{\Gamma}_{\boldsymbol{\eta}}
+    \boldsymbol{\Gamma}
     \mathbf{x}_{i, t}
     +
     \boldsymbol{\Sigma}^{\frac{1}{2}}
@@ -350,7 +350,7 @@ p <- 2
 mu0 <- c(-3.0, 1.5)
 sigma0 <- diag(p)
 sigma0_l <- t(chol(sigma0))
-gamma <- c(0.317, 0.230)
+iota <- c(0.317, 0.230)
 phi <- matrix(
   data = c(
     -0.10,
@@ -388,8 +388,8 @@ x <- lapply(
     )
   }
 )
-gamma_eta <- diag(x = 0.10, nrow = p, ncol = j)
-gamma_y <- diag(x = 0.10, nrow = k, ncol = j)
+gamma <- diag(x = 0.10, nrow = p, ncol = j)
+kappa <- diag(x = 0.10, nrow = k, ncol = j)
 
 # Type 0
 ssm <- SimSSMLinSDEFixed(
@@ -398,7 +398,7 @@ ssm <- SimSSMLinSDEFixed(
   delta_t = delta_t,
   mu0 = mu0,
   sigma0_l = sigma0_l,
-  gamma = gamma,
+  iota = iota,
   phi = phi,
   sigma_l = sigma_l,
   nu = nu,
@@ -416,7 +416,7 @@ ssm <- SimSSMLinSDEFixed(
   delta_t = delta_t,
   mu0 = mu0,
   sigma0_l = sigma0_l,
-  gamma = gamma,
+  iota = iota,
   phi = phi,
   sigma_l = sigma_l,
   nu = nu,
@@ -424,7 +424,7 @@ ssm <- SimSSMLinSDEFixed(
   theta_l = theta_l,
   type = 1,
   x = x,
-  gamma_eta = gamma_eta
+  gamma = gamma
 )
 
 plot(ssm)
@@ -436,7 +436,7 @@ ssm <- SimSSMLinSDEFixed(
   delta_t = delta_t,
   mu0 = mu0,
   sigma0_l = sigma0_l,
-  gamma = gamma,
+  iota = iota,
   phi = phi,
   sigma_l = sigma_l,
   nu = nu,
@@ -444,8 +444,8 @@ ssm <- SimSSMLinSDEFixed(
   theta_l = theta_l,
   type = 2,
   x = x,
-  gamma_eta = gamma_eta,
-  gamma_y = gamma_y
+  gamma = gamma,
+  kappa = kappa
 )
 
 plot(ssm)

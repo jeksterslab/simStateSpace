@@ -15,7 +15,7 @@ SimSSMVARIVary(
   psi_l,
   type = 0,
   x = NULL,
-  gamma_eta = NULL
+  gamma = NULL
 )
 }
 \arguments{
@@ -65,11 +65,11 @@ for each individual \code{i} in \code{n}.
 The number of columns in each matrix
 should be equal to \code{time}.}
 
-\item{gamma_eta}{List of numeric matrices.
+\item{gamma}{List of numeric matrices.
 Each element of the list
 is the matrix linking the covariates to the latent variables
 at current time point
-(\eqn{\boldsymbol{\Gamma}_{\boldsymbol{\eta}}}).}
+(\eqn{\boldsymbol{\Gamma}}).}
 }
 \value{
 Returns an object of class \code{simstatespace}
@@ -107,8 +107,8 @@ If the length of any of the parameters
 \code{alpha},
 \code{beta},
 \code{psi_l},
-\code{gamma_eta}, or
-\code{gamma_y})
+\code{gamma}, or
+\code{kappa})
 is less the \code{n},
 the function will cycle through the available values.
 }
@@ -155,7 +155,7 @@ x <- lapply(
     )
   }
 )
-gamma_eta <- list(
+gamma <- list(
   diag(x = 0.10, nrow = p, ncol = j)
 )
 
@@ -184,7 +184,7 @@ ssm <- SimSSMVARIVary(
   psi_l = psi_l,
   type = 1,
   x = x,
-  gamma_eta = gamma_eta
+  gamma = gamma
 )
 
 plot(ssm)

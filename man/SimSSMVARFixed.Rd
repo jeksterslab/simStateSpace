@@ -15,7 +15,7 @@ SimSSMVARFixed(
   psi_l,
   type = 0,
   x = NULL,
-  gamma_eta = NULL
+  gamma = NULL
 )
 }
 \arguments{
@@ -60,10 +60,10 @@ for each individual \code{i} in \code{n}.
 The number of columns in each matrix
 should be equal to \code{time}.}
 
-\item{gamma_eta}{Numeric matrix.
+\item{gamma}{Numeric matrix.
 Matrix linking the covariates to the latent variables
 at current time point
-(\eqn{\boldsymbol{\Gamma}_{\boldsymbol{\eta}}}).}
+(\eqn{\boldsymbol{\Gamma}}).}
 }
 \value{
 Returns an object of class \code{simstatespace}
@@ -202,7 +202,7 @@ The dynamic structure is given by
     \boldsymbol{\beta}
     \boldsymbol{\eta}_{i, t - 1}
     +
-    \boldsymbol{\Gamma}_{\boldsymbol{\eta}}
+    \boldsymbol{\Gamma}
     \mathbf{x}_{i, t}
     +
     \boldsymbol{\zeta}_{i, t},
@@ -220,7 +220,7 @@ The dynamic structure is given by
 where
 \eqn{\mathbf{x}_{i, t}} is a vector of covariates
 at time \eqn{t} and individual \eqn{i},
-and \eqn{\boldsymbol{\Gamma}_{\boldsymbol{\eta}}} is the coefficient matrix
+and \eqn{\boldsymbol{\Gamma}} is the coefficient matrix
 linking the covariates to the latent variables.
 }
 }
@@ -252,7 +252,7 @@ x <- lapply(
     )
   }
 )
-gamma_eta <- diag(x = 0.10, nrow = p, ncol = j)
+gamma <- diag(x = 0.10, nrow = p, ncol = j)
 
 # Type 0
 ssm <- SimSSMVARFixed(
@@ -279,7 +279,7 @@ ssm <- SimSSMVARFixed(
   psi_l = psi_l,
   type = 1,
   x = x,
-  gamma_eta = gamma_eta
+  gamma = gamma
 )
 
 plot(ssm)

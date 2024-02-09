@@ -31,7 +31,7 @@ lapply(
         )
       }
     )
-    gamma_eta <- diag(x = 0.10, nrow = p, ncol = j)
+    gamma <- diag(x = 0.10, nrow = p, ncol = j)
 
     # Type 0
     ssm <- SimSSMVARFixed(
@@ -68,7 +68,7 @@ lapply(
       psi_l = psi_l,
       type = 1,
       x = x,
-      gamma_eta = gamma_eta
+      gamma = gamma
     )
 
     as.data.frame.simstatespace(ssm, eta = TRUE)

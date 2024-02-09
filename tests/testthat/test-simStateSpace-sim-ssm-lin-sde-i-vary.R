@@ -21,7 +21,7 @@ lapply(
     sigma0_l <- list(
       t(chol(sigma0))
     )
-    gamma <- list(
+    iota <- list(
       c(0.317, 0.230)
     )
     phi <- list(
@@ -67,10 +67,10 @@ lapply(
         )
       }
     )
-    gamma_eta <- list(
+    gamma <- list(
       diag(x = 0.10, nrow = p, ncol = j)
     )
-    gamma_y <- list(
+    kappa <- list(
       diag(x = 0.10, nrow = k, ncol = j)
     )
 
@@ -81,7 +81,7 @@ lapply(
       delta_t = delta_t,
       mu0 = mu0,
       sigma0_l = sigma0_l,
-      gamma = gamma,
+      iota = iota,
       phi = phi,
       sigma_l = sigma_l,
       nu = nu,
@@ -109,7 +109,7 @@ lapply(
       delta_t = delta_t,
       mu0 = mu0,
       sigma0_l = sigma0_l,
-      gamma = gamma,
+      iota = iota,
       phi = phi,
       sigma_l = sigma_l,
       nu = nu,
@@ -117,7 +117,7 @@ lapply(
       theta_l = theta_l,
       type = 1,
       x = x,
-      gamma_eta = gamma_eta
+      gamma = gamma
     )
 
     as.data.frame.simstatespace(ssm, eta = TRUE)
@@ -139,7 +139,7 @@ lapply(
       delta_t = delta_t,
       mu0 = mu0,
       sigma0_l = sigma0_l,
-      gamma = gamma,
+      iota = iota,
       phi = phi,
       sigma_l = sigma_l,
       nu = nu,
@@ -147,8 +147,8 @@ lapply(
       theta_l = theta_l,
       type = 2,
       x = x,
-      gamma_eta = gamma_eta,
-      gamma_y = gamma_y
+      gamma = gamma,
+      kappa = kappa
     )
 
     as.data.frame.simstatespace(ssm, eta = TRUE)

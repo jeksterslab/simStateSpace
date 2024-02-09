@@ -116,7 +116,7 @@
 #'     \boldsymbol{\beta}
 #'     \boldsymbol{\eta}_{i, t - 1}
 #'     +
-#'     \boldsymbol{\Gamma}_{\boldsymbol{\eta}}
+#'     \boldsymbol{\Gamma}
 #'     \mathbf{x}_{i, t}
 #'     +
 #'     \boldsymbol{\zeta}_{i, t},
@@ -134,7 +134,7 @@
 #'   where
 #'   \eqn{\mathbf{x}_{i, t}} is a vector of covariates
 #'   at time \eqn{t} and individual \eqn{i},
-#'   and \eqn{\boldsymbol{\Gamma}_{\boldsymbol{\eta}}} is the coefficient matrix
+#'   and \eqn{\boldsymbol{\Gamma}} is the coefficient matrix
 #'   linking the covariates to the latent variables.
 #'
 #' @author Ivan Jacob Agaloos Pesigan
@@ -171,7 +171,7 @@
 #'     )
 #'   }
 #' )
-#' gamma_eta <- diag(x = 0.10, nrow = p, ncol = j)
+#' gamma <- diag(x = 0.10, nrow = p, ncol = j)
 #'
 #' # Type 0
 #' ssm <- SimSSMVARFixed(
@@ -198,7 +198,7 @@
 #'   psi_l = psi_l,
 #'   type = 1,
 #'   x = x,
-#'   gamma_eta = gamma_eta
+#'   gamma = gamma
 #' )
 #'
 #' plot(ssm)
@@ -210,7 +210,7 @@ SimSSMVARFixed <- function(n, time,
                            mu0, sigma0_l,
                            alpha, beta, psi_l,
                            type = 0,
-                           x = NULL, gamma_eta = NULL) {
+                           x = NULL, gamma = NULL) {
   stopifnot(type %in% c(0, 1))
   covariates <- FALSE
   if (type > 0) {
@@ -228,7 +228,7 @@ SimSSMVARFixed <- function(n, time,
   if (type == 1) {
     stopifnot(
       !is.null(x),
-      !is.null(gamma_eta)
+      !is.null(gamma)
     )
     data <- .SimSSMLatFixed1(
       n = n,
@@ -236,7 +236,7 @@ SimSSMVARFixed <- function(n, time,
       delta_t = 1.0,
       mu0 = mu0, sigma0_l = sigma0_l,
       alpha = alpha, beta = beta, psi_l = psi_l,
-      x = x, gamma_eta = gamma_eta
+      x = x, gamma = gamma
     )
   }
   out <- list(
@@ -246,7 +246,7 @@ SimSSMVARFixed <- function(n, time,
       mu0 = mu0, sigma0_l = sigma0_l,
       alpha = alpha, beta = beta, psi_l = psi_l,
       type = type,
-      x = x, gamma_eta = gamma_eta
+      x = x, gamma = gamma
     ),
     model = list(
       model = "var",

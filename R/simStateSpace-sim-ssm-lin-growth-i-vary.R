@@ -14,8 +14,8 @@
 #'   `sigma0`,
 #'   `mu`,
 #'   `theta_l`,
-#'   `gamma_eta`, or
-#'   `gamma_y`)
+#'   `gamma`, or
+#'   `kappa`)
 #'   is less the `n`,
 #'   the function will cycle through the available values.
 #'
@@ -79,10 +79,10 @@
 #'     )
 #'   }
 #' )
-#' gamma_eta <- list(
+#' gamma <- list(
 #'   diag(x = 0.10, nrow = p, ncol = j)
 #' )
-#' gamma_y <- list(
+#' kappa <- list(
 #'   diag(x = 0.10, nrow = k, ncol = j)
 #' )
 #'
@@ -107,7 +107,7 @@
 #'   theta_l = theta_l,
 #'   type = 1,
 #'   x = x,
-#'   gamma_eta = gamma_eta
+#'   gamma = gamma
 #' )
 #'
 #' plot(ssm)
@@ -121,8 +121,8 @@
 #'   theta_l = theta_l,
 #'   type = 2,
 #'   x = x,
-#'   gamma_eta = gamma_eta,
-#'   gamma_y = gamma_y
+#'   gamma = gamma,
+#'   kappa = kappa
 #' )
 #'
 #' plot(ssm)
@@ -136,7 +136,7 @@
 SimSSMLinGrowthIVary <- function(n, time,
                                  mu0, sigma0_l, theta_l,
                                  type = 0,
-                                 x = NULL, gamma_eta = NULL, gamma_y = NULL) {
+                                 x = NULL, gamma = NULL, kappa = NULL) {
   stopifnot(type %in% c(0, 1, 2))
   p <- 2
   k <- 1
@@ -198,7 +198,7 @@ SimSSMLinGrowthIVary <- function(n, time,
   if (type == 1) {
     stopifnot(
       !is.null(x),
-      !is.null(gamma_eta)
+      !is.null(gamma)
     )
     data <- .SimSSMIVary1(
       n = n,
@@ -213,14 +213,14 @@ SimSSMLinGrowthIVary <- function(n, time,
       lambda = rep(x = lambda, length.out = n),
       theta_l = rep(x = theta_l, length.out = n),
       x = rep(x = x, length.out = n),
-      gamma_eta = rep(x = gamma_eta, length.out = n)
+      gamma = rep(x = gamma, length.out = n)
     )
   }
   if (type == 2) {
     stopifnot(
       !is.null(x),
-      !is.null(gamma_eta),
-      !is.null(gamma_y)
+      !is.null(gamma),
+      !is.null(kappa)
     )
     data <- .SimSSMIVary2(
       n = n,
@@ -235,8 +235,8 @@ SimSSMLinGrowthIVary <- function(n, time,
       lambda = rep(x = lambda, length.out = n),
       theta_l = rep(x = theta_l, length.out = n),
       x = rep(x = x, length.out = n),
-      gamma_eta = rep(x = gamma_eta, length.out = n),
-      gamma_y = rep(x = gamma_y, length.out = n)
+      gamma = rep(x = gamma, length.out = n),
+      kappa = rep(x = kappa, length.out = n)
     )
   }
   out <- list(
@@ -247,7 +247,7 @@ SimSSMLinGrowthIVary <- function(n, time,
       alpha = alpha, beta = beta, psi_l = psi_l,
       nu = nu, lambda = lambda, theta_l = theta_l,
       type = type,
-      x = x, gamma_eta = gamma_eta, gamma_y = gamma_y
+      x = x, gamma = gamma, kappa = kappa
     ),
     model = list(
       model = "lingrowth",

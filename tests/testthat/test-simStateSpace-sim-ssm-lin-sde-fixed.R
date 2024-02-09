@@ -16,7 +16,7 @@ lapply(
     mu0 <- c(-3.0, 1.5)
     sigma0 <- diag(p)
     sigma0_l <- t(chol(sigma0))
-    gamma <- c(0.317, 0.230)
+    iota <- c(0.317, 0.230)
     phi <- matrix(
       data = c(
         -0.10,
@@ -54,8 +54,8 @@ lapply(
         )
       }
     )
-    gamma_eta <- diag(x = 0.10, nrow = p, ncol = j)
-    gamma_y <- diag(x = 0.10, nrow = k, ncol = j)
+    gamma <- diag(x = 0.10, nrow = p, ncol = j)
+    kappa <- diag(x = 0.10, nrow = k, ncol = j)
 
     # Type 0
     ssm <- SimSSMLinSDEFixed(
@@ -64,7 +64,7 @@ lapply(
       delta_t = delta_t,
       mu0 = mu0,
       sigma0_l = sigma0_l,
-      gamma = gamma,
+      iota = iota,
       phi = phi,
       sigma_l = sigma_l,
       nu = nu,
@@ -92,7 +92,7 @@ lapply(
       delta_t = delta_t,
       mu0 = mu0,
       sigma0_l = sigma0_l,
-      gamma = gamma,
+      iota = iota,
       phi = phi,
       sigma_l = sigma_l,
       nu = nu,
@@ -100,7 +100,7 @@ lapply(
       theta_l = theta_l,
       type = 1,
       x = x,
-      gamma_eta = gamma_eta
+      gamma = gamma
     )
 
     as.data.frame.simstatespace(ssm, eta = TRUE)
@@ -122,7 +122,7 @@ lapply(
       delta_t = delta_t,
       mu0 = mu0,
       sigma0_l = sigma0_l,
-      gamma = gamma,
+      iota = iota,
       phi = phi,
       sigma_l = sigma_l,
       nu = nu,
@@ -130,8 +130,8 @@ lapply(
       theta_l = theta_l,
       type = 2,
       x = x,
-      gamma_eta = gamma_eta,
-      gamma_y = gamma_y
+      gamma = gamma,
+      kappa = kappa
     )
 
     as.data.frame.simstatespace(ssm, eta = TRUE)

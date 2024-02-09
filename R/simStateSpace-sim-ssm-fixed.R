@@ -199,7 +199,7 @@
 #'     \boldsymbol{\beta}
 #'     \boldsymbol{\eta}_{i, t - 1}
 #'     +
-#'     \boldsymbol{\Gamma}_{\boldsymbol{\eta}}
+#'     \boldsymbol{\Gamma}
 #'     \mathbf{x}_{i, t}
 #'     +
 #'     \boldsymbol{\zeta}_{i, t},
@@ -217,7 +217,7 @@
 #'   where
 #'   \eqn{\mathbf{x}_{i, t}} is a vector of covariates
 #'   at time \eqn{t} and individual \eqn{i},
-#'   and \eqn{\boldsymbol{\Gamma}_{\boldsymbol{\eta}}} is the coefficient matrix
+#'   and \eqn{\boldsymbol{\Gamma}} is the coefficient matrix
 #'   linking the covariates to the latent variables.
 #'
 #'   ## Type 2
@@ -231,7 +231,7 @@
 #'     \boldsymbol{\Lambda}
 #'     \boldsymbol{\eta}_{i, t}
 #'     +
-#'     \boldsymbol{\Gamma}_{\mathbf{y}}
+#'     \boldsymbol{\Kappa}
 #'     \mathbf{x}_{i, t}
 #'     +
 #'     \boldsymbol{\varepsilon}_{i, t},
@@ -247,7 +247,7 @@
 #'     \right)
 #'   }
 #'   where
-#'   \eqn{\boldsymbol{\Gamma}_{\mathbf{y}}} is the coefficient matrix
+#'   \eqn{\boldsymbol{\Kappa}} is the coefficient matrix
 #'   linking the covariates to the observed variables.
 #'
 #'   The dynamic structure is given by
@@ -259,7 +259,7 @@
 #'     \boldsymbol{\beta}
 #'     \boldsymbol{\eta}_{i, t - 1}
 #'     +
-#'     \boldsymbol{\Gamma}_{\boldsymbol{\eta}}
+#'     \boldsymbol{\Gamma}
 #'     \mathbf{x}_{i, t}
 #'     +
 #'     \boldsymbol{\zeta}_{i, t},
@@ -328,14 +328,14 @@
 #'   for each individual `i` in `n`.
 #'   The number of columns in each matrix
 #'   should be equal to `time`.
-#' @param gamma_eta Numeric matrix.
+#' @param gamma Numeric matrix.
 #'   Matrix linking the covariates to the latent variables
 #'   at current time point
-#'   (\eqn{\boldsymbol{\Gamma}_{\boldsymbol{\eta}}}).
-#' @param gamma_y Numeric matrix.
+#'   (\eqn{\boldsymbol{\Gamma}}).
+#' @param kappa Numeric matrix.
 #'   Matrix linking the covariates to the observed variables
 #'   at current time point
-#'   (\eqn{\boldsymbol{\Gamma}_{\mathbf{y}}}).
+#'   (\eqn{\boldsymbol{\Kappa}}).
 #'
 #' @references
 #'   Chow, S.-M., Ho, M. R., Hamaker, E. L., & Dolan, C. V. (2010).
@@ -394,8 +394,8 @@
 #'     )
 #'   }
 #' )
-#' gamma_eta <- diag(x = 0.10, nrow = p, ncol = j)
-#' gamma_y <- diag(x = 0.10, nrow = k, ncol = j)
+#' gamma <- diag(x = 0.10, nrow = p, ncol = j)
+#' kappa <- diag(x = 0.10, nrow = k, ncol = j)
 #'
 #' # Type 0
 #' ssm <- SimSSMFixed(
@@ -428,7 +428,7 @@
 #'   theta_l = theta_l,
 #'   type = 1,
 #'   x = x,
-#'   gamma_eta = gamma_eta
+#'   gamma = gamma
 #' )
 #'
 #' plot(ssm)
@@ -447,8 +447,8 @@
 #'   theta_l = theta_l,
 #'   type = 2,
 #'   x = x,
-#'   gamma_eta = gamma_eta,
-#'   gamma_y = gamma_y
+#'   gamma = gamma,
+#'   kappa = kappa
 #' )
 #'
 #' plot(ssm)
@@ -461,7 +461,7 @@ SimSSMFixed <- function(n, time, delta_t = 1.0,
                         alpha, beta, psi_l,
                         nu, lambda, theta_l,
                         type = 0,
-                        x = NULL, gamma_eta = NULL, gamma_y = NULL) {
+                        x = NULL, gamma = NULL, kappa = NULL) {
   stopifnot(type %in% c(0, 1, 2))
   covariates <- FALSE
   if (type > 0) {
@@ -480,7 +480,7 @@ SimSSMFixed <- function(n, time, delta_t = 1.0,
   if (type == 1) {
     stopifnot(
       !is.null(x),
-      !is.null(gamma_eta)
+      !is.null(gamma)
     )
     data <- .SimSSMFixed1(
       n = n,
@@ -489,14 +489,14 @@ SimSSMFixed <- function(n, time, delta_t = 1.0,
       mu0 = mu0, sigma0_l = sigma0_l,
       alpha = alpha, beta = beta, psi_l = psi_l,
       nu = nu, lambda = lambda, theta_l = theta_l,
-      x = x, gamma_eta = gamma_eta
+      x = x, gamma = gamma
     )
   }
   if (type == 2) {
     stopifnot(
       !is.null(x),
-      !is.null(gamma_eta),
-      !is.null(gamma_y)
+      !is.null(gamma),
+      !is.null(kappa)
     )
     data <- .SimSSMFixed2(
       n = n,
@@ -505,7 +505,7 @@ SimSSMFixed <- function(n, time, delta_t = 1.0,
       mu0 = mu0, sigma0_l = sigma0_l,
       alpha = alpha, beta = beta, psi_l = psi_l,
       nu = nu, lambda = lambda, theta_l = theta_l,
-      x = x, gamma_eta = gamma_eta, gamma_y = gamma_y
+      x = x, gamma = gamma, kappa = kappa
     )
   }
   out <- list(
@@ -516,7 +516,7 @@ SimSSMFixed <- function(n, time, delta_t = 1.0,
       alpha = alpha, beta = beta, psi_l = psi_l,
       nu = nu, lambda = lambda, theta_l = theta_l,
       type = type,
-      x = x, gamma_eta = gamma_eta, gamma_y = gamma_y
+      x = x, gamma = gamma, kappa = kappa
     ),
     model = list(
       model = "ssm",

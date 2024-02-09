@@ -58,10 +58,10 @@ lapply(
         )
       }
     )
-    gamma_eta <- list(
+    gamma <- list(
       diag(x = 0.10, nrow = p, ncol = j)
     )
-    gamma_y <- list(
+    kappa <- list(
       diag(x = 0.10, nrow = k, ncol = j)
     )
 
@@ -106,7 +106,7 @@ lapply(
       theta_l = theta_l,
       type = 1,
       x = x,
-      gamma_eta = gamma_eta
+      gamma = gamma
     )
 
     as.data.frame.simstatespace(ssm, eta = TRUE)
@@ -135,8 +135,8 @@ lapply(
       theta_l = theta_l,
       type = 2,
       x = x,
-      gamma_eta = gamma_eta,
-      gamma_y = gamma_y
+      gamma = gamma,
+      kappa = kappa
     )
 
     as.data.frame.simstatespace(ssm, eta = TRUE)

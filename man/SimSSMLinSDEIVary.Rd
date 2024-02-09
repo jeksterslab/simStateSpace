@@ -13,7 +13,7 @@ SimSSMLinSDEIVary(
   delta_t = 1,
   mu0,
   sigma0_l,
-  gamma,
+  iota,
   phi,
   sigma_l,
   nu,
@@ -21,8 +21,8 @@ SimSSMLinSDEIVary(
   theta_l,
   type = 0,
   x = NULL,
-  gamma_eta = NULL,
-  gamma_y = NULL
+  gamma = NULL,
+  kappa = NULL
 )
 }
 \arguments{
@@ -52,10 +52,10 @@ of the covariance matrix
 of initial latent variable values
 (\eqn{\boldsymbol{\Sigma}_{\boldsymbol{\eta} \mid 0}}).}
 
-\item{gamma}{List of numeric vectors.
+\item{iota}{List of numeric vectors.
 Each element of the list
 is an unobserved term that is constant over time
-(\eqn{\boldsymbol{\gamma}}).}
+(\eqn{\boldsymbol{\iota}}).}
 
 \item{phi}{List of numeric matrix.
 Each element of the list
@@ -99,17 +99,17 @@ for each individual \code{i} in \code{n}.
 The number of columns in each matrix
 should be equal to \code{time}.}
 
-\item{gamma_eta}{List of numeric matrices.
+\item{gamma}{List of numeric matrices.
 Each element of the list
 is the matrix linking the covariates to the latent variables
 at current time point
-(\eqn{\boldsymbol{\Gamma}_{\boldsymbol{\eta}}}).}
+(\eqn{\boldsymbol{\Gamma}}).}
 
-\item{gamma_y}{List of numeric matrices.
+\item{kappa}{List of numeric matrices.
 Each element of the list
 is the matrix linking the covariates to the observed variables
 at current time point
-(\eqn{\boldsymbol{\Gamma}_{\mathbf{y}}}).}
+(\eqn{\boldsymbol{\Kappa}}).}
 }
 \value{
 Returns an object of class \code{simstatespace}
@@ -144,14 +144,14 @@ by providing a list of parameter values.
 If the length of any of the parameters
 (\code{mu0},
 \code{sigma0_l},
-\code{gamma},
+\code{iota},
 \code{phi},
 \code{sigma_l},
 \code{nu},
 \code{lambda},
 \code{theta_l},
-\code{gamma_eta}, or
-\code{gamma_y})
+\code{gamma}, or
+\code{kappa})
 is less the \code{n},
 the function will cycle through the available values.
 }
@@ -173,7 +173,7 @@ sigma0 <- diag(p)
 sigma0_l <- list(
   t(chol(sigma0))
 )
-gamma <- list(
+iota <- list(
   c(0.317, 0.230)
 )
 phi <- list(
@@ -219,10 +219,10 @@ x <- lapply(
     )
   }
 )
-gamma_eta <- list(
+gamma <- list(
   diag(x = 0.10, nrow = p, ncol = j)
 )
-gamma_y <- list(
+kappa <- list(
   diag(x = 0.10, nrow = k, ncol = j)
 )
 
@@ -233,7 +233,7 @@ ssm <- SimSSMLinSDEIVary(
   delta_t = delta_t,
   mu0 = mu0,
   sigma0_l = sigma0_l,
-  gamma = gamma,
+  iota = iota,
   phi = phi,
   sigma_l = sigma_l,
   nu = nu,
@@ -251,7 +251,7 @@ ssm <- SimSSMLinSDEIVary(
   delta_t = delta_t,
   mu0 = mu0,
   sigma0_l = sigma0_l,
-  gamma = gamma,
+  iota = iota,
   phi = phi,
   sigma_l = sigma_l,
   nu = nu,
@@ -259,7 +259,7 @@ ssm <- SimSSMLinSDEIVary(
   theta_l = theta_l,
   type = 1,
   x = x,
-  gamma_eta = gamma_eta
+  gamma = gamma
 )
 
 plot(ssm)
@@ -271,7 +271,7 @@ ssm <- SimSSMLinSDEIVary(
   delta_t = delta_t,
   mu0 = mu0,
   sigma0_l = sigma0_l,
-  gamma = gamma,
+  iota = iota,
   phi = phi,
   sigma_l = sigma_l,
   nu = nu,
@@ -279,8 +279,8 @@ ssm <- SimSSMLinSDEIVary(
   theta_l = theta_l,
   type = 2,
   x = x,
-  gamma_eta = gamma_eta,
-  gamma_y = gamma_y
+  gamma = gamma,
+  kappa = kappa
 )
 
 plot(ssm)

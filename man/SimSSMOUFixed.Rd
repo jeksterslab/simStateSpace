@@ -21,8 +21,8 @@ SimSSMOUFixed(
   theta_l,
   type = 0,
   x = NULL,
-  gamma_eta = NULL,
-  gamma_y = NULL
+  gamma = NULL,
+  kappa = NULL
 )
 }
 \arguments{
@@ -90,15 +90,15 @@ for each individual \code{i} in \code{n}.
 The number of columns in each matrix
 should be equal to \code{time}.}
 
-\item{gamma_eta}{Numeric matrix.
+\item{gamma}{Numeric matrix.
 Matrix linking the covariates to the latent variables
 at current time point
-(\eqn{\boldsymbol{\Gamma}_{\boldsymbol{\eta}}}).}
+(\eqn{\boldsymbol{\Gamma}}).}
 
-\item{gamma_y}{Numeric matrix.
+\item{kappa}{Numeric matrix.
 Matrix linking the covariates to the observed variables
 at current time point
-(\eqn{\boldsymbol{\Gamma}_{\mathbf{y}}}).}
+(\eqn{\boldsymbol{\Kappa}}).}
 }
 \value{
 Returns an object of class \code{simstatespace}
@@ -274,7 +274,7 @@ The dynamic structure is given by
     \right)
     \mathrm{d}t
     +
-    \boldsymbol{\Gamma}_{\boldsymbol{\eta}}
+    \boldsymbol{\Gamma}
     \mathbf{x}_{i, t}
     +
     \boldsymbol{\Sigma}^{\frac{1}{2}}
@@ -284,7 +284,7 @@ The dynamic structure is given by
 where
 \eqn{\mathbf{x}_{i, t}} is a vector of covariates
 at time \eqn{t} and individual \eqn{i},
-and \eqn{\boldsymbol{\Gamma}_{\boldsymbol{\eta}}} is the coefficient matrix
+and \eqn{\boldsymbol{\Gamma}} is the coefficient matrix
 linking the covariates to the latent variables.
 }
 
@@ -299,7 +299,7 @@ The measurement model is given by
     \boldsymbol{\Lambda}
     \boldsymbol{\eta}_{i, t}
     +
-    \boldsymbol{\Gamma}_{\mathbf{y}}
+    \boldsymbol{\Kappa}
     \mathbf{x}_{i, t}
     +
     \boldsymbol{\varepsilon}_{i, t},
@@ -315,7 +315,7 @@ The measurement model is given by
     \right)
   }
 where
-\eqn{\boldsymbol{\Gamma}_{\mathbf{y}}} is the coefficient matrix
+\eqn{\boldsymbol{\Kappa}} is the coefficient matrix
 linking the covariates to the observed variables.
 
 The dynamic structure is given by
@@ -330,7 +330,7 @@ The dynamic structure is given by
     \right)
     \mathrm{d}t
     +
-    \boldsymbol{\Gamma}_{\boldsymbol{\eta}}
+    \boldsymbol{\Gamma}
     \mathbf{x}_{i, t}
     +
     \boldsymbol{\Sigma}^{\frac{1}{2}}
@@ -390,8 +390,8 @@ x <- lapply(
     )
   }
 )
-gamma_eta <- diag(x = 0.10, nrow = p, ncol = j)
-gamma_y <- diag(x = 0.10, nrow = k, ncol = j)
+gamma <- diag(x = 0.10, nrow = p, ncol = j)
+kappa <- diag(x = 0.10, nrow = k, ncol = j)
 
 # Type 0
 ssm <- SimSSMOUFixed(
@@ -426,7 +426,7 @@ ssm <- SimSSMOUFixed(
   theta_l = theta_l,
   type = 1,
   x = x,
-  gamma_eta = gamma_eta
+  gamma = gamma
 )
 
 plot(ssm)
@@ -446,8 +446,8 @@ ssm <- SimSSMOUFixed(
   theta_l = theta_l,
   type = 2,
   x = x,
-  gamma_eta = gamma_eta,
-  gamma_y = gamma_y
+  gamma = gamma,
+  kappa = kappa
 )
 
 plot(ssm)

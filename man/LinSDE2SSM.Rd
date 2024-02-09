@@ -5,12 +5,12 @@
 \title{Convert Parameters from the Linear Stochastic Differential Equation Model
 to State Space Model Parameterization}
 \usage{
-LinSDE2SSM(gamma, phi, sigma_l, delta_t)
+LinSDE2SSM(iota, phi, sigma_l, delta_t)
 }
 \arguments{
-\item{gamma}{Numeric vector.
+\item{iota}{Numeric vector.
 An unobserved term that is constant over time
-(\eqn{\boldsymbol{\gamma}}).}
+(\eqn{\boldsymbol{\iota}}).}
 
 \item{phi}{Numeric matrix.
 The drift matrix
@@ -56,7 +56,7 @@ Let the linear stochastic equation model be given by
     \boldsymbol{\eta}_{i, t}
     =
     \left(
-      \boldsymbol{\gamma}
+      \boldsymbol{\iota}
       +
       \boldsymbol{\Phi}
       \boldsymbol{\eta}_{i, t}
@@ -90,7 +90,7 @@ are given by
       \left(
         \boldsymbol{\beta} - \mathbf{I}_{p}
       \right)
-      \boldsymbol{\gamma}
+      \boldsymbol{\iota}
   }
 
 \deqn{
@@ -135,7 +135,7 @@ where \eqn{p} is the number of latent variables and
 }
 \examples{
 p <- 2
-gamma <- c(0.317, 0.230)
+iota <- c(0.317, 0.230)
 phi <- matrix(
   data = c(
    -0.10,
@@ -158,7 +158,7 @@ sigma_l <- t(chol(sigma))
 delta_t <- 0.10
 
 LinSDE2SSM(
-  gamma = gamma,
+  iota = iota,
   phi = phi,
   sigma_l = sigma_l,
   delta_t = delta_t

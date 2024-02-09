@@ -15,8 +15,8 @@
 #'   `alpha`,
 #'   `beta`,
 #'   `psi_l`,
-#'   `gamma_eta`, or
-#'   `gamma_y`)
+#'   `gamma`, or
+#'   `kappa`)
 #'   is less the `n`,
 #'   the function will cycle through the available values.
 #'
@@ -68,7 +68,7 @@
 #'     )
 #'   }
 #' )
-#' gamma_eta <- list(
+#' gamma <- list(
 #'   diag(x = 0.10, nrow = p, ncol = j)
 #' )
 #'
@@ -97,7 +97,7 @@
 #'   psi_l = psi_l,
 #'   type = 1,
 #'   x = x,
-#'   gamma_eta = gamma_eta
+#'   gamma = gamma
 #' )
 #'
 #' plot(ssm)
@@ -109,7 +109,7 @@ SimSSMVARIVary <- function(n, time,
                            mu0, sigma0_l,
                            alpha, beta, psi_l,
                            type = 0,
-                           x = NULL, gamma_eta = NULL) {
+                           x = NULL, gamma = NULL) {
   stopifnot(type %in% c(0, 1))
   covariates <- FALSE
   if (type > 0) {
@@ -130,7 +130,7 @@ SimSSMVARIVary <- function(n, time,
   if (type == 1) {
     stopifnot(
       !is.null(x),
-      !is.null(gamma_eta)
+      !is.null(gamma)
     )
     data <- .SimSSMLatIVary1(
       n = n,
@@ -141,7 +141,7 @@ SimSSMVARIVary <- function(n, time,
       alpha = rep(x = alpha, length.out = n),
       beta = rep(x = beta, length.out = n),
       psi_l = rep(x = psi_l, length.out = n),
-      x = x, gamma_eta = rep(x = gamma_eta, length.out = n)
+      x = x, gamma = rep(x = gamma, length.out = n)
     )
   }
   out <- list(
@@ -151,7 +151,7 @@ SimSSMVARIVary <- function(n, time,
       mu0 = mu0, sigma0_l = sigma0_l,
       alpha = alpha, beta = beta, psi_l = psi_l,
       type = type,
-      x = x, gamma_eta = gamma_eta
+      x = x, gamma = gamma
     ),
     model = list(
       model = "var",
