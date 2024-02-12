@@ -132,7 +132,7 @@ at current time point
 <dd><p>Numeric matrix.
 Matrix linking the covariates to the observed variables
 at current time point
-(\(\boldsymbol{\Kappa}\)).</p></dd>
+(\(\boldsymbol{\kappa}\)).</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -145,12 +145,12 @@ at current time point
 <p>which is a list with the following elements:</p><ul><li><p><code>call</code>: Function call.</p></li>
 <li><p><code>args</code>: Function arguments.</p></li>
 <li><p><code>data</code>: Generated data which is a list of length <code>n</code>.
-Each element of <code>data</code> is a list with the following elements:</p><ul><li><p><code>id</code>: A vector of ID numbers with length <code>t</code>,
-where <code>t</code> is the value of the function argument <code>time</code>.</p></li>
-<li><p><code>time</code>: A vector time points of length <code>t</code>.</p></li>
-<li><p><code>y</code>: A <code>t</code> by <code>k</code> matrix of values for the manifest variables.</p></li>
-<li><p><code>eta</code>: A <code>t</code> by <code>p</code> matrix of values for the latent variables.</p></li>
-<li><p><code>x</code>: A <code>t</code> by <code>j</code> matrix of values for the covariates
+Each element of <code>data</code> is a list with the following elements:</p><ul><li><p><code>id</code>: A vector of ID numbers with length <code>l</code>,
+where <code>l</code> is the value of the function argument <code>time</code>.</p></li>
+<li><p><code>time</code>: A vector time points of length <code>l</code>.</p></li>
+<li><p><code>y</code>: A <code>l</code> by <code>k</code> matrix of values for the manifest variables.</p></li>
+<li><p><code>eta</code>: A <code>l</code> by <code>p</code> matrix of values for the latent variables.</p></li>
+<li><p><code>x</code>: A <code>l</code> by <code>j</code> matrix of values for the covariates
 (when covariates are included).</p></li>
 </ul></li>
 <li><p><code>fun</code>: Function used.</p></li>
@@ -197,12 +197,13 @@ are random variables and
 \(\theta\) is a model parameter.
 \(Y_{i, t}\) is the observed random variable
 at time \(t\) and individual \(i\),
-\(\eta_{0_{i, t}}\)
+\(\eta_{0_{i, t}}\) (intercept)
 and
-\(\eta_{1_{i, t}}\) form a vector of latent random variables
+\(\eta_{1_{i, t}}\) (slope)
+form a vector of latent random variables
 at time \(t\) and individual \(i\),
 and \(\boldsymbol{\varepsilon}_{i, t}\)
-is a vector of random measurement errors
+a vector of random measurement errors
 at time \(t\) and individual \(i\).
 \(\theta\) is the variance of
 \(\boldsymbol{\varepsilon}\).</p>
@@ -313,9 +314,9 @@ $$
     \mathbf{x}_{i, t}
   $$
 where
-\(\mathbf{x}_{i, t}\) is a vector of covariates
+\(\mathbf{x}_{i, t}\) represents a vector of covariates
 at time \(t\) and individual \(i\),
-and \(\boldsymbol{\Gamma}\) is the coefficient matrix
+and \(\boldsymbol{\Gamma}\) the coefficient matrix
 linking the covariates to the latent variables.</p>
 </div>
 
@@ -339,7 +340,7 @@ $$
     \end{array}
     \right)
     +
-    \boldsymbol{\Kappa}
+    \boldsymbol{\kappa}
     \mathbf{x}_{i, t}
     +
     \boldsymbol{\varepsilon}_{i, t},
@@ -355,7 +356,7 @@ $$
     \right)
   $$
 where
-\(\boldsymbol{\Kappa}\) is the coefficient matrix
+\(\boldsymbol{\kappa}\) represents the coefficient matrix
 linking the covariates to the observed variables.</p>
 <p>The dynamic structure is given by
 $$
@@ -420,7 +421,7 @@ and state-space modeling techniques.
 <span class="r-in"><span><span class="co">## number of individuals</span></span></span>
 <span class="r-in"><span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">5</span></span></span>
 <span class="r-in"><span><span class="co">## time points</span></span></span>
-<span class="r-in"><span><span class="va">time</span> <span class="op">&lt;-</span> <span class="fl">50</span></span></span>
+<span class="r-in"><span><span class="va">time</span> <span class="op">&lt;-</span> <span class="fl">5</span></span></span>
 <span class="r-in"><span><span class="co">## dynamic structure</span></span></span>
 <span class="r-in"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fl">2</span></span></span>
 <span class="r-in"><span><span class="va">mu0</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.615</span>, <span class="fl">1.006</span><span class="op">)</span></span></span>
