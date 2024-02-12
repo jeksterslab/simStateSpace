@@ -42,12 +42,13 @@
 #'   \eqn{\theta} is a model parameter.
 #'   \eqn{Y_{i, t}} is the observed random variable
 #'   at time \eqn{t} and individual \eqn{i},
-#'   \eqn{\eta_{0_{i, t}}}
+#'   \eqn{\eta_{0_{i, t}}} (intercept)
 #'   and
-#'   \eqn{\eta_{1_{i, t}}} form a vector of latent random variables
+#'   \eqn{\eta_{1_{i, t}}} (slope)
+#'   form a vector of latent random variables
 #'   at time \eqn{t} and individual \eqn{i},
 #'   and \eqn{\boldsymbol{\varepsilon}_{i, t}}
-#'   is a vector of random measurement errors
+#'   a vector of random measurement errors
 #'   at time \eqn{t} and individual \eqn{i}.
 #'   \eqn{\theta} is the variance of
 #'   \eqn{\boldsymbol{\varepsilon}}.
@@ -159,9 +160,9 @@
 #'     \mathbf{x}_{i, t}
 #'   }
 #'   where
-#'   \eqn{\mathbf{x}_{i, t}} is a vector of covariates
+#'   \eqn{\mathbf{x}_{i, t}} represents a vector of covariates
 #'   at time \eqn{t} and individual \eqn{i},
-#'   and \eqn{\boldsymbol{\Gamma}} is the coefficient matrix
+#'   and \eqn{\boldsymbol{\Gamma}} the coefficient matrix
 #'   linking the covariates to the latent variables.
 #'
 #'   ## Type 2
@@ -182,7 +183,7 @@
 #'     \end{array}
 #'     \right)
 #'     +
-#'     \boldsymbol{\Kappa}
+#'     \boldsymbol{\kappa}
 #'     \mathbf{x}_{i, t}
 #'     +
 #'     \boldsymbol{\varepsilon}_{i, t},
@@ -198,7 +199,7 @@
 #'     \right)
 #'   }
 #'   where
-#'   \eqn{\boldsymbol{\Kappa}} is the coefficient matrix
+#'   \eqn{\boldsymbol{\kappa}} represents the coefficient matrix
 #'   linking the covariates to the observed variables.
 #'
 #'   The dynamic structure is given by
@@ -250,7 +251,7 @@
 #' ## number of individuals
 #' n <- 5
 #' ## time points
-#' time <- 50
+#' time <- 5
 #' ## dynamic structure
 #' p <- 2
 #' mu0 <- c(0.615, 1.006)

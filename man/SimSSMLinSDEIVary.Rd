@@ -91,7 +91,7 @@ of the measurement error
 
 \item{type}{Integer.
 State space model type.
-See Details for more information.}
+See Details in \code{\link[=SimSSMLinSDEFixed]{SimSSMLinSDEFixed()}} for more information.}
 
 \item{x}{List.
 Each element of the list is a matrix of covariates
@@ -109,7 +109,7 @@ at current time point
 Each element of the list
 is the matrix linking the covariates to the observed variables
 at current time point
-(\eqn{\boldsymbol{\Kappa}}).}
+(\eqn{\boldsymbol{\kappa}}).}
 }
 \value{
 Returns an object of class \code{simstatespace}
@@ -120,12 +120,12 @@ which is a list with the following elements:
 \item \code{data}: Generated data which is a list of length \code{n}.
 Each element of \code{data} is a list with the following elements:
 \itemize{
-\item \code{id}: A vector of ID numbers with length \code{t},
-where \code{t} is the value of the function argument \code{time}.
-\item \code{time}: A vector time points of length \code{t}.
-\item \code{y}: A \code{t} by \code{k} matrix of values for the manifest variables.
-\item \code{eta}: A \code{t} by \code{p} matrix of values for the latent variables.
-\item \code{x}: A \code{t} by \code{j} matrix of values for the covariates
+\item \code{id}: A vector of ID numbers with length \code{l},
+where \code{l} is the value of the function argument \code{time}.
+\item \code{time}: A vector time points of length \code{l}.
+\item \code{y}: A \code{l} by \code{k} matrix of values for the manifest variables.
+\item \code{eta}: A \code{l} by \code{p} matrix of values for the latent variables.
+\item \code{x}: A \code{l} by \code{j} matrix of values for the covariates
 (when covariates are included).
 }
 \item \code{fun}: Function used.
@@ -135,8 +135,8 @@ where \code{t} is the value of the function argument \code{time}.
 This function simulates data from the
 linear stochastic differential equation model
 using a state space model parameterization.
-In this model,
-the parameters can vary across individuals.
+It assumes that the parameters can vary
+across individuals.
 }
 \details{
 Parameters can vary across individuals
@@ -169,7 +169,7 @@ p <- 2
 mu0 <- list(
   c(-3.0, 1.5)
 )
-sigma0 <- diag(p)
+sigma0 <- 0.001 * diag(p)
 sigma0_l <- list(
   t(chol(sigma0))
 )
@@ -203,7 +203,7 @@ nu <- list(
 lambda <- list(
   diag(k)
 )
-theta <- 0.50 * diag(k)
+theta <- 0.001 * diag(k)
 theta_l <- list(
   t(chol(theta))
 )
@@ -293,6 +293,18 @@ and state-space modeling techniques.
 \emph{Structural Equation Modeling: A Multidisciplinary Journal},
 17(2), 303–332.
 \doi{10.1080/10705511003661553}
+
+Chow, S.-M., Losardo, D., Park, J., & Molenaar, P. C. M. (2023).
+Continuous-time dynamic models:
+Connections to structural equation models and other discrete-time models.
+In R. H. Hoyle (Ed.),
+Handbook of structural equation modeling (2nd ed.).
+The Guilford Press.
+
+Harvey, A. C. (1990).
+Forecasting, structural time series models and the Kalman filter.
+Cambridge University Press.
+\doi{10.1017/cbo9781107049994}
 }
 \seealso{
 Other Simulation of State Space Models Data Functions: 

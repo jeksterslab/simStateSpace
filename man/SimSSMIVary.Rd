@@ -2,7 +2,7 @@
 % Please edit documentation in R/simStateSpace-sim-ssm-i-vary.R
 \name{SimSSMIVary}
 \alias{SimSSMIVary}
-\title{Simulate Data from the State Space Model
+\title{Simulate Data from a State Space Model
 (Individual-Varying Parameters)}
 \usage{
 SimSSMIVary(
@@ -88,7 +88,7 @@ of the measurement error
 
 \item{type}{Integer.
 State space model type.
-See Details for more information.}
+See Details in \code{\link[=SimSSMFixed]{SimSSMFixed()}} for more information.}
 
 \item{x}{List.
 Each element of the list is a matrix of covariates
@@ -106,7 +106,7 @@ at current time point
 Each element of the list
 is the matrix linking the covariates to the observed variables
 at current time point
-(\eqn{\boldsymbol{\Kappa}}).}
+(\eqn{\boldsymbol{\kappa}}).}
 }
 \value{
 Returns an object of class \code{simstatespace}
@@ -117,22 +117,21 @@ which is a list with the following elements:
 \item \code{data}: Generated data which is a list of length \code{n}.
 Each element of \code{data} is a list with the following elements:
 \itemize{
-\item \code{id}: A vector of ID numbers with length \code{t},
-where \code{t} is the value of the function argument \code{time}.
-\item \code{time}: A vector time points of length \code{t}.
-\item \code{y}: A \code{t} by \code{k} matrix of values for the manifest variables.
-\item \code{eta}: A \code{t} by \code{p} matrix of values for the latent variables.
-\item \code{x}: A \code{t} by \code{j} matrix of values for the covariates
+\item \code{id}: A vector of ID numbers with length \code{l},
+where \code{l} is the value of the function argument \code{time}.
+\item \code{time}: A vector time points of length \code{l}.
+\item \code{y}: A \code{l} by \code{k} matrix of values for the manifest variables.
+\item \code{eta}: A \code{l} by \code{p} matrix of values for the latent variables.
+\item \code{x}: A \code{l} by \code{j} matrix of values for the covariates
 (when covariates are included).
 }
 \item \code{fun}: Function used.
 }
 }
 \description{
-This function simulates data from the
-state space model.
-In this model,
-the parameters can vary across individuals.
+This function simulates data using a state space model.
+It assumes that the parameters can vary
+across individuals.
 }
 \details{
 Parameters can vary across individuals
@@ -164,7 +163,7 @@ p <- 3
 mu0 <- list(
   rep(x = 0, times = p)
 )
-sigma0 <- diag(p)
+sigma0 <- 0.001 * diag(p)
 sigma0_l <- list(
   t(chol(sigma0))
 )
@@ -178,7 +177,7 @@ beta <- list(
   0.4 * diag(p),
   0.5 * diag(p)
 )
-psi <- diag(p)
+psi <- 0.001 * diag(p)
 psi_l <- list(
   t(chol(psi))
 )
@@ -190,7 +189,7 @@ nu <- list(
 lambda <- list(
   diag(k)
 )
-theta <- 0.50 * diag(k)
+theta <- 0.001 * diag(k)
 theta_l <- list(
   t(chol(theta))
 )

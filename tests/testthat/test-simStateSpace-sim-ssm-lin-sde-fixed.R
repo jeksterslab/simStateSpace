@@ -14,7 +14,7 @@ lapply(
     ## dynamic structure
     p <- 2
     mu0 <- c(-3.0, 1.5)
-    sigma0 <- diag(p)
+    sigma0 <- 0.001 * diag(p)
     sigma0_l <- t(chol(sigma0))
     iota <- c(0.317, 0.230)
     phi <- matrix(
@@ -40,7 +40,7 @@ lapply(
     k <- 2
     nu <- rep(x = 0, times = k)
     lambda <- diag(k)
-    theta <- 0.50 * diag(k)
+    theta <- 0.001 * diag(k)
     theta_l <- t(chol(theta))
     ## covariates
     j <- 2

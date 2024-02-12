@@ -4,8 +4,8 @@
 #'
 #' This function simulates data from the
 #' linear growth curve model.
-#' In this model,
-#' the parameters can vary across individuals.
+#' It assumes that the parameters can vary
+#' across individuals.
 #'
 #' @details Parameters can vary across individuals
 #'   by providing a list of parameter values.
@@ -19,6 +19,9 @@
 #'   is less the `n`,
 #'   the function will cycle through the available values.
 #'
+#' @param type Integer.
+#'   State space model type.
+#'   See Details in [SimSSMLinGrowth()] for more information.
 #' @author Ivan Jacob Agaloos Pesigan
 #'
 #' @param mu0 A list of numeric vectors.
@@ -47,7 +50,7 @@
 #' ## number of individuals
 #' n <- 10
 #' ## time points
-#' time <- 50
+#' time <- 5
 #' ## dynamic structure
 #' p <- 2
 #' mu0_1 <- c(0.615, 1.006) # lower starting point, higher growth

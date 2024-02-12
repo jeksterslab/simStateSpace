@@ -96,6 +96,12 @@
 //'   where \eqn{p} is the number of latent variables and
 //'   \eqn{\Delta_{t}} is the time interval.
 //'
+//' @references
+//'   Harvey, A. C. (1990).
+//'   Forecasting, structural time series models and the Kalman filter.
+//'   Cambridge University Press.
+//'   \doi{10.1017/cbo9781107049994}
+//'
 //' @author Ivan Jacob Agaloos Pesigan
 //'
 //' @param iota Numeric vector.

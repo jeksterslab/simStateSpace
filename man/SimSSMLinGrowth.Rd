@@ -55,7 +55,7 @@ at current time point
 \item{kappa}{Numeric matrix.
 Matrix linking the covariates to the observed variables
 at current time point
-(\eqn{\boldsymbol{\Kappa}}).}
+(\eqn{\boldsymbol{\kappa}}).}
 }
 \value{
 Returns an object of class \code{simstatespace}
@@ -66,12 +66,12 @@ which is a list with the following elements:
 \item \code{data}: Generated data which is a list of length \code{n}.
 Each element of \code{data} is a list with the following elements:
 \itemize{
-\item \code{id}: A vector of ID numbers with length \code{t},
-where \code{t} is the value of the function argument \code{time}.
-\item \code{time}: A vector time points of length \code{t}.
-\item \code{y}: A \code{t} by \code{k} matrix of values for the manifest variables.
-\item \code{eta}: A \code{t} by \code{p} matrix of values for the latent variables.
-\item \code{x}: A \code{t} by \code{j} matrix of values for the covariates
+\item \code{id}: A vector of ID numbers with length \code{l},
+where \code{l} is the value of the function argument \code{time}.
+\item \code{time}: A vector time points of length \code{l}.
+\item \code{y}: A \code{l} by \code{k} matrix of values for the manifest variables.
+\item \code{eta}: A \code{l} by \code{p} matrix of values for the latent variables.
+\item \code{x}: A \code{l} by \code{j} matrix of values for the covariates
 (when covariates are included).
 }
 \item \code{fun}: Function used.
@@ -119,12 +119,13 @@ are random variables and
 \eqn{\theta} is a model parameter.
 \eqn{Y_{i, t}} is the observed random variable
 at time \eqn{t} and individual \eqn{i},
-\eqn{\eta_{0_{i, t}}}
+\eqn{\eta_{0_{i, t}}} (intercept)
 and
-\eqn{\eta_{1_{i, t}}} form a vector of latent random variables
+\eqn{\eta_{1_{i, t}}} (slope)
+form a vector of latent random variables
 at time \eqn{t} and individual \eqn{i},
 and \eqn{\boldsymbol{\varepsilon}_{i, t}}
-is a vector of random measurement errors
+a vector of random measurement errors
 at time \eqn{t} and individual \eqn{i}.
 \eqn{\theta} is the variance of
 \eqn{\boldsymbol{\varepsilon}}.
@@ -237,9 +238,9 @@ The dynamic structure is given by
     \mathbf{x}_{i, t}
   }
 where
-\eqn{\mathbf{x}_{i, t}} is a vector of covariates
+\eqn{\mathbf{x}_{i, t}} represents a vector of covariates
 at time \eqn{t} and individual \eqn{i},
-and \eqn{\boldsymbol{\Gamma}} is the coefficient matrix
+and \eqn{\boldsymbol{\Gamma}} the coefficient matrix
 linking the covariates to the latent variables.
 }
 
@@ -261,7 +262,7 @@ The measurement model is given by
     \end{array}
     \right)
     +
-    \boldsymbol{\Kappa}
+    \boldsymbol{\kappa}
     \mathbf{x}_{i, t}
     +
     \boldsymbol{\varepsilon}_{i, t},
@@ -277,7 +278,7 @@ The measurement model is given by
     \right)
   }
 where
-\eqn{\boldsymbol{\Kappa}} is the coefficient matrix
+\eqn{\boldsymbol{\kappa}} represents the coefficient matrix
 linking the covariates to the observed variables.
 
 The dynamic structure is given by
@@ -313,7 +314,7 @@ set.seed(42)
 ## number of individuals
 n <- 5
 ## time points
-time <- 50
+time <- 5
 ## dynamic structure
 p <- 2
 mu0 <- c(0.615, 1.006)

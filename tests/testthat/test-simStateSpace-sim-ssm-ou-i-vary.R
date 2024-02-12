@@ -17,7 +17,7 @@ lapply(
     mu0 <- list(
       c(-3.0, 1.5)
     )
-    sigma0 <- diag(p)
+    sigma0 <- 0.001 * diag(p)
     sigma0_l <- list(
       t(chol(sigma0))
     )
@@ -51,7 +51,7 @@ lapply(
     lambda <- list(
       diag(k)
     )
-    theta <- 0.50 * diag(k)
+    theta <- 0.001 * diag(k)
     theta_l <- list(
       t(chol(theta))
     )

@@ -43,7 +43,7 @@ is the square root of the common measurement error variance.}
 
 \item{type}{Integer.
 State space model type.
-See Details for more information.}
+See Details in \code{\link[=SimSSMLinGrowth]{SimSSMLinGrowth()}} for more information.}
 
 \item{x}{List.
 Each element of the list is a matrix of covariates
@@ -61,7 +61,7 @@ at current time point
 Each element of the list
 is the matrix linking the covariates to the observed variables
 at current time point
-(\eqn{\boldsymbol{\Kappa}}).}
+(\eqn{\boldsymbol{\kappa}}).}
 }
 \value{
 Returns an object of class \code{simstatespace}
@@ -72,12 +72,12 @@ which is a list with the following elements:
 \item \code{data}: Generated data which is a list of length \code{n}.
 Each element of \code{data} is a list with the following elements:
 \itemize{
-\item \code{id}: A vector of ID numbers with length \code{t},
-where \code{t} is the value of the function argument \code{time}.
-\item \code{time}: A vector time points of length \code{t}.
-\item \code{y}: A \code{t} by \code{k} matrix of values for the manifest variables.
-\item \code{eta}: A \code{t} by \code{p} matrix of values for the latent variables.
-\item \code{x}: A \code{t} by \code{j} matrix of values for the covariates
+\item \code{id}: A vector of ID numbers with length \code{l},
+where \code{l} is the value of the function argument \code{time}.
+\item \code{time}: A vector time points of length \code{l}.
+\item \code{y}: A \code{l} by \code{k} matrix of values for the manifest variables.
+\item \code{eta}: A \code{l} by \code{p} matrix of values for the latent variables.
+\item \code{x}: A \code{l} by \code{j} matrix of values for the covariates
 (when covariates are included).
 }
 \item \code{fun}: Function used.
@@ -86,8 +86,8 @@ where \code{t} is the value of the function argument \code{time}.
 \description{
 This function simulates data from the
 linear growth curve model.
-In this model,
-the parameters can vary across individuals.
+It assumes that the parameters can vary
+across individuals.
 }
 \details{
 Parameters can vary across individuals
@@ -111,7 +111,7 @@ set.seed(42)
 ## number of individuals
 n <- 10
 ## time points
-time <- 50
+time <- 5
 ## dynamic structure
 p <- 2
 mu0_1 <- c(0.615, 1.006) # lower starting point, higher growth

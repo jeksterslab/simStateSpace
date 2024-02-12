@@ -4,8 +4,8 @@
 #' This function simulates data from the
 #' vector autoregressive model
 #' using a state space model parameterization.
-#' In this model,
-#' the parameters are invariant cross individuals and across time.
+#' It assumes that the parameters remain constant
+#' across individuals and over time.
 #'
 #' @details
 #'   ## Type 0
@@ -14,8 +14,16 @@
 #'   \deqn{
 #'     \mathbf{y}_{i, t}
 #'     =
-#'     \boldsymbol{\eta}_{i, t} .
+#'     \boldsymbol{\eta}_{i, t}
 #'   }
+#'   where \eqn{\mathbf{y}_{i, t}}
+#'   represents a vector of observed variables
+#'   and \eqn{\boldsymbol{\eta}_{i, t}}
+#'   a vector of latent variables
+#'   for individual \eqn{i} and time \eqn{t}.
+#'   Since the observed and latent variables are equal,
+#'   we only generate data
+#'   from the dynamic structure.
 #'
 #'   The dynamic structure is given by
 #'   \deqn{
@@ -50,24 +58,25 @@
 #'   and
 #'   \eqn{\boldsymbol{\Psi}}
 #'   are model parameters.
+#'   Here,
 #'   \eqn{\boldsymbol{\eta}_{i, t}}
 #'   is a vector of latent variables
 #'   at time \eqn{t} and individual \eqn{i},
 #'   \eqn{\boldsymbol{\eta}_{i, t - 1}}
-#'   is a vector of latent variables
+#'   represents a vector of latent variables
 #'   at time \eqn{t - 1} and individual \eqn{i},
 #'   and
 #'   \eqn{\boldsymbol{\zeta}_{i, t}}
-#'   is a vector of dynamic noise
+#'   represents a vector of dynamic noise
 #'   at time \eqn{t} and individual \eqn{i}.
 #'   \eqn{\boldsymbol{\alpha}}
-#'   is a vector of intercepts,
+#'   denotes a vector of intercepts,
 #'   \eqn{\boldsymbol{\beta}}
-#'   is a matrix of autoregression
+#'   a matrix of autoregression
 #'   and cross regression coefficients,
 #'   and
 #'   \eqn{\boldsymbol{\Psi}}
-#'   is the covariance matrix of
+#'   the covariance matrix of
 #'   \eqn{\boldsymbol{\zeta}_{i, t}}.
 #'
 #'   An alternative representation of the dynamic noise
@@ -89,8 +98,6 @@
 #'     \right)
 #'   }
 #'   where
-#'   \eqn{\mathbf{z}_{i, t}} is a vector of
-#'   independent standard normal random variables and
 #'   \eqn{
 #'     \left( \boldsymbol{\Psi}^{\frac{1}{2}} \right)
 #'     \left( \boldsymbol{\Psi}^{\frac{1}{2}} \right)^{\prime}
@@ -132,9 +139,9 @@
 #'     \right)
 #'   }
 #'   where
-#'   \eqn{\mathbf{x}_{i, t}} is a vector of covariates
+#'   \eqn{\mathbf{x}_{i, t}} represents a vector of covariates
 #'   at time \eqn{t} and individual \eqn{i},
-#'   and \eqn{\boldsymbol{\Gamma}} is the coefficient matrix
+#'   and \eqn{\boldsymbol{\Gamma}} the coefficient matrix
 #'   linking the covariates to the latent variables.
 #'
 #' @author Ivan Jacob Agaloos Pesigan
@@ -153,11 +160,11 @@
 #' ## dynamic structure
 #' p <- 3
 #' mu0 <- rep(x = 0, times = p)
-#' sigma0 <- diag(p)
+#' sigma0 <- 0.001 * diag(p)
 #' sigma0_l <- t(chol(sigma0))
 #' alpha <- rep(x = 0, times = p)
 #' beta <- 0.50 * diag(p)
-#' psi <- diag(p)
+#' psi <- 0.001 * diag(p)
 #' psi_l <- t(chol(psi))
 #' ## covariates
 #' j <- 2

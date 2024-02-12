@@ -1,10 +1,9 @@
-#' Simulate Data from the State Space Model
+#' Simulate Data from a State Space Model
 #' (Individual-Varying Parameters)
 #'
-#' This function simulates data from the
-#' state space model.
-#' In this model,
-#' the parameters can vary across individuals.
+#' This function simulates data using a state space model.
+#' It assumes that the parameters can vary
+#' across individuals.
 #'
 #' @details Parameters can vary across individuals
 #'   by providing a list of parameter values.
@@ -25,6 +24,9 @@
 #' @author Ivan Jacob Agaloos Pesigan
 #'
 #' @inheritParams SimSSMFixed
+#' @param type Integer.
+#'   State space model type.
+#'   See Details in [SimSSMFixed()] for more information.
 #' @param mu0 List of numeric vectors.
 #'   Each element of the list
 #'   is the mean of initial latent variable values
@@ -79,7 +81,7 @@
 #'   Each element of the list
 #'   is the matrix linking the covariates to the observed variables
 #'   at current time point
-#'   (\eqn{\boldsymbol{\Kappa}}).
+#'   (\eqn{\boldsymbol{\kappa}}).
 #'
 #' @inherit SimSSMFixed references return
 #'
@@ -96,7 +98,7 @@
 #' mu0 <- list(
 #'   rep(x = 0, times = p)
 #' )
-#' sigma0 <- diag(p)
+#' sigma0 <- 0.001 * diag(p)
 #' sigma0_l <- list(
 #'   t(chol(sigma0))
 #' )
@@ -110,7 +112,7 @@
 #'   0.4 * diag(p),
 #'   0.5 * diag(p)
 #' )
-#' psi <- diag(p)
+#' psi <- 0.001 * diag(p)
 #' psi_l <- list(
 #'   t(chol(psi))
 #' )
@@ -122,7 +124,7 @@
 #' lambda <- list(
 #'   diag(k)
 #' )
-#' theta <- 0.50 * diag(k)
+#' theta <- 0.001 * diag(k)
 #' theta_l <- list(
 #'   t(chol(theta))
 #' )
