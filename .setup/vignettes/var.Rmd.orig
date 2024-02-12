@@ -32,14 +32,58 @@ knitr::opts_chunk$set(
 )
 ```
 
+```{r}
+#| echo = FALSE
+production <- FALSE
+if (production) {
+  n <- 500
+  time <- 1000
+} else {
+  n <- 5
+  time <- 100
+}
+set.seed(42)
+k <- p <- 3
+iden <- diag(k)
+null_vec <- rep(x = 0, times = k)
+mu0 <- null_vec
+sigma0 <- 0.001 * iden
+sigma0_l <- t(chol(sigma0))
+alpha <- null_vec
+beta <- matrix(
+  data = c(
+    0.7,
+    0.5,
+    -0.1,
+    0.0,
+    0.6,
+    0.4,
+    0,
+    0,
+    0.5
+  ),
+  nrow = k
+)
+psi <- iden
+psi_l <- t(chol(psi))
+```
+
 ## Model
 
 The measurement model is given by
 \begin{equation}
   \mathbf{y}_{i, t}
   =
-  \boldsymbol{\eta}_{i, t} .
+  \boldsymbol{\eta}_{i, t}
 \end{equation}
+where $\mathbf{y}_{i, t}$
+represents a vector of observed variables
+and $\boldsymbol{\eta}_{i, t}$
+a vector of latent variables
+for individual $i$ and time $t$.
+Since the observed and latent variables are equal,
+we only generate data
+from the dynamic structure.
 
 The dynamic structure is given by
 \begin{equation}
@@ -74,25 +118,27 @@ $\boldsymbol{\beta}$,
 and
 $\boldsymbol{\Psi}$
 are model parameters.
+Here,
 $\boldsymbol{\eta}_{i, t}$
 is a vector of latent variables
 at time $t$ and individual $i$,
 $\boldsymbol{\eta}_{i, t - 1}$
-is a vector of latent variables
+represents a vector of latent variables
 at time $t - 1$ and individual $i$,
 and
 $\boldsymbol{\zeta}_{i, t}$
-is a vector of dynamic noise
+represents a vector of dynamic noise
 at time $t$ and individual $i$.
 $\boldsymbol{\alpha}$
-is a vector of intercepts,
+denotes a vector of intercepts,
 $\boldsymbol{\beta}$
-is a matrix of autoregression
+a matrix of autoregression
 and cross regression coefficients,
 and
 $\boldsymbol{\Psi}$
-is the covariance matrix of
+the covariance matrix of
 $\boldsymbol{\zeta}_{i, t}$.
+
 An alternative representation of the dynamic noise
 is given by
 \begin{equation}
@@ -112,49 +158,11 @@ is given by
   \right)
 \end{equation}
 where
-$\mathbf{z}_{i, t}$ is a vector of
-independent standard normal random variables and
-$\left( \boldsymbol{\Psi}^{\frac{1}{2}} \right) \left( \boldsymbol{\Psi}^{\frac{1}{2}} \right)^{\prime} = \boldsymbol{\Psi}.$
+$\left( \boldsymbol{\Psi}^{\frac{1}{2}} \right) \left( \boldsymbol{\Psi}^{\frac{1}{2}} \right)^{\prime} = \boldsymbol{\Psi}$ .
 
 ## Data Generation
 
 ### Notation
-
-```{r}
-#| echo = FALSE
-production <- FALSE
-if (production) {
-  n <- 1000
-  time <- 10000
-} else {
-  n <- 5
-  time <- 1000
-}
-set.seed(42)
-k <- p <- 3
-iden <- diag(k)
-null_vec <- rep(x = 0, times = k)
-mu0 <- null_vec
-sigma0 <- iden
-sigma0_l <- t(chol(sigma0))
-alpha <- null_vec
-beta <- matrix(
-  data = c(
-    0.7,
-    0.5,
-    -0.1,
-    0.0,
-    0.6,
-    0.4,
-    0,
-    0,
-    0.5
-  ),
-  nrow = k
-)
-psi <- iden
-psi_l <- t(chol(psi))
-```
 
 Let $t = `r time`$ be the number of time points and $n = `r n`$ be the number of individuals.
 

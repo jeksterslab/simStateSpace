@@ -95,7 +95,7 @@ at current time point
 \item{kappa}{Numeric matrix.
 Matrix linking the covariates to the observed variables
 at current time point
-(\eqn{\boldsymbol{\Kappa}}).}
+(\eqn{\boldsymbol{\kappa}}).}
 }
 \value{
 Returns an object of class \code{simstatespace}
@@ -106,12 +106,12 @@ which is a list with the following elements:
 \item \code{data}: Generated data which is a list of length \code{n}.
 Each element of \code{data} is a list with the following elements:
 \itemize{
-\item \code{id}: A vector of ID numbers with length \code{t},
-where \code{t} is the value of the function argument \code{time}.
-\item \code{time}: A vector time points of length \code{t}.
-\item \code{y}: A \code{t} by \code{k} matrix of values for the manifest variables.
-\item \code{eta}: A \code{t} by \code{p} matrix of values for the latent variables.
-\item \code{x}: A \code{t} by \code{j} matrix of values for the covariates
+\item \code{id}: A vector of ID numbers with length \code{l},
+where \code{l} is the value of the function argument \code{time}.
+\item \code{time}: A vector time points of length \code{l}.
+\item \code{y}: A \code{l} by \code{k} matrix of values for the manifest variables.
+\item \code{eta}: A \code{l} by \code{p} matrix of values for the latent variables.
+\item \code{x}: A \code{l} by \code{j} matrix of values for the covariates
 (when covariates are included).
 }
 \item \code{fun}: Function used.
@@ -121,8 +121,8 @@ where \code{t} is the value of the function argument \code{time}.
 This function simulates data from the
 linear stochastic differential equation model
 using a state space model parameterization.
-In this model,
-the parameters are invariant across individuals and across time.
+It assumes that the parameters remain constant
+across individuals and over time.
 }
 \details{
 \subsection{Type 0}{
@@ -161,20 +161,20 @@ and
 \eqn{\boldsymbol{\Theta}}
 are model parameters.
 \eqn{\mathbf{y}_{i, t}}
-is a vector of observed random variables,
+represents a vector of observed random variables,
 \eqn{\boldsymbol{\eta}_{i, t}}
-is a vector of latent random variables,
+a vector of latent random variables,
 and
 \eqn{\boldsymbol{\varepsilon}_{i, t}}
-is a vector of random measurement errors,
+a vector of random measurement errors,
 at time \eqn{t} and individual \eqn{i}.
 \eqn{\boldsymbol{\nu}}
-is a vector of intercepts,
+denotes a vector of intercepts,
 \eqn{\boldsymbol{\Lambda}}
-is a matrix of factor loadings,
+a matrix of factor loadings,
 and
 \eqn{\boldsymbol{\Theta}}
-is the covariance matrix of
+the covariance matrix of
 \eqn{\boldsymbol{\varepsilon}}.
 
 An alternative representation of the measurement error
@@ -280,9 +280,9 @@ The dynamic structure is given by
     \mathbf{W}_{i, t}
   }
 where
-\eqn{\mathbf{x}_{i, t}} is a vector of covariates
+\eqn{\mathbf{x}_{i, t}} represents a vector of covariates
 at time \eqn{t} and individual \eqn{i},
-and \eqn{\boldsymbol{\Gamma}} is the coefficient matrix
+and \eqn{\boldsymbol{\Gamma}} the coefficient matrix
 linking the covariates to the latent variables.
 }
 
@@ -297,7 +297,7 @@ The measurement model is given by
     \boldsymbol{\Lambda}
     \boldsymbol{\eta}_{i, t}
     +
-    \boldsymbol{\Kappa}
+    \boldsymbol{\kappa}
     \mathbf{x}_{i, t}
     +
     \boldsymbol{\varepsilon}_{i, t},
@@ -313,7 +313,7 @@ The measurement model is given by
     \right)
   }
 where
-\eqn{\boldsymbol{\Kappa}} is the coefficient matrix
+\eqn{\boldsymbol{\kappa}} represents the coefficient matrix
 linking the covariates to the observed variables.
 
 The dynamic structure is given by
@@ -336,6 +336,74 @@ The dynamic structure is given by
     \mathbf{W}_{i, t} .
   }
 }
+
+\subsection{State Space Parameterization}{
+
+The state space parameters
+as a function of the linear stochastic differential equation model
+parameters
+are given by
+\deqn{
+      \boldsymbol{\beta}
+      =
+      \exp{
+        \left(
+          \boldsymbol{\Phi}
+          \Delta_{t}
+        \right)
+      }
+  }
+
+\deqn{
+      \boldsymbol{\alpha}
+      =
+      \boldsymbol{\Phi}^{-1}
+      \left(
+        \boldsymbol{\beta} - \mathbf{I}_{p}
+      \right)
+      \boldsymbol{\iota}
+  }
+
+\deqn{
+      \mathrm{vec}
+      \left(
+        \boldsymbol{\Psi}
+      \right)
+      =
+      \left[
+        \left(
+          \boldsymbol{\Phi} \otimes \mathbf{I}_{p}
+        \right)
+        +
+        \left(
+          \mathbf{I}_{p} \otimes \boldsymbol{\Phi}
+        \right)
+      \right]
+      \left[
+        \exp
+        \left(
+          \left[
+            \left(
+              \boldsymbol{\Phi} \otimes \mathbf{I}_{p}
+            \right)
+            +
+            \left(
+              \mathbf{I}_{p} \otimes \boldsymbol{\Phi}
+            \right)
+          \right]
+          \Delta_{t}
+        \right)
+        -
+        \mathbf{I}_{p \times p}
+      \right]
+      \mathrm{vec}
+      \left(
+        \boldsymbol{\Sigma}
+      \right)
+  }
+where \eqn{p} is the number of latent variables and
+\eqn{\Delta_{t}} is the time interval.
+}
 }
 \examples{
 # prepare parameters
@@ -348,7 +416,7 @@ delta_t <- 0.10
 ## dynamic structure
 p <- 2
 mu0 <- c(-3.0, 1.5)
-sigma0 <- diag(p)
+sigma0 <- 0.001 * diag(p)
 sigma0_l <- t(chol(sigma0))
 iota <- c(0.317, 0.230)
 phi <- matrix(
@@ -374,7 +442,7 @@ sigma_l <- t(chol(sigma))
 k <- 2
 nu <- rep(x = 0, times = k)
 lambda <- diag(k)
-theta <- 0.50 * diag(k)
+theta <- 0.001 * diag(k)
 theta_l <- t(chol(theta))
 ## covariates
 j <- 2
@@ -458,6 +526,18 @@ and state-space modeling techniques.
 \emph{Structural Equation Modeling: A Multidisciplinary Journal},
 17(2), 303–332.
 \doi{10.1080/10705511003661553}
+
+Chow, S.-M., Losardo, D., Park, J., & Molenaar, P. C. M. (2023).
+Continuous-time dynamic models:
+Connections to structural equation models and other discrete-time models.
+In R. H. Hoyle (Ed.),
+Handbook of structural equation modeling (2nd ed.).
+The Guilford Press.
+
+Harvey, A. C. (1990).
+Forecasting, structural time series models and the Kalman filter.
+Cambridge University Press.
+\doi{10.1017/cbo9781107049994}
 }
 \seealso{
 Other Simulation of State Space Models Data Functions: 

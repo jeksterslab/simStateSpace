@@ -32,6 +32,31 @@ knitr::opts_chunk$set(
 )
 ```
 
+```{r}
+#| echo = FALSE
+production <- FALSE
+if (production) {
+  n <- 10000
+} else {
+  n <- 100
+}
+set.seed(42)
+mu0 <- c(0.615, 1.006)
+sigma0 <- matrix(
+  data = c(
+    1.932,
+    0.618,
+    0.618,
+    0.587
+  ),
+  nrow = 2
+)
+sigma0_l <- t(chol(sigma0))
+theta <- 0.6
+theta_l <- sqrt(theta)
+time <- 5
+```
+
 ## Model
 
 The measurement model is given by
@@ -71,10 +96,11 @@ $Y_{i, t}$ is the observed random variable
 at time $t$ and individual $i$,
 $\eta_{0_{i, t}}$ (intercept)
 and
-$\eta_{1_{i, t}}$ (slope) form a vector of latent random variables
+$\eta_{1_{i, t}}$ (slope)
+form a vector of latent random variables
 at time $t$ and individual $i$,
 and $\boldsymbol{\varepsilon}_{i, t}$
-is a vector of random measurement errors
+a vector of random measurement errors
 at time $t$ and individual $i$.
 $\theta$ is the variance of
 $\boldsymbol{\varepsilon}$.
@@ -132,31 +158,6 @@ of the initial condition given by
 ## Data Generation
 
 ### Notation
-
-```{r}
-#| echo = FALSE
-production <- FALSE
-if (production) {
-  n <- 10000
-} else {
-  n <- 100
-}
-set.seed(42)
-mu0 <- c(0.615, 1.006)
-sigma0 <- matrix(
-  data = c(
-    1.932,
-    0.618,
-    0.618,
-    0.587
-  ),
-  nrow = 2
-)
-sigma0_l <- t(chol(sigma0))
-theta <- 0.6
-theta_l <- sqrt(theta)
-time <- 5
-```
 
 Let $t = `r time`$ be the number of time points and $n = `r n`$ be the number of individuals.
 

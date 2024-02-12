@@ -1,10 +1,9 @@
-#' Simulate Data from the State Space Model
+#' Simulate Data from a State Space Model
 #' (Fixed Parameters)
 #'
-#' This function simulates data from the
-#' state space model.
-#' In this model,
-#' the parameters are invariant cross individuals and across time.
+#' This function simulates data using a state space model.
+#' It assumes that the parameters remain constant
+#' across individuals and over time.
 #'
 #' @details
 #'   ## Type 0
@@ -43,20 +42,20 @@
 #'   \eqn{\boldsymbol{\Theta}}
 #'   are model parameters.
 #'   \eqn{\mathbf{y}_{i, t}}
-#'   is a vector of observed random variables,
+#'   represents a vector of observed random variables,
 #'   \eqn{\boldsymbol{\eta}_{i, t}}
-#'   is a vector of latent random variables,
+#'   a vector of latent random variables,
 #'   and
 #'   \eqn{\boldsymbol{\varepsilon}_{i, t}}
-#'   is a vector of random measurement errors,
+#'   a vector of random measurement errors,
 #'   at time \eqn{t} and individual \eqn{i}.
 #'   \eqn{\boldsymbol{\nu}}
-#'   is a vector of intercepts,
+#'   denotes a vector of intercepts,
 #'   \eqn{\boldsymbol{\Lambda}}
-#'   is a matrix of factor loadings,
+#'   a matrix of factor loadings,
 #'   and
 #'   \eqn{\boldsymbol{\Theta}}
-#'   is the covariance matrix of
+#'   the covariance matrix of
 #'   \eqn{\boldsymbol{\varepsilon}}.
 #'
 #'   An alternative representation of the measurement error
@@ -120,24 +119,25 @@
 #'   and
 #'   \eqn{\boldsymbol{\Psi}}
 #'   are model parameters.
+#'   Here,
 #'   \eqn{\boldsymbol{\eta}_{i, t}}
 #'   is a vector of latent variables
 #'   at time \eqn{t} and individual \eqn{i},
 #'   \eqn{\boldsymbol{\eta}_{i, t - 1}}
-#'   is a vector of latent variables
+#'   represents a vector of latent variables
 #'   at time \eqn{t - 1} and individual \eqn{i},
 #'   and
 #'   \eqn{\boldsymbol{\zeta}_{i, t}}
-#'   is a vector of dynamic noise
+#'   represents a vector of dynamic noise
 #'   at time \eqn{t} and individual \eqn{i}.
 #'   \eqn{\boldsymbol{\alpha}}
-#'   is a vector of intercepts,
+#'   denotes a vector of intercepts,
 #'   \eqn{\boldsymbol{\beta}}
-#'   is a matrix of autoregression
+#'   a matrix of autoregression
 #'   and cross regression coefficients,
 #'   and
 #'   \eqn{\boldsymbol{\Psi}}
-#'   is the covariance matrix of
+#'   the covariance matrix of
 #'   \eqn{\boldsymbol{\zeta}_{i, t}}.
 #'
 #'   An alternative representation of the dynamic noise
@@ -215,9 +215,9 @@
 #'     \right)
 #'   }
 #'   where
-#'   \eqn{\mathbf{x}_{i, t}} is a vector of covariates
+#'   \eqn{\mathbf{x}_{i, t}} represents a vector of covariates
 #'   at time \eqn{t} and individual \eqn{i},
-#'   and \eqn{\boldsymbol{\Gamma}} is the coefficient matrix
+#'   and \eqn{\boldsymbol{\Gamma}} the coefficient matrix
 #'   linking the covariates to the latent variables.
 #'
 #'   ## Type 2
@@ -231,7 +231,7 @@
 #'     \boldsymbol{\Lambda}
 #'     \boldsymbol{\eta}_{i, t}
 #'     +
-#'     \boldsymbol{\Kappa}
+#'     \boldsymbol{\kappa}
 #'     \mathbf{x}_{i, t}
 #'     +
 #'     \boldsymbol{\varepsilon}_{i, t},
@@ -247,7 +247,7 @@
 #'     \right)
 #'   }
 #'   where
-#'   \eqn{\boldsymbol{\Kappa}} is the coefficient matrix
+#'   \eqn{\boldsymbol{\kappa}} represents the coefficient matrix
 #'   linking the covariates to the observed variables.
 #'
 #'   The dynamic structure is given by
@@ -335,7 +335,7 @@
 #' @param kappa Numeric matrix.
 #'   Matrix linking the covariates to the observed variables
 #'   at current time point
-#'   (\eqn{\boldsymbol{\Kappa}}).
+#'   (\eqn{\boldsymbol{\kappa}}).
 #'
 #' @references
 #'   Chow, S.-M., Ho, M. R., Hamaker, E. L., & Dolan, C. V. (2010).
@@ -351,12 +351,12 @@
 #'   - `args`: Function arguments.
 #'   - `data`: Generated data which is a list of length `n`.
 #'     Each element of `data` is a list with the following elements:
-#'     * `id`: A vector of ID numbers with length `t`,
-#'       where `t` is the value of the function argument `time`.
-#'     * `time`: A vector time points of length `t`.
-#'     * `y`: A `t` by `k` matrix of values for the manifest variables.
-#'     * `eta`: A `t` by `p` matrix of values for the latent variables.
-#'     * `x`: A `t` by `j` matrix of values for the covariates
+#'     * `id`: A vector of ID numbers with length `l`,
+#'       where `l` is the value of the function argument `time`.
+#'     * `time`: A vector time points of length `l`.
+#'     * `y`: A `l` by `k` matrix of values for the manifest variables.
+#'     * `eta`: A `l` by `p` matrix of values for the latent variables.
+#'     * `x`: A `l` by `j` matrix of values for the covariates
 #'       (when covariates are included).
 #'   - `fun`: Function used.
 #'
@@ -370,17 +370,17 @@
 #' ## dynamic structure
 #' p <- 3
 #' mu0 <- rep(x = 0, times = p)
-#' sigma0 <- diag(p)
+#' sigma0 <- 0.001 * diag(p)
 #' sigma0_l <- t(chol(sigma0))
 #' alpha <- rep(x = 0, times = p)
 #' beta <- 0.50 * diag(p)
-#' psi <- diag(p)
+#' psi <- 0.001 * diag(p)
 #' psi_l <- t(chol(psi))
 #' ## measurement model
 #' k <- 3
 #' nu <- rep(x = 0, times = k)
 #' lambda <- diag(k)
-#' theta <- 0.50 * diag(k)
+#' theta <- 0.001 * diag(k)
 #' theta_l <- t(chol(theta))
 #' ## covariates
 #' j <- 2

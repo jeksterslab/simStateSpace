@@ -13,17 +13,17 @@ lapply(
     ## dynamic structure
     p <- 3
     mu0 <- rep(x = 0, times = p)
-    sigma0 <- diag(p)
+    sigma0 <- 0.001 * diag(p)
     sigma0_l <- t(chol(sigma0))
     alpha <- rep(x = 0, times = p)
     beta <- 0.50 * diag(p)
-    psi <- diag(p)
+    psi <- 0.001 * diag(p)
     psi_l <- t(chol(psi))
     ## measurement model
     k <- 3
     nu <- rep(x = 0, times = k)
     lambda <- diag(k)
-    theta <- 0.50 * diag(k)
+    theta <- 0.001 * diag(k)
     theta_l <- t(chol(theta))
     ## covariates
     j <- 2

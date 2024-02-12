@@ -6,8 +6,8 @@
 #' This function simulates data from the
 #' Ornstein–Uhlenbeck model
 #' using a state space model parameterization.
-#' In this model,
-#' the parameters can vary across individuals.
+#' It assumes that the parameters can vary
+#' across individuals.
 #'
 #' @details Parameters can vary across individuals
 #'   by providing a list of parameter values.
@@ -27,6 +27,9 @@
 #'
 #' @author Ivan Jacob Agaloos Pesigan
 #'
+#' @param type Integer.
+#'   State space model type.
+#'   See Details in [SimSSMOUFixed()] for more information.
 #' @inheritParams SimSSMIVary
 #' @param mu List of numeric vectors.
 #'   Each element of the list
@@ -48,7 +51,8 @@
 #'   or randomness in the process
 #'   \eqn{\boldsymbol{\Sigma}}.
 #'
-#' @inherit SimSSMFixed references return
+#' @inherit SimSSMFixed return
+#' @inherit SimSSMOUFixed references
 #' @inheritParams SimSSMLinSDEIVary
 #'
 #' @examples
@@ -65,7 +69,7 @@
 #' mu0 <- list(
 #'   c(-3.0, 1.5)
 #' )
-#' sigma0 <- diag(p)
+#' sigma0 <- 0.001 * diag(p)
 #' sigma0_l <- list(
 #'   t(chol(sigma0))
 #' )
@@ -99,7 +103,7 @@
 #' lambda <- list(
 #'   diag(k)
 #' )
-#' theta <- 0.50 * diag(k)
+#' theta <- 0.001 * diag(k)
 #' theta_l <- list(
 #'   t(chol(theta))
 #' )

@@ -57,7 +57,7 @@ of the process noise
 
 \item{type}{Integer.
 State space model type.
-See Details for more information.}
+See Details in \code{\link[=SimSSMVARFixed]{SimSSMVARFixed()}} for more information.}
 
 \item{x}{List.
 Each element of the list is a matrix of covariates
@@ -80,12 +80,12 @@ which is a list with the following elements:
 \item \code{data}: Generated data which is a list of length \code{n}.
 Each element of \code{data} is a list with the following elements:
 \itemize{
-\item \code{id}: A vector of ID numbers with length \code{t},
-where \code{t} is the value of the function argument \code{time}.
-\item \code{time}: A vector time points of length \code{t}.
-\item \code{y}: A \code{t} by \code{k} matrix of values for the manifest variables.
-\item \code{eta}: A \code{t} by \code{p} matrix of values for the latent variables.
-\item \code{x}: A \code{t} by \code{j} matrix of values for the covariates
+\item \code{id}: A vector of ID numbers with length \code{l},
+where \code{l} is the value of the function argument \code{time}.
+\item \code{time}: A vector time points of length \code{l}.
+\item \code{y}: A \code{l} by \code{k} matrix of values for the manifest variables.
+\item \code{eta}: A \code{l} by \code{p} matrix of values for the latent variables.
+\item \code{x}: A \code{l} by \code{j} matrix of values for the covariates
 (when covariates are included).
 }
 \item \code{fun}: Function used.
@@ -95,8 +95,8 @@ where \code{t} is the value of the function argument \code{time}.
 This function simulates data from the
 vector autoregressive model
 using a state space model parameterization.
-In this model,
-the parameters can vary across individuals.
+It assumes that the parameters can vary
+across individuals.
 }
 \details{
 Parameters can vary across individuals
@@ -125,7 +125,7 @@ p <- 3
 mu0 <- list(
   rep(x = 0, times = p)
 )
-sigma0 <- diag(p)
+sigma0 <- 0.001 * diag(p)
 sigma0_l <- list(
   t(chol(sigma0))
 )
@@ -139,7 +139,7 @@ beta <- list(
   0.4 * diag(p),
   0.5 * diag(p)
 )
-psi <- diag(p)
+psi <- 0.001 * diag(p)
 psi_l <- list(
   t(chol(psi))
 )

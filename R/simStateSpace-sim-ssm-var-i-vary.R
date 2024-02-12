@@ -4,8 +4,8 @@
 #' This function simulates data from the
 #' vector autoregressive model
 #' using a state space model parameterization.
-#' In this model,
-#' the parameters can vary across individuals.
+#' It assumes that the parameters can vary
+#' across individuals.
 #'
 #' @details Parameters can vary across individuals
 #'   by providing a list of parameter values.
@@ -22,6 +22,9 @@
 #'
 #' @author Ivan Jacob Agaloos Pesigan
 #'
+#' @param type Integer.
+#'   State space model type.
+#'   See Details in [SimSSMVARFixed()] for more information.
 #' @inheritParams SimSSMIVary
 #' @inherit SimSSMFixed references return
 #'
@@ -38,7 +41,7 @@
 #' mu0 <- list(
 #'   rep(x = 0, times = p)
 #' )
-#' sigma0 <- diag(p)
+#' sigma0 <- 0.001 * diag(p)
 #' sigma0_l <- list(
 #'   t(chol(sigma0))
 #' )
@@ -52,7 +55,7 @@
 #'   0.4 * diag(p),
 #'   0.5 * diag(p)
 #' )
-#' psi <- diag(p)
+#' psi <- 0.001 * diag(p)
 #' psi_l <- list(
 #'   t(chol(psi))
 #' )

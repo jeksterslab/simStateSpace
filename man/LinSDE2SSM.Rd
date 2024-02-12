@@ -165,6 +165,12 @@ LinSDE2SSM(
 )
 
 }
+\references{
+Harvey, A. C. (1990).
+Forecasting, structural time series models and the Kalman filter.
+Cambridge University Press.
+\doi{10.1017/cbo9781107049994}
+}
 \seealso{
 Other Simulation of State Space Models Data Functions: 
 \code{\link{SimSSMFixed}()},

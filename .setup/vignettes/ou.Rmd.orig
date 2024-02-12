@@ -11,6 +11,7 @@ nocite: |
   @Uhlenbeck-Ornstein-1930
   @Chow-Ho-Hamaker-etal-2010
   @Deboeck-Preacher-2015
+  @Oravecz-Tuerlinckx-Vandekerckhove-2011
 output:
   rmarkdown::html_vignette:
     toc: true
@@ -34,111 +35,15 @@ knitr::opts_chunk$set(
 )
 ```
 
-## Model
-
-The measurement model is given by
-
-\begin{equation}
-  \mathbf{y}_{i, t}
-  =
-  \boldsymbol{\nu}
-  +
-  \boldsymbol{\Lambda}
-  \boldsymbol{\eta}_{i, t} 
-  +
-  \boldsymbol{\varepsilon}_{i, t},
-  \quad
-  \mathrm{with}
-  \quad
-  \boldsymbol{\varepsilon}_{i, t}
-  \sim
-  \mathcal{N}
-  \left(
-  \mathbf{0},
-  \boldsymbol{\Theta}
-  \right)
-\end{equation}
-
-where $\mathbf{y}_{i, t}$, $\boldsymbol{\eta}_{i, t}$,
-and $\boldsymbol{\varepsilon}_{i, t}$
-are random variables and $\boldsymbol{\nu}$,
-$\boldsymbol{\Lambda}$,
-and $\boldsymbol{\Theta}$ are model parameters.
-$\mathbf{y}_{i, t}$ is a vector of observed random variables
-at time $t$ and individual $i$,
-$\boldsymbol{\eta}_{i, t}$ is a vector of latent random variables
-at time $t$ and individual $i$,
-and $\boldsymbol{\varepsilon}_{i, t}$
-is a vector of random measurement errors
-at time $t$ and individual $i$,
-while $\boldsymbol{\nu}$ is a vector of intercept,
-$\boldsymbol{\Lambda}$ is a matrix of factor loadings,
-and $\boldsymbol{\Theta}$ is the covariance matrix of
-$\boldsymbol{\varepsilon}$.
-An alternative representation of the measurement error
-is given by
-
-\begin{equation}
-  \boldsymbol{\varepsilon}_{i, t}
-  =
-  \boldsymbol{\Theta}^{\frac{1}{2}}
-  \mathbf{z}_{i, t},
-  \quad
-  \mathrm{with}
-  \quad
-  \mathbf{z}_{i, t}
-  \sim
-  \mathcal{N}
-  \left(
-  \mathbf{0},
-  \mathbf{I}
-  \right)
-\end{equation}
-
-where
-$\mathbf{z}_{i, t}$ is a vector of
-independent standard normal random variables and
-$\left( \boldsymbol{\Theta}^{\frac{1}{2}} \right) \left( \boldsymbol{\Theta}^{\frac{1}{2}} \right)^{\prime} = \boldsymbol{\Theta} .$
-
-The dynamic structure is given by
-
-\begin{equation}
-  \mathrm{d} \boldsymbol{\eta}_{i, t}
-  =
-  - \boldsymbol{\Phi}
-  \left(
-  \boldsymbol{\mu}
-  -
-  \boldsymbol{\eta}_{i, t}
-  \right)
-  \mathrm{d}t
-  +
-  \boldsymbol{\Sigma}^{\frac{1}{2}}
-  \mathrm{d}
-  \mathbf{W}_{i, t}
-\end{equation}
-
-where $\boldsymbol{\mu}$ is the long-term mean or equilibrium level,
-$- \boldsymbol{\Phi}$ is the rate of mean reversion,
-determining how quickly the variable returns to its mean,
-$\boldsymbol{\Sigma}$ is the matrix of volatility
-or randomness in the process, and $\mathrm{d}\boldsymbol{W}$
-is a Wiener process or Brownian motion,
-which represents random fluctuations.
-
-## Data Generation
-
-### Notation
-
 ```{r}
 #| echo = FALSE
 production <- FALSE
 if (production) {
-  n <- 1000
-  time <- 10000
+  n <- 500
+  time <- 1000
 } else {
   n <- 5
-  time <- 1000
+  time <- 100
 }
 set.seed(42)
 delta_t <- 0.10
@@ -146,7 +51,7 @@ k <- p <- 3
 iden <- diag(k)
 null_vec <- rep(x = 0, times = k)
 mu0 <- null_vec
-sigma0 <- iden
+sigma0 <- 0.001 * iden
 sigma0_l <- t(chol(sigma0))
 mu <- null_vec
 phi <- matrix(
@@ -163,18 +68,124 @@ phi <- matrix(
   ),
   nrow = k
 )
-beta_var1 <- as.matrix(
-  Matrix::expm(
-    phi
-  )
+beta_var1 <- expm::expm(
+  phi
 )
-sigma <- iden
+sigma <- 0.001 * iden
 sigma_l <- t(chol(sigma))
 nu <- null_vec
 lambda <- iden
-theta <- 0.5 * iden
+theta <- 0.001 * iden
 theta_l <- t(chol(theta))
 ```
+
+## Model
+
+The measurement model is given by
+\begin{equation}
+  \mathbf{y}_{i, t}
+  =
+  \boldsymbol{\nu}
+  +
+  \boldsymbol{\Lambda}
+  \boldsymbol{\eta}_{i, t}
+  +
+  \boldsymbol{\varepsilon}_{i, t},
+  \quad
+  \mathrm{with}
+  \quad
+  \boldsymbol{\varepsilon}_{i, t}
+  \sim
+  \mathcal{N}
+  \left(
+  \mathbf{0},
+  \boldsymbol{\Theta}
+  \right)
+\end{equation}
+where
+$\mathbf{y}_{i, t}$,
+$\boldsymbol{\eta}_{i, t}$,
+and
+$\boldsymbol{\varepsilon}_{i, t}$
+are random variables
+and
+$\boldsymbol{\nu}$,
+$\boldsymbol{\Lambda}$,
+and
+$\boldsymbol{\Theta}$
+are model parameters.
+$\mathbf{y}_{i, t}$
+represents a vector of observed random variables,
+$\boldsymbol{\eta}_{i, t}$
+a vector of latent random variables,
+and
+$\boldsymbol{\varepsilon}_{i, t}$
+a vector of random measurement errors,
+at time $t$ and individual $i$.
+$\boldsymbol{\nu}$
+denotes a vector of intercepts,
+$\boldsymbol{\Lambda}$
+a matrix of factor loadings,
+and
+$\boldsymbol{\Theta}$
+the covariance matrix of
+$\boldsymbol{\varepsilon}$.
+
+An alternative representation of the measurement error
+is given by
+\begin{equation}
+  \boldsymbol{\varepsilon}_{i, t}
+  =
+  \boldsymbol{\Theta}^{\frac{1}{2}}
+  \mathbf{z}_{i, t},
+  \quad
+  \mathrm{with}
+  \quad
+  \mathbf{z}_{i, t}
+  \sim
+  \mathcal{N}
+  \left(
+  \mathbf{0},
+  \mathbf{I}
+  \right)
+\end{equation}
+where
+$\mathbf{z}_{i, t}$ is a vector of
+independent standard normal random variables and
+$\left( \boldsymbol{\Theta}^{\frac{1}{2}} \right) \left( \boldsymbol{\Theta}^{\frac{1}{2}} \right)^{\prime} = \boldsymbol{\Theta}$ .
+
+The dynamic structure is given by
+\begin{equation}
+  \mathrm{d} \boldsymbol{\eta}_{i, t}
+  =
+  - \boldsymbol{\Phi}
+  \left(
+  \boldsymbol{\mu}
+  -
+  \boldsymbol{\eta}_{i, t}
+  \right)
+  \mathrm{d}t
+  +
+  \boldsymbol{\Sigma}^{\frac{1}{2}}
+  \mathrm{d}
+  \mathbf{W}_{i, t}
+\end{equation}
+where
+$\boldsymbol{\mu}$
+is the long-term mean or equilibrium level,
+$- \boldsymbol{\Phi}$
+is the rate of mean reversion,
+determining how quickly the variable returns to its mean,
+$\boldsymbol{\Sigma}$
+is the matrix of volatility
+or randomness in the process, and
+$\mathrm{d}\boldsymbol{W}$
+is a Wiener process or Brownian motion,
+which represents random fluctuations.
+
+## Data Generation
+
+### Notation
 
 Let $t = `r time`$ be the number of time points and $n = `r n`$ be the number of individuals.
 
@@ -572,9 +583,7 @@ phi_hat
 sigma_hat
 mu0_hat
 sigma0_hat
-beta_var1_hat <- as.matrix(
-  Matrix::expm(phi_hat)
-)
+beta_var1_hat <- expm::expm(phi_hat)
 beta_var1_hat
 ```
 

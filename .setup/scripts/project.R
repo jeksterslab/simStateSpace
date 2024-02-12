@@ -20,7 +20,7 @@ project <- "simStateSpace"
 pkg_cran <- c(
   "Rcpp",
   "RcppArmadillo",
-  "Matrix",
+  "expm",
   "lavaan",
   "betaDelta"
 )
