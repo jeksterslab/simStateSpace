@@ -64,7 +64,7 @@ beta <- matrix(
   ),
   nrow = k
 )
-psi <- iden
+psi <- 0.001 * iden
 psi_l <- t(chol(psi))
 ```
 
