@@ -1,0 +1,468 @@
+---
+title: "The Vector Autoregressive Model"
+author: "Ivan Jacob Agaloos Pesigan"
+date: "2024-02-12"
+bibliography: "vignettes.bib"
+csl: https://raw.githubusercontent.com/citation-style-language/styles/master/apa.csl
+nocite: |
+  @RCoreTeam-2023
+  @Shumway-Stoffer-2017
+  @Ou-Hunter-Chow-2019
+  @Chow-Ho-Hamaker-etal-2010
+output:
+  rmarkdown::html_vignette:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{The Vector Autoregressive Model}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+
+
+
+
+## Model
+
+The measurement model is given by
+\begin{equation}
+  \mathbf{y}_{i, t}
+  =
+  \boldsymbol{\eta}_{i, t}
+\end{equation}
+where $\mathbf{y}_{i, t}$
+represents a vector of observed variables
+and $\boldsymbol{\eta}_{i, t}$
+a vector of latent variables
+for individual $i$ and time $t$.
+Since the observed and latent variables are equal,
+we only generate data
+from the dynamic structure.
+
+The dynamic structure is given by
+\begin{equation}
+  \boldsymbol{\eta}_{i, t}
+  =
+  \boldsymbol{\alpha}
+  +
+  \boldsymbol{\beta}
+  \boldsymbol{\eta}_{i, t - 1}
+  +
+  \boldsymbol{\zeta}_{i, t},
+  \quad
+  \mathrm{with}
+  \quad
+  \boldsymbol{\zeta}_{i, t}
+  \sim
+  \mathcal{N}
+  \left(
+  \mathbf{0},
+  \boldsymbol{\Psi}
+  \right)
+\end{equation}
+where
+$\boldsymbol{\eta}_{i, t}$,
+$\boldsymbol{\eta}_{i, t - 1}$,
+and
+$\boldsymbol{\zeta}_{i, t}$
+are random variables,
+and
+$\boldsymbol{\alpha}$,
+$\boldsymbol{\beta}$,
+and
+$\boldsymbol{\Psi}$
+are model parameters.
+Here,
+$\boldsymbol{\eta}_{i, t}$
+is a vector of latent variables
+at time $t$ and individual $i$,
+$\boldsymbol{\eta}_{i, t - 1}$
+represents a vector of latent variables
+at time $t - 1$ and individual $i$,
+and
+$\boldsymbol{\zeta}_{i, t}$
+represents a vector of dynamic noise
+at time $t$ and individual $i$.
+$\boldsymbol{\alpha}$
+denotes a vector of intercepts,
+$\boldsymbol{\beta}$
+a matrix of autoregression
+and cross regression coefficients,
+and
+$\boldsymbol{\Psi}$
+the covariance matrix of
+$\boldsymbol{\zeta}_{i, t}$.
+
+An alternative representation of the dynamic noise
+is given by
+\begin{equation}
+  \boldsymbol{\zeta}_{i, t}
+  =
+  \boldsymbol{\Psi}^{\frac{1}{2}}
+  \mathbf{z}_{i, t},
+  \quad
+  \mathrm{with}
+  \quad
+  \mathbf{z}_{i, t}
+  \sim
+  \mathcal{N}
+  \left(
+  \mathbf{0},
+  \mathbf{I}
+  \right)
+\end{equation}
+where
+$\left( \boldsymbol{\Psi}^{\frac{1}{2}} \right) \left( \boldsymbol{\Psi}^{\frac{1}{2}} \right)^{\prime} = \boldsymbol{\Psi}$ .
+
+## Data Generation
+
+### Notation
+
+Let $t = 100$ be the number of time points and $n = 5$ be the number of individuals.
+
+Let the initial condition
+$\boldsymbol{\eta}_{0}$
+be given by
+
+\begin{equation}
+\boldsymbol{\eta}_{0} \sim \mathcal{N} \left( \boldsymbol{\mu}_{\boldsymbol{\eta} \mid 0}, \boldsymbol{\Sigma}_{\boldsymbol{\eta} \mid 0} \right)
+\end{equation}
+
+\begin{equation}
+\boldsymbol{\mu}_{\boldsymbol{\eta} \mid 0}
+=
+\left(
+\begin{array}{c}
+  0 \\
+  0 \\
+  0 \\
+\end{array}
+\right)
+\end{equation}
+
+\begin{equation}
+\boldsymbol{\Sigma}_{\boldsymbol{\eta} \mid 0}
+=
+\left(
+\begin{array}{ccc}
+  0.001 & 0 & 0 \\
+  0 & 0.001 & 0 \\
+  0 & 0 & 0.001 \\
+\end{array}
+\right) .
+\end{equation}
+
+Let the constant vector $\boldsymbol{\alpha}$ be given by
+
+\begin{equation}
+\boldsymbol{\alpha}
+=
+\left(
+\begin{array}{c}
+  0 \\
+  0 \\
+  0 \\
+\end{array}
+\right) .
+\end{equation}
+
+Let the transition matrix $\boldsymbol{\beta}$ be given by
+
+\begin{equation}
+\boldsymbol{\beta}
+=
+\left(
+\begin{array}{ccc}
+  0.7 & 0 & 0 \\
+  0.5 & 0.6 & 0 \\
+  -0.1 & 0.4 & 0.5 \\
+\end{array}
+\right) .
+\end{equation}
+
+Let the dynamic process noise $\boldsymbol{\Psi}$ be given by
+
+\begin{equation}
+\boldsymbol{\Psi}
+=
+\left(
+\begin{array}{ccc}
+  0.001 & 0 & 0 \\
+  0 & 0.001 & 0 \\
+  0 & 0 & 0.001 \\
+\end{array}
+\right) .
+\end{equation}
+
+### R Function Arguments
+
+
+```r
+n
+#> [1] 5
+time
+#> [1] 100
+mu0
+#> [1] 0 0 0
+sigma0
+#>       [,1]  [,2]  [,3]
+#> [1,] 0.001 0.000 0.000
+#> [2,] 0.000 0.001 0.000
+#> [3,] 0.000 0.000 0.001
+sigma0_l
+#>            [,1]       [,2]       [,3]
+#> [1,] 0.03162278 0.00000000 0.00000000
+#> [2,] 0.00000000 0.03162278 0.00000000
+#> [3,] 0.00000000 0.00000000 0.03162278
+alpha
+#> [1] 0 0 0
+beta
+#>      [,1] [,2] [,3]
+#> [1,]  0.7  0.0  0.0
+#> [2,]  0.5  0.6  0.0
+#> [3,] -0.1  0.4  0.5
+psi
+#>       [,1]  [,2]  [,3]
+#> [1,] 0.001 0.000 0.000
+#> [2,] 0.000 0.001 0.000
+#> [3,] 0.000 0.000 0.001
+psi_l
+#>            [,1]       [,2]       [,3]
+#> [1,] 0.03162278 0.00000000 0.00000000
+#> [2,] 0.00000000 0.03162278 0.00000000
+#> [3,] 0.00000000 0.00000000 0.03162278
+```
+
+### Using the SimSSMVARFixed Function from the simStateSpace Package to Simulate Data
+
+
+```r
+library(simStateSpace)
+sim <- SimSSMVARFixed(
+  n = n,
+  time = time,
+  mu0 = mu0,
+  sigma0_l = sigma0_l,
+  alpha = alpha,
+  beta = beta,
+  psi_l = psi_l
+)
+data <- as.data.frame(sim)
+head(data)
+#>   id time           y1          y2          y3
+#> 1  1    0 -0.016807560  0.02597029 0.070121917
+#> 2  1    1  0.001037461 -0.01259128 0.078378714
+#> 3  1    2 -0.010031429  0.04874324 0.036802970
+#> 4  1    3 -0.008924644  0.04643266 0.004356867
+#> 5  1    4 -0.033034363  0.02430897 0.014761300
+#> 6  1    5 -0.029243334  0.03684040 0.039403861
+plot(sim)
+```
+
+<img src="fig-vignettes-var-unnamed-chunk-4-1.png" width="3300" /><img src="fig-vignettes-var-unnamed-chunk-4-2.png" width="3300" /><img src="fig-vignettes-var-unnamed-chunk-4-3.png" width="3300" />
+
+## Model Fitting
+
+### Prepare Data
+
+
+```r
+dynr_data <- dynr::dynr.data(
+  data = data,
+  id = "id",
+  time = "time",
+  observed = c("y1", "y2", "y3")
+)
+```
+
+### Prepare Initial Condition
+
+
+```r
+dynr_initial <- dynr::prep.initial(
+  values.inistate = mu0,
+  params.inistate = c("mu0_1", "mu0_2", "mu0_3"),
+  values.inicov = sigma0,
+  params.inicov = matrix(
+    data = c(
+      "sigma0_11", "sigma0_12", "sigma0_13",
+      "sigma0_12", "sigma0_22", "sigma0_23",
+      "sigma0_13", "sigma0_23", "sigma0_33"
+    ),
+    nrow = 3
+  )
+)
+```
+
+### Prepare Measurement Model
+
+
+```r
+dynr_measurement <- dynr::prep.measurement(
+  values.load = diag(3),
+  params.load = matrix(data = "fixed", nrow = 3, ncol = 3),
+  state.names = c("eta_1", "eta_2", "eta_3"),
+  obs.names = c("y1", "y2", "y3")
+)
+```
+
+### Prepare Dynamic Process
+
+
+```r
+dynr_dynamics <- dynr::prep.formulaDynamics(
+  formula = list(
+    eta_1 ~ alpha_1 * 1 + beta_11 * eta_1 + beta_12 * eta_2 + beta_13 * eta_3,
+    eta_2 ~ alpha_2 * 1 + beta_21 * eta_1 + beta_22 * eta_2 + beta_23 * eta_3,
+    eta_3 ~ alpha_3 * 1 + beta_31 * eta_1 + beta_32 * eta_2 + beta_33 * eta_3
+  ),
+  startval = c(
+    alpha_1 = alpha[1], alpha_2 = alpha[2], alpha_3 = alpha[3],
+    beta_11 = beta[1, 1], beta_12 = beta[1, 2], beta_13 = beta[1, 3],
+    beta_21 = beta[2, 1], beta_22 = beta[2, 2], beta_23 = beta[2, 3],
+    beta_31 = beta[3, 1], beta_32 = beta[3, 2], beta_33 = beta[3, 3]
+  ),
+  isContinuousTime = FALSE
+)
+```
+
+### Prepare Process Noise
+
+
+```r
+dynr_noise <- dynr::prep.noise(
+  values.latent = psi,
+  params.latent = matrix(
+    data = c(
+      "psi_11", "psi_12", "psi_13",
+      "psi_12", "psi_22", "psi_23",
+      "psi_13", "psi_23", "psi_33"
+    ),
+    nrow = 3
+  ),
+  values.observed = matrix(data = 0, nrow = 3, ncol = 3),
+  params.observed = matrix(data = "fixed", nrow = 3, ncol = 3)
+)
+```
+
+### Prepare the Model
+
+
+```r
+model <- dynr::dynr.model(
+  data = dynr_data,
+  initial = dynr_initial,
+  measurement = dynr_measurement,
+  dynamics = dynr_dynamics,
+  noise = dynr_noise,
+  outfile = "var.c"
+)
+```
+
+<img src="fig-vignettes-var-unnamed-chunk-11-1.png" width="3300" />
+
+### Fit the Model
+
+
+```r
+results <- dynr::dynr.cook(
+  model,
+  debug_flag = TRUE,
+  verbose = FALSE
+)
+#> [1] "Get ready!!!!"
+#> using C compiler: ‘gcc (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0’
+#> Optimization function called.
+#> Starting Hessian calculation ...
+#> Finished Hessian calculation.
+#> Original exit flag:  3 
+#> Modified exit flag:  3 
+#> Optimization terminated successfully: ftol_rel or ftol_abs was reached. 
+#> Original fitted parameters:  -0.001826429 -0.00092289 0.001183117 0.7407205 
+#> -0.004945776 0.01288425 0.4688552 0.6535095 0.006771527 -0.1238074 0.4457776 
+#> 0.4675712 -7.037692 -0.04164728 0.002977158 -6.863964 -0.09284045 -6.972149 
+#> -0.01547433 0.01050811 0.02949978 -7.5077 -0.3171389 -0.3915969 -7.452968 
+#> 0.1565502 -7.830021 
+#> 
+#> Transformed fitted parameters:  -0.001826429 -0.00092289 0.001183117 0.7407205 
+#> -0.004945776 0.01288425 0.4688552 0.6535095 0.006771527 -0.1238074 0.4457776 
+#> 0.4675712 0.0008781513 -3.657262e-05 2.614395e-06 0.001046288 -9.710531e-05 
+#> 0.0009466484 -0.01547433 0.01050811 0.02949978 0.0005488422 -0.0001740592 
+#> -0.0002149249 0.0006349193 0.0001589161 0.0004959887 
+#> 
+#> Doing end processing
+#> Successful trial
+#> Total Time: 13.24132 
+#> Backend Time: 12.79437
+```
+
+## Summary
+
+
+```r
+summary(results)
+#> Coefficients:
+#>             Estimate Std. Error t value   ci.lower   ci.upper Pr(>|t|)    
+#> alpha_1   -1.826e-03  1.354e-03  -1.349 -4.479e-03  8.265e-04   0.0889 .  
+#> alpha_2   -9.229e-04  1.478e-03  -0.625 -3.819e-03  1.973e-03   0.2663    
+#> alpha_3    1.183e-03  1.406e-03   0.842 -1.572e-03  3.938e-03   0.2002    
+#> beta_11    7.407e-01  3.411e-02  21.715  6.739e-01  8.076e-01   <2e-16 ***
+#> beta_12   -4.946e-03  2.757e-02  -0.179 -5.898e-02  4.909e-02   0.4289    
+#> beta_13    1.288e-02  2.873e-02   0.449 -4.342e-02  6.919e-02   0.3270    
+#> beta_21    4.689e-01  3.723e-02  12.592  3.959e-01  5.418e-01   <2e-16 ***
+#> beta_22    6.535e-01  3.009e-02  21.717  5.945e-01  7.125e-01   <2e-16 ***
+#> beta_23    6.772e-03  3.135e-02   0.216 -5.468e-02  6.823e-02   0.4146    
+#> beta_31   -1.238e-01  3.542e-02  -3.495 -1.932e-01 -5.439e-02   0.0003 ***
+#> beta_32    4.458e-01  2.863e-02  15.572  3.897e-01  5.019e-01   <2e-16 ***
+#> beta_33    4.676e-01  2.983e-02  15.677  4.091e-01  5.260e-01   <2e-16 ***
+#> psi_11     8.782e-04  5.592e-05  15.705  7.686e-04  9.877e-04   <2e-16 ***
+#> psi_12    -3.657e-05  4.318e-05  -0.847 -1.212e-04  4.806e-05   0.1987    
+#> psi_13     2.614e-06  4.104e-05   0.064 -7.783e-05  8.306e-05   0.4746    
+#> psi_22     1.046e-03  6.661e-05  15.708  9.157e-04  1.177e-03   <2e-16 ***
+#> psi_23    -9.710e-05  4.501e-05  -2.157 -1.853e-04 -8.888e-06   0.0157 *  
+#> psi_33     9.466e-04  6.026e-05  15.709  8.285e-04  1.065e-03   <2e-16 ***
+#> mu0_1     -1.547e-02  1.049e-02  -1.476 -3.603e-02  5.079e-03   0.0704 .  
+#> mu0_2      1.051e-02  1.128e-02   0.932 -1.160e-02  3.261e-02   0.1760    
+#> mu0_3      2.950e-02  9.970e-03   2.959  9.959e-03  4.904e-02   0.0016 ** 
+#> sigma0_11  5.488e-04  3.477e-04   1.579 -1.326e-04  1.230e-03   0.0575 .  
+#> sigma0_12 -1.741e-04  2.755e-04  -0.632 -7.140e-04  3.659e-04   0.2639    
+#> sigma0_13 -2.149e-04  2.527e-04  -0.851 -7.102e-04  2.804e-04   0.1977    
+#> sigma0_22  6.349e-04  4.022e-04   1.579 -1.534e-04  1.423e-03   0.0576 .  
+#> sigma0_23  1.589e-04  2.611e-04   0.609 -3.528e-04  6.707e-04   0.2715    
+#> sigma0_33  4.960e-04  3.143e-04   1.578 -1.200e-04  1.112e-03   0.0576 .  
+#> ---
+#> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+#> 
+#> -2 log-likelihood value at convergence = -6187.20
+#> AIC = -6133.20
+#> BIC = -6019.40
+```
+
+
+
+### Parameter Estimates
+
+
+```r
+alpha_hat
+#> [1] -0.001826429 -0.000922890  0.001183117
+beta_hat
+#>            [,1]         [,2]        [,3]
+#> [1,]  0.7407205 -0.004945776 0.012884245
+#> [2,]  0.4688552  0.653509518 0.006771527
+#> [3,] -0.1238074  0.445777589 0.467571219
+psi_hat
+#>               [,1]          [,2]          [,3]
+#> [1,]  8.781513e-04 -3.657262e-05  2.614395e-06
+#> [2,] -3.657262e-05  1.046288e-03 -9.710531e-05
+#> [3,]  2.614395e-06 -9.710531e-05  9.466484e-04
+mu0_hat
+#> [1] -0.01547433  0.01050811  0.02949978
+sigma0_hat
+#>               [,1]          [,2]          [,3]
+#> [1,]  0.0005488422 -0.0001740592 -0.0002149249
+#> [2,] -0.0001740592  0.0006349193  0.0001589161
+#> [3,] -0.0002149249  0.0001589161  0.0004959887
+```
+
+## References
