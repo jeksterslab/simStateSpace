@@ -25,7 +25,7 @@
 #'     \mathrm{d}
 #'     \mathbf{W}_{i, t}
 #'   }
-#'   for individual \eqn{i} and time {t}.
+#'   for individual \eqn{i} and time \eqn{t}.
 #'   The discrete-time state space model
 #'   given below
 #'   represents the discrete-time solution
