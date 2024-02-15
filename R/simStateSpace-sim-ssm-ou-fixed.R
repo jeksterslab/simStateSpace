@@ -239,7 +239,10 @@
 #'     \mathrm{d}
 #'     \mathbf{W}_{i, t}
 #'   }
-#'   where \eqn{\boldsymbol{\iota} = \boldsymbol{\Phi} \boldsymbol{\mu}}.
+#'   where
+#'   \eqn{\boldsymbol{\mu} = - \boldsymbol{\Phi}^{-1} \boldsymbol{\iota}}
+#'   and, equivalently
+#'   \eqn{\boldsymbol{\iota} = - \boldsymbol{\Phi} \boldsymbol{\mu}}.
 #'
 #' @references
 #'   Chow, S.-M., Ho, M. R., Hamaker, E. L., & Dolan, C. V. (2010).
@@ -412,7 +415,7 @@ SimSSMOUFixed <- function(n, time, delta_t = 1.0,
                           nu, lambda, theta_l,
                           type = 0,
                           x = NULL, gamma = NULL, kappa = NULL) {
-  iota <- phi %*% mu
+  iota <- -phi %*% mu
   ssm <- LinSDE2SSM(
     iota = iota,
     phi = phi,
