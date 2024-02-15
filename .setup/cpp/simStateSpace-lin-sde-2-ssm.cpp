@@ -31,35 +31,56 @@
 //'     \mathbf{W}_{i, t}
 //'   }
 //'   for individual \eqn{i} and time {t}.
-//'   The state space parameters
-//'   as a function of the linear stochastic differential equation model
-//'   parameters
-//'   are given by
+//'   The discrete-time state space model
+//'   given below
+//'   represents the discrete-time solution
+//'   for the linear stochastic differential equation.
 //'   \deqn{
-//'       \boldsymbol{\beta}
+//'     \boldsymbol{\eta}_{i, t_{{l_{i}}}}
+//'     =
+//'     \boldsymbol{\alpha}_{\Delta t_{{l_{i}}}}
+//'     +
+//'     \boldsymbol{\beta}_{\Delta t_{{l_{i}}}}
+//'     \boldsymbol{\eta}_{i, t_{l_{i} - 1}}
+//'     +
+//'     \boldsymbol{\zeta}_{i, t_{{l_{i}}}},
+//'     \quad
+//'     \mathrm{with}
+//'     \quad
+//'     \boldsymbol{\zeta}_{i, t_{{l_{i}}}}
+//'     \sim
+//'     \mathcal{N}
+//'     \left(
+//'     \mathbf{0},
+//'     \boldsymbol{\Psi}_{\Delta t_{{l_{i}}}}
+//'     \right)
+//'   }
+//'   with
+//'   \deqn{
+//'       \boldsymbol{\beta}_{\Delta t_{{l_{i}}}}
 //'       =
 //'       \exp{
 //'         \left(
+//'           \Delta t
 //'           \boldsymbol{\Phi}
-//'           \Delta_{t}
 //'         \right)
-//'       }
+//'       },
 //'   }
 //'
 //'   \deqn{
-//'       \boldsymbol{\alpha}
+//'       \boldsymbol{\alpha}_{\Delta t_{{l_{i}}}}
 //'       =
 //'       \boldsymbol{\Phi}^{-1}
 //'       \left(
 //'         \boldsymbol{\beta} - \mathbf{I}_{p}
 //'       \right)
-//'       \boldsymbol{\iota}
+//'       \boldsymbol{\iota}, \quad \mathrm{and}
 //'   }
 //'
 //'   \deqn{
 //'       \mathrm{vec}
 //'       \left(
-//'         \boldsymbol{\Psi}
+//'         \boldsymbol{\Psi}_{\Delta t_{{l_{i}}}}
 //'       \right)
 //'       =
 //'       \left[
@@ -83,7 +104,7 @@
 //'               \mathbf{I}_{p} \otimes \boldsymbol{\Phi}
 //'             \right)
 //'           \right]
-//'           \Delta_{t}
+//'           \Delta t
 //'         \right)
 //'         -
 //'         \mathbf{I}_{p \times p}
@@ -93,8 +114,12 @@
 //'         \boldsymbol{\Sigma}
 //'       \right)
 //'   }
-//'   where \eqn{p} is the number of latent variables and
-//'   \eqn{\Delta_{t}} is the time interval.
+//'   where \eqn{t} denotes continuous-time processes
+//'   that can be defined by any arbitrary time point,
+//'   \eqn{t_{l_{i}}} the \eqn{l^\mathrm{th}}
+//'   observed measurement occassion for individual \eqn{i},
+//'   \eqn{p} the number of latent variables and
+//'   \eqn{\Delta t} the time interval.
 //'
 //' @references
 //'   Harvey, A. C. (1990).

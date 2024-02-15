@@ -34,15 +34,9 @@ knitr::opts_chunk$set(
 
 ```{r}
 #| echo = FALSE
-production <- FALSE
-if (production) {
-  n <- 500
-  time <- 1000
-} else {
-  n <- 5
-  time <- 100
-}
 set.seed(42)
+n <- 100
+time <- 1000
 k <- p <- 3
 iden <- diag(k)
 null_vec <- rep(x = 0, times = k)

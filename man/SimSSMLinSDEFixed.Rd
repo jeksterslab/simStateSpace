@@ -344,18 +344,18 @@ as a function of the linear stochastic differential equation model
 parameters
 are given by
 \deqn{
-      \boldsymbol{\beta}
+      \boldsymbol{\beta}_{\Delta t_{{l_{i}}}}
       =
       \exp{
         \left(
+          \Delta t
           \boldsymbol{\Phi}
-          \Delta_{t}
         \right)
       }
   }
 
 \deqn{
-      \boldsymbol{\alpha}
+      \boldsymbol{\alpha}_{\Delta t_{{l_{i}}}}
       =
       \boldsymbol{\Phi}^{-1}
       \left(
@@ -367,7 +367,7 @@ are given by
 \deqn{
       \mathrm{vec}
       \left(
-        \boldsymbol{\Psi}
+        \boldsymbol{\Psi}_{\Delta t_{{l_{i}}}}
       \right)
       =
       \left[
@@ -391,7 +391,7 @@ are given by
               \mathbf{I}_{p} \otimes \boldsymbol{\Phi}
             \right)
           \right]
-          \Delta_{t}
+          \Delta t
         \right)
         -
         \mathbf{I}_{p \times p}
@@ -402,7 +402,7 @@ are given by
       \right)
   }
 where \eqn{p} is the number of latent variables and
-\eqn{\Delta_{t}} is the time interval.
+\eqn{\Delta t} is the time interval.
 }
 }
 \examples{

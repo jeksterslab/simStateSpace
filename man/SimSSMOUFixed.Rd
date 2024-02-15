@@ -360,7 +360,10 @@ in the form of
     \mathrm{d}
     \mathbf{W}_{i, t}
   }
-where \eqn{\boldsymbol{\iota} = \boldsymbol{\Phi} \boldsymbol{\mu}}.
+where
+\eqn{\boldsymbol{\mu} = - \boldsymbol{\Phi}^{-1} \boldsymbol{\iota}}
+and, equivalently
+\eqn{\boldsymbol{\iota} = - \boldsymbol{\Phi} \boldsymbol{\mu}}.
 }
 }
 \examples{

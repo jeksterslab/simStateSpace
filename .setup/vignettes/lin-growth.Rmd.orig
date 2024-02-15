@@ -34,13 +34,8 @@ knitr::opts_chunk$set(
 
 ```{r}
 #| echo = FALSE
-production <- FALSE
-if (production) {
-  n <- 10000
-} else {
-  n <- 100
-}
 set.seed(42)
+n <- 10000
 mu0 <- c(0.615, 1.006)
 sigma0 <- matrix(
   data = c(

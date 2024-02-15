@@ -46,7 +46,7 @@ Rcpp::List SimSSMLinSDEIVary0(const int n, const int time, const double delta_t,
 
     // Step 3.3: Calculate state space parameters
     if (ou) {
-      iota_i = phi_i * iota_i;
+      iota_i = (-1 * phi_i) * iota_i;
     }
     arma::mat phi_hashtag_i = arma::kron(phi_i, I) + arma::kron(I, phi_i);
     arma::vec sigma_vec_i = arma::vectorise(sigma_l_i * sigma_l_i.t());
