@@ -446,17 +446,17 @@ as a function of the linear stochastic differential equation model
 parameters
 are given by
 $$
-      \boldsymbol{\beta}
+      \boldsymbol{\beta}_{\Delta t_{{l_{i}}}}
       =
       \exp{
         \left(
+          \Delta t
           \boldsymbol{\Phi}
-          \Delta_{t}
         \right)
       }
   $$</p>
 <p>$$
-      \boldsymbol{\alpha}
+      \boldsymbol{\alpha}_{\Delta t_{{l_{i}}}}
       =
       \boldsymbol{\Phi}^{-1}
       \left(
@@ -467,7 +467,7 @@ $$
 <p>$$
       \mathrm{vec}
       \left(
-        \boldsymbol{\Psi}
+        \boldsymbol{\Psi}_{\Delta t_{{l_{i}}}}
       \right)
       =
       \left[
@@ -491,7 +491,7 @@ $$
               \mathbf{I}_{p} \otimes \boldsymbol{\Phi}
             \right)
           \right]
-          \Delta_{t}
+          \Delta t
         \right)
         -
         \mathbf{I}_{p \times p}
@@ -502,7 +502,7 @@ $$
       \right)
   $$
 where \(p\) is the number of latent variables and
-\(\Delta_{t}\) is the time interval.</p>
+\(\Delta t\) is the time interval.</p>
 </div>
 
     </div>
