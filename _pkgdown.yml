@@ -1,0 +1,39 @@
+destination: pkgdown
+url: https://github.com/jeksterslab/simStateSpace/
+
+template:
+  bootstrap: 5
+  bslib:
+    base_font: {google: "Roboto"}
+    heading_font: {google: "Roboto Slab"}
+    code_font: {google: "JetBrains Mono"}
+
+reference:
+- title: State Space Model
+  contents:
+  - has_keyword("ssm")
+- title: Growth Curve Model
+  contents:
+  - has_keyword("growth")
+- title: Vector Autoregressive Model
+  contents:
+  - has_keyword("var")
+- title: Linear Stochastic Differential Equation Model
+  contents:
+  - has_keyword("linsde")
+- title: Ornstein–Uhlenbeck Model
+  contents:
+  - has_keyword("ou")
+- title: Methods
+  contents:
+  - has_keyword("methods")
+
+articles:
+- title: Examples
+  contents:
+  - lin-growth
+  - var
+  - ou
+- title: Session Information
+  contents:
+  - session/session
