@@ -1,3 +1,7 @@
+# simStateSpace 1.2.0.9000
+
+* Latest development version.
+
 # simStateSpace 1.2.0
 
 * Added functions to generate linear stochastic differential equation models.
