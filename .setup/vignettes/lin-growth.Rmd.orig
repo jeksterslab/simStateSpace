@@ -212,9 +212,25 @@ theta
 theta_l
 ```
 
+### Visualizing the Dynamics Without Measurement Error ($n = 5$ with Different Initial Condition)
+
+```{r no-error}
+#| echo = FALSE
+library(simStateSpace)
+sim <- SimSSMLinGrowth(
+  n = 5,
+  time = time,
+  mu0 = mu0,
+  sigma0_l = sigma0_l,
+  theta_l = 0,
+  type = 0
+)
+plot(sim, type = "l")
+```
+
 ### Using the SimSSMLinGrowth Function from the simStateSpace Package to Simulate Data
 
-```{r}
+```{r error}
 library(simStateSpace)
 sim <- SimSSMLinGrowth(
   n = n,
@@ -306,7 +322,7 @@ model <- dynr::dynr.model(
 )
 ```
 
-```{r}
+```{r model}
 #| echo = FALSE
 dynr::plotFormula(
   dynrModel = model,
@@ -445,3 +461,8 @@ theta_hat
 ```
 
 ## References
+
+```{r}
+#| include = FALSE
+rm(list = ls())
+```

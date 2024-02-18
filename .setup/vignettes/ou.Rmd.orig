@@ -317,9 +317,39 @@ lambda
 theta
 ```
 
+### Visualizing the Dynamics Without Measurement Error and Process Noise ($n = 5$ with Different Initial Condition)
+
+```{r no-error}
+#| echo = FALSE
+library(simStateSpace)
+sim <- SimSSMOUFixed(
+  n = 5,
+  time = length(seq(from = 0, to = 20, by = delta_t)),
+  delta_t = delta_t,
+  mu0 = mu0,
+  sigma0_l = sigma0_l,
+  mu = mu,
+  phi = phi,
+  sigma_l = matrix(
+    data = 0,
+    nrow = p,
+    ncol = p
+  ),
+  nu = nu,
+  lambda = lambda,
+  theta_l = matrix(
+    data = 0,
+    nrow = k,
+    ncol = k
+  ),
+  type = 0
+)
+plot(sim, type = "l")
+```
+
 ### Using the SimSSMOUFixed Function from the simStateSpace Package to Simulate Data
 
-```{r}
+```{r error}
 library(simStateSpace)
 sim <- SimSSMOUFixed(
   n = n,
@@ -470,7 +500,7 @@ model$ub[
 ] <- +1.5
 ```
 
-```{r}
+```{r model}
 #| echo = FALSE
 dynr::plotFormula(
   dynrModel = model,
@@ -582,3 +612,8 @@ beta_var1_hat
 ```
 
 ## References
+
+```{r}
+#| include = FALSE
+rm(list = ls())
+```

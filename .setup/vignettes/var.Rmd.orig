@@ -247,9 +247,30 @@ psi
 psi_l
 ```
 
+### Visualizing the Dynamics Without Process Noise ($n = 5$ with Different Initial Condition)
+
+```{r no-error}
+#| echo = FALSE
+library(simStateSpace)
+sim <- SimSSMVARFixed(
+  n = 5,
+  time = 20,
+  mu0 = mu0,
+  sigma0_l = sigma0_l,
+  alpha = alpha,
+  beta = beta,
+  psi_l = matrix(
+    data = 0,
+    nrow = k,
+    ncol = k
+  )
+)
+plot(sim, type = "l")
+```
+
 ### Using the SimSSMVARFixed Function from the simStateSpace Package to Simulate Data
 
-```{r}
+```{r error}
 library(simStateSpace)
 sim <- SimSSMVARFixed(
   n = n,
@@ -357,7 +378,7 @@ model <- dynr::dynr.model(
 )
 ```
 
-```{r}
+```{r model}
 #| echo = FALSE
 dynr::plotFormula(
   dynrModel = model,
@@ -465,3 +486,8 @@ sigma0_hat
 ```
 
 ## References
+
+```{r}
+#| include = FALSE
+rm(list = ls())
+```

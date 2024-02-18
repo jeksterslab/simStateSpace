@@ -1,7 +1,7 @@
 ---
 title: "The Linear Growth Curve Model"
 author: "Ivan Jacob Agaloos Pesigan"
-date: "2024-02-16"
+date: "2024-02-18"
 bibliography: "vignettes.bib"
 csl: https://raw.githubusercontent.com/citation-style-language/styles/master/apa.csl
 nocite: |
@@ -194,6 +194,10 @@ theta_l
 #> [1] 0.7745967
 ```
 
+### Visualizing the Dynamics Without Measurement Error ($n = 5$ with Different Initial Condition)
+
+<img src="fig-vignettes-lin-growth-no-error-1.png" width="3300" />
+
 ### Using the SimSSMLinGrowth Function from the simStateSpace Package to Simulate Data
 
 
@@ -209,17 +213,17 @@ sim <- SimSSMLinGrowth(
 )
 data <- as.data.frame(sim)
 head(data)
-#>   id time        y1
-#> 1  1    0 1.5938609
-#> 2  1    1 1.9237785
-#> 3  1    2 2.5079048
-#> 4  1    3 2.8763799
-#> 5  1    4 4.8360762
-#> 6  2    0 0.8113396
+#>   id time       y1
+#> 1  1    0 1.723564
+#> 2  1    1 2.148702
+#> 3  1    2 3.384974
+#> 4  1    3 6.225426
+#> 5  1    4 5.993965
+#> 6  2    0 1.951861
 plot(sim)
 ```
 
-<img src="fig-vignettes-lin-growth-unnamed-chunk-4-1.png" width="3300" />
+<img src="fig-vignettes-lin-growth-error-1.png" width="3300" />
 
 ## Model Fitting
 
@@ -307,7 +311,7 @@ model <- dynr::dynr.model(
 )
 ```
 
-<img src="fig-vignettes-lin-growth-unnamed-chunk-11-1.png" width="3300" />
+<img src="fig-vignettes-lin-growth-model-1.png" width="3300" />
 
 ### Fit the Model
 
@@ -326,16 +330,16 @@ results <- dynr::dynr.cook(
 #> Original exit flag:  3 
 #> Modified exit flag:  3 
 #> Optimization terminated successfully: ftol_rel or ftol_abs was reached. 
-#> Original fitted parameters:  -0.5086335 0.6070447 0.9951688 0.647442 0.3151626 
-#> -0.9463514 
+#> Original fitted parameters:  -0.5089635 0.60732 0.9952181 0.6477021 0.3152438 
+#> -0.9463643 
 #> 
-#> Transformed fitted parameters:  0.6013167 0.6070447 0.9951688 1.910647 
-#> 0.6021645 0.5779344 
+#> Transformed fitted parameters:  0.6011183 0.60732 0.9952181 1.911144 0.6024764 
+#> 0.5780766 
 #> 
 #> Doing end processing
 #> Successful trial
-#> Total Time: 1.391485 
-#> Backend Time: 1.38001
+#> Total Time: 1.663858 
+#> Backend Time: 1.65132
 ```
 
 ## Summary
@@ -345,23 +349,23 @@ results <- dynr::dynr.cook(
 summary(results)
 #> Coefficients:
 #>           Estimate Std. Error t value ci.lower ci.upper Pr(>|t|)    
-#> theta     0.601317   0.004906  122.56 0.591700 0.610933   <2e-16 ***
-#> mu0_0     0.607045   0.015086   40.24 0.577477 0.636613   <2e-16 ***
-#> mu0_1     0.995169   0.007988  124.59 0.979513 1.010825   <2e-16 ***
-#> sigma0_00 1.910647   0.032313   59.13 1.847314 1.973980   <2e-16 ***
-#> sigma0_01 0.602164   0.013012   46.28 0.576662 0.627667   <2e-16 ***
-#> sigma0_11 0.577934   0.009034   63.97 0.560227 0.595642   <2e-16 ***
+#> theta     0.601118   0.004914  122.34 0.591488 0.610749   <2e-16 ***
+#> mu0_0     0.607320   0.015112   40.19 0.577701 0.636939   <2e-16 ***
+#> mu0_1     0.995218   0.007992  124.53 0.979554 1.010882   <2e-16 ***
+#> sigma0_00 1.911144   0.032346   59.08 1.847747 1.974541   <2e-16 ***
+#> sigma0_01 0.602476   0.013016   46.29 0.576966 0.627987   <2e-16 ***
+#> sigma0_11 0.578077   0.009046   63.90 0.560347 0.595807   <2e-16 ***
 #> ---
 #> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 #> 
-#> -2 log-likelihood value at convergence = 167722.07
-#> AIC = 167734.07
-#> BIC = 167786.99
+#> -2 log-likelihood value at convergence = 167712.56
+#> AIC = 167724.56
+#> BIC = 167777.48
 ```
 
 
 ```
-#> [1] 0.6070447 0.9951688
+#> [1] 0.6073200 0.9952181
 ```
 
 ### Estimated Parameters
@@ -369,14 +373,14 @@ summary(results)
 
 ```r
 mu0_hat
-#> [1] 0.6070447 0.9951688
+#> [1] 0.6073200 0.9952181
 sigma0_hat
 #>           [,1]      [,2]
-#> [1,] 1.9106472 0.6021645
-#> [2,] 0.6021645 0.5779344
+#> [1,] 1.9111442 0.6024764
+#> [2,] 0.6024764 0.5780766
 theta_hat
 #>     theta 
-#> 0.6013167
+#> 0.6011183
 ```
 
 ## Linear Growth Curve Model in Structural Equation Modeling
@@ -387,13 +391,13 @@ theta_hat
 ```r
 data <- as.data.frame(sim, long = FALSE)
 head(data)
-#>   id          y1_0       y1_1      y1_2     y1_3     y1_4
-#> 1  1  1.5938608693  1.9237785  2.507905 2.876380 4.836076
-#> 2  2  0.8113395797  2.6475389  3.652304 5.656592 6.716806
-#> 3  3  0.0003967453  2.2679210  3.219681 2.573153 4.103788
-#> 4  4 -0.0836952793 -0.3678517 -0.294712 3.025628 4.562971
-#> 5  5  0.9040516207  3.1909404  1.161196 4.669756 5.078263
-#> 6  6  1.7235643038  2.1487019  3.384974 6.225426 5.993965
+#>   id        y1_0       y1_1        y1_2        y1_3       y1_4
+#> 1  1  1.72356430  2.1487019  3.38497364  6.22542609  5.9939649
+#> 2  2  1.95186051  2.6140623  5.60107919  5.59791920  7.6881040
+#> 3  3  0.07909854 -1.1410633 -0.02940765  0.07103948 -0.4998955
+#> 4  4 -0.14827866 -0.6478676 -0.33440620 -0.29683127 -0.6950588
+#> 5  5  1.14625267  2.3844799  0.39101270 -0.76159166  1.6750324
+#> 6  6  1.02604168  2.1852479  2.55168739  2.13223414  4.1499727
 ```
 
 ### Model
@@ -427,7 +431,7 @@ fit <- lavaan::growth(
   data = data
 )
 lavaan::summary(fit)
-#> lavaan 0.6.17 ended normally after 36 iterations
+#> lavaan 0.6.17 ended normally after 34 iterations
 #> 
 #>   Estimator                                         ML
 #>   Optimization method                           NLMINB
@@ -438,7 +442,7 @@ lavaan::summary(fit)
 #> 
 #> Model Test User Model:
 #>                                                       
-#>   Test statistic                                 5.340
+#>   Test statistic                                 5.386
 #>   Degrees of freedom                                14
 #>   P-value (Chi-square)                           0.980
 #> 
@@ -466,17 +470,17 @@ lavaan::summary(fit)
 #> Covariances:
 #>                    Estimate  Std.Err  z-value  P(>|z|)
 #>   eta0 ~~                                             
-#>     eta1    (s0_0)    0.602    0.013   46.309    0.000
+#>     eta1    (s0_0)    0.602    0.013   46.317    0.000
 #> 
 #> Intercepts:
 #>                    Estimate  Std.Err  z-value  P(>|z|)
-#>     eta0    (m0_0)    0.607    0.015   40.285    0.000
-#>     eta1    (m0_1)    0.995    0.008  124.587    0.000
+#>     eta0    (m0_0)    0.607    0.015   40.295    0.000
+#>     eta1    (m0_1)    0.995    0.008  124.582    0.000
 #> 
 #> Variances:
 #>                    Estimate  Std.Err  z-value  P(>|z|)
-#>     eta0    (s0_0)    1.911    0.032   59.230    0.000
-#>     eta1    (s0_1)    0.578    0.009   63.953    0.000
+#>     eta0    (s0_0)    1.911    0.032   59.235    0.000
+#>     eta1    (s0_1)    0.578    0.009   63.955    0.000
 #>    .y1_0    (thet)    0.601    0.005  122.474    0.000
 #>    .y1_1    (thet)    0.601    0.005  122.474    0.000
 #>    .y1_2    (thet)    0.601    0.005  122.474    0.000
@@ -486,7 +490,7 @@ lavaan::summary(fit)
 
 
 ```
-#> [1] 0.6070447 0.9951688
+#> [1] 0.6073200 0.9952181
 ```
 
 ### Estimated Parameters
@@ -494,13 +498,15 @@ lavaan::summary(fit)
 
 ```r
 mu0_hat
-#> [1] 0.6070447 0.9951688
+#> [1] 0.6073200 0.9952181
 sigma0_hat
 #>           [,1]      [,2]
-#> [1,] 1.9106472 0.6021645
-#> [2,] 0.6021645 0.5779344
+#> [1,] 1.9111442 0.6024764
+#> [2,] 0.6024764 0.5780766
 theta_hat
-#> [1] 0.6013167
+#> [1] 0.6011183
 ```
 
 ## References
+
+
