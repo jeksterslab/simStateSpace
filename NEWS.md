@@ -1,6 +1,7 @@
-# simStateSpace 1.2.0.9000
+# simStateSpace 1.2.1
 
-* Latest development version.
+* [LinSDE2SSM()] can now accept a matrix of zeros for the argument `sigma_l`.
+* Added the `MuEta()` and `SigmaEta()` functions.
 
 # simStateSpace 1.2.0
 
