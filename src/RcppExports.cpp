@@ -308,6 +308,30 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// MuEta0
+arma::vec MuEta0(const arma::mat& beta, const arma::vec& alpha);
+RcppExport SEXP _simStateSpace_MuEta0(SEXP betaSEXP, SEXP alphaSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::mat& >::type beta(betaSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type alpha(alphaSEXP);
+    rcpp_result_gen = Rcpp::wrap(MuEta0(beta, alpha));
+    return rcpp_result_gen;
+END_RCPP
+}
+// SigmaEta0
+arma::mat SigmaEta0(const arma::mat& beta, const arma::mat& psi_l);
+RcppExport SEXP _simStateSpace_SigmaEta0(SEXP betaSEXP, SEXP psi_lSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::mat& >::type beta(betaSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type psi_l(psi_lSEXP);
+    rcpp_result_gen = Rcpp::wrap(SigmaEta0(beta, psi_l));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_simStateSpace_LinSDE2SSM", (DL_FUNC) &_simStateSpace_LinSDE2SSM, 4},
@@ -324,6 +348,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_simStateSpace_SimSSMLinSDEIVary0", (DL_FUNC) &_simStateSpace_SimSSMLinSDEIVary0, 12},
     {"_simStateSpace_SimSSMLinSDEIVary1", (DL_FUNC) &_simStateSpace_SimSSMLinSDEIVary1, 14},
     {"_simStateSpace_SimSSMLinSDEIVary2", (DL_FUNC) &_simStateSpace_SimSSMLinSDEIVary2, 15},
+    {"_simStateSpace_MuEta0", (DL_FUNC) &_simStateSpace_MuEta0, 2},
+    {"_simStateSpace_SigmaEta0", (DL_FUNC) &_simStateSpace_SigmaEta0, 2},
     {NULL, NULL, 0}
 };
 
