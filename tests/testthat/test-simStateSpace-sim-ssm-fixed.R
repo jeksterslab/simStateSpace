@@ -42,8 +42,8 @@ lapply(
 
     # Type 0
     ssm <- SimSSMFixed(
-      n = 5,
-      time = 100,
+      n = n,
+      time = time,
       mu0 = mu0,
       sigma0_l = sigma0_l,
       alpha = alpha,
@@ -69,8 +69,8 @@ lapply(
 
     # Type 1
     ssm <- SimSSMFixed(
-      n = 5,
-      time = 100,
+      n = n,
+      time = time,
       mu0 = mu0,
       sigma0_l = sigma0_l,
       alpha = alpha,
