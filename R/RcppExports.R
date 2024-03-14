@@ -244,67 +244,11 @@ LinSDE2SSM <- function(iota, phi, sigma_l, delta_t) {
     .Call(`_simStateSpace_SimSSMLinSDEIVary2`, n, time, delta_t, mu0, sigma0_l, iota, phi, sigma_l, nu, lambda, theta_l, x, gamma, kappa, ou)
 }
 
-#' Mean Vector of the Latent Variables
-#' for a Stationary Process
-#'
-#' @details The mean vector of the latent variables
-#'   \eqn{\boldsymbol{\mu}_{\boldsymbol{\eta}, \boldsymbol{\eta}}}
-#'   is given by
-#'   \deqn{
-#'     \boldsymbol{\mu}_{\boldsymbol{\eta}, \boldsymbol{\eta}}
-#'     =
-#'     \left(
-#'       \mathbf{I} - \boldsymbol{\beta}
-#'     \right)^{-1}
-#'     \boldsymbol{\alpha}
-#'   }
-#' @inheritParams SimSSMFixed
-#' @examples
-#' p <- 3
-#' beta <- 0.50 * diag(p)
-#' alpha <- rep(x = 0.50, times = p)
-#' MuEta0(beta = beta, alpha = alpha)
-#'
-#' @family Simulation of State Space Models Data Functions
-#' @keywords simStateSpace sim ssm
-#' @export
-MuEta0 <- function(beta, alpha) {
-    .Call(`_simStateSpace_MuEta0`, beta, alpha)
+.Mu0 <- function(alpha, beta, nu) {
+    .Call(`_simStateSpace_Mu0`, alpha, beta, nu)
 }
 
-#' Covariance Matrix of the Latent Variables
-#' for a Stationary Process
-#'
-#' @details The column vector of the elements
-#'   of the covariance matrix of the latent variables
-#'   \eqn{\boldsymbol{\Sigma}_{\boldsymbol{\eta}, \boldsymbol{\eta}}}
-#'   is given by
-#'   \deqn{
-#'     \mathrm{Vec}
-#'     \left(
-#'       \boldsymbol{\Sigma}_{\boldsymbol{\eta}, \boldsymbol{\eta}}
-#'     \right)
-#'     =
-#'     \left(
-#'       \mathbf{I} - \boldsymbol{\beta} \otimes \boldsymbol{\beta}
-#'     \right)^{-1}
-#'     \mathrm{Vec}
-#'     \left(
-#'       \boldsymbol{\Psi}
-#'     \right)
-#'   }
-#' @inheritParams SimSSMFixed
-#' @examples
-#' p <- 3
-#' beta <- 0.50 * diag(p)
-#' psi <- 0.001 * diag(p)
-#' psi_l <- t(chol(psi))
-#' SigmaEta0(beta = beta, psi_l = psi_l)
-#'
-#' @family Simulation of State Space Models Data Functions
-#' @keywords simStateSpace sim ssm
-#' @export
-SigmaEta0 <- function(beta, psi_l) {
-    .Call(`_simStateSpace_SigmaEta0`, beta, psi_l)
+.Sigma0 <- function(beta, psi_l, lambda, theta_l) {
+    .Call(`_simStateSpace_Sigma0`, beta, psi_l, lambda, theta_l)
 }
 

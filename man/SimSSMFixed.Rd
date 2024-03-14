@@ -501,8 +501,6 @@ and state-space modeling techniques.
 \seealso{
 Other Simulation of State Space Models Data Functions: 
 \code{\link{LinSDE2SSM}()},
-\code{\link{MuEta0}()},
-\code{\link{SigmaEta0}()},
 \code{\link{SimSSMIVary}()},
 \code{\link{SimSSMLinGrowth}()},
 \code{\link{SimSSMLinGrowthIVary}()},
