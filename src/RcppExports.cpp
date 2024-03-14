@@ -308,27 +308,30 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// MuEta0
-arma::vec MuEta0(const arma::mat& beta, const arma::vec& alpha);
-RcppExport SEXP _simStateSpace_MuEta0(SEXP betaSEXP, SEXP alphaSEXP) {
+// Mu0
+Rcpp::List Mu0(const arma::vec& alpha, const arma::mat& beta, const arma::vec& nu);
+RcppExport SEXP _simStateSpace_Mu0(SEXP alphaSEXP, SEXP betaSEXP, SEXP nuSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const arma::mat& >::type beta(betaSEXP);
     Rcpp::traits::input_parameter< const arma::vec& >::type alpha(alphaSEXP);
-    rcpp_result_gen = Rcpp::wrap(MuEta0(beta, alpha));
+    Rcpp::traits::input_parameter< const arma::mat& >::type beta(betaSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type nu(nuSEXP);
+    rcpp_result_gen = Rcpp::wrap(Mu0(alpha, beta, nu));
     return rcpp_result_gen;
 END_RCPP
 }
-// SigmaEta0
-arma::mat SigmaEta0(const arma::mat& beta, const arma::mat& psi_l);
-RcppExport SEXP _simStateSpace_SigmaEta0(SEXP betaSEXP, SEXP psi_lSEXP) {
+// Sigma0
+Rcpp::List Sigma0(const arma::mat& beta, const arma::mat& psi_l, const arma::mat& lambda, const arma::mat& theta_l);
+RcppExport SEXP _simStateSpace_Sigma0(SEXP betaSEXP, SEXP psi_lSEXP, SEXP lambdaSEXP, SEXP theta_lSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const arma::mat& >::type beta(betaSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type psi_l(psi_lSEXP);
-    rcpp_result_gen = Rcpp::wrap(SigmaEta0(beta, psi_l));
+    Rcpp::traits::input_parameter< const arma::mat& >::type lambda(lambdaSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type theta_l(theta_lSEXP);
+    rcpp_result_gen = Rcpp::wrap(Sigma0(beta, psi_l, lambda, theta_l));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -348,8 +351,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_simStateSpace_SimSSMLinSDEIVary0", (DL_FUNC) &_simStateSpace_SimSSMLinSDEIVary0, 12},
     {"_simStateSpace_SimSSMLinSDEIVary1", (DL_FUNC) &_simStateSpace_SimSSMLinSDEIVary1, 14},
     {"_simStateSpace_SimSSMLinSDEIVary2", (DL_FUNC) &_simStateSpace_SimSSMLinSDEIVary2, 15},
-    {"_simStateSpace_MuEta0", (DL_FUNC) &_simStateSpace_MuEta0, 2},
-    {"_simStateSpace_SigmaEta0", (DL_FUNC) &_simStateSpace_SigmaEta0, 2},
+    {"_simStateSpace_Mu0", (DL_FUNC) &_simStateSpace_Mu0, 3},
+    {"_simStateSpace_Sigma0", (DL_FUNC) &_simStateSpace_Sigma0, 4},
     {NULL, NULL, 0}
 };
 

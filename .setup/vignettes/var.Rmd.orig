@@ -35,12 +35,25 @@ knitr::opts_chunk$set(
 #| echo = FALSE
 set.seed(42)
 n <- 5
-time <- 100
+time <- 100000
 k <- p <- 3
 iden <- diag(k)
 null_vec <- rep(x = 0, times = k)
 mu0 <- null_vec
-sigma0 <- 0.001 * iden
+sigma0 <- matrix(
+  data = c(
+    1.0,
+    0.2,
+    0.2,
+    0.2,
+    1.0,
+    0.2,
+    0.2,
+    0.2,
+    1.0
+  ),
+  nrow = 3
+)
 sigma0_l <- t(chol(sigma0))
 alpha <- null_vec
 beta <- matrix(
@@ -57,7 +70,7 @@ beta <- matrix(
   ),
   nrow = k
 )
-psi <- 0.001 * iden
+psi <- 0.1 * iden
 psi_l <- t(chol(psi))
 ```
 
