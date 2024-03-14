@@ -244,11 +244,3 @@ LinSDE2SSM <- function(iota, phi, sigma_l, delta_t) {
     .Call(`_simStateSpace_SimSSMLinSDEIVary2`, n, time, delta_t, mu0, sigma0_l, iota, phi, sigma_l, nu, lambda, theta_l, x, gamma, kappa, ou)
 }
 
-.Mu0 <- function(alpha, beta, nu) {
-    .Call(`_simStateSpace_Mu0`, alpha, beta, nu)
-}
-
-.Sigma0 <- function(beta, psi_l, lambda, theta_l) {
-    .Call(`_simStateSpace_Sigma0`, beta, psi_l, lambda, theta_l)
-}
-
