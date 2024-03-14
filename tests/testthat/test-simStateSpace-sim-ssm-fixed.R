@@ -2,8 +2,7 @@
 lapply(
   X = 1,
   FUN = function(i,
-                 text,
-                 tol) {
+                 text) {
     message(text)
     # prepare parameters
     set.seed(42)
@@ -127,6 +126,5 @@ lapply(
     plot.simstatespace(ssm, id = 1:3, time = 0:4)
     plot.simstatespace(ssm, eta = TRUE)
   },
-  text = "test-simStateSpace-sim-ssm-fixed",
-  tol = 0.01
+  text = "test-simStateSpace-sim-ssm-fixed"
 )

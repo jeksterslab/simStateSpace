@@ -31,4 +31,3 @@ Suggests:
     rmarkdown,
     testthat,
     expm
-RoxygenNote: 7.3.1
