@@ -8,13 +8,11 @@
 // [[Rcpp::export(.SimSSMLatFixed0)]]
 Rcpp::List SimSSMLatFixed0(const int n, const int time, const double delta_t,
                            const arma::vec& mu0, const arma::mat& sigma0_l,
-                           const arma::vec& alpha, const arma::mat& beta,
-                           const arma::mat& psi_l) {
+                           const arma::vec& alpha, const arma::mat& beta, const arma::mat& psi_l) {
   // Step 1: Determine dimensions
-  int p = mu0.n_elem;  // number of latent variables
-  int k = p;           // number of observed variables
-  arma::vec time_vec =
-      arma::linspace(0, (time - 1) * delta_t, time);  // time vector
+  int p = mu0.n_elem; // number of latent variables
+  int k = p; // number of observed variables
+  arma::vec time_vec = arma::linspace(0, (time - 1) * delta_t, time); // time vector
 
   // Step 2: Initialize the output list
   Rcpp::List output(n);
@@ -35,9 +33,7 @@ Rcpp::List SimSSMLatFixed0(const int n, const int time, const double delta_t,
       y.col(t) = eta.col(t);
     }
     // Step 3.4 Save results in a list
-    output[i] = Rcpp::List::create(
-        Rcpp::Named("id") = id, Rcpp::Named("time") = time_vec,
-        Rcpp::Named("y") = y.t(), Rcpp::Named("eta") = eta.t());
+    output[i] = Rcpp::List::create(Rcpp::Named("id") = id, Rcpp::Named("time") = time_vec, Rcpp::Named("y") = y.t(), Rcpp::Named("eta") = eta.t());
   }
 
   // Step 4: Return results

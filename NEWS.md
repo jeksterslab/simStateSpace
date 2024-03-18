@@ -1,6 +1,7 @@
 # simStateSpace 1.2.1
 
-* [LinSDE2SSM()] can now accept a matrix of zeros for the argument `sigma_l`.
+* The `LinSDE2SSM` function can now accept a matrix of zeros for the argument `sigma_l`.
+* Added the `DVAR2SVAR1` function.
 
 # simStateSpace 1.2.0
 

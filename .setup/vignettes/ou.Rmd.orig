@@ -45,7 +45,20 @@ k <- p <- 3
 iden <- diag(k)
 null_vec <- rep(x = 0, times = k)
 mu0 <- null_vec
-sigma0 <- 0.001 * iden
+sigma0 <- matrix(
+  data = c(
+    1.0,
+    0.2,
+    0.2,
+    0.2,
+    1.0,
+    0.2,
+    0.2,
+    0.2,
+    1.0
+  ),
+  nrow = 3
+)
 sigma0_l <- t(chol(sigma0))
 mu <- null_vec
 phi <- matrix(
@@ -65,11 +78,24 @@ phi <- matrix(
 beta_var1 <- expm::expm(
   phi
 )
-sigma <- 0.001 * iden
+sigma <- matrix(
+  data = c(
+    0.24455556,
+    0.02201587,
+    -0.05004762,
+    0.02201587,
+    0.07067800,
+    0.01539456,
+    -0.05004762,
+    0.01539456,
+    0.07553061
+  ),
+  nrow = p
+)
 sigma_l <- t(chol(sigma))
 nu <- null_vec
 lambda <- iden
-theta <- 0.001 * iden
+theta <- 0.2 * iden
 theta_l <- t(chol(theta))
 ```
 
