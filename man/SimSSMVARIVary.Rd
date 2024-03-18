@@ -200,6 +200,7 @@ and state-space modeling techniques.
 }
 \seealso{
 Other Simulation of State Space Models Data Functions: 
+\code{\link{DVAR2SVAR1}()},
 \code{\link{LinSDE2SSM}()},
 \code{\link{SimSSMFixed}()},
 \code{\link{SimSSMIVary}()},
