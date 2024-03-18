@@ -58,7 +58,8 @@
 //' @keywords simStateSpace transformation var svar
 //' @export
 // [[Rcpp::export]]
-Rcpp::List DVAR2SVAR1(const arma::mat& beta, const arma::mat& psi_l, const double delta_t) {
+Rcpp::List DVAR2SVAR1(const arma::mat& beta, const arma::mat& psi_l,
+                      const double delta_t) {
   int p = beta.n_rows;
   int order = 1;
   arma::mat I = arma::eye(p, p);
@@ -66,18 +67,19 @@ Rcpp::List DVAR2SVAR1(const arma::mat& beta, const arma::mat& psi_l, const doubl
   arma::mat betastar_0 = arma::mat(p, p);
   arma::mat betastar_1 = arma::mat(p, p);
   arma::mat diff = arma::mat(p, p);
-  betastar_0 = I - (
-    pow(-1, order + 1) * pow(delta_t, -1 * order) * arma::inv(beta)
-  );
+  betastar_0 =
+      I - (pow(-1, order + 1) * pow(delta_t, -1 * order) * arma::inv(beta));
   diff = I - betastar_0;
   betastar_1 = diff * beta;
   // psistar_l
   arma::mat psistar_l = arma::mat(p, p);
   if (arma::all(arma::vectorise(psi_l) == 0)) {
     psistar_l = psi_l;
-  } else{
+  } else {
     psistar_l = arma::chol(diff * (psi_l * psi_l.t()) * diff.t());
   }
   // output
-  return Rcpp::List::create(Rcpp::Named("betastar_0") = betastar_0, Rcpp::Named("betastar_1") = betastar_1, Rcpp::Named("psistar_l") = psistar_l);
+  return Rcpp::List::create(Rcpp::Named("betastar_0") = betastar_0,
+                            Rcpp::Named("betastar_1") = betastar_1,
+                            Rcpp::Named("psistar_l") = psistar_l);
 }
