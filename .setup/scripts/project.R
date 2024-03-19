@@ -21,11 +21,10 @@ pkg_cran <- c(
   "Rcpp",
   "RcppArmadillo",
   "expm",
-  "lavaan",
-  "betaDelta"
+  "lavaan"
 )
 
-# dynr has to be installed which requires more work to install
+# dynr has to be installed on the container used to build this repo
 
 pkg_github <- c()
 
