@@ -1,7 +1,7 @@
 ---
 title: "The Ornstein–Uhlenbeck Model"
 author: "Ivan Jacob Agaloos Pesigan"
-date: "2024-03-19"
+date: "2024-04-08"
 bibliography: "vignettes.bib"
 csl: https://raw.githubusercontent.com/citation-style-language/styles/master/apa.csl
 nocite: |
@@ -296,7 +296,7 @@ theta
 #> [3,]  0.0  0.0  0.2
 ```
 
-### Visualizing the Dynamics Without Measurement Error and Process Noise ($n = 5$ with Different Initial Condition)
+### Visualizing the Dynamics Without Measurement Error and Process Noise (n = 5 with Different Initial Condition)
 
 <img src="fig-vignettes-ou-no-error-1.png" width="3300" /><img src="fig-vignettes-ou-no-error-2.png" width="3300" /><img src="fig-vignettes-ou-no-error-3.png" width="3300" />
 
@@ -504,8 +504,8 @@ results <- dynr::dynr.cook(
 #> Doing end processing
 #> Warning in sqrt(diag(x$inv.hessian)): NaNs produced
 #> Successful trial
-#> Total Time: 23.86454 
-#> Backend Time: 23.3442
+#> Total Time: 59.31109 
+#> Backend Time: 55.06794
 ```
 
 ## Summary

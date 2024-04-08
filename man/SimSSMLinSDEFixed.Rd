@@ -60,7 +60,7 @@ in the absence of any random fluctuations
 Cholesky factorization (\code{t(chol(sigma))})
 of the covariance matrix of volatility
 or randomness in the process
-\eqn{\boldsymbol{\Sigma}}.}
+(\eqn{\boldsymbol{\Sigma}}).}
 
 \item{nu}{Numeric vector.
 Vector of intercept values for the measurement model

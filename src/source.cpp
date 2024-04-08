@@ -226,7 +226,7 @@ Rcpp::List DVAR2SVAR1(const arma::mat& beta, const arma::mat& psi_l,
 //'   Cholesky factorization (`t(chol(sigma))`)
 //'   of the covariance matrix of volatility
 //'   or randomness in the process
-//'   \eqn{\boldsymbol{\Sigma}}.
+//'   (\eqn{\boldsymbol{\Sigma}}).
 //' @param delta_t Numeric.
 //'   Time interval
 //'   (\eqn{\Delta_t}).

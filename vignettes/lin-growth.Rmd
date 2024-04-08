@@ -1,7 +1,7 @@
 ---
 title: "The Linear Growth Curve Model"
 author: "Ivan Jacob Agaloos Pesigan"
-date: "2024-03-19"
+date: "2024-04-08"
 bibliography: "vignettes.bib"
 csl: https://raw.githubusercontent.com/citation-style-language/styles/master/apa.csl
 nocite: |
@@ -194,7 +194,7 @@ theta_l
 #> [1] 0.7745967
 ```
 
-### Visualizing the Dynamics Without Measurement Error ($n = 5$ with Different Initial Condition)
+### Visualizing the Dynamics Without Measurement Error (n = 5 with Different Initial Condition)
 
 <img src="fig-vignettes-lin-growth-no-error-1.png" width="3300" />
 
@@ -338,8 +338,8 @@ results <- dynr::dynr.cook(
 #> 
 #> Doing end processing
 #> Successful trial
-#> Total Time: 45.54557 
-#> Backend Time: 45.12978
+#> Total Time: 1.010778 
+#> Backend Time: 59.68676
 ```
 
 ## Summary

@@ -1,5 +1,6 @@
 .*\.Rcheck$
 .*\.Rproj$
+.*\.sif$
 ^CITATION\.cff$
 ^LICENSE\.md$
 ^Makefile$

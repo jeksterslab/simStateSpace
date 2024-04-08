@@ -141,7 +141,7 @@
 //'   Cholesky factorization (`t(chol(sigma))`)
 //'   of the covariance matrix of volatility
 //'   or randomness in the process
-//'   \eqn{\boldsymbol{\Sigma}}.
+//'   (\eqn{\boldsymbol{\Sigma}}).
 //' @param delta_t Numeric.
 //'   Time interval
 //'   (\eqn{\Delta_t}).

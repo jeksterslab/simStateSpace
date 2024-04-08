@@ -1,7 +1,7 @@
 ---
 title: "The Vector Autoregressive Model"
 author: "Ivan Jacob Agaloos Pesigan"
-date: "2024-03-19"
+date: "2024-04-08"
 bibliography: "vignettes.bib"
 csl: https://raw.githubusercontent.com/citation-style-language/styles/master/apa.csl
 nocite: |
@@ -232,7 +232,7 @@ psi_l
 #> [3,] 0.0000000 0.0000000 0.3162278
 ```
 
-### Visualizing the Dynamics Without Process Noise ($n = 5$ with Different Initial Condition)
+### Visualizing the Dynamics Without Process Noise (n = 5 with Different Initial Condition)
 
 <img src="fig-vignettes-var-no-error-1.png" width="3300" /><img src="fig-vignettes-var-no-error-2.png" width="3300" /><img src="fig-vignettes-var-no-error-3.png" width="3300" />
 
@@ -395,8 +395,8 @@ results <- dynr::dynr.cook(
 #> 
 #> Doing end processing
 #> Successful trial
-#> Total Time: 12.2152 
-#> Backend Time: 11.76123
+#> Total Time: 20.07687 
+#> Backend Time: 18.65088
 ```
 
 ## Summary

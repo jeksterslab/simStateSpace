@@ -212,7 +212,7 @@ theta
 theta_l
 ```
 
-### Visualizing the Dynamics Without Measurement Error ($n = 5$ with Different Initial Condition)
+### Visualizing the Dynamics Without Measurement Error (n = 5 with Different Initial Condition)
 
 ```{r no-error}
 #| echo = FALSE

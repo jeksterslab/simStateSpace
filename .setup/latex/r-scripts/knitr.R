@@ -64,6 +64,18 @@ x <- c(
     recursive = TRUE
   )
 )
+x <- c(
+  x,
+  list.files(
+    path = rproj$find_file(
+      "R"
+    ),
+    pattern = "\\.rda$",
+    full.names = TRUE,
+    all.files = TRUE,
+    recursive = TRUE
+  )
+)
 if (length(x) > 0) {
   for (i in seq_along(x)) {
     load(x[i])
