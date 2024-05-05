@@ -291,7 +291,7 @@ Chow, S.-M., Ho, M. R., Hamaker, E. L., & Dolan, C. V. (2010).
 Equivalence and differences between structural equation modeling
 and state-space modeling techniques.
 \emph{Structural Equation Modeling: A Multidisciplinary Journal},
-17(2), 303–332.
+17(2), 303<U+2013>332.
 \doi{10.1080/10705511003661553}
 
 Chow, S.-M., Losardo, D., Park, J., & Molenaar, P. C. M. (2023).
