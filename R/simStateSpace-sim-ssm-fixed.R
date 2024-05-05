@@ -342,7 +342,7 @@
 #'   Equivalence and differences between structural equation modeling
 #'   and state-space modeling techniques.
 #'   *Structural Equation Modeling: A Multidisciplinary Journal*,
-#'   17(2), 303–332.
+#'   17(2), 303<U+2013>332.
 #'   \doi{10.1080/10705511003661553}
 #'
 #' @return Returns an object of class `simstatespace`
