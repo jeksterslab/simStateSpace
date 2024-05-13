@@ -17,7 +17,7 @@ jobs:
     concurrency:
       group: latex-${{ github.event_name != 'pull_request' || github.run_id }}
     env:
-      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      GITHUB_PAT: ${{ secrets.PAT }}
     permissions:
       contents: write
 
@@ -40,7 +40,7 @@ jobs:
           REPO: self
           BRANCH: latex
           FOLDER: .setup/latex/pdf
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.PAT }}
       -
         name: Make clean
         run: |

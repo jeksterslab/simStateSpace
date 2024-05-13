@@ -201,7 +201,12 @@ Rcpp::List LinSDE2SSM(const arma::vec& iota, const arma::mat& phi,
   // beta
   arma::mat beta = arma::expmat(phi * delta_t);
   // alpha
-  arma::vec alpha = arma::inv(phi) * (beta - I) * iota;
+  arma::vec alpha = arma::vec(p);
+  if (arma::all(iota == 0)) {
+    alpha = iota;
+  } else {
+    alpha = arma::inv(phi) * (beta - I) * iota;
+  }
   // psi_l
   arma::mat psi_l = arma::mat(p, p);
   if (arma::all(arma::vectorise(sigma_l) == 0)) {

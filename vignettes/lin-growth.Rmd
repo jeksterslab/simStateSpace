@@ -1,7 +1,7 @@
 ---
 title: "The Linear Growth Curve Model"
 author: "Ivan Jacob Agaloos Pesigan"
-date: "2024-05-05"
+date: "2024-05-13"
 bibliography: "vignettes.bib"
 csl: https://raw.githubusercontent.com/citation-style-language/styles/master/apa.csl
 nocite: |
@@ -237,10 +237,6 @@ dynr_data <- dynr::dynr.data(
   time = "time",
   observed = "y1"
 )
-#> Warning in check_dep_version(): ABI version mismatch: 
-#> lme4 was built with Matrix ABI version 1
-#> Current Matrix ABI version is 2
-#> Please re-install lme4 from source or restore original 'Matrix' package
 ```
 
 ### Prepare Initial Condition
@@ -342,8 +338,8 @@ results <- dynr::dynr.cook(
 #> 
 #> Doing end processing
 #> Successful trial
-#> Total Time: 52.14464 
-#> Backend Time: 51.48786
+#> Total Time: 41.91961 
+#> Backend Time: 41.26008
 ```
 
 ## Summary

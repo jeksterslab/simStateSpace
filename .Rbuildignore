@@ -11,6 +11,7 @@
 ^\.git.*$
 ^\.library$
 ^\.setup$
+^\.sif$
 ^\.sim$
 ^detritus$
 ^index\.qmd$
