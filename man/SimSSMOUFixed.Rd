@@ -3,7 +3,7 @@
 \name{SimSSMOUFixed}
 \alias{SimSSMOUFixed}
 \title{Simulate Data from the
-Ornstein<U+2013>Uhlenbeck Model
+Ornstein–Uhlenbeck Model
 using a State Space Model Parameterization
 (Fixed Parameters)}
 \usage{
@@ -122,7 +122,7 @@ where \code{l} is the value of the function argument \code{time}.
 }
 \description{
 This function simulates data from the
-Ornstein<U+2013>Uhlenbeck (OU) model
+Ornstein–Uhlenbeck (OU) model
 using a state space model parameterization.
 It assumes that the parameters remain constant
 across individuals and over time.
@@ -485,7 +485,7 @@ Chow, S.-M., Ho, M. R., Hamaker, E. L., & Dolan, C. V. (2010).
 Equivalence and differences between structural equation modeling
 and state-space modeling techniques.
 \emph{Structural Equation Modeling: A Multidisciplinary Journal},
-17(2), 303<U+2013>332.
+17(2), 303–332.
 \doi{10.1080/10705511003661553}
 
 Chow, S.-M., Losardo, D., Park, J., & Molenaar, P. C. M. (2023).
@@ -504,18 +504,17 @@ Oravecz, Z., Tuerlinckx, F., & Vandekerckhove, J. (2011).
 A hierarchical latent stochastic differential equation model
 for affective dynamics.
 Psychological Methods,
-16 (4), 468<U+2013>490.
+16 (4), 468–490.
 \doi{10.1037/a0024375}
 
 Uhlenbeck, G. E., & Ornstein, L. S. (1930).
 On the theory of the brownian motion.
 Physical Review,
-36 (5), 823<U+2013>841.
+36 (5), 823–841.
 \doi{10.1103/physrev.36.823}
 }
 \seealso{
 Other Simulation of State Space Models Data Functions: 
-\code{\link{DVAR2SVAR1}()},
 \code{\link{LinSDE2SSM}()},
 \code{\link{SimSSMFixed}()},
 \code{\link{SimSSMIVary}()},

@@ -1,13 +1,9 @@
-# simStateSpace 1.2.1.9000
-
-* Latest development version.
-
 # simStateSpace 1.2.1
 
 ## Patch
 
 * The `LinSDE2SSM` function can now accept a matrix of zeros for the argument `sigma_l`.
-* Added the `DVAR2SVAR1` function.
+* The `LinSDE2SSM` function can now accept a vector of zeros for the argument `iota`.
 
 # simStateSpace 1.2.0
 

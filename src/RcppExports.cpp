@@ -11,19 +11,6 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
-// DVAR2SVAR1
-Rcpp::List DVAR2SVAR1(const arma::mat& beta, const arma::mat& psi_l, const double delta_t);
-RcppExport SEXP _simStateSpace_DVAR2SVAR1(SEXP betaSEXP, SEXP psi_lSEXP, SEXP delta_tSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const arma::mat& >::type beta(betaSEXP);
-    Rcpp::traits::input_parameter< const arma::mat& >::type psi_l(psi_lSEXP);
-    Rcpp::traits::input_parameter< const double >::type delta_t(delta_tSEXP);
-    rcpp_result_gen = Rcpp::wrap(DVAR2SVAR1(beta, psi_l, delta_t));
-    return rcpp_result_gen;
-END_RCPP
-}
 // LinSDE2SSM
 Rcpp::List LinSDE2SSM(const arma::vec& iota, const arma::mat& phi, const arma::mat& sigma_l, const double delta_t);
 RcppExport SEXP _simStateSpace_LinSDE2SSM(SEXP iotaSEXP, SEXP phiSEXP, SEXP sigma_lSEXP, SEXP delta_tSEXP) {
@@ -323,7 +310,6 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_simStateSpace_DVAR2SVAR1", (DL_FUNC) &_simStateSpace_DVAR2SVAR1, 3},
     {"_simStateSpace_LinSDE2SSM", (DL_FUNC) &_simStateSpace_LinSDE2SSM, 4},
     {"_simStateSpace_SimSSMFixed0", (DL_FUNC) &_simStateSpace_SimSSMFixed0, 11},
     {"_simStateSpace_SimSSMFixed1", (DL_FUNC) &_simStateSpace_SimSSMFixed1, 13},
