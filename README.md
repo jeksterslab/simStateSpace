@@ -59,7 +59,7 @@ package documentation.
 ## References
 
 <div id="refs" class="references csl-bib-body hanging-indent"
-line-spacing="2">
+entry-spacing="0" line-spacing="2">
 
 <div id="ref-Chow-Ho-Hamaker-etal-2010" class="csl-entry">
 
