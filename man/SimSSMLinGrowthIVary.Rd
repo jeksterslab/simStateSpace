@@ -203,6 +203,8 @@ and state-space modeling techniques.
 \seealso{
 Other Simulation of State Space Models Data Functions: 
 \code{\link{LinSDE2SSM}()},
+\code{\link{SimBeta}()},
+\code{\link{SimPhi}()},
 \code{\link{SimSSMFixed}()},
 \code{\link{SimSSMIVary}()},
 \code{\link{SimSSMLinGrowth}()},
@@ -211,10 +213,15 @@ Other Simulation of State Space Models Data Functions:
 \code{\link{SimSSMOUFixed}()},
 \code{\link{SimSSMOUIVary}()},
 \code{\link{SimSSMVARFixed}()},
-\code{\link{SimSSMVARIVary}()}
+\code{\link{SimSSMVARIVary}()},
+\code{\link{TestPhi}()},
+\code{\link{TestStability}()},
+\code{\link{TestStationarity}()}
 
 Other Simulation of State Space Models Data Functions: 
 \code{\link{LinSDE2SSM}()},
+\code{\link{SimBeta}()},
+\code{\link{SimPhi}()},
 \code{\link{SimSSMFixed}()},
 \code{\link{SimSSMIVary}()},
 \code{\link{SimSSMLinGrowth}()},
@@ -223,7 +230,10 @@ Other Simulation of State Space Models Data Functions:
 \code{\link{SimSSMOUFixed}()},
 \code{\link{SimSSMOUIVary}()},
 \code{\link{SimSSMVARFixed}()},
-\code{\link{SimSSMVARIVary}()}
+\code{\link{SimSSMVARIVary}()},
+\code{\link{TestPhi}()},
+\code{\link{TestStability}()},
+\code{\link{TestStationarity}()}
 }
 \author{
 Ivan Jacob Agaloos Pesigan
