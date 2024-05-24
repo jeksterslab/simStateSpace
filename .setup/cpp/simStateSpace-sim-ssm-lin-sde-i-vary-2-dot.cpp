@@ -6,14 +6,12 @@
 #include <RcppArmadillo.h>
 // [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::export(.SimSSMLinSDEIVary2)]]
-Rcpp::List SimSSMLinSDEIVary2(const int n, const int time, const double delta_t,
-                              const Rcpp::List& mu0, const Rcpp::List& sigma0_l,
-                              const Rcpp::List& iota, const Rcpp::List& phi,
-                              const Rcpp::List& sigma_l, const Rcpp::List& nu,
-                              const Rcpp::List& lambda,
-                              const Rcpp::List& theta_l, const Rcpp::List& x,
-                              const Rcpp::List& gamma, const Rcpp::List& kappa,
-                              const bool ou = false) {
+Rcpp::List SimSSMLinSDEIVary2(
+    const arma::uword& n, const arma::uword& time, const double delta_t,
+    const Rcpp::List& mu0, const Rcpp::List& sigma0_l, const Rcpp::List& iota,
+    const Rcpp::List& phi, const Rcpp::List& sigma_l, const Rcpp::List& nu,
+    const Rcpp::List& lambda, const Rcpp::List& theta_l, const Rcpp::List& x,
+    const Rcpp::List& gamma, const Rcpp::List& kappa, const bool ou = false) {
   // Step 1: Determine dimensions
   arma::vec mu0_i = mu0[0];
   arma::vec nu_i = nu[0];
@@ -28,7 +26,7 @@ Rcpp::List SimSSMLinSDEIVary2(const int n, const int time, const double delta_t,
   Rcpp::List output(n);
 
   // Step 3: Generate data per individual
-  for (int i = 0; i < n; i++) {
+  for (arma::uword i = 0; i < n; i++) {
     // Step 3.1: Create matrices of latent, observed, and id variables
     arma::mat eta(p, time);
     arma::mat y(k, time);
@@ -66,7 +64,7 @@ Rcpp::List SimSSMLinSDEIVary2(const int n, const int time, const double delta_t,
     y.col(0) = nu_i + (lambda_i * eta.col(0)) + (theta_l_i * arma::randn(k)) +
                (kappa_i * x_i.col(0));
     // Step 3.4: Data generation loop
-    for (int t = 1; t < time; t++) {
+    for (arma::uword t = 1; t < time; t++) {
       eta.col(t) = alpha_i + (beta_i * eta.col(t - 1)) +
                    (psi_l_i * arma::randn(p)) + (gamma_i * x_i.col(t));
       y.col(t) = nu_i + (lambda_i * eta.col(t)) + (theta_l_i * arma::randn(k)) +

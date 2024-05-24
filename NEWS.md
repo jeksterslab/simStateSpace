@@ -1,6 +1,7 @@
 # simStateSpace 1.2.1.9000
 
 * Latest development version.
+* Added the `TestStationarity()` and `TestStability()` functions.
 
 # simStateSpace 1.2.1
 

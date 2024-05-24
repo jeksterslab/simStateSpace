@@ -1,7 +1,7 @@
 ---
 title: "The Vector Autoregressive Model"
 author: "Ivan Jacob Agaloos Pesigan"
-date: "2024-05-15"
+date: "2024-05-24"
 bibliography: "vignettes.bib"
 csl: https://raw.githubusercontent.com/citation-style-language/styles/master/apa.csl
 nocite: |
@@ -196,35 +196,59 @@ Let the dynamic process noise $\boldsymbol{\Psi}$ be given by
 ### R Function Arguments
 
 
-```r
+``` r
 n
 #> [1] 5
+```
+
+``` r
 time
 #> [1] 100
+```
+
+``` r
 mu0
 #> [1] 0 0 0
+```
+
+``` r
 sigma0
 #>      [,1] [,2] [,3]
 #> [1,]  1.0  0.2  0.2
 #> [2,]  0.2  1.0  0.2
 #> [3,]  0.2  0.2  1.0
+```
+
+``` r
 sigma0_l
 #>      [,1]      [,2]      [,3]
 #> [1,]  1.0 0.0000000 0.0000000
 #> [2,]  0.2 0.9797959 0.0000000
 #> [3,]  0.2 0.1632993 0.9660918
+```
+
+``` r
 alpha
 #> [1] 0 0 0
+```
+
+``` r
 beta
 #>      [,1] [,2] [,3]
 #> [1,]  0.7  0.0  0.0
 #> [2,]  0.5  0.6  0.0
 #> [3,] -0.1  0.4  0.5
+```
+
+``` r
 psi
 #>      [,1] [,2] [,3]
 #> [1,]  0.1  0.0  0.0
 #> [2,]  0.0  0.1  0.0
 #> [3,]  0.0  0.0  0.1
+```
+
+``` r
 psi_l
 #>           [,1]      [,2]      [,3]
 #> [1,] 0.3162278 0.0000000 0.0000000
@@ -239,7 +263,7 @@ psi_l
 ### Using the SimSSMVARFixed Function from the simStateSpace Package to Simulate Data
 
 
-```r
+``` r
 library(simStateSpace)
 sim <- SimSSMVARFixed(
   n = n,
@@ -259,6 +283,9 @@ head(data)
 #> 4  1    3 -0.44448720 -0.9783200 -0.3028425
 #> 5  1    4 -0.28796224 -1.2222325 -0.3807219
 #> 6  1    5  0.01622801 -1.2362032 -1.0056038
+```
+
+``` r
 plot(sim)
 ```
 
@@ -269,7 +296,7 @@ plot(sim)
 ### Prepare Data
 
 
-```r
+``` r
 dynr_data <- dynr::dynr.data(
   data = data,
   id = "id",
@@ -281,7 +308,7 @@ dynr_data <- dynr::dynr.data(
 ### Prepare Initial Condition
 
 
-```r
+``` r
 dynr_initial <- dynr::prep.initial(
   values.inistate = mu0,
   params.inistate = c("mu0_1", "mu0_2", "mu0_3"),
@@ -300,7 +327,7 @@ dynr_initial <- dynr::prep.initial(
 ### Prepare Measurement Model
 
 
-```r
+``` r
 dynr_measurement <- dynr::prep.measurement(
   values.load = diag(3),
   params.load = matrix(data = "fixed", nrow = 3, ncol = 3),
@@ -312,7 +339,7 @@ dynr_measurement <- dynr::prep.measurement(
 ### Prepare Dynamic Process
 
 
-```r
+``` r
 dynr_dynamics <- dynr::prep.formulaDynamics(
   formula = list(
     eta_1 ~ alpha_1 * 1 + beta_11 * eta_1 + beta_12 * eta_2 + beta_13 * eta_3,
@@ -332,7 +359,7 @@ dynr_dynamics <- dynr::prep.formulaDynamics(
 ### Prepare Process Noise
 
 
-```r
+``` r
 dynr_noise <- dynr::prep.noise(
   values.latent = psi,
   params.latent = matrix(
@@ -351,7 +378,7 @@ dynr_noise <- dynr::prep.noise(
 ### Prepare the Model
 
 
-```r
+``` r
 model <- dynr::dynr.model(
   data = dynr_data,
   initial = dynr_initial,
@@ -367,7 +394,7 @@ model <- dynr::dynr.model(
 ### Fit the Model
 
 
-```r
+``` r
 results <- dynr::dynr.cook(
   model,
   debug_flag = TRUE,
@@ -395,14 +422,14 @@ results <- dynr::dynr.cook(
 #> 
 #> Doing end processing
 #> Successful trial
-#> Total Time: 22.67883 
-#> Backend Time: 21.82753
+#> Total Time: 16.04696 
+#> Backend Time: 15.53073
 ```
 
 ## Summary
 
 
-```r
+``` r
 summary(results)
 #> Coefficients:
 #>             Estimate Std. Error t value   ci.lower   ci.upper Pr(>|t|)    
@@ -446,21 +473,33 @@ summary(results)
 ### Parameter Estimates
 
 
-```r
+``` r
 alpha_hat
 #> [1] -0.017803606  0.007988374  0.007653975
+```
+
+``` r
 beta_hat
 #>            [,1]        [,2]        [,3]
 #> [1,]  0.7000363 0.003324985  0.03447235
 #> [2,]  0.4709436 0.646079473 -0.01889653
 #> [3,] -0.1191479 0.423746033  0.47887469
+```
+
+``` r
 psi_hat
 #>              [,1]         [,2]         [,3]
 #> [1,]  0.093809960 -0.007543040 -0.001251799
 #> [2,] -0.007543040  0.109240060 -0.009878017
 #> [3,] -0.001251799 -0.009878017  0.093059988
+```
+
+``` r
 mu0_hat
 #> [1] -0.41533909 -0.06883323  0.16065523
+```
+
+``` r
 sigma0_hat
 #>            [,1]       [,2]       [,3]
 #> [1,]  0.5646626 -0.1011154 -0.2046038

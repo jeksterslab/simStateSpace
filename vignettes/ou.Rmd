@@ -1,7 +1,7 @@
 ---
 title: "The Ornstein–Uhlenbeck Model"
 author: "Ivan Jacob Agaloos Pesigan"
-date: "2024-05-15"
+date: "2024-05-24"
 bibliography: "vignettes.bib"
 csl: https://raw.githubusercontent.com/citation-style-language/styles/master/apa.csl
 nocite: |
@@ -256,39 +256,69 @@ Let $\Delta t = 0.1$.
 ### R Function Arguments
 
 
-```r
+``` r
 n
 #> [1] 5
+```
+
+``` r
 time
 #> [1] 100
+```
+
+``` r
 delta_t
 #> [1] 0.1
+```
+
+``` r
 mu0
 #> [1] 0 0 0
+```
+
+``` r
 sigma0
 #>      [,1] [,2] [,3]
 #> [1,]  1.0  0.2  0.2
 #> [2,]  0.2  1.0  0.2
 #> [3,]  0.2  0.2  1.0
+```
+
+``` r
 mu
 #> [1] 0 0 0
+```
+
+``` r
 phi
 #>        [,1]   [,2]   [,3]
 #> [1,] -0.357  0.000  0.000
 #> [2,]  0.771 -0.511  0.000
 #> [3,] -0.450  0.729 -0.693
+```
+
+``` r
 sigma
 #>             [,1]       [,2]        [,3]
 #> [1,]  0.24455556 0.02201587 -0.05004762
 #> [2,]  0.02201587 0.07067800  0.01539456
 #> [3,] -0.05004762 0.01539456  0.07553061
+```
+
+``` r
 nu
 #> [1] 0 0 0
+```
+
+``` r
 lambda
 #>      [,1] [,2] [,3]
 #> [1,]    1    0    0
 #> [2,]    0    1    0
 #> [3,]    0    0    1
+```
+
+``` r
 theta
 #>      [,1] [,2] [,3]
 #> [1,]  0.2  0.0  0.0
@@ -303,7 +333,7 @@ theta
 ### Using the SimSSMOUFixed Function from the simStateSpace Package to Simulate Data
 
 
-```r
+``` r
 library(simStateSpace)
 sim <- SimSSMOUFixed(
   n = n,
@@ -328,6 +358,9 @@ head(data)
 #> 4  1  0.3 -0.09485392 -0.82030556 1.0272653
 #> 5  1  0.4 -1.50322069 -0.36841853 0.1821731
 #> 6  1  0.5 -0.75049839  0.35752476 0.2862544
+```
+
+``` r
 plot(sim)
 ```
 
@@ -338,7 +371,7 @@ plot(sim)
 ### Prepare Data
 
 
-```r
+``` r
 dynr_data <- dynr::dynr.data(
   dataframe = data,
   id = "id",
@@ -350,7 +383,7 @@ dynr_data <- dynr::dynr.data(
 ### Prepare Initial Condition
 
 
-```r
+``` r
 dynr_initial <- dynr::prep.initial(
   values.inistate = mu0,
   params.inistate = c("mu0_1", "mu0_2", "mu0_3"),
@@ -369,7 +402,7 @@ dynr_initial <- dynr::prep.initial(
 ### Prepare Measurement Model
 
 
-```r
+``` r
 dynr_measurement <- dynr::prep.measurement(
   values.load = diag(3),
   params.load = matrix(data = "fixed", nrow = 3, ncol = 3),
@@ -381,7 +414,7 @@ dynr_measurement <- dynr::prep.measurement(
 ### Prepare Dynamic Process
 
 
-```r
+``` r
 dynr_dynamics <- dynr::prep.formulaDynamics(
   formula = list(  
     eta_1 ~ (-phi_11 * (mu_1 - eta_1)) + (-phi_12 * (mu_2 - eta_2)) + (-phi_13 * (mu_3 - eta_3)),
@@ -401,7 +434,7 @@ dynr_dynamics <- dynr::prep.formulaDynamics(
 ### Prepare Process Noise
 
 
-```r
+``` r
 dynr_noise <- dynr::prep.noise(
   values.latent = sigma,
   params.latent = matrix(
@@ -427,7 +460,7 @@ dynr_noise <- dynr::prep.noise(
 ### Prepare the Model
 
 
-```r
+``` r
 model <- dynr::dynr.model(
   data = dynr_data,
   initial = dynr_initial,
@@ -441,7 +474,7 @@ model <- dynr::dynr.model(
 Add lower and upper bounds to aid in the optimization.
 
 
-```r
+``` r
 model$lb[
   c(
     "phi_11",
@@ -475,7 +508,7 @@ model$ub[
 ### Fit the Model
 
 
-```r
+``` r
 results <- dynr::dynr.cook(
   model,
   debug_flag = TRUE,
@@ -504,14 +537,14 @@ results <- dynr::dynr.cook(
 #> Doing end processing
 #> Warning in sqrt(diag(x$inv.hessian)): NaNs produced
 #> Successful trial
-#> Total Time: 49.8078 
-#> Backend Time: 48.82861
+#> Total Time: 31.45656 
+#> Backend Time: 30.81748
 ```
 
 ## Summary
 
 
-```r
+``` r
 summary(results)
 #> Coefficients:
 #>            Estimate Std. Error t value  ci.lower  ci.upper Pr(>|t|)    
@@ -561,26 +594,41 @@ summary(results)
 ### Parameter Estimates
 
 
-```r
+``` r
 mu_hat
 #> [1] 0.05485504 0.19656423 0.11287416
+```
+
+``` r
 phi_hat
 #>            [,1]       [,2]        [,3]
 #> [1,] -0.2600782 -0.2739041  0.02599383
 #> [2,]  0.7412146 -1.0029554  0.20495046
 #> [3,] -0.9824315  1.5000000 -1.09114523
+```
+
+``` r
 sigma_hat
 #>            [,1]        [,2]        [,3]
 #> [1,] 0.11468333 0.015704147 0.013824128
 #> [2,] 0.01570415 0.041783870 0.003386458
 #> [3,] 0.01382413 0.003386458 0.045167741
+```
+
+``` r
 mu0_hat
 #> [1]  0.007096018 -0.088134745  0.193550032
+```
+
+``` r
 sigma0_hat
 #>             [,1]        [,2]       [,3]
 #> [1,]  0.20758149 -0.06414093  0.1523763
 #> [2,] -0.06414093  0.42805907 -0.7788586
 #> [3,]  0.15237633 -0.77885855  1.4235698
+```
+
+``` r
 beta_var1_hat <- expm::expm(phi_hat)
 beta_var1_hat
 #>            [,1]       [,2]         [,3]

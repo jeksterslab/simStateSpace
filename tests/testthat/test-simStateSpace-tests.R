@@ -5,36 +5,10 @@ lapply(
                  text) {
     message(text)
     testthat::test_that(
-      paste(text, "positive definite"),
-      {
-        testthat::expect_true(
-          simStateSpace:::.TestPositiveDefinite(
-            matrix(
-              data = diag(2),
-              nrow = 2
-            )
-          )
-        )
-      }
-    )
-    testthat::test_that(
-      paste(text, "nonpositive definite"),
-      {
-        testthat::expect_false(
-          simStateSpace:::.TestPositiveDefinite(
-            matrix(
-              data = c(-2, 1, 1, 0),
-              nrow = 2
-            )
-          )
-        )
-      }
-    )
-    testthat::test_that(
       paste(text, "stationary"),
       {
         testthat::expect_true(
-          simStateSpace:::.TestStationarity(
+          TestStationarity(
             matrix(
               data = c(0.5, 0.3, 0.2, 0.4),
               nrow = 2
@@ -47,10 +21,27 @@ lapply(
       paste(text, "nonstationary"),
       {
         testthat::expect_false(
-          simStateSpace:::.TestStationarity(
+          TestStationarity(
             matrix(
               data = c(0.9, -0.5, 0.8, 0.7),
               nrow = 2
+            )
+          )
+        )
+      }
+    )
+    testthat::test_that(
+      paste(text, "stable"),
+      {
+        testthat::expect_true(
+          TestStability(
+            matrix(
+              data = c(
+                -0.357, 0.771, -0.450,
+                0.0, -0.511, 0.729,
+                0, 0, -0.693
+              ),
+              nrow = 3
             )
           )
         )

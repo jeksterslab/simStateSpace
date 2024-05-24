@@ -192,6 +192,82 @@ LinSDE2SSM <- function(iota, phi, sigma_l, delta_t) {
     .Call(`_simStateSpace_LinSDE2SSM`, iota, phi, sigma_l, delta_t)
 }
 
+#' Simulate Transition Matrices
+#' from the Multivariate Normal Distribution
+#'
+#' This function simulates random transition matrices
+#' from the multivariate normal distribution.
+#' The function ensures that the generated transition matrices are stationary
+#' using [TestStationarity()].
+#'
+#' @author Ivan Jacob Agaloos Pesigan
+#'
+#' @param n Positive integer.
+#'   Number of replications.
+#' @param beta Numeric matrix.
+#'   The transition matrix (\eqn{\boldsymbol{\beta}}).
+#' @param vcov_beta_vec_l Numeric matrix.
+#'   Cholesky factorization (`t(chol(vcov_beta_vec))`)
+#'   of the sampling variance-covariance matrix
+#'   \eqn{\mathrm{vec} \left( \boldsymbol{\beta} \right)}.
+#'
+#' @examples
+#' beta <- matrix(
+#'   data = c(
+#'     0.7, 0.5, -0.1,
+#'     0.0, 0.6, 0.4,
+#'     0, 0, 0.5
+#'   ),
+#'   nrow = 3
+#' )
+#' vcov_beta_vec_l <- t(chol(0.10 * diag(9)))
+#' SimBeta(n = 10, beta = beta, vcov_beta_vec_l = vcov_beta_vec_l)
+#'
+#' @family Simulation of State Space Models Data Functions
+#' @keywords simStateSpace ssm
+#' @export
+SimBeta <- function(n, beta, vcov_beta_vec_l) {
+    .Call(`_simStateSpace_SimBeta`, n, beta, vcov_beta_vec_l)
+}
+
+#' Simulate Random Drift Matrices
+#' from the Multivariate Normal Distribution
+#'
+#' This function simulates random drift matrices
+#' from the multivariate normal distribution.
+#' The function ensures that the generated drift matrices are stable
+#' using [TestPhi()].
+#'
+#' @author Ivan Jacob Agaloos Pesigan
+#'
+#' @param n Positive integer.
+#'   Number of replications.
+#' @param phi Numeric matrix.
+#'   The drift matrix (\eqn{\boldsymbol{\Phi}}).
+#' @param vcov_phi_vec_l Numeric matrix.
+#'   Cholesky factorization (`t(chol(vcov_phi_vec))`)
+#'   of the sampling variance-covariance matrix
+#'   \eqn{\mathrm{vec} \left( \boldsymbol{\Phi} \right)}.
+#'
+#' @examples
+#' phi <- matrix(
+#'   data = c(
+#'     -0.357, 0.771, -0.450,
+#'     0.0, -0.511, 0.729,
+#'     0, 0, -0.693
+#'   ),
+#'   nrow = 3
+#' )
+#' vcov_phi_vec_l <- t(chol(0.10 * diag(9)))
+#' SimPhi(n = 10, phi = phi, vcov_phi_vec_l = vcov_phi_vec_l)
+#'
+#' @family Simulation of State Space Models Data Functions
+#' @keywords simStateSpace linsde
+#' @export
+SimPhi <- function(n, phi, vcov_phi_vec_l) {
+    .Call(`_simStateSpace_SimPhi`, n, phi, vcov_phi_vec_l)
+}
+
 .SimSSMFixed0 <- function(n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l, nu, lambda, theta_l) {
     .Call(`_simStateSpace_SimSSMFixed0`, n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l, nu, lambda, theta_l)
 }
@@ -242,5 +318,96 @@ LinSDE2SSM <- function(iota, phi, sigma_l, delta_t) {
 
 .SimSSMLinSDEIVary2 <- function(n, time, delta_t, mu0, sigma0_l, iota, phi, sigma_l, nu, lambda, theta_l, x, gamma, kappa, ou = FALSE) {
     .Call(`_simStateSpace_SimSSMLinSDEIVary2`, n, time, delta_t, mu0, sigma0_l, iota, phi, sigma_l, nu, lambda, theta_l, x, gamma, kappa, ou)
+}
+
+#' Test the Drift Matrix
+#'
+#' Both have to be true for the function to return `TRUE`.
+#'   - Test that the real part of all eigenvalues of \eqn{\boldsymbol{\Phi}}
+#'     are less than zero.
+#'   - Test that the diagonal values of \eqn{\boldsymbol{\Phi}}
+#'     are between 0 to negative inifinity.
+#'
+#' @author Ivan Jacob Agaloos Pesigan
+#'
+#' @param phi Numeric matrix.
+#'   The drift matrix (\eqn{\boldsymbol{\Phi}}).
+#'
+#' @examples
+#' phi <- matrix(
+#'   data = c(
+#'     -0.357, 0.771, -0.450,
+#'     0.0, -0.511, 0.729,
+#'     0, 0, -0.693
+#'   ),
+#'   nrow = 3
+#' )
+#' TestPhi(phi = phi)
+#'
+#' @family Simulation of State Space Models Data Functions
+#' @keywords simStateSpace test linsde
+#' @export
+TestPhi <- function(phi) {
+    .Call(`_simStateSpace_TestPhi`, phi)
+}
+
+#' Test Stability
+#'
+#' The function computes the eigenvalues of the input matrix `x`.
+#' It checks if the real part of all eigenvalues is negative.
+#' If all eigenvalues have negative real parts,
+#' the system is considered stable.
+#'
+#' @author Ivan Jacob Agaloos Pesigan
+#'
+#' @param x Numeric matrix.
+#'
+#' @examples
+#' x <- matrix(
+#'   data = c(
+#'     -0.357, 0.771, -0.450,
+#'     0.0, -0.511, 0.729,
+#'     0, 0, -0.693
+#'   ),
+#'   nrow = 3
+#' )
+#' TestStability(x)
+#'
+#' @family Simulation of State Space Models Data Functions
+#' @keywords simStateSpace test linsde
+#' @export
+TestStability <- function(x) {
+    .Call(`_simStateSpace_TestStability`, x)
+}
+
+#' Test Stationarity
+#'
+#' The function computes the eigenvalues of the input matrix `x`.
+#' It checks if all eigenvalues have moduli less than 1.
+#' If all eigenvalues have moduli less than 1,
+#' the system is considered stationary.
+#'
+#' @author Ivan Jacob Agaloos Pesigan
+#'
+#' @param x Numeric matrix.
+#'
+#' @examples
+#' x <- matrix(
+#'   data = c(0.5, 0.3, 0.2, 0.4),
+#'   nrow = 2
+#' )
+#' TestStationarity(x)
+#'
+#' x <- matrix(
+#'   data = c(0.9, -0.5, 0.8, 0.7),
+#'   nrow = 2
+#' )
+#' TestStationarity(x)
+#'
+#' @family Simulation of State Space Models Data Functions
+#' @keywords simStateSpace test ssm
+#' @export
+TestStationarity <- function(x) {
+    .Call(`_simStateSpace_TestStationarity`, x)
 }
 

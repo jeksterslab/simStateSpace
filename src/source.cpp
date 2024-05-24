@@ -1,4 +1,17 @@
 // -----------------------------------------------------------------------------
+// edit .setup/cpp/000-forward-declarations.cpp
+// Ivan Jacob Agaloos Pesigan
+// -----------------------------------------------------------------------------
+
+#include <RcppArmadillo.h>
+// [[Rcpp::depends(RcppArmadillo)]]
+
+bool TestPhi(const arma::mat& phi);
+
+bool TestStability(const arma::mat& x);
+
+bool TestStationarity(const arma::mat& x);
+// -----------------------------------------------------------------------------
 // edit .setup/cpp/simStateSpace-lin-sde-2-ssm.cpp
 // Ivan Jacob Agaloos Pesigan
 // -----------------------------------------------------------------------------
@@ -198,18 +211,15 @@ Rcpp::List LinSDE2SSM(const arma::vec& iota, const arma::mat& phi,
                       const arma::mat& sigma_l, const double delta_t) {
   int p = iota.n_elem;
   arma::mat I = arma::eye(p, p);
-  // beta
   arma::mat beta = arma::expmat(phi * delta_t);
-  // alpha
   arma::vec alpha = arma::vec(p);
-  if (arma::all(iota == 0)) {
+  if (iota.is_zero()) {
     alpha = iota;
   } else {
     alpha = arma::inv(phi) * (beta - I) * iota;
   }
-  // psi_l
   arma::mat psi_l = arma::mat(p, p);
-  if (arma::all(arma::vectorise(sigma_l) == 0)) {
+  if (sigma_l.is_zero()) {
     psi_l = sigma_l;
   } else {
     arma::mat J = arma::eye(p * p, p * p);
@@ -225,6 +235,134 @@ Rcpp::List LinSDE2SSM(const arma::vec& iota, const arma::mat& phi,
                             Rcpp::Named("psi_l") = psi_l);
 }
 // -----------------------------------------------------------------------------
+// edit .setup/cpp/simStateSpace-sim-beta.cpp
+// Ivan Jacob Agaloos Pesigan
+// -----------------------------------------------------------------------------
+
+#include <RcppArmadillo.h>
+// [[Rcpp::depends(RcppArmadillo)]]
+
+//' Simulate Transition Matrices
+//' from the Multivariate Normal Distribution
+//'
+//' This function simulates random transition matrices
+//' from the multivariate normal distribution.
+//' The function ensures that the generated transition matrices are stationary
+//' using [TestStationarity()].
+//'
+//' @author Ivan Jacob Agaloos Pesigan
+//'
+//' @param n Positive integer.
+//'   Number of replications.
+//' @param beta Numeric matrix.
+//'   The transition matrix (\eqn{\boldsymbol{\beta}}).
+//' @param vcov_beta_vec_l Numeric matrix.
+//'   Cholesky factorization (`t(chol(vcov_beta_vec))`)
+//'   of the sampling variance-covariance matrix
+//'   \eqn{\mathrm{vec} \left( \boldsymbol{\beta} \right)}.
+//'
+//' @examples
+//' beta <- matrix(
+//'   data = c(
+//'     0.7, 0.5, -0.1,
+//'     0.0, 0.6, 0.4,
+//'     0, 0, 0.5
+//'   ),
+//'   nrow = 3
+//' )
+//' vcov_beta_vec_l <- t(chol(0.10 * diag(9)))
+//' SimBeta(n = 10, beta = beta, vcov_beta_vec_l = vcov_beta_vec_l)
+//'
+//' @family Simulation of State Space Models Data Functions
+//' @keywords simStateSpace ssm
+//' @export
+// [[Rcpp::export]]
+Rcpp::List SimBeta(const arma::uword& n, const arma::mat& beta,
+                   const arma::mat& vcov_beta_vec_l) {
+  Rcpp::List output(n);
+  int p = beta.n_rows;
+  int q = p * p;
+  arma::vec beta_vec = arma::vectorise(beta);
+  for (arma::uword i = 0; i < n; i++) {
+    bool run = true;
+    while (run) {
+      arma::vec beta_vec_i = beta_vec + (vcov_beta_vec_l * arma::randn(q));
+      arma::mat beta_i = arma::reshape(beta_vec_i, p, p);
+      if (TestStationarity(beta_i)) {
+        run = false;
+      }
+      if (!run) {
+        output[i] = beta_i;
+      }
+    }
+  }
+  return output;
+}
+// -----------------------------------------------------------------------------
+// edit .setup/cpp/simStateSpace-sim-phi.cpp
+// Ivan Jacob Agaloos Pesigan
+// -----------------------------------------------------------------------------
+
+#include <RcppArmadillo.h>
+// [[Rcpp::depends(RcppArmadillo)]]
+
+//' Simulate Random Drift Matrices
+//' from the Multivariate Normal Distribution
+//'
+//' This function simulates random drift matrices
+//' from the multivariate normal distribution.
+//' The function ensures that the generated drift matrices are stable
+//' using [TestPhi()].
+//'
+//' @author Ivan Jacob Agaloos Pesigan
+//'
+//' @param n Positive integer.
+//'   Number of replications.
+//' @param phi Numeric matrix.
+//'   The drift matrix (\eqn{\boldsymbol{\Phi}}).
+//' @param vcov_phi_vec_l Numeric matrix.
+//'   Cholesky factorization (`t(chol(vcov_phi_vec))`)
+//'   of the sampling variance-covariance matrix
+//'   \eqn{\mathrm{vec} \left( \boldsymbol{\Phi} \right)}.
+//'
+//' @examples
+//' phi <- matrix(
+//'   data = c(
+//'     -0.357, 0.771, -0.450,
+//'     0.0, -0.511, 0.729,
+//'     0, 0, -0.693
+//'   ),
+//'   nrow = 3
+//' )
+//' vcov_phi_vec_l <- t(chol(0.10 * diag(9)))
+//' SimPhi(n = 10, phi = phi, vcov_phi_vec_l = vcov_phi_vec_l)
+//'
+//' @family Simulation of State Space Models Data Functions
+//' @keywords simStateSpace linsde
+//' @export
+// [[Rcpp::export]]
+Rcpp::List SimPhi(const arma::uword& n, const arma::mat& phi,
+                  const arma::mat& vcov_phi_vec_l) {
+  Rcpp::List output(n);
+  int p = phi.n_rows;
+  int q = p * p;
+  arma::vec phi_vec = arma::vectorise(phi);
+  for (arma::uword i = 0; i < n; i++) {
+    bool run = true;
+    while (run) {
+      arma::vec phi_vec_i = phi_vec + (vcov_phi_vec_l * arma::randn(q));
+      arma::mat phi_i = arma::reshape(phi_vec_i, p, p);
+      if (TestPhi(phi_i)) {
+        run = false;
+      }
+      if (!run) {
+        output[i] = phi_i;
+      }
+    }
+  }
+  return output;
+}
+// -----------------------------------------------------------------------------
 // edit .setup/cpp/simStateSpace-sim-ssm-fixed-0-dot.cpp
 // Ivan Jacob Agaloos Pesigan
 // -----------------------------------------------------------------------------
@@ -232,11 +370,12 @@ Rcpp::List LinSDE2SSM(const arma::vec& iota, const arma::mat& phi,
 #include <RcppArmadillo.h>
 // [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::export(.SimSSMFixed0)]]
-Rcpp::List SimSSMFixed0(const int n, const int time, const double delta_t,
-                        const arma::vec& mu0, const arma::mat& sigma0_l,
-                        const arma::vec& alpha, const arma::mat& beta,
-                        const arma::mat& psi_l, const arma::vec& nu,
-                        const arma::mat& lambda, const arma::mat& theta_l) {
+Rcpp::List SimSSMFixed0(const arma::uword& n, const arma::uword& time,
+                        const double delta_t, const arma::vec& mu0,
+                        const arma::mat& sigma0_l, const arma::vec& alpha,
+                        const arma::mat& beta, const arma::mat& psi_l,
+                        const arma::vec& nu, const arma::mat& lambda,
+                        const arma::mat& theta_l) {
   // Step 1: Determine dimensions
   int p = mu0.n_elem;  // number of latent variables
   int k = nu.n_elem;   // number of observed variables
@@ -247,7 +386,7 @@ Rcpp::List SimSSMFixed0(const int n, const int time, const double delta_t,
   Rcpp::List output(n);
 
   // Step 3: Generate data per individual
-  for (int i = 0; i < n; i++) {
+  for (arma::uword i = 0; i < n; i++) {
     // Step 3.1: Create matrices of latent, observed, and id variables
     arma::mat eta(p, time);
     arma::mat y(k, time);
@@ -257,7 +396,7 @@ Rcpp::List SimSSMFixed0(const int n, const int time, const double delta_t,
     eta.col(0) = mu0 + (sigma0_l * arma::randn(p));
     y.col(0) = nu + (lambda * eta.col(0)) + (theta_l * arma::randn(k));
     // Step 3.3: Data generation loop
-    for (int t = 1; t < time; t++) {
+    for (arma::uword t = 1; t < time; t++) {
       eta.col(t) = alpha + (beta * eta.col(t - 1)) + (psi_l * arma::randn(p));
       y.col(t) = nu + (lambda * eta.col(t)) + (theta_l * arma::randn(k));
     }
@@ -278,12 +417,13 @@ Rcpp::List SimSSMFixed0(const int n, const int time, const double delta_t,
 #include <RcppArmadillo.h>
 // [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::export(.SimSSMFixed1)]]
-Rcpp::List SimSSMFixed1(const int n, const int time, const double delta_t,
-                        const arma::vec& mu0, const arma::mat& sigma0_l,
-                        const arma::vec& alpha, const arma::mat& beta,
-                        const arma::mat& psi_l, const arma::vec& nu,
-                        const arma::mat& lambda, const arma::mat& theta_l,
-                        const Rcpp::List& x, const arma::mat& gamma) {
+Rcpp::List SimSSMFixed1(const arma::uword& n, const arma::uword& time,
+                        const double delta_t, const arma::vec& mu0,
+                        const arma::mat& sigma0_l, const arma::vec& alpha,
+                        const arma::mat& beta, const arma::mat& psi_l,
+                        const arma::vec& nu, const arma::mat& lambda,
+                        const arma::mat& theta_l, const Rcpp::List& x,
+                        const arma::mat& gamma) {
   // Step 1: Determine dimensions
   int p = mu0.n_elem;  // number of latent variables
   int k = nu.n_elem;   // number of observed variables
@@ -294,7 +434,7 @@ Rcpp::List SimSSMFixed1(const int n, const int time, const double delta_t,
   Rcpp::List output(n);
 
   // Step 3: Generate data per individual
-  for (int i = 0; i < n; i++) {
+  for (arma::uword i = 0; i < n; i++) {
     // Step 3.1: Create matrices of latent, observed, covariate, and id
     // variables
     arma::mat eta(p, time);
@@ -306,7 +446,7 @@ Rcpp::List SimSSMFixed1(const int n, const int time, const double delta_t,
     eta.col(0) = mu0 + (sigma0_l * arma::randn(p)) + (gamma * x_i.col(0));
     y.col(0) = nu + (lambda * eta.col(0)) + (theta_l * arma::randn(k));
     // Step 3.3: Data generation loop
-    for (int t = 1; t < time; t++) {
+    for (arma::uword t = 1; t < time; t++) {
       eta.col(t) = alpha + (beta * eta.col(t - 1)) + (psi_l * arma::randn(p)) +
                    (gamma * x_i.col(t));
       y.col(t) = nu + (lambda * eta.col(t)) + (theta_l * arma::randn(k));
@@ -329,13 +469,13 @@ Rcpp::List SimSSMFixed1(const int n, const int time, const double delta_t,
 #include <RcppArmadillo.h>
 // [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::export(.SimSSMFixed2)]]
-Rcpp::List SimSSMFixed2(const int n, const int time, const double delta_t,
-                        const arma::vec& mu0, const arma::mat& sigma0_l,
-                        const arma::vec& alpha, const arma::mat& beta,
-                        const arma::mat& psi_l, const arma::vec& nu,
-                        const arma::mat& lambda, const arma::mat& theta_l,
-                        const Rcpp::List& x, const arma::mat& gamma,
-                        const arma::mat& kappa) {
+Rcpp::List SimSSMFixed2(const arma::uword& n, const arma::uword& time,
+                        const double delta_t, const arma::vec& mu0,
+                        const arma::mat& sigma0_l, const arma::vec& alpha,
+                        const arma::mat& beta, const arma::mat& psi_l,
+                        const arma::vec& nu, const arma::mat& lambda,
+                        const arma::mat& theta_l, const Rcpp::List& x,
+                        const arma::mat& gamma, const arma::mat& kappa) {
   // Step 1: Determine dimensions
   int p = mu0.n_elem;  // number of latent variables
   int k = nu.n_elem;   // number of observed variables
@@ -346,7 +486,7 @@ Rcpp::List SimSSMFixed2(const int n, const int time, const double delta_t,
   Rcpp::List output(n);
 
   // Step 3: Generate data per individual
-  for (int i = 0; i < n; i++) {
+  for (arma::uword i = 0; i < n; i++) {
     // Step 3.1: Create matrices of latent, observed, covariate, and id
     // variables
     arma::mat eta(p, time);
@@ -359,7 +499,7 @@ Rcpp::List SimSSMFixed2(const int n, const int time, const double delta_t,
     y.col(0) = nu + (lambda * eta.col(0)) + (theta_l * arma::randn(k)) +
                (kappa * x_i.col(0));
     // Step 3.3: Data generation loop
-    for (int t = 1; t < time; t++) {
+    for (arma::uword t = 1; t < time; t++) {
       eta.col(t) = alpha + (beta * eta.col(t - 1)) + (psi_l * arma::randn(p)) +
                    (gamma * x_i.col(t));
       y.col(t) = nu + (lambda * eta.col(t)) + (theta_l * arma::randn(k)) +
@@ -383,11 +523,12 @@ Rcpp::List SimSSMFixed2(const int n, const int time, const double delta_t,
 #include <RcppArmadillo.h>
 // [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::export(.SimSSMIVary0)]]
-Rcpp::List SimSSMIVary0(const int n, const int time, const double delta_t,
-                        const Rcpp::List& mu0, const Rcpp::List& sigma0_l,
-                        const Rcpp::List& alpha, const Rcpp::List& beta,
-                        const Rcpp::List& psi_l, const Rcpp::List& nu,
-                        const Rcpp::List& lambda, const Rcpp::List& theta_l) {
+Rcpp::List SimSSMIVary0(const arma::uword& n, const arma::uword& time,
+                        const double delta_t, const Rcpp::List& mu0,
+                        const Rcpp::List& sigma0_l, const Rcpp::List& alpha,
+                        const Rcpp::List& beta, const Rcpp::List& psi_l,
+                        const Rcpp::List& nu, const Rcpp::List& lambda,
+                        const Rcpp::List& theta_l) {
   // Step 1: Determine dimensions
   arma::vec mu0_i = mu0[0];
   arma::vec nu_i = nu[0];
@@ -400,7 +541,7 @@ Rcpp::List SimSSMIVary0(const int n, const int time, const double delta_t,
   Rcpp::List output(n);
 
   // Step 3: Generate data per individual
-  for (int i = 0; i < n; i++) {
+  for (arma::uword i = 0; i < n; i++) {
     // Step 3.1: Create matrices of latent, observed, and id variables
     arma::mat eta(p, time);
     arma::mat y(k, time);
@@ -421,7 +562,7 @@ Rcpp::List SimSSMIVary0(const int n, const int time, const double delta_t,
     eta.col(0) = mu0_i + (sigma0_l_i * arma::randn(p));
     y.col(0) = nu_i + (lambda_i * eta.col(0)) + (theta_l_i * arma::randn(k));
     // Step 3.4: Data generation loop
-    for (int t = 1; t < time; t++) {
+    for (arma::uword t = 1; t < time; t++) {
       eta.col(t) =
           alpha_i + (beta_i * eta.col(t - 1)) + (psi_l_i * arma::randn(p));
       y.col(t) = nu_i + (lambda_i * eta.col(t)) + (theta_l_i * arma::randn(k));
@@ -443,12 +584,13 @@ Rcpp::List SimSSMIVary0(const int n, const int time, const double delta_t,
 #include <RcppArmadillo.h>
 // [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::export(.SimSSMIVary1)]]
-Rcpp::List SimSSMIVary1(const int n, const int time, const double delta_t,
-                        const Rcpp::List& mu0, const Rcpp::List& sigma0_l,
-                        const Rcpp::List& alpha, const Rcpp::List& beta,
-                        const Rcpp::List& psi_l, const Rcpp::List& nu,
-                        const Rcpp::List& lambda, const Rcpp::List& theta_l,
-                        const Rcpp::List& x, const Rcpp::List& gamma) {
+Rcpp::List SimSSMIVary1(const arma::uword& n, const arma::uword& time,
+                        const double delta_t, const Rcpp::List& mu0,
+                        const Rcpp::List& sigma0_l, const Rcpp::List& alpha,
+                        const Rcpp::List& beta, const Rcpp::List& psi_l,
+                        const Rcpp::List& nu, const Rcpp::List& lambda,
+                        const Rcpp::List& theta_l, const Rcpp::List& x,
+                        const Rcpp::List& gamma) {
   // Step 1: Determine dimensions
   arma::vec mu0_i = mu0[0];
   arma::vec nu_i = nu[0];
@@ -461,7 +603,7 @@ Rcpp::List SimSSMIVary1(const int n, const int time, const double delta_t,
   Rcpp::List output(n);
 
   // Step 3: Generate data per individual
-  for (int i = 0; i < n; i++) {
+  for (arma::uword i = 0; i < n; i++) {
     // Step 3.1: Create matrices of latent, observed, covariate, and id
     // variables
     arma::mat eta(p, time);
@@ -485,7 +627,7 @@ Rcpp::List SimSSMIVary1(const int n, const int time, const double delta_t,
     eta.col(0) = mu0_i + (sigma0_l_i * arma::randn(p)) + (gamma_i * x_i.col(0));
     y.col(0) = nu_i + (lambda_i * eta.col(0)) + (theta_l_i * arma::randn(k));
     // Step 3.4: Data generation loop
-    for (int t = 1; t < time; t++) {
+    for (arma::uword t = 1; t < time; t++) {
       eta.col(t) = alpha_i + (beta_i * eta.col(t - 1)) +
                    (psi_l_i * arma::randn(p)) + (gamma_i * x_i.col(t));
       y.col(t) = nu_i + (lambda_i * eta.col(t)) + (theta_l_i * arma::randn(k));
@@ -508,13 +650,13 @@ Rcpp::List SimSSMIVary1(const int n, const int time, const double delta_t,
 #include <RcppArmadillo.h>
 // [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::export(.SimSSMIVary2)]]
-Rcpp::List SimSSMIVary2(const int n, const int time, const double delta_t,
-                        const Rcpp::List& mu0, const Rcpp::List& sigma0_l,
-                        const Rcpp::List& alpha, const Rcpp::List& beta,
-                        const Rcpp::List& psi_l, const Rcpp::List& nu,
-                        const Rcpp::List& lambda, const Rcpp::List& theta_l,
-                        const Rcpp::List& x, const Rcpp::List& gamma,
-                        const Rcpp::List& kappa) {
+Rcpp::List SimSSMIVary2(const arma::uword& n, const arma::uword& time,
+                        const double delta_t, const Rcpp::List& mu0,
+                        const Rcpp::List& sigma0_l, const Rcpp::List& alpha,
+                        const Rcpp::List& beta, const Rcpp::List& psi_l,
+                        const Rcpp::List& nu, const Rcpp::List& lambda,
+                        const Rcpp::List& theta_l, const Rcpp::List& x,
+                        const Rcpp::List& gamma, const Rcpp::List& kappa) {
   // Step 1: Determine dimensions
   arma::vec mu0_i = mu0[0];
   arma::vec nu_i = nu[0];
@@ -527,7 +669,7 @@ Rcpp::List SimSSMIVary2(const int n, const int time, const double delta_t,
   Rcpp::List output(n);
 
   // Step 3: Generate data per individual
-  for (int i = 0; i < n; i++) {
+  for (arma::uword i = 0; i < n; i++) {
     // Step 3.1: Create matrices of latent, observed, covariate, and id
     // variables
     arma::mat eta(p, time);
@@ -553,7 +695,7 @@ Rcpp::List SimSSMIVary2(const int n, const int time, const double delta_t,
     y.col(0) = nu_i + (lambda_i * eta.col(0)) + (theta_l_i * arma::randn(k)) +
                (kappa_i * x_i.col(0));
     // Step 3.4: Data generation loop
-    for (int t = 1; t < time; t++) {
+    for (arma::uword t = 1; t < time; t++) {
       eta.col(t) = alpha_i + (beta_i * eta.col(t - 1)) +
                    (psi_l_i * arma::randn(p)) + (gamma_i * x_i.col(t));
       y.col(t) = nu_i + (lambda_i * eta.col(t)) + (theta_l_i * arma::randn(k)) +
@@ -577,10 +719,10 @@ Rcpp::List SimSSMIVary2(const int n, const int time, const double delta_t,
 #include <RcppArmadillo.h>
 // [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::export(.SimSSMLatFixed0)]]
-Rcpp::List SimSSMLatFixed0(const int n, const int time, const double delta_t,
-                           const arma::vec& mu0, const arma::mat& sigma0_l,
-                           const arma::vec& alpha, const arma::mat& beta,
-                           const arma::mat& psi_l) {
+Rcpp::List SimSSMLatFixed0(const arma::uword& n, const arma::uword& time,
+                           const double delta_t, const arma::vec& mu0,
+                           const arma::mat& sigma0_l, const arma::vec& alpha,
+                           const arma::mat& beta, const arma::mat& psi_l) {
   // Step 1: Determine dimensions
   int p = mu0.n_elem;  // number of latent variables
   int k = p;           // number of observed variables
@@ -591,7 +733,7 @@ Rcpp::List SimSSMLatFixed0(const int n, const int time, const double delta_t,
   Rcpp::List output(n);
 
   // Step 3: Generate data per individual
-  for (int i = 0; i < n; i++) {
+  for (arma::uword i = 0; i < n; i++) {
     // Step 3.1: Create matrices of latent, observed, and id variables
     arma::mat eta(p, time);
     arma::mat y(k, time);
@@ -601,7 +743,7 @@ Rcpp::List SimSSMLatFixed0(const int n, const int time, const double delta_t,
     eta.col(0) = mu0 + (sigma0_l * arma::randn(p));
     y.col(0) = eta.col(0);
     // Step 3.3: Data generation loop
-    for (int t = 1; t < time; t++) {
+    for (arma::uword t = 1; t < time; t++) {
       eta.col(t) = alpha + (beta * eta.col(t - 1)) + (psi_l * arma::randn(p));
       y.col(t) = eta.col(t);
     }
@@ -622,11 +764,11 @@ Rcpp::List SimSSMLatFixed0(const int n, const int time, const double delta_t,
 #include <RcppArmadillo.h>
 // [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::export(.SimSSMLatFixed1)]]
-Rcpp::List SimSSMLatFixed1(const int n, const int time, const double delta_t,
-                           const arma::vec& mu0, const arma::mat& sigma0_l,
-                           const arma::vec& alpha, const arma::mat& beta,
-                           const arma::mat& psi_l, const Rcpp::List& x,
-                           const arma::mat& gamma) {
+Rcpp::List SimSSMLatFixed1(const arma::uword& n, const arma::uword& time,
+                           const double delta_t, const arma::vec& mu0,
+                           const arma::mat& sigma0_l, const arma::vec& alpha,
+                           const arma::mat& beta, const arma::mat& psi_l,
+                           const Rcpp::List& x, const arma::mat& gamma) {
   // Step 1: Determine dimensions
   int p = mu0.n_elem;  // number of latent variables
   int k = p;           // number of observed variables
@@ -637,7 +779,7 @@ Rcpp::List SimSSMLatFixed1(const int n, const int time, const double delta_t,
   Rcpp::List output(n);
 
   // Step 3: Generate data per individual
-  for (int i = 0; i < n; i++) {
+  for (arma::uword i = 0; i < n; i++) {
     // Step 3.1: Create matrices of latent, observed, covariate, and id
     // variables
     arma::mat eta(p, time);
@@ -649,7 +791,7 @@ Rcpp::List SimSSMLatFixed1(const int n, const int time, const double delta_t,
     eta.col(0) = mu0 + (sigma0_l * arma::randn(p)) + (gamma * x_i.col(0));
     y.col(0) = eta.col(0);
     // Step 3.3: Data generation loop
-    for (int t = 1; t < time; t++) {
+    for (arma::uword t = 1; t < time; t++) {
       eta.col(t) = alpha + (beta * eta.col(t - 1)) + (psi_l * arma::randn(p)) +
                    (gamma * x_i.col(t));
       y.col(t) = eta.col(t);
@@ -672,10 +814,10 @@ Rcpp::List SimSSMLatFixed1(const int n, const int time, const double delta_t,
 #include <RcppArmadillo.h>
 // [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::export(.SimSSMLatIVary0)]]
-Rcpp::List SimSSMLatIVary0(const int n, const int time, const double delta_t,
-                           const Rcpp::List& mu0, const Rcpp::List& sigma0_l,
-                           const Rcpp::List& alpha, const Rcpp::List& beta,
-                           const Rcpp::List& psi_l) {
+Rcpp::List SimSSMLatIVary0(const arma::uword& n, const arma::uword& time,
+                           const double delta_t, const Rcpp::List& mu0,
+                           const Rcpp::List& sigma0_l, const Rcpp::List& alpha,
+                           const Rcpp::List& beta, const Rcpp::List& psi_l) {
   // Step 1: Determine dimensions
   arma::vec mu0_i = mu0[0];
   int p = mu0_i.n_elem;  // number of latent variables
@@ -687,7 +829,7 @@ Rcpp::List SimSSMLatIVary0(const int n, const int time, const double delta_t,
   Rcpp::List output(n);
 
   // Step 3: Generate data per individual
-  for (int i = 0; i < n; i++) {
+  for (arma::uword i = 0; i < n; i++) {
     // Step 3.1: Create matrices of latent, observed, and id variables
     arma::mat eta(p, time);
     arma::mat y(k, time);
@@ -705,7 +847,7 @@ Rcpp::List SimSSMLatIVary0(const int n, const int time, const double delta_t,
     eta.col(0) = mu0_i + (sigma0_l_i * arma::randn(p));
     y.col(0) = eta.col(0);
     // Step 3.4: Data generation loop
-    for (int t = 1; t < time; t++) {
+    for (arma::uword t = 1; t < time; t++) {
       eta.col(t) =
           alpha_i + (beta_i * eta.col(t - 1)) + (psi_l_i * arma::randn(p));
       y.col(t) = eta.col(t);
@@ -727,11 +869,11 @@ Rcpp::List SimSSMLatIVary0(const int n, const int time, const double delta_t,
 #include <RcppArmadillo.h>
 // [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::export(.SimSSMLatIVary1)]]
-Rcpp::List SimSSMLatIVary1(const int n, const int time, const double delta_t,
-                           const Rcpp::List& mu0, const Rcpp::List& sigma0_l,
-                           const Rcpp::List& alpha, const Rcpp::List& beta,
-                           const Rcpp::List& psi_l, const Rcpp::List& x,
-                           const Rcpp::List& gamma) {
+Rcpp::List SimSSMLatIVary1(const arma::uword& n, const arma::uword& time,
+                           const double delta_t, const Rcpp::List& mu0,
+                           const Rcpp::List& sigma0_l, const Rcpp::List& alpha,
+                           const Rcpp::List& beta, const Rcpp::List& psi_l,
+                           const Rcpp::List& x, const Rcpp::List& gamma) {
   // Step 1: Determine dimensions
   arma::vec mu0_i = mu0[0];
   int p = mu0_i.n_elem;  // number of latent variables
@@ -743,7 +885,7 @@ Rcpp::List SimSSMLatIVary1(const int n, const int time, const double delta_t,
   Rcpp::List output(n);
 
   // Step 3: Generate data per individual
-  for (int i = 0; i < n; i++) {
+  for (arma::uword i = 0; i < n; i++) {
     // Step 3.1: Create matrices of latent, observed, covariate, and id
     // variables
     arma::mat eta(p, time);
@@ -764,7 +906,7 @@ Rcpp::List SimSSMLatIVary1(const int n, const int time, const double delta_t,
     eta.col(0) = mu0_i + (sigma0_l_i * arma::randn(p)) + (gamma_i * x_i.col(0));
     y.col(0) = eta.col(0);
     // Step 3.4: Data generation loop
-    for (int t = 1; t < time; t++) {
+    for (arma::uword t = 1; t < time; t++) {
       eta.col(t) = alpha_i + (beta_i * eta.col(t - 1)) +
                    (psi_l_i * arma::randn(p)) + (gamma_i * x_i.col(t));
       y.col(t) = eta.col(t);
@@ -787,8 +929,9 @@ Rcpp::List SimSSMLatIVary1(const int n, const int time, const double delta_t,
 #include <RcppArmadillo.h>
 // [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::export(.SimSSMLinSDEIVary0)]]
-Rcpp::List SimSSMLinSDEIVary0(const int n, const int time, const double delta_t,
-                              const Rcpp::List& mu0, const Rcpp::List& sigma0_l,
+Rcpp::List SimSSMLinSDEIVary0(const arma::uword& n, const arma::uword& time,
+                              const double delta_t, const Rcpp::List& mu0,
+                              const Rcpp::List& sigma0_l,
                               const Rcpp::List& iota, const Rcpp::List& phi,
                               const Rcpp::List& sigma_l, const Rcpp::List& nu,
                               const Rcpp::List& lambda,
@@ -808,7 +951,7 @@ Rcpp::List SimSSMLinSDEIVary0(const int n, const int time, const double delta_t,
   Rcpp::List output(n);
 
   // Step 3: Generate data per individual
-  for (int i = 0; i < n; i++) {
+  for (arma::uword i = 0; i < n; i++) {
     // Step 3.1: Create matrices of latent, observed, and id variables
     arma::mat eta(p, time);
     arma::mat y(k, time);
@@ -842,7 +985,7 @@ Rcpp::List SimSSMLinSDEIVary0(const int n, const int time, const double delta_t,
     eta.col(0) = mu0_i + (sigma0_l_i * arma::randn(p));
     y.col(0) = nu_i + (lambda_i * eta.col(0)) + (theta_l_i * arma::randn(k));
     // Step 3.4: Data generation loop
-    for (int t = 1; t < time; t++) {
+    for (arma::uword t = 1; t < time; t++) {
       eta.col(t) =
           alpha_i + (beta_i * eta.col(t - 1)) + (psi_l_i * arma::randn(p));
       y.col(t) = nu_i + (lambda_i * eta.col(t)) + (theta_l_i * arma::randn(k));
@@ -864,8 +1007,9 @@ Rcpp::List SimSSMLinSDEIVary0(const int n, const int time, const double delta_t,
 #include <RcppArmadillo.h>
 // [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::export(.SimSSMLinSDEIVary1)]]
-Rcpp::List SimSSMLinSDEIVary1(const int n, const int time, const double delta_t,
-                              const Rcpp::List& mu0, const Rcpp::List& sigma0_l,
+Rcpp::List SimSSMLinSDEIVary1(const arma::uword& n, const arma::uword& time,
+                              const double delta_t, const Rcpp::List& mu0,
+                              const Rcpp::List& sigma0_l,
                               const Rcpp::List& iota, const Rcpp::List& phi,
                               const Rcpp::List& sigma_l, const Rcpp::List& nu,
                               const Rcpp::List& lambda,
@@ -885,7 +1029,7 @@ Rcpp::List SimSSMLinSDEIVary1(const int n, const int time, const double delta_t,
   Rcpp::List output(n);
 
   // Step 3: Generate data per individual
-  for (int i = 0; i < n; i++) {
+  for (arma::uword i = 0; i < n; i++) {
     // Step 3.1: Create matrices of latent, observed, and id variables
     arma::mat eta(p, time);
     arma::mat y(k, time);
@@ -921,7 +1065,7 @@ Rcpp::List SimSSMLinSDEIVary1(const int n, const int time, const double delta_t,
     eta.col(0) = mu0_i + (sigma0_l_i * arma::randn(p)) + (gamma_i * x_i.col(0));
     y.col(0) = nu_i + (lambda_i * eta.col(0)) + (theta_l_i * arma::randn(k));
     // Step 3.4: Data generation loop
-    for (int t = 1; t < time; t++) {
+    for (arma::uword t = 1; t < time; t++) {
       eta.col(t) = alpha_i + (beta_i * eta.col(t - 1)) +
                    (psi_l_i * arma::randn(p)) + (gamma_i * x_i.col(t));
       y.col(t) = nu_i + (lambda_i * eta.col(t)) + (theta_l_i * arma::randn(k));
@@ -944,14 +1088,12 @@ Rcpp::List SimSSMLinSDEIVary1(const int n, const int time, const double delta_t,
 #include <RcppArmadillo.h>
 // [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::export(.SimSSMLinSDEIVary2)]]
-Rcpp::List SimSSMLinSDEIVary2(const int n, const int time, const double delta_t,
-                              const Rcpp::List& mu0, const Rcpp::List& sigma0_l,
-                              const Rcpp::List& iota, const Rcpp::List& phi,
-                              const Rcpp::List& sigma_l, const Rcpp::List& nu,
-                              const Rcpp::List& lambda,
-                              const Rcpp::List& theta_l, const Rcpp::List& x,
-                              const Rcpp::List& gamma, const Rcpp::List& kappa,
-                              const bool ou = false) {
+Rcpp::List SimSSMLinSDEIVary2(
+    const arma::uword& n, const arma::uword& time, const double delta_t,
+    const Rcpp::List& mu0, const Rcpp::List& sigma0_l, const Rcpp::List& iota,
+    const Rcpp::List& phi, const Rcpp::List& sigma_l, const Rcpp::List& nu,
+    const Rcpp::List& lambda, const Rcpp::List& theta_l, const Rcpp::List& x,
+    const Rcpp::List& gamma, const Rcpp::List& kappa, const bool ou = false) {
   // Step 1: Determine dimensions
   arma::vec mu0_i = mu0[0];
   arma::vec nu_i = nu[0];
@@ -966,7 +1108,7 @@ Rcpp::List SimSSMLinSDEIVary2(const int n, const int time, const double delta_t,
   Rcpp::List output(n);
 
   // Step 3: Generate data per individual
-  for (int i = 0; i < n; i++) {
+  for (arma::uword i = 0; i < n; i++) {
     // Step 3.1: Create matrices of latent, observed, and id variables
     arma::mat eta(p, time);
     arma::mat y(k, time);
@@ -1004,7 +1146,7 @@ Rcpp::List SimSSMLinSDEIVary2(const int n, const int time, const double delta_t,
     y.col(0) = nu_i + (lambda_i * eta.col(0)) + (theta_l_i * arma::randn(k)) +
                (kappa_i * x_i.col(0));
     // Step 3.4: Data generation loop
-    for (int t = 1; t < time; t++) {
+    for (arma::uword t = 1; t < time; t++) {
       eta.col(t) = alpha_i + (beta_i * eta.col(t - 1)) +
                    (psi_l_i * arma::randn(p)) + (gamma_i * x_i.col(t));
       y.col(t) = nu_i + (lambda_i * eta.col(t)) + (theta_l_i * arma::randn(k)) +
@@ -1019,4 +1161,128 @@ Rcpp::List SimSSMLinSDEIVary2(const int n, const int time, const double delta_t,
 
   // Step 4: Return results
   return output;
+}
+// -----------------------------------------------------------------------------
+// edit .setup/cpp/simStateSpace-test-phi.cpp
+// Ivan Jacob Agaloos Pesigan
+// -----------------------------------------------------------------------------
+
+#include <RcppArmadillo.h>
+// [[Rcpp::depends(RcppArmadillo)]]
+
+//' Test the Drift Matrix
+//'
+//' Both have to be true for the function to return `TRUE`.
+//'   - Test that the real part of all eigenvalues of \eqn{\boldsymbol{\Phi}}
+//'     are less than zero.
+//'   - Test that the diagonal values of \eqn{\boldsymbol{\Phi}}
+//'     are between 0 to negative inifinity.
+//'
+//' @author Ivan Jacob Agaloos Pesigan
+//'
+//' @param phi Numeric matrix.
+//'   The drift matrix (\eqn{\boldsymbol{\Phi}}).
+//'
+//' @examples
+//' phi <- matrix(
+//'   data = c(
+//'     -0.357, 0.771, -0.450,
+//'     0.0, -0.511, 0.729,
+//'     0, 0, -0.693
+//'   ),
+//'   nrow = 3
+//' )
+//' TestPhi(phi = phi)
+//'
+//' @family Simulation of State Space Models Data Functions
+//' @keywords simStateSpace test linsde
+//' @export
+// [[Rcpp::export]]
+bool TestPhi(const arma::mat& phi) {
+  arma::vec phi_diag = phi.diag(0);
+  arma::cx_vec eigenvalues_phi = arma::eig_gen(phi);
+  return arma::all(arma::real(eigenvalues_phi) < 0) && arma::all(phi_diag <= 0);
+}
+// -----------------------------------------------------------------------------
+// edit .setup/cpp/simStateSpace-test-stability.cpp
+// Ivan Jacob Agaloos Pesigan
+// -----------------------------------------------------------------------------
+
+#include <RcppArmadillo.h>
+// [[Rcpp::depends(RcppArmadillo)]]
+
+//' Test Stability
+//'
+//' The function computes the eigenvalues of the input matrix `x`.
+//' It checks if the real part of all eigenvalues is negative.
+//' If all eigenvalues have negative real parts,
+//' the system is considered stable.
+//'
+//' @author Ivan Jacob Agaloos Pesigan
+//'
+//' @param x Numeric matrix.
+//'
+//' @examples
+//' x <- matrix(
+//'   data = c(
+//'     -0.357, 0.771, -0.450,
+//'     0.0, -0.511, 0.729,
+//'     0, 0, -0.693
+//'   ),
+//'   nrow = 3
+//' )
+//' TestStability(x)
+//'
+//' @family Simulation of State Space Models Data Functions
+//' @keywords simStateSpace test linsde
+//' @export
+// [[Rcpp::export]]
+bool TestStability(const arma::mat& x) {
+  arma::cx_vec eigenvalues = arma::eig_gen(x);
+  return arma::all(arma::real(eigenvalues) < 0);
+}
+// -----------------------------------------------------------------------------
+// edit .setup/cpp/simStateSpace-test-stationarity.cpp
+// Ivan Jacob Agaloos Pesigan
+// -----------------------------------------------------------------------------
+
+#include <RcppArmadillo.h>
+// [[Rcpp::depends(RcppArmadillo)]]
+
+//' Test Stationarity
+//'
+//' The function computes the eigenvalues of the input matrix `x`.
+//' It checks if all eigenvalues have moduli less than 1.
+//' If all eigenvalues have moduli less than 1,
+//' the system is considered stationary.
+//'
+//' @author Ivan Jacob Agaloos Pesigan
+//'
+//' @param x Numeric matrix.
+//'
+//' @examples
+//' x <- matrix(
+//'   data = c(0.5, 0.3, 0.2, 0.4),
+//'   nrow = 2
+//' )
+//' TestStationarity(x)
+//'
+//' x <- matrix(
+//'   data = c(0.9, -0.5, 0.8, 0.7),
+//'   nrow = 2
+//' )
+//' TestStationarity(x)
+//'
+//' @family Simulation of State Space Models Data Functions
+//' @keywords simStateSpace test ssm
+//' @export
+// [[Rcpp::export]]
+bool TestStationarity(const arma::mat& x) {
+  arma::cx_vec eigenvalues = arma::eig_gen(x);
+  for (arma::uword i = 0; i < eigenvalues.n_elem; ++i) {
+    if (std::abs(eigenvalues(i)) >= 1.0) {
+      return false;
+    }
+  }
+  return true;
 }
