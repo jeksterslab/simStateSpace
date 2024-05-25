@@ -24,12 +24,14 @@ lapply(
     iota <- list(
       c(0.317, 0.230)
     )
-    phi <- list(
-      -0.1 * diag(p),
-      -0.2 * diag(p),
-      -0.3 * diag(p),
-      -0.4 * diag(p),
-      -0.5 * diag(p)
+    phi <- SimPhi(
+      n = 5,
+      phi = -0.1 * diag(p),
+      vcov_phi_vec_l = t(
+        chol(
+          0.1 * diag(p^2)
+        )
+      )
     )
     sigma <- matrix(
       data = c(
