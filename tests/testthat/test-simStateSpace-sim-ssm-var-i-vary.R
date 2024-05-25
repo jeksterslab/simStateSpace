@@ -23,12 +23,14 @@ lapply(
     alpha <- list(
       rep(x = 0, times = p)
     )
-    beta <- list(
-      0.1 * diag(p),
-      0.2 * diag(p),
-      0.3 * diag(p),
-      0.4 * diag(p),
-      0.5 * diag(p)
+    beta <- SimBeta(
+      n = 5,
+      beta = 0.1 * diag(p),
+      vcov_beta_vec_l = t(
+        chol(
+          0.1 * diag(p^2)
+        )
+      )
     )
     psi <- 0.001 * diag(p)
     psi_l <- list(
