@@ -41,9 +41,9 @@ void mathfunction_softmax(const gsl_vector *x, gsl_vector *result){
 void function_dx_dt(double t, size_t regime, const gsl_vector *x, double *param, size_t n_param, const gsl_vector *co_variate, gsl_vector *F_dx_dt){
 	switch (regime) {
 		case 0:
-			gsl_vector_set(F_dx_dt, 0, (-param[3] * (param[0] - gsl_vector_get(x, 0))) + (-param[4] * (param[1] - gsl_vector_get(x, 1))) + (-param[5] * (param[2] - gsl_vector_get(x, 2))));
-			gsl_vector_set(F_dx_dt, 1, (-param[6] * (param[0] - gsl_vector_get(x, 0))) + (-param[7] * (param[1] - gsl_vector_get(x, 1))) + (-param[8] * (param[2] - gsl_vector_get(x, 2))));
-			gsl_vector_set(F_dx_dt, 2, (-param[9] * (param[0] - gsl_vector_get(x, 0))) + (-param[10] * (param[1] - gsl_vector_get(x, 1))) + (-param[11] * (param[2] - gsl_vector_get(x, 2))));
+			gsl_vector_set(F_dx_dt, 0, (param[3] * (gsl_vector_get(x, 0) - param[0])) + (param[4] * (gsl_vector_get(x, 1) - param[1])) + (param[5] * (gsl_vector_get(x, 2) - param[2])));
+			gsl_vector_set(F_dx_dt, 1, (param[6] * (gsl_vector_get(x, 0) - param[0])) + (param[7] * (gsl_vector_get(x, 1) - param[1])) + (param[8] * (gsl_vector_get(x, 2) - param[2])));
+			gsl_vector_set(F_dx_dt, 2, (param[9] * (gsl_vector_get(x, 0) - param[0])) + (param[10] * (gsl_vector_get(x, 1) - param[1])) + (param[11] * (gsl_vector_get(x, 2) - param[2])));
 			break;
 	}
 }

@@ -1,7 +1,7 @@
 ---
 title: "The Ornstein–Uhlenbeck Model"
 author: "Ivan Jacob Agaloos Pesigan"
-date: "2024-05-25"
+date: "2024-06-09"
 bibliography: "vignettes.bib"
 csl: https://raw.githubusercontent.com/citation-style-language/styles/master/apa.csl
 nocite: |
@@ -104,11 +104,11 @@ The dynamic structure is given by
 \begin{equation}
   \mathrm{d} \boldsymbol{\eta}_{i, t}
   =
-  - \boldsymbol{\Phi}
+  \boldsymbol{\Phi}
   \left(
-  \boldsymbol{\mu}
-  -
   \boldsymbol{\eta}_{i, t}
+  -
+  \boldsymbol{\mu}
   \right)
   \mathrm{d}t
   +
@@ -119,7 +119,7 @@ The dynamic structure is given by
 where
 $\boldsymbol{\mu}$
 is the long-term mean or equilibrium level,
-$- \boldsymbol{\Phi}$
+$\boldsymbol{\Phi}$
 is the rate of mean reversion,
 determining how quickly the variable returns to its mean,
 $\boldsymbol{\Sigma}$
@@ -223,16 +223,16 @@ Let the long-term mean vector $\boldsymbol{\mu}$ be given by
 \right) .
 \end{equation}
 
-Let the rate of mean reversion matrix $- \boldsymbol{\Phi}$ be given by
+Let the rate of mean reversion matrix $\boldsymbol{\Phi}$ be given by
 
 \begin{equation}
-- \boldsymbol{\Phi}
+\boldsymbol{\Phi}
 =
 \left(
 \begin{array}{ccc}
-  0.357 & 0 & 0 \\
-  -0.771 & 0.511 & 0 \\
-  0.45 & -0.729 & 0.693 \\
+  -0.357 & 0 & 0 \\
+  0.771 & -0.511 & 0 \\
+  -0.45 & 0.729 & -0.693 \\
 \end{array}
 \right) .
 \end{equation}
@@ -417,9 +417,9 @@ dynr_measurement <- dynr::prep.measurement(
 ``` r
 dynr_dynamics <- dynr::prep.formulaDynamics(
   formula = list(  
-    eta_1 ~ (-phi_11 * (mu_1 - eta_1)) + (-phi_12 * (mu_2 - eta_2)) + (-phi_13 * (mu_3 - eta_3)),
-    eta_2 ~ (-phi_21 * (mu_1 - eta_1)) + (-phi_22 * (mu_2 - eta_2)) + (-phi_23 * (mu_3 - eta_3)),
-    eta_3 ~ (-phi_31 * (mu_1 - eta_1)) + (-phi_32 * (mu_2 - eta_2)) + (-phi_33 * (mu_3 - eta_3))
+    eta_1 ~ (phi_11 * (eta_1 - mu_1)) + (phi_12 * (eta_2 - mu_2)) + (phi_13 * (eta_3 - mu_3)),
+    eta_2 ~ (phi_21 * (eta_1 - mu_1)) + (phi_22 * (eta_2 - mu_2)) + (phi_23 * (eta_3 - mu_3)),
+    eta_3 ~ (phi_31 * (eta_1 - mu_1)) + (phi_32 * (eta_2 - mu_2)) + (phi_33 * (eta_3 - mu_3))
   ),
   startval = c(
     mu_1 = mu[1], mu_2 = mu[2], mu_3 = mu[3],
@@ -537,8 +537,8 @@ results <- dynr::dynr.cook(
 #> Doing end processing
 #> Warning in sqrt(diag(x$inv.hessian)): NaNs produced
 #> Successful trial
-#> Total Time: 38.39404 
-#> Backend Time: 37.76446
+#> Total Time: 27.89861 
+#> Backend Time: 27.42884
 ```
 
 ## Summary

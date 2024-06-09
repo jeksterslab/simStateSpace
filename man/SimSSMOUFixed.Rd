@@ -55,9 +55,8 @@ The drift matrix
 which represents the rate of change of the solution
 in the absence of any random fluctuations
 (\eqn{\boldsymbol{\Phi}}).
-The negative value of \code{phi} is the rate of mean reversion,
-determining how quickly the variable returns to its mean
-(\eqn{- \boldsymbol{\Phi}}).}
+It also represents the rate of mean reversion,
+determining how quickly the variable returns to its mean.}
 
 \item{sigma_l}{Numeric matrix.
 Cholesky factorization (\code{t(chol(sigma))})
@@ -212,11 +211,11 @@ The dynamic structure is given by
 \deqn{
     \mathrm{d} \boldsymbol{\eta}_{i, t}
     =
-    - \boldsymbol{\Phi}
+    \boldsymbol{\Phi}
     \left(
-    \boldsymbol{\mu}
-    -
     \boldsymbol{\eta}_{i, t}
+    -
+    \boldsymbol{\mu}
     \right)
     \mathrm{d}t
     +
@@ -227,7 +226,7 @@ The dynamic structure is given by
 where
 \eqn{\boldsymbol{\mu}}
 is the long-term mean or equilibrium level,
-\eqn{- \boldsymbol{\Phi}}
+\eqn{\boldsymbol{\Phi}}
 is the rate of mean reversion,
 determining how quickly the variable returns to its mean,
 \eqn{\boldsymbol{\Sigma}}
@@ -266,11 +265,11 @@ The dynamic structure is given by
 \deqn{
     \mathrm{d} \boldsymbol{\eta}_{i, t}
     =
-    - \boldsymbol{\Phi}
+    \boldsymbol{\Phi}
     \left(
-    \boldsymbol{\mu}
-    -
     \boldsymbol{\eta}_{i, t}
+    -
+    \boldsymbol{\mu}
     \right)
     \mathrm{d}t
     +
@@ -322,11 +321,11 @@ The dynamic structure is given by
 \deqn{
     \mathrm{d} \boldsymbol{\eta}_{i, t}
     =
-    - \boldsymbol{\Phi}
+    \boldsymbol{\Phi}
     \left(
-    \boldsymbol{\mu}
-    -
     \boldsymbol{\eta}_{i, t}
+    -
+    \boldsymbol{\mu}
     \right)
     \mathrm{d}t
     +
