@@ -29,7 +29,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">simStateSpace</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.1.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -78,7 +78,7 @@
                         <h4 data-toc-skip class="author">Ivan Jacob
 Agaloos Pesigan</h4>
             
-            <h4 data-toc-skip class="date">2024-05-25</h4>
+            <h4 data-toc-skip class="date">2024-06-09</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/jeksterslab/simStateSpace/blob/HEAD/vignettes/ou.Rmd"><code>vignettes/ou.Rmd</code></a></small>
       <div class="d-none name"><code>ou.Rmd</code></div>
@@ -143,11 +143,11 @@ and <span class="math inline">\(\left( \boldsymbol{\Theta}^{\frac{1}{2}}
 <p>The dynamic structure is given by <span class="math display">\[\begin{equation}
   \mathrm{d} \boldsymbol{\eta}_{i, t}
   =
-  - \boldsymbol{\Phi}
+  \boldsymbol{\Phi}
   \left(
-  \boldsymbol{\mu}
-  -
   \boldsymbol{\eta}_{i, t}
+  -
+  \boldsymbol{\mu}
   \right)
   \mathrm{d}t
   +
@@ -155,10 +155,10 @@ and <span class="math inline">\(\left( \boldsymbol{\Theta}^{\frac{1}{2}}
   \mathrm{d}
   \mathbf{W}_{i, t}
 \end{equation}\]</span> where <span class="math inline">\(\boldsymbol{\mu}\)</span> is the long-term mean or
-equilibrium level, <span class="math inline">\(-
-\boldsymbol{\Phi}\)</span> is the rate of mean reversion, determining
-how quickly the variable returns to its mean, <span class="math inline">\(\boldsymbol{\Sigma}\)</span> is the matrix of
-volatility or randomness in the process, and <span class="math inline">\(\mathrm{d}\boldsymbol{W}\)</span> is a Wiener
+equilibrium level, <span class="math inline">\(\boldsymbol{\Phi}\)</span> is the rate of mean
+reversion, determining how quickly the variable returns to its mean,
+<span class="math inline">\(\boldsymbol{\Sigma}\)</span> is the matrix
+of volatility or randomness in the process, and <span class="math inline">\(\mathrm{d}\boldsymbol{W}\)</span> is a Wiener
 process or Brownian motion, which represents random fluctuations.</p>
 </div>
 <div class="section level2">
@@ -246,16 +246,15 @@ of individuals.</p>
 \end{array}
 \right) .
 \end{equation}\]</span></p>
-<p>Let the rate of mean reversion matrix <span class="math inline">\(-
-\boldsymbol{\Phi}\)</span> be given by</p>
+<p>Let the rate of mean reversion matrix <span class="math inline">\(\boldsymbol{\Phi}\)</span> be given by</p>
 <p><span class="math display">\[\begin{equation}
-- \boldsymbol{\Phi}
+\boldsymbol{\Phi}
 =
 \left(
 \begin{array}{ccc}
-  0.357 &amp; 0 &amp; 0 \\
-  -0.771 &amp; 0.511 &amp; 0 \\
-  0.45 &amp; -0.729 &amp; 0.693 \\
+  -0.357 &amp; 0 &amp; 0 \\
+  0.771 &amp; -0.511 &amp; 0 \\
+  -0.45 &amp; 0.729 &amp; -0.693 \\
 \end{array}
 \right) .
 \end{equation}\]</span></p>
@@ -414,9 +413,9 @@ Simulate Data<a class="anchor" aria-label="anchor" href="#using-the-simssmoufixe
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dynr_dynamics</span> <span class="op">&lt;-</span> <span class="fu">dynr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/dynr/man/prep.formulaDynamics.html" class="external-link">prep.formulaDynamics</a></span><span class="op">(</span></span>
 <span>  formula <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>  </span>
-<span>    <span class="va">eta_1</span> <span class="op">~</span> <span class="op">(</span><span class="op">-</span><span class="va">phi_11</span> <span class="op">*</span> <span class="op">(</span><span class="va">mu_1</span> <span class="op">-</span> <span class="va">eta_1</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="op">(</span><span class="op">-</span><span class="va">phi_12</span> <span class="op">*</span> <span class="op">(</span><span class="va">mu_2</span> <span class="op">-</span> <span class="va">eta_2</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="op">(</span><span class="op">-</span><span class="va">phi_13</span> <span class="op">*</span> <span class="op">(</span><span class="va">mu_3</span> <span class="op">-</span> <span class="va">eta_3</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>    <span class="va">eta_2</span> <span class="op">~</span> <span class="op">(</span><span class="op">-</span><span class="va">phi_21</span> <span class="op">*</span> <span class="op">(</span><span class="va">mu_1</span> <span class="op">-</span> <span class="va">eta_1</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="op">(</span><span class="op">-</span><span class="va">phi_22</span> <span class="op">*</span> <span class="op">(</span><span class="va">mu_2</span> <span class="op">-</span> <span class="va">eta_2</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="op">(</span><span class="op">-</span><span class="va">phi_23</span> <span class="op">*</span> <span class="op">(</span><span class="va">mu_3</span> <span class="op">-</span> <span class="va">eta_3</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>    <span class="va">eta_3</span> <span class="op">~</span> <span class="op">(</span><span class="op">-</span><span class="va">phi_31</span> <span class="op">*</span> <span class="op">(</span><span class="va">mu_1</span> <span class="op">-</span> <span class="va">eta_1</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="op">(</span><span class="op">-</span><span class="va">phi_32</span> <span class="op">*</span> <span class="op">(</span><span class="va">mu_2</span> <span class="op">-</span> <span class="va">eta_2</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="op">(</span><span class="op">-</span><span class="va">phi_33</span> <span class="op">*</span> <span class="op">(</span><span class="va">mu_3</span> <span class="op">-</span> <span class="va">eta_3</span><span class="op">)</span><span class="op">)</span></span>
+<span>    <span class="va">eta_1</span> <span class="op">~</span> <span class="op">(</span><span class="va">phi_11</span> <span class="op">*</span> <span class="op">(</span><span class="va">eta_1</span> <span class="op">-</span> <span class="va">mu_1</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="op">(</span><span class="va">phi_12</span> <span class="op">*</span> <span class="op">(</span><span class="va">eta_2</span> <span class="op">-</span> <span class="va">mu_2</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="op">(</span><span class="va">phi_13</span> <span class="op">*</span> <span class="op">(</span><span class="va">eta_3</span> <span class="op">-</span> <span class="va">mu_3</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>    <span class="va">eta_2</span> <span class="op">~</span> <span class="op">(</span><span class="va">phi_21</span> <span class="op">*</span> <span class="op">(</span><span class="va">eta_1</span> <span class="op">-</span> <span class="va">mu_1</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="op">(</span><span class="va">phi_22</span> <span class="op">*</span> <span class="op">(</span><span class="va">eta_2</span> <span class="op">-</span> <span class="va">mu_2</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="op">(</span><span class="va">phi_23</span> <span class="op">*</span> <span class="op">(</span><span class="va">eta_3</span> <span class="op">-</span> <span class="va">mu_3</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>    <span class="va">eta_3</span> <span class="op">~</span> <span class="op">(</span><span class="va">phi_31</span> <span class="op">*</span> <span class="op">(</span><span class="va">eta_1</span> <span class="op">-</span> <span class="va">mu_1</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="op">(</span><span class="va">phi_32</span> <span class="op">*</span> <span class="op">(</span><span class="va">eta_2</span> <span class="op">-</span> <span class="va">mu_2</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="op">(</span><span class="va">phi_33</span> <span class="op">*</span> <span class="op">(</span><span class="va">eta_3</span> <span class="op">-</span> <span class="va">mu_3</span><span class="op">)</span><span class="op">)</span></span>
 <span>  <span class="op">)</span>,</span>
 <span>  startval <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
 <span>    mu_1 <span class="op">=</span> <span class="va">mu</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, mu_2 <span class="op">=</span> <span class="va">mu</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, mu_3 <span class="op">=</span> <span class="va">mu</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span>,</span>
@@ -526,8 +525,8 @@ Simulate Data<a class="anchor" aria-label="anchor" href="#using-the-simssmoufixe
 <span><span class="co">#&gt; Doing end processing</span></span>
 <span><span class="co">#&gt; Warning in sqrt(diag(x$inv.hessian)): NaNs produced</span></span>
 <span><span class="co">#&gt; Successful trial</span></span>
-<span><span class="co">#&gt; Total Time: 38.39404 </span></span>
-<span><span class="co">#&gt; Backend Time: 37.76446</span></span></code></pre></div>
+<span><span class="co">#&gt; Total Time: 27.89861 </span></span>
+<span><span class="co">#&gt; Backend Time: 27.42884</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
