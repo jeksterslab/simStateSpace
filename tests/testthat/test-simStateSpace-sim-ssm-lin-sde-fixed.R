@@ -145,6 +145,21 @@ lapply(
     print.simstatespace(ssm)
     plot.simstatespace(ssm, id = 1:3, time = (0:4) * 0.10)
     plot.simstatespace(ssm, eta = TRUE)
+    # coverage LinSDE2SSM
+    SimSSMLinSDEFixed(
+      n = n,
+      time = time,
+      delta_t = delta_t,
+      mu0 = mu0,
+      sigma0_l = sigma0_l,
+      iota = c(0, 0),
+      phi = phi,
+      sigma_l = matrix(data = 0, nrow = p, ncol = p),
+      nu = nu,
+      lambda = lambda,
+      theta_l = theta_l,
+      type = 0
+    )
   },
   text = "test-simStateSpace-sim-ssm-lin-sde-fixed"
 )
