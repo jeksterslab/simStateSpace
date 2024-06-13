@@ -1,7 +1,7 @@
 ---
 title: "The Linear Growth Curve Model"
 author: "Ivan Jacob Agaloos Pesigan"
-date: "2024-06-10"
+date: "2024-06-13"
 bibliography: "vignettes.bib"
 csl: https://raw.githubusercontent.com/citation-style-language/styles/master/apa.csl
 nocite: |
@@ -359,8 +359,8 @@ results <- dynr::dynr.cook(
 #> 
 #> Doing end processing
 #> Successful trial
-#> Total Time: 55.80821 
-#> Backend Time: 55.3813
+#> Total Time: 53.34507 
+#> Backend Time: 52.97728
 ```
 
 ## Summary
