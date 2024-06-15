@@ -34,8 +34,9 @@ phi <- matrix(
   ),
   nrow = 3
 )
-vcov_phi_vec_l <- t(chol(0.10 * diag(9)))
-SimPhi(n = 10, phi = phi, vcov_phi_vec_l = vcov_phi_vec_l)
+n <- 10
+vcov_phi_vec_l <- t(chol(0.001 * diag(9)))
+SimPhi(n = n, phi = phi, vcov_phi_vec_l = vcov_phi_vec_l)
 
 }
 \seealso{

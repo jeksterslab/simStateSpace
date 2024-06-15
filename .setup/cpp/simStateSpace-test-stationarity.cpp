@@ -36,10 +36,5 @@
 // [[Rcpp::export]]
 bool TestStationarity(const arma::mat& x) {
   arma::cx_vec eigenvalues = arma::eig_gen(x);
-  for (arma::uword i = 0; i < eigenvalues.n_elem; ++i) {
-    if (std::abs(eigenvalues(i)) >= 1.0) {
-      return false;
-    }
-  }
-  return true;
+  return arma::all(arma::abs(eigenvalues) < 1.0);
 }

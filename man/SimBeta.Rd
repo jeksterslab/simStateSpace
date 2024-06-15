@@ -34,8 +34,9 @@ beta <- matrix(
   ),
   nrow = 3
 )
-vcov_beta_vec_l <- t(chol(0.10 * diag(9)))
-SimBeta(n = 10, beta = beta, vcov_beta_vec_l = vcov_beta_vec_l)
+n <- 10
+vcov_beta_vec_l <- t(chol(0.001 * diag(9)))
+SimBeta(n = n, beta = beta, vcov_beta_vec_l = vcov_beta_vec_l)
 
 }
 \seealso{
