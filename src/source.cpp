@@ -270,8 +270,9 @@ Rcpp::List LinSDE2SSM(const arma::vec& iota, const arma::mat& phi,
 //'   ),
 //'   nrow = 3
 //' )
-//' vcov_beta_vec_l <- t(chol(0.10 * diag(9)))
-//' SimBeta(n = 10, beta = beta, vcov_beta_vec_l = vcov_beta_vec_l)
+//' n <- 10
+//' vcov_beta_vec_l <- t(chol(0.001 * diag(9)))
+//' SimBeta(n = n, beta = beta, vcov_beta_vec_l = vcov_beta_vec_l)
 //'
 //' @family Simulation of State Space Models Data Functions
 //' @keywords simStateSpace ssm
@@ -334,8 +335,9 @@ Rcpp::List SimBeta(const arma::uword& n, const arma::mat& beta,
 //'   ),
 //'   nrow = 3
 //' )
-//' vcov_phi_vec_l <- t(chol(0.10 * diag(9)))
-//' SimPhi(n = 10, phi = phi, vcov_phi_vec_l = vcov_phi_vec_l)
+//' n <- 10
+//' vcov_phi_vec_l <- t(chol(0.001 * diag(9)))
+//' SimPhi(n = n, phi = phi, vcov_phi_vec_l = vcov_phi_vec_l)
 //'
 //' @family Simulation of State Space Models Data Functions
 //' @keywords simStateSpace linsde
@@ -1279,10 +1281,5 @@ bool TestStability(const arma::mat& x) {
 // [[Rcpp::export]]
 bool TestStationarity(const arma::mat& x) {
   arma::cx_vec eigenvalues = arma::eig_gen(x);
-  for (arma::uword i = 0; i < eigenvalues.n_elem; ++i) {
-    if (std::abs(eigenvalues(i)) >= 1.0) {
-      return false;
-    }
-  }
-  return true;
+  return arma::all(arma::abs(eigenvalues) < 1.0);
 }
