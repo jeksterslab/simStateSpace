@@ -2,7 +2,8 @@
 lapply(
   X = 1,
   FUN = function(i,
-                 text) {
+                 text,
+                 n) {
     message(text)
     phi <- matrix(
       data = c(
@@ -12,7 +13,6 @@ lapply(
       ),
       nrow = 3
     )
-    n <- 100000
     vcov_phi_vec_l <- t(chol(0.001 * diag(9)))
     testthat::test_that(
       text,
@@ -32,5 +32,6 @@ lapply(
       }
     )
   },
-  text = "test-simStateSpace-sim-phi"
+  text = "test-simStateSpace-sim-phi",
+  n = 100000
 )
