@@ -48,17 +48,41 @@ Rcpp::List SimSSMLinSDEIVary1(const arma::uword& n, const arma::uword& time,
     arma::mat gamma_i = gamma[i];
 
     // Step 3.3: Calculate state space parameters
+    // if (ou) {
+    //   iota_i = (-1 * phi_i) * iota_i;
+    // }
+    // arma::mat phi_hashtag_i = arma::kron(phi_i, I) + arma::kron(I, phi_i);
+    // arma::vec sigma_vec_i = arma::vectorise(sigma_l_i * sigma_l_i.t());
+    // arma::vec psi_vec_i = arma::inv(phi_hashtag_i) *
+    // (arma::expmat(phi_hashtag_i * delta_t) - J) * sigma_vec_i; arma::mat
+    // psi_l_i = arma::chol(arma::reshape(psi_vec_i, p, p), "lower"); arma::mat
+    // beta_i = arma::expmat(phi_i * delta_t); arma::vec alpha_i =
+    // arma::inv(phi_i) * (beta_i - I) * iota_i;
     if (ou) {
-      iota_i = (-1 * phi_i) * iota_i;
+      if (iota_i.is_zero()) {
+        iota_i = iota_i;
+      } else {
+        iota_i = (-1 * phi_i) * iota_i;
+      }
     }
-    arma::mat phi_hashtag_i = arma::kron(phi_i, I) + arma::kron(I, phi_i);
-    arma::vec sigma_vec_i = arma::vectorise(sigma_l_i * sigma_l_i.t());
-    arma::vec psi_vec_i = arma::inv(phi_hashtag_i) *
-                          (arma::expmat(phi_hashtag_i * delta_t) - J) *
-                          sigma_vec_i;
-    arma::mat psi_l_i = arma::chol(arma::reshape(psi_vec_i, p, p), "lower");
+    arma::vec alpha_i = arma::vec(p);
     arma::mat beta_i = arma::expmat(phi_i * delta_t);
-    arma::vec alpha_i = arma::inv(phi_i) * (beta_i - I) * iota_i;
+    if (iota_i.is_zero()) {
+      alpha_i = iota_i;
+    } else {
+      alpha_i = arma::inv(phi_i) * (beta_i - I) * iota_i;
+    }
+    arma::mat psi_l_i = arma::mat(p, p);
+    if (sigma_l_i.is_zero()) {
+      psi_l_i = sigma_l_i;
+    } else {
+      arma::mat phi_hashtag_i = arma::kron(phi_i, I) + arma::kron(I, phi_i);
+      arma::vec sigma_vec_i = arma::vectorise(sigma_l_i * sigma_l_i.t());
+      arma::vec psi_vec_i = arma::inv(phi_hashtag_i) *
+                            (arma::expmat(phi_hashtag_i * delta_t) - J) *
+                            sigma_vec_i;
+      psi_l_i = arma::chol(arma::reshape(psi_vec_i, p, p), "lower");
+    }
 
     // Step 3.4: Generate initial condition
     eta.col(0) = mu0_i + (sigma0_l_i * arma::randn(p)) + (gamma_i * x_i.col(0));

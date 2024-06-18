@@ -1,7 +1,13 @@
-# simStateSpace 1.2.2
+# simStateSpace 1.2.1.9000
 
-* Added the `TestStationarity()` and `TestStability()` functions.
+## Patch
+
+* Latest development version.
+* Added the `TestStationarity()`, `TestStability()`, and `TestPhi()` functions.
 * Added the `SimBeta()` and `SimPhi()` functions.
+* The `SimSSMLinSDEIVary()` and `SimSSMOUIVary()` functions can now accept a matrix of zeros for the argument `sigma_l`.
+* The `SimSSMLinSDEIVary()` function can now accept a vector of zeros for the argument `iota`.
+* The `SimSSMOUIVary()` function can now accept a vector of zeros for the argument `mu`.
 
 # simStateSpace 1.2.1
 
