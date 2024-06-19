@@ -8,7 +8,7 @@ message: 'To cite package "simStateSpace" in publications use:'
 type: software
 license: GPL-3.0-or-later
 title: 'simStateSpace: Simulate Data from State Space Models'
-version: 1.2.2
+version: 1.2.1.9000
 abstract: Provides a streamlined and user-friendly framework for simulating data in
   state space models, particularly when the number of subjects/units (n) exceeds one,
   a scenario commonly encountered in social and behavioral sciences. For an introduction
@@ -28,7 +28,7 @@ preferred-citation:
     email: r.jeksterslab@gmail.com
     orcid: https://orcid.org/0000-0003-4818-8420
   year: '2024'
-  notes: R package version 1.2.2
+  notes: R package version 1.2.1.9000
 repository: https://CRAN.R-project.org/package=simStateSpace
 repository-code: https://github.com/jeksterslab/simStateSpace
 url: https://jeksterslab.github.io/simStateSpace/

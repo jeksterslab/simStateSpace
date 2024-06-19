@@ -59,9 +59,7 @@ Rcpp::List SimSSMLinSDEIVary1(const arma::uword& n, const arma::uword& time,
     // beta_i = arma::expmat(phi_i * delta_t); arma::vec alpha_i =
     // arma::inv(phi_i) * (beta_i - I) * iota_i;
     if (ou) {
-      if (iota_i.is_zero()) {
-        iota_i = iota_i;
-      } else {
+      if (!iota_i.is_zero()) {
         iota_i = (-1 * phi_i) * iota_i;
       }
     }
