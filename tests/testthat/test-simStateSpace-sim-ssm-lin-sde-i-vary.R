@@ -24,7 +24,7 @@ lapply(
     iota <- list(
       c(0.317, 0.230)
     )
-    phi <- SimPhi(
+    phi <- SimPhiN(
       n = 5,
       phi = -0.1 * diag(p),
       vcov_phi_vec_l = t(

@@ -189,7 +189,7 @@
 #' @keywords simStateSpace transformation linsde
 #' @export
 LinSDE2SSM <- function(iota, phi, sigma_l, delta_t) {
-    .Call('_simStateSpace_LinSDE2SSM', PACKAGE = 'simStateSpace', iota, phi, sigma_l, delta_t)
+    .Call(`_simStateSpace_LinSDE2SSM`, iota, phi, sigma_l, delta_t)
 }
 
 #' Simulate Transition Matrices
@@ -228,7 +228,7 @@ LinSDE2SSM <- function(iota, phi, sigma_l, delta_t) {
 #' @keywords simStateSpace ssm
 #' @export
 SimBetaN <- function(n, beta, vcov_beta_vec_l) {
-    .Call('_simStateSpace_SimBetaN', PACKAGE = 'simStateSpace', n, beta, vcov_beta_vec_l)
+    .Call(`_simStateSpace_SimBetaN`, n, beta, vcov_beta_vec_l)
 }
 
 #' Simulate Random Drift Matrices
@@ -267,59 +267,59 @@ SimBetaN <- function(n, beta, vcov_beta_vec_l) {
 #' @keywords simStateSpace linsde
 #' @export
 SimPhiN <- function(n, phi, vcov_phi_vec_l) {
-    .Call('_simStateSpace_SimPhiN', PACKAGE = 'simStateSpace', n, phi, vcov_phi_vec_l)
+    .Call(`_simStateSpace_SimPhiN`, n, phi, vcov_phi_vec_l)
 }
 
 .SimSSMFixed0 <- function(n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l, nu, lambda, theta_l) {
-    .Call('_simStateSpace_SimSSMFixed0', PACKAGE = 'simStateSpace', n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l, nu, lambda, theta_l)
+    .Call(`_simStateSpace_SimSSMFixed0`, n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l, nu, lambda, theta_l)
 }
 
 .SimSSMFixed1 <- function(n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l, nu, lambda, theta_l, x, gamma) {
-    .Call('_simStateSpace_SimSSMFixed1', PACKAGE = 'simStateSpace', n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l, nu, lambda, theta_l, x, gamma)
+    .Call(`_simStateSpace_SimSSMFixed1`, n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l, nu, lambda, theta_l, x, gamma)
 }
 
 .SimSSMFixed2 <- function(n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l, nu, lambda, theta_l, x, gamma, kappa) {
-    .Call('_simStateSpace_SimSSMFixed2', PACKAGE = 'simStateSpace', n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l, nu, lambda, theta_l, x, gamma, kappa)
+    .Call(`_simStateSpace_SimSSMFixed2`, n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l, nu, lambda, theta_l, x, gamma, kappa)
 }
 
 .SimSSMIVary0 <- function(n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l, nu, lambda, theta_l) {
-    .Call('_simStateSpace_SimSSMIVary0', PACKAGE = 'simStateSpace', n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l, nu, lambda, theta_l)
+    .Call(`_simStateSpace_SimSSMIVary0`, n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l, nu, lambda, theta_l)
 }
 
 .SimSSMIVary1 <- function(n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l, nu, lambda, theta_l, x, gamma) {
-    .Call('_simStateSpace_SimSSMIVary1', PACKAGE = 'simStateSpace', n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l, nu, lambda, theta_l, x, gamma)
+    .Call(`_simStateSpace_SimSSMIVary1`, n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l, nu, lambda, theta_l, x, gamma)
 }
 
 .SimSSMIVary2 <- function(n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l, nu, lambda, theta_l, x, gamma, kappa) {
-    .Call('_simStateSpace_SimSSMIVary2', PACKAGE = 'simStateSpace', n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l, nu, lambda, theta_l, x, gamma, kappa)
+    .Call(`_simStateSpace_SimSSMIVary2`, n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l, nu, lambda, theta_l, x, gamma, kappa)
 }
 
 .SimSSMLatFixed0 <- function(n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l) {
-    .Call('_simStateSpace_SimSSMLatFixed0', PACKAGE = 'simStateSpace', n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l)
+    .Call(`_simStateSpace_SimSSMLatFixed0`, n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l)
 }
 
 .SimSSMLatFixed1 <- function(n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l, x, gamma) {
-    .Call('_simStateSpace_SimSSMLatFixed1', PACKAGE = 'simStateSpace', n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l, x, gamma)
+    .Call(`_simStateSpace_SimSSMLatFixed1`, n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l, x, gamma)
 }
 
 .SimSSMLatIVary0 <- function(n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l) {
-    .Call('_simStateSpace_SimSSMLatIVary0', PACKAGE = 'simStateSpace', n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l)
+    .Call(`_simStateSpace_SimSSMLatIVary0`, n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l)
 }
 
 .SimSSMLatIVary1 <- function(n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l, x, gamma) {
-    .Call('_simStateSpace_SimSSMLatIVary1', PACKAGE = 'simStateSpace', n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l, x, gamma)
+    .Call(`_simStateSpace_SimSSMLatIVary1`, n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l, x, gamma)
 }
 
 .SimSSMLinSDEIVary0 <- function(n, time, delta_t, mu0, sigma0_l, iota, phi, sigma_l, nu, lambda, theta_l, ou = FALSE) {
-    .Call('_simStateSpace_SimSSMLinSDEIVary0', PACKAGE = 'simStateSpace', n, time, delta_t, mu0, sigma0_l, iota, phi, sigma_l, nu, lambda, theta_l, ou)
+    .Call(`_simStateSpace_SimSSMLinSDEIVary0`, n, time, delta_t, mu0, sigma0_l, iota, phi, sigma_l, nu, lambda, theta_l, ou)
 }
 
 .SimSSMLinSDEIVary1 <- function(n, time, delta_t, mu0, sigma0_l, iota, phi, sigma_l, nu, lambda, theta_l, x, gamma, ou = FALSE) {
-    .Call('_simStateSpace_SimSSMLinSDEIVary1', PACKAGE = 'simStateSpace', n, time, delta_t, mu0, sigma0_l, iota, phi, sigma_l, nu, lambda, theta_l, x, gamma, ou)
+    .Call(`_simStateSpace_SimSSMLinSDEIVary1`, n, time, delta_t, mu0, sigma0_l, iota, phi, sigma_l, nu, lambda, theta_l, x, gamma, ou)
 }
 
 .SimSSMLinSDEIVary2 <- function(n, time, delta_t, mu0, sigma0_l, iota, phi, sigma_l, nu, lambda, theta_l, x, gamma, kappa, ou = FALSE) {
-    .Call('_simStateSpace_SimSSMLinSDEIVary2', PACKAGE = 'simStateSpace', n, time, delta_t, mu0, sigma0_l, iota, phi, sigma_l, nu, lambda, theta_l, x, gamma, kappa, ou)
+    .Call(`_simStateSpace_SimSSMLinSDEIVary2`, n, time, delta_t, mu0, sigma0_l, iota, phi, sigma_l, nu, lambda, theta_l, x, gamma, kappa, ou)
 }
 
 #' Test the Drift Matrix
@@ -350,7 +350,7 @@ SimPhiN <- function(n, phi, vcov_phi_vec_l) {
 #' @keywords simStateSpace test linsde
 #' @export
 TestPhi <- function(phi) {
-    .Call('_simStateSpace_TestPhi', PACKAGE = 'simStateSpace', phi)
+    .Call(`_simStateSpace_TestPhi`, phi)
 }
 
 #' Test Stability
@@ -379,7 +379,7 @@ TestPhi <- function(phi) {
 #' @keywords simStateSpace test linsde
 #' @export
 TestStability <- function(x) {
-    .Call('_simStateSpace_TestStability', PACKAGE = 'simStateSpace', x)
+    .Call(`_simStateSpace_TestStability`, x)
 }
 
 #' Test Stationarity
@@ -410,6 +410,6 @@ TestStability <- function(x) {
 #' @keywords simStateSpace test ssm
 #' @export
 TestStationarity <- function(x) {
-    .Call('_simStateSpace_TestStationarity', PACKAGE = 'simStateSpace', x)
+    .Call(`_simStateSpace_TestStationarity`, x)
 }
 

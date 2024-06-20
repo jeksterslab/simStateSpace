@@ -24,7 +24,7 @@ lapply(
     mu <- list(
       c(5.76, 5.18)
     )
-    phi <- SimPhi(
+    phi <- SimPhiN(
       n = 5,
       phi = -0.1 * diag(p),
       vcov_phi_vec_l = t(

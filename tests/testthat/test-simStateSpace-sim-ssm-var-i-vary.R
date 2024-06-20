@@ -23,7 +23,7 @@ lapply(
     alpha <- list(
       rep(x = 0, times = p)
     )
-    beta <- SimBeta(
+    beta <- SimBetaN(
       n = 5,
       beta = 0.1 * diag(p),
       vcov_beta_vec_l = t(
