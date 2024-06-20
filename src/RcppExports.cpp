@@ -25,29 +25,29 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// SimBeta
-Rcpp::List SimBeta(const arma::uword& n, const arma::mat& beta, const arma::mat& vcov_beta_vec_l);
-RcppExport SEXP _simStateSpace_SimBeta(SEXP nSEXP, SEXP betaSEXP, SEXP vcov_beta_vec_lSEXP) {
+// SimBetaN
+Rcpp::List SimBetaN(const arma::uword& n, const arma::mat& beta, const arma::mat& vcov_beta_vec_l);
+RcppExport SEXP _simStateSpace_SimBetaN(SEXP nSEXP, SEXP betaSEXP, SEXP vcov_beta_vec_lSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const arma::uword& >::type n(nSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type beta(betaSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type vcov_beta_vec_l(vcov_beta_vec_lSEXP);
-    rcpp_result_gen = Rcpp::wrap(SimBeta(n, beta, vcov_beta_vec_l));
+    rcpp_result_gen = Rcpp::wrap(SimBetaN(n, beta, vcov_beta_vec_l));
     return rcpp_result_gen;
 END_RCPP
 }
-// SimPhi
-Rcpp::List SimPhi(const arma::uword& n, const arma::mat& phi, const arma::mat& vcov_phi_vec_l);
-RcppExport SEXP _simStateSpace_SimPhi(SEXP nSEXP, SEXP phiSEXP, SEXP vcov_phi_vec_lSEXP) {
+// SimPhiN
+Rcpp::List SimPhiN(const arma::uword& n, const arma::mat& phi, const arma::mat& vcov_phi_vec_l);
+RcppExport SEXP _simStateSpace_SimPhiN(SEXP nSEXP, SEXP phiSEXP, SEXP vcov_phi_vec_lSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const arma::uword& >::type n(nSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type phi(phiSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type vcov_phi_vec_l(vcov_phi_vec_lSEXP);
-    rcpp_result_gen = Rcpp::wrap(SimPhi(n, phi, vcov_phi_vec_l));
+    rcpp_result_gen = Rcpp::wrap(SimPhiN(n, phi, vcov_phi_vec_l));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -370,8 +370,8 @@ END_RCPP
 
 static const R_CallMethodDef CallEntries[] = {
     {"_simStateSpace_LinSDE2SSM", (DL_FUNC) &_simStateSpace_LinSDE2SSM, 4},
-    {"_simStateSpace_SimBeta", (DL_FUNC) &_simStateSpace_SimBeta, 3},
-    {"_simStateSpace_SimPhi", (DL_FUNC) &_simStateSpace_SimPhi, 3},
+    {"_simStateSpace_SimBetaN", (DL_FUNC) &_simStateSpace_SimBetaN, 3},
+    {"_simStateSpace_SimPhiN", (DL_FUNC) &_simStateSpace_SimPhiN, 3},
     {"_simStateSpace_SimSSMFixed0", (DL_FUNC) &_simStateSpace_SimSSMFixed0, 11},
     {"_simStateSpace_SimSSMFixed1", (DL_FUNC) &_simStateSpace_SimSSMFixed1, 13},
     {"_simStateSpace_SimSSMFixed2", (DL_FUNC) &_simStateSpace_SimSSMFixed2, 14},

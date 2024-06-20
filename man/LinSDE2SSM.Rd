@@ -198,8 +198,8 @@ Cambridge University Press.
 }
 \seealso{
 Other Simulation of State Space Models Data Functions: 
-\code{\link{SimBeta}()},
-\code{\link{SimPhi}()},
+\code{\link{SimBetaN}()},
+\code{\link{SimPhiN}()},
 \code{\link{SimSSMFixed}()},
 \code{\link{SimSSMIVary}()},
 \code{\link{SimSSMLinGrowth}()},

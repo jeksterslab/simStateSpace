@@ -222,13 +222,13 @@ LinSDE2SSM <- function(iota, phi, sigma_l, delta_t) {
 #' )
 #' n <- 10
 #' vcov_beta_vec_l <- t(chol(0.001 * diag(9)))
-#' SimBeta(n = n, beta = beta, vcov_beta_vec_l = vcov_beta_vec_l)
+#' SimBetaN(n = n, beta = beta, vcov_beta_vec_l = vcov_beta_vec_l)
 #'
 #' @family Simulation of State Space Models Data Functions
 #' @keywords simStateSpace ssm
 #' @export
-SimBeta <- function(n, beta, vcov_beta_vec_l) {
-    .Call(`_simStateSpace_SimBeta`, n, beta, vcov_beta_vec_l)
+SimBetaN <- function(n, beta, vcov_beta_vec_l) {
+    .Call(`_simStateSpace_SimBetaN`, n, beta, vcov_beta_vec_l)
 }
 
 #' Simulate Random Drift Matrices
@@ -261,13 +261,13 @@ SimBeta <- function(n, beta, vcov_beta_vec_l) {
 #' )
 #' n <- 10
 #' vcov_phi_vec_l <- t(chol(0.001 * diag(9)))
-#' SimPhi(n = n, phi = phi, vcov_phi_vec_l = vcov_phi_vec_l)
+#' SimPhiN(n = n, phi = phi, vcov_phi_vec_l = vcov_phi_vec_l)
 #'
 #' @family Simulation of State Space Models Data Functions
 #' @keywords simStateSpace linsde
 #' @export
-SimPhi <- function(n, phi, vcov_phi_vec_l) {
-    .Call(`_simStateSpace_SimPhi`, n, phi, vcov_phi_vec_l)
+SimPhiN <- function(n, phi, vcov_phi_vec_l) {
+    .Call(`_simStateSpace_SimPhiN`, n, phi, vcov_phi_vec_l)
 }
 
 .SimSSMFixed0 <- function(n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l, nu, lambda, theta_l) {

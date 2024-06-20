@@ -1,30 +1,30 @@
-## ---- test-simStateSpace-sim-beta
+## ---- test-simStateSpace-sim-phi-n
 lapply(
   X = 1,
   FUN = function(i,
                  text,
                  n) {
     message(text)
-    beta <- matrix(
+    phi <- matrix(
       data = c(
-        0.7, 0.5, -0.1,
-        0.0, 0.6, 0.4,
-        0, 0, 0.5
+        -0.357, 0.771, -0.450,
+        0.0, -0.511, 0.729,
+        0, 0, -0.693
       ),
       nrow = 3
     )
-    vcov_beta_vec_l <- t(chol(0.001 * diag(9)))
+    vcov_phi_vec_l <- t(chol(0.001 * diag(9)))
     testthat::test_that(
       text,
       {
         testthat::expect_true(
           all(
-            beta - (1 / n) * Reduce(
+            phi - (1 / n) * Reduce(
               f = `+`,
-              x = SimBeta(
+              x = SimPhiN(
                 n = n,
-                beta = beta,
-                vcov_beta_vec_l = vcov_beta_vec_l
+                phi = phi,
+                vcov_phi_vec_l = vcov_phi_vec_l
               )
             ) < 0.001
           )
@@ -32,6 +32,6 @@ lapply(
       }
     )
   },
-  text = "test-simStateSpace-sim-beta",
+  text = "test-simStateSpace-sim-phi-n",
   n = 100000
 )
