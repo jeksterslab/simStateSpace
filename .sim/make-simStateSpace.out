@@ -15,16 +15,16 @@ Installing packages...
 Building dotfiles...
 
 
-make[1]: Entering directory '/tmp/RtmpQyVPUK/dotfiles'
-make[2]: Entering directory '/tmp/RtmpQyVPUK/dotfiles/.setup/bash'
+make[1]: Entering directory '/tmp/RtmpR5Ai6l/dotfiles'
+make[2]: Entering directory '/tmp/RtmpR5Ai6l/dotfiles/.setup/bash'
 Building /storage/home/ibp5092/.bashrc
-make[2]: Leaving directory '/tmp/RtmpQyVPUK/dotfiles/.setup/bash'
-make[2]: Entering directory '/tmp/RtmpQyVPUK/dotfiles/.setup/git'
-make[2]: Leaving directory '/tmp/RtmpQyVPUK/dotfiles/.setup/git'
-make[2]: Entering directory '/tmp/RtmpQyVPUK/dotfiles/.setup/ssh'
+make[2]: Leaving directory '/tmp/RtmpR5Ai6l/dotfiles/.setup/bash'
+make[2]: Entering directory '/tmp/RtmpR5Ai6l/dotfiles/.setup/git'
+make[2]: Leaving directory '/tmp/RtmpR5Ai6l/dotfiles/.setup/git'
+make[2]: Entering directory '/tmp/RtmpR5Ai6l/dotfiles/.setup/ssh'
 Keys already exist and will not be overwritten.
-make[2]: Leaving directory '/tmp/RtmpQyVPUK/dotfiles/.setup/ssh'
-make[2]: Entering directory '/tmp/RtmpQyVPUK/dotfiles/.setup/tmux'
+make[2]: Leaving directory '/tmp/RtmpR5Ai6l/dotfiles/.setup/ssh'
+make[2]: Entering directory '/tmp/RtmpR5Ai6l/dotfiles/.setup/tmux'
 [?7l[1m[33m         _
 [33m     ---(_)
 [33m _/  ---  \
@@ -35,17 +35,17 @@ make[2]: Entering directory '/tmp/RtmpQyVPUK/dotfiles/.setup/tmux'
 [14C[33m[1mos[0m[2D[7C[39mUbuntu 22.04.4 LTS[0m
 [14C[33m[1mhost[0m[4D[7C[39mPowerEdge M630[0m
 [14C[33m[1mkernel[0m[6D[7C[39m4.18.0-513.24.1.el8_9.x86_64[0m
-[14C[33m[1muptime[0m[6D[7C[39m33d 19h 1m[0m
+[14C[33m[1muptime[0m[6D[7C[39m33d 19h 7m[0m
 [14C[33m[1mpkgs[0m[4D[7C[39m555[0m
-[14C[33m[1mmemory[0m[6D[7C[39m8579M / 128802M[0m
+[14C[33m[1mmemory[0m[6D[7C[39m8580M / 128802M[0m
 
 [?7hIn tmux press "Prefix + r" to reload configuration.
-make[2]: Leaving directory '/tmp/RtmpQyVPUK/dotfiles/.setup/tmux'
-make[2]: Entering directory '/tmp/RtmpQyVPUK/dotfiles/.setup/vim'
-make[2]: Leaving directory '/tmp/RtmpQyVPUK/dotfiles/.setup/vim'
-make[2]: Entering directory '/tmp/RtmpQyVPUK/dotfiles/.setup/xterm'
-make[2]: Leaving directory '/tmp/RtmpQyVPUK/dotfiles/.setup/xterm'
-make[1]: Leaving directory '/tmp/RtmpQyVPUK/dotfiles'
+make[2]: Leaving directory '/tmp/RtmpR5Ai6l/dotfiles/.setup/tmux'
+make[2]: Entering directory '/tmp/RtmpR5Ai6l/dotfiles/.setup/vim'
+make[2]: Leaving directory '/tmp/RtmpR5Ai6l/dotfiles/.setup/vim'
+make[2]: Entering directory '/tmp/RtmpR5Ai6l/dotfiles/.setup/xterm'
+make[2]: Leaving directory '/tmp/RtmpR5Ai6l/dotfiles/.setup/xterm'
+make[1]: Leaving directory '/tmp/RtmpR5Ai6l/dotfiles'
 
 
 TinyTex...
@@ -95,8 +95,8 @@ Styling  53  files:
  R/simStateSpace-sim-ssm-var-fixed.R                                       ✔ 
  R/simStateSpace-sim-ssm-var-i-vary.R                                      ✔ 
  tests/testthat.R                                                          ✔ 
- tests/testthat/test-simStateSpace-sim-beta.R                              ✔ 
- tests/testthat/test-simStateSpace-sim-phi.R                               ✔ 
+ tests/testthat/test-simStateSpace-sim-beta-n.R                            ✔ 
+ tests/testthat/test-simStateSpace-sim-phi-n.R                             ✔ 
  tests/testthat/test-simStateSpace-sim-ssm-fixed.R                         ✔ 
  tests/testthat/test-simStateSpace-sim-ssm-i-vary.R                        ✔ 
  tests/testthat/test-simStateSpace-sim-ssm-lin-growth-i-vary.R             ✔ 
@@ -177,7 +177,7 @@ g++ -std=gnu++17 -I"/usr/local/lib/R/include" -DNDEBUG  -I'/usr/local/lib/R/site
 g++ -std=gnu++17 -I"/usr/local/lib/R/include" -DNDEBUG  -I'/usr/local/lib/R/site-library/Rcpp/include' -I'/usr/local/lib/R/site-library/RcppArmadillo/include' -I/usr/local/include   -fopenmp -fpic  -g -O2 -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2 -g  -UNDEBUG -Wall -pedantic -g -O0  -c source.cpp -o source.o
 g++ -std=gnu++17 -shared -L/usr/local/lib/R/lib -L/usr/local/lib -o simStateSpace.so RcppExports.o source.o -fopenmp -llapack -lblas -lgfortran -lm -lquadmath -L/usr/local/lib/R/lib -lR
 make[1]: Leaving directory '/scratch/ibp5092/simStateSpace/src'
-installing to /tmp/RtmpWpyd48/devtools_install_393f5b63a4b558/00LOCK-simStateSpace/00new/simStateSpace/libs
+installing to /tmp/RtmpmZLbcS/devtools_install_3951d125996420/00LOCK-simStateSpace/00new/simStateSpace/libs
 ** checking absolute paths in shared objects and dynamic libraries
 * DONE (simStateSpace)
 ══ Documenting ═════════════════════════════════════════════════════════════════
@@ -209,7 +209,7 @@ Setting env vars:
 • _R_CHECK_FORCE_SUGGESTS_      : FALSE
 • NOT_CRAN                      : true
 ── R CMD check ─────────────────────────────────────────────────────────────────
-* using log directory ‘/tmp/RtmpWpyd48/file393f5b2b8f48b/simStateSpace.Rcheck’
+* using log directory ‘/tmp/RtmpmZLbcS/file3951d131cac52b/simStateSpace.Rcheck’
 * using R version 4.4.0 (2024-04-24)
 * using platform: x86_64-pc-linux-gnu
 * R was compiled by
@@ -285,17 +285,17 @@ Last 13 lines of output:
    1. └─base::lapply(...) at test-simStateSpace-sim-ssm-var-i-vary.R:2:1
    2.   └─simStateSpace (local) FUN(X[[i]], ...)
   
-  [ FAIL 6 | WARN 0 | SKIP 0 | PASS 3 ]
+  [ FAIL 4 | WARN 0 | SKIP 0 | PASS 5 ]
   Error: Test failures
   Execution halted
 * DONE
 Status: 1 ERROR
 See
-  ‘/tmp/RtmpWpyd48/file393f5b2b8f48b/simStateSpace.Rcheck/00check.log’
+  ‘/tmp/RtmpmZLbcS/file3951d131cac52b/simStateSpace.Rcheck/00check.log’
 for details.
 
 ── R CMD check results ─────────────────────────── simStateSpace 1.2.1.9000 ────
-Duration: 42.9s
+Duration: 43.7s
 
 ❯ checking tests ...
   See below...
@@ -424,25 +424,9 @@ SimSSMVARFixed(n = n, time = time, mu0 = mu0, sigma0_l = sigma0_l,
 Use `as.data.frame` or `as.matrix` on the output of `SimSSMVARFixed`
 to convert it to a data frame or a matrix.
 
-[ FAIL 6 | WARN 0 | SKIP 0 | PASS 3 ]
+[ FAIL 4 | WARN 0 | SKIP 0 | PASS 5 ]
 
 ══ Failed tests ════════════════════════════════════════════════════════════════
-── Error ('test-simStateSpace-sim-beta.R:20:9'): test-simStateSpace-sim-beta ───
-Error in `SimBeta(n = n, beta = beta, vcov_beta_vec_l = vcov_beta_vec_l)`: could not find function "SimBeta"
-Backtrace:
-    ▆
- 1. ├─testthat::expect_true(...) at test-simStateSpace-sim-beta.R:20:9
- 2. │ └─testthat::quasi_label(enquo(object), label, arg = "object")
- 3. │   └─rlang::eval_bare(expr, quo_get_env(quo))
- 4. └─base::Reduce(f = `+`, x = SimBeta(n = n, beta = beta, vcov_beta_vec_l = vcov_beta_vec_l))
-── Error ('test-simStateSpace-sim-phi.R:20:9'): test-simStateSpace-sim-phi ─────
-Error in `SimPhi(n = n, phi = phi, vcov_phi_vec_l = vcov_phi_vec_l)`: could not find function "SimPhi"
-Backtrace:
-    ▆
- 1. ├─testthat::expect_true(...) at test-simStateSpace-sim-phi.R:20:9
- 2. │ └─testthat::quasi_label(enquo(object), label, arg = "object")
- 3. │   └─rlang::eval_bare(expr, quo_get_env(quo))
- 4. └─base::Reduce(f = `+`, x = SimPhi(n = n, phi = phi, vcov_phi_vec_l = vcov_phi_vec_l))
 ── Error ('test-simStateSpace-sim-ssm-i-vary.R:26:5'): (code run outside of `test_that()`) ──
 Error in `SimBeta(n = 5, beta = 0.1 * diag(p), vcov_beta_vec_l = t(chol(0.1 * 
     diag(p^2))))`: could not find function "SimBeta"
@@ -472,7 +456,7 @@ Backtrace:
  1. └─base::lapply(...) at test-simStateSpace-sim-ssm-var-i-vary.R:2:1
  2.   └─simStateSpace (local) FUN(X[[i]], ...)
 
-[ FAIL 6 | WARN 0 | SKIP 0 | PASS 3 ]
+[ FAIL 4 | WARN 0 | SKIP 0 | PASS 5 ]
 Error: Test failures
 Execution halted
 
