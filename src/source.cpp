@@ -235,7 +235,7 @@ Rcpp::List LinSDE2SSM(const arma::vec& iota, const arma::mat& phi,
                             Rcpp::Named("psi_l") = psi_l);
 }
 // -----------------------------------------------------------------------------
-// edit .setup/cpp/simStateSpace-sim-beta.cpp
+// edit .setup/cpp/simStateSpace-sim-beta-n.cpp
 // Ivan Jacob Agaloos Pesigan
 // -----------------------------------------------------------------------------
 
@@ -272,14 +272,14 @@ Rcpp::List LinSDE2SSM(const arma::vec& iota, const arma::mat& phi,
 //' )
 //' n <- 10
 //' vcov_beta_vec_l <- t(chol(0.001 * diag(9)))
-//' SimBeta(n = n, beta = beta, vcov_beta_vec_l = vcov_beta_vec_l)
+//' SimBetaN(n = n, beta = beta, vcov_beta_vec_l = vcov_beta_vec_l)
 //'
 //' @family Simulation of State Space Models Data Functions
 //' @keywords simStateSpace ssm
 //' @export
 // [[Rcpp::export]]
-Rcpp::List SimBeta(const arma::uword& n, const arma::mat& beta,
-                   const arma::mat& vcov_beta_vec_l) {
+Rcpp::List SimBetaN(const arma::uword& n, const arma::mat& beta,
+                    const arma::mat& vcov_beta_vec_l) {
   Rcpp::List output(n);
   int p = beta.n_rows;
   int q = p * p;
@@ -300,7 +300,7 @@ Rcpp::List SimBeta(const arma::uword& n, const arma::mat& beta,
   return output;
 }
 // -----------------------------------------------------------------------------
-// edit .setup/cpp/simStateSpace-sim-phi.cpp
+// edit .setup/cpp/simStateSpace-sim-phi-n.cpp
 // Ivan Jacob Agaloos Pesigan
 // -----------------------------------------------------------------------------
 
@@ -337,14 +337,14 @@ Rcpp::List SimBeta(const arma::uword& n, const arma::mat& beta,
 //' )
 //' n <- 10
 //' vcov_phi_vec_l <- t(chol(0.001 * diag(9)))
-//' SimPhi(n = n, phi = phi, vcov_phi_vec_l = vcov_phi_vec_l)
+//' SimPhiN(n = n, phi = phi, vcov_phi_vec_l = vcov_phi_vec_l)
 //'
 //' @family Simulation of State Space Models Data Functions
 //' @keywords simStateSpace linsde
 //' @export
 // [[Rcpp::export]]
-Rcpp::List SimPhi(const arma::uword& n, const arma::mat& phi,
-                  const arma::mat& vcov_phi_vec_l) {
+Rcpp::List SimPhiN(const arma::uword& n, const arma::mat& phi,
+                   const arma::mat& vcov_phi_vec_l) {
   Rcpp::List output(n);
   int p = phi.n_rows;
   int q = p * p;

@@ -6,6 +6,6 @@
 #SBATCH --output=make-simStateSpace.out
 #SBATCH --error=make-simStateSpace.err
 
-cd /scratch/ibp5092/simStateSpace
+cd /scratch/ibp5092/simStateSpace || exit
 apptainer exec /scratch/ibp5092/sif/docs-mplus.sif make all
 apptainer exec /scratch/ibp5092/sif/docs-mplus.sif make auto
