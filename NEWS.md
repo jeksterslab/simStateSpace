@@ -1,3 +1,7 @@
+# simStateSpace 1.2.2.9000
+
+* Latest development version.
+
 # simStateSpace 1.2.2
 
 ## Patch
