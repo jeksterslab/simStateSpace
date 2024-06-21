@@ -43,7 +43,7 @@ sessionInfo()
 #> [1] stats     graphics  grDevices utils     datasets  methods   base     
 #> 
 #> other attached packages:
-#> [1] simStateSpace_1.2.2
+#> [1] simStateSpace_1.2.2.9000
 #> 
 #> loaded via a namespace (and not attached):
 #>  [1] gtable_0.3.5        shape_1.4.6.1       xfun_0.45          
@@ -854,7 +854,7 @@ installed.packages()
 #> evaluate        "0.24.0"     NA           
 #> rlang           "1.1.4"      NA           
 #> rProject        "0.0.13"     NA           
-#> simStateSpace   "1.2.2"      NA           
+#> simStateSpace   "1.2.2.9000" NA           
 #> tinytex         "0.51.1"     NA           
 #> xfun            "0.45"       NA           
 #> abind           "1.4-5"      NA           
