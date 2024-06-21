@@ -87,7 +87,7 @@
 % unname(installed.packages()[, 1])
 %% end.rcode
 
-\nocite{RCoreTeam-2023}
+\nocite{RCoreTeam-2024}
 
 \printbibliography
 

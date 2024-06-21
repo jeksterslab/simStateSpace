@@ -5,7 +5,7 @@ date: "`r Sys.Date()`"
 bibliography: "vignettes.bib"
 csl: https://raw.githubusercontent.com/citation-style-language/styles/master/apa.csl
 nocite: |
-  @RCoreTeam-2023
+  @RCoreTeam-2024
   @Ou-Hunter-Chow-2019
   @Chow-Losardo-Park-etal-2023
   @Uhlenbeck-Ornstein-1930
