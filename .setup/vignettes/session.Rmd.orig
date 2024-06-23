@@ -30,5 +30,19 @@ sessionInfo()
 # Packages
 
 ```{r}
-installed.packages()
+installed.packages()[, c("Package", "Version")]
+```
+
+# CPU
+
+```{r}
+#| echo = FALSE
+cat(system("lscpu", intern = TRUE), sep = "\n")
+```
+
+# Memory
+
+```{r}
+#| echo = FALSE
+cat(system("free -g -h -t", intern = TRUE), sep = "\n")
 ```
