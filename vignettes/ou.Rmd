@@ -537,8 +537,8 @@ results <- dynr::dynr.cook(
 #> Doing end processing
 #> Warning in sqrt(diag(x$inv.hessian)): NaNs produced
 #> Successful trial
-#> Total Time: 45.13288 
-#> Backend Time: 44.35563
+#> Total Time: 42.46318 
+#> Backend Time: 41.71781
 ```
 
 ## Summary
