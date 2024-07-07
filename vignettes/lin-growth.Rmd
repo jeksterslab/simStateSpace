@@ -214,7 +214,7 @@ theta_l
 
 ### Visualizing the Dynamics Without Measurement Error (n = 5 with Different Initial Condition)
 
-<img src="fig-vignettes-lin-growth-no-error-1.png" width="3300" />
+<img src="fig-vignettes-lin-growth-no-error-lin-growth-1.png" width="3300" />
 
 ### Using the `SimSSMLinGrowth` Function from the `simStateSpace` Package to Simulate Data
 
@@ -244,7 +244,7 @@ head(data)
 plot(sim)
 ```
 
-<img src="fig-vignettes-lin-growth-error-1.png" width="3300" />
+<img src="fig-vignettes-lin-growth-error-lin-growth-1.png" width="3300" />
 
 ## Model Fitting
 
@@ -359,8 +359,8 @@ results <- dynr::dynr.cook(
 #> 
 #> Doing end processing
 #> Successful trial
-#> Total Time: 1.454239 
-#> Backend Time: 1.444158
+#> Total Time: 1.449945 
+#> Backend Time: 1.439904
 ```
 
 ## Summary

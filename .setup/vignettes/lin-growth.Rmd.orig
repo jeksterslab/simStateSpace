@@ -214,7 +214,7 @@ theta_l
 
 ### Visualizing the Dynamics Without Measurement Error (n = 5 with Different Initial Condition)
 
-```{r no-error}
+```{r no-error-lin-growth}
 #| echo = FALSE
 library(simStateSpace)
 sim <- SimSSMLinGrowth(
@@ -230,7 +230,7 @@ plot(sim, type = "l")
 
 ### Using the `SimSSMLinGrowth` Function from the `simStateSpace` Package to Simulate Data
 
-```{r error}
+```{r error-lin-growth}
 library(simStateSpace)
 sim <- SimSSMLinGrowth(
   n = n,

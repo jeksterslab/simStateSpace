@@ -328,7 +328,7 @@ theta
 
 ### Visualizing the Dynamics Without Measurement Error and Process Noise (n = 5 with Different Initial Condition)
 
-<img src="fig-vignettes-ou-no-error-1.png" width="3300" /><img src="fig-vignettes-ou-no-error-2.png" width="3300" /><img src="fig-vignettes-ou-no-error-3.png" width="3300" />
+<img src="fig-vignettes-ou-no-error-ou-1.png" width="3300" /><img src="fig-vignettes-ou-no-error-ou-2.png" width="3300" /><img src="fig-vignettes-ou-no-error-ou-3.png" width="3300" />
 
 ### Using the `SimSSMOUFixed` Function from the `simStateSpace` Package to Simulate Data
 
@@ -364,7 +364,7 @@ head(data)
 plot(sim)
 ```
 
-<img src="fig-vignettes-ou-error-1.png" width="3300" /><img src="fig-vignettes-ou-error-2.png" width="3300" /><img src="fig-vignettes-ou-error-3.png" width="3300" />
+<img src="fig-vignettes-ou-error-ou-1.png" width="3300" /><img src="fig-vignettes-ou-error-ou-2.png" width="3300" /><img src="fig-vignettes-ou-error-ou-3.png" width="3300" />
 
 ## Model Fitting
 
@@ -537,8 +537,8 @@ results <- dynr::dynr.cook(
 #> Doing end processing
 #> Warning in sqrt(diag(x$inv.hessian)): NaNs produced
 #> Successful trial
-#> Total Time: 42.5531 
-#> Backend Time: 41.7652
+#> Total Time: 43.54367 
+#> Backend Time: 42.76797
 ```
 
 ## Summary

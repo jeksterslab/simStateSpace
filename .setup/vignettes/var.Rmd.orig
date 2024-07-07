@@ -262,7 +262,7 @@ psi_l
 
 ### Visualizing the Dynamics Without Process Noise (n = 5 with Different Initial Condition)
 
-```{r no-error}
+```{r no-error-var}
 #| echo = FALSE
 library(simStateSpace)
 sim <- SimSSMVARFixed(
@@ -283,7 +283,7 @@ plot(sim, type = "l")
 
 ### Using the `SimSSMVARFixed` Function from the `simStateSpace` Package to Simulate Data
 
-```{r error}
+```{r error-var}
 library(simStateSpace)
 sim <- SimSSMVARFixed(
   n = n,

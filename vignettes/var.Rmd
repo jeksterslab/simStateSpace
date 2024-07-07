@@ -258,7 +258,7 @@ psi_l
 
 ### Visualizing the Dynamics Without Process Noise (n = 5 with Different Initial Condition)
 
-<img src="fig-vignettes-var-no-error-1.png" width="3300" /><img src="fig-vignettes-var-no-error-2.png" width="3300" /><img src="fig-vignettes-var-no-error-3.png" width="3300" />
+<img src="fig-vignettes-var-no-error-var-1.png" width="3300" /><img src="fig-vignettes-var-no-error-var-2.png" width="3300" /><img src="fig-vignettes-var-no-error-var-3.png" width="3300" />
 
 ### Using the `SimSSMVARFixed` Function from the `simStateSpace` Package to Simulate Data
 
@@ -289,7 +289,7 @@ head(data)
 plot(sim)
 ```
 
-<img src="fig-vignettes-var-error-1.png" width="3300" /><img src="fig-vignettes-var-error-2.png" width="3300" /><img src="fig-vignettes-var-error-3.png" width="3300" />
+<img src="fig-vignettes-var-error-var-1.png" width="3300" /><img src="fig-vignettes-var-error-var-2.png" width="3300" /><img src="fig-vignettes-var-error-var-3.png" width="3300" />
 
 ## Model Fitting
 
@@ -422,8 +422,8 @@ results <- dynr::dynr.cook(
 #> 
 #> Doing end processing
 #> Successful trial
-#> Total Time: 22.17773 
-#> Backend Time: 21.53439
+#> Total Time: 21.96039 
+#> Backend Time: 21.32956
 ```
 
 ## Summary
