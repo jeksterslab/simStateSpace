@@ -1,7 +1,7 @@
 ---
 title: "The Vector Autoregressive Model"
 author: "Ivan Jacob Agaloos Pesigan"
-date: "2024-07-05"
+date: "2024-07-07"
 bibliography: "vignettes.bib"
 csl: https://raw.githubusercontent.com/citation-style-language/styles/master/apa.csl
 nocite: |
@@ -260,7 +260,7 @@ psi_l
 
 <img src="fig-vignettes-var-no-error-1.png" width="3300" /><img src="fig-vignettes-var-no-error-2.png" width="3300" /><img src="fig-vignettes-var-no-error-3.png" width="3300" />
 
-### Using the SimSSMVARFixed Function from the simStateSpace Package to Simulate Data
+### Using the `SimSSMVARFixed` Function from the `simStateSpace` Package to Simulate Data
 
 
 ``` r
@@ -422,8 +422,8 @@ results <- dynr::dynr.cook(
 #> 
 #> Doing end processing
 #> Successful trial
-#> Total Time: 21.87008 
-#> Backend Time: 21.26703
+#> Total Time: 22.17773 
+#> Backend Time: 21.53439
 ```
 
 ## Summary

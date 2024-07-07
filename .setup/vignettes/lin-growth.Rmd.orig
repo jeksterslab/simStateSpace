@@ -228,7 +228,7 @@ sim <- SimSSMLinGrowth(
 plot(sim, type = "l")
 ```
 
-### Using the SimSSMLinGrowth Function from the simStateSpace Package to Simulate Data
+### Using the `SimSSMLinGrowth` Function from the `simStateSpace` Package to Simulate Data
 
 ```{r error}
 library(simStateSpace)

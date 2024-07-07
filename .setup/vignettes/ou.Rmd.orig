@@ -373,7 +373,7 @@ sim <- SimSSMOUFixed(
 plot(sim, type = "l")
 ```
 
-### Using the SimSSMOUFixed Function from the simStateSpace Package to Simulate Data
+### Using the `SimSSMOUFixed` Function from the `simStateSpace` Package to Simulate Data
 
 ```{r error}
 library(simStateSpace)

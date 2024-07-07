@@ -1,7 +1,7 @@
 ---
 title: "The Linear Growth Curve Model"
 author: "Ivan Jacob Agaloos Pesigan"
-date: "2024-07-05"
+date: "2024-07-07"
 bibliography: "vignettes.bib"
 csl: https://raw.githubusercontent.com/citation-style-language/styles/master/apa.csl
 nocite: |
@@ -216,7 +216,7 @@ theta_l
 
 <img src="fig-vignettes-lin-growth-no-error-1.png" width="3300" />
 
-### Using the SimSSMLinGrowth Function from the simStateSpace Package to Simulate Data
+### Using the `SimSSMLinGrowth` Function from the `simStateSpace` Package to Simulate Data
 
 
 ``` r
@@ -359,8 +359,8 @@ results <- dynr::dynr.cook(
 #> 
 #> Doing end processing
 #> Successful trial
-#> Total Time: 1.445213 
-#> Backend Time: 1.434175
+#> Total Time: 1.454239 
+#> Backend Time: 1.444158
 ```
 
 ## Summary

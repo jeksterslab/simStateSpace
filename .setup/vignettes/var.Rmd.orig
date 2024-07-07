@@ -281,7 +281,7 @@ sim <- SimSSMVARFixed(
 plot(sim, type = "l")
 ```
 
-### Using the SimSSMVARFixed Function from the simStateSpace Package to Simulate Data
+### Using the `SimSSMVARFixed` Function from the `simStateSpace` Package to Simulate Data
 
 ```{r error}
 library(simStateSpace)

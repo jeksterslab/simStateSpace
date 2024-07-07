@@ -1,7 +1,7 @@
 ---
 title: "The Ornstein–Uhlenbeck Model"
 author: "Ivan Jacob Agaloos Pesigan"
-date: "2024-07-05"
+date: "2024-07-07"
 bibliography: "vignettes.bib"
 csl: https://raw.githubusercontent.com/citation-style-language/styles/master/apa.csl
 nocite: |
@@ -330,7 +330,7 @@ theta
 
 <img src="fig-vignettes-ou-no-error-1.png" width="3300" /><img src="fig-vignettes-ou-no-error-2.png" width="3300" /><img src="fig-vignettes-ou-no-error-3.png" width="3300" />
 
-### Using the SimSSMOUFixed Function from the simStateSpace Package to Simulate Data
+### Using the `SimSSMOUFixed` Function from the `simStateSpace` Package to Simulate Data
 
 
 ``` r
@@ -537,8 +537,8 @@ results <- dynr::dynr.cook(
 #> Doing end processing
 #> Warning in sqrt(diag(x$inv.hessian)): NaNs produced
 #> Successful trial
-#> Total Time: 42.23959 
-#> Backend Time: 41.47567
+#> Total Time: 42.5531 
+#> Backend Time: 41.7652
 ```
 
 ## Summary
