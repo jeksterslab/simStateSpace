@@ -332,7 +332,7 @@ model <- dynr::dynr.model(
 )
 ```
 
-<img src="fig-vignettes-lin-growth-model-1.png" width="3300" />
+<img src="fig-vignettes-lin-growth-model-lin-growth-1.png" width="3300" />
 
 ### Fit the Model
 
@@ -359,8 +359,8 @@ results <- dynr::dynr.cook(
 #> 
 #> Doing end processing
 #> Successful trial
-#> Total Time: 1.449945 
-#> Backend Time: 1.439904
+#> Total Time: 1.463386 
+#> Backend Time: 1.453277
 ```
 
 ## Summary

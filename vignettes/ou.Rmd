@@ -503,7 +503,7 @@ model$ub[
 ] <- +1.5
 ```
 
-<img src="fig-vignettes-ou-model-1.png" width="3300" />
+<img src="fig-vignettes-ou-model-ou-1.png" width="3300" />
 
 ### Fit the Model
 
@@ -537,8 +537,8 @@ results <- dynr::dynr.cook(
 #> Doing end processing
 #> Warning in sqrt(diag(x$inv.hessian)): NaNs produced
 #> Successful trial
-#> Total Time: 43.54367 
-#> Backend Time: 42.76797
+#> Total Time: 45.13288 
+#> Backend Time: 44.35563
 ```
 
 ## Summary

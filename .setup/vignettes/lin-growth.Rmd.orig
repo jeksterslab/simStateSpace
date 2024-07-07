@@ -322,7 +322,7 @@ model <- dynr::dynr.model(
 )
 ```
 
-```{r model}
+```{r model-lin-growth}
 #| echo = FALSE
 dynr::plotFormula(
   dynrModel = model,

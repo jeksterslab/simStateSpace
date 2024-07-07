@@ -391,7 +391,7 @@ model <- dynr::dynr.model(
 )
 ```
 
-```{r model}
+```{r model-var}
 #| echo = FALSE
 dynr::plotFormula(
   dynrModel = model,

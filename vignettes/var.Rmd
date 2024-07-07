@@ -389,7 +389,7 @@ model <- dynr::dynr.model(
 )
 ```
 
-<img src="fig-vignettes-var-model-1.png" width="3300" />
+<img src="fig-vignettes-var-model-var-1.png" width="3300" />
 
 ### Fit the Model
 
@@ -422,8 +422,8 @@ results <- dynr::dynr.cook(
 #> 
 #> Doing end processing
 #> Successful trial
-#> Total Time: 21.96039 
-#> Backend Time: 21.32956
+#> Total Time: 21.95401 
+#> Backend Time: 21.32499
 ```
 
 ## Summary

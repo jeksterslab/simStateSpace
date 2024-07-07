@@ -526,7 +526,7 @@ model$ub[
 ] <- +1.5
 ```
 
-```{r model}
+```{r model-ou}
 #| echo = FALSE
 dynr::plotFormula(
   dynrModel = model,
