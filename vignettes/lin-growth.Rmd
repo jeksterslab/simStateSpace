@@ -1,7 +1,7 @@
 ---
 title: "The Linear Growth Curve Model"
 author: "Ivan Jacob Agaloos Pesigan"
-date: "2024-07-08"
+date: "2024-08-08"
 bibliography: "vignettes.bib"
 csl: https://raw.githubusercontent.com/citation-style-language/styles/master/apa.csl
 nocite: |
@@ -176,38 +176,20 @@ be given by
 ``` r
 n
 #> [1] 10000
-```
-
-``` r
 time
 #> [1] 5
-```
-
-``` r
 mu0
 #> [1] 0.615 1.006
-```
-
-``` r
 sigma0
 #>       [,1]  [,2]
 #> [1,] 1.932 0.618
 #> [2,] 0.618 0.587
-```
-
-``` r
 sigma0_l
 #>           [,1]      [,2]
 #> [1,] 1.3899640 0.0000000
 #> [2,] 0.4446158 0.6239525
-```
-
-``` r
 theta
 #> [1] 0.6
-```
-
-``` r
 theta_l
 #> [1] 0.7745967
 ```
@@ -238,9 +220,6 @@ head(data)
 #> 4  1    3 6.225426
 #> 5  1    4 5.993965
 #> 6  2    0 1.951861
-```
-
-``` r
 plot(sim)
 ```
 
@@ -359,8 +338,8 @@ results <- dynr::dynr.cook(
 #> 
 #> Doing end processing
 #> Successful trial
-#> Total Time: 1.473512 
-#> Backend Time: 1.462958
+#> Total Time: 1.446647 
+#> Backend Time: 1.435689
 ```
 
 ## Summary
@@ -395,16 +374,10 @@ summary(results)
 ``` r
 mu0_hat
 #> [1] 0.6073200 0.9952181
-```
-
-``` r
 sigma0_hat
 #>           [,1]      [,2]
 #> [1,] 1.9111442 0.6024764
 #> [2,] 0.6024764 0.5780766
-```
-
-``` r
 theta_hat
 #>     theta 
 #> 0.6011183
@@ -526,16 +499,10 @@ lavaan::summary(fit)
 ``` r
 mu0_hat
 #> [1] 0.6073200 0.9952181
-```
-
-``` r
 sigma0_hat
 #>           [,1]      [,2]
 #> [1,] 1.9111442 0.6024764
 #> [2,] 0.6024764 0.5780766
-```
-
-``` r
 theta_hat
 #> [1] 0.6011183
 ```

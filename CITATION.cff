@@ -9,6 +9,9 @@ type: software
 license: GPL-3.0-or-later
 title: 'simStateSpace: Simulate Data from State Space Models'
 version: 1.2.2.9000
+identifiers:
+- type: doi
+  value: 10.32614/CRAN.package.simStateSpace
 abstract: Provides a streamlined and user-friendly framework for simulating data in
   state space models, particularly when the number of subjects/units (n) exceeds one,
   a scenario commonly encountered in social and behavioral sciences. For an introduction
