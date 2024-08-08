@@ -1,102 +1,36 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://github.com/jeksterslab/simStateSpace/404.html</loc>
-  </url>
-  <url>
-    <loc>https://github.com/jeksterslab/simStateSpace/LICENSE.html</loc>
-  </url>
-  <url>
-    <loc>https://github.com/jeksterslab/simStateSpace/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>https://github.com/jeksterslab/simStateSpace/articles/lin-growth.html</loc>
-  </url>
-  <url>
-    <loc>https://github.com/jeksterslab/simStateSpace/articles/ou.html</loc>
-  </url>
-  <url>
-    <loc>https://github.com/jeksterslab/simStateSpace/articles/session.html</loc>
-  </url>
-  <url>
-    <loc>https://github.com/jeksterslab/simStateSpace/articles/simStateSpace.html</loc>
-  </url>
-  <url>
-    <loc>https://github.com/jeksterslab/simStateSpace/articles/var.html</loc>
-  </url>
-  <url>
-    <loc>https://github.com/jeksterslab/simStateSpace/authors.html</loc>
-  </url>
-  <url>
-    <loc>https://github.com/jeksterslab/simStateSpace/index.html</loc>
-  </url>
-  <url>
-    <loc>https://github.com/jeksterslab/simStateSpace/news/index.html</loc>
-  </url>
-  <url>
-    <loc>https://github.com/jeksterslab/simStateSpace/reference/LinSDE2SSM.html</loc>
-  </url>
-  <url>
-    <loc>https://github.com/jeksterslab/simStateSpace/reference/SimBetaN.html</loc>
-  </url>
-  <url>
-    <loc>https://github.com/jeksterslab/simStateSpace/reference/SimPhiN.html</loc>
-  </url>
-  <url>
-    <loc>https://github.com/jeksterslab/simStateSpace/reference/SimSSMFixed.html</loc>
-  </url>
-  <url>
-    <loc>https://github.com/jeksterslab/simStateSpace/reference/SimSSMIVary.html</loc>
-  </url>
-  <url>
-    <loc>https://github.com/jeksterslab/simStateSpace/reference/SimSSMLinGrowth.html</loc>
-  </url>
-  <url>
-    <loc>https://github.com/jeksterslab/simStateSpace/reference/SimSSMLinGrowthIVary.html</loc>
-  </url>
-  <url>
-    <loc>https://github.com/jeksterslab/simStateSpace/reference/SimSSMLinSDEFixed.html</loc>
-  </url>
-  <url>
-    <loc>https://github.com/jeksterslab/simStateSpace/reference/SimSSMLinSDEIVary.html</loc>
-  </url>
-  <url>
-    <loc>https://github.com/jeksterslab/simStateSpace/reference/SimSSMOUFixed.html</loc>
-  </url>
-  <url>
-    <loc>https://github.com/jeksterslab/simStateSpace/reference/SimSSMOUIVary.html</loc>
-  </url>
-  <url>
-    <loc>https://github.com/jeksterslab/simStateSpace/reference/SimSSMVARFixed.html</loc>
-  </url>
-  <url>
-    <loc>https://github.com/jeksterslab/simStateSpace/reference/SimSSMVARIVary.html</loc>
-  </url>
-  <url>
-    <loc>https://github.com/jeksterslab/simStateSpace/reference/TestPhi.html</loc>
-  </url>
-  <url>
-    <loc>https://github.com/jeksterslab/simStateSpace/reference/TestStability.html</loc>
-  </url>
-  <url>
-    <loc>https://github.com/jeksterslab/simStateSpace/reference/TestStationarity.html</loc>
-  </url>
-  <url>
-    <loc>https://github.com/jeksterslab/simStateSpace/reference/as.data.frame.simstatespace.html</loc>
-  </url>
-  <url>
-    <loc>https://github.com/jeksterslab/simStateSpace/reference/as.matrix.simstatespace.html</loc>
-  </url>
-  <url>
-    <loc>https://github.com/jeksterslab/simStateSpace/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>https://github.com/jeksterslab/simStateSpace/reference/plot.simstatespace.html</loc>
-  </url>
-  <url>
-    <loc>https://github.com/jeksterslab/simStateSpace/reference/print.simstatespace.html</loc>
-  </url>
-  <url>
-    <loc>https://github.com/jeksterslab/simStateSpace/reference/simStateSpace-package.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>https://github.com/jeksterslab/simStateSpace/404.html</loc></url>
+<url><loc>https://github.com/jeksterslab/simStateSpace/LICENSE.html</loc></url>
+<url><loc>https://github.com/jeksterslab/simStateSpace/articles/index.html</loc></url>
+<url><loc>https://github.com/jeksterslab/simStateSpace/articles/lin-growth.html</loc></url>
+<url><loc>https://github.com/jeksterslab/simStateSpace/articles/ou.html</loc></url>
+<url><loc>https://github.com/jeksterslab/simStateSpace/articles/session.html</loc></url>
+<url><loc>https://github.com/jeksterslab/simStateSpace/articles/simStateSpace.html</loc></url>
+<url><loc>https://github.com/jeksterslab/simStateSpace/articles/var.html</loc></url>
+<url><loc>https://github.com/jeksterslab/simStateSpace/authors.html</loc></url>
+<url><loc>https://github.com/jeksterslab/simStateSpace/index.html</loc></url>
+<url><loc>https://github.com/jeksterslab/simStateSpace/news/index.html</loc></url>
+<url><loc>https://github.com/jeksterslab/simStateSpace/reference/LinSDE2SSM.html</loc></url>
+<url><loc>https://github.com/jeksterslab/simStateSpace/reference/SimBetaN.html</loc></url>
+<url><loc>https://github.com/jeksterslab/simStateSpace/reference/SimPhiN.html</loc></url>
+<url><loc>https://github.com/jeksterslab/simStateSpace/reference/SimSSMFixed.html</loc></url>
+<url><loc>https://github.com/jeksterslab/simStateSpace/reference/SimSSMIVary.html</loc></url>
+<url><loc>https://github.com/jeksterslab/simStateSpace/reference/SimSSMLinGrowth.html</loc></url>
+<url><loc>https://github.com/jeksterslab/simStateSpace/reference/SimSSMLinGrowthIVary.html</loc></url>
+<url><loc>https://github.com/jeksterslab/simStateSpace/reference/SimSSMLinSDEFixed.html</loc></url>
+<url><loc>https://github.com/jeksterslab/simStateSpace/reference/SimSSMLinSDEIVary.html</loc></url>
+<url><loc>https://github.com/jeksterslab/simStateSpace/reference/SimSSMOUFixed.html</loc></url>
+<url><loc>https://github.com/jeksterslab/simStateSpace/reference/SimSSMOUIVary.html</loc></url>
+<url><loc>https://github.com/jeksterslab/simStateSpace/reference/SimSSMVARFixed.html</loc></url>
+<url><loc>https://github.com/jeksterslab/simStateSpace/reference/SimSSMVARIVary.html</loc></url>
+<url><loc>https://github.com/jeksterslab/simStateSpace/reference/TestPhi.html</loc></url>
+<url><loc>https://github.com/jeksterslab/simStateSpace/reference/TestStability.html</loc></url>
+<url><loc>https://github.com/jeksterslab/simStateSpace/reference/TestStationarity.html</loc></url>
+<url><loc>https://github.com/jeksterslab/simStateSpace/reference/as.data.frame.simstatespace.html</loc></url>
+<url><loc>https://github.com/jeksterslab/simStateSpace/reference/as.matrix.simstatespace.html</loc></url>
+<url><loc>https://github.com/jeksterslab/simStateSpace/reference/index.html</loc></url>
+<url><loc>https://github.com/jeksterslab/simStateSpace/reference/plot.simstatespace.html</loc></url>
+<url><loc>https://github.com/jeksterslab/simStateSpace/reference/print.simstatespace.html</loc></url>
+<url><loc>https://github.com/jeksterslab/simStateSpace/reference/simStateSpace-package.html</loc></url>
 </urlset>
+
