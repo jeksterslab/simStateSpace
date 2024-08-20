@@ -26,6 +26,7 @@
 //'   \eqn{\mathrm{vec} \left( \boldsymbol{\beta} \right)}.
 //'
 //' @examples
+//' n <- 10
 //' beta <- matrix(
 //'   data = c(
 //'     0.7, 0.5, -0.1,
@@ -34,7 +35,6 @@
 //'   ),
 //'   nrow = 3
 //' )
-//' n <- 10
 //' vcov_beta_vec_l <- t(chol(0.001 * diag(9)))
 //' SimBetaN(n = n, beta = beta, vcov_beta_vec_l = vcov_beta_vec_l)
 //'

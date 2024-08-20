@@ -212,6 +212,7 @@ LinSDE2SSM <- function(iota, phi, sigma_l, delta_t) {
 #'   \eqn{\mathrm{vec} \left( \boldsymbol{\beta} \right)}.
 #'
 #' @examples
+#' n <- 10
 #' beta <- matrix(
 #'   data = c(
 #'     0.7, 0.5, -0.1,
@@ -220,7 +221,6 @@ LinSDE2SSM <- function(iota, phi, sigma_l, delta_t) {
 #'   ),
 #'   nrow = 3
 #' )
-#' n <- 10
 #' vcov_beta_vec_l <- t(chol(0.001 * diag(9)))
 #' SimBetaN(n = n, beta = beta, vcov_beta_vec_l = vcov_beta_vec_l)
 #'
@@ -251,6 +251,7 @@ SimBetaN <- function(n, beta, vcov_beta_vec_l) {
 #'   \eqn{\mathrm{vec} \left( \boldsymbol{\Phi} \right)}.
 #'
 #' @examples
+#' n <- 10
 #' phi <- matrix(
 #'   data = c(
 #'     -0.357, 0.771, -0.450,
@@ -259,7 +260,6 @@ SimBetaN <- function(n, beta, vcov_beta_vec_l) {
 #'   ),
 #'   nrow = 3
 #' )
-#' n <- 10
 #' vcov_phi_vec_l <- t(chol(0.001 * diag(9)))
 #' SimPhiN(n = n, phi = phi, vcov_phi_vec_l = vcov_phi_vec_l)
 #'

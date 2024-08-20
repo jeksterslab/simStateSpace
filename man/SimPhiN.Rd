@@ -26,6 +26,7 @@ The function ensures that the generated drift matrices are stable
 using \code{\link[=TestPhi]{TestPhi()}}.
 }
 \examples{
+n <- 10
 phi <- matrix(
   data = c(
     -0.357, 0.771, -0.450,
@@ -34,7 +35,6 @@ phi <- matrix(
   ),
   nrow = 3
 )
-n <- 10
 vcov_phi_vec_l <- t(chol(0.001 * diag(9)))
 SimPhiN(n = n, phi = phi, vcov_phi_vec_l = vcov_phi_vec_l)
 

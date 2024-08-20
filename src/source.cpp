@@ -262,6 +262,7 @@ Rcpp::List LinSDE2SSM(const arma::vec& iota, const arma::mat& phi,
 //'   \eqn{\mathrm{vec} \left( \boldsymbol{\beta} \right)}.
 //'
 //' @examples
+//' n <- 10
 //' beta <- matrix(
 //'   data = c(
 //'     0.7, 0.5, -0.1,
@@ -270,7 +271,6 @@ Rcpp::List LinSDE2SSM(const arma::vec& iota, const arma::mat& phi,
 //'   ),
 //'   nrow = 3
 //' )
-//' n <- 10
 //' vcov_beta_vec_l <- t(chol(0.001 * diag(9)))
 //' SimBetaN(n = n, beta = beta, vcov_beta_vec_l = vcov_beta_vec_l)
 //'
@@ -327,6 +327,7 @@ Rcpp::List SimBetaN(const arma::uword& n, const arma::mat& beta,
 //'   \eqn{\mathrm{vec} \left( \boldsymbol{\Phi} \right)}.
 //'
 //' @examples
+//' n <- 10
 //' phi <- matrix(
 //'   data = c(
 //'     -0.357, 0.771, -0.450,
@@ -335,7 +336,6 @@ Rcpp::List SimBetaN(const arma::uword& n, const arma::mat& beta,
 //'   ),
 //'   nrow = 3
 //' )
-//' n <- 10
 //' vcov_phi_vec_l <- t(chol(0.001 * diag(9)))
 //' SimPhiN(n = n, phi = phi, vcov_phi_vec_l = vcov_phi_vec_l)
 //'
