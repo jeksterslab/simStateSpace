@@ -9,7 +9,7 @@ Ivan Jacob Agaloos Pesigan
 [![CRAN
 Status](https://www.r-pkg.org/badges/version/simStateSpace)](https://cran.r-project.org/package=simStateSpace)
 [![R-Universe
-Status](https://jeksterslab.r-universe.dev/badges/simStateSpace)](https://jeksterslab.r-universe.dev)
+Status](https://jeksterslab.r-universe.dev/badges/simStateSpace)](https://jeksterslab.r-universe.dev/simStateSpace)
 [![Make
 Project](https://github.com/jeksterslab/simStateSpace/actions/workflows/make.yml/badge.svg)](https://github.com/jeksterslab/simStateSpace/actions/workflows/make.yml)
 [![R-CMD-check](https://github.com/jeksterslab/simStateSpace/actions/workflows/check-full.yml/badge.svg)](https://github.com/jeksterslab/simStateSpace/actions/workflows/check-full.yml)

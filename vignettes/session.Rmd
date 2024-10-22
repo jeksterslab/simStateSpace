@@ -72,7 +72,7 @@ sessionInfo()
 #> [70] utf8_1.2.4          pbivnorm_0.6.0      broom_1.0.6        
 #> [73] withr_3.0.1         scales_1.3.0        backports_1.5.0    
 #> [76] dynr_0.1.16-106     nnet_7.3-19         lme4_1.1-35.5      
-#> [79] deSolve_1.40        evaluate_1.0.0      knitr_1.48         
+#> [79] deSolve_1.40        evaluate_1.0.1      knitr_1.48         
 #> [82] rbibutils_2.2.16    rlang_1.1.4         Rcpp_1.0.13        
 #> [85] hdrcde_3.4          xtable_1.8-4        glue_1.8.0         
 #> [88] fda_6.1.8           minqa_1.2.8         R6_2.5.1           
@@ -91,8 +91,8 @@ installed.packages()[, c("Package", "Version")]
 #> credentials       "credentials"       "2.0.2"      
 #> curl              "curl"              "5.2.3"      
 #> devtools          "devtools"          "2.4.5.9000" 
-#> evaluate          "evaluate"          "1.0.0"      
-#> gert              "gert"              "2.1.2"      
+#> evaluate          "evaluate"          "1.0.1"      
+#> gert              "gert"              "2.1.4"      
 #> glue              "glue"              "1.8.0"      
 #> httr2             "httr2"             "1.0.5"      
 #> jsonlite          "jsonlite"          "1.8.9"      
@@ -101,10 +101,11 @@ installed.packages()[, c("Package", "Version")]
 #> profvis           "profvis"           "0.4.0"      
 #> ps                "ps"                "1.8.0"      
 #> rProject          "rProject"          "0.0.14"     
+#> rstudioapi        "rstudioapi"        "0.17.0"     
 #> simStateSpace     "simStateSpace"     "1.2.2.9000" 
 #> sys               "sys"               "3.4.3"      
-#> tinytex           "tinytex"           "0.53.1"     
-#> V8                "V8"                "5.0.1"      
+#> tinytex           "tinytex"           "0.53.3"     
+#> V8                "V8"                "6.0.0"      
 #> xfun              "xfun"              "0.48"       
 #> abind             "abind"             "1.4-5"      
 #> arm               "arm"               "1.14-4"     
@@ -495,44 +496,45 @@ installed.packages()[, c("Package", "Version")]
 
 
 ```
-#> Architecture:                       x86_64
-#> CPU op-mode(s):                     32-bit, 64-bit
-#> Address sizes:                      46 bits physical, 48 bits virtual
-#> Byte Order:                         Little Endian
-#> CPU(s):                             8
-#> On-line CPU(s) list:                0-7
-#> Vendor ID:                          GenuineIntel
-#> Model name:                         Intel(R) Xeon(R) CPU E5-1620 v2 @ 3.70GHz
-#> CPU family:                         6
-#> Model:                              62
-#> Thread(s) per core:                 2
-#> Core(s) per socket:                 4
-#> Socket(s):                          1
-#> Stepping:                           4
-#> CPU max MHz:                        3900.0000
-#> CPU min MHz:                        1200.0000
-#> BogoMIPS:                           7382.98
-#> Flags:                              fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm cpuid_fault epb pti ssbd ibrs ibpb stibp tpr_shadow flexpriority ept vpid fsgsbase smep erms xsaveopt dtherm ida arat pln pts vnmi md_clear flush_l1d
-#> Virtualization:                     VT-x
-#> L1d cache:                          128 KiB (4 instances)
-#> L1i cache:                          128 KiB (4 instances)
-#> L2 cache:                           1 MiB (4 instances)
-#> L3 cache:                           10 MiB (1 instance)
-#> NUMA node(s):                       1
-#> NUMA node0 CPU(s):                  0-7
-#> Vulnerability Gather data sampling: Not affected
-#> Vulnerability Itlb multihit:        KVM: Mitigation: VMX disabled
-#> Vulnerability L1tf:                 Mitigation; PTE Inversion; VMX conditional cache flushes, SMT vulnerable
-#> Vulnerability Mds:                  Mitigation; Clear CPU buffers; SMT vulnerable
-#> Vulnerability Meltdown:             Mitigation; PTI
-#> Vulnerability Mmio stale data:      Unknown: No mitigations
-#> Vulnerability Retbleed:             Not affected
-#> Vulnerability Spec rstack overflow: Not affected
-#> Vulnerability Spec store bypass:    Mitigation; Speculative Store Bypass disabled via prctl
-#> Vulnerability Spectre v1:           Mitigation; usercopy/swapgs barriers and __user pointer sanitization
-#> Vulnerability Spectre v2:           Mitigation; Retpolines, IBPB conditional, IBRS_FW, STIBP conditional, RSB filling, PBRSB-eIBRS Not affected
-#> Vulnerability Srbds:                Not affected
-#> Vulnerability Tsx async abort:      Not affected
+#> Architecture:                         x86_64
+#> CPU op-mode(s):                       32-bit, 64-bit
+#> Address sizes:                        46 bits physical, 48 bits virtual
+#> Byte Order:                           Little Endian
+#> CPU(s):                               8
+#> On-line CPU(s) list:                  0-7
+#> Vendor ID:                            GenuineIntel
+#> Model name:                           Intel(R) Xeon(R) CPU E5-1620 v2 @ 3.70GHz
+#> CPU family:                           6
+#> Model:                                62
+#> Thread(s) per core:                   2
+#> Core(s) per socket:                   4
+#> Socket(s):                            1
+#> Stepping:                             4
+#> CPU max MHz:                          3900.0000
+#> CPU min MHz:                          1200.0000
+#> BogoMIPS:                             7382.25
+#> Flags:                                fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm cpuid_fault epb pti ssbd ibrs ibpb stibp tpr_shadow flexpriority ept vpid fsgsbase smep erms xsaveopt dtherm ida arat pln pts vnmi md_clear flush_l1d
+#> Virtualization:                       VT-x
+#> L1d cache:                            128 KiB (4 instances)
+#> L1i cache:                            128 KiB (4 instances)
+#> L2 cache:                             1 MiB (4 instances)
+#> L3 cache:                             10 MiB (1 instance)
+#> NUMA node(s):                         1
+#> NUMA node0 CPU(s):                    0-7
+#> Vulnerability Gather data sampling:   Not affected
+#> Vulnerability Itlb multihit:          KVM: Mitigation: VMX disabled
+#> Vulnerability L1tf:                   Mitigation; PTE Inversion; VMX conditional cache flushes, SMT vulnerable
+#> Vulnerability Mds:                    Mitigation; Clear CPU buffers; SMT vulnerable
+#> Vulnerability Meltdown:               Mitigation; PTI
+#> Vulnerability Mmio stale data:        Unknown: No mitigations
+#> Vulnerability Reg file data sampling: Not affected
+#> Vulnerability Retbleed:               Not affected
+#> Vulnerability Spec rstack overflow:   Not affected
+#> Vulnerability Spec store bypass:      Mitigation; Speculative Store Bypass disabled via prctl
+#> Vulnerability Spectre v1:             Mitigation; usercopy/swapgs barriers and __user pointer sanitization
+#> Vulnerability Spectre v2:             Mitigation; Retpolines, IBPB conditional, IBRS_FW, STIBP conditional, RSB filling, PBRSB-eIBRS Not affected
+#> Vulnerability Srbds:                  Not affected
+#> Vulnerability Tsx async abort:        Not affected
 ```
 
 # Memory
@@ -540,7 +542,7 @@ installed.packages()[, c("Package", "Version")]
 
 ```
 #>                total        used        free      shared  buff/cache   available
-#> Mem:            15Gi       2.4Gi       3.5Gi       334Mi       9.3Gi        12Gi
+#> Mem:            11Gi       3.3Gi       4.6Gi        36Mi       3.5Gi       7.7Gi
 #> Swap:          7.8Gi          0B       7.8Gi
-#> Total:          23Gi       2.4Gi        11Gi
+#> Total:          19Gi       3.3Gi        12Gi
 ```
