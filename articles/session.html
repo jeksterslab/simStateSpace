@@ -127,7 +127,7 @@ Agaloos Pesigan</h4>
 <span><span class="co">#&gt; [70] utf8_1.2.4          pbivnorm_0.6.0      broom_1.0.6        </span></span>
 <span><span class="co">#&gt; [73] withr_3.0.1         scales_1.3.0        backports_1.5.0    </span></span>
 <span><span class="co">#&gt; [76] dynr_0.1.16-106     nnet_7.3-19         lme4_1.1-35.5      </span></span>
-<span><span class="co">#&gt; [79] deSolve_1.40        evaluate_1.0.0      knitr_1.48         </span></span>
+<span><span class="co">#&gt; [79] deSolve_1.40        evaluate_1.0.1      knitr_1.48         </span></span>
 <span><span class="co">#&gt; [82] rbibutils_2.2.16    rlang_1.1.4         Rcpp_1.0.13        </span></span>
 <span><span class="co">#&gt; [85] hdrcde_3.4          xtable_1.8-4        glue_1.8.0         </span></span>
 <span><span class="co">#&gt; [88] fda_6.1.8           minqa_1.2.8         R6_2.5.1           </span></span>
@@ -145,8 +145,8 @@ Agaloos Pesigan</h4>
 <span><span class="co">#&gt; credentials       "credentials"       "2.0.2"      </span></span>
 <span><span class="co">#&gt; curl              "curl"              "5.2.3"      </span></span>
 <span><span class="co">#&gt; devtools          "devtools"          "2.4.5.9000" </span></span>
-<span><span class="co">#&gt; evaluate          "evaluate"          "1.0.0"      </span></span>
-<span><span class="co">#&gt; gert              "gert"              "2.1.2"      </span></span>
+<span><span class="co">#&gt; evaluate          "evaluate"          "1.0.1"      </span></span>
+<span><span class="co">#&gt; gert              "gert"              "2.1.4"      </span></span>
 <span><span class="co">#&gt; glue              "glue"              "1.8.0"      </span></span>
 <span><span class="co">#&gt; httr2             "httr2"             "1.0.5"      </span></span>
 <span><span class="co">#&gt; jsonlite          "jsonlite"          "1.8.9"      </span></span>
@@ -155,10 +155,11 @@ Agaloos Pesigan</h4>
 <span><span class="co">#&gt; profvis           "profvis"           "0.4.0"      </span></span>
 <span><span class="co">#&gt; ps                "ps"                "1.8.0"      </span></span>
 <span><span class="co">#&gt; rProject          "rProject"          "0.0.14"     </span></span>
+<span><span class="co">#&gt; rstudioapi        "rstudioapi"        "0.17.0"     </span></span>
 <span><span class="co">#&gt; simStateSpace     "simStateSpace"     "1.2.2.9000" </span></span>
 <span><span class="co">#&gt; sys               "sys"               "3.4.3"      </span></span>
-<span><span class="co">#&gt; tinytex           "tinytex"           "0.53.1"     </span></span>
-<span><span class="co">#&gt; V8                "V8"                "5.0.1"      </span></span>
+<span><span class="co">#&gt; tinytex           "tinytex"           "0.53.3"     </span></span>
+<span><span class="co">#&gt; V8                "V8"                "6.0.0"      </span></span>
 <span><span class="co">#&gt; xfun              "xfun"              "0.48"       </span></span>
 <span><span class="co">#&gt; abind             "abind"             "1.4-5"      </span></span>
 <span><span class="co">#&gt; arm               "arm"               "1.14-4"     </span></span>
@@ -547,52 +548,53 @@ Agaloos Pesigan</h4>
 <div class="section level2">
 <h2 id="cpu">CPU<a class="anchor" aria-label="anchor" href="#cpu"></a>
 </h2>
-<pre><code><span><span class="co">#&gt; Architecture:                       x86_64</span></span>
-<span><span class="co">#&gt; CPU op-mode(s):                     32-bit, 64-bit</span></span>
-<span><span class="co">#&gt; Address sizes:                      46 bits physical, 48 bits virtual</span></span>
-<span><span class="co">#&gt; Byte Order:                         Little Endian</span></span>
-<span><span class="co">#&gt; CPU(s):                             8</span></span>
-<span><span class="co">#&gt; On-line CPU(s) list:                0-7</span></span>
-<span><span class="co">#&gt; Vendor ID:                          GenuineIntel</span></span>
-<span><span class="co">#&gt; Model name:                         Intel(R) Xeon(R) CPU E5-1620 v2 @ 3.70GHz</span></span>
-<span><span class="co">#&gt; CPU family:                         6</span></span>
-<span><span class="co">#&gt; Model:                              62</span></span>
-<span><span class="co">#&gt; Thread(s) per core:                 2</span></span>
-<span><span class="co">#&gt; Core(s) per socket:                 4</span></span>
-<span><span class="co">#&gt; Socket(s):                          1</span></span>
-<span><span class="co">#&gt; Stepping:                           4</span></span>
-<span><span class="co">#&gt; CPU max MHz:                        3900.0000</span></span>
-<span><span class="co">#&gt; CPU min MHz:                        1200.0000</span></span>
-<span><span class="co">#&gt; BogoMIPS:                           7382.98</span></span>
-<span><span class="co">#&gt; Flags:                              fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm cpuid_fault epb pti ssbd ibrs ibpb stibp tpr_shadow flexpriority ept vpid fsgsbase smep erms xsaveopt dtherm ida arat pln pts vnmi md_clear flush_l1d</span></span>
-<span><span class="co">#&gt; Virtualization:                     VT-x</span></span>
-<span><span class="co">#&gt; L1d cache:                          128 KiB (4 instances)</span></span>
-<span><span class="co">#&gt; L1i cache:                          128 KiB (4 instances)</span></span>
-<span><span class="co">#&gt; L2 cache:                           1 MiB (4 instances)</span></span>
-<span><span class="co">#&gt; L3 cache:                           10 MiB (1 instance)</span></span>
-<span><span class="co">#&gt; NUMA node(s):                       1</span></span>
-<span><span class="co">#&gt; NUMA node0 CPU(s):                  0-7</span></span>
-<span><span class="co">#&gt; Vulnerability Gather data sampling: Not affected</span></span>
-<span><span class="co">#&gt; Vulnerability Itlb multihit:        KVM: Mitigation: VMX disabled</span></span>
-<span><span class="co">#&gt; Vulnerability L1tf:                 Mitigation; PTE Inversion; VMX conditional cache flushes, SMT vulnerable</span></span>
-<span><span class="co">#&gt; Vulnerability Mds:                  Mitigation; Clear CPU buffers; SMT vulnerable</span></span>
-<span><span class="co">#&gt; Vulnerability Meltdown:             Mitigation; PTI</span></span>
-<span><span class="co">#&gt; Vulnerability Mmio stale data:      Unknown: No mitigations</span></span>
-<span><span class="co">#&gt; Vulnerability Retbleed:             Not affected</span></span>
-<span><span class="co">#&gt; Vulnerability Spec rstack overflow: Not affected</span></span>
-<span><span class="co">#&gt; Vulnerability Spec store bypass:    Mitigation; Speculative Store Bypass disabled via prctl</span></span>
-<span><span class="co">#&gt; Vulnerability Spectre v1:           Mitigation; usercopy/swapgs barriers and __user pointer sanitization</span></span>
-<span><span class="co">#&gt; Vulnerability Spectre v2:           Mitigation; Retpolines, IBPB conditional, IBRS_FW, STIBP conditional, RSB filling, PBRSB-eIBRS Not affected</span></span>
-<span><span class="co">#&gt; Vulnerability Srbds:                Not affected</span></span>
-<span><span class="co">#&gt; Vulnerability Tsx async abort:      Not affected</span></span></code></pre>
+<pre><code><span><span class="co">#&gt; Architecture:                         x86_64</span></span>
+<span><span class="co">#&gt; CPU op-mode(s):                       32-bit, 64-bit</span></span>
+<span><span class="co">#&gt; Address sizes:                        46 bits physical, 48 bits virtual</span></span>
+<span><span class="co">#&gt; Byte Order:                           Little Endian</span></span>
+<span><span class="co">#&gt; CPU(s):                               8</span></span>
+<span><span class="co">#&gt; On-line CPU(s) list:                  0-7</span></span>
+<span><span class="co">#&gt; Vendor ID:                            GenuineIntel</span></span>
+<span><span class="co">#&gt; Model name:                           Intel(R) Xeon(R) CPU E5-1620 v2 @ 3.70GHz</span></span>
+<span><span class="co">#&gt; CPU family:                           6</span></span>
+<span><span class="co">#&gt; Model:                                62</span></span>
+<span><span class="co">#&gt; Thread(s) per core:                   2</span></span>
+<span><span class="co">#&gt; Core(s) per socket:                   4</span></span>
+<span><span class="co">#&gt; Socket(s):                            1</span></span>
+<span><span class="co">#&gt; Stepping:                             4</span></span>
+<span><span class="co">#&gt; CPU max MHz:                          3900.0000</span></span>
+<span><span class="co">#&gt; CPU min MHz:                          1200.0000</span></span>
+<span><span class="co">#&gt; BogoMIPS:                             7382.25</span></span>
+<span><span class="co">#&gt; Flags:                                fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm cpuid_fault epb pti ssbd ibrs ibpb stibp tpr_shadow flexpriority ept vpid fsgsbase smep erms xsaveopt dtherm ida arat pln pts vnmi md_clear flush_l1d</span></span>
+<span><span class="co">#&gt; Virtualization:                       VT-x</span></span>
+<span><span class="co">#&gt; L1d cache:                            128 KiB (4 instances)</span></span>
+<span><span class="co">#&gt; L1i cache:                            128 KiB (4 instances)</span></span>
+<span><span class="co">#&gt; L2 cache:                             1 MiB (4 instances)</span></span>
+<span><span class="co">#&gt; L3 cache:                             10 MiB (1 instance)</span></span>
+<span><span class="co">#&gt; NUMA node(s):                         1</span></span>
+<span><span class="co">#&gt; NUMA node0 CPU(s):                    0-7</span></span>
+<span><span class="co">#&gt; Vulnerability Gather data sampling:   Not affected</span></span>
+<span><span class="co">#&gt; Vulnerability Itlb multihit:          KVM: Mitigation: VMX disabled</span></span>
+<span><span class="co">#&gt; Vulnerability L1tf:                   Mitigation; PTE Inversion; VMX conditional cache flushes, SMT vulnerable</span></span>
+<span><span class="co">#&gt; Vulnerability Mds:                    Mitigation; Clear CPU buffers; SMT vulnerable</span></span>
+<span><span class="co">#&gt; Vulnerability Meltdown:               Mitigation; PTI</span></span>
+<span><span class="co">#&gt; Vulnerability Mmio stale data:        Unknown: No mitigations</span></span>
+<span><span class="co">#&gt; Vulnerability Reg file data sampling: Not affected</span></span>
+<span><span class="co">#&gt; Vulnerability Retbleed:               Not affected</span></span>
+<span><span class="co">#&gt; Vulnerability Spec rstack overflow:   Not affected</span></span>
+<span><span class="co">#&gt; Vulnerability Spec store bypass:      Mitigation; Speculative Store Bypass disabled via prctl</span></span>
+<span><span class="co">#&gt; Vulnerability Spectre v1:             Mitigation; usercopy/swapgs barriers and __user pointer sanitization</span></span>
+<span><span class="co">#&gt; Vulnerability Spectre v2:             Mitigation; Retpolines, IBPB conditional, IBRS_FW, STIBP conditional, RSB filling, PBRSB-eIBRS Not affected</span></span>
+<span><span class="co">#&gt; Vulnerability Srbds:                  Not affected</span></span>
+<span><span class="co">#&gt; Vulnerability Tsx async abort:        Not affected</span></span></code></pre>
 </div>
 <div class="section level2">
 <h2 id="memory">Memory<a class="anchor" aria-label="anchor" href="#memory"></a>
 </h2>
 <pre><code><span><span class="co">#&gt;                total        used        free      shared  buff/cache   available</span></span>
-<span><span class="co">#&gt; Mem:            15Gi       2.4Gi       3.5Gi       334Mi       9.3Gi        12Gi</span></span>
+<span><span class="co">#&gt; Mem:            11Gi       3.3Gi       4.6Gi        36Mi       3.5Gi       7.7Gi</span></span>
 <span><span class="co">#&gt; Swap:          7.8Gi          0B       7.8Gi</span></span>
-<span><span class="co">#&gt; Total:          23Gi       2.4Gi        11Gi</span></span></code></pre>
+<span><span class="co">#&gt; Total:          19Gi       3.3Gi        12Gi</span></span></code></pre>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
