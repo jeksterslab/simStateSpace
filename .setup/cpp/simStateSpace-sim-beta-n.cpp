@@ -45,14 +45,15 @@
 Rcpp::List SimBetaN(const arma::uword& n, const arma::mat& beta,
                     const arma::mat& vcov_beta_vec_l) {
   Rcpp::List output(n);
-  int p = beta.n_rows;
-  int q = p * p;
   arma::vec beta_vec = arma::vectorise(beta);
+  arma::vec beta_vec_i(beta.n_rows * beta.n_cols, arma::fill::none);
+  arma::mat beta_i(beta.n_rows, beta.n_cols, arma::fill::none);
   for (arma::uword i = 0; i < n; i++) {
     bool run = true;
     while (run) {
-      arma::vec beta_vec_i = beta_vec + (vcov_beta_vec_l * arma::randn(q));
-      arma::mat beta_i = arma::reshape(beta_vec_i, p, p);
+      beta_vec_i =
+          beta_vec + (vcov_beta_vec_l * arma::randn(beta.n_rows * beta.n_rows));
+      beta_i = arma::reshape(beta_vec_i, beta.n_rows, beta.n_cols);
       if (TestStationarity(beta_i)) {
         run = false;
       }

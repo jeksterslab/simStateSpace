@@ -31,7 +31,7 @@ Check](https://github.com/jeksterslab/simStateSpace/actions/workflows/shellcheck
 
 Provides a streamlined and user-friendly framework for simulating data
 in state space models, particularly when the number of subjects/units
-($`n`$) exceeds one, a scenario commonly encountered in social and
+($n$) exceeds one, a scenario commonly encountered in social and
 behavioral sciences. For an introduction to state space models in social
 and behavioral sciences, refer to Chow, Ho, Hamaker, and Dolan (2010:
 <https://doi.org/10.1080/10705511003661553>).

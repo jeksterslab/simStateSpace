@@ -11,10 +11,11 @@ Rcpp::List SimSSMLatFixed0(const arma::uword& n, const arma::uword& time,
                            const arma::mat& sigma0_l, const arma::vec& alpha,
                            const arma::mat& beta, const arma::mat& psi_l) {
   // Step 1: Determine dimensions
-  int p = mu0.n_elem;  // number of latent variables
-  int k = p;           // number of observed variables
+  // int p = mu0.n_elem; // number of latent variables
+  // int k = p; // number of observed variables
   arma::vec time_vec =
       arma::linspace(0, (time - 1) * delta_t, time);  // time vector
+  arma::vec id_template(time, arma::fill::zeros);
 
   // Step 2: Initialize the output list
   Rcpp::List output(n);
@@ -22,16 +23,18 @@ Rcpp::List SimSSMLatFixed0(const arma::uword& n, const arma::uword& time,
   // Step 3: Generate data per individual
   for (arma::uword i = 0; i < n; i++) {
     // Step 3.1: Create matrices of latent, observed, and id variables
-    arma::mat eta(p, time);
-    arma::mat y(k, time);
-    arma::vec id(time, arma::fill::zeros);
+    arma::mat eta(mu0.n_elem, time, arma::fill::zeros);
+    arma::mat y(mu0.n_elem, time, arma::fill::zeros);
+    arma::vec id = id_template;
     id.fill(i + 1);
+
     // Step 3.2: Generate initial condition
-    eta.col(0) = mu0 + (sigma0_l * arma::randn(p));
+    eta.col(0) = mu0 + (sigma0_l * arma::randn(mu0.n_elem));
     y.col(0) = eta.col(0);
     // Step 3.3: Data generation loop
     for (arma::uword t = 1; t < time; t++) {
-      eta.col(t) = alpha + (beta * eta.col(t - 1)) + (psi_l * arma::randn(p));
+      eta.col(t) =
+          alpha + (beta * eta.col(t - 1)) + (psi_l * arma::randn(mu0.n_elem));
       y.col(t) = eta.col(t);
     }
     // Step 3.4 Save results in a list

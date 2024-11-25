@@ -196,25 +196,25 @@
 // [[Rcpp::export]]
 Rcpp::List LinSDE2SSM(const arma::vec& iota, const arma::mat& phi,
                       const arma::mat& sigma_l, const double delta_t) {
-  int p = iota.n_elem;
-  arma::mat I = arma::eye(p, p);
+  arma::mat I = arma::eye(iota.n_elem, iota.n_elem);
   arma::mat beta = arma::expmat(phi * delta_t);
-  arma::vec alpha = arma::vec(p);
-  if (iota.is_zero()) {
-    alpha = iota;
-  } else {
-    alpha = arma::inv(phi) * (beta - I) * iota;
-  }
-  arma::mat psi_l = arma::mat(p, p);
+  arma::vec alpha(iota.n_elem, arma::fill::none);
+  arma::mat psi_l = arma::mat(iota.n_elem, iota.n_elem, arma::fill::none);
+  // alpha = iota.is_zero() ? iota : arma::inv(phi) * (beta - I) * iota;
+  alpha = iota.is_zero() ? iota : arma::solve(phi, (beta - I) * iota);
   if (sigma_l.is_zero()) {
     psi_l = sigma_l;
   } else {
-    arma::mat J = arma::eye(p * p, p * p);
+    arma::mat J =
+        arma::eye(iota.n_elem * iota.n_elem, iota.n_elem * iota.n_elem);
     arma::mat phi_hashtag = arma::kron(phi, I) + arma::kron(I, phi);
     arma::vec sigma_vec = arma::vectorise(sigma_l * sigma_l.t());
-    arma::vec psi_vec = arma::inv(phi_hashtag) *
-                        (arma::expmat(phi_hashtag * delta_t) - J) * sigma_vec;
-    psi_l = arma::chol(arma::reshape(psi_vec, p, p), "lower");
+    // arma::vec psi_vec = arma::inv(phi_hashtag) * (arma::expmat(phi_hashtag *
+    // delta_t) - J) * sigma_vec;
+    arma::vec psi_vec = arma::solve(
+        phi_hashtag, (arma::expmat(phi_hashtag * delta_t) - J) * sigma_vec);
+    psi_l =
+        arma::chol(arma::reshape(psi_vec, iota.n_elem, iota.n_elem), "lower");
   }
   // output
   return Rcpp::List::create(Rcpp::Named("alpha") = alpha,

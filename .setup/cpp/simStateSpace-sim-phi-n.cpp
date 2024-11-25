@@ -45,14 +45,15 @@
 Rcpp::List SimPhiN(const arma::uword& n, const arma::mat& phi,
                    const arma::mat& vcov_phi_vec_l) {
   Rcpp::List output(n);
-  int p = phi.n_rows;
-  int q = p * p;
   arma::vec phi_vec = arma::vectorise(phi);
+  arma::vec phi_vec_i(phi.n_rows * phi.n_cols, arma::fill::none);
+  arma::mat phi_i(phi.n_rows, phi.n_cols, arma::fill::none);
   for (arma::uword i = 0; i < n; i++) {
     bool run = true;
     while (run) {
-      arma::vec phi_vec_i = phi_vec + (vcov_phi_vec_l * arma::randn(q));
-      arma::mat phi_i = arma::reshape(phi_vec_i, p, p);
+      phi_vec_i =
+          phi_vec + (vcov_phi_vec_l * arma::randn(phi.n_rows * phi.n_cols));
+      phi_i = arma::reshape(phi_vec_i, phi.n_rows, phi.n_cols);
       if (TestPhi(phi_i)) {
         run = false;
       }

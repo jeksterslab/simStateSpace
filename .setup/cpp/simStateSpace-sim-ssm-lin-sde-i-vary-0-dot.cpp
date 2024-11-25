@@ -1,8 +1,3 @@
-// -----------------------------------------------------------------------------
-// edit .setup/cpp/simStateSpace-sim-ssm-lin-sde-i-vary-0-dot.cpp
-// Ivan Jacob Agaloos Pesigan
-// -----------------------------------------------------------------------------
-
 #include <RcppArmadillo.h>
 // [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::export(.SimSSMLinSDEIVary0)]]
@@ -17,12 +12,14 @@ Rcpp::List SimSSMLinSDEIVary0(const arma::uword& n, const arma::uword& time,
   // Step 1: Determine dimensions
   arma::vec mu0_i = mu0[0];
   arma::vec nu_i = nu[0];
-  int p = mu0_i.n_elem;  // number of latent variables
-  int k = nu_i.n_elem;   // number of observed variables
+  // int p = mu0_i.n_elem; // number of latent variables
+  // int k = nu_i.n_elem; // number of observed variables
   arma::vec time_vec =
       arma::linspace(0, (time - 1) * delta_t, time);  // time vector
-  arma::mat I = arma::eye<arma::mat>(p, p);
-  arma::mat J = arma::eye<arma::mat>(p * p, p * p);
+  arma::vec id_template(time, arma::fill::zeros);
+  arma::mat I = arma::eye(mu0_i.n_elem, mu0_i.n_elem);
+  arma::mat J =
+      arma::eye(mu0_i.n_elem * mu0_i.n_elem, mu0_i.n_elem * mu0_i.n_elem);
 
   // Step 2: Initialize the output list
   Rcpp::List output(n);
@@ -30,9 +27,9 @@ Rcpp::List SimSSMLinSDEIVary0(const arma::uword& n, const arma::uword& time,
   // Step 3: Generate data per individual
   for (arma::uword i = 0; i < n; i++) {
     // Step 3.1: Create matrices of latent, observed, and id variables
-    arma::mat eta(p, time);
-    arma::mat y(k, time);
-    arma::vec id(time, arma::fill::zeros);
+    arma::mat eta(mu0_i.n_elem, time, arma::fill::zeros);
+    arma::mat y(nu_i.n_elem, time, arma::fill::zeros);
+    arma::vec id = id_template;
     id.fill(i + 1);
 
     // Step 3.2: Extract the ith parameter
@@ -53,41 +50,43 @@ Rcpp::List SimSSMLinSDEIVary0(const arma::uword& n, const arma::uword& time,
     // arma::vec sigma_vec_i = arma::vectorise(sigma_l_i * sigma_l_i.t());
     // arma::vec psi_vec_i = arma::inv(phi_hashtag_i) *
     // (arma::expmat(phi_hashtag_i * delta_t) - J) * sigma_vec_i; arma::mat
-    // psi_l_i = arma::chol(arma::reshape(psi_vec_i, p, p), "lower"); arma::mat
-    // beta_i = arma::expmat(phi_i * delta_t); arma::vec alpha_i =
-    // arma::inv(phi_i) * (beta_i - I) * iota_i;
-    if (ou) {
-      if (!iota_i.is_zero()) {
-        iota_i = (-1 * phi_i) * iota_i;
-      }
+    // psi_l_i = arma::chol(arma::reshape(psi_vec_i, mu0_i.n_elem,
+    // mu0_i.n_elem), "lower"); arma::mat beta_i = arma::expmat(phi_i *
+    // delta_t); arma::vec alpha_i = arma::inv(phi_i) * (beta_i - I) * iota_i;
+    if (ou && !iota_i.is_zero()) {
+      iota_i = (-1 * phi_i) * iota_i;
     }
-    arma::vec alpha_i = arma::vec(p);
+    arma::vec alpha_i = arma::vec(mu0_i.n_elem);
     arma::mat beta_i = arma::expmat(phi_i * delta_t);
-    if (iota_i.is_zero()) {
-      alpha_i = iota_i;
-    } else {
-      alpha_i = arma::inv(phi_i) * (beta_i - I) * iota_i;
-    }
-    arma::mat psi_l_i = arma::mat(p, p);
+    // alpha_i = iota_i.is_zero() ? iota_i : arma::inv(phi_i) * (beta_i - I) *
+    // iota_i;
+    alpha_i =
+        iota_i.is_zero() ? iota_i : arma::solve(phi_i, (beta_i - I) * iota_i);
+    arma::mat psi_l_i = arma::mat(mu0_i.n_elem, mu0_i.n_elem, arma::fill::none);
     if (sigma_l_i.is_zero()) {
       psi_l_i = sigma_l_i;
     } else {
       arma::mat phi_hashtag_i = arma::kron(phi_i, I) + arma::kron(I, phi_i);
       arma::vec sigma_vec_i = arma::vectorise(sigma_l_i * sigma_l_i.t());
-      arma::vec psi_vec_i = arma::inv(phi_hashtag_i) *
-                            (arma::expmat(phi_hashtag_i * delta_t) - J) *
-                            sigma_vec_i;
-      psi_l_i = arma::chol(arma::reshape(psi_vec_i, p, p), "lower");
+      // arma::vec psi_vec_i = arma::inv(phi_hashtag_i) *
+      // (arma::expmat(phi_hashtag_i * delta_t) - J) * sigma_vec_i;
+      arma::vec psi_vec_i = arma::solve(
+          phi_hashtag_i,
+          (arma::expmat(phi_hashtag_i * delta_t) - J) * sigma_vec_i);
+      psi_l_i = arma::chol(arma::reshape(psi_vec_i, mu0_i.n_elem, mu0_i.n_elem),
+                           "lower");
     }
 
     // Step 3.4: Generate initial condition
-    eta.col(0) = mu0_i + (sigma0_l_i * arma::randn(p));
-    y.col(0) = nu_i + (lambda_i * eta.col(0)) + (theta_l_i * arma::randn(k));
+    eta.col(0) = mu0_i + (sigma0_l_i * arma::randn(mu0_i.n_elem));
+    y.col(0) =
+        nu_i + (lambda_i * eta.col(0)) + (theta_l_i * arma::randn(nu_i.n_elem));
     // Step 3.4: Data generation loop
     for (arma::uword t = 1; t < time; t++) {
-      eta.col(t) =
-          alpha_i + (beta_i * eta.col(t - 1)) + (psi_l_i * arma::randn(p));
-      y.col(t) = nu_i + (lambda_i * eta.col(t)) + (theta_l_i * arma::randn(k));
+      eta.col(t) = alpha_i + (beta_i * eta.col(t - 1)) +
+                   (psi_l_i * arma::randn(mu0_i.n_elem));
+      y.col(t) = nu_i + (lambda_i * eta.col(t)) +
+                 (theta_l_i * arma::randn(nu_i.n_elem));
     }
     // Step 3.5 Save results in a list
     output[i] = Rcpp::List::create(

@@ -242,6 +242,7 @@ sim <- SimSSMLinGrowth(
 )
 data <- as.data.frame(sim)
 head(data)
+summary(data)
 plot(sim)
 ```
 
