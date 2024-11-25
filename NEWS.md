@@ -1,6 +1,9 @@
 # simStateSpace 1.2.2.9000
 
+## Patch
+
 * Latest development version.
+* Replaced `arma::inv` with `arma::solve`.
 
 # simStateSpace 1.2.2
 
