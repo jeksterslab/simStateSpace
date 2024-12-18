@@ -1,3 +1,10 @@
+# simStateSpace 1.2.3.9000
+
+## Patch
+
+* Latest development version.
+* Added the `PBSSMLinSDEFixed()`, `PBSSMOUFixed()`, and `PBSSMVARFixed()` functions.
+
 # simStateSpace 1.2.3
 
 ## Patch

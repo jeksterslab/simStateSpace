@@ -1,6 +1,6 @@
 Package: simStateSpace
 Title: Simulate Data from State Space Models
-Version: 1.2.3
+Version: 1.2.3.9000
 Authors@R: 
     person(given = "Ivan Jacob Agaloos",
            family = "Pesigan",
@@ -25,7 +25,9 @@ LinkingTo:
     Rcpp,
     RcppArmadillo
 Imports: 
-    Rcpp
+    Rcpp,
+    stats,
+    dynr
 Suggests:
     knitr,
     rmarkdown,
