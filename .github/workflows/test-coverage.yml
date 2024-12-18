@@ -24,7 +24,7 @@ jobs:
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          extra-packages: any::covr, any::xml2, any::dynr
+          extra-packages: any::covr, any::xml2
           needs: coverage
 
       - name: .covignore
@@ -34,6 +34,11 @@ jobs:
             cp "$FILE" .
           fi
 
+      - name: Install GSL
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libgsl-dev
+          
       - name: Test coverage
         run: |
           cov <- covr::package_coverage(
