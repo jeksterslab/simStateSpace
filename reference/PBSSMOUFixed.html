@@ -72,10 +72,11 @@ At the momennt, the function only supports
 <span>  delta_t <span class="op">=</span> <span class="fl">0.1</span>,</span>
 <span>  <span class="va">mu0</span>,</span>
 <span>  <span class="va">sigma0_l</span>,</span>
-<span>  mu <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">mu</span>,</span>
 <span>  <span class="va">phi</span>,</span>
 <span>  <span class="va">sigma_l</span>,</span>
-<span>  nu <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">nu</span>,</span>
+<span>  <span class="va">lambda</span>,</span>
 <span>  <span class="va">theta_l</span>,</span>
 <span>  type <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  x <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -163,6 +164,13 @@ or randomness in the process
 <dd><p>Numeric vector.
 Vector of intercept values for the measurement model
 (\(\boldsymbol{\nu}\)).</p></dd>
+
+
+<dt id="arg-lambda">lambda<a class="anchor" aria-label="anchor" href="#arg-lambda"></a></dt>
+<dd><p>Numeric matrix.
+Factor loading matrix linking the latent variables
+to the observed variables
+(\(\boldsymbol{\Lambda}\)).</p></dd>
 
 
 <dt id="arg-theta-l">theta_l<a class="anchor" aria-label="anchor" href="#arg-theta-l"></a></dt>
@@ -635,6 +643,7 @@ Physical Review,
 <span class="r-in"><span><span class="co">## measurement model</span></span></span>
 <span class="r-in"><span><span class="va">k</span> <span class="op">&lt;-</span> <span class="fl">2</span></span></span>
 <span class="r-in"><span><span class="va">nu</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fl">0</span>, times <span class="op">=</span> <span class="va">k</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">lambda</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/diag.html" class="external-link">diag</a></span><span class="op">(</span><span class="va">k</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">theta</span> <span class="op">&lt;-</span> <span class="fl">0.001</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/diag.html" class="external-link">diag</a></span><span class="op">(</span><span class="va">k</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">theta_l</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/chol.html" class="external-link">chol</a></span><span class="op">(</span><span class="va">theta</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
@@ -649,6 +658,7 @@ Physical Review,
 <span class="r-in"><span>  phi <span class="op">=</span> <span class="va">phi</span>,</span></span>
 <span class="r-in"><span>  sigma_l <span class="op">=</span> <span class="va">sigma_l</span>,</span></span>
 <span class="r-in"><span>  nu <span class="op">=</span> <span class="va">nu</span>,</span></span>
+<span class="r-in"><span>  lambda <span class="op">=</span> <span class="va">lambda</span>,</span></span>
 <span class="r-in"><span>  theta_l <span class="op">=</span> <span class="va">theta_l</span>,</span></span>
 <span class="r-in"><span>  type <span class="op">=</span> <span class="fl">0</span>,</span></span>
 <span class="r-in"><span>  ncores <span class="op">=</span> <span class="fu">parallel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/parallel/detectCores.html" class="external-link">detectCores</a></span><span class="op">(</span><span class="op">)</span> <span class="op">-</span> <span class="fl">1</span>,</span></span>
