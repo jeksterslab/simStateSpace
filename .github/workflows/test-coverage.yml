@@ -34,11 +34,6 @@ jobs:
             cp "$FILE" .
           fi
 
-      - name: Install GSL
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y libgsl-dev
-          
       - name: Test coverage
         run: |
           cov <- covr::package_coverage(

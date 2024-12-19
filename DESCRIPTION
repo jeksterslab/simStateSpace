@@ -33,4 +33,5 @@ Suggests:
     rmarkdown,
     testthat,
     expm
+SystemRequirements: GSL (>= 2.6)
 RoxygenNote: 7.3.2
