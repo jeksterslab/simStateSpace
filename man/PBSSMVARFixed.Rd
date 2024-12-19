@@ -12,7 +12,7 @@ PBSSMVARFixed(
   time,
   mu0,
   sigma0_l,
-  alpha = NULL,
+  alpha,
   beta,
   psi_l,
   type = 0,

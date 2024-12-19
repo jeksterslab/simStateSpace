@@ -14,10 +14,11 @@ PBSSMLinSDEFixed(
   delta_t = 0.1,
   mu0,
   sigma0_l,
-  iota = NULL,
+  iota,
   phi,
   sigma_l,
-  nu = NULL,
+  nu,
+  lambda,
   theta_l,
   type = 0,
   x = NULL,
@@ -80,6 +81,11 @@ or randomness in the process
 \item{nu}{Numeric vector.
 Vector of intercept values for the measurement model
 (\eqn{\boldsymbol{\nu}}).}
+
+\item{lambda}{Numeric matrix.
+Factor loading matrix linking the latent variables
+to the observed variables
+(\eqn{\boldsymbol{\Lambda}}).}
 
 \item{theta_l}{Numeric matrix.
 Cholesky factorization (\code{t(chol(theta))})
@@ -495,6 +501,7 @@ sigma_l <- t(chol(sigma))
 ## measurement model
 k <- 2
 nu <- rep(x = 0, times = k)
+lambda <- diag(k)
 theta <- 0.001 * diag(k)
 theta_l <- t(chol(theta))
 
@@ -509,6 +516,7 @@ pb <- PBSSMLinSDEFixed(
   phi = phi,
   sigma_l = sigma_l,
   nu = nu,
+  lambda = lambda,
   theta_l = theta_l,
   type = 0,
   ncores = parallel::detectCores() - 1,

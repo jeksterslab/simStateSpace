@@ -76,7 +76,7 @@
 PBSSMVARFixed <- function(R,
                           n, time,
                           mu0, sigma0_l,
-                          alpha = NULL, beta, psi_l,
+                          alpha, beta, psi_l,
                           type = 0,
                           x = NULL, gamma = NULL,
                           mu0_fixed = FALSE,
@@ -91,7 +91,6 @@ PBSSMVARFixed <- function(R,
                           perturb_flag = FALSE,
                           ncores = NULL,
                           seed = NULL) {
-  # nolint start
   R <- as.integer(R)
   stopifnot(R > 0)
   if (!type == 0) {
@@ -103,8 +102,23 @@ PBSSMVARFixed <- function(R,
       )
     )
   }
+  # nocov start
+  if (interactive()) {
+    message(
+      paste0(
+        "\n",
+        "Bootstrapping is computationally intensive.",
+        "\n",
+        "Consider using the argument `ncores` ",
+        "to take advantage of multiple CPU cores.",
+        "\n"
+      )
+    )
+  }
+  # nocov end
   p <- dim(psi_l)[1]
   k <- p
+  covariates <- x
   args <- list(
     R = R,
     n = n,
@@ -130,172 +144,93 @@ PBSSMVARFixed <- function(R,
     ncores = ncores,
     seed = seed
   )
-  beta_label <- params_latent <- params_inicov <- matrix(
-    data = "",
-    nrow = p,
-    ncol = p
+  dynr_initial <- .DynrInitial(
+    mu0 = mu0,
+    sigma0_l = sigma0_l,
+    mu0_fixed = mu0_fixed,
+    sigma0_fixed = sigma0_fixed
   )
-  for (j in seq_len(p)) {
-    for (i in seq_len(p)) {
-      beta_label[i, j] <- paste0(
-        "beta_",
-        i,
-        j
-      )
-      params_inicov[i, j] <- paste0("sigma0_", i, j)
-      params_latent[i, j] <- paste0("psi_", i, j)
-    }
-  }
-  params_inicov[
-    upper.tri(params_inicov)
-  ] <- t(params_inicov)[
-    upper.tri(params_inicov)
-  ]
-  params_latent[
-    upper.tri(params_latent)
-  ] <- t(params_latent)[
-    upper.tri(params_latent)
-  ]
-  params_inistate <- paste0(
-    "mu0_",
-    seq_len(p)
+  mu0_values <- .Vec(
+    dynr_initial$values.inistate[[1]]
   )
-  if (mu0_fixed) {
-    params_inistate <- rep(
-      x = "fixed",
+  mu0_labels <- .Vec(
+    dynr_initial$params.inistate[[1]]
+  )
+  names(mu0_values) <- mu0_labels
+  sigma0_values <- .Vech(
+    dynr_initial$values.inicov[[1]]
+  )
+  sigma0_labels <- .Vech(
+    dynr_initial$params.inicov[[1]]
+  )
+  names(sigma0_values) <- sigma0_labels
+  dynr_measurement <- .DynrMeasurement(
+    lambda = diag(p),
+    nu = rep(
+      x = 0,
       times = p
     )
-  }
-  if (sigma0_fixed) {
-    params_inicov <- matrix(
-      data = "fixed",
-      nrow = p,
-      ncol = p
-    )
-  }
-  formula <- lapply(
-    X = seq_len(p),
-    FUN = function(i) {
-      terms <- paste0(
-        "(beta_",
-        i,
-        seq_len(p),
-        " * eta_",
-        seq_len(p),
-        ")",
-        collapse = " + "
-      )
-      return(
-        paste0(
-          "eta_",
-          i,
-          " ~ ",
-          terms
-        )
-      )
-    }
   )
-  startval <- c(
-    beta
-  )
-  names(startval) <- c(
-    beta_label
-  )
-  if (is.null(alpha)) {
-    alpha_value <- rep(
-      x = 0,
-      time = p
-    )
-  } else {
-    alpha_value <- alpha
-    formula <- lapply(
-      X = seq_len(length(formula)),
-      FUN = function(x) {
-        paste0(
-          formula[[x]],
-          " + ",
-          "alpha_",
-          x
-        )
-      }
-    )
-    startval <- c(
-      beta,
-      alpha
-    )
-    names(startval) <- c(
-      beta_label,
-      paste0(
-        "alpha_",
-        seq_len(p)
-      )
-    )
-  }
-  formula <- lapply(
-    X = formula,
-    FUN = stats::as.formula
-  )
-  y_names <- paste0("y", seq_len(k))
-  eta_names <- paste0("eta_", seq_len(p))
-  sigma0 <- tcrossprod(sigma0_l)
-  psi <- tcrossprod(psi_l)
-  dynr_initial <- dynr::prep.initial(
-    values.inistate = mu0,
-    params.inistate = params_inistate,
-    values.inicov = sigma0,
-    params.inicov = params_inicov
-  )
-  dynr_measurement <- dynr::prep.measurement(
-    values.load = diag(p),
-    params.load = matrix(
-      data = "fixed",
-      nrow = p,
-      ncol = p
-    ),
-    state.names = eta_names,
-    obs.names = y_names,
-    values.int = NULL,
-    params.int = NULL
-  )
-  dynr_dynamics <- dynr::prep.formulaDynamics(
-    formula = formula,
-    startval = startval,
-    isContinuousTime = TRUE
-  )
-  dynr_noise <- dynr::prep.noise(
-    values.latent = psi,
-    params.latent = params_latent,
-    values.observed = matrix(
+  dynr_noise <- .DynrNoise(
+    process_l = psi_l,
+    theta_l = matrix(
       data = 0,
       nrow = k,
       ncol = k
     ),
-    params.observed = matrix(
-      data = "fixed",
-      nrow = k,
-      ncol = k
-    )
+    continuous = FALSE
   )
-  foo <- function(i) {
-    dynr_data <- dynr::dynr.data(
-      dataframe = as.data.frame(
-        x = SimSSMVARFixed(
-          n = n,
-          time = time,
-          mu0 = mu0,
-          sigma0_l = sigma0_l,
-          alpha = alpha_value,
-          beta = beta,
-          psi_l = psi_l,
-          type = type,
-          x = x,
-          gamma = gamma
-        )
-      ),
-      id = "id",
-      time = "time",
-      observed = y_names
-    )
+  psi_values <- .Vec(
+    dynr_noise$values.latent[[1]]
+  )
+  psi_labels <- .Vec(
+    dynr_noise$params.latent[[1]]
+  )
+  names(psi_values) <- psi_labels
+  theta_values <- .Vech(
+    dynr_noise$values.observed[[1]]
+  )
+  theta_labels <- .Vech(
+    dynr_noise$params.observed[[1]]
+  )
+  names(theta_values) <- theta_labels
+  dynr_dynamics <- .DynrDynamics(
+    dynamics = beta,
+    intercept = alpha,
+    continuous = FALSE
+  )
+  dynamics_values <- dynr_dynamics$startval
+  dynamics_labels <- names(dynamics_values)
+  dynr_dynamics <- dynr_dynamics$dynamics
+  est <- c(
+    dynamics_values,
+    psi_values,
+    theta_values,
+    mu0_values,
+    sigma0_values
+  )
+  foo <- function(i,
+                  n,
+                  time,
+                  mu0,
+                  sigma0_l,
+                  alpha,
+                  beta,
+                  psi_l,
+                  type,
+                  covariates,
+                  gamma,
+                  dynr_initial,
+                  dynr_measurement,
+                  dynr_noise,
+                  dynr_dynamics,
+                  max_eval,
+                  optimization_flag,
+                  hessian_flag,
+                  verbose,
+                  weight_flag,
+                  debug_flag,
+                  perturb_flag) {
     temp <- tempdir()
     outfile <- tempfile(
       pattern = "dynr_",
@@ -306,7 +241,20 @@ PBSSMVARFixed <- function(R,
       unlink(temp)
     )
     dynr_model <- dynr::dynr.model(
-      data = dynr_data,
+      data = .DynrData(
+        object = SimSSMVARFixed(
+          n = n,
+          time = time,
+          mu0 = mu0,
+          sigma0_l = sigma0_l,
+          alpha = alpha,
+          beta = beta,
+          psi_l = psi_l,
+          type = type,
+          x = covariates,
+          gamma = gamma
+        )
+      ),
       initial = dynr_initial,
       measurement = dynr_measurement,
       dynamics = dynr_dynamics,
@@ -360,16 +308,31 @@ PBSSMVARFixed <- function(R,
         iseed = seed
       )
     }
-    vars_to_export <- ls(environment())
-    parallel::clusterExport(
-      cl = cl,
-      varlist = vars_to_export,
-      envir = environment()
-    )
     fit <- parallel::parLapply(
       cl = cl,
       X = seq_len(R),
-      fun = foo
+      fun = foo,
+      n = n,
+      time = time,
+      mu0 = mu0,
+      sigma0_l = sigma0_l,
+      alpha = alpha,
+      beta = beta,
+      psi_l = psi_l,
+      type = type,
+      covariates = covariates,
+      gamma = gamma,
+      dynr_initial = dynr_initial,
+      dynr_measurement = dynr_measurement,
+      dynr_noise = dynr_noise,
+      dynr_dynamics = dynr_dynamics,
+      max_eval = max_eval,
+      optimization_flag = optimization_flag,
+      hessian_flag = hessian_flag,
+      verbose = verbose,
+      weight_flag = weight_flag,
+      debug_flag = debug_flag,
+      perturb_flag = perturb_flag
     )
     thetahatstar <- parallel::parLapply(
       cl = cl,
@@ -385,7 +348,28 @@ PBSSMVARFixed <- function(R,
     }
     fit <- lapply(
       X = seq_len(R),
-      FUN = foo
+      FUN = foo,
+      n = n,
+      time = time,
+      mu0 = mu0,
+      sigma0_l = sigma0_l,
+      alpha = alpha,
+      beta = beta,
+      psi_l = psi_l,
+      type = type,
+      covariates = covariates,
+      gamma = gamma,
+      dynr_initial = dynr_initial,
+      dynr_measurement = dynr_measurement,
+      dynr_noise = dynr_noise,
+      dynr_dynamics = dynr_dynamics,
+      max_eval = max_eval,
+      optimization_flag = optimization_flag,
+      hessian_flag = hessian_flag,
+      verbose = verbose,
+      weight_flag = weight_flag,
+      debug_flag = debug_flag,
+      perturb_flag = perturb_flag
     )
     thetahatstar <- lapply(
       X = fit,
@@ -394,18 +378,6 @@ PBSSMVARFixed <- function(R,
       }
     )
   }
-  mu0_vec <- mu0
-  names(mu0_vec) <- params_inistate
-  sigma0_vec <- .Vech(sigma0)
-  names(sigma0_vec) <- .Vech(params_inicov)
-  psi_vec <- .Vech(psi)
-  names(psi_vec) <- .Vech(params_latent)
-  est <- c(
-    startval,
-    mu0_vec,
-    sigma0_vec,
-    psi_vec
-  )
   out <- list(
     call = match.call(),
     args = args,
@@ -427,5 +399,4 @@ PBSSMVARFixed <- function(R,
   return(
     out
   )
-  # nolint end
 }
