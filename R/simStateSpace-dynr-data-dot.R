@@ -4,7 +4,6 @@
     eta = FALSE
   )
   k <- attributes(data)$k
-  p <- attributes(data)$p
   j <- attributes(data)$j
   if (j > 0) {
     output <- dynr::dynr.data(
