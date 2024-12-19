@@ -156,8 +156,6 @@ PBSSMLinSDEFixed <- function(R,
       )
     )
   }
-  p <- dim(lambda)[2]
-  k <- dim(lambda)[1]
   # nocov start
   if (interactive()) {
     message(
@@ -260,7 +258,6 @@ PBSSMLinSDEFixed <- function(R,
     continuous = FALSE
   )
   dynamics_values <- dynr_dynamics$startval
-  dynamics_labels <- names(dynamics_values)
   dynr_dynamics <- dynr_dynamics$dynamics
   est <- c(
     dynamics_values,
