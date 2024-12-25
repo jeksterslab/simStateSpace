@@ -9,6 +9,8 @@ using a State Space Model Parameterization
 \usage{
 PBSSMOUFixed(
   R,
+  path,
+  prefix,
   n,
   time,
   delta_t = 0.1,
@@ -27,13 +29,18 @@ PBSSMOUFixed(
   mu0_fixed = FALSE,
   sigma0_fixed = FALSE,
   alpha_level = 0.05,
-  max_eval = 1e+05,
   optimization_flag = TRUE,
   hessian_flag = FALSE,
   verbose = FALSE,
   weight_flag = FALSE,
   debug_flag = FALSE,
   perturb_flag = FALSE,
+  xtol_rel = 1e-07,
+  stopval = -9999,
+  ftol_rel = -1,
+  ftol_abs = -1,
+  maxeval = as.integer(-1),
+  maxtime = -1,
   ncores = NULL,
   seed = NULL
 )
@@ -41,6 +48,13 @@ PBSSMOUFixed(
 \arguments{
 \item{R}{Positive integer.
 Number of bootstrap samples.}
+
+\item{path}{Path to a directory
+to store bootstrap samples and estimates.}
+
+\item{prefix}{Character string.
+Prefix used for the file names
+for the bootstrap samples and estimates.}
 
 \item{n}{Positive integer.
 Number of individuals.}
@@ -132,9 +146,6 @@ If \code{sigma0_fixed = FALSE},
 \item{alpha_level}{Numeric vector.
 Significance level \eqn{\alpha}.}
 
-\item{max_eval}{Positive integer.
-Maximum evaluation.}
-
 \item{optimization_flag}{a flag (TRUE/FALSE) indicating whether optimization is to be done.}
 
 \item{hessian_flag}{a flag (TRUE/FALSE) indicating whether the Hessian matrix is to be calculated.}
@@ -149,6 +160,30 @@ be weighted by the length of the time series for each individual}
 be used for diagnostic purposes}
 
 \item{perturb_flag}{a flag (TRUE/FLASE) indicating whether to perturb the latent states during estimation. Only useful for ensemble forecasting.}
+
+\item{xtol_rel}{Stopping criteria option
+for parameter optimization.
+See \code{\link[dynr:dynr.model]{dynr::dynr.model()}} for more details.}
+
+\item{stopval}{Stopping criteria option
+for parameter optimization.
+See \code{\link[dynr:dynr.model]{dynr::dynr.model()}} for more details.}
+
+\item{ftol_rel}{Stopping criteria option
+for parameter optimization.
+See \code{\link[dynr:dynr.model]{dynr::dynr.model()}} for more details.}
+
+\item{ftol_abs}{Stopping criteria option
+for parameter optimization.
+See \code{\link[dynr:dynr.model]{dynr::dynr.model()}} for more details.}
+
+\item{maxeval}{Stopping criteria option
+for parameter optimization.
+See \code{\link[dynr:dynr.model]{dynr::dynr.model()}} for more details.}
+
+\item{maxtime}{Stopping criteria option
+for parameter optimization.
+See \code{\link[dynr:dynr.model]{dynr::dynr.model()}} for more details.}
 
 \item{ncores}{Positive integer.
 Number of cores to use.
@@ -183,7 +218,7 @@ and fits the model using the \link{dynr} package.
 The process is repeated \code{R} times.
 It assumes that the parameters remain constant
 across individuals and over time.
-At the momennt, the function only supports
+At the moment, the function only supports
 \code{type = 0}.
 }
 \details{
@@ -467,6 +502,8 @@ theta_l <- t(chol(theta))
 
 pb <- PBSSMOUFixed(
   R = 10L,
+  path = getwd(),
+  prefix = "ou",
   n = n,
   time = time,
   delta_t = delta_t,

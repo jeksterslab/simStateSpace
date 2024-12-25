@@ -10,7 +10,7 @@
 #' The process is repeated `R` times.
 #' It assumes that the parameters remain constant
 #' across individuals and over time.
-#' At the momennt, the function only supports
+#' At the moment, the function only supports
 #' `type = 0`.
 #'
 #' @author Ivan Jacob Agaloos Pesigan
@@ -76,6 +76,8 @@
 #'
 #' pb <- PBSSMOUFixed(
 #'   R = 10L,
+#'   path = getwd(),
+#'   prefix = "ou",
 #'   n = n,
 #'   time = time,
 #'   delta_t = delta_t,
@@ -102,6 +104,8 @@
 #' @keywords simStateSpace boot ou
 #' @export
 PBSSMOUFixed <- function(R,
+                         path,
+                         prefix,
                          n, time, delta_t = 0.1,
                          mu0, sigma0_l,
                          mu, phi, sigma_l,
@@ -111,13 +115,18 @@ PBSSMOUFixed <- function(R,
                          mu0_fixed = FALSE,
                          sigma0_fixed = FALSE,
                          alpha_level = 0.05,
-                         max_eval = 100000,
                          optimization_flag = TRUE,
                          hessian_flag = FALSE,
                          verbose = FALSE,
                          weight_flag = FALSE,
                          debug_flag = FALSE,
                          perturb_flag = FALSE,
+                         xtol_rel = 1e-7,
+                         stopval = -9999,
+                         ftol_rel = -1,
+                         ftol_abs = -1,
+                         maxeval = as.integer(-1),
+                         maxtime = -1,
                          ncores = NULL,
                          seed = NULL) {
   R <- as.integer(R)
@@ -131,24 +140,11 @@ PBSSMOUFixed <- function(R,
       )
     )
   }
-  # nocov start
-  if (interactive()) {
-    message(
-      paste0(
-        "\n",
-        "Bootstrapping is computationally intensive.",
-        "\n",
-        "Consider using the argument `ncores` ",
-        "to take advantage of multiple CPU cores.",
-        "\n"
-      )
-    )
-  }
-  # nocov end
-  # the function is limited to diagonal lambda for now
   covariates <- x
   args <- list(
     R = R,
+    path = path,
+    prefix = prefix,
     n = n,
     time = time,
     delta_t = delta_t,
@@ -167,172 +163,21 @@ PBSSMOUFixed <- function(R,
     mu0_fixed = mu0_fixed,
     sigma0_fixed = sigma0_fixed,
     alpha_level = alpha_level,
-    max_eval = max_eval,
     optimization_flag = optimization_flag,
     hessian_flag = hessian_flag,
     verbose = verbose,
     weight_flag = weight_flag,
     debug_flag = debug_flag,
     perturb_flag = perturb_flag,
+    xtol_rel = xtol_rel,
+    stopval = stopval,
+    ftol_rel = ftol_rel,
+    ftol_abs = ftol_abs,
+    maxeval = maxeval,
+    maxtime = maxtime,
     ncores = ncores,
     seed = seed
   )
-  dynr_initial <- .DynrInitial(
-    mu0 = mu0,
-    sigma0_l = sigma0_l,
-    mu0_fixed = mu0_fixed,
-    sigma0_fixed = sigma0_fixed
-  )
-  mu0_values <- .Vec(
-    dynr_initial$values.inistate[[1]]
-  )
-  mu0_labels <- .Vec(
-    dynr_initial$params.inistate[[1]]
-  )
-  names(mu0_values) <- mu0_labels
-  sigma0_values <- .Vech(
-    dynr_initial$values.inicov[[1]]
-  )
-  sigma0_labels <- .Vech(
-    dynr_initial$params.inicov[[1]]
-  )
-  names(sigma0_values) <- sigma0_labels
-  dynr_measurement <- .DynrMeasurement(
-    lambda = lambda,
-    nu = nu
-  )
-  nus <- .Vec(
-    dynr_measurement$values.int[[1]]
-  )
-  nu_labels <- .Vec(
-    dynr_measurement$params.int[[1]]
-  )
-  names(nus) <- nu_labels
-  dynr_noise <- .DynrNoise(
-    process_l = sigma_l,
-    theta_l = theta_l,
-    continuous = FALSE
-  )
-  sigma_values <- .Vec(
-    dynr_noise$values.latent[[1]]
-  )
-  sigma_labels <- .Vec(
-    dynr_noise$params.latent[[1]]
-  )
-  names(sigma_values) <- sigma_labels
-  theta_values <- .Vech(
-    dynr_noise$values.observed[[1]]
-  )
-  theta_labels <- .Vech(
-    dynr_noise$params.observed[[1]]
-  )
-  names(theta_values) <- theta_labels
-  dynr_dynamics <- .DynrDynamics(
-    dynamics = phi,
-    intercept = mu,
-    continuous = FALSE
-  )
-  dynamics_values <- dynr_dynamics$startval
-  dynr_dynamics <- dynr_dynamics$dynamics
-  est <- c(
-    dynamics_values,
-    sigma_values,
-    nus,
-    theta_values,
-    mu0_values,
-    sigma0_values
-  )
-  foo <- function(i,
-                  n,
-                  time,
-                  delta_t,
-                  mu0,
-                  sigma0_l,
-                  mu,
-                  phi,
-                  sigma_l,
-                  nu,
-                  lambda,
-                  theta_l,
-                  type,
-                  covariates,
-                  gamma,
-                  kappa,
-                  dynr_initial,
-                  dynr_measurement,
-                  dynr_noise,
-                  dynr_dynamics,
-                  max_eval,
-                  optimization_flag,
-                  hessian_flag,
-                  verbose,
-                  weight_flag,
-                  debug_flag,
-                  perturb_flag) {
-    temp <- tempdir()
-    outfile <- tempfile(
-      pattern = "dynr_",
-      tmpdir = temp,
-      fileext = ".c"
-    )
-    on.exit(
-      unlink(temp)
-    )
-    dynr_model <- dynr::dynr.model(
-      data = .DynrData(
-        object = SimSSMOUFixed(
-          n = n,
-          time = time,
-          delta_t = delta_t,
-          mu0 = mu0,
-          sigma0_l = sigma0_l,
-          mu = mu,
-          phi = phi,
-          sigma_l = sigma_l,
-          nu = nu,
-          lambda = lambda,
-          theta_l = theta_l,
-          type = type,
-          x = covariates,
-          gamma = gamma,
-          kappa = kappa
-        )
-      ),
-      initial = dynr_initial,
-      measurement = dynr_measurement,
-      dynamics = dynr_dynamics,
-      noise = dynr_noise,
-      outfile = outfile
-    )
-    dynr_model@options$maxeval <- max_eval
-    if (verbose) {
-      output <- dynr::dynr.cook(
-        dynr_model,
-        optimization_flag = optimization_flag,
-        hessian_flag = hessian_flag,
-        verbose = verbose,
-        weight_flag = weight_flag,
-        debug_flag = debug_flag,
-        perturb_flag = perturb_flag
-      )
-    } else {
-      utils::capture.output(
-        output <- dynr::dynr.cook(
-          dynr_model,
-          optimization_flag = optimization_flag,
-          hessian_flag = hessian_flag,
-          verbose = verbose,
-          weight_flag = weight_flag,
-          debug_flag = debug_flag,
-          perturb_flag = perturb_flag
-        )
-      )
-    }
-    return(
-      output
-    )
-  }
-  # nocov start
   par <- FALSE
   if (!is.null(ncores)) {
     ncores <- as.integer(ncores)
@@ -341,62 +186,90 @@ PBSSMOUFixed <- function(R,
     }
   }
   if (par) {
-    cl <- parallel::makeCluster(ncores)
-    on.exit(
-      parallel::stopCluster(cl = cl)
-    )
-    if (!is.null(seed)) {
-      parallel::clusterSetRNGStream(
-        cl = cl,
-        iseed = seed
+    os_type <- Sys.info()["sysname"]
+    if (os_type == "Darwin") {
+      fork <- TRUE
+    } else if (os_type == "Linux") {
+      fork <- TRUE
+    } else {
+      fork <- FALSE
+    }
+    if (fork) {
+      output <- .PBSSMOUFixedFork(
+        R = R,
+        path = path,
+        prefix = prefix,
+        n = n,
+        time = time,
+        delta_t = delta_t,
+        mu0 = mu0,
+        sigma0_l = sigma0_l,
+        mu = mu,
+        phi = phi,
+        sigma_l = sigma_l,
+        nu = nu,
+        lambda = lambda,
+        theta_l = theta_l,
+        type = type,
+        covariates = covariates,
+        gamma = gamma,
+        kappa = kappa,
+        optimization_flag = optimization_flag,
+        hessian_flag = hessian_flag,
+        verbose = verbose,
+        weight_flag = weight_flag,
+        debug_flag = debug_flag,
+        perturb_flag = perturb_flag,
+        xtol_rel = xtol_rel,
+        stopval = stopval,
+        ftol_rel = ftol_rel,
+        ftol_abs = ftol_abs,
+        maxeval = maxeval,
+        maxtime = maxtime,
+        ncores = ncores,
+        seed = seed
+      )
+    } else {
+      output <- .PBSSMOUFixedSocket(
+        R = R,
+        path = path,
+        prefix = prefix,
+        n = n,
+        time = time,
+        delta_t = delta_t,
+        mu0 = mu0,
+        sigma0_l = sigma0_l,
+        mu = mu,
+        phi = phi,
+        sigma_l = sigma_l,
+        nu = nu,
+        lambda = lambda,
+        theta_l = theta_l,
+        type = type,
+        covariates = covariates,
+        gamma = gamma,
+        kappa = kappa,
+        optimization_flag = optimization_flag,
+        hessian_flag = hessian_flag,
+        verbose = verbose,
+        weight_flag = weight_flag,
+        debug_flag = debug_flag,
+        perturb_flag = perturb_flag,
+        xtol_rel = xtol_rel,
+        stopval = stopval,
+        ftol_rel = ftol_rel,
+        ftol_abs = ftol_abs,
+        maxeval = maxeval,
+        maxtime = maxtime,
+        ncores = ncores,
+        seed = seed
       )
     }
-    fit <- parallel::parLapply(
-      cl = cl,
-      X = seq_len(R),
-      fun = foo,
-      n = n,
-      time = time,
-      delta_t = delta_t,
-      mu0 = mu0,
-      sigma0_l = sigma0_l,
-      mu = mu,
-      phi = phi,
-      sigma_l = sigma_l,
-      nu = nu,
-      lambda = lambda,
-      theta_l = theta_l,
-      type = type,
-      covariates = covariates,
-      gamma = gamma,
-      kappa = kappa,
-      dynr_initial = dynr_initial,
-      dynr_measurement = dynr_measurement,
-      dynr_noise = dynr_noise,
-      dynr_dynamics = dynr_dynamics,
-      max_eval = max_eval,
-      optimization_flag = optimization_flag,
-      hessian_flag = hessian_flag,
-      verbose = verbose,
-      weight_flag = weight_flag,
-      debug_flag = debug_flag,
-      perturb_flag = perturb_flag
-    )
-    thetahatstar <- parallel::parLapply(
-      cl = cl,
-      X = fit,
-      fun = function(x) {
-        x@transformed.parameters
-      }
-    )
   } else {
-    # nocov end
-    if (!is.null(seed)) {
-      set.seed(seed)
-    }
-    fit <- lapply(
-      X = seq_len(R),
-      FUN = foo,
+    output <- .PBSSMOUFixedSerial(
+      R = R,
+      path = path,
+      prefix = prefix,
       n = n,
       time = time,
       delta_t = delta_t,
@@ -412,38 +285,33 @@ PBSSMOUFixed <- function(R,
       covariates = covariates,
       gamma = gamma,
       kappa = kappa,
-      dynr_initial = dynr_initial,
-      dynr_measurement = dynr_measurement,
-      dynr_noise = dynr_noise,
-      dynr_dynamics = dynr_dynamics,
-      max_eval = max_eval,
       optimization_flag = optimization_flag,
       hessian_flag = hessian_flag,
       verbose = verbose,
       weight_flag = weight_flag,
       debug_flag = debug_flag,
-      perturb_flag = perturb_flag
-    )
-    thetahatstar <- lapply(
-      X = fit,
-      FUN = function(x) {
-        x@transformed.parameters
-      }
+      perturb_flag = perturb_flag,
+      xtol_rel = xtol_rel,
+      stopval = stopval,
+      ftol_rel = ftol_rel,
+      ftol_abs = ftol_abs,
+      maxeval = maxeval,
+      maxtime = maxtime,
+      seed = seed
     )
   }
   out <- list(
     call = match.call(),
     args = args,
-    fun = "PBSSMOUFixed",
-    thetahatstar = thetahatstar,
+    thetahatstar = output$thetahatstar,
     vcov = stats::var(
       do.call(
         what = "rbind",
-        args = thetahatstar
+        args = output$thetahatstar
       )
     ),
-    est = est[names(thetahatstar[[1]])],
-    fit = fit
+    est = output$prep$est[names(output$thetahatstar[[1]])],
+    fun = "PBSSMOUFixed"
   )
   class(out) <- c(
     "statespacepb",

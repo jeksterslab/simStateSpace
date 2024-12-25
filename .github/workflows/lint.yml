@@ -24,12 +24,14 @@ jobs:
         with:
           extra-packages: any::lintr, local::.
           needs: lint
+
       - name: .lintr
         run: |
           FILE=.setup/lint/.lintr
           if [ -f "$FILE" ]; then
             cp "$FILE" .
           fi
+
       - name: Lint
         run: lintr::lint_package()
         shell: Rscript {0}

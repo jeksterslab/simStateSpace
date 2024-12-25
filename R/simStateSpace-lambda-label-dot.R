@@ -36,17 +36,17 @@
     }
     return(labels)
   }
-  lambda_labels <- .GenerateLabels(
+  labels <- .GenerateLabels(
     k = k,
     p = p
   )
-  lambda_labels <- .SetFixed(
-    lambda_labels = lambda_labels,
+  labels <- .SetFixed(
+    labels = labels,
     lambda = lambda
   )
   return(
     .SetAnchors(
-      lambda_labels = lambda_labels,
+      labels = labels,
       lambda = lambda,
       p = p
     )
