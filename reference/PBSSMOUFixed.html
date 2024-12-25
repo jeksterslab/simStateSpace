@@ -6,7 +6,7 @@ and fits the model using the dynr package.
 The process is repeated R times.
 It assumes that the parameters remain constant
 across individuals and over time.
-At the momennt, the function only supports
+At the moment, the function only supports
 type = 0."><meta property="og:description" content="This function simulates data from
 a Ornstein–Uhlenbeck (OU) model
 using a state-space model parameterization
@@ -14,7 +14,7 @@ and fits the model using the dynr package.
 The process is repeated R times.
 It assumes that the parameters remain constant
 across individuals and over time.
-At the momennt, the function only supports
+At the moment, the function only supports
 type = 0."><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" integrity="sha384-nB0miv6/jRmo5UMMR1wu3Gz6NLsoTkbqJghGIsx//Rlm+ZU03BU6SQNC66uf4l5+" crossorigin="anonymous"><script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" integrity="sha384-7zkQWkzuo3B5mTepMUcHkMB5jZaolc2xDwL6VFqjFALcbeS9Ggm/Yr2r3Dy4lfFg" crossorigin="anonymous"></script><script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" integrity="sha384-43gviWU0YVjaDtb/GhzOouOXtZMP/7XUzwPTstBeZFe/+rCMvRwr4yROQP43s0Xk" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
@@ -59,7 +59,7 @@ and fits the model using the dynr package.
 The process is repeated <code>R</code> times.
 It assumes that the parameters remain constant
 across individuals and over time.
-At the momennt, the function only supports
+At the moment, the function only supports
 <code>type = 0</code>.</p>
     </div>
 
@@ -67,6 +67,8 @@ At the momennt, the function only supports
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">PBSSMOUFixed</span><span class="op">(</span></span>
 <span>  <span class="va">R</span>,</span>
+<span>  <span class="va">path</span>,</span>
+<span>  <span class="va">prefix</span>,</span>
 <span>  <span class="va">n</span>,</span>
 <span>  <span class="va">time</span>,</span>
 <span>  delta_t <span class="op">=</span> <span class="fl">0.1</span>,</span>
@@ -85,13 +87,18 @@ At the momennt, the function only supports
 <span>  mu0_fixed <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  sigma0_fixed <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  alpha_level <span class="op">=</span> <span class="fl">0.05</span>,</span>
-<span>  max_eval <span class="op">=</span> <span class="fl">1e+05</span>,</span>
 <span>  optimization_flag <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  hessian_flag <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  weight_flag <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  debug_flag <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  perturb_flag <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  xtol_rel <span class="op">=</span> <span class="fl">1e-07</span>,</span>
+<span>  stopval <span class="op">=</span> <span class="op">-</span><span class="fl">9999</span>,</span>
+<span>  ftol_rel <span class="op">=</span> <span class="op">-</span><span class="fl">1</span>,</span>
+<span>  ftol_abs <span class="op">=</span> <span class="op">-</span><span class="fl">1</span>,</span>
+<span>  maxeval <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1</span><span class="op">)</span>,</span>
+<span>  maxtime <span class="op">=</span> <span class="op">-</span><span class="fl">1</span>,</span>
 <span>  ncores <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  seed <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -104,6 +111,17 @@ At the momennt, the function only supports
 <dl><dt id="arg-r">R<a class="anchor" aria-label="anchor" href="#arg-r"></a></dt>
 <dd><p>Positive integer.
 Number of bootstrap samples.</p></dd>
+
+
+<dt id="arg-path">path<a class="anchor" aria-label="anchor" href="#arg-path"></a></dt>
+<dd><p>Path to a directory
+to store bootstrap samples and estimates.</p></dd>
+
+
+<dt id="arg-prefix">prefix<a class="anchor" aria-label="anchor" href="#arg-prefix"></a></dt>
+<dd><p>Character string.
+Prefix used for the file names
+for the bootstrap samples and estimates.</p></dd>
 
 
 <dt id="arg-n">n<a class="anchor" aria-label="anchor" href="#arg-n"></a></dt>
@@ -232,11 +250,6 @@ If <code>sigma0_fixed = FALSE</code>,
 Significance level \(\alpha\).</p></dd>
 
 
-<dt id="arg-max-eval">max_eval<a class="anchor" aria-label="anchor" href="#arg-max-eval"></a></dt>
-<dd><p>Positive integer.
-Maximum evaluation.</p></dd>
-
-
 <dt id="arg-optimization-flag">optimization_flag<a class="anchor" aria-label="anchor" href="#arg-optimization-flag"></a></dt>
 <dd><p>a flag (TRUE/FALSE) indicating whether optimization is to be done.</p></dd>
 
@@ -262,6 +275,42 @@ be used for diagnostic purposes</p></dd>
 
 <dt id="arg-perturb-flag">perturb_flag<a class="anchor" aria-label="anchor" href="#arg-perturb-flag"></a></dt>
 <dd><p>a flag (TRUE/FLASE) indicating whether to perturb the latent states during estimation. Only useful for ensemble forecasting.</p></dd>
+
+
+<dt id="arg-xtol-rel">xtol_rel<a class="anchor" aria-label="anchor" href="#arg-xtol-rel"></a></dt>
+<dd><p>Stopping criteria option
+for parameter optimization.
+See <code><a href="https://rdrr.io/pkg/dynr/man/dynr.model.html" class="external-link">dynr::dynr.model()</a></code> for more details.</p></dd>
+
+
+<dt id="arg-stopval">stopval<a class="anchor" aria-label="anchor" href="#arg-stopval"></a></dt>
+<dd><p>Stopping criteria option
+for parameter optimization.
+See <code><a href="https://rdrr.io/pkg/dynr/man/dynr.model.html" class="external-link">dynr::dynr.model()</a></code> for more details.</p></dd>
+
+
+<dt id="arg-ftol-rel">ftol_rel<a class="anchor" aria-label="anchor" href="#arg-ftol-rel"></a></dt>
+<dd><p>Stopping criteria option
+for parameter optimization.
+See <code><a href="https://rdrr.io/pkg/dynr/man/dynr.model.html" class="external-link">dynr::dynr.model()</a></code> for more details.</p></dd>
+
+
+<dt id="arg-ftol-abs">ftol_abs<a class="anchor" aria-label="anchor" href="#arg-ftol-abs"></a></dt>
+<dd><p>Stopping criteria option
+for parameter optimization.
+See <code><a href="https://rdrr.io/pkg/dynr/man/dynr.model.html" class="external-link">dynr::dynr.model()</a></code> for more details.</p></dd>
+
+
+<dt id="arg-maxeval">maxeval<a class="anchor" aria-label="anchor" href="#arg-maxeval"></a></dt>
+<dd><p>Stopping criteria option
+for parameter optimization.
+See <code><a href="https://rdrr.io/pkg/dynr/man/dynr.model.html" class="external-link">dynr::dynr.model()</a></code> for more details.</p></dd>
+
+
+<dt id="arg-maxtime">maxtime<a class="anchor" aria-label="anchor" href="#arg-maxtime"></a></dt>
+<dd><p>Stopping criteria option
+for parameter optimization.
+See <code><a href="https://rdrr.io/pkg/dynr/man/dynr.model.html" class="external-link">dynr::dynr.model()</a></code> for more details.</p></dd>
 
 
 <dt id="arg-ncores">ncores<a class="anchor" aria-label="anchor" href="#arg-ncores"></a></dt>
@@ -649,6 +698,8 @@ Physical Review,
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">pb</span> <span class="op">&lt;-</span> <span class="fu">PBSSMOUFixed</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  R <span class="op">=</span> <span class="fl">10L</span>,</span></span>
+<span class="r-in"><span>  path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/getwd.html" class="external-link">getwd</a></span><span class="op">(</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  prefix <span class="op">=</span> <span class="st">"ou"</span>,</span></span>
 <span class="r-in"><span>  n <span class="op">=</span> <span class="va">n</span>,</span></span>
 <span class="r-in"><span>  time <span class="op">=</span> <span class="va">time</span>,</span></span>
 <span class="r-in"><span>  delta_t <span class="op">=</span> <span class="va">delta_t</span>,</span></span>
