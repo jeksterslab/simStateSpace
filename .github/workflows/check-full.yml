@@ -54,6 +54,23 @@ jobs:
           http-user-agent: ${{ matrix.config.http-user-agent }}
           use-public-rspm: true
 
+      - name: Install GSL (Linux and macOS)
+        if: runner.os != 'Windows'
+        run: |
+          if [[ `uname` == "Linux" ]]; then
+            sudo apt-get update
+            sudo apt-get install -y libgsl-dev
+          elif [[ `uname` == "Darwin" ]]; then
+            brew install gsl
+          fi
+
+      - name: Install GSL (Windows)
+        if: runner.os == 'Windows'
+        run: |
+          choco install gsl --version=2.7.1 -y
+          echo "C:/Program Files/GnuWin32/lib" > $Env:R_USERLIBS
+          echo "C:/Program Files/GnuWin32/include" > $Env:R_INCLUDE
+
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
           extra-packages: any::rcmdcheck
