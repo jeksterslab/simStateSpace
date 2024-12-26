@@ -68,7 +68,7 @@
   tryCatch(
     {
       if (file.exists(fn)) {
-        data <- readRDS(
+        readRDS(
           file = fn
         )
       } else {

@@ -47,11 +47,6 @@
                   maxeval,
                   maxtime) {
     temp <- tempdir()
-    outfile <- tempfile(
-      pattern = "dynr_",
-      tmpdir = temp,
-      fileext = ".c"
-    )
     on.exit(
       unlink(temp)
     )
@@ -87,7 +82,11 @@
       measurement = dynr_measurement,
       dynamics = dynr_dynamics,
       noise = dynr_noise,
-      outfile = outfile
+      outfile = tempfile(
+        pattern = "dynr_",
+        tmpdir = temp,
+        fileext = ".c"
+      )
     )
     dynr_model@options$xtol_rel <- xtol_rel
     dynr_model@options$stopval <- stopval
@@ -124,10 +123,10 @@
     )
     invisible()
   }
-  output <- tryCatch(
+  tryCatch(
     {
       if (file.exists(fn)) {
-        fit <- readRDS(
+        readRDS(
           file = fn
         )
       } else {
