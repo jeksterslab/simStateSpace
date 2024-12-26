@@ -22,6 +22,9 @@
 #'   `"none"` entries are processed in citation order.
 #' @param map Logical.
 #'   Null mapping for `addendum`, `note`, and `annotation`.
+#' @param maxcitenames Logical.
+#'   If `maxcitenames = TRUE`,
+#'   maxcitenames is set to 100.
 #' @param fn_bib Character string.
 #'   Biblatex filename.
 #'
@@ -34,6 +37,7 @@
                                       sortcites = TRUE,
                                       sorting = "nyt",
                                       map = TRUE,
+                                      maxcitenames = FALSE,
                                       fn_bib = "bib.bib") {
   if (dir.exists(path)) {
     bibs <- list.files(
@@ -47,6 +51,13 @@
         sortcites <- "true"
       } else {
         sortcites <- "false"
+      }
+      if (maxcitenames) {
+        maxcitenames <- paste0(
+          ",maxcitenames=100"
+        )
+      } else {
+        maxcitenames <- ""
       }
       bibs <- unlist(
         lapply(
@@ -81,6 +92,7 @@
         sorting,
         ",",
         "backend=biber",
+        maxcitenames,
         ",",
         "labeldate=year",
         "]{biblatex}",

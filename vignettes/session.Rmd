@@ -84,6 +84,7 @@ sessionInfo()
 ``` r
 installed.packages()[, c("Package", "Version")]
 #>                   Package             Version      
+#> rProject          "rProject"          "0.0.14"     
 #> simStateSpace     "simStateSpace"     "1.2.3.9000" 
 #> abind             "abind"             "1.4-8"      
 #> arm               "arm"               "1.14-4"     
@@ -520,7 +521,7 @@ installed.packages()[, c("Package", "Version")]
 
 ```
 #>                total        used        free      shared  buff/cache   available
-#> Mem:            23Gi       5.0Gi       5.3Gi       950Mi        12Gi        16Gi
-#> Swap:           11Gi       3.0Mi        11Gi
-#> Total:          34Gi       5.0Gi        16Gi
+#> Mem:            23Gi       4.9Gi       5.2Gi       905Mi        12Gi        16Gi
+#> Swap:           11Gi       2.0Mi        11Gi
+#> Total:          34Gi       4.9Gi        16Gi
 ```

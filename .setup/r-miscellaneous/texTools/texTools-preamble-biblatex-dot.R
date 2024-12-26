@@ -20,6 +20,9 @@
 #'   `"none"` entries are processed in citation order.
 #' @param map Logical.
 #'   Null mapping for `addendum`, `note`, and `annotation`.
+#' @param maxcitenames Logical.
+#'   If `maxcitenames = TRUE`,
+#'   maxcitenames is set to 100.
 #'
 #' @family Bibliography Functions
 #' @keywords texTools biblatex internal
@@ -28,7 +31,8 @@
                               style = "apa",
                               sortcites = TRUE,
                               sorting = "nyt",
-                              map = TRUE) {
+                              map = TRUE,
+                              maxcitenames = FALSE) {
   if (dir.exists(path)) {
     bibs <- file.path(path, "bib.bib")
     if (file.exists(bibs)) {
@@ -36,6 +40,13 @@
         sortcites <- "true"
       } else {
         sortcites <- "false"
+      }
+      if (maxcitenames) {
+        maxcitenames <- paste0(
+          ",maxcitenames=100"
+        )
+      } else {
+        maxcitenames <- ""
       }
       biblatex <- paste0(
         "\n",
@@ -50,6 +61,7 @@
         sorting,
         ",",
         "backend=biber",
+        maxcitenames,
         ",",
         "labeldate=year",
         "]{biblatex}",
