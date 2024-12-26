@@ -23,9 +23,10 @@ Depends: R (>= 3.5.0)
 LinkingTo: Rcpp, RcppArmadillo
 Imports: Rcpp, stats, dynr
 Suggests: knitr, rmarkdown, testthat, expm
+SystemRequirements: GSL (>= 2.6)
 RoxygenNote: 7.3.2
 NeedsCompilation: yes
-Packaged: 2024-12-26 01:27:46 UTC; root
+Packaged: 2024-12-26 01:52:40 UTC; root
 Author: Ivan Jacob Agaloos Pesigan [aut, cre, cph]
     (<https://orcid.org/0000-0003-4818-8420>)
 Maintainer: Ivan Jacob Agaloos Pesigan <r.jeksterslab@gmail.com>
