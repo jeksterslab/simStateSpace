@@ -181,7 +181,7 @@ of class \code{statespacepb} which is a list with the following elements:
 This function simulates data from
 a vector autoregressive model
 using a state-space model parameterization
-and fits the model using the \link{dynr} package.
+and fits the model using the \code{dynr} package.
 The process is repeated \code{R} times.
 It assumes that the parameters remain constant
 across individuals and over time.
@@ -344,7 +344,7 @@ beta <- 0.50 * diag(p)
 psi <- 0.001 * diag(p)
 psi_l <- t(chol(psi))
 
-pb <- PBSSMVARFixed(
+boot <- PBSSMVARFixed(
   R = 10L,
   path = getwd(),
   prefix = "var",
@@ -359,11 +359,11 @@ pb <- PBSSMVARFixed(
   ncores = parallel::detectCores() - 1,
   seed = 42
 )
-print(pb)
-summary(pb)
-vcov(pb)
-coef(pb)
-confint(pb)
+print(boot)
+summary(boot)
+vcov(boot)
+coef(boot)
+confint(boot)
 }
 
 }

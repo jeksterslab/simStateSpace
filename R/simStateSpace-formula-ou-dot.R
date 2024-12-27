@@ -8,6 +8,7 @@
           terms <- paste0(
             "(phi_",
             i,
+            "_",
             seq_len(p),
             " * (eta_",
             seq_len(p),
@@ -36,6 +37,7 @@
             "(",
             "phi_",
             i,
+            "_",
             seq_len(p),
             " * eta_",
             seq_len(p),

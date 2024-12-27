@@ -5,7 +5,7 @@
 #' This function simulates data from
 #' a vector autoregressive model
 #' using a state-space model parameterization
-#' and fits the model using the [dynr] package.
+#' and fits the model using the `dynr` package.
 #' The process is repeated `R` times.
 #' It assumes that the parameters remain constant
 #' across individuals and over time.
@@ -50,7 +50,7 @@
 #' psi <- 0.001 * diag(p)
 #' psi_l <- t(chol(psi))
 #'
-#' pb <- PBSSMVARFixed(
+#' boot <- PBSSMVARFixed(
 #'   R = 10L,
 #'   path = getwd(),
 #'   prefix = "var",
@@ -65,11 +65,11 @@
 #'   ncores = parallel::detectCores() - 1,
 #'   seed = 42
 #' )
-#' print(pb)
-#' summary(pb)
-#' vcov(pb)
-#' coef(pb)
-#' confint(pb)
+#' print(boot)
+#' summary(boot)
+#' vcov(boot)
+#' coef(boot)
+#' confint(boot)
 #' }
 #'
 #' @family Simulation of State Space Models Data Functions

@@ -7,7 +7,13 @@
       Y = chars,
       FUN = function(x, y) {
         return(
-          paste0(label, "_", x, y)
+          paste0(
+            label,
+            "_",
+            x,
+            "_",
+            y
+          )
         )
       }
     )

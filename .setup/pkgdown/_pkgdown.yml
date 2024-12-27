@@ -48,6 +48,10 @@ articles:
   - lin-growth
   - var
   - ou
+- title: Parametric Bootstrap
+  contents:
+  - pb-var
+  - pb-ou
 - title: Session Information
   contents:
   - session

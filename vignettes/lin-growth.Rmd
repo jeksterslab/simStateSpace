@@ -346,8 +346,8 @@ results <- dynr::dynr.cook(
 #> 
 #> Doing end processing
 #> Successful trial
-#> Total Time: 1.250381 
-#> Backend Time: 1.243141
+#> Total Time: 48.98901 
+#> Backend Time: 48.57066
 ```
 
 ## Summary
@@ -439,7 +439,7 @@ fit <- lavaan::growth(
   data = data
 )
 lavaan::summary(fit)
-#> lavaan 0.6-19 ended normally after 34 iterations
+#> lavaan 0.6-19 ended normally after 35 iterations
 #> 
 #>   Estimator                                         ML
 #>   Optimization method                           NLMINB

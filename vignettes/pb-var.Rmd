@@ -1,0 +1,299 @@
+---
+title: "Parametric Bootstrap (The Vector Autoregressive Model)"
+author: "Ivan Jacob Agaloos Pesigan"
+date: "2024-12-27"
+bibliography: "vignettes.bib"
+csl: https://raw.githubusercontent.com/citation-style-language/styles/master/apa.csl
+nocite: |
+  @RCoreTeam-2024
+  @Ou-Hunter-Chow-2019
+  @Chow-Ho-Hamaker-etal-2010
+output:
+  rmarkdown::html_vignette:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{Parametric Bootstrap (The Vector Autoregressive Model)}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+
+
+
+
+## Model
+
+The measurement model is given by
+\begin{equation}
+  \mathbf{y}_{i, t}
+  =
+  \boldsymbol{\eta}_{i, t}
+\end{equation}
+where $\mathbf{y}_{i, t}$
+represents a vector of observed variables
+and $\boldsymbol{\eta}_{i, t}$
+a vector of latent variables
+for individual $i$ and time $t$.
+Since the observed and latent variables are equal,
+we only generate data
+from the dynamic structure.
+
+The dynamic structure is given by
+\begin{equation}
+  \boldsymbol{\eta}_{i, t}
+  =
+  \boldsymbol{\alpha}
+  +
+  \boldsymbol{\beta}
+  \boldsymbol{\eta}_{i, t - 1}
+  +
+  \boldsymbol{\zeta}_{i, t},
+  \quad
+  \mathrm{with}
+  \quad
+  \boldsymbol{\zeta}_{i, t}
+  \sim
+  \mathcal{N}
+  \left(
+  \mathbf{0},
+  \boldsymbol{\Psi}
+  \right)
+\end{equation}
+where
+$\boldsymbol{\eta}_{i, t}$,
+$\boldsymbol{\eta}_{i, t - 1}$,
+and
+$\boldsymbol{\zeta}_{i, t}$
+are random variables,
+and
+$\boldsymbol{\alpha}$,
+$\boldsymbol{\beta}$,
+and
+$\boldsymbol{\Psi}$
+are model parameters.
+Here,
+$\boldsymbol{\eta}_{i, t}$
+is a vector of latent variables
+at time $t$ and individual $i$,
+$\boldsymbol{\eta}_{i, t - 1}$
+represents a vector of latent variables
+at time $t - 1$ and individual $i$,
+and
+$\boldsymbol{\zeta}_{i, t}$
+represents a vector of dynamic noise
+at time $t$ and individual $i$.
+$\boldsymbol{\alpha}$
+denotes a vector of intercepts,
+$\boldsymbol{\beta}$
+a matrix of autoregression
+and cross regression coefficients,
+and
+$\boldsymbol{\Psi}$
+the covariance matrix of
+$\boldsymbol{\zeta}_{i, t}$.
+
+An alternative representation of the dynamic noise
+is given by
+\begin{equation}
+  \boldsymbol{\zeta}_{i, t}
+  =
+  \boldsymbol{\Psi}^{\frac{1}{2}}
+  \mathbf{z}_{i, t},
+  \quad
+  \mathrm{with}
+  \quad
+  \mathbf{z}_{i, t}
+  \sim
+  \mathcal{N}
+  \left(
+  \mathbf{0},
+  \mathbf{I}
+  \right)
+\end{equation}
+where
+$\left( \boldsymbol{\Psi}^{\frac{1}{2}} \right) \left( \boldsymbol{\Psi}^{\frac{1}{2}} \right)^{\prime} = \boldsymbol{\Psi}$ .
+
+## Parameters
+
+### Notation
+
+Let $t = 1000$ be the number of time points and $n = 5$ be the number of individuals.
+
+Let the initial condition
+$\boldsymbol{\eta}_{0}$
+be given by
+
+\begin{equation}
+\boldsymbol{\eta}_{0} \sim \mathcal{N} \left( \boldsymbol{\mu}_{\boldsymbol{\eta} \mid 0}, \boldsymbol{\Sigma}_{\boldsymbol{\eta} \mid 0} \right)
+\end{equation}
+
+\begin{equation}
+\boldsymbol{\mu}_{\boldsymbol{\eta} \mid 0}
+=
+\left(
+\begin{array}{c}
+  0 \\
+  0 \\
+  0 \\
+\end{array}
+\right)
+\end{equation}
+
+\begin{equation}
+\boldsymbol{\Sigma}_{\boldsymbol{\eta} \mid 0}
+=
+\left(
+\begin{array}{ccc}
+  1 & 0.2 & 0.2 \\
+  0.2 & 1 & 0.2 \\
+  0.2 & 0.2 & 1 \\
+\end{array}
+\right) .
+\end{equation}
+
+Let the constant vector $\boldsymbol{\alpha}$ be given by
+
+\begin{equation}
+\boldsymbol{\alpha}
+=
+\left(
+\begin{array}{c}
+  0 \\
+  0 \\
+  0 \\
+\end{array}
+\right) .
+\end{equation}
+
+Let the transition matrix $\boldsymbol{\beta}$ be given by
+
+\begin{equation}
+\boldsymbol{\beta}
+=
+\left(
+\begin{array}{ccc}
+  0.7 & 0 & 0 \\
+  0.5 & 0.6 & 0 \\
+  -0.1 & 0.4 & 0.5 \\
+\end{array}
+\right) .
+\end{equation}
+
+Let the dynamic process noise $\boldsymbol{\Psi}$ be given by
+
+\begin{equation}
+\boldsymbol{\Psi}
+=
+\left(
+\begin{array}{ccc}
+  0.1 & 0 & 0 \\
+  0 & 0.1 & 0 \\
+  0 & 0 & 0.1 \\
+\end{array}
+\right) .
+\end{equation}
+
+### R Function Arguments
+
+
+``` r
+n
+#> [1] 5
+time
+#> [1] 1000
+mu0
+#> [1] 0 0 0
+sigma0
+#>      [,1] [,2] [,3]
+#> [1,]  1.0  0.2  0.2
+#> [2,]  0.2  1.0  0.2
+#> [3,]  0.2  0.2  1.0
+sigma0_l
+#>      [,1]      [,2]      [,3]
+#> [1,]  1.0 0.0000000 0.0000000
+#> [2,]  0.2 0.9797959 0.0000000
+#> [3,]  0.2 0.1632993 0.9660918
+alpha
+#> [1] 0 0 0
+beta
+#>      [,1] [,2] [,3]
+#> [1,]  0.7  0.0  0.0
+#> [2,]  0.5  0.6  0.0
+#> [3,] -0.1  0.4  0.5
+psi
+#>      [,1] [,2] [,3]
+#> [1,]  0.1  0.0  0.0
+#> [2,]  0.0  0.1  0.0
+#> [3,]  0.0  0.0  0.1
+psi_l
+#>           [,1]      [,2]      [,3]
+#> [1,] 0.3162278 0.0000000 0.0000000
+#> [2,] 0.0000000 0.3162278 0.0000000
+#> [3,] 0.0000000 0.0000000 0.3162278
+```
+
+### Parametric Bootstrap
+
+
+``` r
+R <- 1000L
+path <- getwd()
+prefix <- "var"
+```
+
+We use the `PBSSMVARFixed` function from the `simStateSpace` package to perform parametric bootstraping using the parameters described above.
+The argument `R` specifies the number of bootstrap replications.
+The generated data and model estimates are be stored in `path` using the specified `prefix` for the file names.
+The `ncores = parallel::detectCores()` argument instructs the function to use all available CPU cores in the system.
+
+
+``` r
+library(simStateSpace)
+PBSSMVARFixed(
+  R = R,
+  path = path,
+  prefix = prefix,
+  n = n,
+  time = time,
+  mu0 = mu0,
+  sigma0_l = sigma0_l,
+  alpha = alpha,
+  beta = beta,
+  psi_l = psi_l,
+  ncores = parallel::detectCores(),
+  seed = 42
+)
+#> Call:
+#> PBSSMVARFixed(R = R, path = path, prefix = prefix, n = n, time = time, 
+#>     mu0 = mu0, sigma0_l = sigma0_l, alpha = alpha, beta = beta, 
+#>     psi_l = psi_l, ncores = parallel::detectCores(), seed = 42)
+#> 
+#> Parametric bootstrap confidence intervals.
+#> type = "pc"
+#>             est     se    R    2.5%   97.5%
+#> beta_1_1    0.7 0.0116 1000  0.6769  0.7218
+#> beta_2_1    0.5 0.0115 1000  0.4795  0.5239
+#> beta_3_1   -0.1 0.0117 1000 -0.1236 -0.0768
+#> beta_1_2    0.0 0.0098 1000 -0.0193  0.0185
+#> beta_2_2    0.6 0.0096 1000  0.5808  0.6187
+#> beta_3_2    0.4 0.0095 1000  0.3820  0.4183
+#> beta_1_3    0.0 0.0100 1000 -0.0208  0.0202
+#> beta_2_3    0.0 0.0096 1000 -0.0190  0.0182
+#> beta_3_3    0.5 0.0096 1000  0.4813  0.5180
+#> psi_1_1     0.1 0.0020 1000  0.0961  0.1038
+#> psi_2_2     0.1 0.0020 1000  0.0962  0.1036
+#> psi_3_3     0.1 0.0020 1000  0.0960  0.1042
+#> mu0_1       0.0 0.4391 1000 -0.8373  0.8901
+#> mu0_2       0.0 0.4602 1000 -0.8889  0.9204
+#> mu0_3       0.0 0.4357 1000 -0.8295  0.8877
+#> sigma0_1_1  1.0 0.6072 1000  0.1078  2.4611
+#> sigma0_2_1  0.2 0.4077 1000 -0.5709  1.0896
+#> sigma0_3_1  0.2 0.4254 1000 -0.5842  1.1576
+#> sigma0_2_2  1.0 0.5448 1000  0.1083  2.0876
+#> sigma0_3_2  0.2 0.4086 1000 -0.5893  1.0362
+#> sigma0_3_3  1.0 0.5761 1000  0.0933  2.3376
+```
+
+## References
+
+

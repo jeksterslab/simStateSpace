@@ -465,5 +465,10 @@ theta_hat
 
 ```{r}
 #| include = FALSE
+unlink(c("lin-growth.c", "lin-growth.s", "lin-growth.so"))
+```
+
+```{r}
+#| include = FALSE
 rm(list = ls())
 ```
