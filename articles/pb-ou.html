@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>The Ornstein–Uhlenbeck Model • simStateSpace</title>
+<title>Parametric Bootstrap (The Ornstein–Uhlenbeck Model) • simStateSpace</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/Roboto-0.4.9/font.css" rel="stylesheet">
@@ -13,7 +13,7 @@
 <link href="../deps/Roboto_Slab-0.4.9/font.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="The Ornstein–Uhlenbeck Model">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Parametric Bootstrap (The Ornstein–Uhlenbeck Model)">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" integrity="sha384-nB0miv6/jRmo5UMMR1wu3Gz6NLsoTkbqJghGIsx//Rlm+ZU03BU6SQNC66uf4l5+" crossorigin="anonymous">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" integrity="sha384-7zkQWkzuo3B5mTepMUcHkMB5jZaolc2xDwL6VFqjFALcbeS9Ggm/Yr2r3Dy4lfFg" crossorigin="anonymous"></script><script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" integrity="sha384-43gviWU0YVjaDtb/GhzOouOXtZMP/7XUzwPTstBeZFe/+rCMvRwr4yROQP43s0Xk" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
 </head>
@@ -57,14 +57,14 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
 
-      <h1>The Ornstein–Uhlenbeck Model</h1>
+      <h1>Parametric Bootstrap (The Ornstein–Uhlenbeck Model)</h1>
                         <h4 data-toc-skip class="author">Ivan Jacob
 Agaloos Pesigan</h4>
             
             <h4 data-toc-skip class="date">2024-12-26</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/jeksterslab/simStateSpace/blob/main/vignettes/ou.Rmd"><code>vignettes/ou.Rmd</code></a></small>
-      <div class="d-none name"><code>ou.Rmd</code></div>
+      <small class="dont-index">Source: <a href="https://github.com/jeksterslab/simStateSpace/blob/main/vignettes/pb-ou.Rmd"><code>vignettes/pb-ou.Rmd</code></a></small>
+      <div class="d-none name"><code>pb-ou.Rmd</code></div>
     </div>
 
     
@@ -168,7 +168,7 @@ is a Wiener process or Brownian motion, which represents random
 fluctuations.</p>
 </div>
 <div class="section level2">
-<h2 id="data-generation">Data Generation<a class="anchor" aria-label="anchor" href="#data-generation"></a>
+<h2 id="parameters">Parameters<a class="anchor" aria-label="anchor" href="#parameters"></a>
 </h2>
 <div class="section level3">
 <h3 id="notation">Notation<a class="anchor" aria-label="anchor" href="#notation"></a>
@@ -336,18 +336,26 @@ be given by</p>
 <span><span class="co">#&gt; [3,]  0.0  0.0  0.2</span></span></code></pre></div>
 </div>
 <div class="section level3">
-<h3 id="visualizing-the-dynamics-without-measurement-error-and-process-noise-n-5-with-different-initial-condition">Visualizing the Dynamics Without Measurement Error and Process Noise
-(n = 5 with Different Initial Condition)<a class="anchor" aria-label="anchor" href="#visualizing-the-dynamics-without-measurement-error-and-process-noise-n-5-with-different-initial-condition"></a>
-</h3>
-<p><img src="fig-vignettes-ou-no-error-ou-1.png" width="3300"><img src="fig-vignettes-ou-no-error-ou-2.png" width="3300"><img src="fig-vignettes-ou-no-error-ou-3.png" width="3300"></p>
-</div>
-<div class="section level3">
-<h3 id="using-the-simssmoufixed-function-from-the-simstatespace-package-to-simulate-data">Using the <code>SimSSMOUFixed</code> Function from the
-<code>simStateSpace</code> Package to Simulate Data<a class="anchor" aria-label="anchor" href="#using-the-simssmoufixed-function-from-the-simstatespace-package-to-simulate-data"></a>
+<h3 id="parametric-bootstrap">Parametric Bootstrap<a class="anchor" aria-label="anchor" href="#parametric-bootstrap"></a>
 </h3>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">R</span> <span class="op">&lt;-</span> <span class="fl">1000L</span></span>
+<span><span class="va">path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/getwd.html" class="external-link">getwd</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">prefix</span> <span class="op">&lt;-</span> <span class="st">"ou"</span></span></code></pre></div>
+<p>We use the <code>PBSSMOUFixed</code> function from the
+<code>simStateSpace</code> package to perform parametric bootstraping
+using the parameters described above. The argument <code>R</code>
+specifies the number of bootstrap replications. The generated data and
+model estimates are be stored in <code>path</code> using the specified
+<code>prefix</code> for the file names. The
+<code>ncores = parallel::detectCores()</code> argument instructs the
+function to use all available CPU cores in the system.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/jeksterslab/simStateSpace">simStateSpace</a></span><span class="op">)</span></span>
-<span><span class="va">sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/SimSSMOUFixed.html">SimSSMOUFixed</a></span><span class="op">(</span></span>
+<span><span class="fu"><a href="../reference/PBSSMOUFixed.html">PBSSMOUFixed</a></span><span class="op">(</span></span>
+<span>  R <span class="op">=</span> <span class="va">R</span>,</span>
+<span>  path <span class="op">=</span> <span class="va">path</span>,</span>
+<span>  prefix <span class="op">=</span> <span class="va">prefix</span>,</span>
 <span>  n <span class="op">=</span> <span class="va">n</span>,</span>
 <span>  time <span class="op">=</span> <span class="va">time</span>,</span>
 <span>  delta_t <span class="op">=</span> <span class="va">delta_t</span>,</span>
@@ -359,273 +367,45 @@ be given by</p>
 <span>  nu <span class="op">=</span> <span class="va">nu</span>,</span>
 <span>  lambda <span class="op">=</span> <span class="va">lambda</span>,</span>
 <span>  theta_l <span class="op">=</span> <span class="va">theta_l</span>,</span>
-<span>  type <span class="op">=</span> <span class="fl">0</span></span>
+<span>  ncores <span class="op">=</span> <span class="fu">parallel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/parallel/detectCores.html" class="external-link">detectCores</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  seed <span class="op">=</span> <span class="fl">42</span></span>
 <span><span class="op">)</span></span>
-<span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">sim</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span>
-<span><span class="co">#&gt;   id time          y1          y2        y3</span></span>
-<span><span class="co">#&gt; 1  1  0.0  0.29937539 -1.37581548 1.3779071</span></span>
-<span><span class="co">#&gt; 2  1  0.1 -0.98770381 -0.03632195 0.8363080</span></span>
-<span><span class="co">#&gt; 3  1  0.2  0.33221051 -0.40321664 1.2054318</span></span>
-<span><span class="co">#&gt; 4  1  0.3 -0.09485392 -0.82030556 1.0272653</span></span>
-<span><span class="co">#&gt; 5  1  0.4 -1.50322069 -0.36841853 0.1821731</span></span>
-<span><span class="co">#&gt; 6  1  0.5 -0.75049839  0.35752476 0.2862544</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span>
-<span><span class="co">#&gt;        id         time             y1                 y2          </span></span>
-<span><span class="co">#&gt;  Min.   :1   Min.   : 0.00   Min.   :-2.25375   Min.   :-2.75152  </span></span>
-<span><span class="co">#&gt;  1st Qu.:2   1st Qu.:24.98   1st Qu.:-0.41569   1st Qu.:-0.47639  </span></span>
-<span><span class="co">#&gt;  Median :3   Median :49.95   Median : 0.04509   Median : 0.08626  </span></span>
-<span><span class="co">#&gt;  Mean   :3   Mean   :49.95   Mean   : 0.03947   Mean   : 0.05358  </span></span>
-<span><span class="co">#&gt;  3rd Qu.:4   3rd Qu.:74.92   3rd Qu.: 0.50782   3rd Qu.: 0.61048  </span></span>
-<span><span class="co">#&gt;  Max.   :5   Max.   :99.90   Max.   : 2.74461   Max.   : 3.02675  </span></span>
-<span><span class="co">#&gt;        y3          </span></span>
-<span><span class="co">#&gt;  Min.   :-2.34092  </span></span>
-<span><span class="co">#&gt;  1st Qu.:-0.44476  </span></span>
-<span><span class="co">#&gt;  Median : 0.02716  </span></span>
-<span><span class="co">#&gt;  Mean   : 0.01476  </span></span>
-<span><span class="co">#&gt;  3rd Qu.: 0.48321  </span></span>
-<span><span class="co">#&gt;  Max.   : 2.34972</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">sim</span><span class="op">)</span></span></code></pre></div>
-<p><img src="fig-vignettes-ou-error-ou-1.png" width="3300"><img src="fig-vignettes-ou-error-ou-2.png" width="3300"><img src="fig-vignettes-ou-error-ou-3.png" width="3300"></p>
-</div>
-</div>
-<div class="section level2">
-<h2 id="model-fitting">Model Fitting<a class="anchor" aria-label="anchor" href="#model-fitting"></a>
-</h2>
-<div class="section level3">
-<h3 id="prepare-data">Prepare Data<a class="anchor" aria-label="anchor" href="#prepare-data"></a>
-</h3>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">dynr_data</span> <span class="op">&lt;-</span> <span class="fu">dynr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/dynr/man/dynr.data.html" class="external-link">dynr.data</a></span><span class="op">(</span></span>
-<span>  dataframe <span class="op">=</span> <span class="va">data</span>,</span>
-<span>  id <span class="op">=</span> <span class="st">"id"</span>,</span>
-<span>  time <span class="op">=</span> <span class="st">"time"</span>,</span>
-<span>  observed <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"y1"</span>, <span class="st">"y2"</span>, <span class="st">"y3"</span><span class="op">)</span></span>
-<span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level3">
-<h3 id="prepare-initial-condition">Prepare Initial Condition<a class="anchor" aria-label="anchor" href="#prepare-initial-condition"></a>
-</h3>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">dynr_initial</span> <span class="op">&lt;-</span> <span class="fu">dynr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/dynr/man/prep.initial.html" class="external-link">prep.initial</a></span><span class="op">(</span></span>
-<span>  values.inistate <span class="op">=</span> <span class="va">mu0</span>,</span>
-<span>  params.inistate <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mu0_1"</span>, <span class="st">"mu0_2"</span>, <span class="st">"mu0_3"</span><span class="op">)</span>,</span>
-<span>  values.inicov <span class="op">=</span> <span class="va">sigma0</span>,</span>
-<span>  params.inicov <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span></span>
-<span>    data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span>      <span class="st">"sigma0_11"</span>, <span class="st">"sigma0_12"</span>, <span class="st">"sigma0_13"</span>,</span>
-<span>      <span class="st">"sigma0_12"</span>, <span class="st">"sigma0_22"</span>, <span class="st">"sigma0_23"</span>,</span>
-<span>      <span class="st">"sigma0_13"</span>, <span class="st">"sigma0_23"</span>, <span class="st">"sigma0_33"</span></span>
-<span>    <span class="op">)</span>,</span>
-<span>    nrow <span class="op">=</span> <span class="fl">3</span></span>
-<span>  <span class="op">)</span></span>
-<span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level3">
-<h3 id="prepare-measurement-model">Prepare Measurement Model<a class="anchor" aria-label="anchor" href="#prepare-measurement-model"></a>
-</h3>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">dynr_measurement</span> <span class="op">&lt;-</span> <span class="fu">dynr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/dynr/man/prep.measurement.html" class="external-link">prep.measurement</a></span><span class="op">(</span></span>
-<span>  values.load <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/diag.html" class="external-link">diag</a></span><span class="op">(</span><span class="fl">3</span><span class="op">)</span>,</span>
-<span>  params.load <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span>data <span class="op">=</span> <span class="st">"fixed"</span>, nrow <span class="op">=</span> <span class="fl">3</span>, ncol <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>,</span>
-<span>  state.names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"eta_1"</span>, <span class="st">"eta_2"</span>, <span class="st">"eta_3"</span><span class="op">)</span>,</span>
-<span>  obs.names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"y1"</span>, <span class="st">"y2"</span>, <span class="st">"y3"</span><span class="op">)</span></span>
-<span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level3">
-<h3 id="prepare-dynamic-process">Prepare Dynamic Process<a class="anchor" aria-label="anchor" href="#prepare-dynamic-process"></a>
-</h3>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">dynr_dynamics</span> <span class="op">&lt;-</span> <span class="fu">dynr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/dynr/man/prep.formulaDynamics.html" class="external-link">prep.formulaDynamics</a></span><span class="op">(</span></span>
-<span>  formula <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>  </span>
-<span>    <span class="va">eta_1</span> <span class="op">~</span> <span class="op">(</span><span class="va">phi_11</span> <span class="op">*</span> <span class="op">(</span><span class="va">eta_1</span> <span class="op">-</span> <span class="va">mu_1</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="op">(</span><span class="va">phi_12</span> <span class="op">*</span> <span class="op">(</span><span class="va">eta_2</span> <span class="op">-</span> <span class="va">mu_2</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="op">(</span><span class="va">phi_13</span> <span class="op">*</span> <span class="op">(</span><span class="va">eta_3</span> <span class="op">-</span> <span class="va">mu_3</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>    <span class="va">eta_2</span> <span class="op">~</span> <span class="op">(</span><span class="va">phi_21</span> <span class="op">*</span> <span class="op">(</span><span class="va">eta_1</span> <span class="op">-</span> <span class="va">mu_1</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="op">(</span><span class="va">phi_22</span> <span class="op">*</span> <span class="op">(</span><span class="va">eta_2</span> <span class="op">-</span> <span class="va">mu_2</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="op">(</span><span class="va">phi_23</span> <span class="op">*</span> <span class="op">(</span><span class="va">eta_3</span> <span class="op">-</span> <span class="va">mu_3</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>    <span class="va">eta_3</span> <span class="op">~</span> <span class="op">(</span><span class="va">phi_31</span> <span class="op">*</span> <span class="op">(</span><span class="va">eta_1</span> <span class="op">-</span> <span class="va">mu_1</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="op">(</span><span class="va">phi_32</span> <span class="op">*</span> <span class="op">(</span><span class="va">eta_2</span> <span class="op">-</span> <span class="va">mu_2</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="op">(</span><span class="va">phi_33</span> <span class="op">*</span> <span class="op">(</span><span class="va">eta_3</span> <span class="op">-</span> <span class="va">mu_3</span><span class="op">)</span><span class="op">)</span></span>
-<span>  <span class="op">)</span>,</span>
-<span>  startval <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span>    mu_1 <span class="op">=</span> <span class="va">mu</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, mu_2 <span class="op">=</span> <span class="va">mu</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, mu_3 <span class="op">=</span> <span class="va">mu</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span>,</span>
-<span>    phi_11 <span class="op">=</span> <span class="va">phi</span><span class="op">[</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">]</span>, phi_12 <span class="op">=</span> <span class="va">phi</span><span class="op">[</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">]</span>, phi_13 <span class="op">=</span> <span class="va">phi</span><span class="op">[</span><span class="fl">1</span>, <span class="fl">3</span><span class="op">]</span>,</span>
-<span>    phi_21 <span class="op">=</span> <span class="va">phi</span><span class="op">[</span><span class="fl">2</span>, <span class="fl">1</span><span class="op">]</span>, phi_22 <span class="op">=</span> <span class="va">phi</span><span class="op">[</span><span class="fl">2</span>, <span class="fl">2</span><span class="op">]</span>, phi_23 <span class="op">=</span> <span class="va">phi</span><span class="op">[</span><span class="fl">2</span>, <span class="fl">3</span><span class="op">]</span>,</span>
-<span>    phi_31 <span class="op">=</span> <span class="va">phi</span><span class="op">[</span><span class="fl">3</span>, <span class="fl">1</span><span class="op">]</span>, phi_32 <span class="op">=</span> <span class="va">phi</span><span class="op">[</span><span class="fl">3</span>, <span class="fl">2</span><span class="op">]</span>, phi_33 <span class="op">=</span> <span class="va">phi</span><span class="op">[</span><span class="fl">3</span>, <span class="fl">3</span><span class="op">]</span></span>
-<span>  <span class="op">)</span>,</span>
-<span>  isContinuousTime <span class="op">=</span> <span class="cn">TRUE</span></span>
-<span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level3">
-<h3 id="prepare-process-noise">Prepare Process Noise<a class="anchor" aria-label="anchor" href="#prepare-process-noise"></a>
-</h3>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">dynr_noise</span> <span class="op">&lt;-</span> <span class="fu">dynr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/dynr/man/prep.noise.html" class="external-link">prep.noise</a></span><span class="op">(</span></span>
-<span>  values.latent <span class="op">=</span> <span class="va">sigma</span>,</span>
-<span>  params.latent <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span></span>
-<span>    data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span>      <span class="st">"sigma_11"</span>, <span class="st">"sigma_12"</span>, <span class="st">"sigma_13"</span>,</span>
-<span>      <span class="st">"sigma_12"</span>, <span class="st">"sigma_22"</span>, <span class="st">"sigma_23"</span>,</span>
-<span>      <span class="st">"sigma_13"</span>, <span class="st">"sigma_23"</span>, <span class="st">"sigma_33"</span></span>
-<span>    <span class="op">)</span>,</span>
-<span>    nrow <span class="op">=</span> <span class="fl">3</span></span>
-<span>  <span class="op">)</span>,</span>
-<span>  values.observed <span class="op">=</span> <span class="va">theta</span>,</span>
-<span>  params.observed <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span></span>
-<span>    data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span>      <span class="st">"theta_11"</span>, <span class="st">"fixed"</span>, <span class="st">"fixed"</span>,</span>
-<span>      <span class="st">"fixed"</span>, <span class="st">"theta_22"</span>, <span class="st">"fixed"</span>,</span>
-<span>      <span class="st">"fixed"</span>, <span class="st">"fixed"</span>, <span class="st">"theta_33"</span></span>
-<span>    <span class="op">)</span>,</span>
-<span>    nrow <span class="op">=</span> <span class="fl">3</span></span>
-<span>  <span class="op">)</span></span>
-<span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level3">
-<h3 id="prepare-the-model">Prepare the Model<a class="anchor" aria-label="anchor" href="#prepare-the-model"></a>
-</h3>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu">dynr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/dynr/man/dynr.model.html" class="external-link">dynr.model</a></span><span class="op">(</span></span>
-<span>  data <span class="op">=</span> <span class="va">dynr_data</span>,</span>
-<span>  initial <span class="op">=</span> <span class="va">dynr_initial</span>,</span>
-<span>  measurement <span class="op">=</span> <span class="va">dynr_measurement</span>,</span>
-<span>  dynamics <span class="op">=</span> <span class="va">dynr_dynamics</span>,</span>
-<span>  noise <span class="op">=</span> <span class="va">dynr_noise</span>,</span>
-<span>  outfile <span class="op">=</span> <span class="st">"ou.c"</span></span>
-<span><span class="op">)</span></span></code></pre></div>
-<p>Add lower and upper bounds to aid in the optimization.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">model</span><span class="op">$</span><span class="va">lb</span><span class="op">[</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span>    <span class="st">"phi_11"</span>,</span>
-<span>    <span class="st">"phi_12"</span>,</span>
-<span>    <span class="st">"phi_13"</span>,</span>
-<span>    <span class="st">"phi_21"</span>,</span>
-<span>    <span class="st">"phi_22"</span>,</span>
-<span>    <span class="st">"phi_23"</span>,</span>
-<span>    <span class="st">"phi_31"</span>,</span>
-<span>    <span class="st">"phi_32"</span>,</span>
-<span>    <span class="st">"phi_33"</span></span>
-<span>  <span class="op">)</span></span>
-<span><span class="op">]</span> <span class="op">&lt;-</span> <span class="op">-</span><span class="fl">1.5</span></span>
-<span><span class="va">model</span><span class="op">$</span><span class="va">ub</span><span class="op">[</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span>    <span class="st">"phi_11"</span>,</span>
-<span>    <span class="st">"phi_12"</span>,</span>
-<span>    <span class="st">"phi_13"</span>,</span>
-<span>    <span class="st">"phi_21"</span>,</span>
-<span>    <span class="st">"phi_22"</span>,</span>
-<span>    <span class="st">"phi_23"</span>,</span>
-<span>    <span class="st">"phi_31"</span>,</span>
-<span>    <span class="st">"phi_32"</span>,</span>
-<span>    <span class="st">"phi_33"</span></span>
-<span>  <span class="op">)</span></span>
-<span><span class="op">]</span> <span class="op">&lt;-</span> <span class="op">+</span><span class="fl">1.5</span></span></code></pre></div>
-<p><img src="fig-vignettes-ou-model-ou-1.png" width="3300"></p>
-</div>
-<div class="section level3">
-<h3 id="fit-the-model">Fit the Model<a class="anchor" aria-label="anchor" href="#fit-the-model"></a>
-</h3>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">results</span> <span class="op">&lt;-</span> <span class="fu">dynr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/dynr/man/dynr.cook.html" class="external-link">dynr.cook</a></span><span class="op">(</span></span>
-<span>  <span class="va">model</span>,</span>
-<span>  debug_flag <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  verbose <span class="op">=</span> <span class="cn">FALSE</span></span>
-<span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "Get ready!!!!"</span></span>
-<span><span class="co">#&gt; using C compiler: ‘gcc (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0’</span></span>
-<span><span class="co">#&gt; Optimization function called.</span></span>
-<span><span class="co">#&gt; Starting Hessian calculation ...</span></span>
-<span><span class="co">#&gt; Finished Hessian calculation.</span></span>
-<span><span class="co">#&gt; Original exit flag:  3 </span></span>
-<span><span class="co">#&gt; Modified exit flag:  3 </span></span>
-<span><span class="co">#&gt; Optimization terminated successfully: ftol_rel or ftol_abs was reached. </span></span>
-<span><span class="co">#&gt; Original fitted parameters:  0.05480874 0.09700059 0.04993973 -0.434506 </span></span>
-<span><span class="co">#&gt; 0.02467273 -0.05454902 0.8417982 -0.6017518 0.1099265 -0.3702948 0.6609449 </span></span>
-<span><span class="co">#&gt; -0.6606183 -1.381888 0.0816109 -0.2479494 -2.480951 0.1751864 -2.810068 </span></span>
-<span><span class="co">#&gt; -1.625097 -1.682562 -1.597112 -0.3660338 -0.4092529 0.2149726 -0.7538978 </span></span>
-<span><span class="co">#&gt; 0.6368556 0.4928618 -0.5914102 0.6108847 -2.103637 </span></span>
+<span><span class="co">#&gt; Call:</span></span>
+<span><span class="co">#&gt; PBSSMOUFixed(R = R, path = path, prefix = prefix, n = n, time = time, </span></span>
+<span><span class="co">#&gt;     delta_t = delta_t, mu0 = mu0, sigma0_l = sigma0_l, mu = mu, </span></span>
+<span><span class="co">#&gt;     phi = phi, sigma_l = sigma_l, nu = nu, lambda = lambda, theta_l = theta_l, </span></span>
+<span><span class="co">#&gt;     ncores = parallel::detectCores(), seed = 42)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Transformed fitted parameters:  0.05480874 0.09700059 0.04993973 -0.434506 </span></span>
-<span><span class="co">#&gt; 0.02467273 -0.05454902 0.8417982 -0.6017518 0.1099265 -0.3702948 0.6609449 </span></span>
-<span><span class="co">#&gt; -0.6606183 0.2511041 0.02049283 -0.0622611 0.08533609 0.009575553 0.07820615 </span></span>
-<span><span class="co">#&gt; 0.1968925 0.1858971 0.2024804 -0.3660338 -0.4092529 0.2149726 0.4705289 </span></span>
-<span><span class="co">#&gt; 0.299659 0.2319058 0.7443857 0.4858433 0.4428817 </span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Doing end processing</span></span>
-<span><span class="co">#&gt; Successful trial</span></span>
-<span><span class="co">#&gt; Total Time: 4.282759 </span></span>
-<span><span class="co">#&gt; Backend Time: 4.273644</span></span></code></pre></div>
-</div>
-</div>
-<div class="section level2">
-<h2 id="summary">Summary<a class="anchor" aria-label="anchor" href="#summary"></a>
-</h2>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">results</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Coefficients:</span></span>
-<span><span class="co">#&gt;            Estimate Std. Error t value  ci.lower  ci.upper Pr(&gt;|t|)    </span></span>
-<span><span class="co">#&gt; mu_1       0.054809   0.051306   1.068 -0.045749  0.155366   0.1427    </span></span>
-<span><span class="co">#&gt; mu_2       0.097001   0.086009   1.128 -0.071575  0.265576   0.1297    </span></span>
-<span><span class="co">#&gt; mu_3       0.049940   0.057061   0.875 -0.061897  0.161777   0.1908    </span></span>
-<span><span class="co">#&gt; phi_11    -0.434506   0.190784  -2.277 -0.808436 -0.060576   0.0114 *  </span></span>
-<span><span class="co">#&gt; phi_12     0.024673   0.163607   0.151 -0.295990  0.345336   0.4401    </span></span>
-<span><span class="co">#&gt; phi_13    -0.054549   0.133220  -0.409 -0.315656  0.206558   0.3411    </span></span>
-<span><span class="co">#&gt; phi_21     0.841798   0.118619   7.097  0.609310  1.074287   &lt;2e-16 ***</span></span>
-<span><span class="co">#&gt; phi_22    -0.601752   0.103565  -5.810 -0.804735 -0.398769   &lt;2e-16 ***</span></span>
-<span><span class="co">#&gt; phi_23     0.109926   0.084808   1.296 -0.056293  0.276146   0.0975 .  </span></span>
-<span><span class="co">#&gt; phi_31    -0.370295   0.116216  -3.186 -0.598074 -0.142515   0.0007 ***</span></span>
-<span><span class="co">#&gt; phi_32     0.660945   0.100619   6.569  0.463736  0.858154   &lt;2e-16 ***</span></span>
-<span><span class="co">#&gt; phi_33    -0.660618   0.082236  -8.033 -0.821797 -0.499439   &lt;2e-16 ***</span></span>
-<span><span class="co">#&gt; sigma_11   0.251104   0.033031   7.602  0.186364  0.315844   &lt;2e-16 ***</span></span>
-<span><span class="co">#&gt; sigma_12   0.020493   0.012944   1.583 -0.004877  0.045863   0.0567 .  </span></span>
-<span><span class="co">#&gt; sigma_13  -0.062261   0.013067  -4.765 -0.087873 -0.036649   &lt;2e-16 ***</span></span>
-<span><span class="co">#&gt; sigma_22   0.085336   0.010418   8.191  0.064917  0.105755   &lt;2e-16 ***</span></span>
-<span><span class="co">#&gt; sigma_23   0.009576   0.006832   1.402 -0.003815  0.022966   0.0806 .  </span></span>
-<span><span class="co">#&gt; sigma_33   0.078206   0.009751   8.020  0.059095  0.097318   &lt;2e-16 ***</span></span>
-<span><span class="co">#&gt; theta_11   0.196892   0.005295  37.181  0.186514  0.207271   &lt;2e-16 ***</span></span>
-<span><span class="co">#&gt; theta_22   0.185897   0.004259  43.649  0.177550  0.194244   &lt;2e-16 ***</span></span>
-<span><span class="co">#&gt; theta_33   0.202480   0.004593  44.081  0.193478  0.211483   &lt;2e-16 ***</span></span>
-<span><span class="co">#&gt; mu0_1     -0.366034   0.329362  -1.111 -1.011571  0.279503   0.1332    </span></span>
-<span><span class="co">#&gt; mu0_2     -0.409253   0.399457  -1.025 -1.192175  0.373669   0.1528    </span></span>
-<span><span class="co">#&gt; mu0_3      0.214973   0.315604   0.681 -0.403600  0.833545   0.2479    </span></span>
-<span><span class="co">#&gt; sigma0_11  0.470529   0.336674   1.398 -0.189340  1.130397   0.0812 .  </span></span>
-<span><span class="co">#&gt; sigma0_12  0.299659   0.322308   0.930 -0.332054  0.931372   0.1763    </span></span>
-<span><span class="co">#&gt; sigma0_13  0.231906   0.254307   0.912 -0.266527  0.730339   0.1809    </span></span>
-<span><span class="co">#&gt; sigma0_22  0.744386   0.514259   1.447 -0.263544  1.752316   0.0739 .  </span></span>
-<span><span class="co">#&gt; sigma0_23  0.485843   0.364487   1.333 -0.228538  1.200225   0.0913 .  </span></span>
-<span><span class="co">#&gt; sigma0_33  0.442882   0.327263   1.353 -0.198542  1.084306   0.0880 .  </span></span>
-<span><span class="co">#&gt; ---</span></span>
-<span><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; -2 log-likelihood value at convergence = 21202.41</span></span>
-<span><span class="co">#&gt; AIC = 21262.41</span></span>
-<span><span class="co">#&gt; BIC = 21457.92</span></span></code></pre></div>
-<pre><code><span><span class="co">#&gt; [1] -0.3660338 -0.4092529  0.2149726</span></span></code></pre>
-<div class="section level3">
-<h3 id="parameter-estimates">Parameter Estimates<a class="anchor" aria-label="anchor" href="#parameter-estimates"></a>
-</h3>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">mu_hat</span></span>
-<span><span class="co">#&gt; [1] 0.05480874 0.09700059 0.04993973</span></span>
-<span><span class="va">phi_hat</span></span>
-<span><span class="co">#&gt;            [,1]        [,2]        [,3]</span></span>
-<span><span class="co">#&gt; [1,] -0.4345060  0.02467273 -0.05454902</span></span>
-<span><span class="co">#&gt; [2,]  0.8417982 -0.60175178  0.10992650</span></span>
-<span><span class="co">#&gt; [3,] -0.3702948  0.66094491 -0.66061828</span></span>
-<span><span class="va">sigma_hat</span></span>
-<span><span class="co">#&gt;             [,1]        [,2]         [,3]</span></span>
-<span><span class="co">#&gt; [1,]  0.25110407 0.020492829 -0.062261099</span></span>
-<span><span class="co">#&gt; [2,]  0.02049283 0.085336088  0.009575553</span></span>
-<span><span class="co">#&gt; [3,] -0.06226110 0.009575553  0.078206147</span></span>
-<span><span class="va">mu0_hat</span></span>
-<span><span class="co">#&gt; [1] -0.3660338 -0.4092529  0.2149726</span></span>
-<span><span class="va">sigma0_hat</span></span>
-<span><span class="co">#&gt;           [,1]      [,2]      [,3]</span></span>
-<span><span class="co">#&gt; [1,] 0.4705289 0.2996590 0.2319058</span></span>
-<span><span class="co">#&gt; [2,] 0.2996590 0.7443857 0.4858433</span></span>
-<span><span class="co">#&gt; [3,] 0.2319058 0.4858433 0.4428817</span></span>
-<span><span class="va">beta_var1_hat</span> <span class="op">&lt;-</span> <span class="fu">expm</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/expm/man/expm.html" class="external-link">expm</a></span><span class="op">(</span><span class="va">phi_hat</span><span class="op">)</span></span>
-<span><span class="va">beta_var1_hat</span></span>
-<span><span class="co">#&gt;             [,1]        [,2]        [,3]</span></span>
-<span><span class="co">#&gt; [1,]  0.65704466 0.004621676 -0.03138431</span></span>
-<span><span class="co">#&gt; [2,]  0.49886539 0.570658924  0.04636743</span></span>
-<span><span class="co">#&gt; [3,] -0.05872866 0.355366249  0.53861154</span></span></code></pre></div>
+<span><span class="co">#&gt; Parametric bootstrap confidence intervals.</span></span>
+<span><span class="co">#&gt; type = "pc"</span></span>
+<span><span class="co">#&gt;                est     se    R    2.5%   97.5%</span></span>
+<span><span class="co">#&gt; phi_1_1    -0.3570 0.1686 1000 -0.7113 -0.0637</span></span>
+<span><span class="co">#&gt; phi_2_1     0.7710 0.1027 1000  0.5722  0.9849</span></span>
+<span><span class="co">#&gt; phi_3_1    -0.4500 0.1045 1000 -0.6689 -0.2540</span></span>
+<span><span class="co">#&gt; phi_1_2     0.0000 0.1459 1000 -0.2663  0.3128</span></span>
+<span><span class="co">#&gt; phi_2_2    -0.5110 0.0908 1000 -0.7040 -0.3389</span></span>
+<span><span class="co">#&gt; phi_3_2     0.7290 0.0909 1000  0.5617  0.9352</span></span>
+<span><span class="co">#&gt; phi_1_3     0.0000 0.1098 1000 -0.2283  0.1885</span></span>
+<span><span class="co">#&gt; phi_2_3     0.0000 0.0677 1000 -0.1307  0.1366</span></span>
+<span><span class="co">#&gt; phi_3_3    -0.6930 0.0705 1000 -0.8385 -0.5620</span></span>
+<span><span class="co">#&gt; sigma_1_1   0.2446 0.0323 1000  0.1918  0.3123</span></span>
+<span><span class="co">#&gt; sigma_2_1   0.0220 0.0123 1000 -0.0041  0.0444</span></span>
+<span><span class="co">#&gt; sigma_3_1  -0.0500 0.0126 1000 -0.0753 -0.0252</span></span>
+<span><span class="co">#&gt; sigma_2_2   0.0707 0.0089 1000  0.0543  0.0899</span></span>
+<span><span class="co">#&gt; sigma_3_2   0.0154 0.0063 1000  0.0028  0.0282</span></span>
+<span><span class="co">#&gt; sigma_3_3   0.0755 0.0096 1000  0.0581  0.0956</span></span>
+<span><span class="co">#&gt; theta_1_1   0.2000 0.0054 1000  0.1895  0.2103</span></span>
+<span><span class="co">#&gt; theta_2_2   0.2000 0.0045 1000  0.1916  0.2090</span></span>
+<span><span class="co">#&gt; theta_3_3   0.2000 0.0046 1000  0.1908  0.2088</span></span>
+<span><span class="co">#&gt; mu0_1       0.0000 0.4449 1000 -0.8332  0.9247</span></span>
+<span><span class="co">#&gt; mu0_2       0.0000 0.4450 1000 -0.9059  0.8869</span></span>
+<span><span class="co">#&gt; mu0_3       0.0000 0.4473 1000 -0.9121  0.8385</span></span>
+<span><span class="co">#&gt; sigma0_1_1  1.0000 0.5872 1000  0.0680  2.1766</span></span>
+<span><span class="co">#&gt; sigma0_2_1  0.2000 0.4355 1000 -0.6710  1.1282</span></span>
+<span><span class="co">#&gt; sigma0_3_1  0.2000 0.4219 1000 -0.6035  1.1242</span></span>
+<span><span class="co">#&gt; sigma0_2_2  1.0000 0.5701 1000  0.0724  2.2282</span></span>
+<span><span class="co">#&gt; sigma0_3_2  0.2000 0.4462 1000 -0.6455  1.1868</span></span>
+<span><span class="co">#&gt; sigma0_3_3  1.0000 0.5677 1000  0.0724  2.3414</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2 unnumbered">
