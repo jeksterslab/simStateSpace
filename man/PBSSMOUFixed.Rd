@@ -214,7 +214,7 @@ of class \code{statespacepb} which is a list with the following elements:
 This function simulates data from
 a Ornstein–Uhlenbeck (OU) model
 using a state-space model parameterization
-and fits the model using the \link{dynr} package.
+and fits the model using the \code{dynr} package.
 The process is repeated \code{R} times.
 It assumes that the parameters remain constant
 across individuals and over time.

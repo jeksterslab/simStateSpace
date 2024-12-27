@@ -9,8 +9,20 @@
         return(
           ifelse(
             test = x <= y,
-            yes = paste0(label, "_", y, x),
-            no = paste0(label, "_", x, y)
+            yes = paste0(
+              label,
+              "_",
+              y,
+              "_",
+              x
+            ),
+            no = paste0(
+              label,
+              "_",
+              x,
+              "_",
+              y
+            )
           )
         )
       }

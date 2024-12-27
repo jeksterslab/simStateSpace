@@ -7,6 +7,7 @@
         "(",
         "phi_",
         i,
+        "_",
         seq_len(p),
         " * eta_",
         seq_len(p),

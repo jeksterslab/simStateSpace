@@ -6,7 +6,7 @@
 #' This function simulates data from
 #' a linear stochastic differential equation model
 #' using a state-space model parameterization
-#' and fits the model using the [dynr] package.
+#' and fits the model using the `dynr` package.
 #' The process is repeated `R` times.
 #' It assumes that the parameters remain constant
 #' across individuals and over time.
