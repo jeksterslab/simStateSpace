@@ -9,4 +9,3 @@
 cd /scratch/ibp5092/simStateSpace || exit
 apptainer exec /scratch/ibp5092/sif/docs.sif make all
 apptainer exec /scratch/ibp5092/sif/docs.sif make auto
-

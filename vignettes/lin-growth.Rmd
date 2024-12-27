@@ -1,7 +1,7 @@
 ---
 title: "The Linear Growth Curve Model"
 author: "Ivan Jacob Agaloos Pesigan"
-date: "2024-12-26"
+date: "2024-12-27"
 bibliography: "vignettes.bib"
 csl: https://raw.githubusercontent.com/citation-style-language/styles/master/apa.csl
 nocite: |
@@ -346,8 +346,8 @@ results <- dynr::dynr.cook(
 #> 
 #> Doing end processing
 #> Successful trial
-#> Total Time: 48.98901 
-#> Backend Time: 48.57066
+#> Total Time: 1.498272 
+#> Backend Time: 1.488382
 ```
 
 ## Summary
@@ -439,7 +439,7 @@ fit <- lavaan::growth(
   data = data
 )
 lavaan::summary(fit)
-#> lavaan 0.6-19 ended normally after 35 iterations
+#> lavaan 0.6-19 ended normally after 34 iterations
 #> 
 #>   Estimator                                         ML
 #>   Optimization method                           NLMINB
@@ -516,5 +516,7 @@ theta_hat
 ```
 
 ## References
+
+
 
 

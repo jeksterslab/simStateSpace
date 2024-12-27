@@ -501,7 +501,7 @@ theta <- 0.001 * diag(k)
 theta_l <- t(chol(theta))
 
 pb <- PBSSMOUFixed(
-  R = 10L,
+  R = 1000L,
   path = getwd(),
   prefix = "ou",
   n = n,
@@ -521,9 +521,12 @@ pb <- PBSSMOUFixed(
 )
 print(pb)
 summary(pb)
+confint(pb)
 vcov(pb)
 coef(pb)
-confint(pb)
+print(pb, type = "bc") # bias-corrected
+summary(pb, type = "bc")
+confint(pb, type = "bc")
 }
 
 }

@@ -1,8 +1,7 @@
-# simStateSpace 1.2.3.9000
+# simStateSpace 1.2.4
 
 ## Patch
 
-* Latest development version.
 * Added the `PBSSMLinSDEFixed()`, `PBSSMOUFixed()`, and `PBSSMVARFixed()` functions.
 * Added `SystemRequirements: GSL (>= 2.6)` in the DESCRIPTION file for the `dynr` package.
 

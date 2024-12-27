@@ -121,7 +121,7 @@
 #' theta_l <- t(chol(theta))
 #'
 #' pb <- PBSSMLinSDEFixed(
-#'   R = 10L,
+#'   R = 1000L,
 #'   path = getwd(),
 #'   prefix = "lse",
 #'   n = n,
@@ -141,9 +141,12 @@
 #' )
 #' print(pb)
 #' summary(pb)
+#' confint(pb)
 #' vcov(pb)
 #' coef(pb)
-#' confint(pb)
+#' print(pb, type = "bc") # bias-corrected
+#' summary(pb, type = "bc")
+#' confint(pb, type = "bc")
 #' }
 #'
 #' @family Simulation of State Space Models Data Functions

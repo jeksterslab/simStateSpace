@@ -51,7 +51,7 @@
 #' psi_l <- t(chol(psi))
 #'
 #' boot <- PBSSMVARFixed(
-#'   R = 10L,
+#'   R = 1000L,
 #'   path = getwd(),
 #'   prefix = "var",
 #'   n = n,
@@ -65,11 +65,14 @@
 #'   ncores = parallel::detectCores() - 1,
 #'   seed = 42
 #' )
-#' print(boot)
-#' summary(boot)
-#' vcov(boot)
-#' coef(boot)
-#' confint(boot)
+#' print(pb)
+#' summary(pb)
+#' confint(pb)
+#' vcov(pb)
+#' coef(pb)
+#' print(pb, type = "bc") # bias-corrected
+#' summary(pb, type = "bc")
+#' confint(pb, type = "bc")
 #' }
 #'
 #' @family Simulation of State Space Models Data Functions
