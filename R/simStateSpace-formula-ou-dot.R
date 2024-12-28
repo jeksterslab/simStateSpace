@@ -14,6 +14,7 @@
             seq_len(p),
             " - mu_",
             seq_len(p),
+            "_1",
             "))",
             collapse = " + "
           )
