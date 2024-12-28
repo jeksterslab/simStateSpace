@@ -9,7 +9,8 @@
   params_int <- matrix(
     data = paste0(
       "nu_",
-      seq_len(k)
+      seq_len(k),
+      "_1"
     ),
     ncol = 1
   )
