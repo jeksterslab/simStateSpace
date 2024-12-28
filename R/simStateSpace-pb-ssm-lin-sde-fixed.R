@@ -79,7 +79,7 @@
 #'       \eqn{\boldsymbol{\hat{\theta}}}.}
 #'     \item{fun}{Function used ("PBSSMLinSDEFixed").}
 #'   }
-#'
+#'    
 #' @examples
 #' \dontrun{
 #' # prepare parameters

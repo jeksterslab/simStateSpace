@@ -13,7 +13,8 @@
       "mu0_",
       seq_len(
         length(mu0)
-      )
+      ),
+      "_1"
     )
   }
   if (sigma0_fixed) {

@@ -187,3 +187,62 @@ confint.statespacepb <- function(object,
     ci
   )
 }
+
+#' Extract Generic Function
+#'
+#' A generic function for extracting elements from objects.
+#'
+#' @param object An object.
+#' @param what Character string.
+#' @return A value determined by the specific method for the object's class.
+#' @keywords methods
+#' @export
+extract <- function(object,
+                    what) {
+  UseMethod("extract")
+}
+
+#' Extract Method for an Object of Class
+#' `statespacepb`
+#'
+#' @author Ivan Jacob Agaloos Pesigan
+#'
+#' @return Returns a list.
+#'   Each element of the list
+#'   is a list of bootstrap estimates
+#'   in matrix format.
+#'
+#' @param object Object of Class `statespacepb`.
+#' @param what Character string.
+#'   What specific matrix to extract.
+#'   If `what = NULL`,
+#'   extract all available matrices.
+#'
+#' @keywords methods
+#' @export
+#' @method extract statespacepb
+extract.statespacepb <- function(object,
+                                 what = NULL) {
+  output <- lapply(
+    X = object$thetahatstar,
+    FUN = function(i) {
+      return(
+        .Vec2Mat(x = i)
+      )
+    }
+  )
+  if (is.null(what)) {
+    return(
+      output
+    )
+  } else {
+    return(
+      lapply(
+        X = output,
+        FUN = function(i) {
+          i[[what]]
+        }
+      )
+    )
+  }
+}
