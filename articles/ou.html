@@ -61,7 +61,7 @@
                         <h4 data-toc-skip class="author">Ivan Jacob
 Agaloos Pesigan</h4>
             
-            <h4 data-toc-skip class="date">2024-12-27</h4>
+            <h4 data-toc-skip class="date">2024-12-29</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/jeksterslab/simStateSpace/blob/main/vignettes/ou.Rmd"><code>vignettes/ou.Rmd</code></a></small>
       <div class="d-none name"><code>ou.Rmd</code></div>
@@ -409,13 +409,13 @@ be given by</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dynr_initial</span> <span class="op">&lt;-</span> <span class="fu">dynr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/dynr/man/prep.initial.html" class="external-link">prep.initial</a></span><span class="op">(</span></span>
 <span>  values.inistate <span class="op">=</span> <span class="va">mu0</span>,</span>
-<span>  params.inistate <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mu0_1"</span>, <span class="st">"mu0_2"</span>, <span class="st">"mu0_3"</span><span class="op">)</span>,</span>
+<span>  params.inistate <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mu0_1_1"</span>, <span class="st">"mu0_2_1"</span>, <span class="st">"mu0_3_1"</span><span class="op">)</span>,</span>
 <span>  values.inicov <span class="op">=</span> <span class="va">sigma0</span>,</span>
 <span>  params.inicov <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span></span>
 <span>    data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span>      <span class="st">"sigma0_11"</span>, <span class="st">"sigma0_12"</span>, <span class="st">"sigma0_13"</span>,</span>
-<span>      <span class="st">"sigma0_12"</span>, <span class="st">"sigma0_22"</span>, <span class="st">"sigma0_23"</span>,</span>
-<span>      <span class="st">"sigma0_13"</span>, <span class="st">"sigma0_23"</span>, <span class="st">"sigma0_33"</span></span>
+<span>      <span class="st">"sigma0_1_1"</span>, <span class="st">"sigma0_2_1"</span>, <span class="st">"sigma0_3_1"</span>,</span>
+<span>      <span class="st">"sigma0_2_1"</span>, <span class="st">"sigma0_2_2"</span>, <span class="st">"sigma0_3_2"</span>,</span>
+<span>      <span class="st">"sigma0_3_1"</span>, <span class="st">"sigma0_3_2"</span>, <span class="st">"sigma0_3_3"</span></span>
 <span>    <span class="op">)</span>,</span>
 <span>    nrow <span class="op">=</span> <span class="fl">3</span></span>
 <span>  <span class="op">)</span></span>
@@ -438,15 +438,15 @@ be given by</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dynr_dynamics</span> <span class="op">&lt;-</span> <span class="fu">dynr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/dynr/man/prep.formulaDynamics.html" class="external-link">prep.formulaDynamics</a></span><span class="op">(</span></span>
 <span>  formula <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>  </span>
-<span>    <span class="va">eta_1</span> <span class="op">~</span> <span class="op">(</span><span class="va">phi_11</span> <span class="op">*</span> <span class="op">(</span><span class="va">eta_1</span> <span class="op">-</span> <span class="va">mu_1</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="op">(</span><span class="va">phi_12</span> <span class="op">*</span> <span class="op">(</span><span class="va">eta_2</span> <span class="op">-</span> <span class="va">mu_2</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="op">(</span><span class="va">phi_13</span> <span class="op">*</span> <span class="op">(</span><span class="va">eta_3</span> <span class="op">-</span> <span class="va">mu_3</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>    <span class="va">eta_2</span> <span class="op">~</span> <span class="op">(</span><span class="va">phi_21</span> <span class="op">*</span> <span class="op">(</span><span class="va">eta_1</span> <span class="op">-</span> <span class="va">mu_1</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="op">(</span><span class="va">phi_22</span> <span class="op">*</span> <span class="op">(</span><span class="va">eta_2</span> <span class="op">-</span> <span class="va">mu_2</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="op">(</span><span class="va">phi_23</span> <span class="op">*</span> <span class="op">(</span><span class="va">eta_3</span> <span class="op">-</span> <span class="va">mu_3</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>    <span class="va">eta_3</span> <span class="op">~</span> <span class="op">(</span><span class="va">phi_31</span> <span class="op">*</span> <span class="op">(</span><span class="va">eta_1</span> <span class="op">-</span> <span class="va">mu_1</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="op">(</span><span class="va">phi_32</span> <span class="op">*</span> <span class="op">(</span><span class="va">eta_2</span> <span class="op">-</span> <span class="va">mu_2</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="op">(</span><span class="va">phi_33</span> <span class="op">*</span> <span class="op">(</span><span class="va">eta_3</span> <span class="op">-</span> <span class="va">mu_3</span><span class="op">)</span><span class="op">)</span></span>
+<span>    <span class="va">eta_1</span> <span class="op">~</span> <span class="op">(</span><span class="va">phi_1_1</span> <span class="op">*</span> <span class="op">(</span><span class="va">eta_1</span> <span class="op">-</span> <span class="va">mu_1_1</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="op">(</span><span class="va">phi_1_2</span> <span class="op">*</span> <span class="op">(</span><span class="va">eta_2</span> <span class="op">-</span> <span class="va">mu_2_1</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="op">(</span><span class="va">phi_1_3</span> <span class="op">*</span> <span class="op">(</span><span class="va">eta_3</span> <span class="op">-</span> <span class="va">mu_3_1</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>    <span class="va">eta_2</span> <span class="op">~</span> <span class="op">(</span><span class="va">phi_2_1</span> <span class="op">*</span> <span class="op">(</span><span class="va">eta_1</span> <span class="op">-</span> <span class="va">mu_1_1</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="op">(</span><span class="va">phi_2_2</span> <span class="op">*</span> <span class="op">(</span><span class="va">eta_2</span> <span class="op">-</span> <span class="va">mu_2_1</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="op">(</span><span class="va">phi_2_3</span> <span class="op">*</span> <span class="op">(</span><span class="va">eta_3</span> <span class="op">-</span> <span class="va">mu_3_1</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>    <span class="va">eta_3</span> <span class="op">~</span> <span class="op">(</span><span class="va">phi_3_1</span> <span class="op">*</span> <span class="op">(</span><span class="va">eta_1</span> <span class="op">-</span> <span class="va">mu_1_1</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="op">(</span><span class="va">phi_3_2</span> <span class="op">*</span> <span class="op">(</span><span class="va">eta_2</span> <span class="op">-</span> <span class="va">mu_2_1</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="op">(</span><span class="va">phi_3_3</span> <span class="op">*</span> <span class="op">(</span><span class="va">eta_3</span> <span class="op">-</span> <span class="va">mu_3_1</span><span class="op">)</span><span class="op">)</span></span>
 <span>  <span class="op">)</span>,</span>
 <span>  startval <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span>    mu_1 <span class="op">=</span> <span class="va">mu</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, mu_2 <span class="op">=</span> <span class="va">mu</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, mu_3 <span class="op">=</span> <span class="va">mu</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span>,</span>
-<span>    phi_11 <span class="op">=</span> <span class="va">phi</span><span class="op">[</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">]</span>, phi_12 <span class="op">=</span> <span class="va">phi</span><span class="op">[</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">]</span>, phi_13 <span class="op">=</span> <span class="va">phi</span><span class="op">[</span><span class="fl">1</span>, <span class="fl">3</span><span class="op">]</span>,</span>
-<span>    phi_21 <span class="op">=</span> <span class="va">phi</span><span class="op">[</span><span class="fl">2</span>, <span class="fl">1</span><span class="op">]</span>, phi_22 <span class="op">=</span> <span class="va">phi</span><span class="op">[</span><span class="fl">2</span>, <span class="fl">2</span><span class="op">]</span>, phi_23 <span class="op">=</span> <span class="va">phi</span><span class="op">[</span><span class="fl">2</span>, <span class="fl">3</span><span class="op">]</span>,</span>
-<span>    phi_31 <span class="op">=</span> <span class="va">phi</span><span class="op">[</span><span class="fl">3</span>, <span class="fl">1</span><span class="op">]</span>, phi_32 <span class="op">=</span> <span class="va">phi</span><span class="op">[</span><span class="fl">3</span>, <span class="fl">2</span><span class="op">]</span>, phi_33 <span class="op">=</span> <span class="va">phi</span><span class="op">[</span><span class="fl">3</span>, <span class="fl">3</span><span class="op">]</span></span>
+<span>    mu_1_1 <span class="op">=</span> <span class="va">mu</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, mu_2_1 <span class="op">=</span> <span class="va">mu</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, mu_3_1 <span class="op">=</span> <span class="va">mu</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span>,</span>
+<span>    phi_1_1 <span class="op">=</span> <span class="va">phi</span><span class="op">[</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">]</span>, phi_1_2 <span class="op">=</span> <span class="va">phi</span><span class="op">[</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">]</span>, phi_1_3 <span class="op">=</span> <span class="va">phi</span><span class="op">[</span><span class="fl">1</span>, <span class="fl">3</span><span class="op">]</span>,</span>
+<span>    phi_2_1 <span class="op">=</span> <span class="va">phi</span><span class="op">[</span><span class="fl">2</span>, <span class="fl">1</span><span class="op">]</span>, phi_2_2 <span class="op">=</span> <span class="va">phi</span><span class="op">[</span><span class="fl">2</span>, <span class="fl">2</span><span class="op">]</span>, phi_2_3 <span class="op">=</span> <span class="va">phi</span><span class="op">[</span><span class="fl">2</span>, <span class="fl">3</span><span class="op">]</span>,</span>
+<span>    phi_3_1 <span class="op">=</span> <span class="va">phi</span><span class="op">[</span><span class="fl">3</span>, <span class="fl">1</span><span class="op">]</span>, phi_3_2 <span class="op">=</span> <span class="va">phi</span><span class="op">[</span><span class="fl">3</span>, <span class="fl">2</span><span class="op">]</span>, phi_3_3 <span class="op">=</span> <span class="va">phi</span><span class="op">[</span><span class="fl">3</span>, <span class="fl">3</span><span class="op">]</span></span>
 <span>  <span class="op">)</span>,</span>
 <span>  isContinuousTime <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -459,18 +459,18 @@ be given by</p>
 <span>  values.latent <span class="op">=</span> <span class="va">sigma</span>,</span>
 <span>  params.latent <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span></span>
 <span>    data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span>      <span class="st">"sigma_11"</span>, <span class="st">"sigma_12"</span>, <span class="st">"sigma_13"</span>,</span>
-<span>      <span class="st">"sigma_12"</span>, <span class="st">"sigma_22"</span>, <span class="st">"sigma_23"</span>,</span>
-<span>      <span class="st">"sigma_13"</span>, <span class="st">"sigma_23"</span>, <span class="st">"sigma_33"</span></span>
+<span>      <span class="st">"sigma_1_1"</span>, <span class="st">"sigma_2_1"</span>, <span class="st">"sigma_3_1"</span>,</span>
+<span>      <span class="st">"sigma_2_1"</span>, <span class="st">"sigma_2_2"</span>, <span class="st">"sigma_3_2"</span>,</span>
+<span>      <span class="st">"sigma_3_1"</span>, <span class="st">"sigma_3_2"</span>, <span class="st">"sigma_3_3"</span></span>
 <span>    <span class="op">)</span>,</span>
 <span>    nrow <span class="op">=</span> <span class="fl">3</span></span>
 <span>  <span class="op">)</span>,</span>
 <span>  values.observed <span class="op">=</span> <span class="va">theta</span>,</span>
 <span>  params.observed <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span></span>
 <span>    data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span>      <span class="st">"theta_11"</span>, <span class="st">"fixed"</span>, <span class="st">"fixed"</span>,</span>
-<span>      <span class="st">"fixed"</span>, <span class="st">"theta_22"</span>, <span class="st">"fixed"</span>,</span>
-<span>      <span class="st">"fixed"</span>, <span class="st">"fixed"</span>, <span class="st">"theta_33"</span></span>
+<span>      <span class="st">"theta_1_1"</span>, <span class="st">"fixed"</span>, <span class="st">"fixed"</span>,</span>
+<span>      <span class="st">"fixed"</span>, <span class="st">"theta_2_2"</span>, <span class="st">"fixed"</span>,</span>
+<span>      <span class="st">"fixed"</span>, <span class="st">"fixed"</span>, <span class="st">"theta_3_3"</span></span>
 <span>    <span class="op">)</span>,</span>
 <span>    nrow <span class="op">=</span> <span class="fl">3</span></span>
 <span>  <span class="op">)</span></span>
@@ -492,28 +492,28 @@ be given by</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">model</span><span class="op">$</span><span class="va">lb</span><span class="op">[</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span>    <span class="st">"phi_11"</span>,</span>
-<span>    <span class="st">"phi_12"</span>,</span>
-<span>    <span class="st">"phi_13"</span>,</span>
-<span>    <span class="st">"phi_21"</span>,</span>
-<span>    <span class="st">"phi_22"</span>,</span>
-<span>    <span class="st">"phi_23"</span>,</span>
-<span>    <span class="st">"phi_31"</span>,</span>
-<span>    <span class="st">"phi_32"</span>,</span>
-<span>    <span class="st">"phi_33"</span></span>
+<span>    <span class="st">"phi_1_1"</span>,</span>
+<span>    <span class="st">"phi_1_2"</span>,</span>
+<span>    <span class="st">"phi_1_3"</span>,</span>
+<span>    <span class="st">"phi_2_1"</span>,</span>
+<span>    <span class="st">"phi_2_2"</span>,</span>
+<span>    <span class="st">"phi_2_3"</span>,</span>
+<span>    <span class="st">"phi_3_1"</span>,</span>
+<span>    <span class="st">"phi_3_2"</span>,</span>
+<span>    <span class="st">"phi_3_3"</span></span>
 <span>  <span class="op">)</span></span>
 <span><span class="op">]</span> <span class="op">&lt;-</span> <span class="op">-</span><span class="fl">1.5</span></span>
 <span><span class="va">model</span><span class="op">$</span><span class="va">ub</span><span class="op">[</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span>    <span class="st">"phi_11"</span>,</span>
-<span>    <span class="st">"phi_12"</span>,</span>
-<span>    <span class="st">"phi_13"</span>,</span>
-<span>    <span class="st">"phi_21"</span>,</span>
-<span>    <span class="st">"phi_22"</span>,</span>
-<span>    <span class="st">"phi_23"</span>,</span>
-<span>    <span class="st">"phi_31"</span>,</span>
-<span>    <span class="st">"phi_32"</span>,</span>
-<span>    <span class="st">"phi_33"</span></span>
+<span>    <span class="st">"phi_1_1"</span>,</span>
+<span>    <span class="st">"phi_1_2"</span>,</span>
+<span>    <span class="st">"phi_1_3"</span>,</span>
+<span>    <span class="st">"phi_2_1"</span>,</span>
+<span>    <span class="st">"phi_2_2"</span>,</span>
+<span>    <span class="st">"phi_2_3"</span>,</span>
+<span>    <span class="st">"phi_3_1"</span>,</span>
+<span>    <span class="st">"phi_3_2"</span>,</span>
+<span>    <span class="st">"phi_3_3"</span></span>
 <span>  <span class="op">)</span></span>
 <span><span class="op">]</span> <span class="op">&lt;-</span> <span class="op">+</span><span class="fl">1.5</span></span></code></pre></div>
 <p><img src="fig-vignettes-ou-model-ou-1.png" width="3300"></p>
@@ -549,8 +549,8 @@ be given by</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Doing end processing</span></span>
 <span><span class="co">#&gt; Successful trial</span></span>
-<span><span class="co">#&gt; Total Time: 7.240891 </span></span>
-<span><span class="co">#&gt; Backend Time: 7.228775</span></span></code></pre></div>
+<span><span class="co">#&gt; Total Time: 7.213 </span></span>
+<span><span class="co">#&gt; Backend Time: 7.201146</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -559,37 +559,37 @@ be given by</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">results</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Coefficients:</span></span>
-<span><span class="co">#&gt;            Estimate Std. Error t value  ci.lower  ci.upper Pr(&gt;|t|)    </span></span>
-<span><span class="co">#&gt; mu_1       0.054809   0.051341   1.068 -0.045818  0.155436   0.1429    </span></span>
-<span><span class="co">#&gt; mu_2       0.097001   0.086113   1.126 -0.071777  0.265778   0.1300    </span></span>
-<span><span class="co">#&gt; mu_3       0.049940   0.057135   0.874 -0.062042  0.161922   0.1911    </span></span>
-<span><span class="co">#&gt; phi_11    -0.434506   0.180354  -2.409 -0.787994 -0.081018   0.0080 ** </span></span>
-<span><span class="co">#&gt; phi_12     0.024673   0.154258   0.160 -0.277668  0.327013   0.4365    </span></span>
-<span><span class="co">#&gt; phi_13    -0.054549   0.126095  -0.433 -0.301690  0.192592   0.3327    </span></span>
-<span><span class="co">#&gt; phi_21     0.841798   0.116934   7.199  0.612611  1.070985   &lt;2e-16 ***</span></span>
-<span><span class="co">#&gt; phi_22    -0.601752   0.102169  -5.890 -0.802000 -0.401504   &lt;2e-16 ***</span></span>
-<span><span class="co">#&gt; phi_23     0.109926   0.083850   1.311 -0.054416  0.274269   0.0950 .  </span></span>
-<span><span class="co">#&gt; phi_31    -0.370295   0.114555  -3.232 -0.594819 -0.145771   0.0006 ***</span></span>
-<span><span class="co">#&gt; phi_32     0.660945   0.099134   6.667  0.466647  0.855243   &lt;2e-16 ***</span></span>
-<span><span class="co">#&gt; phi_33    -0.660618   0.081176  -8.138 -0.819720 -0.501517   &lt;2e-16 ***</span></span>
-<span><span class="co">#&gt; sigma_11   0.251104   0.031869   7.879  0.188642  0.313566   &lt;2e-16 ***</span></span>
-<span><span class="co">#&gt; sigma_12   0.020493   0.012759   1.606 -0.004513  0.045499   0.0541 .  </span></span>
-<span><span class="co">#&gt; sigma_13  -0.062261   0.012982  -4.796 -0.087706 -0.036816   &lt;2e-16 ***</span></span>
-<span><span class="co">#&gt; sigma_22   0.085336   0.010363   8.234  0.065024  0.105648   &lt;2e-16 ***</span></span>
-<span><span class="co">#&gt; sigma_23   0.009576   0.006803   1.408 -0.003758  0.022909   0.0797 .  </span></span>
-<span><span class="co">#&gt; sigma_33   0.078206   0.009743   8.027  0.059110  0.097303   &lt;2e-16 ***</span></span>
-<span><span class="co">#&gt; theta_11   0.196892   0.005250  37.504  0.186603  0.207182   &lt;2e-16 ***</span></span>
-<span><span class="co">#&gt; theta_22   0.185897   0.004255  43.687  0.177557  0.194237   &lt;2e-16 ***</span></span>
-<span><span class="co">#&gt; theta_33   0.202480   0.004592  44.090  0.193479  0.211481   &lt;2e-16 ***</span></span>
-<span><span class="co">#&gt; mu0_1     -0.366034   0.327590  -1.117 -1.008099  0.276031   0.1319    </span></span>
-<span><span class="co">#&gt; mu0_2     -0.409253   0.397704  -1.029 -1.188738  0.370233   0.1518    </span></span>
-<span><span class="co">#&gt; mu0_3      0.214973   0.314431   0.684 -0.401300  0.831246   0.2471    </span></span>
-<span><span class="co">#&gt; sigma0_11  0.470529   0.340595   1.381 -0.197025  1.138083   0.0836 .  </span></span>
-<span><span class="co">#&gt; sigma0_12  0.299659   0.323106   0.927 -0.333617  0.932935   0.1769    </span></span>
-<span><span class="co">#&gt; sigma0_13  0.231906   0.254674   0.911 -0.267246  0.731058   0.1813    </span></span>
-<span><span class="co">#&gt; sigma0_22  0.744386   0.505722   1.472 -0.246811  1.735582   0.0706 .  </span></span>
-<span><span class="co">#&gt; sigma0_23  0.485843   0.352649   1.378 -0.205336  1.177023   0.0842 .  </span></span>
-<span><span class="co">#&gt; sigma0_33  0.442882   0.313556   1.412 -0.171676  1.057439   0.0789 .  </span></span>
+<span><span class="co">#&gt;             Estimate Std. Error t value  ci.lower  ci.upper Pr(&gt;|t|)    </span></span>
+<span><span class="co">#&gt; mu_1_1      0.054809   0.051341   1.068 -0.045818  0.155436   0.1429    </span></span>
+<span><span class="co">#&gt; mu_2_1      0.097001   0.086113   1.126 -0.071777  0.265778   0.1300    </span></span>
+<span><span class="co">#&gt; mu_3_1      0.049940   0.057135   0.874 -0.062042  0.161922   0.1911    </span></span>
+<span><span class="co">#&gt; phi_1_1    -0.434506   0.180354  -2.409 -0.787994 -0.081018   0.0080 ** </span></span>
+<span><span class="co">#&gt; phi_1_2     0.024673   0.154258   0.160 -0.277668  0.327013   0.4365    </span></span>
+<span><span class="co">#&gt; phi_1_3    -0.054549   0.126095  -0.433 -0.301690  0.192592   0.3327    </span></span>
+<span><span class="co">#&gt; phi_2_1     0.841798   0.116934   7.199  0.612611  1.070985   &lt;2e-16 ***</span></span>
+<span><span class="co">#&gt; phi_2_2    -0.601752   0.102169  -5.890 -0.802000 -0.401504   &lt;2e-16 ***</span></span>
+<span><span class="co">#&gt; phi_2_3     0.109926   0.083850   1.311 -0.054416  0.274269   0.0950 .  </span></span>
+<span><span class="co">#&gt; phi_3_1    -0.370295   0.114555  -3.232 -0.594819 -0.145771   0.0006 ***</span></span>
+<span><span class="co">#&gt; phi_3_2     0.660945   0.099134   6.667  0.466647  0.855243   &lt;2e-16 ***</span></span>
+<span><span class="co">#&gt; phi_3_3    -0.660618   0.081176  -8.138 -0.819720 -0.501517   &lt;2e-16 ***</span></span>
+<span><span class="co">#&gt; sigma_1_1   0.251104   0.031869   7.879  0.188642  0.313566   &lt;2e-16 ***</span></span>
+<span><span class="co">#&gt; sigma_2_1   0.020493   0.012759   1.606 -0.004513  0.045499   0.0541 .  </span></span>
+<span><span class="co">#&gt; sigma_3_1  -0.062261   0.012982  -4.796 -0.087706 -0.036816   &lt;2e-16 ***</span></span>
+<span><span class="co">#&gt; sigma_2_2   0.085336   0.010363   8.234  0.065024  0.105648   &lt;2e-16 ***</span></span>
+<span><span class="co">#&gt; sigma_3_2   0.009576   0.006803   1.408 -0.003758  0.022909   0.0797 .  </span></span>
+<span><span class="co">#&gt; sigma_3_3   0.078206   0.009743   8.027  0.059110  0.097303   &lt;2e-16 ***</span></span>
+<span><span class="co">#&gt; theta_1_1   0.196892   0.005250  37.504  0.186603  0.207182   &lt;2e-16 ***</span></span>
+<span><span class="co">#&gt; theta_2_2   0.185897   0.004255  43.687  0.177557  0.194237   &lt;2e-16 ***</span></span>
+<span><span class="co">#&gt; theta_3_3   0.202480   0.004592  44.090  0.193479  0.211481   &lt;2e-16 ***</span></span>
+<span><span class="co">#&gt; mu0_1_1    -0.366034   0.327590  -1.117 -1.008099  0.276031   0.1319    </span></span>
+<span><span class="co">#&gt; mu0_2_1    -0.409253   0.397704  -1.029 -1.188738  0.370233   0.1518    </span></span>
+<span><span class="co">#&gt; mu0_3_1     0.214973   0.314431   0.684 -0.401300  0.831246   0.2471    </span></span>
+<span><span class="co">#&gt; sigma0_1_1  0.470529   0.340595   1.381 -0.197025  1.138083   0.0836 .  </span></span>
+<span><span class="co">#&gt; sigma0_2_1  0.299659   0.323106   0.927 -0.333617  0.932935   0.1769    </span></span>
+<span><span class="co">#&gt; sigma0_3_1  0.231906   0.254674   0.911 -0.267246  0.731058   0.1813    </span></span>
+<span><span class="co">#&gt; sigma0_2_2  0.744386   0.505722   1.472 -0.246811  1.735582   0.0706 .  </span></span>
+<span><span class="co">#&gt; sigma0_3_2  0.485843   0.352649   1.378 -0.205336  1.177023   0.0842 .  </span></span>
+<span><span class="co">#&gt; sigma0_3_3  0.442882   0.313556   1.412 -0.171676  1.057439   0.0789 .  </span></span>
 <span><span class="co">#&gt; ---</span></span>
 <span><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span>
 <span><span class="co">#&gt; </span></span>
