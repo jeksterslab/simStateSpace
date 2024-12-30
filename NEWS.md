@@ -2,7 +2,7 @@
 
 ## Patch
 
-* Added the `PBSSMLinSDEFixed()`, `PBSSMOUFixed()`, and `PBSSMVARFixed()` functions.
+* Added the `PBSSMFixed()`, `PBSSMVARFixed()`, `PBSSMLinSDEFixed()`, and `PBSSMOUFixed()` functions.
 * Added `SystemRequirements: GSL (>= 2.6)` in the DESCRIPTION file for the `dynr` package.
 
 # simStateSpace 1.2.3

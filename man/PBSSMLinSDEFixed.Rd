@@ -593,6 +593,7 @@ Cambridge University Press.
 \seealso{
 Other Simulation of State Space Models Data Functions: 
 \code{\link{LinSDE2SSM}()},
+\code{\link{PBSSMFixed}()},
 \code{\link{PBSSMOUFixed}()},
 \code{\link{PBSSMVARFixed}()},
 \code{\link{SimBetaN}()},
