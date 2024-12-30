@@ -1,7 +1,7 @@
 ---
 title: "The Ornstein–Uhlenbeck Model"
 author: "Ivan Jacob Agaloos Pesigan"
-date: "2024-12-29"
+date: "2024-12-30"
 bibliography: "vignettes.bib"
 csl: https://raw.githubusercontent.com/citation-style-language/styles/master/apa.csl
 nocite: |
@@ -518,8 +518,8 @@ results <- dynr::dynr.cook(
 #> 
 #> Doing end processing
 #> Successful trial
-#> Total Time: 7.213 
-#> Backend Time: 7.201146
+#> Total Time: 7.098982 
+#> Backend Time: 7.086891
 ```
 
 ## Summary
