@@ -198,6 +198,7 @@ Cambridge University Press.
 }
 \seealso{
 Other Simulation of State Space Models Data Functions: 
+\code{\link{PBSSMFixed}()},
 \code{\link{PBSSMLinSDEFixed}()},
 \code{\link{PBSSMOUFixed}()},
 \code{\link{PBSSMVARFixed}()},

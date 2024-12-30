@@ -16,55 +16,9 @@
 #' @author Ivan Jacob Agaloos Pesigan
 #'
 #' @inheritParams SimSSMLinSDEFixed
+#' @inheritParams PBSSMFixed
 #' @inheritParams dynr::dynr.cook
 #' @inherit SimSSMLinSDEFixed references details
-#' @param R Positive integer.
-#'   Number of bootstrap samples.
-#' @param path Path to a directory
-#'   to store bootstrap samples and estimates.
-#' @param prefix Character string.
-#'   Prefix used for the file names
-#'   for the bootstrap samples and estimates.
-#' @param mu0_fixed Logical.
-#'   If `mu0_fixed = TRUE`,
-#'   fix the initial mean vector
-#'   to `mu0`.
-#'   If `mu0_fixed = FALSE`,
-#'   `mu0` is estimated.
-#' @param sigma0_fixed Logical.
-#'   If `sigma0_fixed = TRUE`,
-#'   fix the initial covariance matrix
-#'   to `tcrossprod(sigma0_l)`.
-#'   If `sigma0_fixed = FALSE`,
-#'   `sigma0` is estimated.
-#' @param alpha_level Numeric vector.
-#'   Significance level \eqn{\alpha}.
-#' @param ncores Positive integer.
-#'   Number of cores to use.
-#'   If `ncores = NULL`,
-#'   use a single core.
-#'   Consider using multiple cores
-#'   when number of bootstrap samples `R`
-#'   is a large value.
-#' @param seed Random seed.
-#' @param xtol_rel Stopping criteria option
-#'   for parameter optimization.
-#'   See [dynr::dynr.model()] for more details.
-#' @param stopval Stopping criteria option
-#'   for parameter optimization.
-#'   See [dynr::dynr.model()] for more details.
-#' @param ftol_rel Stopping criteria option
-#'   for parameter optimization.
-#'   See [dynr::dynr.model()] for more details.
-#' @param ftol_abs Stopping criteria option
-#'   for parameter optimization.
-#'   See [dynr::dynr.model()] for more details.
-#' @param maxeval Stopping criteria option
-#'   for parameter optimization.
-#'   See [dynr::dynr.model()] for more details.
-#' @param maxtime Stopping criteria option
-#'   for parameter optimization.
-#'   See [dynr::dynr.model()] for more details.
 #'
 #' @return Returns an object
 #'   of class `statespacepb` which is a list with the following elements:
