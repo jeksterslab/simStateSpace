@@ -1,7 +1,7 @@
 ---
 title: "The Linear Growth Curve Model"
 author: "Ivan Jacob Agaloos Pesigan"
-date: "2024-12-30"
+date: "2025-01-01"
 bibliography: "vignettes.bib"
 csl: https://raw.githubusercontent.com/citation-style-language/styles/master/apa.csl
 nocite: |
@@ -331,7 +331,7 @@ results <- dynr::dynr.cook(
   verbose = FALSE
 )
 #> [1] "Get ready!!!!"
-#> using C compiler: ‘gcc (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0’
+#> using C compiler: ‘gcc (Ubuntu 13.3.0-6ubuntu2~24.04) 13.3.0’
 #> Optimization function called.
 #> Starting Hessian calculation ...
 #> Finished Hessian calculation.
@@ -346,8 +346,8 @@ results <- dynr::dynr.cook(
 #> 
 #> Doing end processing
 #> Successful trial
-#> Total Time: 1.48677 
-#> Backend Time: 1.476792
+#> Total Time: 1.619885 
+#> Backend Time: 1.609797
 ```
 
 ## Summary

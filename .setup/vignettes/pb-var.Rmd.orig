@@ -263,7 +263,7 @@ psi_l
 ### Parametric Bootstrap
 
 ```{r}
-R <- 1000L
+R <- 5000L
 path <- getwd()
 prefix <- "var"
 ```
