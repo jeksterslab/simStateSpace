@@ -1,3 +1,9 @@
+# simStateSpace 1.2.5
+
+## Patch
+
+* Removed long running tests.
+
 # simStateSpace 1.2.4
 
 ## Patch
