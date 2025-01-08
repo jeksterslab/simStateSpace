@@ -335,12 +335,15 @@ time
 delta_t
 mu0
 sigma0
+sigma0_l # sigma0_l <- t(chol(sigma0))
 mu
 phi
 sigma
+sigma_l # sigma_l <- t(chol(sigma))
 nu
 lambda
 theta
+theta_l # theta_l <- t(chol(theta))
 ```
 
 ### Visualizing the Dynamics Without Measurement Error and Process Noise (n = 5 with Different Initial Condition)
@@ -642,7 +645,7 @@ beta_var1_hat
 
 ```{r}
 #| include = FALSE
-unlink(c("ou.c", "ou.s", "ou.so"))
+unlink(c("ou.c", "ou.s", "ou.so", "ou.o"))
 ```
 
 ```{r}

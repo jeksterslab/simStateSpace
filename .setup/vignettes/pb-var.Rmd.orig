@@ -253,11 +253,11 @@ n
 time
 mu0
 sigma0
-sigma0_l
+sigma0_l # sigma0_l <- t(chol(sigma0))
 alpha
 beta
 psi
-psi_l
+psi_l # psi_l <- t(chol(psi))
 ```
 
 ### Parametric Bootstrap
@@ -272,6 +272,8 @@ We use the `PBSSMVARFixed` function from the `simStateSpace` package to perform 
 The argument `R` specifies the number of bootstrap replications.
 The generated data and model estimates are be stored in `path` using the specified `prefix` for the file names.
 The `ncores = parallel::detectCores()` argument instructs the function to use all available CPU cores in the system.
+
+> **_NOTE:_**  Fitting the VAR model multiple times is computationally intensive. 
 
 ```{r}
 library(simStateSpace)

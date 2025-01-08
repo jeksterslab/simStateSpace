@@ -7,6 +7,8 @@ on:
       - completed
   workflow_dispatch:
 
+permissions: read-all
+
 jobs:
 
   R-CMD-check:
@@ -29,8 +31,8 @@ jobs:
           - {os: windows-latest, r: 'release'}
           # Use 3.6 to trigger usage of RTools35
           - {os: windows-latest, r: '3.6'}
-          # use 4.1 to check with rtools40's older compiler
-          - {os: windows-latest, r: '4.1'}
+          # use 4.0 or 4.1 to check with rtools40's older compiler
+          - {os: windows-latest, r: 'oldrel-4'}
           # ubuntu
           - {os: ubuntu-latest,  r: 'devel', http-user-agent: 'release'}
           - {os: ubuntu-latest,  r: 'release'}

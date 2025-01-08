@@ -253,11 +253,11 @@ n
 time
 mu0
 sigma0
-sigma0_l
+sigma0_l # sigma0_l <- t(chol(sigma0))
 alpha
 beta
 psi
-psi_l
+psi_l # psi_l <- t(chol(psi))
 ```
 
 ### Visualizing the Dynamics Without Process Noise (n = 5 with Different Initial Condition)
@@ -503,7 +503,7 @@ sigma0_hat
 
 ```{r}
 #| include = FALSE
-unlink(c("var.c", "var.s", "var.so"))
+unlink(c("var.c", "var.s", "var.so", "var.o"))
 ```
 
 ```{r}

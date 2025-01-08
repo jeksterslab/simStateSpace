@@ -207,9 +207,9 @@ n
 time
 mu0
 sigma0
-sigma0_l
+sigma0_l # sigma0_l <- t(chol(sigma0))
 theta
-theta_l
+theta_l # theta_l <- t(chol(theta))
 ```
 
 ### Visualizing the Dynamics Without Measurement Error (n = 5 with Different Initial Condition)
@@ -465,7 +465,7 @@ theta_hat
 
 ```{r}
 #| include = FALSE
-unlink(c("lin-growth.c", "lin-growth.s", "lin-growth.so"))
+unlink(c("lin-growth.c", "lin-growth.s", "lin-growth.so", "lin-growth.o"))
 ```
 
 ```{r}
