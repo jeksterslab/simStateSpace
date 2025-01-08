@@ -1,5 +1,5 @@
 linters: lintr::linters_with_defaults(lintr::object_name_linter(styles = c("CamelCase", "snake_case", "symbols")))
-exclusions: list("R/RcppExports.R", "R/methods.R")
+exclusions: list("R/RcppExports.R", "R/methods.R", "R/nolint.R")
 exclude: "# Exclude Linting"
 exclude_start: "# Begin Exclude Linting"
 exclude_end: "# End Exclude Linting"

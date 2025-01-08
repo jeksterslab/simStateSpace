@@ -1,4 +1,4 @@
-# simStateSpace 1.2.6
+# simStateSpace 1.2.7
 
 ## Patch
 
