@@ -1,3 +1,11 @@
+# simStateSpace 1.2.7.9000
+
+## Patch
+
+* Latest development version.
+* Minor edits to tests.
+* Fixed `mu0_fixed` and `sigma0_fixed` bug in the `PBSSMFixed()`, `PBSSMVARFixed()`, `PBSSMLinSDEFixed()`, and `PBSSMOUFixed()` functions.
+
 # simStateSpace 1.2.7
 
 ## Patch

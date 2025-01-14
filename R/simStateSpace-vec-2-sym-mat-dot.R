@@ -1,7 +1,7 @@
 .Vec2SymMat <- function(x,
                         prefix,
-                        row_names = NULL,
-                        col_names = NULL) {
+                        row_names,
+                        col_names) {
   y <- x[
     grep(
       paste0(

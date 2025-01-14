@@ -65,7 +65,7 @@
 #'   See [dynr::dynr.model()] for more details.
 #'
 #' @return Returns an object
-#'   of class `statespacepb` which is a list with the following elements:
+#'   of class `pbstatespace` which is a list with the following elements:
 #'   \describe{
 #'     \item{call}{Function call.}
 #'     \item{args}{Function arguments.}
@@ -103,7 +103,7 @@
 #' theta_l <- t(chol(theta))
 #'
 #' pb <- PBSSMFixed(
-#'   R = 1000L,
+#'   R = 10L, # use at least 1000 in actual research
 #'   path = getwd(),
 #'   prefix = "ssm",
 #'   n = n,
@@ -118,7 +118,7 @@
 #'   lambda = lambda,
 #'   theta_l = theta_l,
 #'   type = 0,
-#'   ncores = parallel::detectCores() - 1,
+#'   ncores = 1, # consider using multiple cores
 #'   seed = 42
 #' )
 #' print(pb)
@@ -137,7 +137,7 @@
 PBSSMFixed <- function(R,
                        path,
                        prefix,
-                       n, time, delta_t = 0.1,
+                       n, time, delta_t = 1,
                        mu0, sigma0_l,
                        alpha, beta, psi_l,
                        nu, lambda, theta_l,
@@ -245,6 +245,8 @@ PBSSMFixed <- function(R,
         covariates = covariates,
         gamma = gamma,
         kappa = kappa,
+        mu0_fixed = mu0_fixed,
+        sigma0_fixed = sigma0_fixed,
         optimization_flag = optimization_flag,
         hessian_flag = hessian_flag,
         verbose = verbose,
@@ -280,6 +282,8 @@ PBSSMFixed <- function(R,
         covariates = covariates,
         gamma = gamma,
         kappa = kappa,
+        mu0_fixed = mu0_fixed,
+        sigma0_fixed = sigma0_fixed,
         optimization_flag = optimization_flag,
         hessian_flag = hessian_flag,
         verbose = verbose,
@@ -316,6 +320,8 @@ PBSSMFixed <- function(R,
       covariates = covariates,
       gamma = gamma,
       kappa = kappa,
+      mu0_fixed = mu0_fixed,
+      sigma0_fixed = sigma0_fixed,
       optimization_flag = optimization_flag,
       hessian_flag = hessian_flag,
       verbose = verbose,
@@ -345,7 +351,7 @@ PBSSMFixed <- function(R,
     fun = "PBSSMFixed"
   )
   class(out) <- c(
-    "statespacepb",
+    "pbstatespace",
     class(out)
   )
   return(
