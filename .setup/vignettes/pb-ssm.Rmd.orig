@@ -371,7 +371,7 @@ theta_l # theta_l <- t(chol(theta))
 ### Parametric Bootstrap
 
 ```{r}
-R <- 5L # use at least 1000 in actual research
+R <- 1000L # use at least 1000 in actual research
 path <- getwd()
 prefix <- "ssm"
 ```
@@ -381,11 +381,11 @@ The argument `R` specifies the number of bootstrap replications.
 The generated data and model estimates are stored in `path` using the specified `prefix` for the file names.
 The `ncores = parallel::detectCores()` argument instructs the function to use all available CPU cores in the system.
 
-> **_NOTE:_**  Fitting the state space model multiple times is computationally intensive.
+> **_NOTE:_**  Fitting the state space model multiple times is computationally intensive. 
 
 ```{r}
 library(simStateSpace)
-PBSSMFixed(
+pb <- PBSSMFixed(
   R = R,
   path = path,
   prefix = prefix,
@@ -402,6 +402,8 @@ PBSSMFixed(
   ncores = parallel::detectCores(),
   seed = 42
 )
+summary(pb)
+summary(pb, type = "bc")
 ```
 
 ## References

@@ -8,6 +8,12 @@
 
 # Define an array of directories
 directories=(
+  "/scratch/ibp5092/betaDelta"
+  "/scratch/ibp5092/betaMC"
+  "/scratch/ibp5092/betaNB"
+  "/scratch/ibp5092/betaSandwich"
+  "/scratch/ibp5092/cTMed"
+  "/scratch/ibp5092/semmcci"
   "/scratch/ibp5092/simStateSpace"
 )
 
