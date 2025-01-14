@@ -1,7 +1,7 @@
 ---
 title: "The Vector Autoregressive Model"
 author: "Ivan Jacob Agaloos Pesigan"
-date: "2025-01-02"
+date: "2025-01-14"
 bibliography: "vignettes.bib"
 csl: https://raw.githubusercontent.com/citation-style-language/styles/master/apa.csl
 nocite: |
@@ -208,7 +208,7 @@ sigma0
 #> [1,]  1.0  0.2  0.2
 #> [2,]  0.2  1.0  0.2
 #> [3,]  0.2  0.2  1.0
-sigma0_l
+sigma0_l # sigma0_l <- t(chol(sigma0))
 #>      [,1]      [,2]      [,3]
 #> [1,]  1.0 0.0000000 0.0000000
 #> [2,]  0.2 0.9797959 0.0000000
@@ -225,7 +225,7 @@ psi
 #> [1,]  0.1  0.0  0.0
 #> [2,]  0.0  0.1  0.0
 #> [3,]  0.0  0.0  0.1
-psi_l
+psi_l # psi_l <- t(chol(psi))
 #>           [,1]      [,2]      [,3]
 #> [1,] 0.3162278 0.0000000 0.0000000
 #> [2,] 0.0000000 0.3162278 0.0000000
@@ -410,8 +410,8 @@ results <- dynr::dynr.cook(
 #> 
 #> Doing end processing
 #> Successful trial
-#> Total Time: 4.188599 
-#> Backend Time: 4.176704
+#> Total Time: 3.245424 
+#> Backend Time: 3.237333
 ```
 
 ## Summary

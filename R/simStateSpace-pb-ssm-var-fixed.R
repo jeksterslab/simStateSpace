@@ -20,7 +20,7 @@
 #' @inherit SimSSMVARFixed references details
 #'
 #' @return Returns an object
-#'   of class `statespacepb` which is a list with the following elements:
+#'   of class `pbstatespace` which is a list with the following elements:
 #'   \describe{
 #'     \item{call}{Function call.}
 #'     \item{args}{Function arguments.}
@@ -51,7 +51,7 @@
 #' psi_l <- t(chol(psi))
 #'
 #' boot <- PBSSMVARFixed(
-#'   R = 1000L,
+#'   R = 10L, # use at least 1000 in actual research
 #'   path = getwd(),
 #'   prefix = "var",
 #'   n = n,
@@ -62,7 +62,7 @@
 #'   beta = beta,
 #'   psi_l = psi_l,
 #'   type = 0,
-#'   ncores = parallel::detectCores() - 1,
+#'   ncores = 1, # consider using multiple cores
 #'   seed = 42
 #' )
 #' print(pb)
@@ -274,7 +274,7 @@ PBSSMVARFixed <- function(R,
     fun = "PBSSMVARFixed"
   )
   class(out) <- c(
-    "statespacepb",
+    "pbstatespace",
     class(out)
   )
   return(

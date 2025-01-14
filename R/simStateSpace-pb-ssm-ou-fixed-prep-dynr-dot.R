@@ -6,8 +6,8 @@
                                   nu,
                                   lambda,
                                   theta_l,
-                                  mu0_fixed = FALSE,
-                                  sigma0_fixed = FALSE) {
+                                  mu0_fixed,
+                                  sigma0_fixed) {
   dynr_initial <- .DynrInitial(
     mu0 = mu0,
     sigma0_l = sigma0_l,

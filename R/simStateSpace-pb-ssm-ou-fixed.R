@@ -21,7 +21,7 @@
 #' @inherit SimSSMOUFixed references details
 #'
 #' @return Returns an object
-#'   of class `statespacepb` which is a list with the following elements:
+#'   of class `pbstatespace` which is a list with the following elements:
 #'   \describe{
 #'     \item{call}{Function call.}
 #'     \item{args}{Function arguments.}
@@ -75,7 +75,7 @@
 #' theta_l <- t(chol(theta))
 #'
 #' pb <- PBSSMOUFixed(
-#'   R = 1000L,
+#'   R = 10L, # use at least 1000 in actual research
 #'   path = getwd(),
 #'   prefix = "ou",
 #'   n = n,
@@ -90,7 +90,7 @@
 #'   lambda = lambda,
 #'   theta_l = theta_l,
 #'   type = 0,
-#'   ncores = parallel::detectCores() - 1,
+#'   ncores = 1, # consider using multiple cores
 #'   seed = 42
 #' )
 #' print(pb)
@@ -217,6 +217,8 @@ PBSSMOUFixed <- function(R,
         covariates = covariates,
         gamma = gamma,
         kappa = kappa,
+        mu0_fixed = mu0_fixed,
+        sigma0_fixed = sigma0_fixed,
         optimization_flag = optimization_flag,
         hessian_flag = hessian_flag,
         verbose = verbose,
@@ -252,6 +254,8 @@ PBSSMOUFixed <- function(R,
         covariates = covariates,
         gamma = gamma,
         kappa = kappa,
+        mu0_fixed = mu0_fixed,
+        sigma0_fixed = sigma0_fixed,
         optimization_flag = optimization_flag,
         hessian_flag = hessian_flag,
         verbose = verbose,
@@ -288,6 +292,8 @@ PBSSMOUFixed <- function(R,
       covariates = covariates,
       gamma = gamma,
       kappa = kappa,
+      mu0_fixed = mu0_fixed,
+      sigma0_fixed = sigma0_fixed,
       optimization_flag = optimization_flag,
       hessian_flag = hessian_flag,
       verbose = verbose,
@@ -317,7 +323,7 @@ PBSSMOUFixed <- function(R,
     fun = "PBSSMOUFixed"
   )
   class(out) <- c(
-    "statespacepb",
+    "pbstatespace",
     class(out)
   )
   return(

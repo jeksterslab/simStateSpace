@@ -263,17 +263,17 @@ psi_l # psi_l <- t(chol(psi))
 ### Parametric Bootstrap
 
 ```{r}
-R <- 5000L
+R <- 5L # use at least 1000 in actual research
 path <- getwd()
 prefix <- "var"
 ```
 
 We use the `PBSSMVARFixed` function from the `simStateSpace` package to perform parametric bootstraping using the parameters described above.
 The argument `R` specifies the number of bootstrap replications.
-The generated data and model estimates are be stored in `path` using the specified `prefix` for the file names.
+The generated data and model estimates are stored in `path` using the specified `prefix` for the file names.
 The `ncores = parallel::detectCores()` argument instructs the function to use all available CPU cores in the system.
 
-> **_NOTE:_**  Fitting the VAR model multiple times is computationally intensive. 
+> **_NOTE:_**  Fitting the VAR model multiple times is computationally intensive.
 
 ```{r}
 library(simStateSpace)

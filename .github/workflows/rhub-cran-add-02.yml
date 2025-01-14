@@ -1,0 +1,54 @@
+name: rhub (additional CRAN checks - 02)
+
+on:
+  workflow_run:
+    workflows: [ "Source Code" ]
+    types:
+      - completed
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_PAT: ${{ secrets.PAT }}
+    strategy:
+      fail-fast: false
+      matrix:
+        container:
+          - name: gcc13
+            image: ghcr.io/r-hub/containers/gcc13:latest
+          - name: gcc14
+            image: ghcr.io/r-hub/containers/gcc14:latest
+          - name: intel
+            image: ghcr.io/r-hub/containers/intel:latest
+          - name: mkl
+            image: ghcr.io/r-hub/containers/mkl:latest
+          - name: nold
+            image: ghcr.io/r-hub/containers/nold:latest
+          - name: noremap
+            image: ghcr.io/r-hub/containers/noremap:latest
+          - name: nosuggests
+            image: ghcr.io/r-hub/containers/nosuggests:latest
+          - name: rchk
+            image: ghcr.io/r-hub/containers/rchk:latest
+          - name: valgrind
+            image: ghcr.io/r-hub/containers/valgrind:latest
+    name: ${{ matrix.container.name }}
+    container:
+      image: ${{ matrix.container.image }}
+    steps:
+      - name: Checkout src repo
+        uses: actions/checkout@v4
+        with:
+          ref: 'src'
+
+      - name: Install dependencies
+        run: |
+          R -q -e 'if (!require("pak")) install.packages("pak", repos = sprintf("https://r-lib.github.io/p/pak/stable/%s/%s/%s", .Platform$pkgType, R.Version()$os, R.Version()$arch))'
+          R -q -e 'pak::pkg_install(c("deps::.", "any::rcmdcheck"), dependencies = TRUE)'
+
+      - name: R-CMD-check
+        uses: r-lib/actions/check-r-package@v2
+        with:
+          error-on: '"error"'

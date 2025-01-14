@@ -1,5 +1,5 @@
 #' Print Method for an Object of Class
-#' `statespacepb`
+#' `pbstatespace`
 #'
 #' @author Ivan Jacob Agaloos Pesigan
 #'
@@ -10,16 +10,16 @@
 #'   and
 #'   confidence intervals.
 #'
-#' @param x Object of Class `statespacepb`.
+#' @param x Object of Class `pbstatespace`.
 #' @param alpha Numeric vector.
 #'   Significance level \eqn{\alpha}.
 #'   If `alpha = NULL`,
 #'   use the argument `alpha` used in `x`.
-#' @inheritParams summary.statespacepb
+#' @inheritParams summary.pbstatespace
 #'
 #' @keywords methods
 #' @export
-print.statespacepb <- function(x,
+print.pbstatespace <- function(x,
                                alpha = NULL,
                                type = "pc",
                                digits = 4,
@@ -51,7 +51,7 @@ print.statespacepb <- function(x,
 }
 
 #' Summary Method for an Object of Class
-#' `statespacepb`
+#' `pbstatespace`
 #'
 #' @author Ivan Jacob Agaloos Pesigan
 #'
@@ -62,7 +62,7 @@ print.statespacepb <- function(x,
 #'   and
 #'   confidence intervals.
 #'
-#' @param object Object of Class `statespacepb`.
+#' @param object Object of Class `pbstatespace`.
 #' @param ... additional arguments.
 #' @param alpha Numeric vector.
 #'   Significance level \eqn{\alpha}.
@@ -76,7 +76,7 @@ print.statespacepb <- function(x,
 #'
 #' @keywords methods
 #' @export
-summary.statespacepb <- function(object,
+summary.pbstatespace <- function(object,
                                  alpha = NULL,
                                  type = "pc",
                                  digits = 4,
@@ -108,17 +108,17 @@ summary.statespacepb <- function(object,
 }
 
 #' Sampling Variance-Covariance Matrix Method for an Object of Class
-#' `statespacepb`
+#' `pbstatespace`
 #'
 #' @author Ivan Jacob Agaloos Pesigan
 #'
 #' @return Returns the variance-covariance matrix of estimates.
 #'
-#' @inheritParams summary.statespacepb
+#' @inheritParams summary.pbstatespace
 #'
 #' @keywords methods
 #' @export
-vcov.statespacepb <- function(object,
+vcov.pbstatespace <- function(object,
                               ...) {
   return(
     object$vcov
@@ -126,17 +126,17 @@ vcov.statespacepb <- function(object,
 }
 
 #' Estimated Parameter Method for an Object of Class
-#' `statespacepb`
+#' `pbstatespace`
 #'
 #' @author Ivan Jacob Agaloos Pesigan
 #'
 #' @return Returns a vector of estimated parameters.
 #'
-#' @inheritParams summary.statespacepb
+#' @inheritParams summary.pbstatespace
 #'
 #' @keywords methods
 #' @export
-coef.statespacepb <- function(object,
+coef.pbstatespace <- function(object,
                               ...) {
   return(
     object$est
@@ -144,13 +144,13 @@ coef.statespacepb <- function(object,
 }
 
 #' Confidence Intervals Method for an Object of Class
-#' `statespacepb`
+#' `pbstatespace`
 #'
 #' @author Ivan Jacob Agaloos Pesigan
 #'
 #' @return Returns a matrix of confidence intervals.
 #'
-#' @inheritParams summary.statespacepb
+#' @inheritParams summary.pbstatespace
 #' @param parm a specification of which parameters
 #'   are to be given confidence intervals,
 #'   either a vector of numbers or a vector of names.
@@ -159,7 +159,7 @@ coef.statespacepb <- function(object,
 #'
 #' @keywords methods
 #' @export
-confint.statespacepb <- function(object,
+confint.pbstatespace <- function(object,
                                  parm = NULL,
                                  level = 0.95,
                                  type = "pc",
@@ -203,7 +203,7 @@ extract <- function(object,
 }
 
 #' Extract Method for an Object of Class
-#' `statespacepb`
+#' `pbstatespace`
 #'
 #' @author Ivan Jacob Agaloos Pesigan
 #'
@@ -212,7 +212,7 @@ extract <- function(object,
 #'   is a list of bootstrap estimates
 #'   in matrix format.
 #'
-#' @param object Object of Class `statespacepb`.
+#' @param object Object of Class `pbstatespace`.
 #' @param what Character string.
 #'   What specific matrix to extract.
 #'   If `what = NULL`,
@@ -220,8 +220,8 @@ extract <- function(object,
 #'
 #' @keywords methods
 #' @export
-#' @method extract statespacepb
-extract.statespacepb <- function(object,
+#' @method extract pbstatespace
+extract.pbstatespace <- function(object,
                                  what = NULL) {
   output <- lapply(
     X = object$thetahatstar,

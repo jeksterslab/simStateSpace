@@ -627,6 +627,14 @@ sigma_hat <- matrix(
   ],
   nrow = 3
 )
+theta_hat <- diag(3)
+diag(theta_hat) <- estimates[
+  c(
+    "theta_1_1",
+    "theta_2_2",
+    "theta_3_3"
+  )
+]
 ```
 
 ### Parameter Estimates
@@ -635,6 +643,7 @@ sigma_hat <- matrix(
 mu_hat
 phi_hat
 sigma_hat
+theta_hat
 mu0_hat
 sigma0_hat
 beta_var1_hat <- expm::expm(phi_hat)

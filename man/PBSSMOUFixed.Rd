@@ -197,7 +197,7 @@ is a large value.}
 }
 \value{
 Returns an object
-of class \code{statespacepb} which is a list with the following elements:
+of class \code{pbstatespace} which is a list with the following elements:
 \describe{
 \item{call}{Function call.}
 \item{args}{Function arguments.}
@@ -501,7 +501,7 @@ theta <- 0.001 * diag(k)
 theta_l <- t(chol(theta))
 
 pb <- PBSSMOUFixed(
-  R = 1000L,
+  R = 10L, # use at least 1000 in actual research
   path = getwd(),
   prefix = "ou",
   n = n,
@@ -516,7 +516,7 @@ pb <- PBSSMOUFixed(
   lambda = lambda,
   theta_l = theta_l,
   type = 0,
-  ncores = parallel::detectCores() - 1,
+  ncores = 1, # consider using multiple cores
   seed = 42
 )
 print(pb)

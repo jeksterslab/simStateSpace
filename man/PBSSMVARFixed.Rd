@@ -164,7 +164,7 @@ is a large value.}
 }
 \value{
 Returns an object
-of class \code{statespacepb} which is a list with the following elements:
+of class \code{pbstatespace} which is a list with the following elements:
 \describe{
 \item{call}{Function call.}
 \item{args}{Function arguments.}
@@ -345,7 +345,7 @@ psi <- 0.001 * diag(p)
 psi_l <- t(chol(psi))
 
 boot <- PBSSMVARFixed(
-  R = 1000L,
+  R = 10L, # use at least 1000 in actual research
   path = getwd(),
   prefix = "var",
   n = n,
@@ -356,7 +356,7 @@ boot <- PBSSMVARFixed(
   beta = beta,
   psi_l = psi_l,
   type = 0,
-  ncores = parallel::detectCores() - 1,
+  ncores = 1, # consider using multiple cores
   seed = 42
 )
 print(pb)

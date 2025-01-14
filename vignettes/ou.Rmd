@@ -1,7 +1,7 @@
 ---
 title: "The Ornstein–Uhlenbeck Model"
 author: "Ivan Jacob Agaloos Pesigan"
-date: "2025-01-01"
+date: "2025-01-13"
 bibliography: "vignettes.bib"
 csl: https://raw.githubusercontent.com/citation-style-language/styles/master/apa.csl
 nocite: |
@@ -270,6 +270,11 @@ sigma0
 #> [1,]  1.0  0.2  0.2
 #> [2,]  0.2  1.0  0.2
 #> [3,]  0.2  0.2  1.0
+sigma0_l # sigma0_l <- t(chol(sigma0))
+#>      [,1]      [,2]      [,3]
+#> [1,]  1.0 0.0000000 0.0000000
+#> [2,]  0.2 0.9797959 0.0000000
+#> [3,]  0.2 0.1632993 0.9660918
 mu
 #> [1] 0 0 0
 phi
@@ -282,6 +287,11 @@ sigma
 #> [1,]  0.24455556 0.02201587 -0.05004762
 #> [2,]  0.02201587 0.07067800  0.01539456
 #> [3,] -0.05004762 0.01539456  0.07553061
+sigma_l # sigma_l <- t(chol(sigma))
+#>             [,1]      [,2]     [,3]
+#> [1,]  0.49452559 0.0000000 0.000000
+#> [2,]  0.04451917 0.2620993 0.000000
+#> [3,] -0.10120330 0.0759256 0.243975
 nu
 #> [1] 0 0 0
 lambda
@@ -294,6 +304,11 @@ theta
 #> [1,]  0.2  0.0  0.0
 #> [2,]  0.0  0.2  0.0
 #> [3,]  0.0  0.0  0.2
+theta_l # theta_l <- t(chol(theta))
+#>           [,1]      [,2]      [,3]
+#> [1,] 0.4472136 0.0000000 0.0000000
+#> [2,] 0.0000000 0.4472136 0.0000000
+#> [3,] 0.0000000 0.0000000 0.4472136
 ```
 
 ### Visualizing the Dynamics Without Measurement Error and Process Noise (n = 5 with Different Initial Condition)
@@ -518,8 +533,8 @@ results <- dynr::dynr.cook(
 #> 
 #> Doing end processing
 #> Successful trial
-#> Total Time: 7.580708 
-#> Backend Time: 7.568527
+#> Total Time: 7.351477 
+#> Backend Time: 7.338865
 ```
 
 ## Summary
@@ -588,6 +603,11 @@ sigma_hat
 #> [1,]  0.25110408 0.020492828 -0.062261099
 #> [2,]  0.02049283 0.085336089  0.009575553
 #> [3,] -0.06226110 0.009575553  0.078206146
+theta_hat
+#>           [,1]      [,2]      [,3]
+#> [1,] 0.1968925 0.0000000 0.0000000
+#> [2,] 0.0000000 0.1858971 0.0000000
+#> [3,] 0.0000000 0.0000000 0.2024804
 mu0_hat
 #> [1] -0.3660337 -0.4092527  0.2149727
 sigma0_hat

@@ -75,6 +75,11 @@
 
 \maketitle
 
+%% begin.rcode
+% #| include = FALSE
+% Sys.setenv(NOT_CRAN = "true")
+%% end.rcode
+
 \section*{Tests}
 
 %% begin.rcode

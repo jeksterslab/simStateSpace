@@ -1,7 +1,7 @@
 ---
 title: "The Linear Growth Curve Model"
 author: "Ivan Jacob Agaloos Pesigan"
-date: "2025-01-01"
+date: "2025-01-13"
 bibliography: "vignettes.bib"
 csl: https://raw.githubusercontent.com/citation-style-language/styles/master/apa.csl
 nocite: |
@@ -184,13 +184,13 @@ sigma0
 #>       [,1]  [,2]
 #> [1,] 1.932 0.618
 #> [2,] 0.618 0.587
-sigma0_l
+sigma0_l # sigma0_l <- t(chol(sigma0))
 #>           [,1]      [,2]
 #> [1,] 1.3899640 0.0000000
 #> [2,] 0.4446158 0.6239525
 theta
 #> [1] 0.6
-theta_l
+theta_l # theta_l <- t(chol(theta))
 #> [1] 0.7745967
 ```
 
@@ -346,8 +346,8 @@ results <- dynr::dynr.cook(
 #> 
 #> Doing end processing
 #> Successful trial
-#> Total Time: 1.619885 
-#> Backend Time: 1.609797
+#> Total Time: 1.552192 
+#> Backend Time: 1.542496
 ```
 
 ## Summary

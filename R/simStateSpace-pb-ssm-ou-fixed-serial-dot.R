@@ -42,7 +42,9 @@
     sigma_l = sigma_l,
     nu = nu,
     lambda = lambda,
-    theta_l = theta_l
+    theta_l = theta_l,
+    mu0_fixed = mu0_fixed,
+    sigma0_fixed = sigma0_fixed
   )
   if (interactive()) {
     message(

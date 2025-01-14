@@ -1,0 +1,46 @@
+name: rhub (etc)
+
+on:
+  workflow_run:
+    workflows: [ "Source Code" ]
+    types:
+      - completed
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_PAT: ${{ secrets.PAT }}
+    strategy:
+      fail-fast: false
+      matrix:
+        container:
+          - name: rhel7
+            image: ghcr.io/r-hub/containers/rhel7:latest
+          - name: rhel8
+            image: ghcr.io/r-hub/containers/rhel8:latest
+          - name: rhel9
+            image: ghcr.io/r-hub/containers/rhel9:latest
+          - name: s390x
+            image: ghcr.io/r-hub/containers/s390x:latest
+          - name: centos7
+            image: ghcr.io/r-hub/containers/centos7:latest
+    name: ${{ matrix.container.name }}
+    container:
+      image: ${{ matrix.container.image }}
+    steps:
+      - name: Checkout src repo
+        uses: actions/checkout@v4
+        with:
+          ref: 'src'
+
+      - name: Install dependencies
+        run: |
+          R -q -e 'if (!require("pak")) install.packages("pak", repos = sprintf("https://r-lib.github.io/p/pak/stable/%s/%s/%s", .Platform$pkgType, R.Version()$os, R.Version()$arch))'
+          R -q -e 'pak::pkg_install(c("deps::.", "any::rcmdcheck"), dependencies = TRUE)'
+
+      - name: R-CMD-check
+        uses: r-lib/actions/check-r-package@v2
+        with:
+          error-on: '"error"'

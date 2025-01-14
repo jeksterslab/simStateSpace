@@ -8,7 +8,7 @@
 #'   and
 #'   confidence intervals.
 #'
-#' @param object Object of class `statespacepb`.
+#' @param object Object of class `pbstatespace`.
 #' @param alpha Numeric vector.
 #'   Significance level \eqn{\alpha}.
 #' @param type Charater string.
@@ -20,8 +20,8 @@
 #' @keywords betaNB ci internal
 #' @noRd
 .PBCI <- function(object,
-                  alpha = NULL,
-                  type = "pc") {
+                  alpha,
+                  type) {
   if (is.null(alpha)) {
     alpha <- object$args$alpha_level
   }

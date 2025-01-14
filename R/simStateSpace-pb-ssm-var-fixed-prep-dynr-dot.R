@@ -3,8 +3,8 @@
                                    alpha,
                                    beta,
                                    psi_l,
-                                   mu0_fixed = FALSE,
-                                   sigma0_fixed = FALSE) {
+                                   mu0_fixed,
+                                   sigma0_fixed) {
   p <- dim(psi_l)[1]
   k <- p
   dynr_initial <- .DynrInitial(

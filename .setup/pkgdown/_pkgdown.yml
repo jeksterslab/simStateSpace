@@ -46,10 +46,12 @@ articles:
 - title: Examples
   contents:
   - lin-growth
+  - ssm
   - var
   - ou
 - title: Parametric Bootstrap
   contents:
+  - pb-ssm
   - pb-var
   - pb-ou
 - title: Session Information
