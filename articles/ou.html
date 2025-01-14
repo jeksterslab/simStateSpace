@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">simStateSpace</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.7</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.7.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -61,7 +61,7 @@
                         <h4 data-toc-skip class="author">Ivan Jacob
 Agaloos Pesigan</h4>
             
-            <h4 data-toc-skip class="date">2025-01-01</h4>
+            <h4 data-toc-skip class="date">2025-01-13</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/jeksterslab/simStateSpace/blob/main/vignettes/ou.Rmd"><code>vignettes/ou.Rmd</code></a></small>
       <div class="d-none name"><code>ou.Rmd</code></div>
@@ -310,6 +310,11 @@ be given by</p>
 <span><span class="co">#&gt; [1,]  1.0  0.2  0.2</span></span>
 <span><span class="co">#&gt; [2,]  0.2  1.0  0.2</span></span>
 <span><span class="co">#&gt; [3,]  0.2  0.2  1.0</span></span>
+<span><span class="va">sigma0_l</span> <span class="co"># sigma0_l &lt;- t(chol(sigma0))</span></span>
+<span><span class="co">#&gt;      [,1]      [,2]      [,3]</span></span>
+<span><span class="co">#&gt; [1,]  1.0 0.0000000 0.0000000</span></span>
+<span><span class="co">#&gt; [2,]  0.2 0.9797959 0.0000000</span></span>
+<span><span class="co">#&gt; [3,]  0.2 0.1632993 0.9660918</span></span>
 <span><span class="va">mu</span></span>
 <span><span class="co">#&gt; [1] 0 0 0</span></span>
 <span><span class="va">phi</span></span>
@@ -322,6 +327,11 @@ be given by</p>
 <span><span class="co">#&gt; [1,]  0.24455556 0.02201587 -0.05004762</span></span>
 <span><span class="co">#&gt; [2,]  0.02201587 0.07067800  0.01539456</span></span>
 <span><span class="co">#&gt; [3,] -0.05004762 0.01539456  0.07553061</span></span>
+<span><span class="va">sigma_l</span> <span class="co"># sigma_l &lt;- t(chol(sigma))</span></span>
+<span><span class="co">#&gt;             [,1]      [,2]     [,3]</span></span>
+<span><span class="co">#&gt; [1,]  0.49452559 0.0000000 0.000000</span></span>
+<span><span class="co">#&gt; [2,]  0.04451917 0.2620993 0.000000</span></span>
+<span><span class="co">#&gt; [3,] -0.10120330 0.0759256 0.243975</span></span>
 <span><span class="va">nu</span></span>
 <span><span class="co">#&gt; [1] 0 0 0</span></span>
 <span><span class="va">lambda</span></span>
@@ -333,7 +343,12 @@ be given by</p>
 <span><span class="co">#&gt;      [,1] [,2] [,3]</span></span>
 <span><span class="co">#&gt; [1,]  0.2  0.0  0.0</span></span>
 <span><span class="co">#&gt; [2,]  0.0  0.2  0.0</span></span>
-<span><span class="co">#&gt; [3,]  0.0  0.0  0.2</span></span></code></pre></div>
+<span><span class="co">#&gt; [3,]  0.0  0.0  0.2</span></span>
+<span><span class="va">theta_l</span> <span class="co"># theta_l &lt;- t(chol(theta))</span></span>
+<span><span class="co">#&gt;           [,1]      [,2]      [,3]</span></span>
+<span><span class="co">#&gt; [1,] 0.4472136 0.0000000 0.0000000</span></span>
+<span><span class="co">#&gt; [2,] 0.0000000 0.4472136 0.0000000</span></span>
+<span><span class="co">#&gt; [3,] 0.0000000 0.0000000 0.4472136</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="visualizing-the-dynamics-without-measurement-error-and-process-noise-n-5-with-different-initial-condition">Visualizing the Dynamics Without Measurement Error and Process Noise
@@ -549,8 +564,8 @@ be given by</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Doing end processing</span></span>
 <span><span class="co">#&gt; Successful trial</span></span>
-<span><span class="co">#&gt; Total Time: 7.580708 </span></span>
-<span><span class="co">#&gt; Backend Time: 7.568527</span></span></code></pre></div>
+<span><span class="co">#&gt; Total Time: 7.351477 </span></span>
+<span><span class="co">#&gt; Backend Time: 7.338865</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -613,6 +628,11 @@ be given by</p>
 <span><span class="co">#&gt; [1,]  0.25110408 0.020492828 -0.062261099</span></span>
 <span><span class="co">#&gt; [2,]  0.02049283 0.085336089  0.009575553</span></span>
 <span><span class="co">#&gt; [3,] -0.06226110 0.009575553  0.078206146</span></span>
+<span><span class="va">theta_hat</span></span>
+<span><span class="co">#&gt;           [,1]      [,2]      [,3]</span></span>
+<span><span class="co">#&gt; [1,] 0.1968925 0.0000000 0.0000000</span></span>
+<span><span class="co">#&gt; [2,] 0.0000000 0.1858971 0.0000000</span></span>
+<span><span class="co">#&gt; [3,] 0.0000000 0.0000000 0.2024804</span></span>
 <span><span class="va">mu0_hat</span></span>
 <span><span class="co">#&gt; [1] -0.3660337 -0.4092527  0.2149727</span></span>
 <span><span class="va">sigma0_hat</span></span>

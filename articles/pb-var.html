@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">simStateSpace</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.7</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.7.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -61,7 +61,7 @@
                         <h4 data-toc-skip class="author">Ivan Jacob
 Agaloos Pesigan</h4>
             
-            <h4 data-toc-skip class="date">2025-01-01</h4>
+            <h4 data-toc-skip class="date">2025-01-14</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/jeksterslab/simStateSpace/blob/main/vignettes/pb-var.Rmd"><code>vignettes/pb-var.Rmd</code></a></small>
       <div class="d-none name"><code>pb-var.Rmd</code></div>
@@ -258,7 +258,7 @@ be given by</p>
 <span><span class="co">#&gt; [1,]  1.0  0.2  0.2</span></span>
 <span><span class="co">#&gt; [2,]  0.2  1.0  0.2</span></span>
 <span><span class="co">#&gt; [3,]  0.2  0.2  1.0</span></span>
-<span><span class="va">sigma0_l</span></span>
+<span><span class="va">sigma0_l</span> <span class="co"># sigma0_l &lt;- t(chol(sigma0))</span></span>
 <span><span class="co">#&gt;      [,1]      [,2]      [,3]</span></span>
 <span><span class="co">#&gt; [1,]  1.0 0.0000000 0.0000000</span></span>
 <span><span class="co">#&gt; [2,]  0.2 0.9797959 0.0000000</span></span>
@@ -275,7 +275,7 @@ be given by</p>
 <span><span class="co">#&gt; [1,]  0.1  0.0  0.0</span></span>
 <span><span class="co">#&gt; [2,]  0.0  0.1  0.0</span></span>
 <span><span class="co">#&gt; [3,]  0.0  0.0  0.1</span></span>
-<span><span class="va">psi_l</span></span>
+<span><span class="va">psi_l</span> <span class="co"># psi_l &lt;- t(chol(psi))</span></span>
 <span><span class="co">#&gt;           [,1]      [,2]      [,3]</span></span>
 <span><span class="co">#&gt; [1,] 0.3162278 0.0000000 0.0000000</span></span>
 <span><span class="co">#&gt; [2,] 0.0000000 0.3162278 0.0000000</span></span>
@@ -285,17 +285,21 @@ be given by</p>
 <h3 id="parametric-bootstrap">Parametric Bootstrap<a class="anchor" aria-label="anchor" href="#parametric-bootstrap"></a>
 </h3>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">R</span> <span class="op">&lt;-</span> <span class="fl">5000L</span></span>
+<code class="sourceCode R"><span><span class="va">R</span> <span class="op">&lt;-</span> <span class="fl">5L</span> <span class="co"># use at least 1000 in actual research</span></span>
 <span><span class="va">path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/getwd.html" class="external-link">getwd</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">prefix</span> <span class="op">&lt;-</span> <span class="st">"var"</span></span></code></pre></div>
 <p>We use the <code>PBSSMVARFixed</code> function from the
 <code>simStateSpace</code> package to perform parametric bootstraping
 using the parameters described above. The argument <code>R</code>
 specifies the number of bootstrap replications. The generated data and
-model estimates are be stored in <code>path</code> using the specified
+model estimates are stored in <code>path</code> using the specified
 <code>prefix</code> for the file names. The
 <code>ncores = parallel::detectCores()</code> argument instructs the
 function to use all available CPU cores in the system.</p>
+<blockquote>
+<p><strong><em>NOTE:</em></strong> Fitting the VAR model multiple times
+is computationally intensive.</p>
+</blockquote>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/jeksterslab/simStateSpace">simStateSpace</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/PBSSMVARFixed.html">PBSSMVARFixed</a></span><span class="op">(</span></span>
@@ -319,28 +323,28 @@ function to use all available CPU cores in the system.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Parametric bootstrap confidence intervals.</span></span>
 <span><span class="co">#&gt; type = "pc"</span></span>
-<span><span class="co">#&gt;             est     se    R    2.5%   97.5%</span></span>
-<span><span class="co">#&gt; beta_1_1    0.7 0.0114 5000  0.6771  0.7215</span></span>
-<span><span class="co">#&gt; beta_2_1    0.5 0.0112 5000  0.4782  0.5216</span></span>
-<span><span class="co">#&gt; beta_3_1   -0.1 0.0116 5000 -0.1225 -0.0778</span></span>
-<span><span class="co">#&gt; beta_1_2    0.0 0.0097 5000 -0.0185  0.0191</span></span>
-<span><span class="co">#&gt; beta_2_2    0.6 0.0095 5000  0.5811  0.6180</span></span>
-<span><span class="co">#&gt; beta_3_2    0.4 0.0098 5000  0.3804  0.4194</span></span>
-<span><span class="co">#&gt; beta_1_3    0.0 0.0097 5000 -0.0191  0.0187</span></span>
-<span><span class="co">#&gt; beta_2_3    0.0 0.0097 5000 -0.0191  0.0194</span></span>
-<span><span class="co">#&gt; beta_3_3    0.5 0.0098 5000  0.4804  0.5189</span></span>
-<span><span class="co">#&gt; psi_1_1     0.1 0.0020 5000  0.0961  0.1040</span></span>
-<span><span class="co">#&gt; psi_2_2     0.1 0.0020 5000  0.0960  0.1038</span></span>
-<span><span class="co">#&gt; psi_3_3     0.1 0.0020 5000  0.0960  0.1038</span></span>
-<span><span class="co">#&gt; mu0_1_1     0.0 0.4424 5000 -0.8761  0.8495</span></span>
-<span><span class="co">#&gt; mu0_2_1     0.0 0.4484 5000 -0.8763  0.8730</span></span>
-<span><span class="co">#&gt; mu0_3_1     0.0 0.4491 5000 -0.8810  0.8918</span></span>
-<span><span class="co">#&gt; sigma0_1_1  1.0 0.5607 5000  0.0925  2.2062</span></span>
-<span><span class="co">#&gt; sigma0_2_1  0.2 0.4088 5000 -0.5813  1.1036</span></span>
-<span><span class="co">#&gt; sigma0_3_1  0.2 0.4103 5000 -0.6123  1.0583</span></span>
-<span><span class="co">#&gt; sigma0_2_2  1.0 0.5481 5000  0.0982  2.2020</span></span>
-<span><span class="co">#&gt; sigma0_3_2  0.2 0.4001 5000 -0.5490  1.1096</span></span>
-<span><span class="co">#&gt; sigma0_3_3  1.0 0.5637 5000  0.1034  2.2382</span></span></code></pre></div>
+<span><span class="co">#&gt;             est     se R    2.5%   97.5%</span></span>
+<span><span class="co">#&gt; beta_1_1    0.7 0.0071 5  0.6937  0.7111</span></span>
+<span><span class="co">#&gt; beta_2_1    0.5 0.0097 5  0.4850  0.5083</span></span>
+<span><span class="co">#&gt; beta_3_1   -0.1 0.0097 5 -0.1127 -0.0909</span></span>
+<span><span class="co">#&gt; beta_1_2    0.0 0.0058 5 -0.0057  0.0082</span></span>
+<span><span class="co">#&gt; beta_2_2    0.6 0.0102 5  0.5984  0.6198</span></span>
+<span><span class="co">#&gt; beta_3_2    0.4 0.0073 5  0.3957  0.4130</span></span>
+<span><span class="co">#&gt; beta_1_3    0.0 0.0136 5 -0.0141  0.0185</span></span>
+<span><span class="co">#&gt; beta_2_3    0.0 0.0071 5 -0.0128  0.0037</span></span>
+<span><span class="co">#&gt; beta_3_3    0.5 0.0084 5  0.4911  0.5124</span></span>
+<span><span class="co">#&gt; psi_1_1     0.1 0.0019 5  0.0949  0.0991</span></span>
+<span><span class="co">#&gt; psi_2_2     0.1 0.0023 5  0.0969  0.1022</span></span>
+<span><span class="co">#&gt; psi_3_3     0.1 0.0010 5  0.0977  0.1000</span></span>
+<span><span class="co">#&gt; mu0_1_1     0.0 0.3486 5 -0.2680  0.5843</span></span>
+<span><span class="co">#&gt; mu0_2_1     0.0 0.5342 5 -0.3802  0.8733</span></span>
+<span><span class="co">#&gt; mu0_3_1     0.0 0.3878 5 -0.0611  0.8881</span></span>
+<span><span class="co">#&gt; sigma0_1_1  1.0 0.3609 5  0.3308  1.1757</span></span>
+<span><span class="co">#&gt; sigma0_2_1  0.2 0.4832 5 -0.6296  0.4846</span></span>
+<span><span class="co">#&gt; sigma0_3_1  0.2 0.3419 5 -0.3073  0.5489</span></span>
+<span><span class="co">#&gt; sigma0_2_2  1.0 0.8315 5  0.3440  2.1676</span></span>
+<span><span class="co">#&gt; sigma0_3_2  0.2 0.3590 5 -0.6904  0.1942</span></span>
+<span><span class="co">#&gt; sigma0_3_3  1.0 0.5229 5  0.2766  1.4503</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2 unnumbered">

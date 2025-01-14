@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">simStateSpace</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.7</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.7.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -61,7 +61,7 @@
                         <h4 data-toc-skip class="author">Ivan Jacob
 Agaloos Pesigan</h4>
             
-            <h4 data-toc-skip class="date">2025-01-01</h4>
+            <h4 data-toc-skip class="date">2025-01-13</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/jeksterslab/simStateSpace/blob/main/vignettes/lin-growth.Rmd"><code>vignettes/lin-growth.Rmd</code></a></small>
       <div class="d-none name"><code>lin-growth.Rmd</code></div>
@@ -243,13 +243,13 @@ be given by</p>
 <span><span class="co">#&gt;       [,1]  [,2]</span></span>
 <span><span class="co">#&gt; [1,] 1.932 0.618</span></span>
 <span><span class="co">#&gt; [2,] 0.618 0.587</span></span>
-<span><span class="va">sigma0_l</span></span>
+<span><span class="va">sigma0_l</span> <span class="co"># sigma0_l &lt;- t(chol(sigma0))</span></span>
 <span><span class="co">#&gt;           [,1]      [,2]</span></span>
 <span><span class="co">#&gt; [1,] 1.3899640 0.0000000</span></span>
 <span><span class="co">#&gt; [2,] 0.4446158 0.6239525</span></span>
 <span><span class="va">theta</span></span>
 <span><span class="co">#&gt; [1] 0.6</span></span>
-<span><span class="va">theta_l</span></span>
+<span><span class="va">theta_l</span> <span class="co"># theta_l &lt;- t(chol(theta))</span></span>
 <span><span class="co">#&gt; [1] 0.7745967</span></span></code></pre></div>
 </div>
 <div class="section level3">
@@ -400,8 +400,8 @@ Different Initial Condition)<a class="anchor" aria-label="anchor" href="#visuali
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Doing end processing</span></span>
 <span><span class="co">#&gt; Successful trial</span></span>
-<span><span class="co">#&gt; Total Time: 1.619885 </span></span>
-<span><span class="co">#&gt; Backend Time: 1.609797</span></span></code></pre></div>
+<span><span class="co">#&gt; Total Time: 1.552192 </span></span>
+<span><span class="co">#&gt; Backend Time: 1.542496</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">

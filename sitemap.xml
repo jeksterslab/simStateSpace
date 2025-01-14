@@ -5,9 +5,11 @@
 <url><loc>https://github.com/jeksterslab/simStateSpace/articles/lin-growth.html</loc></url>
 <url><loc>https://github.com/jeksterslab/simStateSpace/articles/ou.html</loc></url>
 <url><loc>https://github.com/jeksterslab/simStateSpace/articles/pb-ou.html</loc></url>
+<url><loc>https://github.com/jeksterslab/simStateSpace/articles/pb-ssm.html</loc></url>
 <url><loc>https://github.com/jeksterslab/simStateSpace/articles/pb-var.html</loc></url>
 <url><loc>https://github.com/jeksterslab/simStateSpace/articles/session.html</loc></url>
 <url><loc>https://github.com/jeksterslab/simStateSpace/articles/simStateSpace.html</loc></url>
+<url><loc>https://github.com/jeksterslab/simStateSpace/articles/ssm.html</loc></url>
 <url><loc>https://github.com/jeksterslab/simStateSpace/articles/var.html</loc></url>
 <url><loc>https://github.com/jeksterslab/simStateSpace/authors.html</loc></url>
 <url><loc>https://github.com/jeksterslab/simStateSpace/index.html</loc></url>
@@ -34,16 +36,16 @@
 <url><loc>https://github.com/jeksterslab/simStateSpace/reference/TestStationarity.html</loc></url>
 <url><loc>https://github.com/jeksterslab/simStateSpace/reference/as.data.frame.simstatespace.html</loc></url>
 <url><loc>https://github.com/jeksterslab/simStateSpace/reference/as.matrix.simstatespace.html</loc></url>
-<url><loc>https://github.com/jeksterslab/simStateSpace/reference/coef.statespacepb.html</loc></url>
-<url><loc>https://github.com/jeksterslab/simStateSpace/reference/confint.statespacepb.html</loc></url>
+<url><loc>https://github.com/jeksterslab/simStateSpace/reference/coef.pbstatespace.html</loc></url>
+<url><loc>https://github.com/jeksterslab/simStateSpace/reference/confint.pbstatespace.html</loc></url>
 <url><loc>https://github.com/jeksterslab/simStateSpace/reference/extract.html</loc></url>
-<url><loc>https://github.com/jeksterslab/simStateSpace/reference/extract.statespacepb.html</loc></url>
+<url><loc>https://github.com/jeksterslab/simStateSpace/reference/extract.pbstatespace.html</loc></url>
 <url><loc>https://github.com/jeksterslab/simStateSpace/reference/index.html</loc></url>
 <url><loc>https://github.com/jeksterslab/simStateSpace/reference/plot.simstatespace.html</loc></url>
+<url><loc>https://github.com/jeksterslab/simStateSpace/reference/print.pbstatespace.html</loc></url>
 <url><loc>https://github.com/jeksterslab/simStateSpace/reference/print.simstatespace.html</loc></url>
-<url><loc>https://github.com/jeksterslab/simStateSpace/reference/print.statespacepb.html</loc></url>
 <url><loc>https://github.com/jeksterslab/simStateSpace/reference/simStateSpace-package.html</loc></url>
-<url><loc>https://github.com/jeksterslab/simStateSpace/reference/summary.statespacepb.html</loc></url>
-<url><loc>https://github.com/jeksterslab/simStateSpace/reference/vcov.statespacepb.html</loc></url>
+<url><loc>https://github.com/jeksterslab/simStateSpace/reference/summary.pbstatespace.html</loc></url>
+<url><loc>https://github.com/jeksterslab/simStateSpace/reference/vcov.pbstatespace.html</loc></url>
 </urlset>
 

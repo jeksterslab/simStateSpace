@@ -23,7 +23,7 @@ type = 0."><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.
 
     <a class="navbar-brand me-2" href="../index.html">simStateSpace</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.7</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.7.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -288,7 +288,7 @@ is a large value.</p></dd>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>Returns an object
-of class <code>statespacepb</code> which is a list with the following elements:</p><dl><dt>call</dt>
+of class <code>pbstatespace</code> which is a list with the following elements:</p><dl><dt>call</dt>
 <dd><p>Function call.</p></dd>
 
 <dt>args</dt>
@@ -510,7 +510,7 @@ and state-space modeling techniques.
 <span class="r-in"><span><span class="va">psi_l</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/chol.html" class="external-link">chol</a></span><span class="op">(</span><span class="va">psi</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">boot</span> <span class="op">&lt;-</span> <span class="fu">PBSSMVARFixed</span><span class="op">(</span></span></span>
-<span class="r-in"><span>  R <span class="op">=</span> <span class="fl">1000L</span>,</span></span>
+<span class="r-in"><span>  R <span class="op">=</span> <span class="fl">10L</span>, <span class="co"># use at least 1000 in actual research</span></span></span>
 <span class="r-in"><span>  path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/getwd.html" class="external-link">getwd</a></span><span class="op">(</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  prefix <span class="op">=</span> <span class="st">"var"</span>,</span></span>
 <span class="r-in"><span>  n <span class="op">=</span> <span class="va">n</span>,</span></span>
@@ -521,7 +521,7 @@ and state-space modeling techniques.
 <span class="r-in"><span>  beta <span class="op">=</span> <span class="va">beta</span>,</span></span>
 <span class="r-in"><span>  psi_l <span class="op">=</span> <span class="va">psi_l</span>,</span></span>
 <span class="r-in"><span>  type <span class="op">=</span> <span class="fl">0</span>,</span></span>
-<span class="r-in"><span>  ncores <span class="op">=</span> <span class="fu">parallel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/parallel/detectCores.html" class="external-link">detectCores</a></span><span class="op">(</span><span class="op">)</span> <span class="op">-</span> <span class="fl">1</span>,</span></span>
+<span class="r-in"><span>  ncores <span class="op">=</span> <span class="fl">1</span>, <span class="co"># consider using multiple cores</span></span></span>
 <span class="r-in"><span>  seed <span class="op">=</span> <span class="fl">42</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">pb</span><span class="op">)</span></span></span>
