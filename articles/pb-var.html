@@ -61,7 +61,7 @@
                         <h4 data-toc-skip class="author">Ivan Jacob
 Agaloos Pesigan</h4>
             
-            <h4 data-toc-skip class="date">2025-01-14</h4>
+            <h4 data-toc-skip class="date">2025-01-15</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/jeksterslab/simStateSpace/blob/main/vignettes/pb-var.Rmd"><code>vignettes/pb-var.Rmd</code></a></small>
       <div class="d-none name"><code>pb-var.Rmd</code></div>
@@ -285,7 +285,7 @@ be given by</p>
 <h3 id="parametric-bootstrap">Parametric Bootstrap<a class="anchor" aria-label="anchor" href="#parametric-bootstrap"></a>
 </h3>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">R</span> <span class="op">&lt;-</span> <span class="fl">5L</span> <span class="co"># use at least 1000 in actual research</span></span>
+<code class="sourceCode R"><span><span class="va">R</span> <span class="op">&lt;-</span> <span class="fl">1000L</span> <span class="co"># use at least 1000 in actual research</span></span>
 <span><span class="va">path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/getwd.html" class="external-link">getwd</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">prefix</span> <span class="op">&lt;-</span> <span class="st">"var"</span></span></code></pre></div>
 <p>We use the <code>PBSSMVARFixed</code> function from the
@@ -302,7 +302,7 @@ is computationally intensive.</p>
 </blockquote>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/jeksterslab/simStateSpace">simStateSpace</a></span><span class="op">)</span></span>
-<span><span class="fu"><a href="../reference/PBSSMVARFixed.html">PBSSMVARFixed</a></span><span class="op">(</span></span>
+<span><span class="va">pb</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/PBSSMVARFixed.html">PBSSMVARFixed</a></span><span class="op">(</span></span>
 <span>  R <span class="op">=</span> <span class="va">R</span>,</span>
 <span>  path <span class="op">=</span> <span class="va">path</span>,</span>
 <span>  prefix <span class="op">=</span> <span class="va">prefix</span>,</span>
@@ -316,6 +316,7 @@ is computationally intensive.</p>
 <span>  ncores <span class="op">=</span> <span class="fu">parallel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/parallel/detectCores.html" class="external-link">detectCores</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  seed <span class="op">=</span> <span class="fl">42</span></span>
 <span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">pb</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Call:</span></span>
 <span><span class="co">#&gt; PBSSMVARFixed(R = R, path = path, prefix = prefix, n = n, time = time, </span></span>
 <span><span class="co">#&gt;     mu0 = mu0, sigma0_l = sigma0_l, alpha = alpha, beta = beta, </span></span>
@@ -323,28 +324,58 @@ is computationally intensive.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Parametric bootstrap confidence intervals.</span></span>
 <span><span class="co">#&gt; type = "pc"</span></span>
-<span><span class="co">#&gt;             est     se R    2.5%   97.5%</span></span>
-<span><span class="co">#&gt; beta_1_1    0.7 0.0071 5  0.6937  0.7111</span></span>
-<span><span class="co">#&gt; beta_2_1    0.5 0.0097 5  0.4850  0.5083</span></span>
-<span><span class="co">#&gt; beta_3_1   -0.1 0.0097 5 -0.1127 -0.0909</span></span>
-<span><span class="co">#&gt; beta_1_2    0.0 0.0058 5 -0.0057  0.0082</span></span>
-<span><span class="co">#&gt; beta_2_2    0.6 0.0102 5  0.5984  0.6198</span></span>
-<span><span class="co">#&gt; beta_3_2    0.4 0.0073 5  0.3957  0.4130</span></span>
-<span><span class="co">#&gt; beta_1_3    0.0 0.0136 5 -0.0141  0.0185</span></span>
-<span><span class="co">#&gt; beta_2_3    0.0 0.0071 5 -0.0128  0.0037</span></span>
-<span><span class="co">#&gt; beta_3_3    0.5 0.0084 5  0.4911  0.5124</span></span>
-<span><span class="co">#&gt; psi_1_1     0.1 0.0019 5  0.0949  0.0991</span></span>
-<span><span class="co">#&gt; psi_2_2     0.1 0.0023 5  0.0969  0.1022</span></span>
-<span><span class="co">#&gt; psi_3_3     0.1 0.0010 5  0.0977  0.1000</span></span>
-<span><span class="co">#&gt; mu0_1_1     0.0 0.3486 5 -0.2680  0.5843</span></span>
-<span><span class="co">#&gt; mu0_2_1     0.0 0.5342 5 -0.3802  0.8733</span></span>
-<span><span class="co">#&gt; mu0_3_1     0.0 0.3878 5 -0.0611  0.8881</span></span>
-<span><span class="co">#&gt; sigma0_1_1  1.0 0.3609 5  0.3308  1.1757</span></span>
-<span><span class="co">#&gt; sigma0_2_1  0.2 0.4832 5 -0.6296  0.4846</span></span>
-<span><span class="co">#&gt; sigma0_3_1  0.2 0.3419 5 -0.3073  0.5489</span></span>
-<span><span class="co">#&gt; sigma0_2_2  1.0 0.8315 5  0.3440  2.1676</span></span>
-<span><span class="co">#&gt; sigma0_3_2  0.2 0.3590 5 -0.6904  0.1942</span></span>
-<span><span class="co">#&gt; sigma0_3_3  1.0 0.5229 5  0.2766  1.4503</span></span></code></pre></div>
+<span><span class="co">#&gt;             est     se    R    2.5%   97.5%</span></span>
+<span><span class="co">#&gt; beta_1_1    0.7 0.0111 1000  0.6770  0.7220</span></span>
+<span><span class="co">#&gt; beta_2_1    0.5 0.0121 1000  0.4774  0.5242</span></span>
+<span><span class="co">#&gt; beta_3_1   -0.1 0.0115 1000 -0.1232 -0.0778</span></span>
+<span><span class="co">#&gt; beta_1_2    0.0 0.0092 1000 -0.0180  0.0174</span></span>
+<span><span class="co">#&gt; beta_2_2    0.6 0.0097 1000  0.5796  0.6180</span></span>
+<span><span class="co">#&gt; beta_3_2    0.4 0.0097 1000  0.3813  0.4182</span></span>
+<span><span class="co">#&gt; beta_1_3    0.0 0.0096 1000 -0.0190  0.0185</span></span>
+<span><span class="co">#&gt; beta_2_3    0.0 0.0097 1000 -0.0182  0.0194</span></span>
+<span><span class="co">#&gt; beta_3_3    0.5 0.0099 1000  0.4798  0.5186</span></span>
+<span><span class="co">#&gt; psi_1_1     0.1 0.0020 1000  0.0962  0.1038</span></span>
+<span><span class="co">#&gt; psi_2_2     0.1 0.0021 1000  0.0958  0.1038</span></span>
+<span><span class="co">#&gt; psi_3_3     0.1 0.0021 1000  0.0960  0.1043</span></span>
+<span><span class="co">#&gt; mu0_1_1     0.0 0.4489 1000 -0.8529  0.8740</span></span>
+<span><span class="co">#&gt; mu0_2_1     0.0 0.4457 1000 -0.7936  0.8979</span></span>
+<span><span class="co">#&gt; mu0_3_1     0.0 0.4357 1000 -0.8548  0.8466</span></span>
+<span><span class="co">#&gt; sigma0_1_1  1.0 0.6131 1000  0.0948  2.3627</span></span>
+<span><span class="co">#&gt; sigma0_2_1  0.2 0.4146 1000 -0.5173  1.1095</span></span>
+<span><span class="co">#&gt; sigma0_3_1  0.2 0.4179 1000 -0.5867  1.1012</span></span>
+<span><span class="co">#&gt; sigma0_2_2  1.0 0.5798 1000  0.0847  2.2834</span></span>
+<span><span class="co">#&gt; sigma0_3_2  0.2 0.4124 1000 -0.5218  1.0941</span></span>
+<span><span class="co">#&gt; sigma0_3_3  1.0 0.5642 1000  0.0936  2.1704</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">pb</span>, type <span class="op">=</span> <span class="st">"bc"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Call:</span></span>
+<span><span class="co">#&gt; PBSSMVARFixed(R = R, path = path, prefix = prefix, n = n, time = time, </span></span>
+<span><span class="co">#&gt;     mu0 = mu0, sigma0_l = sigma0_l, alpha = alpha, beta = beta, </span></span>
+<span><span class="co">#&gt;     psi_l = psi_l, ncores = parallel::detectCores(), seed = 42)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Parametric bootstrap confidence intervals.</span></span>
+<span><span class="co">#&gt; type = "bc"</span></span>
+<span><span class="co">#&gt;             est     se    R    2.5%   97.5%</span></span>
+<span><span class="co">#&gt; beta_1_1    0.7 0.0111 1000  0.6770  0.7220</span></span>
+<span><span class="co">#&gt; beta_2_1    0.5 0.0121 1000  0.4775  0.5245</span></span>
+<span><span class="co">#&gt; beta_3_1   -0.1 0.0115 1000 -0.1238 -0.0784</span></span>
+<span><span class="co">#&gt; beta_1_2    0.0 0.0092 1000 -0.0179  0.0177</span></span>
+<span><span class="co">#&gt; beta_2_2    0.6 0.0097 1000  0.5796  0.6179</span></span>
+<span><span class="co">#&gt; beta_3_2    0.4 0.0097 1000  0.3817  0.4185</span></span>
+<span><span class="co">#&gt; beta_1_3    0.0 0.0096 1000 -0.0197  0.0179</span></span>
+<span><span class="co">#&gt; beta_2_3    0.0 0.0097 1000 -0.0192  0.0190</span></span>
+<span><span class="co">#&gt; beta_3_3    0.5 0.0099 1000  0.4805  0.5187</span></span>
+<span><span class="co">#&gt; psi_1_1     0.1 0.0020 1000  0.0963  0.1041</span></span>
+<span><span class="co">#&gt; psi_2_2     0.1 0.0021 1000  0.0963  0.1048</span></span>
+<span><span class="co">#&gt; psi_3_3     0.1 0.0021 1000  0.0961  0.1043</span></span>
+<span><span class="co">#&gt; mu0_1_1     0.0 0.4489 1000 -0.8537  0.8663</span></span>
+<span><span class="co">#&gt; mu0_2_1     0.0 0.4457 1000 -0.8403  0.8489</span></span>
+<span><span class="co">#&gt; mu0_3_1     0.0 0.4357 1000 -0.8546  0.8490</span></span>
+<span><span class="co">#&gt; sigma0_1_1  1.0 0.6131 1000  0.3125  3.9395</span></span>
+<span><span class="co">#&gt; sigma0_2_1  0.2 0.4146 1000 -0.3912  1.4120</span></span>
+<span><span class="co">#&gt; sigma0_3_1  0.2 0.4179 1000 -0.4263  1.2495</span></span>
+<span><span class="co">#&gt; sigma0_2_2  1.0 0.5798 1000  0.3372  4.1256</span></span>
+<span><span class="co">#&gt; sigma0_3_2  0.2 0.4124 1000 -0.3187  1.4554</span></span>
+<span><span class="co">#&gt; sigma0_3_3  1.0 0.5642 1000  0.3006  3.6517</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2 unnumbered">

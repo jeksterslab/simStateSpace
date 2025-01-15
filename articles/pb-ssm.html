@@ -61,7 +61,7 @@
                         <h4 data-toc-skip class="author">Ivan Jacob
 Agaloos Pesigan</h4>
             
-            <h4 data-toc-skip class="date">2025-01-14</h4>
+            <h4 data-toc-skip class="date">2025-01-15</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/jeksterslab/simStateSpace/blob/main/vignettes/pb-ssm.Rmd"><code>vignettes/pb-ssm.Rmd</code></a></small>
       <div class="d-none name"><code>pb-ssm.Rmd</code></div>
@@ -397,7 +397,7 @@ be given by</p>
 <h3 id="parametric-bootstrap">Parametric Bootstrap<a class="anchor" aria-label="anchor" href="#parametric-bootstrap"></a>
 </h3>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">R</span> <span class="op">&lt;-</span> <span class="fl">5L</span> <span class="co"># use at least 1000 in actual research</span></span>
+<code class="sourceCode R"><span><span class="va">R</span> <span class="op">&lt;-</span> <span class="fl">1000L</span> <span class="co"># use at least 1000 in actual research</span></span>
 <span><span class="va">path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/getwd.html" class="external-link">getwd</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">prefix</span> <span class="op">&lt;-</span> <span class="st">"ssm"</span></span></code></pre></div>
 <p>We use the <code>PBSSMFixed</code> function from the
@@ -414,7 +414,7 @@ multiple times is computationally intensive.</p>
 </blockquote>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/jeksterslab/simStateSpace">simStateSpace</a></span><span class="op">)</span></span>
-<span><span class="fu"><a href="../reference/PBSSMFixed.html">PBSSMFixed</a></span><span class="op">(</span></span>
+<span><span class="va">pb</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/PBSSMFixed.html">PBSSMFixed</a></span><span class="op">(</span></span>
 <span>  R <span class="op">=</span> <span class="va">R</span>,</span>
 <span>  path <span class="op">=</span> <span class="va">path</span>,</span>
 <span>  prefix <span class="op">=</span> <span class="va">prefix</span>,</span>
@@ -431,6 +431,7 @@ multiple times is computationally intensive.</p>
 <span>  ncores <span class="op">=</span> <span class="fu">parallel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/parallel/detectCores.html" class="external-link">detectCores</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  seed <span class="op">=</span> <span class="fl">42</span></span>
 <span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">pb</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Call:</span></span>
 <span><span class="co">#&gt; PBSSMFixed(R = R, path = path, prefix = prefix, n = n, time = time, </span></span>
 <span><span class="co">#&gt;     mu0 = mu0, sigma0_l = sigma0_l, alpha = alpha, beta = beta, </span></span>
@@ -439,31 +440,65 @@ multiple times is computationally intensive.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Parametric bootstrap confidence intervals.</span></span>
 <span><span class="co">#&gt; type = "pc"</span></span>
-<span><span class="co">#&gt;             est     se R    2.5%   97.5%</span></span>
-<span><span class="co">#&gt; phi_1_1     0.7 0.0187 5 -0.2473 -0.1995</span></span>
-<span><span class="co">#&gt; phi_2_1     0.5 0.0646 5  0.4736  0.6276</span></span>
-<span><span class="co">#&gt; phi_3_1    -0.1 0.4685 5 -1.4388 -0.3556</span></span>
-<span><span class="co">#&gt; phi_1_2     0.0 0.0156 5 -0.1191 -0.0850</span></span>
-<span><span class="co">#&gt; phi_2_2     0.6 0.0773 5 -0.4516 -0.2596</span></span>
-<span><span class="co">#&gt; phi_3_2     0.4 0.4314 5  0.6783  1.6094</span></span>
-<span><span class="co">#&gt; phi_1_3     0.0 0.0193 5  0.0117  0.0551</span></span>
-<span><span class="co">#&gt; phi_2_3     0.0 0.0650 5 -0.1419 -0.0051</span></span>
-<span><span class="co">#&gt; phi_3_3     0.5 0.3545 5 -1.4125 -0.6924</span></span>
-<span><span class="co">#&gt; sigma_1_1   0.1 0.0060 5  0.1022  0.1162</span></span>
-<span><span class="co">#&gt; sigma_2_2   0.1 0.0106 5  0.0879  0.1142</span></span>
-<span><span class="co">#&gt; sigma_3_3   0.1 4.0656 5  0.5713 10.9455</span></span>
-<span><span class="co">#&gt; theta_1_1   0.2 0.0040 5  0.2086  0.2182</span></span>
-<span><span class="co">#&gt; theta_2_2   0.2 0.0040 5  0.2216  0.2317</span></span>
-<span><span class="co">#&gt; theta_3_3   0.2 0.0458 5  0.0947  0.2080</span></span>
-<span><span class="co">#&gt; mu0_1_1     0.0 0.4579 5 -0.7184  0.3669</span></span>
-<span><span class="co">#&gt; mu0_2_1     0.0 0.4231 5 -0.0143  0.8935</span></span>
-<span><span class="co">#&gt; mu0_3_1     0.0 0.6083 5 -0.3494  0.9791</span></span>
-<span><span class="co">#&gt; sigma0_1_1  1.0 0.5618 5  0.2752  1.4810</span></span>
-<span><span class="co">#&gt; sigma0_2_1  0.2 0.2000 5  0.3486  0.8094</span></span>
-<span><span class="co">#&gt; sigma0_3_1  0.2 0.2681 5 -0.2738  0.3649</span></span>
-<span><span class="co">#&gt; sigma0_2_2  1.0 0.3624 5  0.5884  1.5077</span></span>
-<span><span class="co">#&gt; sigma0_3_2  0.2 0.4510 5 -0.3323  0.7011</span></span>
-<span><span class="co">#&gt; sigma0_3_3  1.0 0.2489 5  0.1993  0.7689</span></span></code></pre></div>
+<span><span class="co">#&gt;             est     se    R    2.5%   97.5%</span></span>
+<span><span class="co">#&gt; beta_1_1    0.7 0.0433 1000  0.6074  0.7816</span></span>
+<span><span class="co">#&gt; beta_2_1    0.5 0.0413 1000  0.4273  0.5909</span></span>
+<span><span class="co">#&gt; beta_3_1   -0.1 0.0273 1000 -0.1575 -0.0501</span></span>
+<span><span class="co">#&gt; beta_1_2    0.0 0.0275 1000 -0.0501  0.0554</span></span>
+<span><span class="co">#&gt; beta_2_2    0.6 0.0331 1000  0.5324  0.6563</span></span>
+<span><span class="co">#&gt; beta_3_2    0.4 0.0267 1000  0.3519  0.4556</span></span>
+<span><span class="co">#&gt; beta_1_3    0.0 0.0195 1000 -0.0396  0.0343</span></span>
+<span><span class="co">#&gt; beta_2_3    0.0 0.0242 1000 -0.0451  0.0470</span></span>
+<span><span class="co">#&gt; beta_3_3    0.5 0.0279 1000  0.4439  0.5484</span></span>
+<span><span class="co">#&gt; psi_1_1     0.1 0.0138 1000  0.0760  0.1295</span></span>
+<span><span class="co">#&gt; psi_2_2     0.1 0.0105 1000  0.0809  0.1219</span></span>
+<span><span class="co">#&gt; psi_3_3     0.1 0.0126 1000  0.0773  0.1254</span></span>
+<span><span class="co">#&gt; theta_1_1   0.2 0.0117 1000  0.1737  0.2218</span></span>
+<span><span class="co">#&gt; theta_2_2   0.2 0.0099 1000  0.1805  0.2184</span></span>
+<span><span class="co">#&gt; theta_3_3   0.2 0.0126 1000  0.1746  0.2230</span></span>
+<span><span class="co">#&gt; mu0_1_1     0.0 0.4912 1000 -0.9586  1.0170</span></span>
+<span><span class="co">#&gt; mu0_2_1     0.0 0.4809 1000 -0.9346  0.9384</span></span>
+<span><span class="co">#&gt; mu0_3_1     0.0 0.5043 1000 -0.9370  0.9521</span></span>
+<span><span class="co">#&gt; sigma0_1_1  1.0 0.6512 1000  0.0312  2.5160</span></span>
+<span><span class="co">#&gt; sigma0_2_1  0.2 0.4580 1000 -0.7127  1.1984</span></span>
+<span><span class="co">#&gt; sigma0_3_1  0.2 0.4376 1000 -0.6829  1.0350</span></span>
+<span><span class="co">#&gt; sigma0_2_2  1.0 0.5973 1000  0.0530  2.3736</span></span>
+<span><span class="co">#&gt; sigma0_3_2  0.2 0.4444 1000 -0.7278  1.1359</span></span>
+<span><span class="co">#&gt; sigma0_3_3  1.0 0.6344 1000  0.0345  2.3728</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">pb</span>, type <span class="op">=</span> <span class="st">"bc"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Call:</span></span>
+<span><span class="co">#&gt; PBSSMFixed(R = R, path = path, prefix = prefix, n = n, time = time, </span></span>
+<span><span class="co">#&gt;     mu0 = mu0, sigma0_l = sigma0_l, alpha = alpha, beta = beta, </span></span>
+<span><span class="co">#&gt;     psi_l = psi_l, nu = nu, lambda = lambda, theta_l = theta_l, </span></span>
+<span><span class="co">#&gt;     ncores = parallel::detectCores(), seed = 42)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Parametric bootstrap confidence intervals.</span></span>
+<span><span class="co">#&gt; type = "bc"</span></span>
+<span><span class="co">#&gt;             est     se    R    2.5%   97.5%</span></span>
+<span><span class="co">#&gt; beta_1_1    0.7 0.0433 1000  0.6052  0.7789</span></span>
+<span><span class="co">#&gt; beta_2_1    0.5 0.0413 1000  0.4289  0.5962</span></span>
+<span><span class="co">#&gt; beta_3_1   -0.1 0.0273 1000 -0.1574 -0.0501</span></span>
+<span><span class="co">#&gt; beta_1_2    0.0 0.0275 1000 -0.0478  0.0576</span></span>
+<span><span class="co">#&gt; beta_2_2    0.6 0.0331 1000  0.5301  0.6548</span></span>
+<span><span class="co">#&gt; beta_3_2    0.4 0.0267 1000  0.3515  0.4547</span></span>
+<span><span class="co">#&gt; beta_1_3    0.0 0.0195 1000 -0.0417  0.0324</span></span>
+<span><span class="co">#&gt; beta_2_3    0.0 0.0242 1000 -0.0431  0.0485</span></span>
+<span><span class="co">#&gt; beta_3_3    0.5 0.0279 1000  0.4462  0.5508</span></span>
+<span><span class="co">#&gt; psi_1_1     0.1 0.0138 1000  0.0767  0.1318</span></span>
+<span><span class="co">#&gt; psi_2_2     0.1 0.0105 1000  0.0814  0.1224</span></span>
+<span><span class="co">#&gt; psi_3_3     0.1 0.0126 1000  0.0776  0.1259</span></span>
+<span><span class="co">#&gt; theta_1_1   0.2 0.0117 1000  0.1737  0.2219</span></span>
+<span><span class="co">#&gt; theta_2_2   0.2 0.0099 1000  0.1804  0.2182</span></span>
+<span><span class="co">#&gt; theta_3_3   0.2 0.0126 1000  0.1753  0.2238</span></span>
+<span><span class="co">#&gt; mu0_1_1     0.0 0.4912 1000 -0.9477  1.0290</span></span>
+<span><span class="co">#&gt; mu0_2_1     0.0 0.4809 1000 -0.9576  0.9031</span></span>
+<span><span class="co">#&gt; mu0_3_1     0.0 0.5043 1000 -0.9482  0.9488</span></span>
+<span><span class="co">#&gt; sigma0_1_1  1.0 0.6512 1000  0.2583  4.1254</span></span>
+<span><span class="co">#&gt; sigma0_2_1  0.2 0.4580 1000 -0.5485  1.5533</span></span>
+<span><span class="co">#&gt; sigma0_3_1  0.2 0.4376 1000 -0.5029  1.2764</span></span>
+<span><span class="co">#&gt; sigma0_2_2  1.0 0.5973 1000  0.2702  3.1458</span></span>
+<span><span class="co">#&gt; sigma0_3_2  0.2 0.4444 1000 -0.4960  1.3274</span></span>
+<span><span class="co">#&gt; sigma0_3_3  1.0 0.6344 1000  0.2538  3.7833</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2 unnumbered">
