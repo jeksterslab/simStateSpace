@@ -1,7 +1,7 @@
 ---
 title: "Parametric Bootstrap (The Vector Autoregressive Model)"
 author: "Ivan Jacob Agaloos Pesigan"
-date: "2025-01-14"
+date: "2025-01-15"
 bibliography: "vignettes.bib"
 csl: https://raw.githubusercontent.com/citation-style-language/styles/master/apa.csl
 nocite: |
@@ -236,7 +236,7 @@ psi_l # psi_l <- t(chol(psi))
 
 
 ``` r
-R <- 5L # use at least 1000 in actual research
+R <- 1000L # use at least 1000 in actual research
 path <- getwd()
 prefix <- "var"
 ```
@@ -246,12 +246,12 @@ The argument `R` specifies the number of bootstrap replications.
 The generated data and model estimates are stored in `path` using the specified `prefix` for the file names.
 The `ncores = parallel::detectCores()` argument instructs the function to use all available CPU cores in the system.
 
-> **_NOTE:_**  Fitting the VAR model multiple times is computationally intensive.
+> **_NOTE:_**  Fitting the VAR model multiple times is computationally intensive. 
 
 
 ``` r
 library(simStateSpace)
-PBSSMVARFixed(
+pb <- PBSSMVARFixed(
   R = R,
   path = path,
   prefix = prefix,
@@ -265,6 +265,7 @@ PBSSMVARFixed(
   ncores = parallel::detectCores(),
   seed = 42
 )
+summary(pb)
 #> Call:
 #> PBSSMVARFixed(R = R, path = path, prefix = prefix, n = n, time = time, 
 #>     mu0 = mu0, sigma0_l = sigma0_l, alpha = alpha, beta = beta, 
@@ -272,28 +273,58 @@ PBSSMVARFixed(
 #> 
 #> Parametric bootstrap confidence intervals.
 #> type = "pc"
-#>             est     se R    2.5%   97.5%
-#> beta_1_1    0.7 0.0071 5  0.6937  0.7111
-#> beta_2_1    0.5 0.0097 5  0.4850  0.5083
-#> beta_3_1   -0.1 0.0097 5 -0.1127 -0.0909
-#> beta_1_2    0.0 0.0058 5 -0.0057  0.0082
-#> beta_2_2    0.6 0.0102 5  0.5984  0.6198
-#> beta_3_2    0.4 0.0073 5  0.3957  0.4130
-#> beta_1_3    0.0 0.0136 5 -0.0141  0.0185
-#> beta_2_3    0.0 0.0071 5 -0.0128  0.0037
-#> beta_3_3    0.5 0.0084 5  0.4911  0.5124
-#> psi_1_1     0.1 0.0019 5  0.0949  0.0991
-#> psi_2_2     0.1 0.0023 5  0.0969  0.1022
-#> psi_3_3     0.1 0.0010 5  0.0977  0.1000
-#> mu0_1_1     0.0 0.3486 5 -0.2680  0.5843
-#> mu0_2_1     0.0 0.5342 5 -0.3802  0.8733
-#> mu0_3_1     0.0 0.3878 5 -0.0611  0.8881
-#> sigma0_1_1  1.0 0.3609 5  0.3308  1.1757
-#> sigma0_2_1  0.2 0.4832 5 -0.6296  0.4846
-#> sigma0_3_1  0.2 0.3419 5 -0.3073  0.5489
-#> sigma0_2_2  1.0 0.8315 5  0.3440  2.1676
-#> sigma0_3_2  0.2 0.3590 5 -0.6904  0.1942
-#> sigma0_3_3  1.0 0.5229 5  0.2766  1.4503
+#>             est     se    R    2.5%   97.5%
+#> beta_1_1    0.7 0.0111 1000  0.6770  0.7220
+#> beta_2_1    0.5 0.0121 1000  0.4774  0.5242
+#> beta_3_1   -0.1 0.0115 1000 -0.1232 -0.0778
+#> beta_1_2    0.0 0.0092 1000 -0.0180  0.0174
+#> beta_2_2    0.6 0.0097 1000  0.5796  0.6180
+#> beta_3_2    0.4 0.0097 1000  0.3813  0.4182
+#> beta_1_3    0.0 0.0096 1000 -0.0190  0.0185
+#> beta_2_3    0.0 0.0097 1000 -0.0182  0.0194
+#> beta_3_3    0.5 0.0099 1000  0.4798  0.5186
+#> psi_1_1     0.1 0.0020 1000  0.0962  0.1038
+#> psi_2_2     0.1 0.0021 1000  0.0958  0.1038
+#> psi_3_3     0.1 0.0021 1000  0.0960  0.1043
+#> mu0_1_1     0.0 0.4489 1000 -0.8529  0.8740
+#> mu0_2_1     0.0 0.4457 1000 -0.7936  0.8979
+#> mu0_3_1     0.0 0.4357 1000 -0.8548  0.8466
+#> sigma0_1_1  1.0 0.6131 1000  0.0948  2.3627
+#> sigma0_2_1  0.2 0.4146 1000 -0.5173  1.1095
+#> sigma0_3_1  0.2 0.4179 1000 -0.5867  1.1012
+#> sigma0_2_2  1.0 0.5798 1000  0.0847  2.2834
+#> sigma0_3_2  0.2 0.4124 1000 -0.5218  1.0941
+#> sigma0_3_3  1.0 0.5642 1000  0.0936  2.1704
+summary(pb, type = "bc")
+#> Call:
+#> PBSSMVARFixed(R = R, path = path, prefix = prefix, n = n, time = time, 
+#>     mu0 = mu0, sigma0_l = sigma0_l, alpha = alpha, beta = beta, 
+#>     psi_l = psi_l, ncores = parallel::detectCores(), seed = 42)
+#> 
+#> Parametric bootstrap confidence intervals.
+#> type = "bc"
+#>             est     se    R    2.5%   97.5%
+#> beta_1_1    0.7 0.0111 1000  0.6770  0.7220
+#> beta_2_1    0.5 0.0121 1000  0.4775  0.5245
+#> beta_3_1   -0.1 0.0115 1000 -0.1238 -0.0784
+#> beta_1_2    0.0 0.0092 1000 -0.0179  0.0177
+#> beta_2_2    0.6 0.0097 1000  0.5796  0.6179
+#> beta_3_2    0.4 0.0097 1000  0.3817  0.4185
+#> beta_1_3    0.0 0.0096 1000 -0.0197  0.0179
+#> beta_2_3    0.0 0.0097 1000 -0.0192  0.0190
+#> beta_3_3    0.5 0.0099 1000  0.4805  0.5187
+#> psi_1_1     0.1 0.0020 1000  0.0963  0.1041
+#> psi_2_2     0.1 0.0021 1000  0.0963  0.1048
+#> psi_3_3     0.1 0.0021 1000  0.0961  0.1043
+#> mu0_1_1     0.0 0.4489 1000 -0.8537  0.8663
+#> mu0_2_1     0.0 0.4457 1000 -0.8403  0.8489
+#> mu0_3_1     0.0 0.4357 1000 -0.8546  0.8490
+#> sigma0_1_1  1.0 0.6131 1000  0.3125  3.9395
+#> sigma0_2_1  0.2 0.4146 1000 -0.3912  1.4120
+#> sigma0_3_1  0.2 0.4179 1000 -0.4263  1.2495
+#> sigma0_2_2  1.0 0.5798 1000  0.3372  4.1256
+#> sigma0_3_2  0.2 0.4124 1000 -0.3187  1.4554
+#> sigma0_3_3  1.0 0.5642 1000  0.3006  3.6517
 ```
 
 ## References

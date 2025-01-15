@@ -1,7 +1,7 @@
 ---
 title: "Parametric Bootstrap (The Ornstein–Uhlenbeck Model)"
 author: "Ivan Jacob Agaloos Pesigan"
-date: "2025-01-13"
+date: "2025-01-14"
 bibliography: "vignettes.bib"
 csl: https://raw.githubusercontent.com/citation-style-language/styles/master/apa.csl
 nocite: |
@@ -315,7 +315,7 @@ theta_l # theta_l <- t(chol(theta))
 
 
 ``` r
-R <- 5L # use at least 1000 in actual research
+R <- 1000L # use at least 1000 in actual research
 path <- getwd()
 prefix <- "ou"
 ```
@@ -325,12 +325,12 @@ The argument `R` specifies the number of bootstrap replications.
 The generated data and model estimates are stored in `path` using the specified `prefix` for the file names.
 The `ncores = parallel::detectCores()` argument instructs the function to use all available CPU cores in the system.
 
-> **_NOTE:_**  Fitting the Ornstein–Uhlenbeck model multiple times is computationally intensive.
+> **_NOTE:_**  Fitting the Ornstein–Uhlenbeck model multiple times is computationally intensive. 
 
 
 ``` r
 library(simStateSpace)
-PBSSMOUFixed(
+pb <- PBSSMOUFixed(
   R = R,
   path = path,
   prefix = prefix,
@@ -348,6 +348,7 @@ PBSSMOUFixed(
   ncores = parallel::detectCores(),
   seed = 42
 )
+summary(pb)
 #> Call:
 #> PBSSMOUFixed(R = R, path = path, prefix = prefix, n = n, time = time, 
 #>     delta_t = delta_t, mu0 = mu0, sigma0_l = sigma0_l, mu = mu, 
@@ -356,34 +357,71 @@ PBSSMOUFixed(
 #> 
 #> Parametric bootstrap confidence intervals.
 #> type = "pc"
-#>                est     se R    2.5%   97.5%
-#> phi_1_1    -0.3570 0.1946 5 -0.6084 -0.1255
-#> phi_2_1     0.7710 0.0459 5  0.7150  0.8233
-#> phi_3_1    -0.4500 0.0713 5 -0.4956 -0.3151
-#> phi_1_2     0.0000 0.1619 5 -0.1821  0.1921
-#> phi_2_2    -0.5110 0.0532 5 -0.5836 -0.4502
-#> phi_3_2     0.7290 0.0574 5  0.6228  0.7683
-#> phi_1_3     0.0000 0.1167 5 -0.1080  0.1539
-#> phi_2_3     0.0000 0.0475 5 -0.0345  0.0869
-#> phi_3_3    -0.6930 0.0242 5 -0.6806 -0.6207
-#> sigma_1_1   0.2446 0.0188 5  0.2296  0.2748
-#> sigma_2_1   0.0220 0.0061 5  0.0132  0.0269
-#> sigma_3_1  -0.0500 0.0024 5 -0.0530 -0.0476
-#> sigma_2_2   0.0707 0.0067 5  0.0595  0.0749
-#> sigma_3_2   0.0154 0.0044 5  0.0114  0.0215
-#> sigma_3_3   0.0755 0.0089 5  0.0631  0.0849
-#> theta_1_1   0.2000 0.0077 5  0.1886  0.2067
-#> theta_2_2   0.2000 0.0041 5  0.1933  0.2037
-#> theta_3_3   0.2000 0.0052 5  0.1945  0.2065
-#> mu0_1_1     0.0000 0.3742 5 -0.6103  0.1927
-#> mu0_2_1     0.0000 0.5863 5 -0.7512  0.7138
-#> mu0_3_1     0.0000 0.9812 5 -1.5380  0.8512
-#> sigma0_1_1  1.0000 0.7037 5  0.5559  2.1771
-#> sigma0_2_1  0.2000 0.6052 5 -0.7541  0.4825
-#> sigma0_3_1  0.2000 0.6646 5 -0.8479  0.7327
-#> sigma0_2_2  1.0000 0.5761 5  0.5268  1.8382
-#> sigma0_3_2  0.2000 0.5301 5 -0.3540  0.8717
-#> sigma0_3_3  1.0000 0.5995 5  0.1998  1.6898
+#>                est     se    R    2.5%   97.5%
+#> phi_1_1    -0.3570 0.1699 1000 -0.7001 -0.0508
+#> phi_2_1     0.7710 0.1034 1000  0.5816  0.9878
+#> phi_3_1    -0.4500 0.1044 1000 -0.6636 -0.2538
+#> phi_1_2     0.0000 0.1466 1000 -0.2746  0.2954
+#> phi_2_2    -0.5110 0.0917 1000 -0.7021 -0.3440
+#> phi_3_2     0.7290 0.0933 1000  0.5576  0.9286
+#> phi_1_3     0.0000 0.1086 1000 -0.2234  0.1977
+#> phi_2_3     0.0000 0.0685 1000 -0.1312  0.1446
+#> phi_3_3    -0.6930 0.0726 1000 -0.8544 -0.5643
+#> sigma_1_1   0.2446 0.0313 1000  0.1909  0.3122
+#> sigma_2_1   0.0220 0.0122 1000 -0.0015  0.0444
+#> sigma_3_1  -0.0500 0.0124 1000 -0.0752 -0.0258
+#> sigma_2_2   0.0707 0.0091 1000  0.0537  0.0892
+#> sigma_3_2   0.0154 0.0063 1000  0.0030  0.0277
+#> sigma_3_3   0.0755 0.0098 1000  0.0571  0.0948
+#> theta_1_1   0.2000 0.0053 1000  0.1901  0.2109
+#> theta_2_2   0.2000 0.0045 1000  0.1912  0.2091
+#> theta_3_3   0.2000 0.0045 1000  0.1913  0.2088
+#> mu0_1_1     0.0000 0.4539 1000 -0.9004  0.8934
+#> mu0_2_1     0.0000 0.4624 1000 -0.9453  0.9216
+#> mu0_3_1     0.0000 0.4481 1000 -0.8804  0.8994
+#> sigma0_1_1  1.0000 0.5817 1000  0.0497  2.2765
+#> sigma0_2_1  0.2000 0.4383 1000 -0.5675  1.1787
+#> sigma0_3_1  0.2000 0.4101 1000 -0.5626  1.1054
+#> sigma0_2_2  1.0000 0.6239 1000  0.0550  2.3037
+#> sigma0_3_2  0.2000 0.4454 1000 -0.6436  1.1700
+#> sigma0_3_3  1.0000 0.5942 1000  0.0691  2.3123
+summary(pb, type = "bc")
+#> Call:
+#> PBSSMOUFixed(R = R, path = path, prefix = prefix, n = n, time = time, 
+#>     delta_t = delta_t, mu0 = mu0, sigma0_l = sigma0_l, mu = mu, 
+#>     phi = phi, sigma_l = sigma_l, nu = nu, lambda = lambda, theta_l = theta_l, 
+#>     ncores = parallel::detectCores(), seed = 42)
+#> 
+#> Parametric bootstrap confidence intervals.
+#> type = "bc"
+#>                est     se    R    2.5%   97.5%
+#> phi_1_1    -0.3570 0.1699 1000 -0.6815 -0.0366
+#> phi_2_1     0.7710 0.1034 1000  0.5740  0.9761
+#> phi_3_1    -0.4500 0.1044 1000 -0.6558 -0.2455
+#> phi_1_2     0.0000 0.1466 1000 -0.2932  0.2725
+#> phi_2_2    -0.5110 0.0917 1000 -0.6950 -0.3359
+#> phi_3_2     0.7290 0.0933 1000  0.5411  0.9036
+#> phi_1_3     0.0000 0.1086 1000 -0.1944  0.2169
+#> phi_2_3     0.0000 0.0685 1000 -0.1328  0.1416
+#> phi_3_3    -0.6930 0.0726 1000 -0.8415 -0.5562
+#> sigma_1_1   0.2446 0.0313 1000  0.1898  0.3095
+#> sigma_2_1   0.0220 0.0122 1000 -0.0014  0.0445
+#> sigma_3_1  -0.0500 0.0124 1000 -0.0758 -0.0266
+#> sigma_2_2   0.0707 0.0091 1000  0.0538  0.0894
+#> sigma_3_2   0.0154 0.0063 1000  0.0033  0.0278
+#> sigma_3_3   0.0755 0.0098 1000  0.0574  0.0952
+#> theta_1_1   0.2000 0.0053 1000  0.1902  0.2113
+#> theta_2_2   0.2000 0.0045 1000  0.1911  0.2091
+#> theta_3_3   0.2000 0.0045 1000  0.1912  0.2083
+#> mu0_1_1     0.0000 0.4539 1000 -0.8903  0.9166
+#> mu0_2_1     0.0000 0.4624 1000 -0.9409  0.9229
+#> mu0_3_1     0.0000 0.4481 1000 -0.8937  0.8755
+#> sigma0_1_1  1.0000 0.5817 1000  0.2902  3.2078
+#> sigma0_2_1  0.2000 0.4383 1000 -0.4340  1.4370
+#> sigma0_3_1  0.2000 0.4101 1000 -0.3913  1.3177
+#> sigma0_2_2  1.0000 0.6239 1000  0.2921  5.0804
+#> sigma0_3_2  0.2000 0.4454 1000 -0.4393  1.4506
+#> sigma0_3_3  1.0000 0.5942 1000  0.3007  3.6202
 ```
 
 ## References

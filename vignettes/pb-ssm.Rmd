@@ -1,7 +1,7 @@
 ---
 title: "Parametric Bootstrap (The State Space Model)"
 author: "Ivan Jacob Agaloos Pesigan"
-date: "2025-01-14"
+date: "2025-01-15"
 bibliography: "vignettes.bib"
 csl: https://raw.githubusercontent.com/citation-style-language/styles/master/apa.csl
 nocite: |
@@ -353,7 +353,7 @@ theta_l # theta_l <- t(chol(theta))
 
 
 ``` r
-R <- 5L # use at least 1000 in actual research
+R <- 1000L # use at least 1000 in actual research
 path <- getwd()
 prefix <- "ssm"
 ```
@@ -363,12 +363,12 @@ The argument `R` specifies the number of bootstrap replications.
 The generated data and model estimates are stored in `path` using the specified `prefix` for the file names.
 The `ncores = parallel::detectCores()` argument instructs the function to use all available CPU cores in the system.
 
-> **_NOTE:_**  Fitting the state space model multiple times is computationally intensive.
+> **_NOTE:_**  Fitting the state space model multiple times is computationally intensive. 
 
 
 ``` r
 library(simStateSpace)
-PBSSMFixed(
+pb <- PBSSMFixed(
   R = R,
   path = path,
   prefix = prefix,
@@ -385,6 +385,7 @@ PBSSMFixed(
   ncores = parallel::detectCores(),
   seed = 42
 )
+summary(pb)
 #> Call:
 #> PBSSMFixed(R = R, path = path, prefix = prefix, n = n, time = time, 
 #>     mu0 = mu0, sigma0_l = sigma0_l, alpha = alpha, beta = beta, 
@@ -393,31 +394,65 @@ PBSSMFixed(
 #> 
 #> Parametric bootstrap confidence intervals.
 #> type = "pc"
-#>             est     se R    2.5%   97.5%
-#> phi_1_1     0.7 0.0187 5 -0.2473 -0.1995
-#> phi_2_1     0.5 0.0646 5  0.4736  0.6276
-#> phi_3_1    -0.1 0.4685 5 -1.4388 -0.3556
-#> phi_1_2     0.0 0.0156 5 -0.1191 -0.0850
-#> phi_2_2     0.6 0.0773 5 -0.4516 -0.2596
-#> phi_3_2     0.4 0.4314 5  0.6783  1.6094
-#> phi_1_3     0.0 0.0193 5  0.0117  0.0551
-#> phi_2_3     0.0 0.0650 5 -0.1419 -0.0051
-#> phi_3_3     0.5 0.3545 5 -1.4125 -0.6924
-#> sigma_1_1   0.1 0.0060 5  0.1022  0.1162
-#> sigma_2_2   0.1 0.0106 5  0.0879  0.1142
-#> sigma_3_3   0.1 4.0656 5  0.5713 10.9455
-#> theta_1_1   0.2 0.0040 5  0.2086  0.2182
-#> theta_2_2   0.2 0.0040 5  0.2216  0.2317
-#> theta_3_3   0.2 0.0458 5  0.0947  0.2080
-#> mu0_1_1     0.0 0.4579 5 -0.7184  0.3669
-#> mu0_2_1     0.0 0.4231 5 -0.0143  0.8935
-#> mu0_3_1     0.0 0.6083 5 -0.3494  0.9791
-#> sigma0_1_1  1.0 0.5618 5  0.2752  1.4810
-#> sigma0_2_1  0.2 0.2000 5  0.3486  0.8094
-#> sigma0_3_1  0.2 0.2681 5 -0.2738  0.3649
-#> sigma0_2_2  1.0 0.3624 5  0.5884  1.5077
-#> sigma0_3_2  0.2 0.4510 5 -0.3323  0.7011
-#> sigma0_3_3  1.0 0.2489 5  0.1993  0.7689
+#>             est     se    R    2.5%   97.5%
+#> beta_1_1    0.7 0.0433 1000  0.6074  0.7816
+#> beta_2_1    0.5 0.0413 1000  0.4273  0.5909
+#> beta_3_1   -0.1 0.0273 1000 -0.1575 -0.0501
+#> beta_1_2    0.0 0.0275 1000 -0.0501  0.0554
+#> beta_2_2    0.6 0.0331 1000  0.5324  0.6563
+#> beta_3_2    0.4 0.0267 1000  0.3519  0.4556
+#> beta_1_3    0.0 0.0195 1000 -0.0396  0.0343
+#> beta_2_3    0.0 0.0242 1000 -0.0451  0.0470
+#> beta_3_3    0.5 0.0279 1000  0.4439  0.5484
+#> psi_1_1     0.1 0.0138 1000  0.0760  0.1295
+#> psi_2_2     0.1 0.0105 1000  0.0809  0.1219
+#> psi_3_3     0.1 0.0126 1000  0.0773  0.1254
+#> theta_1_1   0.2 0.0117 1000  0.1737  0.2218
+#> theta_2_2   0.2 0.0099 1000  0.1805  0.2184
+#> theta_3_3   0.2 0.0126 1000  0.1746  0.2230
+#> mu0_1_1     0.0 0.4912 1000 -0.9586  1.0170
+#> mu0_2_1     0.0 0.4809 1000 -0.9346  0.9384
+#> mu0_3_1     0.0 0.5043 1000 -0.9370  0.9521
+#> sigma0_1_1  1.0 0.6512 1000  0.0312  2.5160
+#> sigma0_2_1  0.2 0.4580 1000 -0.7127  1.1984
+#> sigma0_3_1  0.2 0.4376 1000 -0.6829  1.0350
+#> sigma0_2_2  1.0 0.5973 1000  0.0530  2.3736
+#> sigma0_3_2  0.2 0.4444 1000 -0.7278  1.1359
+#> sigma0_3_3  1.0 0.6344 1000  0.0345  2.3728
+summary(pb, type = "bc")
+#> Call:
+#> PBSSMFixed(R = R, path = path, prefix = prefix, n = n, time = time, 
+#>     mu0 = mu0, sigma0_l = sigma0_l, alpha = alpha, beta = beta, 
+#>     psi_l = psi_l, nu = nu, lambda = lambda, theta_l = theta_l, 
+#>     ncores = parallel::detectCores(), seed = 42)
+#> 
+#> Parametric bootstrap confidence intervals.
+#> type = "bc"
+#>             est     se    R    2.5%   97.5%
+#> beta_1_1    0.7 0.0433 1000  0.6052  0.7789
+#> beta_2_1    0.5 0.0413 1000  0.4289  0.5962
+#> beta_3_1   -0.1 0.0273 1000 -0.1574 -0.0501
+#> beta_1_2    0.0 0.0275 1000 -0.0478  0.0576
+#> beta_2_2    0.6 0.0331 1000  0.5301  0.6548
+#> beta_3_2    0.4 0.0267 1000  0.3515  0.4547
+#> beta_1_3    0.0 0.0195 1000 -0.0417  0.0324
+#> beta_2_3    0.0 0.0242 1000 -0.0431  0.0485
+#> beta_3_3    0.5 0.0279 1000  0.4462  0.5508
+#> psi_1_1     0.1 0.0138 1000  0.0767  0.1318
+#> psi_2_2     0.1 0.0105 1000  0.0814  0.1224
+#> psi_3_3     0.1 0.0126 1000  0.0776  0.1259
+#> theta_1_1   0.2 0.0117 1000  0.1737  0.2219
+#> theta_2_2   0.2 0.0099 1000  0.1804  0.2182
+#> theta_3_3   0.2 0.0126 1000  0.1753  0.2238
+#> mu0_1_1     0.0 0.4912 1000 -0.9477  1.0290
+#> mu0_2_1     0.0 0.4809 1000 -0.9576  0.9031
+#> mu0_3_1     0.0 0.5043 1000 -0.9482  0.9488
+#> sigma0_1_1  1.0 0.6512 1000  0.2583  4.1254
+#> sigma0_2_1  0.2 0.4580 1000 -0.5485  1.5533
+#> sigma0_3_1  0.2 0.4376 1000 -0.5029  1.2764
+#> sigma0_2_2  1.0 0.5973 1000  0.2702  3.1458
+#> sigma0_3_2  0.2 0.4444 1000 -0.4960  1.3274
+#> sigma0_3_3  1.0 0.6344 1000  0.2538  3.7833
 ```
 
 ## References

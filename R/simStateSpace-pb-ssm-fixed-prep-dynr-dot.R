@@ -42,7 +42,7 @@
   dynr_noise <- .DynrNoise(
     process_l = psi_l,
     theta_l = theta_l,
-    continuous = TRUE
+    continuous = FALSE
   )
   psi_values <- .Vec(
     dynr_noise$values.latent[[1]]
@@ -61,7 +61,7 @@
   dynr_dynamics <- .DynrDynamics(
     dynamics = beta,
     intercept = alpha,
-    continuous = TRUE,
+    continuous = FALSE,
     ou = FALSE
   )
   dynamics_values <- dynr_dynamics$startval
