@@ -75,68 +75,6 @@
 
 \maketitle
 
-Convert OU to SSM.
-
-\begin{equation}
-    \boldsymbol{\beta}
-    =
-    \exp{
-      \left(
-        - \boldsymbol{\Phi}
-        \Delta_{t}
-      \right)
-    }
-\end{equation}
-
-\begin{equation}
-    \boldsymbol{\alpha}
-    =
-    - \boldsymbol{\Phi}^{-1}
-    \left(
-      \boldsymbol{\beta} - \mathbf{I}_{p}
-    \right)
-\end{equation}
-
-\begin{equation}
-    \mathrm{vec}
-    \left(
-      \boldsymbol{\Psi}
-    \right)
-    =
-    \left\{
-      \left[
-        \left(
-          - \boldsymbol{\Phi} \otimes \mathbf{I}_{p}
-        \right)
-        +
-        \left(
-          \mathbf{I}_{p} \otimes - \boldsymbol{\Phi}
-        \right)
-      \right]
-      \left[
-        \exp
-        \left(
-          \left[
-            \left(
-              - \boldsymbol{\Phi} \otimes \mathbf{I}_{p}
-            \right)
-            +
-            \left(
-              \mathbf{I}_{p} \otimes - \boldsymbol{\Phi}
-            \right)
-          \right]
-          \Delta_{t}
-      \right)
-      -
-      \mathbf{I}_{p \times p}
-    \right]
-    \mathrm{vec}
-    \left(
-      \boldsymbol{\Sigma}
-    \right)
-  \right\}
-\end{equation}
-
 \nocite{RCoreTeam-2024}
 
 \printbibliography

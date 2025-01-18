@@ -26,12 +26,11 @@ LinkingTo:
     RcppArmadillo
 Imports: 
     Rcpp,
-    stats,
-    dynr
+    stats
 Suggests:
     knitr,
     rmarkdown,
     testthat,
     expm
-SystemRequirements: GSL (>= 2.6)
 RoxygenNote: 7.3.2
+

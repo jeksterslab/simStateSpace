@@ -29,9 +29,6 @@ reference:
 - title: Ornstein–Uhlenbeck Model
   contents:
   - has_keyword("ou")
-- title: Parametric Bootstrap
-  contents:
-  - has_keyword("boot")
 - title: Transformation
   contents:
   - has_keyword("transformation")
@@ -49,11 +46,6 @@ articles:
   - ssm
   - var
   - ou
-- title: Parametric Bootstrap
-  contents:
-  - pb-ssm
-  - pb-var
-  - pb-ou
 - title: Session Information
   contents:
   - session

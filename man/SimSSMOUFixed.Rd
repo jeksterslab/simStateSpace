@@ -515,10 +515,6 @@ Physical Review,
 \seealso{
 Other Simulation of State Space Models Data Functions: 
 \code{\link{LinSDE2SSM}()},
-\code{\link{PBSSMFixed}()},
-\code{\link{PBSSMLinSDEFixed}()},
-\code{\link{PBSSMOUFixed}()},
-\code{\link{PBSSMVARFixed}()},
 \code{\link{SimBetaN}()},
 \code{\link{SimPhiN}()},
 \code{\link{SimSSMFixed}()},

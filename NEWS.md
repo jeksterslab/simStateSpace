@@ -2,7 +2,7 @@
 
 ## Patch
 
-* Edits to the `mu0_fixed` and `sigma0_fixed` arguments in the `PBSSMFixed()`, `PBSSMVARFixed()`, `PBSSMLinSDEFixed()`, and `PBSSMOUFixed()` functions.
+* Moved bootstrap components to a dedicated package, bootStateSpace, for better modularity.
 
 # simStateSpace 1.2.7
 

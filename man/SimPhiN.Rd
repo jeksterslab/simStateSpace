@@ -42,10 +42,6 @@ SimPhiN(n = n, phi = phi, vcov_phi_vec_l = vcov_phi_vec_l)
 \seealso{
 Other Simulation of State Space Models Data Functions: 
 \code{\link{LinSDE2SSM}()},
-\code{\link{PBSSMFixed}()},
-\code{\link{PBSSMLinSDEFixed}()},
-\code{\link{PBSSMOUFixed}()},
-\code{\link{PBSSMVARFixed}()},
 \code{\link{SimBetaN}()},
 \code{\link{SimSSMFixed}()},
 \code{\link{SimSSMIVary}()},
