@@ -10,6 +10,7 @@
 ^\.devcontainer$
 ^\.git.*$
 ^\.library$
+^\.quarto$
 ^\.setup$
 ^\.sif$
 ^\.sim$
