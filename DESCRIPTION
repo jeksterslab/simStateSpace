@@ -22,10 +22,10 @@ Roxygen: list(markdown = TRUE)
 Depends: R (>= 3.5.0)
 LinkingTo: Rcpp, RcppArmadillo
 Imports: Rcpp, stats
-Suggests: knitr, rmarkdown, testthat, expm
+Suggests: knitr, rmarkdown, testthat, bootStateSpace, expm
 RoxygenNote: 7.3.2
 NeedsCompilation: yes
-Packaged: 2025-01-22 00:42:25 UTC; root
+Packaged: 2025-01-22 19:13:35 UTC; root
 Author: Ivan Jacob Agaloos Pesigan [aut, cre, cph]
     (<https://orcid.org/0000-0003-4818-8420>)
 Maintainer: Ivan Jacob Agaloos Pesigan <r.jeksterslab@gmail.com>
