@@ -33,3 +33,4 @@ Suggests:
     testthat,
     bootStateSpace,
     expm
+RoxygenNote: 7.3.2
