@@ -2,7 +2,7 @@
 
 ## Patch
 
-* Moved bootstrap components to a dedicated package, bootStateSpace, for better modularity.
+* Moved bootstrap components to a dedicated package, `bootStateSpace`, for better modularity.
 
 # simStateSpace 1.2.7
 
