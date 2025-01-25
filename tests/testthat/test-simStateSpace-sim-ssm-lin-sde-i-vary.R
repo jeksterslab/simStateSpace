@@ -169,6 +169,68 @@ lapply(
         plot.simstatespace(ssm, id = 1:3, time = (0:4) * 0.10)
         plot.simstatespace(ssm, eta = TRUE)
 
+        # sigma_l zero --------------------------------------------
+        sigma_l <- list(
+          matrix(
+            data = 0,
+            nrow = p,
+            ncol = p
+          )
+        )
+
+        # Type 0
+        ssm <- SimSSMLinSDEIVary(
+          n = n,
+          time = time,
+          delta_t = delta_t,
+          mu0 = mu0,
+          sigma0_l = sigma0_l,
+          iota = iota,
+          phi = phi,
+          sigma_l = sigma_l,
+          nu = nu,
+          lambda = lambda,
+          theta_l = theta_l,
+          type = 0
+        )
+
+        # Type 1
+        ssm <- SimSSMLinSDEIVary(
+          n = n,
+          time = time,
+          delta_t = delta_t,
+          mu0 = mu0,
+          sigma0_l = sigma0_l,
+          iota = iota,
+          phi = phi,
+          sigma_l = sigma_l,
+          nu = nu,
+          lambda = lambda,
+          theta_l = theta_l,
+          type = 1,
+          x = x,
+          gamma = gamma
+        )
+
+        # Type 2
+        ssm <- SimSSMLinSDEIVary(
+          n = n,
+          time = time,
+          delta_t = delta_t,
+          mu0 = mu0,
+          sigma0_l = sigma0_l,
+          iota = iota,
+          phi = phi,
+          sigma_l = sigma_l,
+          nu = nu,
+          lambda = lambda,
+          theta_l = theta_l,
+          type = 2,
+          x = x,
+          gamma = gamma,
+          kappa = kappa
+        )
+
         testthat::expect_true(
           TRUE
         )
