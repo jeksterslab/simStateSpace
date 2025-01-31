@@ -38,7 +38,7 @@ knitr::opts_chunk$set(
 ```{r}
 #| echo = FALSE
 set.seed(42)
-n <- 200
+n <- 500
 time <- 1000
 delta_t <- 0.10
 k <- p <- 3
@@ -446,7 +446,7 @@ dynr_measurement <- dynr::prep.measurement(
 
 ```{r}
 dynr_dynamics <- dynr::prep.formulaDynamics(
-  formula = list(
+  formula = list(  
     eta_1 ~ (phi_1_1 * (eta_1 - mu_1_1)) + (phi_1_2 * (eta_2 - mu_2_1)) + (phi_1_3 * (eta_3 - mu_3_1)),
     eta_2 ~ (phi_2_1 * (eta_1 - mu_1_1)) + (phi_2_2 * (eta_2 - mu_2_1)) + (phi_2_3 * (eta_3 - mu_3_1)),
     eta_3 ~ (phi_3_1 * (eta_1 - mu_1_1)) + (phi_3_2 * (eta_2 - mu_2_1)) + (phi_3_3 * (eta_3 - mu_3_1))
