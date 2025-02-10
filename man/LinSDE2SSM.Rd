@@ -198,6 +198,8 @@ Cambridge University Press.
 }
 \seealso{
 Other Simulation of State Space Models Data Functions: 
+\code{\link{LinSDECov}()},
+\code{\link{LinSDEMean}()},
 \code{\link{SimBetaN}()},
 \code{\link{SimPhiN}()},
 \code{\link{SimSSMFixed}()},

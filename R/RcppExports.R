@@ -322,6 +322,10 @@ SimPhiN <- function(n, phi, vcov_phi_vec_l) {
     .Call(`_simStateSpace_SimSSMLinSDEIVary2`, n, time, delta_t, mu0, sigma0_l, iota, phi, sigma_l, nu, lambda, theta_l, x, gamma, kappa, ou)
 }
 
+.SolveSyl <- function(A, B, C) {
+    .Call(`_simStateSpace_SolveSyl`, A, B, C)
+}
+
 #' Test the Drift Matrix
 #'
 #' Both have to be true for the function to return `TRUE`.
