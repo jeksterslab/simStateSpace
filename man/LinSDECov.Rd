@@ -2,7 +2,7 @@
 % Please edit documentation in R/simStateSpace-lin-sde-cov.R
 \name{LinSDECov}
 \alias{LinSDECov}
-\title{Steady State Covariance Matrix for the
+\title{Steady-State Covariance Matrix for the
 Linear Stochastic Differential Equation Model}
 \usage{
 LinSDECov(phi, sigma)
@@ -20,7 +20,7 @@ or randomness in the process
 (\eqn{\boldsymbol{\Sigma}}).}
 }
 \description{
-The steady state covariance matrix is the solution
+The steady-state covariance matrix is the solution
 to the Sylvester equation,
 i.e.
 \deqn{
@@ -30,7 +30,7 @@ i.e.
 } where \eqn{\mathbf{X}} is unknown,
 \eqn{\mathbf{A} = \boldsymbol{\Phi}},
 \eqn{\mathbf{B} = \boldsymbol{\Phi}^{\prime}}, and
-\eqn{\mathbf{C} = \boldsymbol{\Sigma} \boldsymbol{\Sigma}^{\prime}}.
+\eqn{\mathbf{C} = \boldsymbol{\Sigma}}.
 }
 \examples{
 phi <- matrix(

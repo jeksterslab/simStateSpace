@@ -1,7 +1,7 @@
-#' Steady State Mean Vector for the
+#' Steady-State Mean Vector for the
 #' Linear Stochastic Differential Equation Model
 #'
-#' The steady state mean is given by
+#' The steady-state mean vector is given by
 #' \deqn{
 #'   -\boldsymbol{\Phi}^{-1} \boldsymbol{\iota}
 #' }.
