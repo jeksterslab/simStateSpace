@@ -2,7 +2,7 @@
 % Please edit documentation in R/simStateSpace-lin-sde-mean.R
 \name{LinSDEMean}
 \alias{LinSDEMean}
-\title{Steady State Mean Vector for the
+\title{Steady-State Mean Vector for the
 Linear Stochastic Differential Equation Model}
 \usage{
 LinSDEMean(phi, iota)
@@ -19,7 +19,7 @@ An unobserved term that is constant over time
 (\eqn{\boldsymbol{\iota}}).}
 }
 \description{
-The steady state mean is given by
+The steady-state mean vector is given by
 \deqn{
   -\boldsymbol{\Phi}^{-1} \boldsymbol{\iota}
 }.

@@ -1,7 +1,7 @@
-#' Steady State Covariance Matrix for the
+#' Steady-State Covariance Matrix for the
 #' Linear Stochastic Differential Equation Model
 #'
-#' The steady state covariance matrix is the solution
+#' The steady-state covariance matrix is the solution
 #' to the Sylvester equation,
 #' i.e.
 #' \deqn{
@@ -11,7 +11,7 @@
 #' } where \eqn{\mathbf{X}} is unknown,
 #' \eqn{\mathbf{A} = \boldsymbol{\Phi}},
 #' \eqn{\mathbf{B} = \boldsymbol{\Phi}^{\prime}}, and
-#' \eqn{\mathbf{C} = \boldsymbol{\Sigma} \boldsymbol{\Sigma}^{\prime}}.
+#' \eqn{\mathbf{C} = \boldsymbol{\Sigma}}.
 #'
 #' @author Ivan Jacob Agaloos Pesigan
 #'
@@ -50,7 +50,7 @@ LinSDECov <- function(phi, sigma) {
     .SolveSyl(
       A = phi,
       B = t(phi),
-      C = tcrossprod(sigma)
+      C = sigma
     )
   )
 }
