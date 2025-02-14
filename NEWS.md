@@ -1,8 +1,7 @@
-# simStateSpace 1.2.8.9000
+# simStateSpace 1.2.9
 
 ## Patch
 
-* Latest development version.
 * Added the `LinSDECov()` and `LinSDEMean()` functions.
 
 # simStateSpace 1.2.8
