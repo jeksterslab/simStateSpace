@@ -21,5 +21,5 @@
   attributes(out)$k <- dims$k
   attributes(out)$p <- dims$p
   attributes(out)$j <- dims$j
-  return(out)
+  out
 }

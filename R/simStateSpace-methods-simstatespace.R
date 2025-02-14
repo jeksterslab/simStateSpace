@@ -135,12 +135,10 @@ as.data.frame.simstatespace <- function(x,
   attributes(out)$k <- NULL
   attributes(out)$p <- NULL
   attributes(out)$j <- NULL
-  return(
-    as.data.frame.matrix(
-      x = out,
-      row.names = row.names,
-      optional = optional
-    )
+  as.data.frame.matrix(
+    x = out,
+    row.names = row.names,
+    optional = optional
   )
 }
 
@@ -274,9 +272,7 @@ as.matrix.simstatespace <- function(x,
   attributes(out)$k <- NULL
   attributes(out)$p <- NULL
   attributes(out)$j <- NULL
-  return(
-    out
-  )
+  out
 }
 
 #' Plot Method for an Object of Class `simstatespace`

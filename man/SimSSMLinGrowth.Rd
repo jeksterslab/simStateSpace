@@ -337,11 +337,9 @@ j <- 2
 x <- lapply(
   X = seq_len(n),
   FUN = function(i) {
-    return(
-      matrix(
-        data = rnorm(n = j * time),
-        nrow = j
-      )
+    matrix(
+      data = rnorm(n = j * time),
+      nrow = j
     )
   }
 )

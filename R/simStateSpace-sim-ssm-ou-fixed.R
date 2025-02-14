@@ -438,5 +438,5 @@ SimSSMOUFixed <- function(n, time, delta_t = 1.0,
   )
   out$model$model <- "ou"
   out$fun <- "SimSSMOUFixed"
-  return(out)
+  out
 }

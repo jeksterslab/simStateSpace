@@ -456,5 +456,5 @@ SimSSMLinSDEFixed <- function(n, time, delta_t = 1.0,
   )
   out$model$model <- "linsde"
   out$fun <- "SimSSMLinSDEFixed"
-  return(out)
+  out
 }
