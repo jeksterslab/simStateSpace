@@ -299,7 +299,5 @@ SimSSMIVary <- function(n, time, delta_t = 1.0,
     "simstatespace",
     class(out)
   )
-  return(
-    out
-  )
+  out
 }

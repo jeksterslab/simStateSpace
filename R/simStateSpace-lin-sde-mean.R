@@ -27,7 +27,5 @@
 #' @keywords simStateSpace sim linsde
 #' @export
 LinSDEMean <- function(phi, iota) {
-  return(
-    solve(-phi, iota)
-  )
+  solve(-phi, iota)
 }

@@ -30,11 +30,9 @@
   out <- lapply(
     X = x$data,
     FUN = function(x) {
-      return(
-        do.call(
-          what = "cbind",
-          args = x
-        )
+      do.call(
+        what = "cbind",
+        args = x
       )
     }
   )
@@ -53,5 +51,5 @@
   attributes(out)$k <- k
   attributes(out)$p <- p
   attributes(out)$j <- j
-  return(out)
+  out
 }
