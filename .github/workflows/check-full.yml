@@ -40,6 +40,8 @@ jobs:
           - {os: ubuntu-latest,  r: 'oldrel-2'}
           - {os: ubuntu-latest,  r: 'oldrel-3'}
           - {os: ubuntu-latest,  r: 'oldrel-4'}
+          # arm64
+          - {os: ubuntu-22.04-arm, r: 'release' }
 
     env:
       GITHUB_PAT: ${{ secrets.PAT }}
