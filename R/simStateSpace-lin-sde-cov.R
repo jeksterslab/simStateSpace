@@ -46,9 +46,11 @@
 #' @keywords simStateSpace sim linsde
 #' @export
 LinSDECov <- function(phi, sigma) {
-  .SolveSyl(
+  stopifnot(
+    sigma == t(sigma)
+  )
+  .SolveLya(
     A = phi,
-    B = t(phi),
-    C = sigma
+    Q = sigma
   )
 }

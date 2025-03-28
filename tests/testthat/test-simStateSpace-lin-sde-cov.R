@@ -44,6 +44,26 @@ lapply(
             ) < tol
           )
         )
+        syl <- simStateSpace:::.SolveSyl(
+          A = phi,
+          B = t(phi),
+          C = sigma
+        )
+        syl <- (syl + t(syl)) / 2
+        testthat::expect_true(
+          all(
+            (
+              c(
+                syl
+              ) - c(
+                19.2,
+                10.5,
+                10.5,
+                21.6
+              )
+            ) < tol
+          )
+        )
       }
     )
   },

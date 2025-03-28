@@ -334,6 +334,18 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// SolveLya
+arma::mat SolveLya(arma::mat A, arma::mat Q);
+RcppExport SEXP _simStateSpace_SolveLya(SEXP ASEXP, SEXP QSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat >::type A(ASEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type Q(QSEXP);
+    rcpp_result_gen = Rcpp::wrap(SolveLya(A, Q));
+    return rcpp_result_gen;
+END_RCPP
+}
 // SolveSyl
 arma::mat SolveSyl(arma::mat A, arma::mat B, arma::mat C);
 RcppExport SEXP _simStateSpace_SolveSyl(SEXP ASEXP, SEXP BSEXP, SEXP CSEXP) {
@@ -398,6 +410,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_simStateSpace_SimSSMLinSDEIVary0", (DL_FUNC) &_simStateSpace_SimSSMLinSDEIVary0, 12},
     {"_simStateSpace_SimSSMLinSDEIVary1", (DL_FUNC) &_simStateSpace_SimSSMLinSDEIVary1, 14},
     {"_simStateSpace_SimSSMLinSDEIVary2", (DL_FUNC) &_simStateSpace_SimSSMLinSDEIVary2, 15},
+    {"_simStateSpace_SolveLya", (DL_FUNC) &_simStateSpace_SolveLya, 2},
     {"_simStateSpace_SolveSyl", (DL_FUNC) &_simStateSpace_SolveSyl, 3},
     {"_simStateSpace_TestPhi", (DL_FUNC) &_simStateSpace_TestPhi, 1},
     {"_simStateSpace_TestStability", (DL_FUNC) &_simStateSpace_TestStability, 1},

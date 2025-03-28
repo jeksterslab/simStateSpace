@@ -1,3 +1,9 @@
+# simStateSpace 1.2.10
+
+## Patch
+
+* Make sure the result of `LinSDECov()` is symmetric.
+
 # simStateSpace 1.2.9
 
 ## Patch
