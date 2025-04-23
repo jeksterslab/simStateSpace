@@ -1,3 +1,10 @@
+# simStateSpace 1.2.11
+
+## Patch
+
+* Added the `SimAlphaN()` and `SimIotaN()` functions.
+* Added the `SSMCov()` and `SSMMean()` functions.
+
 # simStateSpace 1.2.10
 
 ## Patch

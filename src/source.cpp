@@ -235,6 +235,53 @@ Rcpp::List LinSDE2SSM(const arma::vec& iota, const arma::mat& phi,
                             Rcpp::Named("psi_l") = psi_l);
 }
 // -----------------------------------------------------------------------------
+// edit .setup/cpp/simStateSpace-sim-alpha-n.cpp
+// Ivan Jacob Agaloos Pesigan
+// -----------------------------------------------------------------------------
+
+#include <RcppArmadillo.h>
+// [[Rcpp::depends(RcppArmadillo)]]
+
+//' Simulate Intercept Vectors
+//' in a Discrete-Time Vector Autoregressive Model
+//' from the Multivariate Normal Distribution
+//'
+//' This function simulates random intercept vectors
+//' in a discrete-time vector autoregressive model
+//' from the multivariate normal distribution.
+//'
+//' @author Ivan Jacob Agaloos Pesigan
+//'
+//' @param n Positive integer.
+//'   Number of replications.
+//' @param alpha Numeric vector.
+//'   Intercept (\eqn{\boldsymbol{\alpha}}).
+//' @param vcov_alpha_l Numeric matrix.
+//'   Cholesky factorization (`t(chol(vcov_alpha))`)
+//'   of the sampling variance-covariance matrix
+//'   \eqn{\boldsymbol{\alpha}}.
+//'
+//' @examples
+//' n <- 10
+//' alpha <- c(0, 0, 0)
+//' vcov_alpha_l <- t(chol(0.001 * diag(3)))
+//' SimAlphaN(n = n, alpha = alpha, vcov_alpha_l = vcov_alpha_l)
+//'
+//' @family Simulation of State Space Models Data Functions
+//' @keywords simStateSpace ssm
+//' @export
+// [[Rcpp::export]]
+Rcpp::List SimAlphaN(const arma::uword& n, const arma::vec& alpha,
+                     const arma::mat& vcov_alpha_l) {
+  Rcpp::List output(n);
+  arma::vec alpha_i(alpha.n_rows, arma::fill::none);
+  for (arma::uword i = 0; i < n; i++) {
+    alpha_i = alpha + (vcov_alpha_l * arma::randn(alpha.n_rows));
+    output[i] = alpha_i;
+  }
+  return output;
+}
+// -----------------------------------------------------------------------------
 // edit .setup/cpp/simStateSpace-sim-beta-n.cpp
 // Ivan Jacob Agaloos Pesigan
 // -----------------------------------------------------------------------------
@@ -297,6 +344,53 @@ Rcpp::List SimBetaN(const arma::uword& n, const arma::mat& beta,
         output[i] = beta_i;
       }
     }
+  }
+  return output;
+}
+// -----------------------------------------------------------------------------
+// edit .setup/cpp/simStateSpace-sim-iota-n.cpp
+// Ivan Jacob Agaloos Pesigan
+// -----------------------------------------------------------------------------
+
+#include <RcppArmadillo.h>
+// [[Rcpp::depends(RcppArmadillo)]]
+
+//' Simulate Intercept Vectors
+//' in a Continuous-Time Vector Autoregressive Model
+//' from the Multivariate Normal Distribution
+//'
+//' This function simulates random intercept vectors
+//' in a continuous-time vector autoregressive model
+//' from the multivariate normal distribution.
+//'
+//' @author Ivan Jacob Agaloos Pesigan
+//'
+//' @param n Positive integer.
+//'   Number of replications.
+//' @param iota Numeric vector.
+//'   Intercept (\eqn{\boldsymbol{\iota}}).
+//' @param vcov_iota_l Numeric matrix.
+//'   Cholesky factorization (`t(chol(vcov_iota))`)
+//'   of the sampling variance-covariance matrix
+//'   \eqn{\boldsymbol{\iota}}.
+//'
+//' @examples
+//' n <- 10
+//' iota <- c(0, 0, 0)
+//' vcov_iota_l <- t(chol(0.001 * diag(3)))
+//' SimIotaN(n = n, iota = iota, vcov_iota_l = vcov_iota_l)
+//'
+//' @family Simulation of State Space Models Data Functions
+//' @keywords simStateSpace ssm
+//' @export
+// [[Rcpp::export]]
+Rcpp::List SimIotaN(const arma::uword& n, const arma::vec& iota,
+                    const arma::mat& vcov_iota_l) {
+  Rcpp::List output(n);
+  arma::vec iota_i(iota.n_rows, arma::fill::none);
+  for (arma::uword i = 0; i < n; i++) {
+    iota_i = iota + (vcov_iota_l * arma::randn(iota.n_rows));
+    output[i] = iota_i;
   }
   return output;
 }
@@ -1297,6 +1391,99 @@ arma::mat SolveSyl(arma::mat A, arma::mat B, arma::mat C) {
   arma::mat X;
   arma::syl(X, A, B, C);
   return X;
+}
+// -----------------------------------------------------------------------------
+// edit .setup/cpp/simStateSpace-ssm-cov.cpp
+// Ivan Jacob Agaloos Pesigan
+// -----------------------------------------------------------------------------
+
+#include <RcppArmadillo.h>
+// [[Rcpp::depends(RcppArmadillo)]]
+
+//' State Covariance Matrix for the
+//' State Space Model
+//'
+//' This function calculates the state covariance matrix
+//' for the state space model
+//' given by
+//' \deqn{
+//'   \mathrm{vec}
+//'   \left(
+//'     \mathrm{Cov} \left( \boldsymbol{\eta} \right)
+//'   \right)
+//'   =
+//'   \left(
+//'     \mathbf{I} - \boldsymbol{\beta} \otimes \boldsymbol{\beta}
+//'   \right)^{-1}
+//'   \mathrm{vec} \left( \boldsymbol{\Psi} \right) .
+//' }
+//'
+//' @author Ivan Jacob Agaloos Pesigan
+//'
+//' @param beta Numeric matrix.
+//'   The transition matrix (\eqn{\boldsymbol{\beta}}).
+//' @param psi Numeric matrix.
+//'   The covariance matrix
+//'   of the process noise
+//'   (\eqn{\boldsymbol{\Psi}}).
+//'
+//' @examples
+//' beta <- 0.50 * diag(3)
+//' psi <- 0.001 * diag(3)
+//' SSMCov(beta = beta, psi = psi)
+//'
+//' @family Simulation of State Space Models Data Functions
+//' @keywords simStateSpace ssm
+//' @export
+// [[Rcpp::export]]
+arma::mat SSMCov(const arma::mat& beta, const arma::mat& psi) {
+  arma::vec vec_sigma = arma::solve(
+      arma::eye(beta.n_rows * beta.n_rows, beta.n_rows * beta.n_rows) -
+          arma::kron(beta, beta),
+      arma::vectorise(psi));
+  return arma::reshape(vec_sigma, beta.n_rows, beta.n_rows);
+}
+// -----------------------------------------------------------------------------
+// edit .setup/cpp/simStateSpace-ssm-mean.cpp
+// Ivan Jacob Agaloos Pesigan
+// -----------------------------------------------------------------------------
+
+#include <RcppArmadillo.h>
+// [[Rcpp::depends(RcppArmadillo)]]
+
+//' State Mean Vector for the
+//' State Space Model
+//'
+//' This function calculates the state mean vector
+//' for the state space model
+//' given by
+//' \deqn{
+//'   \mathrm{Mean} \left( \boldsymbol{\eta} \right)
+//'   =
+//'   \left(
+//'     \mathbf{I} - \boldsymbol{\beta}
+//'   \right)^{-1}
+//'   \boldsymbol{\alpha} .
+//' }
+//'
+//' @author Ivan Jacob Agaloos Pesigan
+//'
+//' @param beta Numeric matrix.
+//'   The transition matrix (\eqn{\boldsymbol{\beta}}).
+//' @param alpha Numeric vector.
+//'   Vector of constant values for the dynamic model
+//'   (\eqn{\boldsymbol{\alpha}}).
+//' @examples
+//' beta <- 0.50 * diag(3)
+//' alpha <- rep(x = 0.001, times = 3)
+//' SSMMean(beta = beta, alpha = alpha)
+//'
+//' @family Simulation of State Space Models Data Functions
+//' @keywords simStateSpace ssm
+//' @export
+// [[Rcpp::export]]
+arma::vec SSMMean(const arma::mat& beta, const arma::vec& alpha) {
+  return arma::solve(arma::eye(beta.n_rows, beta.n_rows) - beta, alpha);
 }
 // -----------------------------------------------------------------------------
 // edit .setup/cpp/simStateSpace-test-phi.cpp

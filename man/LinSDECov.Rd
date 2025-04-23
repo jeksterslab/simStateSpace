@@ -58,7 +58,11 @@ LinSDECov(phi = phi, sigma = sigma)
 Other Simulation of State Space Models Data Functions: 
 \code{\link{LinSDE2SSM}()},
 \code{\link{LinSDEMean}()},
+\code{\link{SSMCov}()},
+\code{\link{SSMMean}()},
+\code{\link{SimAlphaN}()},
 \code{\link{SimBetaN}()},
+\code{\link{SimIotaN}()},
 \code{\link{SimPhiN}()},
 \code{\link{SimSSMFixed}()},
 \code{\link{SimSSMIVary}()},
