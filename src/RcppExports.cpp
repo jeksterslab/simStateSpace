@@ -25,6 +25,19 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// SimAlphaN
+Rcpp::List SimAlphaN(const arma::uword& n, const arma::vec& alpha, const arma::mat& vcov_alpha_l);
+RcppExport SEXP _simStateSpace_SimAlphaN(SEXP nSEXP, SEXP alphaSEXP, SEXP vcov_alpha_lSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::uword& >::type n(nSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type vcov_alpha_l(vcov_alpha_lSEXP);
+    rcpp_result_gen = Rcpp::wrap(SimAlphaN(n, alpha, vcov_alpha_l));
+    return rcpp_result_gen;
+END_RCPP
+}
 // SimBetaN
 Rcpp::List SimBetaN(const arma::uword& n, const arma::mat& beta, const arma::mat& vcov_beta_vec_l);
 RcppExport SEXP _simStateSpace_SimBetaN(SEXP nSEXP, SEXP betaSEXP, SEXP vcov_beta_vec_lSEXP) {
@@ -35,6 +48,19 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const arma::mat& >::type beta(betaSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type vcov_beta_vec_l(vcov_beta_vec_lSEXP);
     rcpp_result_gen = Rcpp::wrap(SimBetaN(n, beta, vcov_beta_vec_l));
+    return rcpp_result_gen;
+END_RCPP
+}
+// SimIotaN
+Rcpp::List SimIotaN(const arma::uword& n, const arma::vec& iota, const arma::mat& vcov_iota_l);
+RcppExport SEXP _simStateSpace_SimIotaN(SEXP nSEXP, SEXP iotaSEXP, SEXP vcov_iota_lSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::uword& >::type n(nSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type iota(iotaSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type vcov_iota_l(vcov_iota_lSEXP);
+    rcpp_result_gen = Rcpp::wrap(SimIotaN(n, iota, vcov_iota_l));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -359,6 +385,30 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// SSMCov
+arma::mat SSMCov(const arma::mat& beta, const arma::mat& psi);
+RcppExport SEXP _simStateSpace_SSMCov(SEXP betaSEXP, SEXP psiSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::mat& >::type beta(betaSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type psi(psiSEXP);
+    rcpp_result_gen = Rcpp::wrap(SSMCov(beta, psi));
+    return rcpp_result_gen;
+END_RCPP
+}
+// SSMMean
+arma::vec SSMMean(const arma::mat& beta, const arma::vec& alpha);
+RcppExport SEXP _simStateSpace_SSMMean(SEXP betaSEXP, SEXP alphaSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::mat& >::type beta(betaSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type alpha(alphaSEXP);
+    rcpp_result_gen = Rcpp::wrap(SSMMean(beta, alpha));
+    return rcpp_result_gen;
+END_RCPP
+}
 // TestPhi
 bool TestPhi(const arma::mat& phi);
 RcppExport SEXP _simStateSpace_TestPhi(SEXP phiSEXP) {
@@ -395,7 +445,9 @@ END_RCPP
 
 static const R_CallMethodDef CallEntries[] = {
     {"_simStateSpace_LinSDE2SSM", (DL_FUNC) &_simStateSpace_LinSDE2SSM, 4},
+    {"_simStateSpace_SimAlphaN", (DL_FUNC) &_simStateSpace_SimAlphaN, 3},
     {"_simStateSpace_SimBetaN", (DL_FUNC) &_simStateSpace_SimBetaN, 3},
+    {"_simStateSpace_SimIotaN", (DL_FUNC) &_simStateSpace_SimIotaN, 3},
     {"_simStateSpace_SimPhiN", (DL_FUNC) &_simStateSpace_SimPhiN, 3},
     {"_simStateSpace_SimSSMFixed0", (DL_FUNC) &_simStateSpace_SimSSMFixed0, 11},
     {"_simStateSpace_SimSSMFixed1", (DL_FUNC) &_simStateSpace_SimSSMFixed1, 13},
@@ -412,6 +464,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_simStateSpace_SimSSMLinSDEIVary2", (DL_FUNC) &_simStateSpace_SimSSMLinSDEIVary2, 15},
     {"_simStateSpace_SolveLya", (DL_FUNC) &_simStateSpace_SolveLya, 2},
     {"_simStateSpace_SolveSyl", (DL_FUNC) &_simStateSpace_SolveSyl, 3},
+    {"_simStateSpace_SSMCov", (DL_FUNC) &_simStateSpace_SSMCov, 2},
+    {"_simStateSpace_SSMMean", (DL_FUNC) &_simStateSpace_SSMMean, 2},
     {"_simStateSpace_TestPhi", (DL_FUNC) &_simStateSpace_TestPhi, 1},
     {"_simStateSpace_TestStability", (DL_FUNC) &_simStateSpace_TestStability, 1},
     {"_simStateSpace_TestStationarity", (DL_FUNC) &_simStateSpace_TestStationarity, 1},

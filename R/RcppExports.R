@@ -192,6 +192,38 @@ LinSDE2SSM <- function(iota, phi, sigma_l, delta_t) {
     .Call(`_simStateSpace_LinSDE2SSM`, iota, phi, sigma_l, delta_t)
 }
 
+#' Simulate Intercept Vectors
+#' in a Discrete-Time Vector Autoregressive Model
+#' from the Multivariate Normal Distribution
+#'
+#' This function simulates random intercept vectors
+#' in a discrete-time vector autoregressive model
+#' from the multivariate normal distribution.
+#'
+#' @author Ivan Jacob Agaloos Pesigan
+#'
+#' @param n Positive integer.
+#'   Number of replications.
+#' @param alpha Numeric vector.
+#'   Intercept (\eqn{\boldsymbol{\alpha}}).
+#' @param vcov_alpha_l Numeric matrix.
+#'   Cholesky factorization (`t(chol(vcov_alpha))`)
+#'   of the sampling variance-covariance matrix
+#'   \eqn{\boldsymbol{\alpha}}.
+#'
+#' @examples
+#' n <- 10
+#' alpha <- c(0, 0, 0)
+#' vcov_alpha_l <- t(chol(0.001 * diag(3)))
+#' SimAlphaN(n = n, alpha = alpha, vcov_alpha_l = vcov_alpha_l)
+#'
+#' @family Simulation of State Space Models Data Functions
+#' @keywords simStateSpace ssm
+#' @export
+SimAlphaN <- function(n, alpha, vcov_alpha_l) {
+    .Call(`_simStateSpace_SimAlphaN`, n, alpha, vcov_alpha_l)
+}
+
 #' Simulate Transition Matrices
 #' from the Multivariate Normal Distribution
 #'
@@ -229,6 +261,38 @@ LinSDE2SSM <- function(iota, phi, sigma_l, delta_t) {
 #' @export
 SimBetaN <- function(n, beta, vcov_beta_vec_l) {
     .Call(`_simStateSpace_SimBetaN`, n, beta, vcov_beta_vec_l)
+}
+
+#' Simulate Intercept Vectors
+#' in a Continuous-Time Vector Autoregressive Model
+#' from the Multivariate Normal Distribution
+#'
+#' This function simulates random intercept vectors
+#' in a continuous-time vector autoregressive model
+#' from the multivariate normal distribution.
+#'
+#' @author Ivan Jacob Agaloos Pesigan
+#'
+#' @param n Positive integer.
+#'   Number of replications.
+#' @param iota Numeric vector.
+#'   Intercept (\eqn{\boldsymbol{\iota}}).
+#' @param vcov_iota_l Numeric matrix.
+#'   Cholesky factorization (`t(chol(vcov_iota))`)
+#'   of the sampling variance-covariance matrix
+#'   \eqn{\boldsymbol{\iota}}.
+#'
+#' @examples
+#' n <- 10
+#' iota <- c(0, 0, 0)
+#' vcov_iota_l <- t(chol(0.001 * diag(3)))
+#' SimIotaN(n = n, iota = iota, vcov_iota_l = vcov_iota_l)
+#'
+#' @family Simulation of State Space Models Data Functions
+#' @keywords simStateSpace ssm
+#' @export
+SimIotaN <- function(n, iota, vcov_iota_l) {
+    .Call(`_simStateSpace_SimIotaN`, n, iota, vcov_iota_l)
 }
 
 #' Simulate Random Drift Matrices
@@ -328,6 +392,79 @@ SimPhiN <- function(n, phi, vcov_phi_vec_l) {
 
 .SolveSyl <- function(A, B, C) {
     .Call(`_simStateSpace_SolveSyl`, A, B, C)
+}
+
+#' State Covariance Matrix for the
+#' State Space Model
+#'
+#' This function calculates the state covariance matrix
+#' for the state space model
+#' given by
+#' \deqn{
+#'   \mathrm{vec}
+#'   \left(
+#'     \mathrm{Cov} \left( \boldsymbol{\eta} \right)
+#'   \right)
+#'   =
+#'   \left(
+#'     \mathbf{I} - \boldsymbol{\beta} \otimes \boldsymbol{\beta}
+#'   \right)^{-1}
+#'   \mathrm{vec} \left( \boldsymbol{\Psi} \right) .
+#' }
+#'
+#' @author Ivan Jacob Agaloos Pesigan
+#'
+#' @param beta Numeric matrix.
+#'   The transition matrix (\eqn{\boldsymbol{\beta}}).
+#' @param psi Numeric matrix.
+#'   The covariance matrix
+#'   of the process noise
+#'   (\eqn{\boldsymbol{\Psi}}).
+#'
+#' @examples
+#' beta <- 0.50 * diag(3)
+#' psi <- 0.001 * diag(3)
+#' SSMCov(beta = beta, psi = psi)
+#'
+#' @family Simulation of State Space Models Data Functions
+#' @keywords simStateSpace ssm
+#' @export
+SSMCov <- function(beta, psi) {
+    .Call(`_simStateSpace_SSMCov`, beta, psi)
+}
+
+#' State Mean Vector for the
+#' State Space Model
+#'
+#' This function calculates the state mean vector
+#' for the state space model
+#' given by
+#' \deqn{
+#'   \mathrm{Mean} \left( \boldsymbol{\eta} \right)
+#'   =
+#'   \left(
+#'     \mathbf{I} - \boldsymbol{\beta}
+#'   \right)^{-1}
+#'   \boldsymbol{\alpha} .
+#' }
+#'
+#' @author Ivan Jacob Agaloos Pesigan
+#'
+#' @param beta Numeric matrix.
+#'   The transition matrix (\eqn{\boldsymbol{\beta}}).
+#' @param alpha Numeric vector.
+#'   Vector of constant values for the dynamic model
+#'   (\eqn{\boldsymbol{\alpha}}).
+#' @examples
+#' beta <- 0.50 * diag(3)
+#' alpha <- rep(x = 0.001, times = 3)
+#' SSMMean(beta = beta, alpha = alpha)
+#'
+#' @family Simulation of State Space Models Data Functions
+#' @keywords simStateSpace ssm
+#' @export
+SSMMean <- function(beta, alpha) {
+    .Call(`_simStateSpace_SSMMean`, beta, alpha)
 }
 
 #' Test the Drift Matrix

@@ -8,7 +8,7 @@
 
 # Define an array of directories
 directories=(
-  "/scratch/ibp5092/overleaf/simStateSpace"
+  "/scratch/ibp5092/simStateSpace2"
 )
 
 # SIF path
