@@ -8,7 +8,7 @@
 
 # Define an array of directories
 directories=(
-  "/scratch/ibp5092/simStateSpace2"
+  "/scratch/ibp5092/simStateSpace"
 )
 
 # SIF path
@@ -20,7 +20,7 @@ for dir in "${directories[@]}"; do
     echo "Processing: $dir"
     cd "$dir" || exit
     apptainer exec "$sif_path" make all
-    apptainer exec "$sif_path" make auto
+    # apptainer exec "$sif_path" make auto
   fi
 done
 
