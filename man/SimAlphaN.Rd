@@ -17,8 +17,11 @@ Intercept (\eqn{\boldsymbol{\alpha}}).}
 
 \item{vcov_alpha_l}{Numeric matrix.
 Cholesky factorization (\code{t(chol(vcov_alpha))})
-of the sampling variance-covariance matrix
+of the sampling variance-covariance matrix of
 \eqn{\boldsymbol{\alpha}}.}
+}
+\value{
+Returns a list of random intercept vectors.
 }
 \description{
 This function simulates random intercept vectors
@@ -40,6 +43,8 @@ Other Simulation of State Space Models Data Functions:
 \code{\link{SSMCov}()},
 \code{\link{SSMMean}()},
 \code{\link{SimBetaN}()},
+\code{\link{SimCovDiagN}()},
+\code{\link{SimCovN}()},
 \code{\link{SimIotaN}()},
 \code{\link{SimPhiN}()},
 \code{\link{SimSSMFixed}()},

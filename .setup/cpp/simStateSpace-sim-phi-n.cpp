@@ -22,8 +22,9 @@
 //'   The drift matrix (\eqn{\boldsymbol{\Phi}}).
 //' @param vcov_phi_vec_l Numeric matrix.
 //'   Cholesky factorization (`t(chol(vcov_phi_vec))`)
-//'   of the sampling variance-covariance matrix
+//'   of the sampling variance-covariance matrix of
 //'   \eqn{\mathrm{vec} \left( \boldsymbol{\Phi} \right)}.
+//' @return Returns a list of random drift matrices.
 //'
 //' @examples
 //' n <- 10

@@ -22,8 +22,9 @@
 //'   Intercept (\eqn{\boldsymbol{\iota}}).
 //' @param vcov_iota_l Numeric matrix.
 //'   Cholesky factorization (`t(chol(vcov_iota))`)
-//'   of the sampling variance-covariance matrix
+//'   of the sampling variance-covariance matrix of
 //'   \eqn{\boldsymbol{\iota}}.
+//' @return Returns a list of random intercept vectors.
 //'
 //' @examples
 //' n <- 10

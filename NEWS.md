@@ -4,6 +4,7 @@
 
 * Added the `SimAlphaN()` and `SimIotaN()` functions.
 * Added the `SSMCov()` and `SSMMean()` functions.
+* Added the `SimCovN()` and `SimCovDiagN()` functions.
 
 # simStateSpace 1.2.10
 

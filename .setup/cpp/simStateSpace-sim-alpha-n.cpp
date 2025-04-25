@@ -22,8 +22,9 @@
 //'   Intercept (\eqn{\boldsymbol{\alpha}}).
 //' @param vcov_alpha_l Numeric matrix.
 //'   Cholesky factorization (`t(chol(vcov_alpha))`)
-//'   of the sampling variance-covariance matrix
+//'   of the sampling variance-covariance matrix of
 //'   \eqn{\boldsymbol{\alpha}}.
+//' @return Returns a list of random intercept vectors.
 //'
 //' @examples
 //' n <- 10

@@ -16,8 +16,11 @@ The drift matrix (\eqn{\boldsymbol{\Phi}}).}
 
 \item{vcov_phi_vec_l}{Numeric matrix.
 Cholesky factorization (\code{t(chol(vcov_phi_vec))})
-of the sampling variance-covariance matrix
+of the sampling variance-covariance matrix of
 \eqn{\mathrm{vec} \left( \boldsymbol{\Phi} \right)}.}
+}
+\value{
+Returns a list of random drift matrices.
 }
 \description{
 This function simulates random drift matrices
@@ -48,6 +51,8 @@ Other Simulation of State Space Models Data Functions:
 \code{\link{SSMMean}()},
 \code{\link{SimAlphaN}()},
 \code{\link{SimBetaN}()},
+\code{\link{SimCovDiagN}()},
+\code{\link{SimCovN}()},
 \code{\link{SimIotaN}()},
 \code{\link{SimSSMFixed}()},
 \code{\link{SimSSMIVary}()},

@@ -22,8 +22,9 @@
 //'   The transition matrix (\eqn{\boldsymbol{\beta}}).
 //' @param vcov_beta_vec_l Numeric matrix.
 //'   Cholesky factorization (`t(chol(vcov_beta_vec))`)
-//'   of the sampling variance-covariance matrix
+//'   of the sampling variance-covariance matrix of
 //'   \eqn{\mathrm{vec} \left( \boldsymbol{\beta} \right)}.
+//' @return Returns a list of random transition matrices.
 //'
 //' @examples
 //' n <- 10
