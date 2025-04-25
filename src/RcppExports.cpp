@@ -51,6 +51,32 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// SimCovDiagN
+Rcpp::List SimCovDiagN(const arma::uword& n, const arma::vec& sigma_diag, const arma::mat& vcov_sigma_diag_l);
+RcppExport SEXP _simStateSpace_SimCovDiagN(SEXP nSEXP, SEXP sigma_diagSEXP, SEXP vcov_sigma_diag_lSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::uword& >::type n(nSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type sigma_diag(sigma_diagSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type vcov_sigma_diag_l(vcov_sigma_diag_lSEXP);
+    rcpp_result_gen = Rcpp::wrap(SimCovDiagN(n, sigma_diag, vcov_sigma_diag_l));
+    return rcpp_result_gen;
+END_RCPP
+}
+// SimCovN
+Rcpp::List SimCovN(const arma::uword& n, const arma::mat& sigma, const arma::mat& vcov_sigma_vech_l);
+RcppExport SEXP _simStateSpace_SimCovN(SEXP nSEXP, SEXP sigmaSEXP, SEXP vcov_sigma_vech_lSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::uword& >::type n(nSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type sigma(sigmaSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type vcov_sigma_vech_l(vcov_sigma_vech_lSEXP);
+    rcpp_result_gen = Rcpp::wrap(SimCovN(n, sigma, vcov_sigma_vech_l));
+    return rcpp_result_gen;
+END_RCPP
+}
 // SimIotaN
 Rcpp::List SimIotaN(const arma::uword& n, const arma::vec& iota, const arma::mat& vcov_iota_l);
 RcppExport SEXP _simStateSpace_SimIotaN(SEXP nSEXP, SEXP iotaSEXP, SEXP vcov_iota_lSEXP) {
@@ -447,6 +473,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_simStateSpace_LinSDE2SSM", (DL_FUNC) &_simStateSpace_LinSDE2SSM, 4},
     {"_simStateSpace_SimAlphaN", (DL_FUNC) &_simStateSpace_SimAlphaN, 3},
     {"_simStateSpace_SimBetaN", (DL_FUNC) &_simStateSpace_SimBetaN, 3},
+    {"_simStateSpace_SimCovDiagN", (DL_FUNC) &_simStateSpace_SimCovDiagN, 3},
+    {"_simStateSpace_SimCovN", (DL_FUNC) &_simStateSpace_SimCovN, 3},
     {"_simStateSpace_SimIotaN", (DL_FUNC) &_simStateSpace_SimIotaN, 3},
     {"_simStateSpace_SimPhiN", (DL_FUNC) &_simStateSpace_SimPhiN, 3},
     {"_simStateSpace_SimSSMFixed0", (DL_FUNC) &_simStateSpace_SimSSMFixed0, 11},

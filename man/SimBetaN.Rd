@@ -16,8 +16,11 @@ The transition matrix (\eqn{\boldsymbol{\beta}}).}
 
 \item{vcov_beta_vec_l}{Numeric matrix.
 Cholesky factorization (\code{t(chol(vcov_beta_vec))})
-of the sampling variance-covariance matrix
+of the sampling variance-covariance matrix of
 \eqn{\mathrm{vec} \left( \boldsymbol{\beta} \right)}.}
+}
+\value{
+Returns a list of random transition matrices.
 }
 \description{
 This function simulates random transition matrices
@@ -47,6 +50,8 @@ Other Simulation of State Space Models Data Functions:
 \code{\link{SSMCov}()},
 \code{\link{SSMMean}()},
 \code{\link{SimAlphaN}()},
+\code{\link{SimCovDiagN}()},
+\code{\link{SimCovN}()},
 \code{\link{SimIotaN}()},
 \code{\link{SimPhiN}()},
 \code{\link{SimSSMFixed}()},

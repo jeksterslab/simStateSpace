@@ -208,8 +208,9 @@ LinSDE2SSM <- function(iota, phi, sigma_l, delta_t) {
 #'   Intercept (\eqn{\boldsymbol{\alpha}}).
 #' @param vcov_alpha_l Numeric matrix.
 #'   Cholesky factorization (`t(chol(vcov_alpha))`)
-#'   of the sampling variance-covariance matrix
+#'   of the sampling variance-covariance matrix of
 #'   \eqn{\boldsymbol{\alpha}}.
+#' @return Returns a list of random intercept vectors.
 #'
 #' @examples
 #' n <- 10
@@ -240,8 +241,9 @@ SimAlphaN <- function(n, alpha, vcov_alpha_l) {
 #'   The transition matrix (\eqn{\boldsymbol{\beta}}).
 #' @param vcov_beta_vec_l Numeric matrix.
 #'   Cholesky factorization (`t(chol(vcov_beta_vec))`)
-#'   of the sampling variance-covariance matrix
+#'   of the sampling variance-covariance matrix of
 #'   \eqn{\mathrm{vec} \left( \boldsymbol{\beta} \right)}.
+#' @return Returns a list of random transition matrices.
 #'
 #' @examples
 #' n <- 10
@@ -263,6 +265,93 @@ SimBetaN <- function(n, beta, vcov_beta_vec_l) {
     .Call(`_simStateSpace_SimBetaN`, n, beta, vcov_beta_vec_l)
 }
 
+#' Simulate Diagonal Covariance Matrices
+#' from the Multivariate Normal Distribution
+#'
+#' This function simulates random diagonal covariance matrices
+#' from the multivariate normal distribution.
+#' The function ensures that the generated covariance matrices
+#' are positive semi-definite.
+#'
+#' @author Ivan Jacob Agaloos Pesigan
+#'
+#' @param n Positive integer.
+#'   Number of replications.
+#' @param sigma_diag Numeric matrix.
+#'   The covariance matrix
+#'   (\eqn{\boldsymbol{\Sigma}}).
+#' @param vcov_sigma_diag_l Numeric matrix.
+#'   Cholesky factorization (`t(chol(vcov_sigma_vech))`)
+#'   of the sampling variance-covariance matrix of
+#'   \eqn{\mathrm{vech} \left( \boldsymbol{\Sigma} \right)}.
+#' @return Returns a list of random diagonal covariance matrices.
+#'
+#' @examples
+#' n <- 10
+#' sigma_diag <- c(1, 1, 1)
+#' vcov_sigma_diag_l <- t(chol(0.001 * diag(3)))
+#' SimCovDiagN(
+#'   n = n,
+#'   sigma_diag = sigma_diag,
+#'   vcov_sigma_diag_l = vcov_sigma_diag_l
+#' )
+#'
+#' @family Simulation of State Space Models Data Functions
+#' @keywords simStateSpace ssm
+#' @export
+SimCovDiagN <- function(n, sigma_diag, vcov_sigma_diag_l) {
+    .Call(`_simStateSpace_SimCovDiagN`, n, sigma_diag, vcov_sigma_diag_l)
+}
+
+#' Simulate Covariance Matrices
+#' from the Multivariate Normal Distribution
+#'
+#' This function simulates random covariance matrices
+#' from the multivariate normal distribution.
+#' The function ensures that the generated covariance matrices
+#' are positive semi-definite.
+#'
+#' @author Ivan Jacob Agaloos Pesigan
+#'
+#' @param n Positive integer.
+#'   Number of replications.
+#' @param sigma Numeric matrix.
+#'   The covariance matrix
+#'   (\eqn{\boldsymbol{\Sigma}}).
+#' @param vcov_sigma_vech_l Numeric matrix.
+#'   Cholesky factorization (`t(chol(vcov_sigma_vech))`)
+#'   of the sampling variance-covariance matrix of
+#'   \eqn{\mathrm{vech} \left( \boldsymbol{\Sigma} \right)}.
+#' @return Returns a list of random covariance matrices.
+#'
+#' @examples
+#' n <- 10
+#' sigma <- matrix(
+#'   data = c(
+#'     1.0, 0.5, 0.3,
+#'     0.5, 1.0, 0.4,
+#'     0.3, 0.4, 1.0
+#'   ),
+#'   nrow = 3
+#' )
+#' vcov_sigma_vech_l <- t(
+#'   chol(
+#'     0.001 * diag(3 * (3 + 1) / 2)
+#'   )
+#' )
+#' SimCovN(
+#'   n = n,
+#'   sigma = sigma,
+#'   vcov_sigma_vech_l = vcov_sigma_vech_l
+#' )
+#'
+#' @family Simulation of State Space Models Data Functions
+#' @keywords simStateSpace ssm
+#' @export
+SimCovN <- function(n, sigma, vcov_sigma_vech_l) {
+    .Call(`_simStateSpace_SimCovN`, n, sigma, vcov_sigma_vech_l)
+}
+
 #' Simulate Intercept Vectors
 #' in a Continuous-Time Vector Autoregressive Model
 #' from the Multivariate Normal Distribution
@@ -279,8 +368,9 @@ SimBetaN <- function(n, beta, vcov_beta_vec_l) {
 #'   Intercept (\eqn{\boldsymbol{\iota}}).
 #' @param vcov_iota_l Numeric matrix.
 #'   Cholesky factorization (`t(chol(vcov_iota))`)
-#'   of the sampling variance-covariance matrix
+#'   of the sampling variance-covariance matrix of
 #'   \eqn{\boldsymbol{\iota}}.
+#' @return Returns a list of random intercept vectors.
 #'
 #' @examples
 #' n <- 10
@@ -311,8 +401,9 @@ SimIotaN <- function(n, iota, vcov_iota_l) {
 #'   The drift matrix (\eqn{\boldsymbol{\Phi}}).
 #' @param vcov_phi_vec_l Numeric matrix.
 #'   Cholesky factorization (`t(chol(vcov_phi_vec))`)
-#'   of the sampling variance-covariance matrix
+#'   of the sampling variance-covariance matrix of
 #'   \eqn{\mathrm{vec} \left( \boldsymbol{\Phi} \right)}.
+#' @return Returns a list of random drift matrices.
 #'
 #' @examples
 #' n <- 10
