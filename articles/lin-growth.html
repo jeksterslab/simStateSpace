@@ -61,7 +61,7 @@
                         <h4 data-toc-skip class="author">Ivan Jacob
 Agaloos Pesigan</h4>
             
-            <h4 data-toc-skip class="date">2025-04-22</h4>
+            <h4 data-toc-skip class="date">2025-04-30</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/jeksterslab/simStateSpace/blob/main/vignettes/lin-growth.Rmd"><code>vignettes/lin-growth.Rmd</code></a></small>
       <div class="d-none name"><code>lin-growth.Rmd</code></div>
@@ -186,7 +186,7 @@ condition given by
 <p>Let
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>t</mi><mo>=</mo><mn>5</mn></mrow><annotation encoding="application/x-tex">t = 5</annotation></semantics></math>
 be the number of time points and
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>=</mo><mn>10</mn><mo>&lt;</mo><mi>s</mi><mi>u</mi><mi>p</mi><mo>&gt;</mo><mn>4</mn><mo>&lt;</mo><mi>/</mi><mi>s</mi><mi>u</mi><mi>p</mi><mo>&gt;</mo></mrow><annotation encoding="application/x-tex">n = 10&lt;sup&gt;4&lt;/sup&gt;</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>=</mo><mn>1000</mn></mrow><annotation encoding="application/x-tex">n = 1000</annotation></semantics></math>
 be the number of individuals.</p>
 <p>Let the measurement error variance
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>θ</mi><annotation encoding="application/x-tex">\theta</annotation></semantics></math>
@@ -234,7 +234,7 @@ be given by</p>
 </h3>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">n</span></span>
-<span><span class="co">#&gt; [1] 10000</span></span>
+<span><span class="co">#&gt; [1] 1000</span></span>
 <span><span class="va">time</span></span>
 <span><span class="co">#&gt; [1] 5</span></span>
 <span><span class="va">mu0</span></span>
@@ -282,13 +282,13 @@ Different Initial Condition)<a class="anchor" aria-label="anchor" href="#visuali
 <span><span class="co">#&gt; 5  1    4 5.993965</span></span>
 <span><span class="co">#&gt; 6  2    0 1.951861</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span>
-<span><span class="co">#&gt;        id             time         y1          </span></span>
-<span><span class="co">#&gt;  Min.   :    1   Min.   :0   Min.   :-10.7863  </span></span>
-<span><span class="co">#&gt;  1st Qu.: 2501   1st Qu.:1   1st Qu.:  0.3943  </span></span>
-<span><span class="co">#&gt;  Median : 5000   Median :2   Median :  2.1839  </span></span>
-<span><span class="co">#&gt;  Mean   : 5000   Mean   :2   Mean   :  2.5978  </span></span>
-<span><span class="co">#&gt;  3rd Qu.: 7500   3rd Qu.:3   3rd Qu.:  4.4536  </span></span>
-<span><span class="co">#&gt;  Max.   :10000   Max.   :4   Max.   : 21.0250</span></span>
+<span><span class="co">#&gt;        id              time         y1         </span></span>
+<span><span class="co">#&gt;  Min.   :   1.0   Min.   :0   Min.   :-8.1963  </span></span>
+<span><span class="co">#&gt;  1st Qu.: 250.8   1st Qu.:1   1st Qu.: 0.4272  </span></span>
+<span><span class="co">#&gt;  Median : 500.5   Median :2   Median : 2.1273  </span></span>
+<span><span class="co">#&gt;  Mean   : 500.5   Mean   :2   Mean   : 2.5210  </span></span>
+<span><span class="co">#&gt;  3rd Qu.: 750.2   3rd Qu.:3   3rd Qu.: 4.2851  </span></span>
+<span><span class="co">#&gt;  Max.   :1000.0   Max.   :4   Max.   :17.0616</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">sim</span><span class="op">)</span></span></code></pre></div>
 <p><img src="fig-vignettes-lin-growth-error-lin-growth-1.png" width="3300"></p>
 </div>
@@ -392,16 +392,16 @@ Different Initial Condition)<a class="anchor" aria-label="anchor" href="#visuali
 <span><span class="co">#&gt; Original exit flag:  3 </span></span>
 <span><span class="co">#&gt; Modified exit flag:  3 </span></span>
 <span><span class="co">#&gt; Optimization terminated successfully: ftol_rel or ftol_abs was reached. </span></span>
-<span><span class="co">#&gt; Original fitted parameters:  -0.5089635 0.60732 0.9952181 0.6477021 0.3152438 </span></span>
-<span><span class="co">#&gt; -0.9463643 </span></span>
+<span><span class="co">#&gt; Original fitted parameters:  -0.5142509 0.6149011 0.9529499 0.5824694 0.2823027 </span></span>
+<span><span class="co">#&gt; -0.889854 </span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Transformed fitted parameters:  0.6011183 0.60732 0.9952181 1.911144 0.6024764 </span></span>
-<span><span class="co">#&gt; 0.5780766 </span></span>
+<span><span class="co">#&gt; Transformed fitted parameters:  0.5979484 0.6149011 0.9529499 1.790454 </span></span>
+<span><span class="co">#&gt; 0.5054501 0.5534056 </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Doing end processing</span></span>
 <span><span class="co">#&gt; Successful trial</span></span>
-<span><span class="co">#&gt; Total Time: 1.342728 </span></span>
-<span><span class="co">#&gt; Backend Time: 1.334002</span></span></code></pre></div>
+<span><span class="co">#&gt; Total Time: 9.298819 </span></span>
+<span><span class="co">#&gt; Backend Time: 8.764129</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -411,32 +411,32 @@ Different Initial Condition)<a class="anchor" aria-label="anchor" href="#visuali
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">results</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Coefficients:</span></span>
 <span><span class="co">#&gt;           Estimate Std. Error t value ci.lower ci.upper Pr(&gt;|t|)    </span></span>
-<span><span class="co">#&gt; theta     0.601118   0.004914  122.34 0.591488 0.610749   &lt;2e-16 ***</span></span>
-<span><span class="co">#&gt; mu0_0     0.607320   0.015112   40.19 0.577701 0.636939   &lt;2e-16 ***</span></span>
-<span><span class="co">#&gt; mu0_1     0.995218   0.007992  124.53 0.979554 1.010882   &lt;2e-16 ***</span></span>
-<span><span class="co">#&gt; sigma0_00 1.911144   0.032346   59.08 1.847747 1.974541   &lt;2e-16 ***</span></span>
-<span><span class="co">#&gt; sigma0_01 0.602476   0.013016   46.29 0.576966 0.627987   &lt;2e-16 ***</span></span>
-<span><span class="co">#&gt; sigma0_11 0.578077   0.009046   63.90 0.560347 0.595807   &lt;2e-16 ***</span></span>
+<span><span class="co">#&gt; theta      0.59795    0.01544   38.74  0.56769  0.62820   &lt;2e-16 ***</span></span>
+<span><span class="co">#&gt; mu0_0      0.61490    0.04633   13.27  0.52409  0.70571   &lt;2e-16 ***</span></span>
+<span><span class="co">#&gt; mu0_1      0.95295    0.02476   38.48  0.90442  1.00148   &lt;2e-16 ***</span></span>
+<span><span class="co">#&gt; sigma0_00  1.79045    0.09650   18.55  1.60133  1.97958   &lt;2e-16 ***</span></span>
+<span><span class="co">#&gt; sigma0_01  0.50545    0.03841   13.16  0.43016  0.58074   &lt;2e-16 ***</span></span>
+<span><span class="co">#&gt; sigma0_11  0.55341    0.02746   20.15  0.49958  0.60723   &lt;2e-16 ***</span></span>
 <span><span class="co">#&gt; ---</span></span>
 <span><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; -2 log-likelihood value at convergence = 167712.56</span></span>
-<span><span class="co">#&gt; AIC = 167724.56</span></span>
-<span><span class="co">#&gt; BIC = 167777.48</span></span></code></pre></div>
-<pre><code><span><span class="co">#&gt; [1] 0.6073200 0.9952181</span></span></code></pre>
+<span><span class="co">#&gt; -2 log-likelihood value at convergence = 16715.02</span></span>
+<span><span class="co">#&gt; AIC = 16727.02</span></span>
+<span><span class="co">#&gt; BIC = 16766.12</span></span></code></pre></div>
+<pre><code><span><span class="co">#&gt; [1] 0.6149011 0.9529499</span></span></code></pre>
 <div class="section level3">
 <h3 id="estimated-parameters">Estimated Parameters<a class="anchor" aria-label="anchor" href="#estimated-parameters"></a>
 </h3>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mu0_hat</span></span>
-<span><span class="co">#&gt; [1] 0.6073200 0.9952181</span></span>
+<span><span class="co">#&gt; [1] 0.6149011 0.9529499</span></span>
 <span><span class="va">sigma0_hat</span></span>
 <span><span class="co">#&gt;           [,1]      [,2]</span></span>
-<span><span class="co">#&gt; [1,] 1.9111442 0.6024764</span></span>
-<span><span class="co">#&gt; [2,] 0.6024764 0.5780766</span></span>
+<span><span class="co">#&gt; [1,] 1.7904543 0.5054501</span></span>
+<span><span class="co">#&gt; [2,] 0.5054501 0.5534056</span></span>
 <span><span class="va">theta_hat</span></span>
 <span><span class="co">#&gt;     theta </span></span>
-<span><span class="co">#&gt; 0.6011183</span></span></code></pre></div>
+<span><span class="co">#&gt; 0.5979484</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -484,20 +484,20 @@ Different Initial Condition)<a class="anchor" aria-label="anchor" href="#visuali
 <span>  data <span class="op">=</span> <span class="va">data</span></span>
 <span><span class="op">)</span></span>
 <span><span class="fu">lavaan</span><span class="fu">::</span><span class="fu">summary</span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span>
-<span><span class="co">#&gt; lavaan 0.6-19 ended normally after 34 iterations</span></span>
+<span><span class="co">#&gt; lavaan 0.6-19 ended normally after 24 iterations</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;   Estimator                                         ML</span></span>
 <span><span class="co">#&gt;   Optimization method                           NLMINB</span></span>
 <span><span class="co">#&gt;   Number of model parameters                        10</span></span>
 <span><span class="co">#&gt;   Number of equality constraints                     4</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;   Number of observations                         10000</span></span>
+<span><span class="co">#&gt;   Number of observations                          1000</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Model Test User Model:</span></span>
 <span><span class="co">#&gt;                                                       </span></span>
-<span><span class="co">#&gt;   Test statistic                                 5.386</span></span>
+<span><span class="co">#&gt;   Test statistic                                22.423</span></span>
 <span><span class="co">#&gt;   Degrees of freedom                                14</span></span>
-<span><span class="co">#&gt;   P-value (Chi-square)                           0.980</span></span>
+<span><span class="co">#&gt;   P-value (Chi-square)                           0.070</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Parameter Estimates:</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -523,36 +523,36 @@ Different Initial Condition)<a class="anchor" aria-label="anchor" href="#visuali
 <span><span class="co">#&gt; Covariances:</span></span>
 <span><span class="co">#&gt;                    Estimate  Std.Err  z-value  P(&gt;|z|)</span></span>
 <span><span class="co">#&gt;   eta0 ~~                                             </span></span>
-<span><span class="co">#&gt;     eta1    (s0_0)    0.602    0.013   46.317    0.000</span></span>
+<span><span class="co">#&gt;     eta1    (s0_0)    0.506    0.038   13.157    0.000</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Intercepts:</span></span>
 <span><span class="co">#&gt;                    Estimate  Std.Err  z-value  P(&gt;|z|)</span></span>
-<span><span class="co">#&gt;     eta0    (m0_0)    0.607    0.015   40.295    0.000</span></span>
-<span><span class="co">#&gt;     eta1    (m0_1)    0.995    0.008  124.582    0.000</span></span>
+<span><span class="co">#&gt;     eta0    (m0_0)    0.615    0.046   13.265    0.000</span></span>
+<span><span class="co">#&gt;     eta1    (m0_1)    0.953    0.025   38.485    0.000</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variances:</span></span>
 <span><span class="co">#&gt;                    Estimate  Std.Err  z-value  P(&gt;|z|)</span></span>
-<span><span class="co">#&gt;     eta0    (s0_0)    1.911    0.032   59.235    0.000</span></span>
-<span><span class="co">#&gt;     eta1    (s0_1)    0.578    0.009   63.955    0.000</span></span>
-<span><span class="co">#&gt;    .y1_0    (thet)    0.601    0.005  122.474    0.000</span></span>
-<span><span class="co">#&gt;    .y1_1    (thet)    0.601    0.005  122.474    0.000</span></span>
-<span><span class="co">#&gt;    .y1_2    (thet)    0.601    0.005  122.474    0.000</span></span>
-<span><span class="co">#&gt;    .y1_3    (thet)    0.601    0.005  122.474    0.000</span></span>
-<span><span class="co">#&gt;    .y1_4    (thet)    0.601    0.005  122.474    0.000</span></span></code></pre></div>
-<pre><code><span><span class="co">#&gt; [1] 0.6073200 0.9952181</span></span></code></pre>
+<span><span class="co">#&gt;     eta0    (s0_0)    1.790    0.097   18.542    0.000</span></span>
+<span><span class="co">#&gt;     eta1    (s0_1)    0.553    0.027   20.148    0.000</span></span>
+<span><span class="co">#&gt;    .y1_0    (thet)    0.598    0.015   38.730    0.000</span></span>
+<span><span class="co">#&gt;    .y1_1    (thet)    0.598    0.015   38.730    0.000</span></span>
+<span><span class="co">#&gt;    .y1_2    (thet)    0.598    0.015   38.730    0.000</span></span>
+<span><span class="co">#&gt;    .y1_3    (thet)    0.598    0.015   38.730    0.000</span></span>
+<span><span class="co">#&gt;    .y1_4    (thet)    0.598    0.015   38.730    0.000</span></span></code></pre></div>
+<pre><code><span><span class="co">#&gt; [1] 0.6149011 0.9529499</span></span></code></pre>
 </div>
 <div class="section level3">
 <h3 id="estimated-parameters-1">Estimated Parameters<a class="anchor" aria-label="anchor" href="#estimated-parameters-1"></a>
 </h3>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mu0_hat</span></span>
-<span><span class="co">#&gt; [1] 0.6073200 0.9952181</span></span>
+<span><span class="co">#&gt; [1] 0.6149011 0.9529499</span></span>
 <span><span class="va">sigma0_hat</span></span>
 <span><span class="co">#&gt;           [,1]      [,2]</span></span>
-<span><span class="co">#&gt; [1,] 1.9111442 0.6024764</span></span>
-<span><span class="co">#&gt; [2,] 0.6024764 0.5780766</span></span>
+<span><span class="co">#&gt; [1,] 1.7904543 0.5054501</span></span>
+<span><span class="co">#&gt; [2,] 0.5054501 0.5534056</span></span>
 <span><span class="va">theta_hat</span></span>
-<span><span class="co">#&gt; [1] 0.6011183</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] 0.5979484</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2 unnumbered">
@@ -592,7 +592,7 @@ Statistical Software</em>, <em>48</em>(2). <a href="https://doi.org/10.18637/jss
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.2.</p>
 </div>
 
     </footer>
