@@ -38,5 +38,7 @@
 //' @export
 // [[Rcpp::export]]
 arma::vec SSMMean(const arma::mat& beta, const arma::vec& alpha) {
-  return arma::solve(arma::eye(beta.n_rows, beta.n_rows) - beta, alpha);
+  arma::vec output =
+      arma::solve(arma::eye(beta.n_rows, beta.n_rows) - beta, alpha);
+  return Rcpp::NumericVector(output.begin(), output.end());
 }

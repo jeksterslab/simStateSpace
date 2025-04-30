@@ -42,7 +42,7 @@ Rcpp::List SimIotaN(const arma::uword& n, const arma::vec& iota,
   arma::vec iota_i(iota.n_rows, arma::fill::none);
   for (arma::uword i = 0; i < n; i++) {
     iota_i = iota + (vcov_iota_l * arma::randn(iota.n_rows));
-    output[i] = iota_i;
+    output[i] = Rcpp::NumericVector(iota_i.begin(), iota_i.end());
   }
   return output;
 }

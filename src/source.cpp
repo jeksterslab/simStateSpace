@@ -278,7 +278,7 @@ Rcpp::List SimAlphaN(const arma::uword& n, const arma::vec& alpha,
   arma::vec alpha_i(alpha.n_rows, arma::fill::none);
   for (arma::uword i = 0; i < n; i++) {
     alpha_i = alpha + (vcov_alpha_l * arma::randn(alpha.n_rows));
-    output[i] = alpha_i;
+    output[i] = Rcpp::NumericVector(alpha_i.begin(), alpha_i.end());
   }
   return output;
 }
@@ -541,7 +541,7 @@ Rcpp::List SimIotaN(const arma::uword& n, const arma::vec& iota,
   arma::vec iota_i(iota.n_rows, arma::fill::none);
   for (arma::uword i = 0; i < n; i++) {
     iota_i = iota + (vcov_iota_l * arma::randn(iota.n_rows));
-    output[i] = iota_i;
+    output[i] = Rcpp::NumericVector(iota_i.begin(), iota_i.end());
   }
   return output;
 }
@@ -1635,7 +1635,9 @@ arma::mat SSMCov(const arma::mat& beta, const arma::mat& psi) {
 //' @export
 // [[Rcpp::export]]
 arma::vec SSMMean(const arma::mat& beta, const arma::vec& alpha) {
-  return arma::solve(arma::eye(beta.n_rows, beta.n_rows) - beta, alpha);
+  arma::vec output =
+      arma::solve(arma::eye(beta.n_rows, beta.n_rows) - beta, alpha);
+  return Rcpp::NumericVector(output.begin(), output.end());
 }
 // -----------------------------------------------------------------------------
 // edit .setup/cpp/simStateSpace-test-phi.cpp
