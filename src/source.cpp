@@ -1634,7 +1634,7 @@ arma::mat SSMCov(const arma::mat& beta, const arma::mat& psi) {
 //' @keywords simStateSpace ssm
 //' @export
 // [[Rcpp::export]]
-arma::vec SSMMean(const arma::mat& beta, const arma::vec& alpha) {
+Rcpp::NumericVector SSMMean(const arma::mat& beta, const arma::vec& alpha) {
   arma::vec output =
       arma::solve(arma::eye(beta.n_rows, beta.n_rows) - beta, alpha);
   return Rcpp::NumericVector(output.begin(), output.end());

@@ -424,7 +424,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // SSMMean
-arma::vec SSMMean(const arma::mat& beta, const arma::vec& alpha);
+Rcpp::NumericVector SSMMean(const arma::mat& beta, const arma::vec& alpha);
 RcppExport SEXP _simStateSpace_SSMMean(SEXP betaSEXP, SEXP alphaSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
