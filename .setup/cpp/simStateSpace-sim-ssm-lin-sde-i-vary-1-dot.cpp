@@ -39,12 +39,12 @@ Rcpp::List SimSSMLinSDEIVary1(const arma::uword& n, const arma::uword& time,
     id.fill(i + 1);
 
     // Step 3.2: Extract the ith parameter
-    arma::vec mu0_i = mu0[i];
+    arma::vec mu0_i = Rcpp::as<arma::vec>(mu0[i]);
     arma::mat sigma0_l_i = sigma0_l[i];
-    arma::vec iota_i = iota[i];
+    arma::vec iota_i = Rcpp::as<arma::vec>(iota[i]);
     arma::mat phi_i = phi[i];
     arma::mat sigma_l_i = sigma_l[i];
-    arma::vec nu_i = nu[i];
+    arma::vec nu_i = Rcpp::as<arma::vec>(nu[i]);
     arma::mat lambda_i = lambda[i];
     arma::mat theta_l_i = theta_l[i];
     arma::mat gamma_i = gamma[i];

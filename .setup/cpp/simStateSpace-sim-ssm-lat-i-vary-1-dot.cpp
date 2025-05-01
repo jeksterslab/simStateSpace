@@ -33,9 +33,9 @@ Rcpp::List SimSSMLatIVary1(const arma::uword& n, const arma::uword& time,
     id.fill(i + 1);
 
     // Step 3.2: Extract the ith parameter
-    arma::vec mu0_i = mu0[i];
+    arma::vec mu0_i = Rcpp::as<arma::vec>(mu0[i]);
     arma::mat sigma0_l_i = sigma0_l[i];
-    arma::vec alpha_i = alpha[i];
+    arma::vec alpha_i = Rcpp::as<arma::vec>(alpha[i]);
     arma::mat beta_i = beta[i];
     arma::mat psi_l_i = psi_l[i];
     arma::mat gamma_i = gamma[i];
