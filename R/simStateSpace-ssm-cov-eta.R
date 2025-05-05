@@ -36,8 +36,15 @@
 #' @inheritParams SimSSMFixed
 #'
 #' @examples
-#' beta <- 0.50 * diag(3)
-#' psi <- 0.001 * diag(3)
+#' beta <- matrix(
+#'   data = c(
+#'     0.7, 0.5, -0.1,
+#'     0.0, 0.6, 0.4,
+#'     0.0, 0.0, 0.5
+#'   ),
+#'   nrow = 3
+#' )
+#' psi <- 0.1 * iden
 #' SSMCovEta(
 #'   beta = beta,
 #'   psi = psi

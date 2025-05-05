@@ -30,8 +30,15 @@
 #' @inheritParams SimSSMFixed
 #'
 #' @examples
-#' beta <- 0.50 * diag(3)
-#' alpha <- rep(x = 0.001, times = 3)
+#' beta <- matrix(
+#'   data = c(
+#'     0.7, 0.5, -0.1,
+#'     0.0, 0.6, 0.4,
+#'     0.0, 0.0, 0.5
+#'   ),
+#'   nrow = 3
+#' )
+#' alpha <- rep(x = 1, times = 3)
 #' SSMMeanEta(
 #'   beta = beta,
 #'   alpha = alpha

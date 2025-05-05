@@ -33,6 +33,7 @@ lapply(
         psi <- 0.1 * iden
         psi_l <- t(chol(psi))
         nu <- rep(x = 1, times = k)
+        lambda <- iden
         theta <- iden
         theta <- 0.2 * iden
         theta_l <- t(chol(theta))

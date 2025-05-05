@@ -47,16 +47,17 @@ is the steady-state mean vector
 for the latent variables.
 }
 \examples{
-iota <- c(0.317, 0.230)
 phi <- matrix(
   data = c(
-    -0.10, 0.05,
-    0.05, -0.10
+    -0.357, 0.771, -0.450,
+    0.0, -0.511, 0.729,
+    0.0, 0.0, -0.693
   ),
-  nrow = 2
+  nrow = 3
 )
-nu <- rep(x = 0.03, times = 2)
-lambda <- diag(2)
+iota <- rep(x = 1, times = 3)
+lambda <- diag(3)
+nu <- rep(x = 1, times = 3)
 mean_eta <- LinSDEMeanEta(
   phi = phi,
   iota = iota

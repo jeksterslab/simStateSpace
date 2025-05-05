@@ -53,20 +53,22 @@ for the latent variables.
 \examples{
 phi <- matrix(
   data = c(
-    -0.10, 0.05,
-    0.05, -0.10
+    -0.357, 0.771, -0.450,
+    0.0, -0.511, 0.729,
+    0.0, 0.0, -0.693
   ),
-  nrow = 2
+  nrow = 3
 )
 sigma <- matrix(
   data = c(
-    2.79, 0.06,
-    0.06, 3.27
+    0.24455556, 0.02201587, -0.05004762,
+    0.02201587, 0.07067800, 0.01539456,
+    -0.05004762, 0.01539456, 0.07553061
   ),
-  nrow = 2
+  nrow = 3
 )
-lambda <- diag(2)
-theta <- 0.01 * diag(2)
+lambda <- diag(3)
+theta <- diag(3)
 cov_eta <- LinSDECovEta(
   phi = phi,
   sigma = sigma
