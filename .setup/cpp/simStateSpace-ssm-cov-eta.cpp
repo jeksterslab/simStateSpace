@@ -1,5 +1,5 @@
 // -----------------------------------------------------------------------------
-// edit .setup/cpp/simStateSpace-ssm-cov.cpp
+// edit .setup/cpp/simStateSpace-ssm-cov-eta.cpp
 // Ivan Jacob Agaloos Pesigan
 // -----------------------------------------------------------------------------
 
@@ -36,13 +36,13 @@
 //' @examples
 //' beta <- 0.50 * diag(3)
 //' psi <- 0.001 * diag(3)
-//' SSMCov(beta = beta, psi = psi)
+//' SSMCovEta(beta = beta, psi = psi)
 //'
 //' @family Simulation of State Space Models Data Functions
 //' @keywords simStateSpace ssm
 //' @export
 // [[Rcpp::export]]
-arma::mat SSMCov(const arma::mat& beta, const arma::mat& psi) {
+arma::mat SSMCovEta(const arma::mat& beta, const arma::mat& psi) {
   arma::vec vec_sigma = arma::solve(
       arma::eye(beta.n_rows * beta.n_rows, beta.n_rows * beta.n_rows) -
           arma::kron(beta, beta),

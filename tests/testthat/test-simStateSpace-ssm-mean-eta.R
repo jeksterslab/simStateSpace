@@ -43,7 +43,7 @@ lapply(
           all(
             (
               c(
-                SSMMean(
+                SSMMeanEta(
                   beta = ssm$beta,
                   alpha = ssm$alpha
                 )

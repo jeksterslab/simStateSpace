@@ -1,5 +1,5 @@
 // -----------------------------------------------------------------------------
-// edit .setup/cpp/simStateSpace-ssm-mean.cpp
+// edit .setup/cpp/simStateSpace-ssm-mean-eta.cpp
 // Ivan Jacob Agaloos Pesigan
 // -----------------------------------------------------------------------------
 
@@ -31,13 +31,13 @@
 //' @examples
 //' beta <- 0.50 * diag(3)
 //' alpha <- rep(x = 0.001, times = 3)
-//' SSMMean(beta = beta, alpha = alpha)
+//' SSMMeanEta(beta = beta, alpha = alpha)
 //'
 //' @family Simulation of State Space Models Data Functions
 //' @keywords simStateSpace ssm
 //' @export
 // [[Rcpp::export]]
-Rcpp::NumericVector SSMMean(const arma::mat& beta, const arma::vec& alpha) {
+Rcpp::NumericVector SSMMeanEta(const arma::mat& beta, const arma::vec& alpha) {
   arma::vec output =
       arma::solve(arma::eye(beta.n_rows, beta.n_rows) - beta, alpha);
   return Rcpp::NumericVector(output.begin(), output.end());

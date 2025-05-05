@@ -43,7 +43,7 @@ lapply(
           all(
             (
               c(
-                SSMCov(
+                SSMCovEta(
                   beta = ssm$beta,
                   psi = ssm$psi_l %*% t(ssm$psi_l)
                 )
