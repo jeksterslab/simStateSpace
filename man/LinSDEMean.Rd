@@ -42,8 +42,10 @@ LinSDEMean(phi = phi, iota = iota)
 Other Simulation of State Space Models Data Functions: 
 \code{\link{LinSDE2SSM}()},
 \code{\link{LinSDECov}()},
-\code{\link{SSMCov}()},
-\code{\link{SSMMean}()},
+\code{\link{SSMCovEta}()},
+\code{\link{SSMCovY}()},
+\code{\link{SSMMeanEta}()},
+\code{\link{SSMMeanY}()},
 \code{\link{SimAlphaN}()},
 \code{\link{SimBetaN}()},
 \code{\link{SimCovDiagN}()},

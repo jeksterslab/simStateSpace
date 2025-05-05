@@ -515,13 +515,60 @@ SimPhiN <- function(n, phi, vcov_phi_vec_l) {
 #' @examples
 #' beta <- 0.50 * diag(3)
 #' psi <- 0.001 * diag(3)
-#' SSMCov(beta = beta, psi = psi)
+#' SSMCovEta(beta = beta, psi = psi)
 #'
 #' @family Simulation of State Space Models Data Functions
 #' @keywords simStateSpace ssm
 #' @export
-SSMCov <- function(beta, psi) {
-    .Call(`_simStateSpace_SSMCov`, beta, psi)
+SSMCovEta <- function(beta, psi) {
+    .Call(`_simStateSpace_SSMCovEta`, beta, psi)
+}
+
+#' Observed Variable Covariance Matrix for the
+#' State Space Model
+#'
+#' This function calculates the observed variable covariance matrix
+#' for the state space model
+#' given by
+#' \deqn{
+#'   \mathrm{Cov} \left( \mathbf{y} \right)
+#'   =
+#'   \boldsymbol{\Lambda}
+#'   \mathrm{Cov} \left( \boldsymbol{\eta} \right)
+#'   \boldsymbol{\Lambda}^{\prime}
+#'   +
+#'   \boldsymbol{\Theta} .
+#' }
+#'
+#' @author Ivan Jacob Agaloos Pesigan
+#'
+#' @param lambda Numeric matrix.
+#'   The factor loadings matrix (\eqn{\boldsymbol{\Lambda}}).
+#' @param theta Numeric matrix.
+#'   The covariance matrix
+#'   of the measurement error
+#'   (\eqn{\boldsymbol{\Theta}}).
+#' @param cov_eta Numeric matrix.
+#'   State covariance matrix
+#'   \eqn{\mathrm{Cov} \left( \boldsymbol{\eta} \right)}.
+#'
+#' @examples
+#' beta <- 0.50 * diag(3)
+#' psi <- 0.001 * diag(3)
+#' lambda <- diag(3)
+#' theta <- 0.02 * diag(3)
+#' cov_eta <- SSMCovEta(beta = beta, psi = psi)
+#' SSMCovY(
+#'   lambda = lambda,
+#'   theta = theta,
+#'   cov_eta = cov_eta
+#' )
+#'
+#' @family Simulation of State Space Models Data Functions
+#' @keywords simStateSpace ssm
+#' @export
+SSMCovY <- function(lambda, theta, cov_eta) {
+    .Call(`_simStateSpace_SSMCovY`, lambda, theta, cov_eta)
 }
 
 #' State Mean Vector for the
@@ -549,13 +596,58 @@ SSMCov <- function(beta, psi) {
 #' @examples
 #' beta <- 0.50 * diag(3)
 #' alpha <- rep(x = 0.001, times = 3)
-#' SSMMean(beta = beta, alpha = alpha)
+#' SSMMeanEta(beta = beta, alpha = alpha)
 #'
 #' @family Simulation of State Space Models Data Functions
 #' @keywords simStateSpace ssm
 #' @export
-SSMMean <- function(beta, alpha) {
-    .Call(`_simStateSpace_SSMMean`, beta, alpha)
+SSMMeanEta <- function(beta, alpha) {
+    .Call(`_simStateSpace_SSMMeanEta`, beta, alpha)
+}
+
+#' Observed Variable Mean Vector for the
+#' State Space Model
+#'
+#' This function calculates the observed variable mean vector
+#' for the state space model
+#' given by
+#' \deqn{
+#'   \mathrm{Mean} \left( \mathbf{y} \right)
+#'   =
+#'   \boldsymbol{\nu}
+#'   +
+#'   \boldsymbol{\Lambda}
+#'   \mathrm{Mean} \left( \boldsymbol{\eta} \right) .
+#' }
+#'
+#' @author Ivan Jacob Agaloos Pesigan
+#'
+#' @param nu Numeric vector.
+#'   Vector of constant values for the measurement model
+#'   (\eqn{\boldsymbol{\nu}}).
+#' @param lambda Numeric matrix.
+#'   The factor loadings matrix (\eqn{\boldsymbol{\Lambda}}).
+#' @param mean_eta Numeric vector.
+#'   State mean vector
+#'   \eqn{\mathrm{Mean} \left( \boldsymbol{\eta} \right)}.
+#'
+#' @examples
+#' beta <- 0.50 * diag(3)
+#' alpha <- rep(x = 0.001, times = 3)
+#' nu <- rep(x = 0.03, times = 3)
+#' lambda <- diag(3)
+#' mean_eta <- SSMMeanEta(beta = beta, alpha = alpha)
+#' SSMMeanY(
+#'   nu = nu,
+#'   lambda = lambda,
+#'   mean_eta = mean_eta
+#' )
+#'
+#' @family Simulation of State Space Models Data Functions
+#' @keywords simStateSpace ssm
+#' @export
+SSMMeanY <- function(nu, lambda, mean_eta) {
+    .Call(`_simStateSpace_SSMMeanY`, nu, lambda, mean_eta)
 }
 
 #' Test the Drift Matrix

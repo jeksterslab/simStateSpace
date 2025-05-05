@@ -411,27 +411,53 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// SSMCov
-arma::mat SSMCov(const arma::mat& beta, const arma::mat& psi);
-RcppExport SEXP _simStateSpace_SSMCov(SEXP betaSEXP, SEXP psiSEXP) {
+// SSMCovEta
+arma::mat SSMCovEta(const arma::mat& beta, const arma::mat& psi);
+RcppExport SEXP _simStateSpace_SSMCovEta(SEXP betaSEXP, SEXP psiSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const arma::mat& >::type beta(betaSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type psi(psiSEXP);
-    rcpp_result_gen = Rcpp::wrap(SSMCov(beta, psi));
+    rcpp_result_gen = Rcpp::wrap(SSMCovEta(beta, psi));
     return rcpp_result_gen;
 END_RCPP
 }
-// SSMMean
-Rcpp::NumericVector SSMMean(const arma::mat& beta, const arma::vec& alpha);
-RcppExport SEXP _simStateSpace_SSMMean(SEXP betaSEXP, SEXP alphaSEXP) {
+// SSMCovY
+arma::mat SSMCovY(const arma::mat& lambda, const arma::mat& theta, const arma::mat& cov_eta);
+RcppExport SEXP _simStateSpace_SSMCovY(SEXP lambdaSEXP, SEXP thetaSEXP, SEXP cov_etaSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::mat& >::type lambda(lambdaSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type theta(thetaSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type cov_eta(cov_etaSEXP);
+    rcpp_result_gen = Rcpp::wrap(SSMCovY(lambda, theta, cov_eta));
+    return rcpp_result_gen;
+END_RCPP
+}
+// SSMMeanEta
+Rcpp::NumericVector SSMMeanEta(const arma::mat& beta, const arma::vec& alpha);
+RcppExport SEXP _simStateSpace_SSMMeanEta(SEXP betaSEXP, SEXP alphaSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const arma::mat& >::type beta(betaSEXP);
     Rcpp::traits::input_parameter< const arma::vec& >::type alpha(alphaSEXP);
-    rcpp_result_gen = Rcpp::wrap(SSMMean(beta, alpha));
+    rcpp_result_gen = Rcpp::wrap(SSMMeanEta(beta, alpha));
+    return rcpp_result_gen;
+END_RCPP
+}
+// SSMMeanY
+Rcpp::NumericVector SSMMeanY(const arma::vec& nu, const arma::mat& lambda, const arma::vec& mean_eta);
+RcppExport SEXP _simStateSpace_SSMMeanY(SEXP nuSEXP, SEXP lambdaSEXP, SEXP mean_etaSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::vec& >::type nu(nuSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type lambda(lambdaSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type mean_eta(mean_etaSEXP);
+    rcpp_result_gen = Rcpp::wrap(SSMMeanY(nu, lambda, mean_eta));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -492,8 +518,10 @@ static const R_CallMethodDef CallEntries[] = {
     {"_simStateSpace_SimSSMLinSDEIVary2", (DL_FUNC) &_simStateSpace_SimSSMLinSDEIVary2, 15},
     {"_simStateSpace_SolveLya", (DL_FUNC) &_simStateSpace_SolveLya, 2},
     {"_simStateSpace_SolveSyl", (DL_FUNC) &_simStateSpace_SolveSyl, 3},
-    {"_simStateSpace_SSMCov", (DL_FUNC) &_simStateSpace_SSMCov, 2},
-    {"_simStateSpace_SSMMean", (DL_FUNC) &_simStateSpace_SSMMean, 2},
+    {"_simStateSpace_SSMCovEta", (DL_FUNC) &_simStateSpace_SSMCovEta, 2},
+    {"_simStateSpace_SSMCovY", (DL_FUNC) &_simStateSpace_SSMCovY, 3},
+    {"_simStateSpace_SSMMeanEta", (DL_FUNC) &_simStateSpace_SSMMeanEta, 2},
+    {"_simStateSpace_SSMMeanY", (DL_FUNC) &_simStateSpace_SSMMeanY, 3},
     {"_simStateSpace_TestPhi", (DL_FUNC) &_simStateSpace_TestPhi, 1},
     {"_simStateSpace_TestStability", (DL_FUNC) &_simStateSpace_TestStability, 1},
     {"_simStateSpace_TestStationarity", (DL_FUNC) &_simStateSpace_TestStationarity, 1},
