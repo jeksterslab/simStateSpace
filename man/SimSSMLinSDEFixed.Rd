@@ -542,8 +542,10 @@ Cambridge University Press.
 \seealso{
 Other Simulation of State Space Models Data Functions: 
 \code{\link{LinSDE2SSM}()},
-\code{\link{LinSDECov}()},
-\code{\link{LinSDEMean}()},
+\code{\link{LinSDECovEta}()},
+\code{\link{LinSDECovY}()},
+\code{\link{LinSDEMeanEta}()},
+\code{\link{LinSDEMeanY}()},
 \code{\link{SSMCovEta}()},
 \code{\link{SSMCovY}()},
 \code{\link{SSMMeanEta}()},

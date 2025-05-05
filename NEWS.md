@@ -3,6 +3,7 @@
 ## Patch
 
 * Added the `SimAlphaN()` and `SimIotaN()` functions.
+* Added the `LinSDECovEta()`, `LinSDECovY()`, `LinSDEMeanEta()` and `LinSDEMeanY()` functions. Removed the `LinSDECov()` and `LinSDEMean()` functions.
 * Added the `SSMCovEta()`, `SSMCovY()`, `SSMMeanEta()` and `SSMMeanY()` functions.
 * Added the `SimCovN()` and `SimCovDiagN()` functions.
 

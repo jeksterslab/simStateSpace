@@ -34,27 +34,11 @@ knitr::opts_chunk$set(
 ```{r}
 #| echo = FALSE
 set.seed(42)
-n <- 50 # n <- 1000
-time <- 500 # time <- 1000
+n <- 1000
+time <- 1000
 k <- p <- 3
 iden <- diag(k)
 null_vec <- rep(x = 0, times = k)
-mu0 <- null_vec
-sigma0 <- matrix(
-  data = c(
-    1.0,
-    0.2,
-    0.2,
-    0.2,
-    1.0,
-    0.2,
-    0.2,
-    0.2,
-    1.0
-  ),
-  nrow = 3
-)
-sigma0_l <- t(chol(sigma0))
 alpha <- null_vec
 beta <- matrix(
   data = c(
@@ -72,6 +56,24 @@ beta <- matrix(
 )
 psi <- 0.1 * iden
 psi_l <- t(chol(psi))
+mu0 <- simStateSpace::SSMMeanEta(
+  beta = beta,
+  alpha = alpha
+)
+# mu0 <- null_vec
+sigma0 <- simStateSpace::SSMCovEta(
+  beta = beta,
+  psi = psi
+)
+# sigma0 <- matrix(
+#   data = c(
+#     1.0, 0.2, 0.2,
+#     0.2, 1.0, 0.2,
+#     0.2, 0.2, 1.0
+#   ),
+#   nrow = 3
+# )
+sigma0_l <- t(chol(sigma0))
 ```
 
 ## Model

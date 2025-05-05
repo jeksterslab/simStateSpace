@@ -6,7 +6,7 @@
 #include <RcppArmadillo.h>
 // [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::export(.SolveLya)]]
-arma::mat SolveLya(arma::mat A, arma::mat Q) {
+arma::mat SolveLya(const arma::mat A, const arma::mat Q) {
   arma::mat X;
   arma::syl(X, A, A.t(), Q);
   return ((X + X.t()) / 2);

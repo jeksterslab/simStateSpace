@@ -1,4 +1,4 @@
-## ---- test-simStateSpace-ssm-cov
+## ---- test-simStateSpace-ssm-cov-eta
 lapply(
   X = 1,
   FUN = function(i,
@@ -9,56 +9,73 @@ lapply(
       text,
       {
         testthat::skip_on_cran()
-        iota <- c(0.317, 0.230)
-        phi <- matrix(
+        set.seed(42)
+        n <- 1000
+        time <- 1000
+        k <- p <- 3
+        iden <- diag(k)
+        null_vec <- rep(x = 0, times = k)
+        alpha <- null_vec
+        beta <- matrix(
           data = c(
-            -0.10,
-            0.05,
-            0.05,
-            -0.10
+            0.7,
+            0.5,
+            -0.1,
+            0.0,
+            0.6,
+            0.4,
+            0,
+            0,
+            0.5
           ),
-          nrow = 2
+          nrow = k
         )
-        sigma_l <- t(
-          chol(
-            matrix(
-              data = c(
-                2.79,
-                0.06,
-                0.06,
-                3.27
-              ),
-              nrow = 2
-            )
-          )
+        psi <- 0.1 * iden
+        psi_l <- t(chol(psi))
+        nu <- rep(x = 1, times = k)
+        lambda <- iden
+        theta <- iden
+        theta_l <- t(chol(theta))
+        mu0 <- simStateSpace::SSMMeanEta(
+          beta = beta,
+          alpha = alpha
         )
-        delta_t <- 1
-        ssm <- LinSDE2SSM(
-          iota = iota,
-          phi = phi,
-          sigma_l = sigma_l,
-          delta_t = delta_t
+        sigma0 <- simStateSpace::SSMCovEta(
+          beta = beta,
+          psi = psi
         )
+        sigma0_l <- t(chol(sigma0))
+        sim <- simStateSpace::SimSSMFixed(
+          n = n,
+          time = time,
+          mu0 = mu0,
+          sigma0_l = sigma0_l,
+          alpha = alpha,
+          beta = beta,
+          psi_l = psi_l,
+          nu = nu,
+          lambda = lambda,
+          theta_l = theta_l,
+          type = 0
+        )
+        data <- as.matrix(sim, eta = TRUE)
+        eta <- data[, paste0("eta", seq_len(p))]
         testthat::expect_true(
           all(
             (
               c(
-                SSMCovEta(
-                  beta = ssm$beta,
-                  psi = ssm$psi_l %*% t(ssm$psi_l)
-                )
+                sigma0
               ) - c(
-                19.2,
-                10.5,
-                10.5,
-                21.6
+                cov(
+                  eta
+                )
               )
-            ) < tol
+            ) <= tol
           )
         )
       }
     )
   },
-  text = "test-simStateSpace-ssm-cov",
-  tol = 0.000001
+  text = "test-simStateSpace-ssm-cov-eta",
+  tol = 0.01
 )
