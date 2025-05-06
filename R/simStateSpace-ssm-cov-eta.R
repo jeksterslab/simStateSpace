@@ -44,7 +44,7 @@
 #'   ),
 #'   nrow = 3
 #' )
-#' psi <- 0.1 * iden
+#' psi <- 0.1 * diag(3)
 #' SSMCovEta(
 #'   beta = beta,
 #'   psi = psi
