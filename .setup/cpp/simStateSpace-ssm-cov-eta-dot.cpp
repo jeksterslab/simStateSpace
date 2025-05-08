@@ -11,5 +11,6 @@ arma::mat SSMCovEta(const arma::mat& beta, const arma::mat& psi) {
       arma::eye(beta.n_rows * beta.n_rows, beta.n_rows * beta.n_rows) -
           arma::kron(beta, beta),
       arma::vectorise(psi));
-  return arma::reshape(vec_sigma, beta.n_rows, beta.n_rows);
+  arma::mat X = arma::reshape(vec_sigma, beta.n_rows, beta.n_rows);
+  return ((X + X.t()) / 2);
 }

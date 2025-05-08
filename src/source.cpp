@@ -257,7 +257,8 @@ arma::mat LinSDECovEta(const arma::mat phi, const arma::mat sigma) {
 // [[Rcpp::export(.LinSDECovY)]]
 arma::mat LinSDECovY(const arma::mat& lambda, const arma::mat& theta,
                      const arma::mat& cov_eta) {
-  return lambda * cov_eta * lambda.t() + theta;
+  arma::mat X = lambda * cov_eta * lambda.t() + theta;
+  return ((X + X.t()) / 2);
 }
 // -----------------------------------------------------------------------------
 // edit .setup/cpp/simStateSpace-lin-sde-mean-eta-dot.cpp
@@ -1607,7 +1608,8 @@ arma::mat SSMCovEta(const arma::mat& beta, const arma::mat& psi) {
       arma::eye(beta.n_rows * beta.n_rows, beta.n_rows * beta.n_rows) -
           arma::kron(beta, beta),
       arma::vectorise(psi));
-  return arma::reshape(vec_sigma, beta.n_rows, beta.n_rows);
+  arma::mat X = arma::reshape(vec_sigma, beta.n_rows, beta.n_rows);
+  return ((X + X.t()) / 2);
 }
 // -----------------------------------------------------------------------------
 // edit .setup/cpp/simStateSpace-ssm-cov-y-dot.cpp
@@ -1619,7 +1621,8 @@ arma::mat SSMCovEta(const arma::mat& beta, const arma::mat& psi) {
 // [[Rcpp::export(.SSMCovY)]]
 arma::mat SSMCovY(const arma::mat& lambda, const arma::mat& theta,
                   const arma::mat& cov_eta) {
-  return lambda * cov_eta * lambda.t() + theta;
+  arma::mat X = lambda * cov_eta * lambda.t() + theta;
+  return ((X + X.t()) / 2);
 }
 // -----------------------------------------------------------------------------
 // edit .setup/cpp/simStateSpace-ssm-mean-eta-dot.cpp

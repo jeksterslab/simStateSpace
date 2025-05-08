@@ -1,0 +1,528 @@
+---
+title: "simStateSpace: Session"
+author: "Ivan Jacob Agaloos Pesigan"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{simStateSpace: Session}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+
+
+
+``` r
+library(simStateSpace)
+```
+
+# Session
+
+
+``` r
+sessionInfo()
+#> R version 4.5.0 (2025-04-11)
+#> Platform: x86_64-pc-linux-gnu
+#> Running under: Ubuntu 24.04.2 LTS
+#> 
+#> Matrix products: default
+#> BLAS:   /usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3 
+#> LAPACK: /usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.26.so;  LAPACK version 3.12.0
+#> 
+#> locale:
+#>  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
+#>  [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
+#>  [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
+#>  [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
+#>  [9] LC_ADDRESS=C               LC_TELEPHONE=C            
+#> [11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
+#> 
+#> time zone: Etc/UTC
+#> tzcode source: system (glibc)
+#> 
+#> attached base packages:
+#> [1] stats     graphics  grDevices utils     datasets  methods   base     
+#> 
+#> other attached packages:
+#> [1] simStateSpace_1.2.11
+#> 
+#> loaded via a namespace (and not attached):
+#>  [1] gtable_0.3.6        shape_1.4.6.1       xfun_0.52          
+#>  [4] ggplot2_3.5.2       ks_1.14.3           lattice_0.22-6     
+#>  [7] numDeriv_2016.8-1.1 quadprog_1.5-8      bitops_1.0-9       
+#> [10] vctrs_0.6.5         tools_4.5.0         Rdpack_2.6.4       
+#> [13] generics_0.1.3      parallel_4.5.0      stats4_4.5.0       
+#> [16] tibble_3.2.1        cluster_2.1.8.1     pan_1.9            
+#> [19] pkgconfig_2.0.3     fds_1.8             jomo_2.7-6         
+#> [22] Matrix_1.7-3        KernSmooth_2.23-26  RColorBrewer_1.1-3 
+#> [25] lifecycle_1.0.4     compiler_4.5.0      farver_2.1.2       
+#> [28] stringr_1.5.1       mnormt_2.1.1        codetools_0.2-20   
+#> [31] carData_3.0-5       rainbow_3.8         RCurl_1.98-1.17    
+#> [34] glmnet_4.1-8        Formula_1.2-5       mice_3.17.0        
+#> [37] pracma_2.4.4        car_3.1-3           pillar_1.10.2      
+#> [40] nloptr_2.2.1        tidyr_1.3.1         MASS_7.3-65        
+#> [43] reformulas_0.4.0    iterators_1.0.14    abind_1.4-8        
+#> [46] rpart_4.1.24        boot_1.3-31         rProject_0.0.18    
+#> [49] mclust_6.1.1        foreach_1.5.2       mitml_0.4-5        
+#> [52] nlme_3.1-168        lavaan_0.6-19       tidyselect_1.2.1   
+#> [55] mvtnorm_1.3-3       stringi_1.8.7       dplyr_1.1.4        
+#> [58] reshape2_1.4.4      purrr_1.0.4         labeling_0.4.3     
+#> [61] splines_4.5.0       pcaPP_2.0-5         latex2exp_0.9.6    
+#> [64] grid_4.5.0          expm_1.0-0          colorspace_2.1-1   
+#> [67] cli_3.6.5.9000      magrittr_2.0.3      survival_3.8-3     
+#> [70] pbivnorm_0.6.0      broom_1.0.8         withr_3.0.2        
+#> [73] scales_1.4.0        backports_1.5.0     dynr_0.1.16-109    
+#> [76] nnet_7.3-20         lme4_1.1-37         deSolve_1.40       
+#> [79] evaluate_1.0.3      knitr_1.50          rbibutils_2.3      
+#> [82] rlang_1.1.6         Rcpp_1.0.14         xtable_1.8-4       
+#> [85] glue_1.8.0          fda_6.2.0           hdrcde_3.4         
+#> [88] minqa_1.2.8         R6_2.6.1            plyr_1.8.9
+```
+
+# Packages
+
+
+``` r
+installed.packages()[, c("Package", "Version")]
+#>                   Package             Version      
+#> simStateSpace     "simStateSpace"     "1.2.11"     
+#> abind             "abind"             "1.4-8"      
+#> Amelia            "Amelia"            "1.8.3"      
+#> arm               "arm"               "1.14-4"     
+#> arrow             "arrow"             "19.0.1.1"   
+#> ash               "ash"               "1.0-15"     
+#> askpass           "askpass"           "1.2.1"      
+#> assertthat        "assertthat"        "0.2.1"      
+#> backports         "backports"         "1.5.0"      
+#> base64enc         "base64enc"         "0.1-3"      
+#> betaDelta         "betaDelta"         "1.0.6"      
+#> betaMC            "betaMC"            "1.3.3"      
+#> betaNB            "betaNB"            "1.0.5.9000" 
+#> betaSandwich      "betaSandwich"      "1.0.8"      
+#> BH                "BH"                "1.87.0-1"   
+#> bibtex            "bibtex"            "0.5.1"      
+#> BiocManager       "BiocManager"       "1.30.25"    
+#> bit               "bit"               "4.6.0"      
+#> bit64             "bit64"             "4.6.0-1"    
+#> bitops            "bitops"            "1.0-9"      
+#> blob              "blob"              "1.2.4"      
+#> bootStateSpace    "bootStateSpace"    "1.0.2"      
+#> brew              "brew"              "1.0-10"     
+#> brio              "brio"              "1.1.5"      
+#> broom             "broom"             "1.0.8"      
+#> bslib             "bslib"             "0.9.0"      
+#> cachem            "cachem"            "1.1.0"      
+#> callr             "callr"             "3.7.6"      
+#> car               "car"               "3.1-3"      
+#> caracas           "caracas"           "2.1.1"      
+#> carData           "carData"           "3.0-5"      
+#> cellranger        "cellranger"        "1.1.0"      
+#> cffr              "cffr"              "1.2.0"      
+#> checkmate         "checkmate"         "2.3.2"      
+#> cli               "cli"               "3.6.5.9000" 
+#> clipr             "clipr"             "0.8.0"      
+#> clock             "clock"             "0.7.3"      
+#> clusterGeneration "clusterGeneration" "1.3.8"      
+#> coda              "coda"              "0.19-4.1"   
+#> cOde              "cOde"              "1.1.1"      
+#> collections       "collections"       "0.3.7"      
+#> colorspace        "colorspace"        "2.1-1"      
+#> commonmark        "commonmark"        "1.9.5"      
+#> conflicted        "conflicted"        "1.2.0"      
+#> corpcor           "corpcor"           "1.6.10"     
+#> covr              "covr"              "3.6.4"      
+#> cowplot           "cowplot"           "1.1.3"      
+#> cpp11             "cpp11"             "0.5.2"      
+#> crayon            "crayon"            "1.5.3"      
+#> credentials       "credentials"       "2.0.2"      
+#> crosstalk         "crosstalk"         "1.2.1"      
+#> cTMed             "cTMed"             "1.0.6.9000" 
+#> ctsem             "ctsem"             "3.10.2"     
+#> curl              "curl"              "6.2.2"      
+#> data.table        "data.table"        "1.17.0"     
+#> DBI               "DBI"               "1.2.3"      
+#> dbplyr            "dbplyr"            "2.5.0"      
+#> Deriv             "Deriv"             "4.1.6"      
+#> desc              "desc"              "1.4.3"      
+#> deSolve           "deSolve"           "1.40"       
+#> devtools          "devtools"          "2.4.5.9000" 
+#> diagram           "diagram"           "1.6.5"      
+#> dials             "dials"             "1.4.0"      
+#> DiceDesign        "DiceDesign"        "1.10"       
+#> diffobj           "diffobj"           "0.3.6"      
+#> digest            "digest"            "0.6.37"     
+#> distributional    "distributional"    "0.5.0"      
+#> distro            "distro"            "0.1.0"      
+#> doBy              "doBy"              "4.6.26"     
+#> docopt            "docopt"            "0.7.2"      
+#> doFuture          "doFuture"          "1.0.2"      
+#> downlit           "downlit"           "0.4.4"      
+#> dplyr             "dplyr"             "1.1.4"      
+#> DT                "DT"                "0.33"       
+#> dtplyr            "dtplyr"            "1.3.1"      
+#> duckdb            "duckdb"            "1.2.1"      
+#> dynr              "dynr"              "0.1.16-109" 
+#> dynUtils          "dynUtils"          "0.9.1"      
+#> ellipse           "ellipse"           "0.5.0"      
+#> ellipsis          "ellipsis"          "0.3.2"      
+#> evaluate          "evaluate"          "1.0.3"      
+#> expm              "expm"              "1.0-0"      
+#> fansi             "fansi"             "1.0.6"      
+#> farver            "farver"            "2.1.2"      
+#> fastDummies       "fastDummies"       "1.7.5"      
+#> fastmap           "fastmap"           "1.2.0"      
+#> fclust            "fclust"            "2.1.1.1"    
+#> fda               "fda"               "6.2.0"      
+#> fdrtool           "fdrtool"           "1.2.18"     
+#> fds               "fds"               "1.8"        
+#> fitCTVARMx        "fitCTVARMx"        "0.0.0.9000" 
+#> fitDTVARMx        "fitDTVARMx"        "0.0.0.9000" 
+#> FNN               "FNN"               "1.1.4.1"    
+#> fontawesome       "fontawesome"       "0.5.3"      
+#> forcats           "forcats"           "1.0.0"      
+#> foreach           "foreach"           "1.5.2"      
+#> Formula           "Formula"           "1.2-5"      
+#> fs                "fs"                "1.6.6"      
+#> fst               "fst"               "0.9.8"      
+#> fstcore           "fstcore"           "0.10.0"     
+#> furrr             "furrr"             "0.3.1"      
+#> future            "future"            "1.40.0"     
+#> future.apply      "future.apply"      "1.11.3"     
+#> gargle            "gargle"            "1.5.2"      
+#> generics          "generics"          "0.1.3"      
+#> gert              "gert"              "2.1.5"      
+#> ggplot2           "ggplot2"           "3.5.2"      
+#> ggrepel           "ggrepel"           "0.9.6"      
+#> gh                "gh"                "1.4.1"      
+#> gitcreds          "gitcreds"          "0.1.2"      
+#> glasso            "glasso"            "1.11"       
+#> glmnet            "glmnet"            "4.1-8"      
+#> globals           "globals"           "0.17.0"     
+#> glue              "glue"              "1.8.0"      
+#> googledrive       "googledrive"       "2.1.1"      
+#> googlesheets4     "googlesheets4"     "1.1.1"      
+#> gower             "gower"             "1.0.2"      
+#> GPArotation       "GPArotation"       "2025.3-1"   
+#> GPfit             "GPfit"             "1.0-9"      
+#> graphicalVAR      "graphicalVAR"      "0.3.4"      
+#> gridExtra         "gridExtra"         "2.3"        
+#> gsubfn            "gsubfn"            "0.7"        
+#> gtable            "gtable"            "0.3.6"      
+#> gtools            "gtools"            "3.9.5"      
+#> hardhat           "hardhat"           "1.4.1"      
+#> haven             "haven"             "2.5.4"      
+#> hdrcde            "hdrcde"            "3.4"        
+#> here              "here"              "1.0.1"      
+#> highr             "highr"             "0.11"       
+#> Hmisc             "Hmisc"             "5.2-3"      
+#> hms               "hms"               "1.1.3"      
+#> htmlTable         "htmlTable"         "2.4.3"      
+#> htmltools         "htmltools"         "0.5.8.1"    
+#> htmlwidgets       "htmlwidgets"       "1.6.4"      
+#> httpuv            "httpuv"            "1.6.16"     
+#> httr              "httr"              "1.4.7"      
+#> httr2             "httr2"             "1.1.2"      
+#> ids               "ids"               "1.0.1"      
+#> ifaTools          "ifaTools"          "0.23"       
+#> igraph            "igraph"            "2.1.4"      
+#> infer             "infer"             "1.0.8"      
+#> ini               "ini"               "0.3.1"      
+#> inline            "inline"            "0.3.21"     
+#> ipred             "ipred"             "0.9-15"     
+#> isoband           "isoband"           "0.2.7"      
+#> iterators         "iterators"         "1.0.14"     
+#> jomo              "jomo"              "2.7-6"      
+#> jpeg              "jpeg"              "0.1-11"     
+#> jquerylib         "jquerylib"         "0.1.4"      
+#> jsonlite          "jsonlite"          "2.0.0"      
+#> jsonvalidate      "jsonvalidate"      "1.5.0"      
+#> kernlab           "kernlab"           "0.9-33"     
+#> knitr             "knitr"             "1.50"       
+#> ks                "ks"                "1.14.3"     
+#> labeling          "labeling"          "0.4.3"      
+#> Lahman            "Lahman"            "12.0-0"     
+#> languageserver    "languageserver"    "0.3.16"     
+#> later             "later"             "1.4.2"      
+#> latex2exp         "latex2exp"         "0.9.6"      
+#> lava              "lava"              "1.8.1"      
+#> lavaan            "lavaan"            "0.6-19"     
+#> lazyeval          "lazyeval"          "0.2.2"      
+#> lhs               "lhs"               "1.2.0"      
+#> lifecycle         "lifecycle"         "1.0.4"      
+#> lintr             "lintr"             "3.2.0"      
+#> listenv           "listenv"           "0.9.1"      
+#> litedown          "litedown"          "0.7"        
+#> littler           "littler"           "0.3.21"     
+#> lme4              "lme4"              "1.1-37"     
+#> locfit            "locfit"            "1.5-9.12"   
+#> longMI            "longMI"            "1.0.0"      
+#> loo               "loo"               "2.8.0"      
+#> lubridate         "lubridate"         "1.9.4"      
+#> magick            "magick"            "2.8.6"      
+#> magrittr          "magrittr"          "2.0.3"      
+#> markdown          "markdown"          "2.0"        
+#> MatrixModels      "MatrixModels"      "0.5-4"      
+#> matrixStats       "matrixStats"       "1.5.0"      
+#> mclust            "mclust"            "6.1.1"      
+#> memoise           "memoise"           "2.0.1"      
+#> metaSEM           "metaSEM"           "1.5.0"      
+#> metaVAR           "metaVAR"           "0.0.0.9000" 
+#> mice              "mice"              "3.17.0"     
+#> microbenchmark    "microbenchmark"    "1.5.0"      
+#> mime              "mime"              "0.13"       
+#> miniUI            "miniUI"            "0.1.2"      
+#> minqa             "minqa"             "1.2.8"      
+#> mitml             "mitml"             "0.4-5"      
+#> mize              "mize"              "0.2.4"      
+#> mlVAR             "mlVAR"             "0.5.2"      
+#> mnormt            "mnormt"            "2.1.1"      
+#> modeldata         "modeldata"         "1.4.0"      
+#> modelenv          "modelenv"          "0.2.0"      
+#> modelr            "modelr"            "0.1.11"     
+#> MplusAutomation   "MplusAutomation"   "1.1.1"      
+#> multicool         "multicool"         "1.0.1"      
+#> munsell           "munsell"           "0.5.1"      
+#> mvtnorm           "mvtnorm"           "1.3-3"      
+#> nloptr            "nloptr"            "2.2.1"      
+#> numDeriv          "numDeriv"          "2016.8-1.1" 
+#> nycflights13      "nycflights13"      "1.0.2"      
+#> OpenMx            "OpenMx"            "2.21.13"    
+#> openssl           "openssl"           "2.3.2"      
+#> ordinal           "ordinal"           "2023.12-4.1"
+#> pan               "pan"               "1.9"        
+#> pander            "pander"            "0.6.6"      
+#> parallelly        "parallelly"        "1.43.0"     
+#> parsnip           "parsnip"           "1.3.1"      
+#> patchwork         "patchwork"         "1.3.0"      
+#> pbapply           "pbapply"           "1.7-2"      
+#> pbivnorm          "pbivnorm"          "0.6.0"      
+#> pbkrtest          "pbkrtest"          "0.5.4"      
+#> pcaPP             "pcaPP"             "2.0-5"      
+#> pdftools          "pdftools"          "3.5.0"      
+#> pillar            "pillar"            "1.10.2"     
+#> pkgbuild          "pkgbuild"          "1.4.7"      
+#> pkgconfig         "pkgconfig"         "2.0.3"      
+#> pkgdown           "pkgdown"           "2.1.2"      
+#> pkgload           "pkgload"           "1.4.0"      
+#> plogr             "plogr"             "0.2.0"      
+#> plyr              "plyr"              "1.8.9"      
+#> png               "png"               "0.1-8"      
+#> posterior         "posterior"         "1.6.1"      
+#> pracma            "pracma"            "2.4.4"      
+#> praise            "praise"            "1.0.0"      
+#> prettyunits       "prettyunits"       "1.2.0"      
+#> printr            "printr"            "0.3"        
+#> processx          "processx"          "3.8.6"      
+#> prodlim           "prodlim"           "2024.06.25" 
+#> profvis           "profvis"           "0.4.0"      
+#> progress          "progress"          "1.2.3"      
+#> progressr         "progressr"         "0.15.1"     
+#> promises          "promises"          "1.3.2"      
+#> proto             "proto"             "1.0.0"      
+#> ps                "ps"                "1.9.1"      
+#> psych             "psych"             "2.5.3"      
+#> purrr             "purrr"             "1.0.4"      
+#> qgraph            "qgraph"            "1.9.8"      
+#> qpdf              "qpdf"              "1.3.5"      
+#> quadprog          "quadprog"          "1.5-8"      
+#> quantreg          "quantreg"          "6.1"        
+#> quarto            "quarto"            "1.4.4"      
+#> QuickJSR          "QuickJSR"          "1.7.0"      
+#> R.cache           "R.cache"           "0.16.0"     
+#> R.methodsS3       "R.methodsS3"       "1.8.2"      
+#> R.oo              "R.oo"              "1.27.0"     
+#> R.utils           "R.utils"           "2.13.0"     
+#> R6                "R6"                "2.6.1"      
+#> ragg              "ragg"              "1.4.0"      
+#> rainbow           "rainbow"           "3.8"        
+#> rappdirs          "rappdirs"          "0.3.3"      
+#> rbibutils         "rbibutils"         "2.3"        
+#> rcmdcheck         "rcmdcheck"         "1.4.0"      
+#> RColorBrewer      "RColorBrewer"      "1.1-3"      
+#> Rcpp              "Rcpp"              "1.0.14"     
+#> RcppArmadillo     "RcppArmadillo"     "14.4.2-1"   
+#> RcppEigen         "RcppEigen"         "0.3.4.0.2"  
+#> RcppGSL           "RcppGSL"           "0.3.13"     
+#> RcppParallel      "RcppParallel"      "5.1.10"     
+#> RcppTOML          "RcppTOML"          "0.2.3"      
+#> RCurl             "RCurl"             "1.98-1.17"  
+#> Rdpack            "Rdpack"            "2.6.4"      
+#> readr             "readr"             "2.1.5"      
+#> readxl            "readxl"            "1.4.5"      
+#> recipes           "recipes"           "1.3.0"      
+#> RefManageR        "RefManageR"        "1.4.0"      
+#> reformulas        "reformulas"        "0.4.0"      
+#> rematch           "rematch"           "2.0.0"      
+#> rematch2          "rematch2"          "2.1.2"      
+#> remotes           "remotes"           "2.5.0"      
+#> reprex            "reprex"            "2.1.1"      
+#> reshape2          "reshape2"          "1.4.4"      
+#> reticulate        "reticulate"        "1.42.0"     
+#> rex               "rex"               "1.2.1"      
+#> rhub              "rhub"              "2.0.1"      
+#> rjags             "rjags"             "4-17"       
+#> rlang             "rlang"             "1.1.6"      
+#> RMariaDB          "RMariaDB"          "1.3.4"      
+#> rmarkdown         "rmarkdown"         "2.29"       
+#> roxygen2          "roxygen2"          "7.3.2"      
+#> rpf               "rpf"               "1.0.14"     
+#> RPostgres         "RPostgres"         "1.4.8"      
+#> rProject          "rProject"          "0.0.18"     
+#> rprojroot         "rprojroot"         "2.0.4"      
+#> rsample           "rsample"           "1.3.0"      
+#> RSQLite           "RSQLite"           "2.3.9"      
+#> rstan             "rstan"             "2.32.7"     
+#> rstantools        "rstantools"        "2.4.0"      
+#> rstudioapi        "rstudioapi"        "0.17.1"     
+#> rversions         "rversions"         "2.1.2"      
+#> rvest             "rvest"             "1.0.4"      
+#> Ryacas            "Ryacas"            "1.1.5"      
+#> sass              "sass"              "0.4.10"     
+#> scales            "scales"            "1.4.0"      
+#> selectr           "selectr"           "0.4-2"      
+#> semlbci           "semlbci"           "0.11.3"     
+#> semmcci           "semmcci"           "1.1.5"      
+#> sessioninfo       "sessioninfo"       "1.2.3"      
+#> sfd               "sfd"               "0.1.0"      
+#> shape             "shape"             "1.4.6.1"    
+#> shiny             "shiny"             "1.10.0"     
+#> simStateSpace     "simStateSpace"     "1.2.11"     
+#> slider            "slider"            "0.3.2"      
+#> snow              "snow"              "0.4-4"      
+#> snowfall          "snowfall"          "1.84-6.3"   
+#> sourcetools       "sourcetools"       "0.1.7-1"    
+#> SparseM           "SparseM"           "1.84-2"     
+#> sparsevctrs       "sparsevctrs"       "0.3.3"      
+#> SQUAREM           "SQUAREM"           "2021.1"     
+#> StanHeaders       "StanHeaders"       "2.32.10"    
+#> statmod           "statmod"           "1.5.0"      
+#> stringi           "stringi"           "1.8.7"      
+#> stringr           "stringr"           "1.5.1"      
+#> styler            "styler"            "1.10.3"     
+#> symSEM            "symSEM"            "0.4"        
+#> sys               "sys"               "3.4.3"      
+#> systemfonts       "systemfonts"       "1.2.2"      
+#> tensorA           "tensorA"           "0.36.2.1"   
+#> testthat          "testthat"          "3.2.3.9000" 
+#> texreg            "texreg"            "1.39.4"     
+#> textshaping       "textshaping"       "1.0.0"      
+#> tibble            "tibble"            "3.2.1"      
+#> tidymodels        "tidymodels"        "1.3.0"      
+#> tidyr             "tidyr"             "1.3.1"      
+#> tidyselect        "tidyselect"        "1.2.1"      
+#> tidyverse         "tidyverse"         "2.0.0"      
+#> timechange        "timechange"        "0.3.0"      
+#> timeDate          "timeDate"          "4041.110"   
+#> tinytex           "tinytex"           "0.57"       
+#> tune              "tune"              "1.3.0"      
+#> tzdb              "tzdb"              "0.5.0"      
+#> ucminf            "ucminf"            "1.2.2"      
+#> urlchecker        "urlchecker"        "1.0.1"      
+#> usethis           "usethis"           "3.1.0"      
+#> utf8              "utf8"              "1.2.4"      
+#> uuid              "uuid"              "1.2-1"      
+#> V8                "V8"                "6.0.3"      
+#> vctrs             "vctrs"             "0.6.5"      
+#> viridis           "viridis"           "0.6.5"      
+#> viridisLite       "viridisLite"       "0.4.2"      
+#> vroom             "vroom"             "1.6.5"      
+#> waldo             "waldo"             "0.6.1"      
+#> warp              "warp"              "0.2.1"      
+#> whisker           "whisker"           "0.4.1"      
+#> whoami            "whoami"            "1.3.0"      
+#> withr             "withr"             "3.0.2"      
+#> workflows         "workflows"         "1.2.0"      
+#> workflowsets      "workflowsets"      "1.1.0"      
+#> xfun              "xfun"              "0.52"       
+#> xml2              "xml2"              "1.3.8"      
+#> xmlparsedata      "xmlparsedata"      "1.0.5"      
+#> xopen             "xopen"             "1.0.1"      
+#> xtable            "xtable"            "1.8-4"      
+#> yaml              "yaml"              "2.3.10"     
+#> yardstick         "yardstick"         "1.3.2"      
+#> zip               "zip"               "2.3.2"      
+#> base              "base"              "4.5.0"      
+#> boot              "boot"              "1.3-31"     
+#> class             "class"             "7.3-23"     
+#> cluster           "cluster"           "2.1.8.1"    
+#> codetools         "codetools"         "0.2-20"     
+#> compiler          "compiler"          "4.5.0"      
+#> datasets          "datasets"          "4.5.0"      
+#> foreign           "foreign"           "0.8-90"     
+#> graphics          "graphics"          "4.5.0"      
+#> grDevices         "grDevices"         "4.5.0"      
+#> grid              "grid"              "4.5.0"      
+#> KernSmooth        "KernSmooth"        "2.23-26"    
+#> lattice           "lattice"           "0.22-6"     
+#> MASS              "MASS"              "7.3-65"     
+#> Matrix            "Matrix"            "1.7-3"      
+#> methods           "methods"           "4.5.0"      
+#> mgcv              "mgcv"              "1.9-1"      
+#> nlme              "nlme"              "3.1-168"    
+#> nnet              "nnet"              "7.3-20"     
+#> parallel          "parallel"          "4.5.0"      
+#> rpart             "rpart"             "4.1.24"     
+#> spatial           "spatial"           "7.3-18"     
+#> splines           "splines"           "4.5.0"      
+#> stats             "stats"             "4.5.0"      
+#> stats4            "stats4"            "4.5.0"      
+#> survival          "survival"          "3.8-3"      
+#> tcltk             "tcltk"             "4.5.0"      
+#> tools             "tools"             "4.5.0"      
+#> utils             "utils"             "4.5.0"
+```
+
+# CPU
+
+
+```
+#> Architecture:                         x86_64
+#> CPU op-mode(s):                       32-bit, 64-bit
+#> Address sizes:                        46 bits physical, 48 bits virtual
+#> Byte Order:                           Little Endian
+#> CPU(s):                               24
+#> On-line CPU(s) list:                  0-23
+#> Vendor ID:                            GenuineIntel
+#> Model name:                           Intel(R) Xeon(R) CPU E5-2680 v3 @ 2.50GHz
+#> CPU family:                           6
+#> Model:                                63
+#> Thread(s) per core:                   1
+#> Core(s) per socket:                   12
+#> Socket(s):                            2
+#> Stepping:                             2
+#> CPU(s) scaling MHz:                   62%
+#> CPU max MHz:                          3300.0000
+#> CPU min MHz:                          1200.0000
+#> BogoMIPS:                             4988.02
+#> Flags:                                fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf pni pclmulqdq dtes64 monitor ds_cpl smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm cpuid_fault epb invpcid_single pti ssbd ibrs ibpb stibp fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid cqm xsaveopt cqm_llc cqm_occup_llc dtherm ida arat pln pts md_clear flush_l1d
+#> L1d cache:                            768 KiB (24 instances)
+#> L1i cache:                            768 KiB (24 instances)
+#> L2 cache:                             6 MiB (24 instances)
+#> L3 cache:                             60 MiB (2 instances)
+#> NUMA node(s):                         2
+#> NUMA node0 CPU(s):                    0,2,4,6,8,10,12,14,16,18,20,22
+#> NUMA node1 CPU(s):                    1,3,5,7,9,11,13,15,17,19,21,23
+#> Vulnerability Gather data sampling:   Not affected
+#> Vulnerability Itlb multihit:          KVM: Mitigation: VMX unsupported
+#> Vulnerability L1tf:                   Mitigation; PTE Inversion
+#> Vulnerability Mds:                    Mitigation; Clear CPU buffers; SMT disabled
+#> Vulnerability Meltdown:               Mitigation; PTI
+#> Vulnerability Mmio stale data:        Mitigation; Clear CPU buffers; SMT disabled
+#> Vulnerability Reg file data sampling: Not affected
+#> Vulnerability Retbleed:               Not affected
+#> Vulnerability Spec rstack overflow:   Not affected
+#> Vulnerability Spec store bypass:      Mitigation; Speculative Store Bypass disabled via prctl
+#> Vulnerability Spectre v1:             Mitigation; usercopy/swapgs barriers and __user pointer sanitization
+#> Vulnerability Spectre v2:             Mitigation; Retpolines; IBPB conditional; IBRS_FW; RSB filling; PBRSB-eIBRS Not affected; BHI Not affected
+#> Vulnerability Srbds:                  Not affected
+#> Vulnerability Tsx async abort:        Not affected
+```
+
+# Memory
+
+
+```
+#>                total        used        free      shared  buff/cache   available
+#> Mem:           251Gi        10Gi       167Gi       5.3Gi        80Gi       241Gi
+#> Swap:             0B          0B          0B
+#> Total:         251Gi        10Gi       167Gi
+```

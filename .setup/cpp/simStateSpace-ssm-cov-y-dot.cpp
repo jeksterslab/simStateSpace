@@ -8,5 +8,6 @@
 // [[Rcpp::export(.SSMCovY)]]
 arma::mat SSMCovY(const arma::mat& lambda, const arma::mat& theta,
                   const arma::mat& cov_eta) {
-  return lambda * cov_eta * lambda.t() + theta;
+  arma::mat X = lambda * cov_eta * lambda.t() + theta;
+  return ((X + X.t()) / 2);
 }

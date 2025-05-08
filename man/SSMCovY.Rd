@@ -59,7 +59,7 @@ beta <- matrix(
   ),
   nrow = 3
 )
-psi <- 0.1 * iden
+psi <- 0.1 * diag(3)
 lambda <- diag(3)
 theta <- diag(3)
 cov_eta <- SSMCovEta(
