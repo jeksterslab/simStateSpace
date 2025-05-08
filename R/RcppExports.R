@@ -192,6 +192,22 @@ LinSDE2SSM <- function(iota, phi, sigma_l, delta_t) {
     .Call(`_simStateSpace_LinSDE2SSM`, iota, phi, sigma_l, delta_t)
 }
 
+.LinSDECovEta <- function(phi, sigma) {
+    .Call(`_simStateSpace_LinSDECovEta`, phi, sigma)
+}
+
+.LinSDECovY <- function(lambda, theta, cov_eta) {
+    .Call(`_simStateSpace_LinSDECovY`, lambda, theta, cov_eta)
+}
+
+.LinSDEMeanEta <- function(phi, iota) {
+    .Call(`_simStateSpace_LinSDEMeanEta`, phi, iota)
+}
+
+.LinSDEMeanY <- function(nu, lambda, mean_eta) {
+    .Call(`_simStateSpace_LinSDEMeanY`, nu, lambda, mean_eta)
+}
+
 #' Simulate Intercept Vectors
 #' in a Discrete-Time Vector Autoregressive Model
 #' from the Multivariate Normal Distribution
@@ -485,168 +501,19 @@ SimPhiN <- function(n, phi, vcov_phi_vec_l) {
     .Call(`_simStateSpace_SolveSyl`, A, B, C)
 }
 
-#' State Covariance Matrix for the
-#' State Space Model
-#'
-#' This function calculates the state covariance matrix
-#' for the state space model
-#' given by
-#' \deqn{
-#'   \mathrm{vec}
-#'   \left(
-#'     \mathrm{Cov} \left( \boldsymbol{\eta} \right)
-#'   \right)
-#'   =
-#'   \left(
-#'     \mathbf{I} - \boldsymbol{\beta} \otimes \boldsymbol{\beta}
-#'   \right)^{-1}
-#'   \mathrm{vec} \left( \boldsymbol{\Psi} \right) .
-#' }
-#'
-#' @author Ivan Jacob Agaloos Pesigan
-#'
-#' @param beta Numeric matrix.
-#'   The transition matrix (\eqn{\boldsymbol{\beta}}).
-#' @param psi Numeric matrix.
-#'   The covariance matrix
-#'   of the process noise
-#'   (\eqn{\boldsymbol{\Psi}}).
-#'
-#' @examples
-#' beta <- 0.50 * diag(3)
-#' psi <- 0.001 * diag(3)
-#' SSMCovEta(beta = beta, psi = psi)
-#'
-#' @family Simulation of State Space Models Data Functions
-#' @keywords simStateSpace ssm
-#' @export
-SSMCovEta <- function(beta, psi) {
+.SSMCovEta <- function(beta, psi) {
     .Call(`_simStateSpace_SSMCovEta`, beta, psi)
 }
 
-#' Observed Variable Covariance Matrix for the
-#' State Space Model
-#'
-#' This function calculates the observed variable covariance matrix
-#' for the state space model
-#' given by
-#' \deqn{
-#'   \mathrm{Cov} \left( \mathbf{y} \right)
-#'   =
-#'   \boldsymbol{\Lambda}
-#'   \mathrm{Cov} \left( \boldsymbol{\eta} \right)
-#'   \boldsymbol{\Lambda}^{\prime}
-#'   +
-#'   \boldsymbol{\Theta} .
-#' }
-#'
-#' @author Ivan Jacob Agaloos Pesigan
-#'
-#' @param lambda Numeric matrix.
-#'   The factor loadings matrix (\eqn{\boldsymbol{\Lambda}}).
-#' @param theta Numeric matrix.
-#'   The covariance matrix
-#'   of the measurement error
-#'   (\eqn{\boldsymbol{\Theta}}).
-#' @param cov_eta Numeric matrix.
-#'   State covariance matrix
-#'   \eqn{\mathrm{Cov} \left( \boldsymbol{\eta} \right)}.
-#'
-#' @examples
-#' beta <- 0.50 * diag(3)
-#' psi <- 0.001 * diag(3)
-#' lambda <- diag(3)
-#' theta <- 0.02 * diag(3)
-#' cov_eta <- SSMCovEta(beta = beta, psi = psi)
-#' SSMCovY(
-#'   lambda = lambda,
-#'   theta = theta,
-#'   cov_eta = cov_eta
-#' )
-#'
-#' @family Simulation of State Space Models Data Functions
-#' @keywords simStateSpace ssm
-#' @export
-SSMCovY <- function(lambda, theta, cov_eta) {
+.SSMCovY <- function(lambda, theta, cov_eta) {
     .Call(`_simStateSpace_SSMCovY`, lambda, theta, cov_eta)
 }
 
-#' State Mean Vector for the
-#' State Space Model
-#'
-#' This function calculates the state mean vector
-#' for the state space model
-#' given by
-#' \deqn{
-#'   \mathrm{Mean} \left( \boldsymbol{\eta} \right)
-#'   =
-#'   \left(
-#'     \mathbf{I} - \boldsymbol{\beta}
-#'   \right)^{-1}
-#'   \boldsymbol{\alpha} .
-#' }
-#'
-#' @author Ivan Jacob Agaloos Pesigan
-#'
-#' @param beta Numeric matrix.
-#'   The transition matrix (\eqn{\boldsymbol{\beta}}).
-#' @param alpha Numeric vector.
-#'   Vector of constant values for the dynamic model
-#'   (\eqn{\boldsymbol{\alpha}}).
-#' @examples
-#' beta <- 0.50 * diag(3)
-#' alpha <- rep(x = 0.001, times = 3)
-#' SSMMeanEta(beta = beta, alpha = alpha)
-#'
-#' @family Simulation of State Space Models Data Functions
-#' @keywords simStateSpace ssm
-#' @export
-SSMMeanEta <- function(beta, alpha) {
+.SSMMeanEta <- function(beta, alpha) {
     .Call(`_simStateSpace_SSMMeanEta`, beta, alpha)
 }
 
-#' Observed Variable Mean Vector for the
-#' State Space Model
-#'
-#' This function calculates the observed variable mean vector
-#' for the state space model
-#' given by
-#' \deqn{
-#'   \mathrm{Mean} \left( \mathbf{y} \right)
-#'   =
-#'   \boldsymbol{\nu}
-#'   +
-#'   \boldsymbol{\Lambda}
-#'   \mathrm{Mean} \left( \boldsymbol{\eta} \right) .
-#' }
-#'
-#' @author Ivan Jacob Agaloos Pesigan
-#'
-#' @param nu Numeric vector.
-#'   Vector of constant values for the measurement model
-#'   (\eqn{\boldsymbol{\nu}}).
-#' @param lambda Numeric matrix.
-#'   The factor loadings matrix (\eqn{\boldsymbol{\Lambda}}).
-#' @param mean_eta Numeric vector.
-#'   State mean vector
-#'   \eqn{\mathrm{Mean} \left( \boldsymbol{\eta} \right)}.
-#'
-#' @examples
-#' beta <- 0.50 * diag(3)
-#' alpha <- rep(x = 0.001, times = 3)
-#' nu <- rep(x = 0.03, times = 3)
-#' lambda <- diag(3)
-#' mean_eta <- SSMMeanEta(beta = beta, alpha = alpha)
-#' SSMMeanY(
-#'   nu = nu,
-#'   lambda = lambda,
-#'   mean_eta = mean_eta
-#' )
-#'
-#' @family Simulation of State Space Models Data Functions
-#' @keywords simStateSpace ssm
-#' @export
-SSMMeanY <- function(nu, lambda, mean_eta) {
+.SSMMeanY <- function(nu, lambda, mean_eta) {
     .Call(`_simStateSpace_SSMMeanY`, nu, lambda, mean_eta)
 }
 

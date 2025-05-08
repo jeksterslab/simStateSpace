@@ -25,6 +25,56 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// LinSDECovEta
+arma::mat LinSDECovEta(const arma::mat phi, const arma::mat sigma);
+RcppExport SEXP _simStateSpace_LinSDECovEta(SEXP phiSEXP, SEXP sigmaSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::mat >::type phi(phiSEXP);
+    Rcpp::traits::input_parameter< const arma::mat >::type sigma(sigmaSEXP);
+    rcpp_result_gen = Rcpp::wrap(LinSDECovEta(phi, sigma));
+    return rcpp_result_gen;
+END_RCPP
+}
+// LinSDECovY
+arma::mat LinSDECovY(const arma::mat& lambda, const arma::mat& theta, const arma::mat& cov_eta);
+RcppExport SEXP _simStateSpace_LinSDECovY(SEXP lambdaSEXP, SEXP thetaSEXP, SEXP cov_etaSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::mat& >::type lambda(lambdaSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type theta(thetaSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type cov_eta(cov_etaSEXP);
+    rcpp_result_gen = Rcpp::wrap(LinSDECovY(lambda, theta, cov_eta));
+    return rcpp_result_gen;
+END_RCPP
+}
+// LinSDEMeanEta
+Rcpp::NumericVector LinSDEMeanEta(const arma::mat phi, const arma::vec iota);
+RcppExport SEXP _simStateSpace_LinSDEMeanEta(SEXP phiSEXP, SEXP iotaSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::mat >::type phi(phiSEXP);
+    Rcpp::traits::input_parameter< const arma::vec >::type iota(iotaSEXP);
+    rcpp_result_gen = Rcpp::wrap(LinSDEMeanEta(phi, iota));
+    return rcpp_result_gen;
+END_RCPP
+}
+// LinSDEMeanY
+Rcpp::NumericVector LinSDEMeanY(const arma::vec& nu, const arma::mat& lambda, const arma::vec& mean_eta);
+RcppExport SEXP _simStateSpace_LinSDEMeanY(SEXP nuSEXP, SEXP lambdaSEXP, SEXP mean_etaSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::vec& >::type nu(nuSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type lambda(lambdaSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type mean_eta(mean_etaSEXP);
+    rcpp_result_gen = Rcpp::wrap(LinSDEMeanY(nu, lambda, mean_eta));
+    return rcpp_result_gen;
+END_RCPP
+}
 // SimAlphaN
 Rcpp::List SimAlphaN(const arma::uword& n, const arma::vec& alpha, const arma::mat& vcov_alpha_l);
 RcppExport SEXP _simStateSpace_SimAlphaN(SEXP nSEXP, SEXP alphaSEXP, SEXP vcov_alpha_lSEXP) {
@@ -387,26 +437,26 @@ BEGIN_RCPP
 END_RCPP
 }
 // SolveLya
-arma::mat SolveLya(arma::mat A, arma::mat Q);
+arma::mat SolveLya(const arma::mat A, const arma::mat Q);
 RcppExport SEXP _simStateSpace_SolveLya(SEXP ASEXP, SEXP QSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::mat >::type A(ASEXP);
-    Rcpp::traits::input_parameter< arma::mat >::type Q(QSEXP);
+    Rcpp::traits::input_parameter< const arma::mat >::type A(ASEXP);
+    Rcpp::traits::input_parameter< const arma::mat >::type Q(QSEXP);
     rcpp_result_gen = Rcpp::wrap(SolveLya(A, Q));
     return rcpp_result_gen;
 END_RCPP
 }
 // SolveSyl
-arma::mat SolveSyl(arma::mat A, arma::mat B, arma::mat C);
+arma::mat SolveSyl(const arma::mat A, const arma::mat B, const arma::mat C);
 RcppExport SEXP _simStateSpace_SolveSyl(SEXP ASEXP, SEXP BSEXP, SEXP CSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::mat >::type A(ASEXP);
-    Rcpp::traits::input_parameter< arma::mat >::type B(BSEXP);
-    Rcpp::traits::input_parameter< arma::mat >::type C(CSEXP);
+    Rcpp::traits::input_parameter< const arma::mat >::type A(ASEXP);
+    Rcpp::traits::input_parameter< const arma::mat >::type B(BSEXP);
+    Rcpp::traits::input_parameter< const arma::mat >::type C(CSEXP);
     rcpp_result_gen = Rcpp::wrap(SolveSyl(A, B, C));
     return rcpp_result_gen;
 END_RCPP
@@ -497,6 +547,10 @@ END_RCPP
 
 static const R_CallMethodDef CallEntries[] = {
     {"_simStateSpace_LinSDE2SSM", (DL_FUNC) &_simStateSpace_LinSDE2SSM, 4},
+    {"_simStateSpace_LinSDECovEta", (DL_FUNC) &_simStateSpace_LinSDECovEta, 2},
+    {"_simStateSpace_LinSDECovY", (DL_FUNC) &_simStateSpace_LinSDECovY, 3},
+    {"_simStateSpace_LinSDEMeanEta", (DL_FUNC) &_simStateSpace_LinSDEMeanEta, 2},
+    {"_simStateSpace_LinSDEMeanY", (DL_FUNC) &_simStateSpace_LinSDEMeanY, 3},
     {"_simStateSpace_SimAlphaN", (DL_FUNC) &_simStateSpace_SimAlphaN, 3},
     {"_simStateSpace_SimBetaN", (DL_FUNC) &_simStateSpace_SimBetaN, 3},
     {"_simStateSpace_SimCovDiagN", (DL_FUNC) &_simStateSpace_SimCovDiagN, 3},

@@ -1,4 +1,4 @@
-## ---- test-simStateSpace-ssm-mean-eta
+## ---- test-simStateSpace-lin-sde-mean-eta
 lapply(
   X = 1,
   FUN = function(i,
@@ -12,47 +12,63 @@ lapply(
         set.seed(42)
         n <- 1000
         time <- 1000
+        delta_t <- 0.10
         k <- p <- 3
         iden <- diag(k)
         null_vec <- rep(x = 0, times = k)
-        alpha <- null_vec
-        beta <- matrix(
+        iota <- rep(x = 1, times = p)
+        phi <- matrix(
           data = c(
-            0.7,
-            0.5,
-            -0.1,
+            -0.357,
+            0.771,
+            -0.450,
             0.0,
-            0.6,
-            0.4,
+            -0.511,
+            0.729,
             0,
             0,
-            0.5
+            -0.693
           ),
           nrow = k
         )
-        psi <- 0.1 * iden
-        psi_l <- t(chol(psi))
+        sigma <- matrix(
+          data = c(
+            0.24455556,
+            0.02201587,
+            -0.05004762,
+            0.02201587,
+            0.07067800,
+            0.01539456,
+            -0.05004762,
+            0.01539456,
+            0.07553061
+          ),
+          nrow = p
+        )
+        sigma_l <- t(chol(sigma))
         nu <- rep(x = 1, times = k)
         lambda <- iden
         theta <- iden
         theta_l <- t(chol(theta))
-        mu0 <- simStateSpace::SSMMeanEta(
-          beta = beta,
-          alpha = alpha
+        mu0 <- simStateSpace::LinSDEMeanEta(
+          phi = phi,
+          iota = iota
         )
-        sigma0 <- simStateSpace::SSMCovEta(
-          beta = beta,
-          psi = psi
+        mu <- mu0
+        sigma0 <- simStateSpace::LinSDECovEta(
+          phi = phi,
+          sigma = sigma
         )
         sigma0_l <- t(chol(sigma0))
-        sim <- simStateSpace::SimSSMFixed(
+        sim <- simStateSpace::SimSSMOUFixed(
           n = n,
           time = time,
+          delta_t = delta_t,
           mu0 = mu0,
           sigma0_l = sigma0_l,
-          alpha = alpha,
-          beta = beta,
-          psi_l = psi_l,
+          mu = mu,
+          phi = phi,
+          sigma_l = sigma_l,
           nu = nu,
           lambda = lambda,
           theta_l = theta_l,
@@ -76,6 +92,6 @@ lapply(
       }
     )
   },
-  text = "test-simStateSpace-ssm-mean-eta",
+  text = "test-simStateSpace-lin-sde-mean-eta",
   tol = 0.01
 )

@@ -235,6 +235,57 @@ Rcpp::List LinSDE2SSM(const arma::vec& iota, const arma::mat& phi,
                             Rcpp::Named("psi_l") = psi_l);
 }
 // -----------------------------------------------------------------------------
+// edit .setup/cpp/simStateSpace-lin-sde-cov-eta-dot.cpp
+// Ivan Jacob Agaloos Pesigan
+// -----------------------------------------------------------------------------
+
+#include <RcppArmadillo.h>
+// [[Rcpp::depends(RcppArmadillo)]]
+// [[Rcpp::export(.LinSDECovEta)]]
+arma::mat LinSDECovEta(const arma::mat phi, const arma::mat sigma) {
+  arma::mat X;
+  arma::syl(X, phi, phi.t(), sigma);
+  return ((X + X.t()) / 2);
+}
+// -----------------------------------------------------------------------------
+// edit .setup/cpp/simStateSpace-lin-sde-cov-y-dot.cpp
+// Ivan Jacob Agaloos Pesigan
+// -----------------------------------------------------------------------------
+
+#include <RcppArmadillo.h>
+// [[Rcpp::depends(RcppArmadillo)]]
+// [[Rcpp::export(.LinSDECovY)]]
+arma::mat LinSDECovY(const arma::mat& lambda, const arma::mat& theta,
+                     const arma::mat& cov_eta) {
+  arma::mat X = lambda * cov_eta * lambda.t() + theta;
+  return ((X + X.t()) / 2);
+}
+// -----------------------------------------------------------------------------
+// edit .setup/cpp/simStateSpace-lin-sde-mean-eta-dot.cpp
+// Ivan Jacob Agaloos Pesigan
+// -----------------------------------------------------------------------------
+
+#include <RcppArmadillo.h>
+// [[Rcpp::depends(RcppArmadillo)]]
+// [[Rcpp::export(.LinSDEMeanEta)]]
+Rcpp::NumericVector LinSDEMeanEta(const arma::mat phi, const arma::vec iota) {
+  arma::vec output = arma::solve(-phi, iota);
+  return Rcpp::NumericVector(output.begin(), output.end());
+}
+// -----------------------------------------------------------------------------
+// edit .setup/cpp/simStateSpace-lin-sde-mean-y-dot.cpp
+// Ivan Jacob Agaloos Pesigan
+// -----------------------------------------------------------------------------
+
+#include <RcppArmadillo.h>
+// [[Rcpp::depends(RcppArmadillo)]]
+// [[Rcpp::export(.LinSDEMeanY)]]
+Rcpp::NumericVector LinSDEMeanY(const arma::vec& nu, const arma::mat& lambda,
+                                const arma::vec& mean_eta) {
+  arma::vec output = nu + lambda * mean_eta;
+  return Rcpp::NumericVector(output.begin(), output.end());
+}
+// -----------------------------------------------------------------------------
 // edit .setup/cpp/simStateSpace-sim-alpha-n.cpp
 // Ivan Jacob Agaloos Pesigan
 // -----------------------------------------------------------------------------
@@ -1526,7 +1577,7 @@ Rcpp::List SimSSMLinSDEIVary2(
 #include <RcppArmadillo.h>
 // [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::export(.SolveLya)]]
-arma::mat SolveLya(arma::mat A, arma::mat Q) {
+arma::mat SolveLya(const arma::mat A, const arma::mat Q) {
   arma::mat X;
   arma::syl(X, A, A.t(), Q);
   return ((X + X.t()) / 2);
@@ -1539,212 +1590,61 @@ arma::mat SolveLya(arma::mat A, arma::mat Q) {
 #include <RcppArmadillo.h>
 // [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::export(.SolveSyl)]]
-arma::mat SolveSyl(arma::mat A, arma::mat B, arma::mat C) {
+arma::mat SolveSyl(const arma::mat A, const arma::mat B, const arma::mat C) {
   arma::mat X;
   arma::syl(X, A, B, C);
   return X;
 }
 // -----------------------------------------------------------------------------
-// edit .setup/cpp/simStateSpace-ssm-cov-eta.cpp
+// edit .setup/cpp/simStateSpace-ssm-cov-eta-dot.cpp
 // Ivan Jacob Agaloos Pesigan
 // -----------------------------------------------------------------------------
 
 #include <RcppArmadillo.h>
 // [[Rcpp::depends(RcppArmadillo)]]
-
-//' State Covariance Matrix for the
-//' State Space Model
-//'
-//' This function calculates the state covariance matrix
-//' for the state space model
-//' given by
-//' \deqn{
-//'   \mathrm{vec}
-//'   \left(
-//'     \mathrm{Cov} \left( \boldsymbol{\eta} \right)
-//'   \right)
-//'   =
-//'   \left(
-//'     \mathbf{I} - \boldsymbol{\beta} \otimes \boldsymbol{\beta}
-//'   \right)^{-1}
-//'   \mathrm{vec} \left( \boldsymbol{\Psi} \right) .
-//' }
-//'
-//' @author Ivan Jacob Agaloos Pesigan
-//'
-//' @param beta Numeric matrix.
-//'   The transition matrix (\eqn{\boldsymbol{\beta}}).
-//' @param psi Numeric matrix.
-//'   The covariance matrix
-//'   of the process noise
-//'   (\eqn{\boldsymbol{\Psi}}).
-//'
-//' @examples
-//' beta <- 0.50 * diag(3)
-//' psi <- 0.001 * diag(3)
-//' SSMCovEta(beta = beta, psi = psi)
-//'
-//' @family Simulation of State Space Models Data Functions
-//' @keywords simStateSpace ssm
-//' @export
-// [[Rcpp::export]]
+// [[Rcpp::export(.SSMCovEta)]]
 arma::mat SSMCovEta(const arma::mat& beta, const arma::mat& psi) {
   arma::vec vec_sigma = arma::solve(
       arma::eye(beta.n_rows * beta.n_rows, beta.n_rows * beta.n_rows) -
           arma::kron(beta, beta),
       arma::vectorise(psi));
-  return arma::reshape(vec_sigma, beta.n_rows, beta.n_rows);
+  arma::mat X = arma::reshape(vec_sigma, beta.n_rows, beta.n_rows);
+  return ((X + X.t()) / 2);
 }
 // -----------------------------------------------------------------------------
-// edit .setup/cpp/simStateSpace-ssm-cov-y.cpp
+// edit .setup/cpp/simStateSpace-ssm-cov-y-dot.cpp
 // Ivan Jacob Agaloos Pesigan
 // -----------------------------------------------------------------------------
 
 #include <RcppArmadillo.h>
 // [[Rcpp::depends(RcppArmadillo)]]
-
-//' Observed Variable Covariance Matrix for the
-//' State Space Model
-//'
-//' This function calculates the observed variable covariance matrix
-//' for the state space model
-//' given by
-//' \deqn{
-//'   \mathrm{Cov} \left( \mathbf{y} \right)
-//'   =
-//'   \boldsymbol{\Lambda}
-//'   \mathrm{Cov} \left( \boldsymbol{\eta} \right)
-//'   \boldsymbol{\Lambda}^{\prime}
-//'   +
-//'   \boldsymbol{\Theta} .
-//' }
-//'
-//' @author Ivan Jacob Agaloos Pesigan
-//'
-//' @param lambda Numeric matrix.
-//'   The factor loadings matrix (\eqn{\boldsymbol{\Lambda}}).
-//' @param theta Numeric matrix.
-//'   The covariance matrix
-//'   of the measurement error
-//'   (\eqn{\boldsymbol{\Theta}}).
-//' @param cov_eta Numeric matrix.
-//'   State covariance matrix
-//'   \eqn{\mathrm{Cov} \left( \boldsymbol{\eta} \right)}.
-//'
-//' @examples
-//' beta <- 0.50 * diag(3)
-//' psi <- 0.001 * diag(3)
-//' lambda <- diag(3)
-//' theta <- 0.02 * diag(3)
-//' cov_eta <- SSMCovEta(beta = beta, psi = psi)
-//' SSMCovY(
-//'   lambda = lambda,
-//'   theta = theta,
-//'   cov_eta = cov_eta
-//' )
-//'
-//' @family Simulation of State Space Models Data Functions
-//' @keywords simStateSpace ssm
-//' @export
-// [[Rcpp::export]]
+// [[Rcpp::export(.SSMCovY)]]
 arma::mat SSMCovY(const arma::mat& lambda, const arma::mat& theta,
                   const arma::mat& cov_eta) {
-  return lambda * cov_eta * lambda.t() + theta;
+  arma::mat X = lambda * cov_eta * lambda.t() + theta;
+  return ((X + X.t()) / 2);
 }
 // -----------------------------------------------------------------------------
-// edit .setup/cpp/simStateSpace-ssm-mean-eta.cpp
+// edit .setup/cpp/simStateSpace-ssm-mean-eta-dot.cpp
 // Ivan Jacob Agaloos Pesigan
 // -----------------------------------------------------------------------------
 
 #include <RcppArmadillo.h>
 // [[Rcpp::depends(RcppArmadillo)]]
-
-//' State Mean Vector for the
-//' State Space Model
-//'
-//' This function calculates the state mean vector
-//' for the state space model
-//' given by
-//' \deqn{
-//'   \mathrm{Mean} \left( \boldsymbol{\eta} \right)
-//'   =
-//'   \left(
-//'     \mathbf{I} - \boldsymbol{\beta}
-//'   \right)^{-1}
-//'   \boldsymbol{\alpha} .
-//' }
-//'
-//' @author Ivan Jacob Agaloos Pesigan
-//'
-//' @param beta Numeric matrix.
-//'   The transition matrix (\eqn{\boldsymbol{\beta}}).
-//' @param alpha Numeric vector.
-//'   Vector of constant values for the dynamic model
-//'   (\eqn{\boldsymbol{\alpha}}).
-//' @examples
-//' beta <- 0.50 * diag(3)
-//' alpha <- rep(x = 0.001, times = 3)
-//' SSMMeanEta(beta = beta, alpha = alpha)
-//'
-//' @family Simulation of State Space Models Data Functions
-//' @keywords simStateSpace ssm
-//' @export
-// [[Rcpp::export]]
+// [[Rcpp::export(.SSMMeanEta)]]
 Rcpp::NumericVector SSMMeanEta(const arma::mat& beta, const arma::vec& alpha) {
   arma::vec output =
       arma::solve(arma::eye(beta.n_rows, beta.n_rows) - beta, alpha);
   return Rcpp::NumericVector(output.begin(), output.end());
 }
 // -----------------------------------------------------------------------------
-// edit .setup/cpp/simStateSpace-ssm-mean-y.cpp
+// edit .setup/cpp/simStateSpace-ssm-mean-y-dot.cpp
 // Ivan Jacob Agaloos Pesigan
 // -----------------------------------------------------------------------------
 
 #include <RcppArmadillo.h>
 // [[Rcpp::depends(RcppArmadillo)]]
-
-//' Observed Variable Mean Vector for the
-//' State Space Model
-//'
-//' This function calculates the observed variable mean vector
-//' for the state space model
-//' given by
-//' \deqn{
-//'   \mathrm{Mean} \left( \mathbf{y} \right)
-//'   =
-//'   \boldsymbol{\nu}
-//'   +
-//'   \boldsymbol{\Lambda}
-//'   \mathrm{Mean} \left( \boldsymbol{\eta} \right) .
-//' }
-//'
-//' @author Ivan Jacob Agaloos Pesigan
-//'
-//' @param nu Numeric vector.
-//'   Vector of constant values for the measurement model
-//'   (\eqn{\boldsymbol{\nu}}).
-//' @param lambda Numeric matrix.
-//'   The factor loadings matrix (\eqn{\boldsymbol{\Lambda}}).
-//' @param mean_eta Numeric vector.
-//'   State mean vector
-//'   \eqn{\mathrm{Mean} \left( \boldsymbol{\eta} \right)}.
-//'
-//' @examples
-//' beta <- 0.50 * diag(3)
-//' alpha <- rep(x = 0.001, times = 3)
-//' nu <- rep(x = 0.03, times = 3)
-//' lambda <- diag(3)
-//' mean_eta <- SSMMeanEta(beta = beta, alpha = alpha)
-//' SSMMeanY(
-//'   nu = nu,
-//'   lambda = lambda,
-//'   mean_eta = mean_eta
-//' )
-//'
-//' @family Simulation of State Space Models Data Functions
-//' @keywords simStateSpace ssm
-//' @export
-// [[Rcpp::export]]
+// [[Rcpp::export(.SSMMeanY)]]
 Rcpp::NumericVector SSMMeanY(const arma::vec& nu, const arma::mat& lambda,
                              const arma::vec& mean_eta) {
   arma::vec output = nu + lambda * mean_eta;

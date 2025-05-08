@@ -1,4 +1,4 @@
-## ---- test-simStateSpace-ssm-mean-eta
+## ---- test-simStateSpace-ssm-cov-y
 lapply(
   X = 1,
   FUN = function(i,
@@ -35,6 +35,7 @@ lapply(
         nu <- rep(x = 1, times = k)
         lambda <- iden
         theta <- iden
+        theta <- 0.2 * iden
         theta_l <- t(chol(theta))
         mu0 <- simStateSpace::SSMMeanEta(
           beta = beta,
@@ -45,6 +46,11 @@ lapply(
           psi = psi
         )
         sigma0_l <- t(chol(sigma0))
+        sigma_y <- simStateSpace::SSMCovY(
+          lambda = lambda,
+          theta = theta,
+          cov_eta = sigma0
+        )
         sim <- simStateSpace::SimSSMFixed(
           n = n,
           time = time,
@@ -59,15 +65,15 @@ lapply(
           type = 0
         )
         data <- as.matrix(sim, eta = TRUE)
-        eta <- data[, paste0("eta", seq_len(p))]
+        y <- data[, paste0("y", seq_len(p))]
         testthat::expect_true(
           all(
             (
               c(
-                mu0
+                sigma0
               ) - c(
-                colMeans(
-                  eta
+                cov(
+                  y
                 )
               )
             ) <= tol
@@ -76,6 +82,6 @@ lapply(
       }
     )
   },
-  text = "test-simStateSpace-ssm-mean-eta",
+  text = "test-simStateSpace-ssm-cov-y",
   tol = 0.01
 )

@@ -1,4 +1,4 @@
-## ---- test-simStateSpace-ssm-mean-eta
+## ---- test-simStateSpace-ssm-mean-y
 lapply(
   X = 1,
   FUN = function(i,
@@ -40,6 +40,11 @@ lapply(
           beta = beta,
           alpha = alpha
         )
+        mu_y <- simStateSpace::SSMMeanY(
+          nu = nu,
+          lambda = lambda,
+          mean_eta = mu0
+        )
         sigma0 <- simStateSpace::SSMCovEta(
           beta = beta,
           psi = psi
@@ -59,15 +64,15 @@ lapply(
           type = 0
         )
         data <- as.matrix(sim, eta = TRUE)
-        eta <- data[, paste0("eta", seq_len(p))]
+        y <- data[, paste0("y", seq_len(p))]
         testthat::expect_true(
           all(
             (
               c(
-                mu0
+                mu_y
               ) - c(
                 colMeans(
-                  eta
+                  y
                 )
               )
             ) <= tol
@@ -76,6 +81,6 @@ lapply(
       }
     )
   },
-  text = "test-simStateSpace-ssm-mean-eta",
+  text = "test-simStateSpace-ssm-mean-y",
   tol = 0.01
 )
