@@ -124,7 +124,7 @@ of the initial condition given by
 
 ### Notation
 
-Let $t = 5$ be the number of time points and $n = 1000$ be the number of individuals.
+Let $t = 5$ be the number of time points and $n = 10<sup>4</sup>$ be the number of individuals.
 
 Let the measurement error variance $\theta$ be given by
 
@@ -175,7 +175,7 @@ be given by
 
 ``` r
 n
-#> [1] 1000
+#> [1] 10000
 time
 #> [1] 5
 mu0
@@ -221,13 +221,13 @@ head(data)
 #> 5  1    4 5.993965
 #> 6  2    0 1.951861
 summary(data)
-#>        id              time         y1         
-#>  Min.   :   1.0   Min.   :0   Min.   :-8.1963  
-#>  1st Qu.: 250.8   1st Qu.:1   1st Qu.: 0.4272  
-#>  Median : 500.5   Median :2   Median : 2.1273  
-#>  Mean   : 500.5   Mean   :2   Mean   : 2.5210  
-#>  3rd Qu.: 750.2   3rd Qu.:3   3rd Qu.: 4.2851  
-#>  Max.   :1000.0   Max.   :4   Max.   :17.0616
+#>        id             time         y1          
+#>  Min.   :    1   Min.   :0   Min.   :-10.7863  
+#>  1st Qu.: 2501   1st Qu.:1   1st Qu.:  0.3943  
+#>  Median : 5000   Median :2   Median :  2.1839  
+#>  Mean   : 5000   Mean   :2   Mean   :  2.5978  
+#>  3rd Qu.: 7500   3rd Qu.:3   3rd Qu.:  4.4536  
+#>  Max.   :10000   Max.   :4   Max.   : 21.0250
 plot(sim)
 ```
 
@@ -338,16 +338,16 @@ results <- dynr::dynr.cook(
 #> Original exit flag:  3 
 #> Modified exit flag:  3 
 #> Optimization terminated successfully: ftol_rel or ftol_abs was reached. 
-#> Original fitted parameters:  -0.5142509 0.6149011 0.9529499 0.5824694 0.2823027 
-#> -0.889854 
+#> Original fitted parameters:  -0.5089635 0.60732 0.9952181 0.6477021 0.3152438 
+#> -0.9463643 
 #> 
-#> Transformed fitted parameters:  0.5979484 0.6149011 0.9529499 1.790454 
-#> 0.5054501 0.5534056 
+#> Transformed fitted parameters:  0.6011183 0.60732 0.9952181 1.911144 0.6024764 
+#> 0.5780766 
 #> 
 #> Doing end processing
 #> Successful trial
-#> Total Time: 9.112048 
-#> Backend Time: 8.587239
+#> Total Time: 1.359341 
+#> Backend Time: 1.350335
 ```
 
 ## Summary
@@ -357,23 +357,23 @@ results <- dynr::dynr.cook(
 summary(results)
 #> Coefficients:
 #>           Estimate Std. Error t value ci.lower ci.upper Pr(>|t|)    
-#> theta      0.59795    0.01544   38.74  0.56769  0.62820   <2e-16 ***
-#> mu0_0      0.61490    0.04633   13.27  0.52409  0.70571   <2e-16 ***
-#> mu0_1      0.95295    0.02476   38.48  0.90442  1.00148   <2e-16 ***
-#> sigma0_00  1.79045    0.09650   18.55  1.60133  1.97958   <2e-16 ***
-#> sigma0_01  0.50545    0.03841   13.16  0.43016  0.58074   <2e-16 ***
-#> sigma0_11  0.55341    0.02746   20.15  0.49958  0.60723   <2e-16 ***
+#> theta     0.601118   0.004914  122.34 0.591488 0.610749   <2e-16 ***
+#> mu0_0     0.607320   0.015112   40.19 0.577701 0.636939   <2e-16 ***
+#> mu0_1     0.995218   0.007992  124.53 0.979554 1.010882   <2e-16 ***
+#> sigma0_00 1.911144   0.032346   59.08 1.847747 1.974541   <2e-16 ***
+#> sigma0_01 0.602476   0.013016   46.29 0.576966 0.627987   <2e-16 ***
+#> sigma0_11 0.578077   0.009046   63.90 0.560347 0.595807   <2e-16 ***
 #> ---
 #> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 #> 
-#> -2 log-likelihood value at convergence = 16715.02
-#> AIC = 16727.02
-#> BIC = 16766.12
+#> -2 log-likelihood value at convergence = 167712.56
+#> AIC = 167724.56
+#> BIC = 167777.48
 ```
 
 
 ```
-#> [1] 0.6149011 0.9529499
+#> [1] 0.6073200 0.9952181
 ```
 
 ### Estimated Parameters
@@ -381,14 +381,14 @@ summary(results)
 
 ``` r
 mu0_hat
-#> [1] 0.6149011 0.9529499
+#> [1] 0.6073200 0.9952181
 sigma0_hat
 #>           [,1]      [,2]
-#> [1,] 1.7904543 0.5054501
-#> [2,] 0.5054501 0.5534056
+#> [1,] 1.9111442 0.6024764
+#> [2,] 0.6024764 0.5780766
 theta_hat
 #>     theta 
-#> 0.5979484
+#> 0.6011183
 ```
 
 ## Linear Growth Curve Model in Structural Equation Modeling
@@ -439,20 +439,20 @@ fit <- lavaan::growth(
   data = data
 )
 lavaan::summary(fit)
-#> lavaan 0.6-19 ended normally after 24 iterations
+#> lavaan 0.6-19 ended normally after 34 iterations
 #> 
 #>   Estimator                                         ML
 #>   Optimization method                           NLMINB
 #>   Number of model parameters                        10
 #>   Number of equality constraints                     4
 #> 
-#>   Number of observations                          1000
+#>   Number of observations                         10000
 #> 
 #> Model Test User Model:
 #>                                                       
-#>   Test statistic                                22.423
+#>   Test statistic                                 5.386
 #>   Degrees of freedom                                14
-#>   P-value (Chi-square)                           0.070
+#>   P-value (Chi-square)                           0.980
 #> 
 #> Parameter Estimates:
 #> 
@@ -478,27 +478,27 @@ lavaan::summary(fit)
 #> Covariances:
 #>                    Estimate  Std.Err  z-value  P(>|z|)
 #>   eta0 ~~                                             
-#>     eta1    (s0_0)    0.506    0.038   13.157    0.000
+#>     eta1    (s0_0)    0.602    0.013   46.317    0.000
 #> 
 #> Intercepts:
 #>                    Estimate  Std.Err  z-value  P(>|z|)
-#>     eta0    (m0_0)    0.615    0.046   13.265    0.000
-#>     eta1    (m0_1)    0.953    0.025   38.485    0.000
+#>     eta0    (m0_0)    0.607    0.015   40.295    0.000
+#>     eta1    (m0_1)    0.995    0.008  124.582    0.000
 #> 
 #> Variances:
 #>                    Estimate  Std.Err  z-value  P(>|z|)
-#>     eta0    (s0_0)    1.790    0.097   18.542    0.000
-#>     eta1    (s0_1)    0.553    0.027   20.148    0.000
-#>    .y1_0    (thet)    0.598    0.015   38.730    0.000
-#>    .y1_1    (thet)    0.598    0.015   38.730    0.000
-#>    .y1_2    (thet)    0.598    0.015   38.730    0.000
-#>    .y1_3    (thet)    0.598    0.015   38.730    0.000
-#>    .y1_4    (thet)    0.598    0.015   38.730    0.000
+#>     eta0    (s0_0)    1.911    0.032   59.235    0.000
+#>     eta1    (s0_1)    0.578    0.009   63.955    0.000
+#>    .y1_0    (thet)    0.601    0.005  122.474    0.000
+#>    .y1_1    (thet)    0.601    0.005  122.474    0.000
+#>    .y1_2    (thet)    0.601    0.005  122.474    0.000
+#>    .y1_3    (thet)    0.601    0.005  122.474    0.000
+#>    .y1_4    (thet)    0.601    0.005  122.474    0.000
 ```
 
 
 ```
-#> [1] 0.6149011 0.9529499
+#> [1] 0.6073200 0.9952181
 ```
 
 ### Estimated Parameters
@@ -506,13 +506,13 @@ lavaan::summary(fit)
 
 ``` r
 mu0_hat
-#> [1] 0.6149011 0.9529499
+#> [1] 0.6073200 0.9952181
 sigma0_hat
 #>           [,1]      [,2]
-#> [1,] 1.7904543 0.5054501
-#> [2,] 0.5054501 0.5534056
+#> [1,] 1.9111442 0.6024764
+#> [2,] 0.6024764 0.5780766
 theta_hat
-#> [1] 0.5979484
+#> [1] 0.6011183
 ```
 
 ## References
