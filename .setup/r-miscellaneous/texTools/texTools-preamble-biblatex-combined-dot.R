@@ -126,25 +126,24 @@
       } else {
         map <- ""
       }
-      return(
+      out <- paste0(
+        biblatex,
         paste0(
-          biblatex,
-          paste0(
-            "\n",
-            "\\addbibresource{",
-            output_file,
-            "}",
-            "\n",
-            collapse = ""
-          ),
-          map,
+          "\n",
+          "\\addbibresource{",
+          output_file,
+          "}",
+          "\n",
           collapse = ""
-        )
+        ),
+        map,
+        collapse = ""
       )
     } else {
-      return("")
+      out <- ""
     }
   } else {
-    return("")
+    out <- ""
   }
+  out
 }

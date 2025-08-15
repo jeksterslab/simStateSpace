@@ -17,6 +17,8 @@
 
 project <- "simStateSpace"
 
+rproject_ver <- NULL
+
 pkg_cran <- c(
   "Rcpp",
   "RcppArmadillo",

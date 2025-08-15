@@ -36,7 +36,7 @@ jobs:
         run: touch pkgdown/.nojekyll
       -
         name: Deploy to GitHub pages
-        uses: JamesIves/github-pages-deploy-action@v4
+        uses: JamesIves/github-pages-deploy-action@v4.5.0
         with:
           clean: true
           branch: pkgdown

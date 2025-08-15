@@ -193,7 +193,7 @@ be given by
 \boldsymbol{\Sigma}_{\boldsymbol{\eta} \mid 0}
 =
 \left(
-\begin{array}{ccc}
+\begin{array}{cc}
   `r sigma0[1, 1]` & `r sigma0[1, 2]` \\
   `r sigma0[2, 1]` & `r sigma0[2, 2]` \\
 \end{array}

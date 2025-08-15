@@ -12,7 +12,7 @@
 //' This function simulates random transition matrices
 //' from the multivariate normal distribution.
 //' The function ensures that the generated transition matrices are stationary
-//' using [TestStationarity()].
+//' using [TestStationarity()] with a rejection sampling approach.
 //'
 //' @author Ivan Jacob Agaloos Pesigan
 //'
@@ -53,7 +53,7 @@ Rcpp::List SimBetaN(const arma::uword& n, const arma::mat& beta,
     bool run = true;
     while (run) {
       beta_vec_i =
-          beta_vec + (vcov_beta_vec_l * arma::randn(beta.n_rows * beta.n_rows));
+          beta_vec + (vcov_beta_vec_l * arma::randn(beta.n_rows * beta.n_cols));
       beta_i = arma::reshape(beta_vec_i, beta.n_rows, beta.n_cols);
       if (TestStationarity(beta_i)) {
         run = false;

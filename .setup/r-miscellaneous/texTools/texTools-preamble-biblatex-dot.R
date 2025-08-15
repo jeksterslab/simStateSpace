@@ -95,25 +95,24 @@
       } else {
         map <- ""
       }
-      return(
+      out <- paste0(
+        biblatex,
         paste0(
-          biblatex,
-          paste0(
-            "\n",
-            "\\addbibresource{",
-            bibs,
-            "}",
-            "\n",
-            collapse = ""
-          ),
-          map,
+          "\n",
+          "\\addbibresource{",
+          bibs,
+          "}",
+          "\n",
           collapse = ""
-        )
+        ),
+        map,
+        collapse = ""
       )
     } else {
-      return("")
+      out <- ""
     }
   } else {
-    return("")
+    out <- ""
   }
+  out
 }

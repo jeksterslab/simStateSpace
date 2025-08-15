@@ -13,7 +13,6 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: ijapesigan/docs
-    # Only restrict concurrency for non-PR jobs
     concurrency:
       group: latex-${{ github.event_name != 'pull_request' || github.run_id }}
     env:
@@ -22,27 +21,39 @@ jobs:
       contents: write
 
     steps:
-      -
-        name: Checkout 
+      - name: Checkout 
         uses: actions/checkout@v4
-      -
-        name: Make Project
+
+      - name: Make Project
         run: make build
-      -
-        name: Make LaTeX
+
+      - name: Make LaTeX
         run: |
           make bibrproject
           make pdf
-      - 
-        name: Push to the latex branch
-        uses: s0/git-publish-subdir-action@develop
+
+      - name: Copy output to clean folder
+        run: |
+          mkdir -p publish
+          cp .setup/latex/pdf/*.pdf publish/ || true
+          cp .setup/latex/pdf/*.bib publish/ || true
+          cp .setup/latex/pdf/.gitignore publish/ || true
+
+      - name: Publish to latex branch manually
+        run: |
+          cd publish
+          git init
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git remote add origin https://x-access-token:${GITHUB_PAT}@github.com/${{ github.repository }}.git
+          git checkout -b latex
+          git add .
+          git commit -m "Publish LaTeX artifacts"
+          git push origin latex --force
         env:
-          REPO: self
-          BRANCH: latex
-          FOLDER: .setup/latex/pdf
-          GITHUB_TOKEN: ${{ secrets.PAT }}
-      -
-        name: Make clean
+          GITHUB_PAT: ${{ secrets.PAT }}
+
+      - name: Make clean
         run: |
           make bibrproject
           make pdf

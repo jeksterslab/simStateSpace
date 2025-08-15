@@ -11,3 +11,8 @@ bool TestPhi(const arma::mat& phi);
 bool TestStability(const arma::mat& x);
 
 bool TestStationarity(const arma::mat& x);
+
+double SpectralRadius(const arma::mat& x);
+
+arma::mat ProjectToStability(const arma::mat& x, const double margin,
+                             const double tol);

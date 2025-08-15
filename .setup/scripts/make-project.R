@@ -94,11 +94,23 @@ if (project == "rProject") {
     )
   }
 } else {
-  remotes::install_github(
-    "ijapesigan/rProject",
-    quiet = TRUE,
-    lib = dot_library_folder
-  )
+  if (is.null(rproject_ver)) {
+    remotes::install_github(
+      "ijapesigan/rProject",
+      quiet = TRUE,
+      lib = dot_library_folder
+    )
+  } else {
+    remotes::install_github(
+      paste0(
+        "ijapesigan/rProject",
+        "@",
+        rproject_ver
+      ),
+      quiet = TRUE,
+      lib = dot_library_folder
+    )
+  }
 }
 rProject::Project(
   path = path
