@@ -128,28 +128,27 @@ division by zero.</p>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Matrix with eigenvalues greater than 1</span></span></span>
-<span class="r-in"><span><span class="va">A</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>  data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>    <span class="fl">1.2</span>, <span class="fl">0.3</span>,</span></span>
 <span class="r-in"><span>    <span class="fl">0.4</span>, <span class="fl">0.9</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span>,</span></span>
 <span class="r-in"><span>  nrow <span class="op">=</span> <span class="fl">2</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="SpectralRadius.html">SpectralRadius</a></span><span class="op">(</span><span class="va">A</span><span class="op">)</span>  <span class="co"># &gt; 1</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="SpectralRadius.html">SpectralRadius</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span><span class="op">)</span> <span class="co"># &gt; 1</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1.427492</span>
-<span class="r-in"><span><span class="va">A_stable</span> <span class="op">&lt;-</span> <span class="fu">ProjectToStability</span><span class="op">(</span><span class="va">A</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="SpectralRadius.html">SpectralRadius</a></span><span class="op">(</span><span class="va">A_stable</span><span class="op">)</span>  <span class="co"># &lt; 1</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="SpectralRadius.html">SpectralRadius</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu">ProjectToStability</span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span><span class="op">)</span><span class="op">)</span>  <span class="co"># &lt; 1</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.98</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Matrix already stable is returned unchanged</span></span></span>
-<span class="r-in"><span><span class="va">B</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>  data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>    <span class="fl">0.5</span>, <span class="fl">0.3</span>,</span></span>
 <span class="r-in"><span>    <span class="fl">0.2</span>, <span class="fl">0.4</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span>,</span></span>
 <span class="r-in"><span>  nrow <span class="op">=</span> <span class="fl">2</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/identical.html" class="external-link">identical</a></span><span class="op">(</span><span class="fu">ProjectToStability</span><span class="op">(</span><span class="va">B</span><span class="op">)</span>, <span class="va">B</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/identical.html" class="external-link">identical</a></span><span class="op">(</span><span class="fu">ProjectToStability</span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span><span class="op">)</span>, <span class="va">x</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
