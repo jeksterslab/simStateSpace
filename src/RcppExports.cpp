@@ -75,6 +75,19 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// ProjectToStability
+arma::mat ProjectToStability(const arma::mat& x, const double margin, const double tol);
+RcppExport SEXP _simStateSpace_ProjectToStability(SEXP xSEXP, SEXP marginSEXP, SEXP tolSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::mat& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const double >::type margin(marginSEXP);
+    Rcpp::traits::input_parameter< const double >::type tol(tolSEXP);
+    rcpp_result_gen = Rcpp::wrap(ProjectToStability(x, margin, tol));
+    return rcpp_result_gen;
+END_RCPP
+}
 // SimAlphaN
 Rcpp::List SimAlphaN(const arma::uword& n, const arma::vec& alpha, const arma::mat& vcov_alpha_l);
 RcppExport SEXP _simStateSpace_SimAlphaN(SEXP nSEXP, SEXP alphaSEXP, SEXP vcov_alpha_lSEXP) {
@@ -85,6 +98,21 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const arma::vec& >::type alpha(alphaSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type vcov_alpha_l(vcov_alpha_lSEXP);
     rcpp_result_gen = Rcpp::wrap(SimAlphaN(n, alpha, vcov_alpha_l));
+    return rcpp_result_gen;
+END_RCPP
+}
+// SimBetaN2
+Rcpp::List SimBetaN2(const arma::uword& n, const arma::mat& beta, const arma::mat& vcov_beta_vec_l, const double margin, const double tol);
+RcppExport SEXP _simStateSpace_SimBetaN2(SEXP nSEXP, SEXP betaSEXP, SEXP vcov_beta_vec_lSEXP, SEXP marginSEXP, SEXP tolSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::uword& >::type n(nSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type beta(betaSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type vcov_beta_vec_l(vcov_beta_vec_lSEXP);
+    Rcpp::traits::input_parameter< const double >::type margin(marginSEXP);
+    Rcpp::traits::input_parameter< const double >::type tol(tolSEXP);
+    rcpp_result_gen = Rcpp::wrap(SimBetaN2(n, beta, vcov_beta_vec_l, margin, tol));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -461,6 +489,17 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// SpectralRadius
+double SpectralRadius(const arma::mat& x);
+RcppExport SEXP _simStateSpace_SpectralRadius(SEXP xSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::mat& >::type x(xSEXP);
+    rcpp_result_gen = Rcpp::wrap(SpectralRadius(x));
+    return rcpp_result_gen;
+END_RCPP
+}
 // SSMCovEta
 arma::mat SSMCovEta(const arma::mat& beta, const arma::mat& psi);
 RcppExport SEXP _simStateSpace_SSMCovEta(SEXP betaSEXP, SEXP psiSEXP) {
@@ -551,7 +590,9 @@ static const R_CallMethodDef CallEntries[] = {
     {"_simStateSpace_LinSDECovY", (DL_FUNC) &_simStateSpace_LinSDECovY, 3},
     {"_simStateSpace_LinSDEMeanEta", (DL_FUNC) &_simStateSpace_LinSDEMeanEta, 2},
     {"_simStateSpace_LinSDEMeanY", (DL_FUNC) &_simStateSpace_LinSDEMeanY, 3},
+    {"_simStateSpace_ProjectToStability", (DL_FUNC) &_simStateSpace_ProjectToStability, 3},
     {"_simStateSpace_SimAlphaN", (DL_FUNC) &_simStateSpace_SimAlphaN, 3},
+    {"_simStateSpace_SimBetaN2", (DL_FUNC) &_simStateSpace_SimBetaN2, 5},
     {"_simStateSpace_SimBetaN", (DL_FUNC) &_simStateSpace_SimBetaN, 3},
     {"_simStateSpace_SimCovDiagN", (DL_FUNC) &_simStateSpace_SimCovDiagN, 3},
     {"_simStateSpace_SimCovN", (DL_FUNC) &_simStateSpace_SimCovN, 3},
@@ -572,6 +613,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_simStateSpace_SimSSMLinSDEIVary2", (DL_FUNC) &_simStateSpace_SimSSMLinSDEIVary2, 15},
     {"_simStateSpace_SolveLya", (DL_FUNC) &_simStateSpace_SolveLya, 2},
     {"_simStateSpace_SolveSyl", (DL_FUNC) &_simStateSpace_SolveSyl, 3},
+    {"_simStateSpace_SpectralRadius", (DL_FUNC) &_simStateSpace_SpectralRadius, 1},
     {"_simStateSpace_SSMCovEta", (DL_FUNC) &_simStateSpace_SSMCovEta, 2},
     {"_simStateSpace_SSMCovY", (DL_FUNC) &_simStateSpace_SSMCovY, 3},
     {"_simStateSpace_SSMMeanEta", (DL_FUNC) &_simStateSpace_SSMMeanEta, 2},

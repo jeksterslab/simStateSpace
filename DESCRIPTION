@@ -25,7 +25,7 @@ Imports: Rcpp, stats
 Suggests: knitr, rmarkdown, testthat, expm
 RoxygenNote: 7.3.2
 NeedsCompilation: yes
-Packaged: 2025-05-11 06:11:56 UTC; root
+Packaged: 2025-08-15 21:22:37 UTC; root
 Author: Ivan Jacob Agaloos Pesigan [aut, cre, cph] (ORCID:
     <https://orcid.org/0000-0003-4818-8420>)
 Maintainer: Ivan Jacob Agaloos Pesigan <r.jeksterslab@gmail.com>

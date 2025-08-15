@@ -208,6 +208,60 @@ LinSDE2SSM <- function(iota, phi, sigma_l, delta_t) {
     .Call(`_simStateSpace_LinSDEMeanY`, nu, lambda, mean_eta)
 }
 
+#' Project Matrix to Stability
+#'
+#' Scales a square matrix so that its spectral radius is strictly less than
+#' 1 by a specified stability margin. This is useful for ensuring that
+#' transition matrices in state space or vector autoregressive (VAR) models
+#' are stationary. If the matrix is already within the margin, it is returned
+#' unchanged.
+#'
+#' The projection is performed by multiplying the matrix by a constant factor
+#' \eqn{c = \frac{\text{margin}}{\rho + \text{tol}}}, where \eqn{\rho} is the
+#' spectral radius and \code{tol} is a small positive number to prevent
+#' division by zero.
+#'
+#' @author Ivan Jacob Agaloos Pesigan
+#'
+#' @param x Numeric square matrix.
+#' @param margin Double in \eqn{(0, 1)}. Target upper bound for the spectral
+#'   radius (default = 0.98).
+#' @param tol Small positive double added to the denominator in the scaling
+#'   factor to avoid division by zero (default = 1e-12).
+#'
+#' @return A numeric matrix of the same dimensions as \code{x}, scaled if
+#'   necessary to satisfy the stability constraint.
+#'
+#' @examples
+#' # Matrix with eigenvalues greater than 1
+#' A <- matrix(
+#'   data = c(
+#'     1.2, 0.3,
+#'     0.4, 0.9
+#'   ),
+#'   nrow = 2
+#' )
+#' SpectralRadius(A)  # > 1
+#' A_stable <- ProjectToStability(A)
+#' SpectralRadius(A_stable)  # < 1
+#'
+#' # Matrix already stable is returned unchanged
+#' B <- matrix(
+#'   data = c(
+#'     0.5, 0.3,
+#'     0.2, 0.4
+#'   ),
+#'   nrow = 2
+#' )
+#' identical(ProjectToStability(B), B)
+#'
+#' @family Simulation of State Space Models Data Functions
+#' @keywords simStateSpace stability ssm
+#' @export
+ProjectToStability <- function(x, margin = 0.98, tol = 1e-12) {
+    .Call(`_simStateSpace_ProjectToStability`, x, margin, tol)
+}
+
 #' Simulate Intercept Vectors
 #' in a Discrete-Time Vector Autoregressive Model
 #' from the Multivariate Normal Distribution
@@ -243,11 +297,56 @@ SimAlphaN <- function(n, alpha, vcov_alpha_l) {
 
 #' Simulate Transition Matrices
 #' from the Multivariate Normal Distribution
+#' and Project to Stability
+#'
+#' This function simulates random transition matrices
+#' from the multivariate normal distribution
+#' then projects each draw to the stability region
+#' using [ProjectToStability()].
+#'
+#' @author Ivan Jacob Agaloos Pesigan
+#'
+#' @param n Positive integer.
+#'   Number of replications.
+#' @param beta Numeric matrix.
+#'   The transition matrix (\eqn{\boldsymbol{\beta}}).
+#' @param vcov_beta_vec_l Numeric matrix.
+#'   Cholesky factorization (`t(chol(vcov_beta_vec))`)
+#'   of the sampling variance-covariance matrix of
+#'   \eqn{\mathrm{vec} \left( \boldsymbol{\beta} \right)}.
+#' @param margin Double in \eqn{(0, 1)}. Target upper bound for the spectral
+#'   radius (default = 0.98).
+#' @param tol Small positive double added to the denominator in the scaling
+#'   factor to avoid division by zero (default = 1e-12).
+#' @return Returns a list of random transition matrices.
+#'
+#' @examples
+#' n <- 10
+#' beta <- matrix(
+#'   data = c(
+#'     0.7, 0.5, -0.1,
+#'     0.0, 0.6, 0.4,
+#'     0, 0, 0.5
+#'   ),
+#'   nrow = 3
+#' )
+#' vcov_beta_vec_l <- t(chol(0.001 * diag(9)))
+#' SimBetaN2(n = n, beta = beta, vcov_beta_vec_l = vcov_beta_vec_l)
+#'
+#' @family Simulation of State Space Models Data Functions
+#' @keywords simStateSpace ssm
+#' @export
+SimBetaN2 <- function(n, beta, vcov_beta_vec_l, margin = 0.98, tol = 1e-12) {
+    .Call(`_simStateSpace_SimBetaN2`, n, beta, vcov_beta_vec_l, margin, tol)
+}
+
+#' Simulate Transition Matrices
+#' from the Multivariate Normal Distribution
 #'
 #' This function simulates random transition matrices
 #' from the multivariate normal distribution.
 #' The function ensures that the generated transition matrices are stationary
-#' using [TestStationarity()].
+#' using [TestStationarity()] with a rejection sampling approach.
 #'
 #' @author Ivan Jacob Agaloos Pesigan
 #'
@@ -499,6 +598,48 @@ SimPhiN <- function(n, phi, vcov_phi_vec_l) {
 
 .SolveSyl <- function(A, B, C) {
     .Call(`_simStateSpace_SolveSyl`, A, B, C)
+}
+
+#' Spectral Radius
+#'
+#' Computes the spectral radius of a square matrix, defined as the maximum
+#' modulus (absolute value) of its eigenvalues.
+#' The spectral radius is often used to assess the stability of systems such as
+#' vector autoregressive (VAR) models: a system is considered stationary if
+#' the spectral radius of its transition matrix is strictly less than 1.
+#'
+#' @author Ivan Jacob Agaloos Pesigan
+#'
+#' @param x Numeric square matrix.
+#'
+#' @return Numeric value representing the spectral radius of \code{x}.
+#'
+#' @examples
+#' # Matrix with eigenvalues less than 1
+#' x <- matrix(
+#'   data = c(
+#'     0.5, 0.3,
+#'     0.2, 0.4
+#'   ),
+#'   nrow = 2
+#' )
+#' SpectralRadius(x)
+#'
+#' # Matrix with eigenvalues greater than 1
+#' y <- matrix(
+#'   data = c(
+#'     1.2, 0.3,
+#'     0.4, 0.9
+#'   ),
+#'   nrow = 2
+#' )
+#' SpectralRadius(y)
+#'
+#' @family Simulation of State Space Models Data Functions
+#' @keywords simStateSpace stability ssm
+#' @export
+SpectralRadius <- function(x) {
+    .Call(`_simStateSpace_SpectralRadius`, x)
 }
 
 .SSMCovEta <- function(beta, psi) {
