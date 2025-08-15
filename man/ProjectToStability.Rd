@@ -34,26 +34,25 @@ division by zero.
 }
 \examples{
 # Matrix with eigenvalues greater than 1
-A <- matrix(
+x <- matrix(
   data = c(
     1.2, 0.3,
     0.4, 0.9
   ),
   nrow = 2
 )
-SpectralRadius(A)  # > 1
-A_stable <- ProjectToStability(A)
-SpectralRadius(A_stable)  # < 1
+SpectralRadius(x = x) # > 1
+SpectralRadius(x = ProjectToStability(x = x))  # < 1
 
 # Matrix already stable is returned unchanged
-B <- matrix(
+x <- matrix(
   data = c(
     0.5, 0.3,
     0.2, 0.4
   ),
   nrow = 2
 )
-identical(ProjectToStability(B), B)
+identical(ProjectToStability(x = x), x)
 
 }
 \seealso{
