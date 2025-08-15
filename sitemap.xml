@@ -16,12 +16,14 @@
 <url><loc>https://github.com/jeksterslab/simStateSpace/reference/LinSDECovY.html</loc></url>
 <url><loc>https://github.com/jeksterslab/simStateSpace/reference/LinSDEMeanEta.html</loc></url>
 <url><loc>https://github.com/jeksterslab/simStateSpace/reference/LinSDEMeanY.html</loc></url>
+<url><loc>https://github.com/jeksterslab/simStateSpace/reference/ProjectToStability.html</loc></url>
 <url><loc>https://github.com/jeksterslab/simStateSpace/reference/SSMCovEta.html</loc></url>
 <url><loc>https://github.com/jeksterslab/simStateSpace/reference/SSMCovY.html</loc></url>
 <url><loc>https://github.com/jeksterslab/simStateSpace/reference/SSMMeanEta.html</loc></url>
 <url><loc>https://github.com/jeksterslab/simStateSpace/reference/SSMMeanY.html</loc></url>
 <url><loc>https://github.com/jeksterslab/simStateSpace/reference/SimAlphaN.html</loc></url>
 <url><loc>https://github.com/jeksterslab/simStateSpace/reference/SimBetaN.html</loc></url>
+<url><loc>https://github.com/jeksterslab/simStateSpace/reference/SimBetaN2.html</loc></url>
 <url><loc>https://github.com/jeksterslab/simStateSpace/reference/SimCovDiagN.html</loc></url>
 <url><loc>https://github.com/jeksterslab/simStateSpace/reference/SimCovN.html</loc></url>
 <url><loc>https://github.com/jeksterslab/simStateSpace/reference/SimIotaN.html</loc></url>
@@ -36,6 +38,7 @@
 <url><loc>https://github.com/jeksterslab/simStateSpace/reference/SimSSMOUIVary.html</loc></url>
 <url><loc>https://github.com/jeksterslab/simStateSpace/reference/SimSSMVARFixed.html</loc></url>
 <url><loc>https://github.com/jeksterslab/simStateSpace/reference/SimSSMVARIVary.html</loc></url>
+<url><loc>https://github.com/jeksterslab/simStateSpace/reference/SpectralRadius.html</loc></url>
 <url><loc>https://github.com/jeksterslab/simStateSpace/reference/TestPhi.html</loc></url>
 <url><loc>https://github.com/jeksterslab/simStateSpace/reference/TestStability.html</loc></url>
 <url><loc>https://github.com/jeksterslab/simStateSpace/reference/TestStationarity.html</loc></url>
