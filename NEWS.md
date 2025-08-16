@@ -6,7 +6,7 @@
 * Added the `LinSDECovEta()`, `LinSDECovY()`, `LinSDEMeanEta()` and `LinSDEMeanY()` functions. Removed the `LinSDECov()` and `LinSDEMean()` functions.
 * Added the `SSMCovEta()`, `SSMCovY()`, `SSMMeanEta()` and `SSMMeanY()` functions.
 * Added the `SimCovN()` and `SimCovDiagN()` functions.
-* Added the `SimBetaN2()` function.
+* Added the `SimBetaN2()` and `SimPhiN2()` functions.
 
 # simStateSpace 1.2.10
 

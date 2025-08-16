@@ -13,11 +13,12 @@ SpectralRadius(x)
 Numeric value representing the spectral radius of \code{x}.
 }
 \description{
-Computes the spectral radius of a square matrix, defined as the maximum
-modulus (absolute value) of its eigenvalues.
-The spectral radius is often used to assess the stability of systems such as
-vector autoregressive (VAR) models: a system is considered stationary if
-the spectral radius of its transition matrix is strictly less than 1.
+Computes the spectral radius of a square matrix,
+defined as the maximum modulus (absolute value) of its eigenvalues.
+The spectral radius is often used to assess the stability of systems
+such as vector autoregressive (VAR) models:
+a system is considered stationary
+if the spectral radius of its transition matrix is strictly less than 1.
 }
 \examples{
 # Matrix with eigenvalues less than 1
@@ -48,6 +49,7 @@ Other Simulation of State Space Models Data Functions:
 \code{\link{LinSDECovY}()},
 \code{\link{LinSDEMeanEta}()},
 \code{\link{LinSDEMeanY}()},
+\code{\link{ProjectToHurwitz}()},
 \code{\link{ProjectToStability}()},
 \code{\link{SSMCovEta}()},
 \code{\link{SSMCovY}()},
@@ -60,6 +62,7 @@ Other Simulation of State Space Models Data Functions:
 \code{\link{SimCovN}()},
 \code{\link{SimIotaN}()},
 \code{\link{SimPhiN}()},
+\code{\link{SimPhiN2}()},
 \code{\link{SimSSMFixed}()},
 \code{\link{SimSSMIVary}()},
 \code{\link{SimSSMLinGrowth}()},
@@ -71,6 +74,7 @@ Other Simulation of State Space Models Data Functions:
 \code{\link{SimSSMVARFixed}()},
 \code{\link{SimSSMVARIVary}()},
 \code{\link{TestPhi}()},
+\code{\link{TestPhiHurwitz}()},
 \code{\link{TestStability}()},
 \code{\link{TestStationarity}()}
 }

@@ -208,29 +208,91 @@ LinSDE2SSM <- function(iota, phi, sigma_l, delta_t) {
     .Call(`_simStateSpace_LinSDEMeanY`, nu, lambda, mean_eta)
 }
 
-#' Project Matrix to Stability
+#' Project Matrix to Hurwitz Stability
 #'
-#' Scales a square matrix so that its spectral radius is strictly less than
-#' 1 by a specified stability margin. This is useful for ensuring that
-#' transition matrices in state space or vector autoregressive (VAR) models
-#' are stationary. If the matrix is already within the margin, it is returned
-#' unchanged.
+#' Shifts a square matrix left on the real axis
+#' so that its spectral abscissa (maximum real part of the eigenvalues)
+#' is strictly less than `-margin`.
+#' This is useful for ensuring that continuous-time drift matrices
+#' (e.g. in linear SDEs/state-space models) are Hurwitz-stable.
+#' If the matrix already satisfies the margin,
+#' it is returned unchanged.
 #'
-#' The projection is performed by multiplying the matrix by a constant factor
-#' \eqn{c = \frac{\text{margin}}{\rho + \text{tol}}}, where \eqn{\rho} is the
-#' spectral radius and \code{tol} is a small positive number to prevent
-#' division by zero.
+#' The projection is performed by subtracting a multiple of the identity:
+#' \deqn{x^\star = x - (\alpha + \text{margin}) I,}
+#' where \eqn{\alpha = \max \Re\{\lambda_i(x)\}} is the spectral abscissa.
 #'
 #' @author Ivan Jacob Agaloos Pesigan
 #'
 #' @param x Numeric square matrix.
-#' @param margin Double in \eqn{(0, 1)}. Target upper bound for the spectral
-#'   radius (default = 0.98).
-#' @param tol Small positive double added to the denominator in the scaling
-#'   factor to avoid division by zero (default = 1e-12).
+#' @param margin Positive numeric.
+#'   Target buffer inside the Hurwitz region;
+#'   the result satisfies
+#'   \eqn{\max \Re\{\lambda_i(x^\star)\} \le -\text{margin}}
+#'   (default `1e-3`).
 #'
-#' @return A numeric matrix of the same dimensions as \code{x}, scaled if
-#'   necessary to satisfy the stability constraint.
+#' @return A numeric matrix of the same dimensions as `x`,
+#'   shifted if necessary to satisfy the Hurwitz stability constraint.
+#'
+#' @examples
+#' # Unstable (spectral abscissa >= 0):
+#' x <- matrix(
+#'   data = c(
+#'     0.10, -0.40,
+#'     0.50, 0.20
+#'   ),
+#'   nrow = 2
+#' )
+#' SpectralAbscissa(x = x) # >= 0
+#' SpectralAbscissa(x = ProjectToHurwitz(x = x)) # <= -1e-3 (default margin)
+#'
+#' # Already Hurwitz-stable is returned unchanged up to numerics:
+#' x <- matrix(
+#'   data = c(
+#'     -0.50, -0.20,
+#'      1.00, -0.30
+#'   ),
+#'   nrow = 2
+#' )
+#' SpectralAbscissa(x = x) # < 0
+#' identical(ProjectToHurwitz(x = x), x)
+#'
+#' @family Simulation of State Space Models Data Functions
+#' @keywords simStateSpace stability linsde
+#' @export
+ProjectToHurwitz <- function(x, margin = 1e-3) {
+    .Call(`_simStateSpace_ProjectToHurwitz`, x, margin)
+}
+
+#' Project Matrix to Stability
+#'
+#' Scales a square matrix
+#' so that its spectral radius
+#' is strictly less than 1 by a specified stability margin.
+#' This is useful for ensuring that transition matrices
+#' in state space or vector autoregressive (VAR) models are stationary.
+#' If the matrix is already within the margin,
+#' it is returned unchanged.
+#'
+#' The projection is performed
+#' by multiplying the matrix by a constant factor
+#' \eqn{c = \frac{\text{margin}}{\rho + \text{tol}}},
+#' where \eqn{\rho} is the spectral radius and `tol`
+#' is a small positive number to prevent division by zero.
+#'
+#' @author Ivan Jacob Agaloos Pesigan
+#'
+#' @param x Numeric square matrix.
+#' @param margin Double in \eqn{(0, 1)}.
+#'   Target upper bound for the spectral
+#'   radius (default = 0.98).
+#' @param tol Small positive double
+#'   added to the denominator in the scaling
+#'   factor to avoid division by zero
+#'   (default `1e-12`).
+#'
+#' @return A numeric matrix of the same dimensions as `x`,
+#'   scaled if necessary to satisfy the stability constraint.
 #'
 #' @examples
 #' # Matrix with eigenvalues greater than 1
@@ -313,10 +375,12 @@ SimAlphaN <- function(n, alpha, vcov_alpha_l) {
 #'   Cholesky factorization (`t(chol(vcov_beta_vec))`)
 #'   of the sampling variance-covariance matrix of
 #'   \eqn{\mathrm{vec} \left( \boldsymbol{\beta} \right)}.
-#' @param margin Double in \eqn{(0, 1)}. Target upper bound for the spectral
-#'   radius (default = 0.98).
-#' @param tol Small positive double added to the denominator in the scaling
-#'   factor to avoid division by zero (default = 1e-12).
+#' @param margin Double in \eqn{(0, 1)}.
+#'   Target upper bound for the spectral radius
+#'   (default = 0.98).
+#' @param tol Small positive double added to the denominator
+#'   in the scaling factor to avoid division by zero
+#'   (default = 1e-12).
 #' @return Returns a list of random transition matrices.
 #'
 #' @examples
@@ -501,6 +565,50 @@ SimIotaN <- function(n, iota, vcov_iota_l) {
 
 #' Simulate Random Drift Matrices
 #' from the Multivariate Normal Distribution
+#' and Project to Hurwitz
+#'
+#' This function simulates random dirft matrices
+#' from the multivariate normal distribution
+#' then projects each draw to the Hurwitz-stable region
+#' using [ProjectToHurwitz()].
+#'
+#' @author Ivan Jacob Agaloos Pesigan
+#'
+#' @param n Positive integer.
+#'   Number of replications.
+#' @param phi Numeric matrix.
+#'   The drift matrix (\eqn{\boldsymbol{\Phi}}).
+#' @param vcov_phi_vec_l Numeric matrix.
+#'   Cholesky factorization (`t(chol(vcov_phi_vec))`)
+#'   of the sampling variance-covariance matrix of
+#'   \eqn{\mathrm{vec} \left( \boldsymbol{\Phi} \right)}.
+#' @param margin Positive numeric.
+#'   Target buffer so that the spectral abscissa
+#'   is \eqn{\le -\text{margin}} (default `1e-3`).
+#' @return Returns a list of random drift matrices.
+#'
+#' @examples
+#' n <- 10
+#' phi <- matrix(
+#'   data = c(
+#'     -0.357, 0.771, -0.450,
+#'     0.0, -0.511, 0.729,
+#'     0, 0, -0.693
+#'   ),
+#'   nrow = 3
+#' )
+#' vcov_phi_vec_l <- t(chol(0.001 * diag(9)))
+#' SimPhiN2(n = n, phi = phi, vcov_phi_vec_l = vcov_phi_vec_l)
+#'
+#' @family Simulation of State Space Models Data Functions
+#' @keywords simStateSpace linsde
+#' @export
+SimPhiN2 <- function(n, phi, vcov_phi_vec_l, margin = 1e-3) {
+    .Call(`_simStateSpace_SimPhiN2`, n, phi, vcov_phi_vec_l, margin)
+}
+
+#' Simulate Random Drift Matrices
+#' from the Multivariate Normal Distribution
 #'
 #' This function simulates random drift matrices
 #' from the multivariate normal distribution.
@@ -599,19 +707,59 @@ SimPhiN <- function(n, phi, vcov_phi_vec_l) {
     .Call(`_simStateSpace_SolveSyl`, A, B, C)
 }
 
-#' Spectral Radius
+#' Spectral Abscissa
 #'
-#' Computes the spectral radius of a square matrix, defined as the maximum
-#' modulus (absolute value) of its eigenvalues.
-#' The spectral radius is often used to assess the stability of systems such as
-#' vector autoregressive (VAR) models: a system is considered stationary if
-#' the spectral radius of its transition matrix is strictly less than 1.
+#' Returns the maximum real part of the eigenvalues of a square matrix.
+#' For continuous-time stability (Hurwitz),
+#' a matrix is stable if the spectral abscissa is strictly less than 0.
 #'
 #' @author Ivan Jacob Agaloos Pesigan
 #'
 #' @param x Numeric square matrix.
 #'
-#' @return Numeric value representing the spectral radius of \code{x}.
+#' @return Numeric value \eqn{\alpha(x) = \max \Re(\lambda_i(x))}.
+#'
+#' @examples
+#' # Hurwitz-stable (spectral abscissa < 0):
+#' x <- matrix(
+#'   data = c(
+#'     -0.5, -0.2,
+#'      1.0, -0.3
+#'   ),
+#'   nrow = 2
+#' )
+#' SpectralAbscissa(x = x) # < 0
+#'
+#' # Unstable (spectral abscissa > 0):
+#' x <- matrix(
+#'   data = c(
+#'      0.10, 0.50,
+#'     -0.40, 0.20
+#'   ),
+#'   nrow = 2
+#' )
+#' SpectralAbscissa(x = x) # > 0
+#'
+#' @keywords simStateSpace stability linsde
+#' @export
+SpectralAbscissa <- function(x) {
+    .Call(`_simStateSpace_SpectralAbscissa`, x)
+}
+
+#' Spectral Radius
+#'
+#' Computes the spectral radius of a square matrix,
+#' defined as the maximum modulus (absolute value) of its eigenvalues.
+#' The spectral radius is often used to assess the stability of systems
+#' such as vector autoregressive (VAR) models:
+#' a system is considered stationary
+#' if the spectral radius of its transition matrix is strictly less than 1.
+#'
+#' @author Ivan Jacob Agaloos Pesigan
+#'
+#' @param x Numeric square matrix.
+#'
+#' @return Numeric value representing the spectral radius of `x`.
 #'
 #' @examples
 #' # Matrix with eigenvalues less than 1
@@ -655,6 +803,52 @@ SpectralRadius <- function(x) {
 
 .SSMMeanY <- function(nu, lambda, mean_eta) {
     .Call(`_simStateSpace_SSMMeanY`, nu, lambda, mean_eta)
+}
+
+#' Test Hurwitz Stability of a Drift Matrix
+#'
+#' Returns `TRUE` iff the drift matrix \eqn{\boldsymbol{\Phi}}
+#' is Hurwitz-stable,
+#' i.e., all eigenvalues have real parts strictly less than `-eps`.
+#' Setting `eps = 0` enforces the usual strict condition
+#' \eqn{\max \Re\{\lambda_i(\boldsymbol{\Phi})\} < 0}.
+#' A small positive `eps` (e.g., `1e-12`) can be used
+#' to guard against floating-point round-off.
+#'
+#' @author Ivan Jacob Agaloos Pesigan
+#'
+#' @param phi Numeric matrix.
+#'   The drift matrix (\eqn{\boldsymbol{\Phi}}).
+#' @param eps Nonnegative numeric tolerance (default `0.0`).
+#'   The test checks \eqn{\Re(\lambda_i) < -\text{eps}} for all eigenvalues.
+#'
+#' @examples
+#' # Unstable example (spectral abscissa >= 0):
+#' phi <- matrix(
+#'   data = c(
+#'     0.10, -0.40,
+#'     0.50, 0.20
+#'   ),
+#'   nrow = 2
+#' )
+#' TestPhiHurwitz(phi = phi) # FALSE
+#'
+#' # Stable example (all real parts < 0):
+#' phi <- matrix(
+#'   data = c(
+#'     -0.50, -0.20,
+#'      1.00, -0.30
+#'   ),
+#'   nrow = 2
+#' )
+#' TestPhiHurwitz(phi = phi) # TRUE
+#' TestPhiHurwitz(phi = phi, eps = 1e-12) # also TRUE with tolerance
+#'
+#' @family Simulation of State Space Models Data Functions
+#' @keywords simStateSpace test linsde
+#' @export
+TestPhiHurwitz <- function(phi, eps = 0.0) {
+    .Call(`_simStateSpace_TestPhiHurwitz`, phi, eps)
 }
 
 #' Test the Drift Matrix

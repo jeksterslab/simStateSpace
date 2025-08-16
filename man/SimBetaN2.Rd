@@ -20,11 +20,13 @@ Cholesky factorization (\code{t(chol(vcov_beta_vec))})
 of the sampling variance-covariance matrix of
 \eqn{\mathrm{vec} \left( \boldsymbol{\beta} \right)}.}
 
-\item{margin}{Double in \eqn{(0, 1)}. Target upper bound for the spectral
-radius (default = 0.98).}
+\item{margin}{Double in \eqn{(0, 1)}.
+Target upper bound for the spectral radius
+(default = 0.98).}
 
-\item{tol}{Small positive double added to the denominator in the scaling
-factor to avoid division by zero (default = 1e-12).}
+\item{tol}{Small positive double added to the denominator
+in the scaling factor to avoid division by zero
+(default = 1e-12).}
 }
 \value{
 Returns a list of random transition matrices.
@@ -56,6 +58,7 @@ Other Simulation of State Space Models Data Functions:
 \code{\link{LinSDECovY}()},
 \code{\link{LinSDEMeanEta}()},
 \code{\link{LinSDEMeanY}()},
+\code{\link{ProjectToHurwitz}()},
 \code{\link{ProjectToStability}()},
 \code{\link{SSMCovEta}()},
 \code{\link{SSMCovY}()},
@@ -67,6 +70,7 @@ Other Simulation of State Space Models Data Functions:
 \code{\link{SimCovN}()},
 \code{\link{SimIotaN}()},
 \code{\link{SimPhiN}()},
+\code{\link{SimPhiN2}()},
 \code{\link{SimSSMFixed}()},
 \code{\link{SimSSMIVary}()},
 \code{\link{SimSSMLinGrowth}()},
@@ -79,6 +83,7 @@ Other Simulation of State Space Models Data Functions:
 \code{\link{SimSSMVARIVary}()},
 \code{\link{SpectralRadius}()},
 \code{\link{TestPhi}()},
+\code{\link{TestPhiHurwitz}()},
 \code{\link{TestStability}()},
 \code{\link{TestStationarity}()}
 }

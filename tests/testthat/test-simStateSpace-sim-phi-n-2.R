@@ -1,4 +1,4 @@
-## ---- test-simStateSpace-sim-phi-n
+## ---- test-simStateSpace-sim-phi-n-2
 lapply(
   X = 1,
   FUN = function(i,
@@ -22,7 +22,7 @@ lapply(
           all(
             phi - (1 / n) * Reduce(
               f = `+`,
-              x = SimPhiN(
+              x = SimPhiN2(
                 n = n,
                 phi = phi,
                 vcov_phi_vec_l = vcov_phi_vec_l
@@ -33,6 +33,6 @@ lapply(
       }
     )
   },
-  text = "test-simStateSpace-sim-phi-n",
+  text = "test-simStateSpace-sim-phi-n-2",
   n = 100000
 )

@@ -1,44 +1,41 @@
-## ---- test-simStateSpace-project-to-stability
+## ---- test-simStateSpace-spectral-abscissa
 lapply(
   X = 1,
   FUN = function(i,
                  text) {
     message(text)
     testthat::test_that(
-      paste0(text, "< 1"),
+      paste0(text, "x < 0"),
       {
         testthat::skip_on_cran()
         x <- matrix(
           data = c(
-            0.5, 0.3,
-            0.2, 0.4
+            -0.5, -0.2,
+            1.0, -0.3
           ),
           nrow = 2
         )
         testthat::expect_true(
-          identical(ProjectToStability(x = x), x)
+          SpectralAbscissa(x = x) < 0
         )
       }
     )
     testthat::test_that(
-      paste0(text, "> 1"),
+      paste0(text, "x > 0"),
       {
         testthat::skip_on_cran()
         x <- matrix(
           data = c(
-            1.2, 0.3,
-            0.4, 0.9
+            0.10, 0.50,
+            -0.40, 0.20
           ),
           nrow = 2
         )
         testthat::expect_true(
-          SpectralRadius(x = x) > 1
-        )
-        testthat::expect_true(
-          SpectralRadius(x = ProjectToStability(x = x)) < 1
+          SpectralAbscissa(x = x) > 0
         )
       }
     )
   },
-  text = "test-simStateSpace-project-to-stability"
+  text = "test-simStateSpace-spectral-abscissa"
 )
