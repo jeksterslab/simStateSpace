@@ -83,6 +83,7 @@ of the sampling variance-covariance matrix of
 <code><a href="LinSDECovY.html">LinSDECovY</a>()</code>,
 <code><a href="LinSDEMeanEta.html">LinSDEMeanEta</a>()</code>,
 <code><a href="LinSDEMeanY.html">LinSDEMeanY</a>()</code>,
+<code><a href="ProjectToHurwitz.html">ProjectToHurwitz</a>()</code>,
 <code><a href="ProjectToStability.html">ProjectToStability</a>()</code>,
 <code><a href="SSMCovEta.html">SSMCovEta</a>()</code>,
 <code><a href="SSMCovY.html">SSMCovY</a>()</code>,
@@ -94,6 +95,7 @@ of the sampling variance-covariance matrix of
 <code><a href="SimCovDiagN.html">SimCovDiagN</a>()</code>,
 <code><a href="SimCovN.html">SimCovN</a>()</code>,
 <code><a href="SimPhiN.html">SimPhiN</a>()</code>,
+<code><a href="SimPhiN2.html">SimPhiN2</a>()</code>,
 <code><a href="SimSSMFixed.html">SimSSMFixed</a>()</code>,
 <code><a href="SimSSMIVary.html">SimSSMIVary</a>()</code>,
 <code><a href="SimSSMLinGrowth.html">SimSSMLinGrowth</a>()</code>,
@@ -106,6 +108,7 @@ of the sampling variance-covariance matrix of
 <code><a href="SimSSMVARIVary.html">SimSSMVARIVary</a>()</code>,
 <code><a href="SpectralRadius.html">SpectralRadius</a>()</code>,
 <code><a href="TestPhi.html">TestPhi</a>()</code>,
+<code><a href="TestPhiHurwitz.html">TestPhiHurwitz</a>()</code>,
 <code><a href="TestStability.html">TestStability</a>()</code>,
 <code><a href="TestStationarity.html">TestStationarity</a>()</code></p></div>
     </div>
@@ -121,34 +124,34 @@ of the sampling variance-covariance matrix of
 <span class="r-in"><span><span class="va">vcov_iota_l</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/chol.html" class="external-link">chol</a></span><span class="op">(</span><span class="fl">0.001</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/diag.html" class="external-link">diag</a></span><span class="op">(</span><span class="fl">3</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">SimIotaN</span><span class="op">(</span>n <span class="op">=</span> <span class="va">n</span>, iota <span class="op">=</span> <span class="va">iota</span>, vcov_iota_l <span class="op">=</span> <span class="va">vcov_iota_l</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1]  0.009915378 -0.049780640 -0.019712377</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] -0.01971238  0.01106751 -0.01125932</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] -0.01125932 -0.01507257 -0.02521992</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] -0.02521992 -0.02068220  0.06565717</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[3]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1]  0.065657167 -0.033691305 -0.009554499</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] -0.009554499 -0.020656927 -0.040582313</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[4]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] -0.040582313  0.027435112  0.006026689</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1]  0.0060266889  0.0358791638 -0.0009399133</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[5]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] -0.0009399133 -0.0544561012 -0.0642395704</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] -0.06423957 -0.04651410  0.01509581</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[6]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1]  0.015095814  0.001129115 -0.023214491</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] -0.02321449  0.06976612  0.01854302</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[7]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.01854302 0.04752510 0.10891773</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1]  0.108917731 -0.014241541 -0.001112522</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[8]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] -0.001112522  0.011419870  0.021296500</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1]  0.0212965004 -0.0666725421  0.0001880568</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[9]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1]  0.0001880568 -0.0254260549  0.0073114955</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.007311496 0.002311165 0.010663016</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[10]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.0106630163 0.0007951237 0.0483638530</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.04836385 0.01192810 0.03895627</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
