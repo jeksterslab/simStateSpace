@@ -38,8 +38,8 @@ knitr::opts_chunk$set(
 ```{r}
 #| echo = FALSE
 set.seed(42)
-n <- 1000
-time <- 1000
+n <- 50
+time <- 200
 delta_t <- 0.10
 k <- p <- 3
 iden <- diag(k)

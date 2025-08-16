@@ -5,7 +5,7 @@ lapply(
                  text) {
     message(text)
     testthat::test_that(
-      paste0(text, "x < 1"),
+      paste0(text, "< 1"),
       {
         testthat::skip_on_cran()
         x <- matrix(
@@ -21,7 +21,7 @@ lapply(
       }
     )
     testthat::test_that(
-      paste0(text, "x > 1"),
+      paste0(text, "> 1"),
       {
         testthat::skip_on_cran()
         x <- matrix(

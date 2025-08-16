@@ -75,6 +75,18 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// ProjectToHurwitz
+arma::mat ProjectToHurwitz(const arma::mat& x, const double margin);
+RcppExport SEXP _simStateSpace_ProjectToHurwitz(SEXP xSEXP, SEXP marginSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::mat& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const double >::type margin(marginSEXP);
+    rcpp_result_gen = Rcpp::wrap(ProjectToHurwitz(x, margin));
+    return rcpp_result_gen;
+END_RCPP
+}
 // ProjectToStability
 arma::mat ProjectToStability(const arma::mat& x, const double margin, const double tol);
 RcppExport SEXP _simStateSpace_ProjectToStability(SEXP xSEXP, SEXP marginSEXP, SEXP tolSEXP) {
@@ -165,6 +177,20 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const arma::vec& >::type iota(iotaSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type vcov_iota_l(vcov_iota_lSEXP);
     rcpp_result_gen = Rcpp::wrap(SimIotaN(n, iota, vcov_iota_l));
+    return rcpp_result_gen;
+END_RCPP
+}
+// SimPhiN2
+Rcpp::List SimPhiN2(const arma::uword& n, const arma::mat& phi, const arma::mat& vcov_phi_vec_l, const double margin);
+RcppExport SEXP _simStateSpace_SimPhiN2(SEXP nSEXP, SEXP phiSEXP, SEXP vcov_phi_vec_lSEXP, SEXP marginSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::uword& >::type n(nSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type phi(phiSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type vcov_phi_vec_l(vcov_phi_vec_lSEXP);
+    Rcpp::traits::input_parameter< const double >::type margin(marginSEXP);
+    rcpp_result_gen = Rcpp::wrap(SimPhiN2(n, phi, vcov_phi_vec_l, margin));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -489,6 +515,17 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// SpectralAbscissa
+double SpectralAbscissa(const arma::mat& x);
+RcppExport SEXP _simStateSpace_SpectralAbscissa(SEXP xSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::mat& >::type x(xSEXP);
+    rcpp_result_gen = Rcpp::wrap(SpectralAbscissa(x));
+    return rcpp_result_gen;
+END_RCPP
+}
 // SpectralRadius
 double SpectralRadius(const arma::mat& x);
 RcppExport SEXP _simStateSpace_SpectralRadius(SEXP xSEXP) {
@@ -550,6 +587,18 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// TestPhiHurwitz
+bool TestPhiHurwitz(const arma::mat& phi, const double eps);
+RcppExport SEXP _simStateSpace_TestPhiHurwitz(SEXP phiSEXP, SEXP epsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::mat& >::type phi(phiSEXP);
+    Rcpp::traits::input_parameter< const double >::type eps(epsSEXP);
+    rcpp_result_gen = Rcpp::wrap(TestPhiHurwitz(phi, eps));
+    return rcpp_result_gen;
+END_RCPP
+}
 // TestPhi
 bool TestPhi(const arma::mat& phi);
 RcppExport SEXP _simStateSpace_TestPhi(SEXP phiSEXP) {
@@ -590,6 +639,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_simStateSpace_LinSDECovY", (DL_FUNC) &_simStateSpace_LinSDECovY, 3},
     {"_simStateSpace_LinSDEMeanEta", (DL_FUNC) &_simStateSpace_LinSDEMeanEta, 2},
     {"_simStateSpace_LinSDEMeanY", (DL_FUNC) &_simStateSpace_LinSDEMeanY, 3},
+    {"_simStateSpace_ProjectToHurwitz", (DL_FUNC) &_simStateSpace_ProjectToHurwitz, 2},
     {"_simStateSpace_ProjectToStability", (DL_FUNC) &_simStateSpace_ProjectToStability, 3},
     {"_simStateSpace_SimAlphaN", (DL_FUNC) &_simStateSpace_SimAlphaN, 3},
     {"_simStateSpace_SimBetaN2", (DL_FUNC) &_simStateSpace_SimBetaN2, 5},
@@ -597,6 +647,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_simStateSpace_SimCovDiagN", (DL_FUNC) &_simStateSpace_SimCovDiagN, 3},
     {"_simStateSpace_SimCovN", (DL_FUNC) &_simStateSpace_SimCovN, 3},
     {"_simStateSpace_SimIotaN", (DL_FUNC) &_simStateSpace_SimIotaN, 3},
+    {"_simStateSpace_SimPhiN2", (DL_FUNC) &_simStateSpace_SimPhiN2, 4},
     {"_simStateSpace_SimPhiN", (DL_FUNC) &_simStateSpace_SimPhiN, 3},
     {"_simStateSpace_SimSSMFixed0", (DL_FUNC) &_simStateSpace_SimSSMFixed0, 11},
     {"_simStateSpace_SimSSMFixed1", (DL_FUNC) &_simStateSpace_SimSSMFixed1, 13},
@@ -613,11 +664,13 @@ static const R_CallMethodDef CallEntries[] = {
     {"_simStateSpace_SimSSMLinSDEIVary2", (DL_FUNC) &_simStateSpace_SimSSMLinSDEIVary2, 15},
     {"_simStateSpace_SolveLya", (DL_FUNC) &_simStateSpace_SolveLya, 2},
     {"_simStateSpace_SolveSyl", (DL_FUNC) &_simStateSpace_SolveSyl, 3},
+    {"_simStateSpace_SpectralAbscissa", (DL_FUNC) &_simStateSpace_SpectralAbscissa, 1},
     {"_simStateSpace_SpectralRadius", (DL_FUNC) &_simStateSpace_SpectralRadius, 1},
     {"_simStateSpace_SSMCovEta", (DL_FUNC) &_simStateSpace_SSMCovEta, 2},
     {"_simStateSpace_SSMCovY", (DL_FUNC) &_simStateSpace_SSMCovY, 3},
     {"_simStateSpace_SSMMeanEta", (DL_FUNC) &_simStateSpace_SSMMeanEta, 2},
     {"_simStateSpace_SSMMeanY", (DL_FUNC) &_simStateSpace_SSMMeanY, 3},
+    {"_simStateSpace_TestPhiHurwitz", (DL_FUNC) &_simStateSpace_TestPhiHurwitz, 2},
     {"_simStateSpace_TestPhi", (DL_FUNC) &_simStateSpace_TestPhi, 1},
     {"_simStateSpace_TestStability", (DL_FUNC) &_simStateSpace_TestStability, 1},
     {"_simStateSpace_TestStationarity", (DL_FUNC) &_simStateSpace_TestStationarity, 1},

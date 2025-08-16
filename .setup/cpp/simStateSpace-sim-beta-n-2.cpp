@@ -25,10 +25,12 @@
 //'   Cholesky factorization (`t(chol(vcov_beta_vec))`)
 //'   of the sampling variance-covariance matrix of
 //'   \eqn{\mathrm{vec} \left( \boldsymbol{\beta} \right)}.
-//' @param margin Double in \eqn{(0, 1)}. Target upper bound for the spectral
-//'   radius (default = 0.98).
-//' @param tol Small positive double added to the denominator in the scaling
-//'   factor to avoid division by zero (default = 1e-12).
+//' @param margin Double in \eqn{(0, 1)}.
+//'   Target upper bound for the spectral radius
+//'   (default = 0.98).
+//' @param tol Small positive double added to the denominator
+//'   in the scaling factor to avoid division by zero
+//'   (default = 1e-12).
 //' @return Returns a list of random transition matrices.
 //'
 //' @examples

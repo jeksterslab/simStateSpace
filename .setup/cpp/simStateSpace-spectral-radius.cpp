@@ -8,17 +8,18 @@
 
 //' Spectral Radius
 //'
-//' Computes the spectral radius of a square matrix, defined as the maximum
-//' modulus (absolute value) of its eigenvalues.
-//' The spectral radius is often used to assess the stability of systems such as
-//' vector autoregressive (VAR) models: a system is considered stationary if
-//' the spectral radius of its transition matrix is strictly less than 1.
+//' Computes the spectral radius of a square matrix,
+//' defined as the maximum modulus (absolute value) of its eigenvalues.
+//' The spectral radius is often used to assess the stability of systems
+//' such as vector autoregressive (VAR) models:
+//' a system is considered stationary
+//' if the spectral radius of its transition matrix is strictly less than 1.
 //'
 //' @author Ivan Jacob Agaloos Pesigan
 //'
 //' @param x Numeric square matrix.
 //'
-//' @return Numeric value representing the spectral radius of \code{x}.
+//' @return Numeric value representing the spectral radius of `x`.
 //'
 //' @examples
 //' # Matrix with eigenvalues less than 1

@@ -16,3 +16,7 @@ double SpectralRadius(const arma::mat& x);
 
 arma::mat ProjectToStability(const arma::mat& x, const double margin,
                              const double tol);
+
+double SpectralAbscissa(const arma::mat& x);
+
+arma::mat ProjectToHurwitz(const arma::mat& x, const double margin);

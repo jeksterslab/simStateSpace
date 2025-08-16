@@ -9,28 +9,34 @@ ProjectToStability(x, margin = 0.98, tol = 1e-12)
 \arguments{
 \item{x}{Numeric square matrix.}
 
-\item{margin}{Double in \eqn{(0, 1)}. Target upper bound for the spectral
+\item{margin}{Double in \eqn{(0, 1)}.
+Target upper bound for the spectral
 radius (default = 0.98).}
 
-\item{tol}{Small positive double added to the denominator in the scaling
-factor to avoid division by zero (default = 1e-12).}
+\item{tol}{Small positive double
+added to the denominator in the scaling
+factor to avoid division by zero
+(default \code{1e-12}).}
 }
 \value{
-A numeric matrix of the same dimensions as \code{x}, scaled if
-necessary to satisfy the stability constraint.
+A numeric matrix of the same dimensions as \code{x},
+scaled if necessary to satisfy the stability constraint.
 }
 \description{
-Scales a square matrix so that its spectral radius is strictly less than
-1 by a specified stability margin. This is useful for ensuring that
-transition matrices in state space or vector autoregressive (VAR) models
-are stationary. If the matrix is already within the margin, it is returned
-unchanged.
+Scales a square matrix
+so that its spectral radius
+is strictly less than 1 by a specified stability margin.
+This is useful for ensuring that transition matrices
+in state space or vector autoregressive (VAR) models are stationary.
+If the matrix is already within the margin,
+it is returned unchanged.
 }
 \details{
-The projection is performed by multiplying the matrix by a constant factor
-\eqn{c = \frac{\text{margin}}{\rho + \text{tol}}}, where \eqn{\rho} is the
-spectral radius and \code{tol} is a small positive number to prevent
-division by zero.
+The projection is performed
+by multiplying the matrix by a constant factor
+\eqn{c = \frac{\text{margin}}{\rho + \text{tol}}},
+where \eqn{\rho} is the spectral radius and \code{tol}
+is a small positive number to prevent division by zero.
 }
 \examples{
 # Matrix with eigenvalues greater than 1
@@ -62,6 +68,7 @@ Other Simulation of State Space Models Data Functions:
 \code{\link{LinSDECovY}()},
 \code{\link{LinSDEMeanEta}()},
 \code{\link{LinSDEMeanY}()},
+\code{\link{ProjectToHurwitz}()},
 \code{\link{SSMCovEta}()},
 \code{\link{SSMCovY}()},
 \code{\link{SSMMeanEta}()},
@@ -73,6 +80,7 @@ Other Simulation of State Space Models Data Functions:
 \code{\link{SimCovN}()},
 \code{\link{SimIotaN}()},
 \code{\link{SimPhiN}()},
+\code{\link{SimPhiN2}()},
 \code{\link{SimSSMFixed}()},
 \code{\link{SimSSMIVary}()},
 \code{\link{SimSSMLinGrowth}()},
@@ -85,6 +93,7 @@ Other Simulation of State Space Models Data Functions:
 \code{\link{SimSSMVARIVary}()},
 \code{\link{SpectralRadius}()},
 \code{\link{TestPhi}()},
+\code{\link{TestPhiHurwitz}()},
 \code{\link{TestStability}()},
 \code{\link{TestStationarity}()}
 }

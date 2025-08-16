@@ -205,6 +205,7 @@ Other Simulation of State Space Models Data Functions:
 \code{\link{LinSDECovY}()},
 \code{\link{LinSDEMeanEta}()},
 \code{\link{LinSDEMeanY}()},
+\code{\link{ProjectToHurwitz}()},
 \code{\link{ProjectToStability}()},
 \code{\link{SSMCovEta}()},
 \code{\link{SSMCovY}()},
@@ -217,6 +218,7 @@ Other Simulation of State Space Models Data Functions:
 \code{\link{SimCovN}()},
 \code{\link{SimIotaN}()},
 \code{\link{SimPhiN}()},
+\code{\link{SimPhiN2}()},
 \code{\link{SimSSMFixed}()},
 \code{\link{SimSSMIVary}()},
 \code{\link{SimSSMLinGrowth}()},
@@ -228,6 +230,7 @@ Other Simulation of State Space Models Data Functions:
 \code{\link{SimSSMVARFixed}()},
 \code{\link{SpectralRadius}()},
 \code{\link{TestPhi}()},
+\code{\link{TestPhiHurwitz}()},
 \code{\link{TestStability}()},
 \code{\link{TestStationarity}()}
 }

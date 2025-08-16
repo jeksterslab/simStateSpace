@@ -5,7 +5,6 @@ lapply(
                  text,
                  n) {
     message(text)
-    testthat::skip_on_cran()
     phi <- matrix(
       data = c(
         -0.357, 0.771, -0.450,
