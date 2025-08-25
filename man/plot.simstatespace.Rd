@@ -4,7 +4,16 @@
 \alias{plot.simstatespace}
 \title{Plot Method for an Object of Class \code{simstatespace}}
 \usage{
-\method{plot}{simstatespace}(x, id = NULL, time = NULL, eta = FALSE, type = "b", ...)
+\method{plot}{simstatespace}(
+  x,
+  id = NULL,
+  time = NULL,
+  eta = FALSE,
+  type = "b",
+  burnin = 0,
+  reset_time = TRUE,
+  ...
+)
 }
 \arguments{
 \item{x}{Object of class \code{simstatespace}.}
@@ -23,6 +32,13 @@ If \code{eta = FALSE}, plot the observed variables.}
 
 \item{type}{Character indicating the type of plotting;
 actually any of the types as in \code{\link[=plot.default]{plot.default()}}.}
+
+\item{burnin}{Positive integer.
+Initial data points to discard.
+Default is zero.}
+
+\item{reset_time}{Logical.
+Reset the time index after burnin.}
 
 \item{...}{Additional arguments.}
 }

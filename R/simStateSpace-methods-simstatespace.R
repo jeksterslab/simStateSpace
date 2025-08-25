@@ -14,6 +14,11 @@
 #' @param long Logical.
 #'   If `long = TRUE`, use long format.
 #'   If `long = FALSE`, use wide format.
+#' @param burnin Positive integer.
+#'   Initial data points to discard.
+#'   Default is zero.
+#' @param reset_time Logical.
+#'   Reset the time index after burnin.
 #' @param ... Additional arguments.
 #'
 #' @examples
@@ -119,11 +124,15 @@ as.data.frame.simstatespace <- function(x,
                                         optional = FALSE,
                                         eta = FALSE,
                                         long = TRUE,
+                                        burnin = 0,
+                                        reset_time = TRUE,
                                         ...) {
   if (long) {
     out <- .Long(
       x = x,
-      eta = eta
+      eta = eta,
+      burnin = burnin,
+      reset_time = reset_time
     )
   } else {
     out <- .Wide(
@@ -153,6 +162,11 @@ as.data.frame.simstatespace <- function(x,
 #' @param long Logical.
 #'   If `long = TRUE`, use long format.
 #'   If `long = FALSE`, use wide format.
+#' @param burnin Positive integer.
+#'   Initial data points to discard.
+#'   Default is zero.
+#' @param reset_time Logical.
+#'   Reset the time index after burnin.
 #' @param ... Additional arguments.
 #'
 #' @examples
@@ -256,11 +270,15 @@ as.data.frame.simstatespace <- function(x,
 as.matrix.simstatespace <- function(x,
                                     eta = FALSE,
                                     long = TRUE,
+                                    burnin = 0,
+                                    reset_time = TRUE,
                                     ...) {
   if (long) {
     out <- .Long(
       x = x,
-      eta = eta
+      eta = eta,
+      burnin = burnin,
+      reset_time = reset_time
     )
   } else {
     out <- .Wide(
@@ -291,6 +309,11 @@ as.matrix.simstatespace <- function(x,
 #'   If `eta = FALSE`, plot the observed variables.
 #' @param type Character indicating the type of plotting;
 #'   actually any of the types as in [plot.default()].
+#' @param burnin Positive integer.
+#'   Initial data points to discard.
+#'   Default is zero.
+#' @param reset_time Logical.
+#'   Reset the time index after burnin.
 #' @param ... Additional arguments.
 #'
 #' @examples
@@ -396,10 +419,14 @@ plot.simstatespace <- function(x,
                                time = NULL,
                                eta = FALSE,
                                type = "b",
+                               burnin = 0,
+                               reset_time = TRUE,
                                ...) {
   data <- .Long(
     x = x,
-    eta = eta
+    eta = eta,
+    burnin = burnin,
+    reset_time = reset_time
   )
   if (eta) {
     n <- attributes(data)$p

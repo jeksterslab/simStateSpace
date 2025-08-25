@@ -4,7 +4,7 @@
 \alias{as.matrix.simstatespace}
 \title{Coerce an Object of Class \code{simstatespace} to a Matrix}
 \usage{
-\method{as.matrix}{simstatespace}(x, eta = FALSE, long = TRUE, ...)
+\method{as.matrix}{simstatespace}(x, eta = FALSE, long = TRUE, burnin = 0, reset_time = TRUE, ...)
 }
 \arguments{
 \item{x}{Object of class \code{simstatespace}.}
@@ -16,6 +16,13 @@ If \code{eta = FALSE}, exclude \code{eta}.}
 \item{long}{Logical.
 If \code{long = TRUE}, use long format.
 If \code{long = FALSE}, use wide format.}
+
+\item{burnin}{Positive integer.
+Initial data points to discard.
+Default is zero.}
+
+\item{reset_time}{Logical.
+Reset the time index after burnin.}
 
 \item{...}{Additional arguments.}
 }
