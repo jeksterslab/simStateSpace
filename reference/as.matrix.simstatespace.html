@@ -42,7 +42,7 @@
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="co"># S3 method for class 'simstatespace'</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">x</span>, eta <span class="op">=</span> <span class="cn">FALSE</span>, long <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">x</span>, eta <span class="op">=</span> <span class="cn">FALSE</span>, long <span class="op">=</span> <span class="cn">TRUE</span>, burnin <span class="op">=</span> <span class="fl">0</span>, reset_time <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -63,6 +63,17 @@ If <code>eta = FALSE</code>, exclude <code>eta</code>.</p></dd>
 <dd><p>Logical.
 If <code>long = TRUE</code>, use long format.
 If <code>long = FALSE</code>, use wide format.</p></dd>
+
+
+<dt id="arg-burnin">burnin<a class="anchor" aria-label="anchor" href="#arg-burnin"></a></dt>
+<dd><p>Positive integer.
+Initial data points to discard.
+Default is zero.</p></dd>
+
+
+<dt id="arg-reset-time">reset_time<a class="anchor" aria-label="anchor" href="#arg-reset-time"></a></dt>
+<dd><p>Logical.
+Reset the time index after burnin.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>

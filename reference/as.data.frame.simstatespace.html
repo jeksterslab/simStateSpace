@@ -48,6 +48,8 @@
 <span>  optional <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  eta <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  long <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  burnin <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  reset_time <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -81,6 +83,17 @@ If <code>eta = FALSE</code>, exclude <code>eta</code>.</p></dd>
 <dd><p>Logical.
 If <code>long = TRUE</code>, use long format.
 If <code>long = FALSE</code>, use wide format.</p></dd>
+
+
+<dt id="arg-burnin">burnin<a class="anchor" aria-label="anchor" href="#arg-burnin"></a></dt>
+<dd><p>Positive integer.
+Initial data points to discard.
+Default is zero.</p></dd>
+
+
+<dt id="arg-reset-time">reset_time<a class="anchor" aria-label="anchor" href="#arg-reset-time"></a></dt>
+<dd><p>Logical.
+Reset the time index after burnin.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
