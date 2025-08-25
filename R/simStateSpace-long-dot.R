@@ -1,5 +1,10 @@
 .Long <- function(x,
-                  eta) {
+                  eta,
+                  burnin = 0,
+                  reset_time = TRUE) {
+  stopifnot(
+    burnin >= 0
+  )
   first <- x$data[[1]]
   obs <- first$y
   k <- dim(obs)[2]
@@ -44,6 +49,44 @@
   if (!eta) {
     varnames <- varnames[!(varnames %in% eta_names)]
     out <- out[, varnames, drop = FALSE]
+  }
+  if (burnin > 0) {
+    time <- sort(
+      unique(
+        out[, "time"]
+      )
+    )
+    m <- length(time)
+    if (burnin > m) {
+      stop(
+        "`burnin` should not be greater than the measurement occasions.\n"
+      )
+    }
+    out[
+      which(
+        out[, "time"] %in% time[-seq_len(burnin)]
+      ),
+    ]
+    if (reset_time) {
+      after_burnin_time <- sort(
+        unique(
+          out[, "time"]
+        )
+      )
+      new_time <- time[
+        seq_len(
+          length(
+            after_burnin_time
+          )
+        )
+      ]
+      out[, "time"] <- new_time[
+        match(
+          out[, "time"],
+          after_burnin_time
+        )
+      ]
+    }
   }
   attributes(out)$n <- length(
     unique(out[, "id"])

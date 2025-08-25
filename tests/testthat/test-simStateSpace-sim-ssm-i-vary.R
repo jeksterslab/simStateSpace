@@ -90,13 +90,18 @@ lapply(
         as.data.frame.simstatespace(ssm, eta = FALSE)
         as.data.frame.simstatespace(ssm, eta = TRUE, long = FALSE)
         as.data.frame.simstatespace(ssm, eta = FALSE, long = FALSE)
+        as.data.frame.simstatespace(ssm, burnin = 5, reset_time = TRUE)
+        as.data.frame.simstatespace(ssm, burnin = 5, reset_time = FALSE)
         as.matrix.simstatespace(ssm, eta = TRUE)
         as.matrix.simstatespace(ssm, eta = FALSE)
         as.matrix.simstatespace(ssm, eta = TRUE, long = FALSE)
         as.matrix.simstatespace(ssm, eta = FALSE, long = FALSE)
+        as.matrix.simstatespace(ssm, burnin = 5, reset_time = TRUE)
+        as.matrix.simstatespace(ssm, burnin = 5, reset_time = FALSE)
         print.simstatespace(ssm)
         plot.simstatespace(ssm, id = 1:3, time = 0:4)
         plot.simstatespace(ssm, eta = TRUE)
+        plot.simstatespace(ssm, burnin = 5, reset_time = FALSE)
 
         # Type 1
         ssm <- SimSSMIVary(
@@ -119,13 +124,18 @@ lapply(
         as.data.frame.simstatespace(ssm, eta = FALSE)
         as.data.frame.simstatespace(ssm, eta = TRUE, long = FALSE)
         as.data.frame.simstatespace(ssm, eta = FALSE, long = FALSE)
+        as.data.frame.simstatespace(ssm, burnin = 5, reset_time = TRUE)
+        as.data.frame.simstatespace(ssm, burnin = 5, reset_time = FALSE)
         as.matrix.simstatespace(ssm, eta = TRUE)
         as.matrix.simstatespace(ssm, eta = FALSE)
         as.matrix.simstatespace(ssm, eta = TRUE, long = FALSE)
         as.matrix.simstatespace(ssm, eta = FALSE, long = FALSE)
+        as.matrix.simstatespace(ssm, burnin = 5, reset_time = TRUE)
+        as.matrix.simstatespace(ssm, burnin = 5, reset_time = FALSE)
         print.simstatespace(ssm)
         plot.simstatespace(ssm, id = 1:3, time = 0:4)
         plot.simstatespace(ssm, eta = TRUE)
+        plot.simstatespace(ssm, burnin = 5, reset_time = FALSE)
 
         # Type 2
         ssm <- SimSSMIVary(
@@ -149,13 +159,18 @@ lapply(
         as.data.frame.simstatespace(ssm, eta = FALSE)
         as.data.frame.simstatespace(ssm, eta = TRUE, long = FALSE)
         as.data.frame.simstatespace(ssm, eta = FALSE, long = FALSE)
+        as.data.frame.simstatespace(ssm, burnin = 5, reset_time = TRUE)
+        as.data.frame.simstatespace(ssm, burnin = 5, reset_time = FALSE)
         as.matrix.simstatespace(ssm, eta = TRUE)
         as.matrix.simstatespace(ssm, eta = FALSE)
         as.matrix.simstatespace(ssm, eta = TRUE, long = FALSE)
         as.matrix.simstatespace(ssm, eta = FALSE, long = FALSE)
+        as.matrix.simstatespace(ssm, burnin = 5, reset_time = TRUE)
+        as.matrix.simstatespace(ssm, burnin = 5, reset_time = FALSE)
         print.simstatespace(ssm)
         plot.simstatespace(ssm, id = 1:3, time = 0:4)
         plot.simstatespace(ssm, eta = TRUE)
+        plot.simstatespace(ssm, burnin = 5, reset_time = FALSE)
 
         testthat::expect_true(
           TRUE

@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --nodes=1
 #SBATCH --exclusive
-#SBATCH --mem 0
+#SBATCH --mem=0
 #SBATCH --time=2-00:00:00
 #SBATCH --output=make.out
 #SBATCH --error=make.err
@@ -20,7 +20,7 @@ for dir in "${directories[@]}"; do
     echo "Processing: $dir"
     cd "$dir" || exit
     apptainer exec "$sif_path" make all
-    # apptainer exec "$sif_path" make auto
+    apptainer exec "$sif_path" make auto
   fi
 done
 

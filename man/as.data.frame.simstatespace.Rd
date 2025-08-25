@@ -10,6 +10,8 @@
   optional = FALSE,
   eta = FALSE,
   long = TRUE,
+  burnin = 0,
+  reset_time = TRUE,
   ...
 )
 }
@@ -30,6 +32,13 @@ If \code{eta = FALSE}, exclude \code{eta}.}
 \item{long}{Logical.
 If \code{long = TRUE}, use long format.
 If \code{long = FALSE}, use wide format.}
+
+\item{burnin}{Positive integer.
+Initial data points to discard.
+Default is zero.}
+
+\item{reset_time}{Logical.
+Reset the time index after burnin.}
 
 \item{...}{Additional arguments.}
 }
