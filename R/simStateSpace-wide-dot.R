@@ -22,6 +22,7 @@
   )
   rownames(out) <- NULL
   attributes(out)$n <- dims$n
+  attributes(out)$m <- dims$m
   attributes(out)$k <- dims$k
   attributes(out)$p <- dims$p
   attributes(out)$j <- dims$j

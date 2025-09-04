@@ -57,39 +57,29 @@
       )
     )
     m <- length(time)
-    if (burnin > m) {
+    if (burnin >= m) {
       stop(
         "`burnin` should not be greater than the measurement occasions.\n"
       )
     }
-    out[
+    out <- out[
       which(
         out[, "time"] %in% time[-seq_len(burnin)]
       ),
     ]
     if (reset_time) {
-      after_burnin_time <- sort(
+      out[, "time"] <- out[, "time"] - sort(
         unique(
           out[, "time"]
         )
-      )
-      new_time <- time[
-        seq_len(
-          length(
-            after_burnin_time
-          )
-        )
-      ]
-      out[, "time"] <- new_time[
-        match(
-          out[, "time"],
-          after_burnin_time
-        )
-      ]
+      )[1]
     }
   }
   attributes(out)$n <- length(
     unique(out[, "id"])
+  )
+  attributes(out)$m <- length(
+    unique(out[, "time"])
   )
   attributes(out)$k <- k
   attributes(out)$p <- p
