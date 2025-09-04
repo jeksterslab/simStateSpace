@@ -16,7 +16,7 @@ lapply(
         ## number of individuals
         n <- 10
         ## time points
-        time <- 5
+        time <- 50
         ## dynamic structure
         p <- 2
         mu0_1 <- c(0.615, 1.006) # lower starting point, higher growth

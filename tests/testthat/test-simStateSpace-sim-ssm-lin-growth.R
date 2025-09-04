@@ -13,7 +13,7 @@ lapply(
         ## number of individuals
         n <- 5
         ## time points
-        time <- 5
+        time <- 50
         ## dynamic structure
         p <- 2
         mu0 <- c(0.615, 1.006)
