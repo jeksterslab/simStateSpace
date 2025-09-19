@@ -421,6 +421,13 @@ SimBetaN2 <- function(n, beta, vcov_beta_vec_l, margin = 0.98, tol = 1e-12) {
 #'   Cholesky factorization (`t(chol(vcov_beta_vec))`)
 #'   of the sampling variance-covariance matrix of
 #'   \eqn{\mathrm{vec} \left( \boldsymbol{\beta} \right)}.
+#' @param beta_lbound Optional numeric matrix of same dim as `beta`.
+#'   Use NA for no lower bound.
+#' @param beta_ubound Optional numeric matrix of same dim as `beta`.
+#'   Use NA for no upper bound.
+#' @param bound Logical;
+#'   if TRUE, resample until all elements respect bounds (NA bounds ignored).
+#' @param max_iter Safety cap on resampling attempts per draw.
 #' @return Returns a list of random transition matrices.
 #'
 #' @examples
@@ -439,8 +446,8 @@ SimBetaN2 <- function(n, beta, vcov_beta_vec_l, margin = 0.98, tol = 1e-12) {
 #' @family Simulation of State Space Models Data Functions
 #' @keywords simStateSpace ssm
 #' @export
-SimBetaN <- function(n, beta, vcov_beta_vec_l) {
-    .Call(`_simStateSpace_SimBetaN`, n, beta, vcov_beta_vec_l)
+SimBetaN <- function(n, beta, vcov_beta_vec_l, beta_lbound = NULL, beta_ubound = NULL, bound = FALSE, max_iter = 100000L) {
+    .Call(`_simStateSpace_SimBetaN`, n, beta, vcov_beta_vec_l, beta_lbound, beta_ubound, bound, max_iter)
 }
 
 #' Simulate Diagonal Covariance Matrices
@@ -563,6 +570,39 @@ SimIotaN <- function(n, iota, vcov_iota_l) {
     .Call(`_simStateSpace_SimIotaN`, n, iota, vcov_iota_l)
 }
 
+#' Simulate Intercept Vectors
+#' in a Discrete-Time Vector Autoregressive Model
+#' from the Multivariate Normal Distribution
+#'
+#' This function simulates random intercept vectors
+#' in a discrete-time vector autoregressive model
+#' from the multivariate normal distribution.
+#'
+#' @author Ivan Jacob Agaloos Pesigan
+#'
+#' @param n Positive integer.
+#'   Number of replications.
+#' @param nu Numeric vector.
+#'   Intercept (\eqn{\boldsymbol{\nu}}).
+#' @param vcov_nu_l Numeric matrix.
+#'   Cholesky factorization (`t(chol(vcov_nu))`)
+#'   of the sampling variance-covariance matrix of
+#'   \eqn{\boldsymbol{\nu}}.
+#' @return Returns a list of random intercept vectors.
+#'
+#' @examples
+#' n <- 10
+#' nu <- c(0, 0, 0)
+#' vcov_nu_l <- t(chol(0.001 * diag(3)))
+#' SimNuN(n = n, nu = nu, vcov_nu_l = vcov_nu_l)
+#'
+#' @family Simulation of State Space Models Data Functions
+#' @keywords simStateSpace ssm
+#' @export
+SimNuN <- function(n, nu, vcov_nu_l) {
+    .Call(`_simStateSpace_SimNuN`, n, nu, vcov_nu_l)
+}
+
 #' Simulate Random Drift Matrices
 #' from the Multivariate Normal Distribution
 #' and Project to Hurwitz
@@ -625,6 +665,13 @@ SimPhiN2 <- function(n, phi, vcov_phi_vec_l, margin = 1e-3) {
 #'   Cholesky factorization (`t(chol(vcov_phi_vec))`)
 #'   of the sampling variance-covariance matrix of
 #'   \eqn{\mathrm{vec} \left( \boldsymbol{\Phi} \right)}.
+#' @param phi_lbound Optional numeric matrix of same dim as `phi`.
+#'   Use NA for no lower bound.
+#' @param phi_ubound Optional numeric matrix of same dim as `phi`.
+#'   Use NA for no upper bound.
+#' @param bound Logical;
+#'   if TRUE, resample until all elements respect bounds (NA bounds ignored).
+#' @param max_iter Safety cap on resampling attempts per draw.
 #' @return Returns a list of random drift matrices.
 #'
 #' @examples
@@ -643,8 +690,8 @@ SimPhiN2 <- function(n, phi, vcov_phi_vec_l, margin = 1e-3) {
 #' @family Simulation of State Space Models Data Functions
 #' @keywords simStateSpace linsde
 #' @export
-SimPhiN <- function(n, phi, vcov_phi_vec_l) {
-    .Call(`_simStateSpace_SimPhiN`, n, phi, vcov_phi_vec_l)
+SimPhiN <- function(n, phi, vcov_phi_vec_l, phi_lbound = NULL, phi_ubound = NULL, bound = FALSE, max_iter = 100000L) {
+    .Call(`_simStateSpace_SimPhiN`, n, phi, vcov_phi_vec_l, phi_lbound, phi_ubound, bound, max_iter)
 }
 
 .SimSSMFixed0 <- function(n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l, nu, lambda, theta_l) {

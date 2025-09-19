@@ -55,10 +55,10 @@ sessionInfo()
 #> [19] pkgconfig_2.0.3     fds_1.8             jomo_2.7-6         
 #> [22] Matrix_1.7-3        KernSmooth_2.23-26  RColorBrewer_1.1-3 
 #> [25] lifecycle_1.0.4     compiler_4.5.1      farver_2.1.2       
-#> [28] stringr_1.5.1       mnormt_2.1.1        codetools_0.2-20   
+#> [28] stringr_1.5.2       mnormt_2.1.1        codetools_0.2-20   
 #> [31] carData_3.0-5       rainbow_3.8         RCurl_1.98-1.17    
 #> [34] glmnet_4.1-10       Formula_1.2-5       mice_3.18.0        
-#> [37] pracma_2.4.4        car_3.1-3           pillar_1.11.0      
+#> [37] pracma_2.4.4        car_3.1-3           pillar_1.11.1      
 #> [40] nloptr_2.2.1        tidyr_1.3.1         MASS_7.3-65        
 #> [43] reformulas_0.4.1    iterators_1.0.14    abind_1.4-8        
 #> [46] rpart_4.1.24        boot_1.3-31         rProject_0.0.21    
@@ -68,11 +68,11 @@ sessionInfo()
 #> [58] reshape2_1.4.4      purrr_1.1.0         labeling_0.4.3     
 #> [61] splines_4.5.1       pcaPP_2.0-5         latex2exp_0.9.6    
 #> [64] grid_4.5.1          expm_1.0-0          colorspace_2.1-1   
-#> [67] cli_3.6.5.9000      magrittr_2.0.3      survival_3.8-3     
+#> [67] cli_3.6.5.9000      magrittr_2.0.4      survival_3.8-3     
 #> [70] pbivnorm_0.6.0      broom_1.0.9         withr_3.0.2        
-#> [73] scales_1.4.0        backports_1.5.0     dynr_0.1.16-112    
+#> [73] scales_1.4.0        backports_1.5.0     dynr_0.1.16-114    
 #> [76] nnet_7.3-20         lme4_1.1-37         deSolve_1.40       
-#> [79] evaluate_1.0.4      knitr_1.50          rbibutils_2.3      
+#> [79] evaluate_1.0.5      knitr_1.50          rbibutils_2.3      
 #> [82] rlang_1.1.6         Rcpp_1.1.0          xtable_1.8-4       
 #> [85] glue_1.8.0          fda_6.3.0           hdrcde_3.4         
 #> [88] minqa_1.2.8         R6_2.6.1            plyr_1.8.9
@@ -84,7 +84,13 @@ sessionInfo()
 ``` r
 installed.packages()[, c("Package", "Version")]
 #>                   Package             Version      
+#> credentials       "credentials"       "2.0.3"      
+#> distro            "distro"            "0.1.1"      
+#> magrittr          "magrittr"          "2.0.4"      
+#> pillar            "pillar"            "1.11.1"     
+#> rProject          "rProject"          "0.0.21"     
 #> simStateSpace     "simStateSpace"     "1.2.11"     
+#> stringr           "stringr"           "1.5.2"      
 #> abind             "abind"             "1.4-8"      
 #> Amelia            "Amelia"            "1.8.3"      
 #> arm               "arm"               "1.14-4"     
@@ -134,8 +140,8 @@ installed.packages()[, c("Package", "Version")]
 #> cpp11             "cpp11"             "0.5.2"      
 #> crayon            "crayon"            "1.5.3"      
 #> credentials       "credentials"       "2.0.2"      
-#> crosstalk         "crosstalk"         "1.2.1"      
-#> cTMed             "cTMed"             "1.0.6.9000" 
+#> crosstalk         "crosstalk"         "1.2.2"      
+#> cTMed             "cTMed"             "1.0.7"      
 #> ctsem             "ctsem"             "3.10.4"     
 #> curl              "curl"              "7.0.0"      
 #> data.table        "data.table"        "1.17.8"     
@@ -146,7 +152,7 @@ installed.packages()[, c("Package", "Version")]
 #> deSolve           "deSolve"           "1.40"       
 #> devtools          "devtools"          "2.4.5.9000" 
 #> diagram           "diagram"           "1.6.5"      
-#> dials             "dials"             "1.4.1"      
+#> dials             "dials"             "1.4.2"      
 #> DiceDesign        "DiceDesign"        "1.10"       
 #> diffobj           "diffobj"           "0.3.6"      
 #> digest            "digest"            "0.6.37"     
@@ -154,17 +160,16 @@ installed.packages()[, c("Package", "Version")]
 #> distro            "distro"            "0.1.0"      
 #> doBy              "doBy"              "4.7.0"      
 #> docopt            "docopt"            "0.7.2"      
-#> doFuture          "doFuture"          "1.1.2"      
 #> downlit           "downlit"           "0.4.4"      
 #> dplyr             "dplyr"             "1.1.4"      
-#> DT                "DT"                "0.33"       
+#> DT                "DT"                "0.34.0"     
 #> dtplyr            "dtplyr"            "1.3.1"      
 #> duckdb            "duckdb"            "1.3.2"      
-#> dynr              "dynr"              "0.1.16-112" 
+#> dynr              "dynr"              "0.1.16-114" 
 #> dynUtils          "dynUtils"          "0.9.1"      
 #> ellipse           "ellipse"           "0.5.0"      
 #> ellipsis          "ellipsis"          "0.3.2"      
-#> evaluate          "evaluate"          "1.0.4"      
+#> evaluate          "evaluate"          "1.0.5"      
 #> expm              "expm"              "1.0-0"      
 #> fansi             "fansi"             "1.0.6"      
 #> farver            "farver"            "2.1.2"      
@@ -186,7 +191,7 @@ installed.packages()[, c("Package", "Version")]
 #> furrr             "furrr"             "0.3.1"      
 #> future            "future"            "1.67.0"     
 #> future.apply      "future.apply"      "1.20.0"     
-#> gargle            "gargle"            "1.5.2"      
+#> gargle            "gargle"            "1.6.0"      
 #> generics          "generics"          "0.1.4"      
 #> gert              "gert"              "2.1.5"      
 #> ggplot2           "ggplot2"           "3.5.2"      
@@ -198,7 +203,7 @@ installed.packages()[, c("Package", "Version")]
 #> globals           "globals"           "0.18.0"     
 #> glue              "glue"              "1.8.0"      
 #> googledrive       "googledrive"       "2.1.1"      
-#> googlesheets4     "googlesheets4"     "1.1.1"      
+#> googlesheets4     "googlesheets4"     "1.1.2"      
 #> gower             "gower"             "1.0.2"      
 #> GPArotation       "GPArotation"       "2025.3-1"   
 #> GPfit             "GPfit"             "1.0-9"      
@@ -207,7 +212,7 @@ installed.packages()[, c("Package", "Version")]
 #> gsubfn            "gsubfn"            "0.7"        
 #> gtable            "gtable"            "0.3.6"      
 #> gtools            "gtools"            "3.9.5"      
-#> hardhat           "hardhat"           "1.4.1"      
+#> hardhat           "hardhat"           "1.4.2"      
 #> haven             "haven"             "2.5.5"      
 #> hdrcde            "hdrcde"            "3.4"        
 #> here              "here"              "1.0.1"      
@@ -240,7 +245,7 @@ installed.packages()[, c("Package", "Version")]
 #> labeling          "labeling"          "0.4.3"      
 #> Lahman            "Lahman"            "12.0-0"     
 #> languageserver    "languageserver"    "0.3.16"     
-#> later             "later"             "1.4.3"      
+#> later             "later"             "1.4.4"      
 #> latex2exp         "latex2exp"         "0.9.6"      
 #> lava              "lava"              "1.8.1"      
 #> lavaan            "lavaan"            "0.6-19"     
@@ -274,23 +279,23 @@ installed.packages()[, c("Package", "Version")]
 #> mize              "mize"              "0.2.4"      
 #> mlVAR             "mlVAR"             "0.5.2"      
 #> mnormt            "mnormt"            "2.1.1"      
-#> modeldata         "modeldata"         "1.5.0"      
+#> modeldata         "modeldata"         "1.5.1"      
 #> modelenv          "modelenv"          "0.2.0"      
 #> modelr            "modelr"            "0.1.11"     
-#> MplusAutomation   "MplusAutomation"   "1.1.1"      
+#> MplusAutomation   "MplusAutomation"   "1.2"        
 #> multicool         "multicool"         "1.0.1"      
 #> mvtnorm           "mvtnorm"           "1.3-3"      
 #> nloptr            "nloptr"            "2.2.1"      
 #> numDeriv          "numDeriv"          "2016.8-1.1" 
 #> nycflights13      "nycflights13"      "1.0.2"      
-#> OpenMx            "OpenMx"            "2.22.7"     
+#> OpenMx            "OpenMx"            "2.22.9"     
 #> openssl           "openssl"           "2.3.3"      
 #> ordinal           "ordinal"           "2023.12-4.1"
 #> pan               "pan"               "1.9"        
 #> pander            "pander"            "0.6.6"      
 #> parallelly        "parallelly"        "1.45.1"     
-#> parsnip           "parsnip"           "1.3.2"      
-#> patchwork         "patchwork"         "1.3.1"      
+#> parsnip           "parsnip"           "1.3.3"      
+#> patchwork         "patchwork"         "1.3.2"      
 #> pbapply           "pbapply"           "1.7-4"      
 #> pbivnorm          "pbivnorm"          "0.6.0"      
 #> pbkrtest          "pbkrtest"          "0.5.5"      
@@ -323,7 +328,7 @@ installed.packages()[, c("Package", "Version")]
 #> qpdf              "qpdf"              "1.4.1"      
 #> quadprog          "quadprog"          "1.5-8"      
 #> quantreg          "quantreg"          "6.1"        
-#> quarto            "quarto"            "1.5.0"      
+#> quarto            "quarto"            "1.5.1"      
 #> QuickJSR          "QuickJSR"          "1.8.0"      
 #> R.cache           "R.cache"           "0.17.0"     
 #> R.methodsS3       "R.methodsS3"       "1.8.2"      
@@ -332,17 +337,17 @@ installed.packages()[, c("Package", "Version")]
 #> R2jags            "R2jags"            "0.8-9"      
 #> R2WinBUGS         "R2WinBUGS"         "2.1-23"     
 #> R6                "R6"                "2.6.1"      
-#> ragg              "ragg"              "1.4.0"      
+#> ragg              "ragg"              "1.5.0"      
 #> rainbow           "rainbow"           "3.8"        
 #> rappdirs          "rappdirs"          "0.3.3"      
 #> rbibutils         "rbibutils"         "2.3"        
 #> rcmdcheck         "rcmdcheck"         "1.4.0"      
 #> RColorBrewer      "RColorBrewer"      "1.1-3"      
 #> Rcpp              "Rcpp"              "1.1.0"      
-#> RcppArmadillo     "RcppArmadillo"     "14.6.3-1"   
+#> RcppArmadillo     "RcppArmadillo"     "15.0.1-1"   
 #> RcppEigen         "RcppEigen"         "0.3.4.0.2"  
 #> RcppGSL           "RcppGSL"           "0.3.13"     
-#> RcppParallel      "RcppParallel"      "5.1.10"     
+#> RcppParallel      "RcppParallel"      "5.1.11-1"   
 #> RcppTOML          "RcppTOML"          "0.2.3"      
 #> RCurl             "RCurl"             "1.98-1.17"  
 #> Rdpack            "Rdpack"            "2.6.4"      
@@ -363,18 +368,18 @@ installed.packages()[, c("Package", "Version")]
 #> rlang             "rlang"             "1.1.6"      
 #> RMariaDB          "RMariaDB"          "1.3.4"      
 #> rmarkdown         "rmarkdown"         "2.29"       
-#> roxygen2          "roxygen2"          "7.3.2"      
+#> roxygen2          "roxygen2"          "7.3.3.9000" 
 #> rpf               "rpf"               "1.0.15"     
 #> RPostgres         "RPostgres"         "1.4.8"      
 #> rProject          "rProject"          "0.0.21"     
-#> rprojroot         "rprojroot"         "2.1.0"      
+#> rprojroot         "rprojroot"         "2.1.1"      
 #> rsample           "rsample"           "1.3.1"      
-#> RSQLite           "RSQLite"           "2.4.2"      
+#> RSQLite           "RSQLite"           "2.4.3"      
 #> rstan             "rstan"             "2.32.7"     
-#> rstantools        "rstantools"        "2.4.0"      
+#> rstantools        "rstantools"        "2.5.0"      
 #> rstudioapi        "rstudioapi"        "0.17.1"     
 #> rversions         "rversions"         "2.1.2"      
-#> rvest             "rvest"             "1.0.4"      
+#> rvest             "rvest"             "1.0.5"      
 #> Ryacas            "Ryacas"            "1.1.5"      
 #> sass              "sass"              "0.4.10"     
 #> scales            "scales"            "1.4.0"      
@@ -400,26 +405,27 @@ installed.packages()[, c("Package", "Version")]
 #> symSEM            "symSEM"            "0.4"        
 #> sys               "sys"               "3.4.3"      
 #> systemfonts       "systemfonts"       "1.2.3"      
+#> tailor            "tailor"            "0.1.0"      
 #> tensorA           "tensorA"           "0.36.2.1"   
 #> testthat          "testthat"          "3.2.3.9000" 
 #> texreg            "texreg"            "1.39.4"     
-#> textshaping       "textshaping"       "1.0.1"      
+#> textshaping       "textshaping"       "1.0.3"      
 #> tibble            "tibble"            "3.3.0"      
-#> tidymodels        "tidymodels"        "1.3.0"      
+#> tidymodels        "tidymodels"        "1.4.0"      
 #> tidyr             "tidyr"             "1.3.1"      
 #> tidyselect        "tidyselect"        "1.2.1"      
 #> tidyverse         "tidyverse"         "2.0.0"      
 #> timechange        "timechange"        "0.3.0"      
 #> timeDate          "timeDate"          "4041.110"   
 #> tinytex           "tinytex"           "0.57"       
-#> tune              "tune"              "1.3.0"      
+#> tune              "tune"              "2.0.0"      
 #> tzdb              "tzdb"              "0.5.0"      
 #> ucminf            "ucminf"            "1.2.2"      
 #> urlchecker        "urlchecker"        "1.0.1"      
-#> usethis           "usethis"           "3.1.0"      
+#> usethis           "usethis"           "3.2.1"      
 #> utf8              "utf8"              "1.2.6"      
 #> uuid              "uuid"              "1.2-1"      
-#> V8                "V8"                "6.0.6"      
+#> V8                "V8"                "7.0.0"      
 #> vctrs             "vctrs"             "0.6.5"      
 #> viridis           "viridis"           "0.6.5"      
 #> viridisLite       "viridisLite"       "0.4.2"      
@@ -429,7 +435,7 @@ installed.packages()[, c("Package", "Version")]
 #> whisker           "whisker"           "0.4.1"      
 #> whoami            "whoami"            "1.3.0"      
 #> withr             "withr"             "3.0.2"      
-#> workflows         "workflows"         "1.2.0"      
+#> workflows         "workflows"         "1.3.0"      
 #> workflowsets      "workflowsets"      "1.1.1"      
 #> xfun              "xfun"              "0.53"       
 #> xml2              "xml2"              "1.4.0"      
@@ -478,28 +484,28 @@ installed.packages()[, c("Package", "Version")]
 #> CPU op-mode(s):                       32-bit, 64-bit
 #> Address sizes:                        46 bits physical, 48 bits virtual
 #> Byte Order:                           Little Endian
-#> CPU(s):                               24
-#> On-line CPU(s) list:                  0-23
+#> CPU(s):                               28
+#> On-line CPU(s) list:                  0-27
 #> Vendor ID:                            GenuineIntel
-#> Model name:                           Intel(R) Xeon(R) CPU E5-2650 v4 @ 2.20GHz
+#> Model name:                           Intel(R) Xeon(R) CPU E5-2680 v4 @ 2.40GHz
 #> CPU family:                           6
 #> Model:                                79
 #> Thread(s) per core:                   1
-#> Core(s) per socket:                   12
+#> Core(s) per socket:                   14
 #> Socket(s):                            2
 #> Stepping:                             1
-#> CPU(s) scaling MHz:                   89%
-#> CPU max MHz:                          2900.0000
+#> CPU(s) scaling MHz:                   61%
+#> CPU max MHz:                          3300.0000
 #> CPU min MHz:                          1200.0000
-#> BogoMIPS:                             4389.76
+#> BogoMIPS:                             4800.04
 #> Flags:                                fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf pni pclmulqdq dtes64 monitor ds_cpl smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch cpuid_fault epb cat_l3 cdp_l3 invpcid_single pti ssbd ibrs ibpb stibp fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm cqm rdt_a rdseed adx smap intel_pt xsaveopt cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local dtherm ida arat pln pts md_clear flush_l1d
-#> L1d cache:                            768 KiB (24 instances)
-#> L1i cache:                            768 KiB (24 instances)
-#> L2 cache:                             6 MiB (24 instances)
-#> L3 cache:                             60 MiB (2 instances)
+#> L1d cache:                            896 KiB (28 instances)
+#> L1i cache:                            896 KiB (28 instances)
+#> L2 cache:                             7 MiB (28 instances)
+#> L3 cache:                             70 MiB (2 instances)
 #> NUMA node(s):                         2
-#> NUMA node0 CPU(s):                    0,2,4,6,8,10,12,14,16,18,20,22
-#> NUMA node1 CPU(s):                    1,3,5,7,9,11,13,15,17,19,21,23
+#> NUMA node0 CPU(s):                    0,2,4,6,8,10,12,14,16,18,20,22,24,26
+#> NUMA node1 CPU(s):                    1,3,5,7,9,11,13,15,17,19,21,23,25,27
 #> Vulnerability Gather data sampling:   Not affected
 #> Vulnerability Itlb multihit:          KVM: Mitigation: VMX unsupported
 #> Vulnerability L1tf:                   Mitigation; PTE Inversion
@@ -521,7 +527,7 @@ installed.packages()[, c("Package", "Version")]
 
 ```
 #>                total        used        free      shared  buff/cache   available
-#> Mem:           125Gi        12Gi        52Gi       5.5Gi        67Gi       113Gi
+#> Mem:           251Gi        24Gi       116Gi       7.1Gi       119Gi       226Gi
 #> Swap:             0B          0B          0B
-#> Total:         125Gi        12Gi        52Gi
+#> Total:         251Gi        24Gi       116Gi
 ```

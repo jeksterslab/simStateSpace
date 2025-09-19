@@ -558,6 +558,33 @@ Rcpp::List SimBetaN2(const arma::uword& n, const arma::mat& beta,
 #include <RcppArmadillo.h>
 // [[Rcpp::depends(RcppArmadillo)]]
 
+// Assumed to exist in your compile unit; keep your original implementation.
+// bool TestStationarity(const arma::mat& x);
+
+inline bool in_bounds_element(double x, double lb, double ub, bool has_lb,
+                              bool has_ub) {
+  // Treat non-finite bounds (NA/NaN/Inf) as "no bound" on that side
+  bool lb_ok = true, ub_ok = true;
+  if (has_lb && std::isfinite(lb)) lb_ok = (x >= lb);
+  if (has_ub && std::isfinite(ub)) ub_ok = (x <= ub);
+  return lb_ok && ub_ok;
+}
+
+inline bool matrix_in_bounds(const arma::mat& x, const arma::mat* lb_ptr,
+                             const arma::mat* ub_ptr, bool has_lb,
+                             bool has_ub) {
+  if (!has_lb && !has_ub) return true;  // nothing to check
+  const arma::uword nr = x.n_rows, nc = x.n_cols;
+  for (arma::uword i = 0; i < nr; ++i) {
+    for (arma::uword j = 0; j < nc; ++j) {
+      double lb = has_lb ? (*lb_ptr)(i, j) : NA_REAL;
+      double ub = has_ub ? (*ub_ptr)(i, j) : NA_REAL;
+      if (!in_bounds_element(x(i, j), lb, ub, has_lb, has_ub)) return false;
+    }
+  }
+  return true;
+}
+
 //' Simulate Transition Matrices
 //' from the Multivariate Normal Distribution
 //'
@@ -576,6 +603,13 @@ Rcpp::List SimBetaN2(const arma::uword& n, const arma::mat& beta,
 //'   Cholesky factorization (`t(chol(vcov_beta_vec))`)
 //'   of the sampling variance-covariance matrix of
 //'   \eqn{\mathrm{vec} \left( \boldsymbol{\beta} \right)}.
+//' @param beta_lbound Optional numeric matrix of same dim as `beta`.
+//'   Use NA for no lower bound.
+//' @param beta_ubound Optional numeric matrix of same dim as `beta`.
+//'   Use NA for no upper bound.
+//' @param bound Logical;
+//'   if TRUE, resample until all elements respect bounds (NA bounds ignored).
+//' @param max_iter Safety cap on resampling attempts per draw.
 //' @return Returns a list of random transition matrices.
 //'
 //' @examples
@@ -595,27 +629,95 @@ Rcpp::List SimBetaN2(const arma::uword& n, const arma::mat& beta,
 //' @keywords simStateSpace ssm
 //' @export
 // [[Rcpp::export]]
-Rcpp::List SimBetaN(const arma::uword& n, const arma::mat& beta,
-                    const arma::mat& vcov_beta_vec_l) {
-  Rcpp::List output(n);
-  arma::vec beta_vec = arma::vectorise(beta);
-  arma::vec beta_vec_i(beta.n_rows * beta.n_cols, arma::fill::none);
-  arma::mat beta_i(beta.n_rows, beta.n_cols, arma::fill::none);
-  for (arma::uword i = 0; i < n; i++) {
-    bool run = true;
-    while (run) {
-      beta_vec_i =
-          beta_vec + (vcov_beta_vec_l * arma::randn(beta.n_rows * beta.n_cols));
-      beta_i = arma::reshape(beta_vec_i, beta.n_rows, beta.n_cols);
-      if (TestStationarity(beta_i)) {
-        run = false;
-      }
-      if (!run) {
-        output[i] = beta_i;
+Rcpp::List SimBetaN(
+    const arma::uword& n, const arma::mat& beta,
+    const arma::mat& vcov_beta_vec_l,
+    Rcpp::Nullable<Rcpp::NumericMatrix> beta_lbound = R_NilValue,
+    Rcpp::Nullable<Rcpp::NumericMatrix> beta_ubound = R_NilValue,
+    const bool bound = false, const arma::uword max_iter = 100000) {
+  const arma::uword nr = beta.n_rows, nc = beta.n_cols;
+  const arma::uword p = nr * nc;
+
+  if (vcov_beta_vec_l.n_rows != p || vcov_beta_vec_l.n_cols != p) {
+    Rcpp::stop(
+        "vcov_beta_vec_l must be p x p with p = nrow(beta) * ncol(beta).");
+  }
+
+  arma::mat lb, ub;
+  arma::umat has_lb_el(nr, nc, arma::fill::zeros);
+  arma::umat has_ub_el(nr, nc, arma::fill::zeros);
+
+  const bool has_lb = beta_lbound.isNotNull();
+  const bool has_ub = beta_ubound.isNotNull();
+
+  if (has_lb) {
+    lb = Rcpp::as<arma::mat>(beta_lbound);
+    if (lb.n_rows != nr || lb.n_cols != nc)
+      Rcpp::stop("beta_lbound dims must match beta.");
+    // Build mask: 1 where finite lower bound exists
+    for (arma::uword i = 0; i < nr; ++i) {
+      for (arma::uword j = 0; j < nc; ++j) {
+        has_lb_el(i, j) = std::isfinite(lb(i, j)) ? 1u : 0u;
       }
     }
+  } else {
+    lb.set_size(nr, nc);
+    lb.fill(0.0);  // unused unless has_lb_el==1 at an element
   }
-  return output;
+
+  if (has_ub) {
+    ub = Rcpp::as<arma::mat>(beta_ubound);
+    if (ub.n_rows != nr || ub.n_cols != nc)
+      Rcpp::stop("beta_ubound dims must match beta.");
+    // Build mask: 1 where finite upper bound exists
+    for (arma::uword i = 0; i < nr; ++i) {
+      for (arma::uword j = 0; j < nc; ++j) {
+        has_ub_el(i, j) = std::isfinite(ub(i, j)) ? 1u : 0u;
+      }
+    }
+  } else {
+    ub.set_size(nr, nc);
+    ub.fill(0.0);
+  }
+
+  // Vectorized bounds check with masks; quick-reject
+  auto bounds_ok = [&](const arma::mat& x) -> bool {
+    if (!bound) return true;
+    arma::umat low_violate =
+        (x < lb) % has_lb_el;  // only where a finite lb exists
+    arma::umat high_violate =
+        (x > ub) % has_ub_el;  // only where a finite ub exists
+    return !(arma::any(arma::vectorise(low_violate)) ||
+             arma::any(arma::vectorise(high_violate)));
+  };
+
+  Rcpp::List out(n);
+  const arma::vec beta_vec = arma::vectorise(beta);
+  arma::vec z(p, arma::fill::none), beta_vec_i(p, arma::fill::none);
+  arma::mat beta_i(nr, nc, arma::fill::none);
+
+  for (arma::uword i = 0; i < n; ++i) {
+    arma::uword iter = 0;
+    for (;;) {
+      if (iter++ >= max_iter) {
+        Rcpp::stop(
+            "SimBetaN: exceeded max_iter while drawing beta_i (i=%u). Relax "
+            "bounds or stationarity.",
+            i + 1);
+      }
+      z.randn();
+      beta_vec_i = beta_vec + (vcov_beta_vec_l * z);
+      beta_i = arma::reshape(beta_vec_i, nr, nc);
+
+      if (!bounds_ok(beta_i)) continue;  // early quick-reject
+      if (!TestStationarity(beta_i)) continue;
+
+      out[i] = beta_i;
+      break;
+    }
+  }
+
+  return out;
 }
 // -----------------------------------------------------------------------------
 // edit .setup/cpp/simStateSpace-sim-cov-diag-n.cpp
@@ -814,6 +916,54 @@ Rcpp::List SimIotaN(const arma::uword& n, const arma::vec& iota,
   return output;
 }
 // -----------------------------------------------------------------------------
+// edit .setup/cpp/simStateSpace-sim-nu-n.cpp
+// Ivan Jacob Agaloos Pesigan
+// -----------------------------------------------------------------------------
+
+#include <RcppArmadillo.h>
+// [[Rcpp::depends(RcppArmadillo)]]
+
+//' Simulate Intercept Vectors
+//' in a Discrete-Time Vector Autoregressive Model
+//' from the Multivariate Normal Distribution
+//'
+//' This function simulates random intercept vectors
+//' in a discrete-time vector autoregressive model
+//' from the multivariate normal distribution.
+//'
+//' @author Ivan Jacob Agaloos Pesigan
+//'
+//' @param n Positive integer.
+//'   Number of replications.
+//' @param nu Numeric vector.
+//'   Intercept (\eqn{\boldsymbol{\nu}}).
+//' @param vcov_nu_l Numeric matrix.
+//'   Cholesky factorization (`t(chol(vcov_nu))`)
+//'   of the sampling variance-covariance matrix of
+//'   \eqn{\boldsymbol{\nu}}.
+//' @return Returns a list of random intercept vectors.
+//'
+//' @examples
+//' n <- 10
+//' nu <- c(0, 0, 0)
+//' vcov_nu_l <- t(chol(0.001 * diag(3)))
+//' SimNuN(n = n, nu = nu, vcov_nu_l = vcov_nu_l)
+//'
+//' @family Simulation of State Space Models Data Functions
+//' @keywords simStateSpace ssm
+//' @export
+// [[Rcpp::export]]
+Rcpp::List SimNuN(const arma::uword& n, const arma::vec& nu,
+                  const arma::mat& vcov_nu_l) {
+  Rcpp::List output(n);
+  arma::vec nu_i(nu.n_rows, arma::fill::none);
+  for (arma::uword i = 0; i < n; i++) {
+    nu_i = nu + (vcov_nu_l * arma::randn(nu.n_rows));
+    output[i] = Rcpp::NumericVector(nu_i.begin(), nu_i.end());
+  }
+  return output;
+}
+// -----------------------------------------------------------------------------
 // edit .setup/cpp/simStateSpace-sim-phi-n-2.cpp
 // Ivan Jacob Agaloos Pesigan
 // -----------------------------------------------------------------------------
@@ -904,6 +1054,13 @@ Rcpp::List SimPhiN2(const arma::uword& n, const arma::mat& phi,
 //'   Cholesky factorization (`t(chol(vcov_phi_vec))`)
 //'   of the sampling variance-covariance matrix of
 //'   \eqn{\mathrm{vec} \left( \boldsymbol{\Phi} \right)}.
+//' @param phi_lbound Optional numeric matrix of same dim as `phi`.
+//'   Use NA for no lower bound.
+//' @param phi_ubound Optional numeric matrix of same dim as `phi`.
+//'   Use NA for no upper bound.
+//' @param bound Logical;
+//'   if TRUE, resample until all elements respect bounds (NA bounds ignored).
+//' @param max_iter Safety cap on resampling attempts per draw.
 //' @return Returns a list of random drift matrices.
 //'
 //' @examples
@@ -924,25 +1081,86 @@ Rcpp::List SimPhiN2(const arma::uword& n, const arma::mat& phi,
 //' @export
 // [[Rcpp::export]]
 Rcpp::List SimPhiN(const arma::uword& n, const arma::mat& phi,
-                   const arma::mat& vcov_phi_vec_l) {
+                   const arma::mat& vcov_phi_vec_l,
+                   Rcpp::Nullable<Rcpp::NumericMatrix> phi_lbound = R_NilValue,
+                   Rcpp::Nullable<Rcpp::NumericMatrix> phi_ubound = R_NilValue,
+                   const bool bound = false,
+                   const arma::uword max_iter = 100000) {
+  const arma::uword nr = phi.n_rows, nc = phi.n_cols;
+  const arma::uword p = nr * nc;
+
+  if (vcov_phi_vec_l.n_rows != p || vcov_phi_vec_l.n_cols != p) {
+    Rcpp::stop("vcov_phi_vec_l must be p x p with p = nrow(phi) * ncol(phi).");
+  }
+
+  // Bounds & masks
+  arma::mat lb, ub;
+  arma::umat has_lb_el(nr, nc, arma::fill::zeros);
+  arma::umat has_ub_el(nr, nc, arma::fill::zeros);
+
+  const bool has_lb = phi_lbound.isNotNull();
+  const bool has_ub = phi_ubound.isNotNull();
+
+  if (has_lb) {
+    lb = Rcpp::as<arma::mat>(phi_lbound);
+    if (lb.n_rows != nr || lb.n_cols != nc)
+      Rcpp::stop("phi_lbound dims must match phi.");
+    for (arma::uword i = 0; i < nr; ++i)
+      for (arma::uword j = 0; j < nc; ++j)
+        has_lb_el(i, j) = std::isfinite(lb(i, j)) ? 1u : 0u;
+  } else {
+    lb.set_size(nr, nc);
+    lb.fill(0.0);
+  }
+
+  if (has_ub) {
+    ub = Rcpp::as<arma::mat>(phi_ubound);
+    if (ub.n_rows != nr || ub.n_cols != nc)
+      Rcpp::stop("phi_ubound dims must match phi.");
+    for (arma::uword i = 0; i < nr; ++i)
+      for (arma::uword j = 0; j < nc; ++j)
+        has_ub_el(i, j) = std::isfinite(ub(i, j)) ? 1u : 0u;
+  } else {
+    ub.set_size(nr, nc);
+    ub.fill(0.0);
+  }
+
+  auto bounds_ok = [&](const arma::mat& x) -> bool {
+    if (!bound) return true;
+    arma::umat low_violate =
+        (x < lb) % has_lb_el;  // check only where a finite lb exists
+    arma::umat high_violate =
+        (x > ub) % has_ub_el;  // check only where a finite ub exists
+    return !(arma::any(arma::vectorise(low_violate)) ||
+             arma::any(arma::vectorise(high_violate)));
+  };
+
   Rcpp::List output(n);
-  arma::vec phi_vec = arma::vectorise(phi);
-  arma::vec phi_vec_i(phi.n_rows * phi.n_cols, arma::fill::none);
-  arma::mat phi_i(phi.n_rows, phi.n_cols, arma::fill::none);
-  for (arma::uword i = 0; i < n; i++) {
-    bool run = true;
-    while (run) {
-      phi_vec_i =
-          phi_vec + (vcov_phi_vec_l * arma::randn(phi.n_rows * phi.n_cols));
-      phi_i = arma::reshape(phi_vec_i, phi.n_rows, phi.n_cols);
-      if (TestPhi(phi_i)) {
-        run = false;
+  const arma::vec phi_vec = arma::vectorise(phi);
+  arma::vec z(p, arma::fill::none), phi_vec_i(p, arma::fill::none);
+  arma::mat phi_i(nr, nc, arma::fill::none);
+
+  for (arma::uword i = 0; i < n; ++i) {
+    arma::uword iter = 0;
+    for (;;) {
+      if (iter++ >= max_iter) {
+        Rcpp::stop(
+            "SimPhiN: exceeded max_iter while drawing phi_i (i=%u). Relax "
+            "bounds or TestPhi().",
+            i + 1);
       }
-      if (!run) {
-        output[i] = phi_i;
-      }
+      z.randn();                                   // N(0, I_p)
+      phi_vec_i = phi_vec + (vcov_phi_vec_l * z);  // mean + L * z
+      phi_i = arma::reshape(phi_vec_i, nr, nc);    // back to matrix
+
+      if (!bounds_ok(phi_i)) continue;  // quick-reject on bounds
+      if (!TestPhi(phi_i)) continue;    // user-supplied validity check
+
+      output[i] = phi_i;
+      break;
     }
   }
+
   return output;
 }
 // -----------------------------------------------------------------------------

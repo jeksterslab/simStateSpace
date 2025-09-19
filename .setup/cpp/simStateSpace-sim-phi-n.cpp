@@ -24,6 +24,13 @@
 //'   Cholesky factorization (`t(chol(vcov_phi_vec))`)
 //'   of the sampling variance-covariance matrix of
 //'   \eqn{\mathrm{vec} \left( \boldsymbol{\Phi} \right)}.
+//' @param phi_lbound Optional numeric matrix of same dim as `phi`.
+//'   Use NA for no lower bound.
+//' @param phi_ubound Optional numeric matrix of same dim as `phi`.
+//'   Use NA for no upper bound.
+//' @param bound Logical;
+//'   if TRUE, resample until all elements respect bounds (NA bounds ignored).
+//' @param max_iter Safety cap on resampling attempts per draw.
 //' @return Returns a list of random drift matrices.
 //'
 //' @examples
@@ -44,24 +51,85 @@
 //' @export
 // [[Rcpp::export]]
 Rcpp::List SimPhiN(const arma::uword& n, const arma::mat& phi,
-                   const arma::mat& vcov_phi_vec_l) {
+                   const arma::mat& vcov_phi_vec_l,
+                   Rcpp::Nullable<Rcpp::NumericMatrix> phi_lbound = R_NilValue,
+                   Rcpp::Nullable<Rcpp::NumericMatrix> phi_ubound = R_NilValue,
+                   const bool bound = false,
+                   const arma::uword max_iter = 100000) {
+  const arma::uword nr = phi.n_rows, nc = phi.n_cols;
+  const arma::uword p = nr * nc;
+
+  if (vcov_phi_vec_l.n_rows != p || vcov_phi_vec_l.n_cols != p) {
+    Rcpp::stop("vcov_phi_vec_l must be p x p with p = nrow(phi) * ncol(phi).");
+  }
+
+  // Bounds & masks
+  arma::mat lb, ub;
+  arma::umat has_lb_el(nr, nc, arma::fill::zeros);
+  arma::umat has_ub_el(nr, nc, arma::fill::zeros);
+
+  const bool has_lb = phi_lbound.isNotNull();
+  const bool has_ub = phi_ubound.isNotNull();
+
+  if (has_lb) {
+    lb = Rcpp::as<arma::mat>(phi_lbound);
+    if (lb.n_rows != nr || lb.n_cols != nc)
+      Rcpp::stop("phi_lbound dims must match phi.");
+    for (arma::uword i = 0; i < nr; ++i)
+      for (arma::uword j = 0; j < nc; ++j)
+        has_lb_el(i, j) = std::isfinite(lb(i, j)) ? 1u : 0u;
+  } else {
+    lb.set_size(nr, nc);
+    lb.fill(0.0);
+  }
+
+  if (has_ub) {
+    ub = Rcpp::as<arma::mat>(phi_ubound);
+    if (ub.n_rows != nr || ub.n_cols != nc)
+      Rcpp::stop("phi_ubound dims must match phi.");
+    for (arma::uword i = 0; i < nr; ++i)
+      for (arma::uword j = 0; j < nc; ++j)
+        has_ub_el(i, j) = std::isfinite(ub(i, j)) ? 1u : 0u;
+  } else {
+    ub.set_size(nr, nc);
+    ub.fill(0.0);
+  }
+
+  auto bounds_ok = [&](const arma::mat& x) -> bool {
+    if (!bound) return true;
+    arma::umat low_violate =
+        (x < lb) % has_lb_el;  // check only where a finite lb exists
+    arma::umat high_violate =
+        (x > ub) % has_ub_el;  // check only where a finite ub exists
+    return !(arma::any(arma::vectorise(low_violate)) ||
+             arma::any(arma::vectorise(high_violate)));
+  };
+
   Rcpp::List output(n);
-  arma::vec phi_vec = arma::vectorise(phi);
-  arma::vec phi_vec_i(phi.n_rows * phi.n_cols, arma::fill::none);
-  arma::mat phi_i(phi.n_rows, phi.n_cols, arma::fill::none);
-  for (arma::uword i = 0; i < n; i++) {
-    bool run = true;
-    while (run) {
-      phi_vec_i =
-          phi_vec + (vcov_phi_vec_l * arma::randn(phi.n_rows * phi.n_cols));
-      phi_i = arma::reshape(phi_vec_i, phi.n_rows, phi.n_cols);
-      if (TestPhi(phi_i)) {
-        run = false;
+  const arma::vec phi_vec = arma::vectorise(phi);
+  arma::vec z(p, arma::fill::none), phi_vec_i(p, arma::fill::none);
+  arma::mat phi_i(nr, nc, arma::fill::none);
+
+  for (arma::uword i = 0; i < n; ++i) {
+    arma::uword iter = 0;
+    for (;;) {
+      if (iter++ >= max_iter) {
+        Rcpp::stop(
+            "SimPhiN: exceeded max_iter while drawing phi_i (i=%u). Relax "
+            "bounds or TestPhi().",
+            i + 1);
       }
-      if (!run) {
-        output[i] = phi_i;
-      }
+      z.randn();                                   // N(0, I_p)
+      phi_vec_i = phi_vec + (vcov_phi_vec_l * z);  // mean + L * z
+      phi_i = arma::reshape(phi_vec_i, nr, nc);    // back to matrix
+
+      if (!bounds_ok(phi_i)) continue;  // quick-reject on bounds
+      if (!TestPhi(phi_i)) continue;    // user-supplied validity check
+
+      output[i] = phi_i;
+      break;
     }
   }
+
   return output;
 }

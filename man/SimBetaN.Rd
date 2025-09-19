@@ -5,7 +5,15 @@
 \title{Simulate Transition Matrices
 from the Multivariate Normal Distribution}
 \usage{
-SimBetaN(n, beta, vcov_beta_vec_l)
+SimBetaN(
+  n,
+  beta,
+  vcov_beta_vec_l,
+  beta_lbound = NULL,
+  beta_ubound = NULL,
+  bound = FALSE,
+  max_iter = 100000L
+)
 }
 \arguments{
 \item{n}{Positive integer.
@@ -18,6 +26,17 @@ The transition matrix (\eqn{\boldsymbol{\beta}}).}
 Cholesky factorization (\code{t(chol(vcov_beta_vec))})
 of the sampling variance-covariance matrix of
 \eqn{\mathrm{vec} \left( \boldsymbol{\beta} \right)}.}
+
+\item{beta_lbound}{Optional numeric matrix of same dim as \code{beta}.
+Use NA for no lower bound.}
+
+\item{beta_ubound}{Optional numeric matrix of same dim as \code{beta}.
+Use NA for no upper bound.}
+
+\item{bound}{Logical;
+if TRUE, resample until all elements respect bounds (NA bounds ignored).}
+
+\item{max_iter}{Safety cap on resampling attempts per draw.}
 }
 \value{
 Returns a list of random transition matrices.
@@ -60,6 +79,7 @@ Other Simulation of State Space Models Data Functions:
 \code{\link{SimCovDiagN}()},
 \code{\link{SimCovN}()},
 \code{\link{SimIotaN}()},
+\code{\link{SimNuN}()},
 \code{\link{SimPhiN}()},
 \code{\link{SimPhiN2}()},
 \code{\link{SimSSMFixed}()},
