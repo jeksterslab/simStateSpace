@@ -98,6 +98,7 @@ Other Simulation of State Space Models Data Functions:
 \code{\link{SimCovDiagN}()},
 \code{\link{SimCovN}()},
 \code{\link{SimIotaN}()},
+\code{\link{SimNuN}()},
 \code{\link{SimPhiN}()},
 \code{\link{SimPhiN2}()},
 \code{\link{SimSSMFixed}()},
