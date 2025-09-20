@@ -246,6 +246,13 @@ lapply(
           kappa = kappa
         )
 
+        testthat::expect_error(
+          as.matrix.simstatespace(ssm, burnin = time),
+          regexp = paste0(
+            "`burnin` should not be greater than the measurement occasions.\n"
+          )
+        )
+
         testthat::expect_true(
           TRUE
         )

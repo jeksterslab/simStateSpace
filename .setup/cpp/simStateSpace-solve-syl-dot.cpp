@@ -8,6 +8,6 @@
 // [[Rcpp::export(.SolveSyl)]]
 arma::mat SolveSyl(const arma::mat A, const arma::mat B, const arma::mat C) {
   arma::mat X;
-  arma::syl(X, A, B, C);
+  arma::sylvester(X, A, B, C);
   return X;
 }
