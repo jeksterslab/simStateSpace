@@ -253,7 +253,7 @@ Rcpp::List LinSDE2SSM(const arma::vec& iota, const arma::mat& phi,
 // [[Rcpp::export(.LinSDECovEta)]]
 arma::mat LinSDECovEta(const arma::mat phi, const arma::mat sigma) {
   arma::mat X;
-  arma::syl(X, phi, phi.t(), sigma);
+  arma::sylvester(X, phi, phi.t(), sigma);
   return ((X + X.t()) / 2);
 }
 // -----------------------------------------------------------------------------
@@ -638,10 +638,10 @@ Rcpp::List SimBetaN(
   const arma::uword nr = beta.n_rows, nc = beta.n_cols;
   const arma::uword p = nr * nc;
 
-  if (vcov_beta_vec_l.n_rows != p || vcov_beta_vec_l.n_cols != p) {
-    Rcpp::stop(
-        "vcov_beta_vec_l must be p x p with p = nrow(beta) * ncol(beta).");
-  }
+  // if (vcov_beta_vec_l.n_rows != p || vcov_beta_vec_l.n_cols != p) {
+  //   Rcpp::stop("vcov_beta_vec_l must be p x p with p = nrow(beta) *
+  //   ncol(beta).");
+  // }
 
   arma::mat lb, ub;
   arma::umat has_lb_el(nr, nc, arma::fill::zeros);
@@ -662,7 +662,7 @@ Rcpp::List SimBetaN(
     }
   } else {
     lb.set_size(nr, nc);
-    lb.fill(0.0);  // unused unless has_lb_el==1 at an element
+    lb.fill(0.0);
   }
 
   if (has_ub) {
@@ -683,10 +683,8 @@ Rcpp::List SimBetaN(
   // Vectorized bounds check with masks; quick-reject
   auto bounds_ok = [&](const arma::mat& x) -> bool {
     if (!bound) return true;
-    arma::umat low_violate =
-        (x < lb) % has_lb_el;  // only where a finite lb exists
-    arma::umat high_violate =
-        (x > ub) % has_ub_el;  // only where a finite ub exists
+    arma::umat low_violate = (x < lb) % has_lb_el;
+    arma::umat high_violate = (x > ub) % has_ub_el;
     return !(arma::any(arma::vectorise(low_violate)) ||
              arma::any(arma::vectorise(high_violate)));
   };
@@ -709,7 +707,7 @@ Rcpp::List SimBetaN(
       beta_vec_i = beta_vec + (vcov_beta_vec_l * z);
       beta_i = arma::reshape(beta_vec_i, nr, nc);
 
-      if (!bounds_ok(beta_i)) continue;  // early quick-reject
+      if (!bounds_ok(beta_i)) continue;
       if (!TestStationarity(beta_i)) continue;
 
       out[i] = beta_i;
@@ -1089,9 +1087,10 @@ Rcpp::List SimPhiN(const arma::uword& n, const arma::mat& phi,
   const arma::uword nr = phi.n_rows, nc = phi.n_cols;
   const arma::uword p = nr * nc;
 
-  if (vcov_phi_vec_l.n_rows != p || vcov_phi_vec_l.n_cols != p) {
-    Rcpp::stop("vcov_phi_vec_l must be p x p with p = nrow(phi) * ncol(phi).");
-  }
+  // if (vcov_phi_vec_l.n_rows != p || vcov_phi_vec_l.n_cols != p) {
+  //   Rcpp::stop("vcov_phi_vec_l must be p x p with p = nrow(phi) *
+  //   ncol(phi).");
+  // }
 
   // Bounds & masks
   arma::mat lb, ub;
@@ -1127,10 +1126,8 @@ Rcpp::List SimPhiN(const arma::uword& n, const arma::mat& phi,
 
   auto bounds_ok = [&](const arma::mat& x) -> bool {
     if (!bound) return true;
-    arma::umat low_violate =
-        (x < lb) % has_lb_el;  // check only where a finite lb exists
-    arma::umat high_violate =
-        (x > ub) % has_ub_el;  // check only where a finite ub exists
+    arma::umat low_violate = (x < lb) % has_lb_el;
+    arma::umat high_violate = (x > ub) % has_ub_el;
     return !(arma::any(arma::vectorise(low_violate)) ||
              arma::any(arma::vectorise(high_violate)));
   };
@@ -1149,12 +1146,12 @@ Rcpp::List SimPhiN(const arma::uword& n, const arma::mat& phi,
             "bounds or TestPhi().",
             i + 1);
       }
-      z.randn();                                   // N(0, I_p)
-      phi_vec_i = phi_vec + (vcov_phi_vec_l * z);  // mean + L * z
-      phi_i = arma::reshape(phi_vec_i, nr, nc);    // back to matrix
+      z.randn();
+      phi_vec_i = phi_vec + (vcov_phi_vec_l * z);
+      phi_i = arma::reshape(phi_vec_i, nr, nc);
 
-      if (!bounds_ok(phi_i)) continue;  // quick-reject on bounds
-      if (!TestPhi(phi_i)) continue;    // user-supplied validity check
+      if (!bounds_ok(phi_i)) continue;
+      if (!TestPhi(phi_i)) continue;
 
       output[i] = phi_i;
       break;
@@ -2079,7 +2076,7 @@ Rcpp::List SimSSMLinSDEIVary2(
 // [[Rcpp::export(.SolveLya)]]
 arma::mat SolveLya(const arma::mat A, const arma::mat Q) {
   arma::mat X;
-  arma::syl(X, A, A.t(), Q);
+  arma::sylvester(X, A, A.t(), Q);
   return ((X + X.t()) / 2);
 }
 // -----------------------------------------------------------------------------
@@ -2092,7 +2089,7 @@ arma::mat SolveLya(const arma::mat A, const arma::mat Q) {
 // [[Rcpp::export(.SolveSyl)]]
 arma::mat SolveSyl(const arma::mat A, const arma::mat B, const arma::mat C) {
   arma::mat X;
-  arma::syl(X, A, B, C);
+  arma::sylvester(X, A, B, C);
   return X;
 }
 // -----------------------------------------------------------------------------
