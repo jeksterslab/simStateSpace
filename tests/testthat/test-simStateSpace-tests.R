@@ -50,6 +50,35 @@ lapply(
         )
       }
     )
+    testthat::test_that(
+      paste(text, "Hurwitz"),
+      {
+        phi <- matrix(
+          data = c(
+            0.10, -0.40,
+            0.50, 0.20
+          ),
+          nrow = 2
+        )
+        testthat::skip_on_cran()
+        testthat::expect_true(
+          !TestPhiHurwitz(phi = phi)
+        )
+        phi <- matrix(
+          data = c(
+            -0.50, -0.20,
+            1.00, -0.30
+          ),
+          nrow = 2
+        )
+        testthat::expect_true(
+          TestPhiHurwitz(phi = phi)
+        )
+        testthat::expect_true(
+          TestPhiHurwitz(phi = phi, eps = 1e-12)
+        )
+      }
+    )
   },
   text = "test-simStateSpace-tests"
 )

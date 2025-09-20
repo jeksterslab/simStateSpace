@@ -32,6 +32,51 @@ lapply(
         )
       }
     )
+    testthat::test_that(
+      paste0(text, "errors"),
+      {
+        beta_lbound <- matrix(
+          data = NA,
+          nrow = 2,
+          ncol = 2
+        )
+        diag(beta_lbound) <- -1
+        testthat::skip_on_cran()
+        testthat::expect_error(
+          SimBetaN(
+            n = n,
+            beta = beta,
+            vcov_beta_vec_l = vcov_beta_vec_l,
+            beta_lbound = beta_lbound,
+            bound = TRUE
+          )
+        )
+        beta_ubound <- matrix(
+          data = NA,
+          nrow = 2,
+          ncol = 2
+        )
+        diag(beta_ubound) <- 1
+        testthat::skip_on_cran()
+        testthat::expect_error(
+          SimBetaN(
+            n = n,
+            beta = beta,
+            vcov_beta_vec_l = vcov_beta_vec_l,
+            beta_ubound = beta_ubound,
+            bound = TRUE
+          )
+        )
+        testthat::expect_error(
+          SimBetaN(
+            n = n,
+            beta = 5 * diag(3),
+            vcov_beta_vec_l = vcov_beta_vec_l,
+            max_iter = 1
+          )
+        )
+      }
+    )
     # coverage
     beta_ubound <- beta_lbound <- matrix(
       data = NA,
