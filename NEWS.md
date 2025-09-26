@@ -1,3 +1,9 @@
+# simStateSpace 1.2.12
+
+## Patch
+
+* Armadillo 15.0.x transition at CRAN.
+
 # simStateSpace 1.2.11
 
 ## Patch
