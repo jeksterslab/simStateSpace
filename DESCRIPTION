@@ -1,6 +1,6 @@
 Package: simStateSpace
 Title: Simulate Data from State Space Models
-Version: 1.2.11
+Version: 1.2.12
 Authors@R: 
     person(given = "Ivan Jacob Agaloos",
            family = "Pesigan",
