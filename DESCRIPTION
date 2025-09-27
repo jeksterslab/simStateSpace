@@ -20,12 +20,12 @@ License: GPL (>= 3)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 Depends: R (>= 3.5.0)
-LinkingTo: Rcpp, RcppArmadillo
+LinkingTo: Rcpp, RcppArmadillo (>= 15.0.2-2)
 Imports: Rcpp, stats
 Suggests: knitr, rmarkdown, testthat, expm
 RoxygenNote: 7.3.3.9000
 NeedsCompilation: yes
-Packaged: 2025-09-26 15:10:57 UTC; root
+Packaged: 2025-09-27 05:23:36 UTC; root
 Author: Ivan Jacob Agaloos Pesigan [aut, cre, cph] (ORCID:
     <https://orcid.org/0000-0003-4818-8420>)
 Maintainer: Ivan Jacob Agaloos Pesigan <r.jeksterslab@gmail.com>
