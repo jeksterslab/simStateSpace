@@ -23,7 +23,7 @@ Depends:
     R (>= 3.5.0)
 LinkingTo: 
     Rcpp,
-    RcppArmadillo
+    RcppArmadillo (>= 15.0.2-2)
 Imports: 
     Rcpp,
     stats
