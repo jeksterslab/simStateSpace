@@ -129,8 +129,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // SimBetaN
-Rcpp::List SimBetaN(const arma::uword& n, const arma::mat& beta, const arma::mat& vcov_beta_vec_l, Rcpp::Nullable<Rcpp::NumericMatrix> beta_lbound, Rcpp::Nullable<Rcpp::NumericMatrix> beta_ubound, const bool bound, const arma::uword max_iter);
-RcppExport SEXP _simStateSpace_SimBetaN(SEXP nSEXP, SEXP betaSEXP, SEXP vcov_beta_vec_lSEXP, SEXP beta_lboundSEXP, SEXP beta_uboundSEXP, SEXP boundSEXP, SEXP max_iterSEXP) {
+Rcpp::List SimBetaN(const arma::uword& n, const arma::mat& beta, const arma::mat& vcov_beta_vec_l, Rcpp::Nullable<Rcpp::NumericMatrix> beta_lbound, Rcpp::Nullable<Rcpp::NumericMatrix> beta_ubound, const bool bound, const arma::uword max_iter, const bool shrink, const double r_target, const double rho_trigger);
+RcppExport SEXP _simStateSpace_SimBetaN(SEXP nSEXP, SEXP betaSEXP, SEXP vcov_beta_vec_lSEXP, SEXP beta_lboundSEXP, SEXP beta_uboundSEXP, SEXP boundSEXP, SEXP max_iterSEXP, SEXP shrinkSEXP, SEXP r_targetSEXP, SEXP rho_triggerSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -141,7 +141,10 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::NumericMatrix> >::type beta_ubound(beta_uboundSEXP);
     Rcpp::traits::input_parameter< const bool >::type bound(boundSEXP);
     Rcpp::traits::input_parameter< const arma::uword >::type max_iter(max_iterSEXP);
-    rcpp_result_gen = Rcpp::wrap(SimBetaN(n, beta, vcov_beta_vec_l, beta_lbound, beta_ubound, bound, max_iter));
+    Rcpp::traits::input_parameter< const bool >::type shrink(shrinkSEXP);
+    Rcpp::traits::input_parameter< const double >::type r_target(r_targetSEXP);
+    Rcpp::traits::input_parameter< const double >::type rho_trigger(rho_triggerSEXP);
+    rcpp_result_gen = Rcpp::wrap(SimBetaN(n, beta, vcov_beta_vec_l, beta_lbound, beta_ubound, bound, max_iter, shrink, r_target, rho_trigger));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -664,7 +667,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_simStateSpace_ProjectToStability", (DL_FUNC) &_simStateSpace_ProjectToStability, 3},
     {"_simStateSpace_SimAlphaN", (DL_FUNC) &_simStateSpace_SimAlphaN, 3},
     {"_simStateSpace_SimBetaN2", (DL_FUNC) &_simStateSpace_SimBetaN2, 5},
-    {"_simStateSpace_SimBetaN", (DL_FUNC) &_simStateSpace_SimBetaN, 7},
+    {"_simStateSpace_SimBetaN", (DL_FUNC) &_simStateSpace_SimBetaN, 10},
     {"_simStateSpace_SimCovDiagN", (DL_FUNC) &_simStateSpace_SimCovDiagN, 3},
     {"_simStateSpace_SimCovN", (DL_FUNC) &_simStateSpace_SimCovN, 3},
     {"_simStateSpace_SimIotaN", (DL_FUNC) &_simStateSpace_SimIotaN, 3},

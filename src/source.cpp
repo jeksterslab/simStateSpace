@@ -558,9 +558,6 @@ Rcpp::List SimBetaN2(const arma::uword& n, const arma::mat& beta,
 #include <RcppArmadillo.h>
 // [[Rcpp::depends(RcppArmadillo)]]
 
-// Assumed to exist in your compile unit; keep your original implementation.
-// bool TestStationarity(const arma::mat& x);
-
 inline bool in_bounds_element(double x, double lb, double ub, bool has_lb,
                               bool has_ub) {
   // Treat non-finite bounds (NA/NaN/Inf) as "no bound" on that side
@@ -583,6 +580,26 @@ inline bool matrix_in_bounds(const arma::mat& x, const arma::mat* lb_ptr,
     }
   }
   return true;
+}
+
+inline double spectral_radius(const arma::mat& x) {
+  arma::cx_vec evals = arma::eig_gen(x);
+  arma::vec mags = arma::abs(evals);
+  return mags.max();
+}
+
+inline bool shrink_to_radius(arma::mat& x, const double r_target,
+                             const double rho_trigger) {
+  const double rho = spectral_radius(x);
+  if (!std::isfinite(rho)) return false;
+  if (rho >= rho_trigger && rho > 0.0) {
+    const double s = r_target / rho;  // s < 1 when rho > r_target
+    if (s < 1.0) {
+      x *= s;  // minimal scaling to meet r_target
+      return true;
+    }
+  }
+  return false;
 }
 
 //' Simulate Transition Matrices
@@ -610,6 +627,12 @@ inline bool matrix_in_bounds(const arma::mat& x, const arma::mat* lb_ptr,
 //' @param bound Logical;
 //'   if TRUE, resample until all elements respect bounds (NA bounds ignored).
 //' @param max_iter Safety cap on resampling attempts per draw.
+//' @param shrink Logical;
+//'   if TRUE, apply spectral shrinkage when `rho >= rho_trigger`.
+//' @param r_target Target spectral radius after shrinkage (e.g., 0.98).
+//' @param rho_trigger Shrink only if `rho >= rho_trigger`
+//'   (e.g., 1.0 to shrink only nonstationary draws;
+//'   use 0.97 to also shrink "near-unit" draws).
 //' @return Returns a list of random transition matrices.
 //'
 //' @examples
@@ -634,7 +657,9 @@ Rcpp::List SimBetaN(
     const arma::mat& vcov_beta_vec_l,
     Rcpp::Nullable<Rcpp::NumericMatrix> beta_lbound = R_NilValue,
     Rcpp::Nullable<Rcpp::NumericMatrix> beta_ubound = R_NilValue,
-    const bool bound = false, const arma::uword max_iter = 100000) {
+    const bool bound = false, const arma::uword max_iter = 100000,
+    const bool shrink = false, const double r_target = 0.97,
+    const double rho_trigger = 0.98) {
   const arma::uword nr = beta.n_rows, nc = beta.n_cols;
   const arma::uword p = nr * nc;
 
@@ -708,6 +733,12 @@ Rcpp::List SimBetaN(
       beta_i = arma::reshape(beta_vec_i, nr, nc);
 
       if (!bounds_ok(beta_i)) continue;
+
+      if (shrink) {
+        bool shrank = shrink_to_radius(beta_i, r_target, rho_trigger);
+        if (shrank && !bounds_ok(beta_i)) continue;
+      }
+
       if (!TestStationarity(beta_i)) continue;
 
       out[i] = beta_i;
