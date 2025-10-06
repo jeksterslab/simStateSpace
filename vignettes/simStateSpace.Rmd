@@ -5,11 +5,9 @@ output: rmarkdown::html_vignette
 bibliography: "vignettes.bib"
 csl: https://raw.githubusercontent.com/citation-style-language/styles/master/apa.csl
 nocite: |
-  @RCoreTeam-2024
-  @Shumway-Stoffer-2017
-  @Chow-Losardo-Park-etal-2023
-  @Uhlenbeck-Ornstein-1930
+  @RCoreTeam-2025
   @Chow-Ho-Hamaker-etal-2010
+  @Pesigan-Russell-Chow-2025a
 vignette: >
   %\VignetteIndexEntry{simStateSpace: Simulate Data from State Space Models}
   %\VignetteEngine{knitr::rmarkdown}
@@ -71,5 +69,9 @@ remotes::install_github("jeksterslab/simStateSpace")
 See
 [GitHub Pages](https://jeksterslab.github.io/simStateSpace)
 for package documentation.
+
+## Citation
+
+To cite `simStateSpace` in publications, please cite @Pesigan-Russell-Chow-2025a.
 
 ## References

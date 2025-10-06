@@ -102,7 +102,9 @@ See
 \href{https://jeksterslab.github.io/simStateSpace/index.html}{GitHub Pages}
 for package documentation.
 
-\nocite{RCoreTeam-2024}
+\nocite{RCoreTeam-2025}
+
+\nocite{Pesigan-Russell-Chow-2025a}
 
 \printbibliography
 

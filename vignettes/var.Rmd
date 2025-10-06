@@ -8,6 +8,7 @@ nocite: |
   @RCoreTeam-2024
   @Ou-Hunter-Chow-2019
   @Chow-Ho-Hamaker-etal-2010
+  @Pesigan-Russell-Chow-2025a
 output:
   rmarkdown::html_vignette:
     toc: true
@@ -410,8 +411,8 @@ results <- dynr::dynr.cook(
 #> 
 #> Doing end processing
 #> Successful trial
-#> Total Time: 36.1058 
-#> Backend Time: 36.09668
+#> Total Time: 35.6358 
+#> Backend Time: 35.62645
 ```
 
 ## Summary

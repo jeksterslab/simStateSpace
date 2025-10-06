@@ -58,6 +58,11 @@ remotes::install_github("jeksterslab/simStateSpace")
 See [GitHub Pages](https://jeksterslab.github.io/simStateSpace) for
 package documentation.
 
+## Citation
+
+To cite `simStateSpace` in publications, please cite Pesigan et al.
+(2025).
+
 ## References
 
 <div id="refs" class="references csl-bib-body hanging-indent"
@@ -73,9 +78,18 @@ Multidisciplinary Journal*, *17*(2), 303–332.
 
 </div>
 
-<div id="ref-RCoreTeam-2024" class="csl-entry">
+<div id="ref-Pesigan-Russell-Chow-2025a" class="csl-entry">
 
-R Core Team. (2024). *R: A language and environment for statistical
+Pesigan, I. J. A., Russell, M. A., & Chow, S.-M. (2025). Inferences and
+effect sizes for direct, indirect, and total effects in continuous-time
+mediation models. *Psychological Methods*.
+<https://doi.org/10.1037/met0000779>
+
+</div>
+
+<div id="ref-RCoreTeam-2025" class="csl-entry">
+
+R Core Team. (2025). *R: A language and environment for statistical
 computing*. R Foundation for Statistical Computing.
 <https://www.R-project.org/>
 

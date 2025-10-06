@@ -117,7 +117,9 @@
 % )
 %% end.rcode
 
-\nocite{RCoreTeam-2024}
+\nocite{RCoreTeam-2025}
+
+\nocite{Pesigan-Russell-Chow-2025a}
 
 \printbibliography
 

@@ -8,6 +8,7 @@ nocite: |
   @RCoreTeam-2024
   @Ou-Hunter-Chow-2019
   @Chow-Ho-Hamaker-etal-2010
+  @Pesigan-Russell-Chow-2025a
 output:
   rmarkdown::html_vignette:
     toc: true
