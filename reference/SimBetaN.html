@@ -57,7 +57,10 @@ using <code><a href="TestStationarity.html">TestStationarity()</a></code> with a
 <span>  beta_lbound <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  beta_ubound <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  bound <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  max_iter <span class="op">=</span> <span class="fl">100000L</span></span>
+<span>  max_iter <span class="op">=</span> <span class="fl">100000L</span>,</span>
+<span>  shrink <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  r_target <span class="op">=</span> <span class="fl">0.97</span>,</span>
+<span>  rho_trigger <span class="op">=</span> <span class="fl">0.98</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -99,6 +102,21 @@ if TRUE, resample until all elements respect bounds (NA bounds ignored).</p></dd
 
 <dt id="arg-max-iter">max_iter<a class="anchor" aria-label="anchor" href="#arg-max-iter"></a></dt>
 <dd><p>Safety cap on resampling attempts per draw.</p></dd>
+
+
+<dt id="arg-shrink">shrink<a class="anchor" aria-label="anchor" href="#arg-shrink"></a></dt>
+<dd><p>Logical;
+if TRUE, apply spectral shrinkage when <code>rho &gt;= rho_trigger</code>.</p></dd>
+
+
+<dt id="arg-r-target">r_target<a class="anchor" aria-label="anchor" href="#arg-r-target"></a></dt>
+<dd><p>Target spectral radius after shrinkage (e.g., 0.98).</p></dd>
+
+
+<dt id="arg-rho-trigger">rho_trigger<a class="anchor" aria-label="anchor" href="#arg-rho-trigger"></a></dt>
+<dd><p>Shrink only if <code>rho &gt;= rho_trigger</code>
+(e.g., 1.0 to shrink only nonstationary draws;
+use 0.97 to also shrink "near-unit" draws).</p></dd>
 
 </dl></div>
     <div class="section level2">
