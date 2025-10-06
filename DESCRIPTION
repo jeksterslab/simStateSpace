@@ -1,6 +1,6 @@
 Package: simStateSpace
 Title: Simulate Data from State Space Models
-Version: 1.2.12
+Version: 1.2.12.9000
 Authors@R: 
     person(given = "Ivan Jacob Agaloos",
            family = "Pesigan",
@@ -11,8 +11,8 @@ Description: Provides a streamlined and user-friendly framework
     for simulating data in state space models,
     particularly when the number of subjects/units (n) exceeds one,
     a scenario commonly encountered in social and behavioral sciences.
-    For an introduction to state space models in social and behavioral sciences,
-    refer to Chow, Ho, Hamaker, and Dolan (2010) <doi:10.1080/10705511003661553>.
+    This package was designed to generate data for the simulations
+    performed in Pesigan, Russell, and Chow (2025) <doi:10.1037/met0000779>.    
 URL: https://github.com/jeksterslab/simStateSpace, https://jeksterslab.github.io/simStateSpace/
 BugReports: https://github.com/jeksterslab/simStateSpace/issues
 License: GPL (>= 3)
@@ -31,5 +31,7 @@ Suggests:
     knitr,
     rmarkdown,
     testthat,
-    expm
+    expm,
+    dynr
+SystemRequirements: GNU GSL (>= 2.0)
 RoxygenNote: 7.3.3.9000

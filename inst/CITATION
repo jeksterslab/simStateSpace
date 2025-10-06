@@ -1,7 +1,7 @@
-year <- 2024
-author_text <- "Pesigan, I. J. A."
+year <- 2025
+author_text <- "Pesigan, I. J. A., Russell, M. A., & Chow, S.-M."
 pkg <- meta$Package
-title <- meta$Title
+title <- "Inferences and effect sizes for direct, indirect, and total effects in continuous-time mediation models"
 version <- meta$Version
 author <- c(
   person(
@@ -10,35 +10,45 @@ author <- c(
     role = c("aut", "cre", "cph"),
     email = "r.jeksterslab@gmail.com",
     comment = c(ORCID = "0000-0003-4818-8420")
+  ),
+  person(
+    given = "Michael A.",
+    family = "Russell",
+    role = "ctb",
+    email = "mar60@psu.edu",
+    comment = c(ORCID = "0000-0002-3956-604X")
+  ),
+  person(
+    given = "Sy-Miin",
+    family = "Chow",
+    role = "ctb",
+    email = "quc16@psu.edu",
+    comment = c(ORCID = "0000-0003-1938-027X")
   )
 )
 note <- sprintf(
   "R package version %s",
   meta$Version
 )
-
-# url <- paste0(
-#   "https://CRAN.R-project.org/package=",
-#   pkg
-# )
-
 url <- paste0(
   "https://github.com/jeksterslab/",
   pkg
 )
 
 bibentry(
-  bibtype = "Manual",
+  bibtype = "Article",
   author = author,
-  title = paste0(pkg, ":", " ", title),
+  title = title,
   year = year,
+  doi = "10.1037/met0000779",
+  journal = "Psychological Methods",
   note = note,
   textVersion = paste0(
     author_text, " ",
     "(", year, ")", ".", " ",
-    pkg, ":", " ", title, ".", " ",
-    note, ".", " ",
-    url
+    title, ".", " ",
+    "Psychological Methods", ".", " ",
+    "https://doi.org/10.1037/met0000779", " "
   ),
   header = paste(
     "To cite",

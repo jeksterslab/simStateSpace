@@ -27,6 +27,7 @@ knitr::opts_chunk$set(
 ```
 
 <!-- badges: start -->
+[![DOI](https://zenodo.org/badge/DOI/10.1037/met0000779.svg)](https://doi.org/10.1037/met0000779)
 [![CRAN Status](https://www.r-pkg.org/badges/version/simStateSpace)](https://cran.r-project.org/package=simStateSpace)
 [![R-Universe Status](https://jeksterslab.r-universe.dev/badges/simStateSpace)](https://jeksterslab.r-universe.dev)
 [![Make Project](https://github.com/jeksterslab/simStateSpace/actions/workflows/make.yml/badge.svg)](https://github.com/jeksterslab/simStateSpace/actions/workflows/make.yml)
@@ -44,11 +45,11 @@ knitr::opts_chunk$set(
 
 Provides a streamlined and user-friendly framework
 for simulating data in state space models,
-particularly when the number of subjects/units ($n$) exceeds one,
+particularly when the number of subjects/units (n) exceeds one,
 a scenario commonly encountered in social and behavioral sciences.
-For an introduction to state space models in social and behavioral sciences,
-refer to Chow, Ho, Hamaker, and Dolan (2010: https://doi.org/10.1080/10705511003661553).
-
+This package was designed to generate data for the simulations
+performed in Pesigan, Russell, and Chow (2025: https://doi.org/10.1037/met0000779).  
+    
 ## Installation
 
 You can install the CRAN release of `simStateSpace` with:
