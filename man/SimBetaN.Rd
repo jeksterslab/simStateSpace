@@ -12,7 +12,10 @@ SimBetaN(
   beta_lbound = NULL,
   beta_ubound = NULL,
   bound = FALSE,
-  max_iter = 100000L
+  max_iter = 100000L,
+  shrink = FALSE,
+  r_target = 0.97,
+  rho_trigger = 0.98
 )
 }
 \arguments{
@@ -37,6 +40,15 @@ Use NA for no upper bound.}
 if TRUE, resample until all elements respect bounds (NA bounds ignored).}
 
 \item{max_iter}{Safety cap on resampling attempts per draw.}
+
+\item{shrink}{Logical;
+if TRUE, apply spectral shrinkage when \code{rho >= rho_trigger}.}
+
+\item{r_target}{Target spectral radius after shrinkage (e.g., 0.98).}
+
+\item{rho_trigger}{Shrink only if \code{rho >= rho_trigger}
+(e.g., 1.0 to shrink only nonstationary draws;
+use 0.97 to also shrink "near-unit" draws).}
 }
 \value{
 Returns a list of random transition matrices.
