@@ -13,7 +13,7 @@ using TestPhi()."><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/kate
 
     <a class="navbar-brand me-2" href="../index.html">simStateSpace</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.12.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.13</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -54,6 +54,8 @@ using <code><a href="TestPhi.html">TestPhi()</a></code>.</p>
 <span>  <span class="va">n</span>,</span>
 <span>  <span class="va">phi</span>,</span>
 <span>  <span class="va">vcov_phi_vec_l</span>,</span>
+<span>  a_target <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  auto_ubound <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  phi_lbound <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  phi_ubound <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  bound <span class="op">=</span> <span class="cn">FALSE</span>,</span>
@@ -80,6 +82,19 @@ The drift matrix (\(\boldsymbol{\Phi}\)).</p></dd>
 Cholesky factorization (<code>t(chol(vcov_phi_vec))</code>)
 of the sampling variance-covariance matrix of
 \(\mathrm{vec} \left( \boldsymbol{\Phi} \right)\).</p></dd>
+
+
+<dt id="arg-a-target">a_target<a class="anchor" aria-label="anchor" href="#arg-a-target"></a></dt>
+<dd><p>Numeric scalar specifying the stability threshold
+for the real part of the eigenvalues.
+The default <code>0.0</code> corresponds to the imaginary axis;
+values less than <code>0.0</code> enforce a stricter stability margin.</p></dd>
+
+
+<dt id="arg-auto-ubound">auto_ubound<a class="anchor" aria-label="anchor" href="#arg-auto-ubound"></a></dt>
+<dd><p>Numeric scalar specifying the upper bound
+for the diagonal elements of \(\boldsymbol{\Phi}\).
+Default is <code>0.0</code>, requiring all diagonal values to be \(\leq 0\).</p></dd>
 
 
 <dt id="arg-phi-lbound">phi_lbound<a class="anchor" aria-label="anchor" href="#arg-phi-lbound"></a></dt>

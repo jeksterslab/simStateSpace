@@ -13,7 +13,7 @@ the system is considered stable."><link rel="stylesheet" href="https://cdn.jsdel
 
     <a class="navbar-brand me-2" href="../index.html">simStateSpace</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.12.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.13</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -50,7 +50,7 @@ the system is considered stable.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">TestStability</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">TestStability</span><span class="op">(</span><span class="va">x</span>, a_target <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -59,6 +59,13 @@ the system is considered stable.</p>
 
 <dl><dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
 <dd><p>Numeric matrix.</p></dd>
+
+
+<dt id="arg-a-target">a_target<a class="anchor" aria-label="anchor" href="#arg-a-target"></a></dt>
+<dd><p>Numeric scalar specifying the stability threshold
+for the real part of the eigenvalues.
+The default <code>0.0</code> corresponds to the imaginary axis;
+values less than <code>0.0</code> enforce a stricter stability margin.</p></dd>
 
 </dl></div>
     <div class="section level2">
