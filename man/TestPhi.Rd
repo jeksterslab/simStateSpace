@@ -4,11 +4,20 @@
 \alias{TestPhi}
 \title{Test the Drift Matrix}
 \usage{
-TestPhi(phi)
+TestPhi(phi, a_target = 0, auto_ubound = 0)
 }
 \arguments{
 \item{phi}{Numeric matrix.
 The drift matrix (\eqn{\boldsymbol{\Phi}}).}
+
+\item{a_target}{Numeric scalar specifying the stability threshold
+for the real part of the eigenvalues.
+The default \code{0.0} corresponds to the imaginary axis;
+values less than \code{0.0} enforce a stricter stability margin.}
+
+\item{auto_ubound}{Numeric scalar specifying the upper bound
+for the diagonal elements of \eqn{\boldsymbol{\Phi}}.
+Default is \code{0.0}, requiring all diagonal values to be \eqn{\leq 0}.}
 }
 \description{
 Both have to be true for the function to return \code{TRUE}.

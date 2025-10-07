@@ -9,13 +9,11 @@ SimBetaN(
   n,
   beta,
   vcov_beta_vec_l,
+  r_target = 1,
   beta_lbound = NULL,
   beta_ubound = NULL,
   bound = FALSE,
-  max_iter = 100000L,
-  shrink = FALSE,
-  r_target = 0.97,
-  rho_trigger = 0.98
+  max_iter = 100000L
 )
 }
 \arguments{
@@ -30,6 +28,9 @@ Cholesky factorization (\code{t(chol(vcov_beta_vec))})
 of the sampling variance-covariance matrix of
 \eqn{\mathrm{vec} \left( \boldsymbol{\beta} \right)}.}
 
+\item{r_target}{Numeric scalar specifying the stationarity threshold.
+Values less than 1 indicate stricter stationarity criteria.}
+
 \item{beta_lbound}{Optional numeric matrix of same dim as \code{beta}.
 Use NA for no lower bound.}
 
@@ -40,15 +41,6 @@ Use NA for no upper bound.}
 if TRUE, resample until all elements respect bounds (NA bounds ignored).}
 
 \item{max_iter}{Safety cap on resampling attempts per draw.}
-
-\item{shrink}{Logical;
-if TRUE, apply spectral shrinkage when \code{rho >= rho_trigger}.}
-
-\item{r_target}{Target spectral radius after shrinkage (e.g., 0.98).}
-
-\item{rho_trigger}{Shrink only if \code{rho >= rho_trigger}
-(e.g., 1.0 to shrink only nonstationary draws;
-use 0.97 to also shrink "near-unit" draws).}
 }
 \value{
 Returns a list of random transition matrices.

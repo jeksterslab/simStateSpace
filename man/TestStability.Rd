@@ -4,10 +4,15 @@
 \alias{TestStability}
 \title{Test Stability}
 \usage{
-TestStability(x)
+TestStability(x, a_target = 0)
 }
 \arguments{
 \item{x}{Numeric matrix.}
+
+\item{a_target}{Numeric scalar specifying the stability threshold
+for the real part of the eigenvalues.
+The default \code{0.0} corresponds to the imaginary axis;
+values less than \code{0.0} enforce a stricter stability margin.}
 }
 \description{
 The function computes the eigenvalues of the input matrix \code{x}.
