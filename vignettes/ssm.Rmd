@@ -1,0 +1,627 @@
+---
+title: "The State Space Model"
+author: "Ivan Jacob Agaloos Pesigan"
+date: "2025-10-07"
+bibliography: "vignettes.bib"
+csl: https://raw.githubusercontent.com/citation-style-language/styles/master/apa.csl
+nocite: |
+  @RCoreTeam-2024
+  @Ou-Hunter-Chow-2019
+  @Chow-Ho-Hamaker-etal-2010
+  @Pesigan-Russell-Chow-2025a
+output:
+  rmarkdown::html_vignette:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{The State Space Model}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+
+
+
+
+## Model
+
+The measurement model is given by
+\begin{equation}
+  \mathbf{y}_{i, t}
+  =
+  \boldsymbol{\nu}
+  +
+  \boldsymbol{\Lambda}
+  \boldsymbol{\eta}_{i, t}
+  +
+  \boldsymbol{\varepsilon}_{i, t},
+  \quad
+  \mathrm{with}
+  \quad
+  \boldsymbol{\varepsilon}_{i, t}
+  \sim
+  \mathcal{N}
+  \left(
+  \mathbf{0},
+  \boldsymbol{\Theta}
+  \right)
+\end{equation}
+where
+$\mathbf{y}_{i, t}$,
+$\boldsymbol{\eta}_{i, t}$,
+and
+$\boldsymbol{\varepsilon}_{i, t}$
+are random variables
+and
+$\boldsymbol{\nu}$,
+$\boldsymbol{\Lambda}$,
+and
+$\boldsymbol{\Theta}$
+are model parameters.
+$\mathbf{y}_{i, t}$
+represents a vector of observed random variables,
+$\boldsymbol{\eta}_{i, t}$
+a vector of latent random variables,
+and
+$\boldsymbol{\varepsilon}_{i, t}$
+a vector of random measurement errors,
+at time $t$ and individual $i$.
+$\boldsymbol{\nu}$
+denotes a vector of intercepts,
+$\boldsymbol{\Lambda}$
+a matrix of factor loadings,
+and
+$\boldsymbol{\Theta}$
+the covariance matrix of
+$\boldsymbol{\varepsilon}$.
+
+An alternative representation of the measurement error
+is given by
+\begin{equation}
+  \boldsymbol{\varepsilon}_{i, t}
+  =
+  \boldsymbol{\Theta}^{\frac{1}{2}}
+  \mathbf{z}_{i, t},
+  \quad
+  \mathrm{with}
+  \quad
+  \mathbf{z}_{i, t}
+  \sim
+  \mathcal{N}
+  \left(
+  \mathbf{0},
+  \mathbf{I}
+  \right)
+\end{equation}
+where
+$\mathbf{z}_{i, t}$ is a vector of
+independent standard normal random variables and
+$\left( \boldsymbol{\Theta}^{\frac{1}{2}} \right) \left( \boldsymbol{\Theta}^{\frac{1}{2}} \right)^{\prime} = \boldsymbol{\Theta}$ .
+
+The dynamic structure is given by
+\begin{equation}
+  \boldsymbol{\eta}_{i, t}
+  =
+  \boldsymbol{\alpha}
+  +
+  \boldsymbol{\beta}
+  \boldsymbol{\eta}_{i, t - 1}
+  +
+  \boldsymbol{\zeta}_{i, t},
+  \quad
+  \mathrm{with}
+  \quad
+  \boldsymbol{\zeta}_{i, t}
+  \sim
+  \mathcal{N}
+  \left(
+  \mathbf{0},
+  \boldsymbol{\Psi}
+  \right)
+\end{equation}
+where
+$\boldsymbol{\eta}_{i, t}$,
+$\boldsymbol{\eta}_{i, t - 1}$,
+and
+$\boldsymbol{\zeta}_{i, t}$
+are random variables,
+and
+$\boldsymbol{\alpha}$,
+$\boldsymbol{\beta}$,
+and
+$\boldsymbol{\Psi}$
+are model parameters.
+Here,
+$\boldsymbol{\eta}_{i, t}$
+is a vector of latent variables
+at time $t$ and individual $i$,
+$\boldsymbol{\eta}_{i, t - 1}$
+represents a vector of latent variables
+at time $t - 1$ and individual $i$,
+and
+$\boldsymbol{\zeta}_{i, t}$
+represents a vector of dynamic noise
+at time $t$ and individual $i$.
+$\boldsymbol{\alpha}$
+denotes a vector of intercepts,
+$\boldsymbol{\beta}$
+a matrix of autoregression
+and cross regression coefficients,
+and
+$\boldsymbol{\Psi}$
+the covariance matrix of
+$\boldsymbol{\zeta}_{i, t}$.
+
+An alternative representation of the dynamic noise
+is given by
+\begin{equation}
+  \boldsymbol{\zeta}_{i, t}
+  =
+  \boldsymbol{\Psi}^{\frac{1}{2}}
+  \mathbf{z}_{i, t},
+  \quad
+  \mathrm{with}
+  \quad
+  \mathbf{z}_{i, t}
+  \sim
+  \mathcal{N}
+  \left(
+  \mathbf{0},
+  \mathbf{I}
+  \right)
+\end{equation}
+where
+$\left( \boldsymbol{\Psi}^{\frac{1}{2}} \right) \left( \boldsymbol{\Psi}^{\frac{1}{2}} \right)^{\prime} = \boldsymbol{\Psi}$ .
+
+## Data Generation
+
+### Notation
+
+Let $t = 500$ be the number of time points and $n = 100$ be the number of individuals.
+
+Let the measurement model intecept vector $\boldsymbol{\nu}$ be given by
+
+\begin{equation}
+\boldsymbol{\nu}
+=
+\left(
+\begin{array}{c}
+  0 \\
+  0 \\
+  0 \\
+\end{array}
+\right) .
+\end{equation}
+
+Let the factor loadings matrix $\boldsymbol{\Lambda}$ be given by
+
+\begin{equation}
+\boldsymbol{\Lambda}
+=
+\left(
+\begin{array}{ccc}
+  1 & 0 & 0 \\
+  0 & 1 & 0 \\
+  0 & 0 & 1 \\
+\end{array}
+\right) .
+\end{equation}
+
+Let the measurement error covariance matrix $\boldsymbol{\Theta}$ be given by
+
+\begin{equation}
+\boldsymbol{\Theta}
+=
+\left(
+\begin{array}{ccc}
+  0.2 & 0 & 0 \\
+  0 & 0.2 & 0 \\
+  0 & 0 & 0.2 \\
+\end{array}
+\right) .
+\end{equation}
+
+Let the initial condition
+$\boldsymbol{\eta}_{0}$
+be given by
+
+\begin{equation}
+\boldsymbol{\eta}_{0} \sim \mathcal{N} \left( \boldsymbol{\mu}_{\boldsymbol{\eta} \mid 0}, \boldsymbol{\Sigma}_{\boldsymbol{\eta} \mid 0} \right)
+\end{equation}
+
+\begin{equation}
+\boldsymbol{\mu}_{\boldsymbol{\eta} \mid 0}
+=
+\left(
+\begin{array}{c}
+  0 \\
+  0 \\
+  0 \\
+\end{array}
+\right)
+\end{equation}
+
+\begin{equation}
+\boldsymbol{\Sigma}_{\boldsymbol{\eta} \mid 0}
+=
+\left(
+\begin{array}{ccc}
+  0.1960784 & 0.1183232 & 0.0298539 \\
+  0.1183232 & 0.3437711 & 0.1381855 \\
+  0.0298539 & 0.1381855 & 0.2663828 \\
+\end{array}
+\right) .
+\end{equation}
+
+Let the constant vector $\boldsymbol{\alpha}$ be given by
+
+\begin{equation}
+\boldsymbol{\alpha}
+=
+\left(
+\begin{array}{c}
+  0 \\
+  0 \\
+  0 \\
+\end{array}
+\right) .
+\end{equation}
+
+Let the transition matrix $\boldsymbol{\beta}$ be given by
+
+\begin{equation}
+\boldsymbol{\beta}
+=
+\left(
+\begin{array}{ccc}
+  0.7 & 0 & 0 \\
+  0.5 & 0.6 & 0 \\
+  -0.1 & 0.4 & 0.5 \\
+\end{array}
+\right) .
+\end{equation}
+
+Let the dynamic process noise $\boldsymbol{\Psi}$ be given by
+
+\begin{equation}
+\boldsymbol{\Psi}
+=
+\left(
+\begin{array}{ccc}
+  0.1 & 0 & 0 \\
+  0 & 0.1 & 0 \\
+  0 & 0 & 0.1 \\
+\end{array}
+\right) .
+\end{equation}
+
+### R Function Arguments
+
+
+``` r
+n
+#> [1] 100
+time
+#> [1] 500
+mu0
+#> [1] 0 0 0
+sigma0
+#>            [,1]      [,2]       [,3]
+#> [1,] 0.19607843 0.1183232 0.02985385
+#> [2,] 0.11832319 0.3437711 0.13818551
+#> [3,] 0.02985385 0.1381855 0.26638284
+sigma0_l # sigma0_l <- t(chol(sigma0))
+#>            [,1]      [,2]     [,3]
+#> [1,] 0.44280744 0.0000000 0.000000
+#> [2,] 0.26721139 0.5218900 0.000000
+#> [3,] 0.06741949 0.2302597 0.456966
+alpha
+#> [1] 0 0 0
+beta
+#>      [,1] [,2] [,3]
+#> [1,]  0.7  0.0  0.0
+#> [2,]  0.5  0.6  0.0
+#> [3,] -0.1  0.4  0.5
+psi
+#>      [,1] [,2] [,3]
+#> [1,]  0.1  0.0  0.0
+#> [2,]  0.0  0.1  0.0
+#> [3,]  0.0  0.0  0.1
+psi_l # psi_l <- t(chol(psi))
+#>           [,1]      [,2]      [,3]
+#> [1,] 0.3162278 0.0000000 0.0000000
+#> [2,] 0.0000000 0.3162278 0.0000000
+#> [3,] 0.0000000 0.0000000 0.3162278
+nu
+#> [1] 0 0 0
+lambda
+#>      [,1] [,2] [,3]
+#> [1,]    1    0    0
+#> [2,]    0    1    0
+#> [3,]    0    0    1
+theta
+#>      [,1] [,2] [,3]
+#> [1,]  0.2  0.0  0.0
+#> [2,]  0.0  0.2  0.0
+#> [3,]  0.0  0.0  0.2
+theta_l # theta_l <- t(chol(theta))
+#>           [,1]      [,2]      [,3]
+#> [1,] 0.4472136 0.0000000 0.0000000
+#> [2,] 0.0000000 0.4472136 0.0000000
+#> [3,] 0.0000000 0.0000000 0.4472136
+```
+
+### Visualizing the Dynamics Without Process Noise (n = 5 with Different Initial Condition)
+
+<img src="fig-vignettes-ssm-no-error-ssm-1.png" width="3300" /><img src="fig-vignettes-ssm-no-error-ssm-2.png" width="3300" /><img src="fig-vignettes-ssm-no-error-ssm-3.png" width="3300" />
+
+### Using the `SimSSMFixed` Function from the `simStateSpace` Package to Simulate Data
+
+
+``` r
+library(simStateSpace)
+sim <- SimSSMFixed(
+  n = n,
+  time = time,
+  mu0 = mu0,
+  sigma0_l = sigma0_l,
+  alpha = alpha,
+  beta = beta,
+  psi_l = psi_l,
+  nu = nu,
+  lambda = lambda,
+  theta_l = theta_l,
+  type = 0
+)
+data <- as.data.frame(sim)
+head(data)
+#>   id time          y1         y2         y3
+#> 1  1    0 -0.66908807 0.16178434  0.2955693
+#> 2  1    1 -0.23021811 0.22873073 -0.2540210
+#> 3  1    2  0.93689389 0.09496693 -0.9267506
+#> 4  1    3  0.04445794 0.67521289 -0.1792168
+#> 5  1    4  0.15413707 0.82591676  0.8976536
+#> 6  1    5 -0.09943698 0.67154173  0.2853507
+summary(data)
+#>        id              time             y1                  y2           
+#>  Min.   :  1.00   Min.   :  0.0   Min.   :-2.840534   Min.   :-2.671337  
+#>  1st Qu.: 25.75   1st Qu.:124.8   1st Qu.:-0.421845   1st Qu.:-0.498760  
+#>  Median : 50.50   Median :249.5   Median :-0.001813   Median : 0.004066  
+#>  Mean   : 50.50   Mean   :249.5   Mean   :-0.000370   Mean   : 0.001287  
+#>  3rd Qu.: 75.25   3rd Qu.:374.2   3rd Qu.: 0.421838   3rd Qu.: 0.498712  
+#>  Max.   :100.00   Max.   :499.0   Max.   : 2.602905   Max.   : 3.274871  
+#>        y3           
+#>  Min.   :-2.675596  
+#>  1st Qu.:-0.452601  
+#>  Median : 0.001744  
+#>  Mean   : 0.003782  
+#>  3rd Qu.: 0.462944  
+#>  Max.   : 3.016221
+plot(sim)
+```
+
+<img src="fig-vignettes-ssm-error-ssm-1.png" width="3300" /><img src="fig-vignettes-ssm-error-ssm-2.png" width="3300" /><img src="fig-vignettes-ssm-error-ssm-3.png" width="3300" />
+
+## Model Fitting
+
+### Prepare Data
+
+
+``` r
+dynr_data <- dynr::dynr.data(
+  data = data,
+  id = "id",
+  time = "time",
+  observed = c("y1", "y2", "y3")
+)
+```
+
+### Prepare Initial Condition
+
+
+``` r
+dynr_initial <- dynr::prep.initial(
+  values.inistate = mu0,
+  params.inistate = c("mu0_1_1", "mu0_2_1", "mu0_3_1"),
+  values.inicov = sigma0,
+  params.inicov = matrix(
+    data = c(
+      "sigma0_1_1", "sigma0_2_1", "sigma0_3_1",
+      "sigma0_2_1", "sigma0_2_2", "sigma0_3_2",
+      "sigma0_3_1", "sigma0_3_2", "sigma0_3_3"
+    ),
+    nrow = 3
+  )
+)
+```
+
+### Prepare Measurement Model
+
+
+``` r
+dynr_measurement <- dynr::prep.measurement(
+  values.load = diag(3),
+  params.load = matrix(data = "fixed", nrow = 3, ncol = 3),
+  state.names = c("eta_1", "eta_2", "eta_3"),
+  obs.names = c("y1", "y2", "y3")
+)
+```
+
+### Prepare Dynamic Process
+
+
+``` r
+dynr_dynamics <- dynr::prep.formulaDynamics(
+  formula = list(
+    eta_1 ~ alpha_1_1 * 1 + beta_1_1 * eta_1 + beta_1_2 * eta_2 + beta_1_3 * eta_3,
+    eta_2 ~ alpha_2_1 * 1 + beta_2_1 * eta_1 + beta_2_2 * eta_2 + beta_2_3 * eta_3,
+    eta_3 ~ alpha_3_1 * 1 + beta_3_1 * eta_1 + beta_3_2 * eta_2 + beta_3_3 * eta_3
+  ),
+  startval = c(
+    alpha_1_1 = alpha[1], alpha_2_1 = alpha[2], alpha_3_1 = alpha[3],
+    beta_1_1 = beta[1, 1], beta_1_2 = beta[1, 2], beta_1_3 = beta[1, 3],
+    beta_2_1 = beta[2, 1], beta_2_2 = beta[2, 2], beta_2_3 = beta[2, 3],
+    beta_3_1 = beta[3, 1], beta_3_2 = beta[3, 2], beta_3_3 = beta[3, 3]
+  ),
+  isContinuousTime = FALSE
+)
+```
+
+### Prepare Process Noise
+
+
+``` r
+dynr_noise <- dynr::prep.noise(
+  values.latent = psi,
+  params.latent = matrix(
+    data = c(
+      "psi_1_1", "psi_2_1", "psi_3_1",
+      "psi_2_1", "psi_2_2", "psi_3_2",
+      "psi_3_1", "psi_3_2", "psi_3_3"
+    ),
+    nrow = 3
+  ),
+  values.observed = theta,
+  params.observed = matrix(
+    data = c(
+      "theta_1_1", "fixed", "fixed",
+      "fixed", "theta_2_2", "fixed",
+      "fixed", "fixed", "theta_3_3"
+    ),
+    nrow = 3
+  )
+)
+```
+
+### Prepare the Model
+
+
+``` r
+model <- dynr::dynr.model(
+  data = dynr_data,
+  initial = dynr_initial,
+  measurement = dynr_measurement,
+  dynamics = dynr_dynamics,
+  noise = dynr_noise,
+  outfile = "ssm.c"
+)
+```
+
+<img src="fig-vignettes-ssm-model-ssm-1.png" width="3300" />
+
+### Fit the Model
+
+
+``` r
+results <- dynr::dynr.cook(
+  model,
+  debug_flag = TRUE,
+  verbose = FALSE
+)
+#> [1] "Get ready!!!!"
+#> using C compiler: ‘gcc (Ubuntu 13.3.0-6ubuntu2~24.04) 13.3.0’
+#> Optimization function called.
+#> Starting Hessian calculation ...
+#> Finished Hessian calculation.
+#> Original exit flag:  3 
+#> Modified exit flag:  3 
+#> Optimization terminated successfully: ftol_rel or ftol_abs was reached. 
+#> Original fitted parameters:  -7.482091e-05 0.0009771779 0.001185204 0.6978014 
+#> 0.006914791 -0.007611952 0.5060786 0.5923553 0.003602732 -0.08436625 0.3818816 
+#> 0.5098833 -2.303145 -0.006457767 -0.006052534 -2.261517 0.008481604 -2.381506 
+#> -1.605916 -1.6393 -1.571531 -0.01046285 -0.1363822 0.07357103 -1.927046 
+#> 0.4206043 0.1606324 -1.003452 0.3994318 -1.785151 
+#> 
+#> Transformed fitted parameters:  -7.482091e-05 0.0009771779 0.001185204 
+#> 0.6978014 0.006914791 -0.007611952 0.5060786 0.5923553 0.003602732 -0.08436625 
+#> 0.3818816 0.5098833 0.09994399 -0.0006454149 -0.0006049144 0.1041965 
+#> 0.0008876247 0.0924225 0.2007056 0.1941158 0.2077269 -0.01046285 -0.1363822 
+#> 0.07357103 0.1455775 0.06123054 0.02338447 0.3923654 0.1562719 0.2300193 
+#> 
+#> Doing end processing
+#> Successful trial
+#> Total Time: 47.78483 
+#> Backend Time: 47.77447
+```
+
+## Summary
+
+
+``` r
+summary(results)
+#> Coefficients:
+#>              Estimate Std. Error t value   ci.lower   ci.upper Pr(>|t|)    
+#> alpha_1_1  -7.482e-05  1.542e-03  -0.049 -3.096e-03  2.947e-03   0.4806    
+#> alpha_2_1   9.772e-04  1.942e-03   0.503 -2.828e-03  4.783e-03   0.3074    
+#> alpha_3_1   1.185e-03  1.858e-03   0.638 -2.457e-03  4.828e-03   0.2618    
+#> beta_1_1    6.978e-01  1.378e-02  50.644  6.708e-01  7.248e-01   <2e-16 ***
+#> beta_1_2    6.915e-03  8.563e-03   0.808 -9.868e-03  2.370e-02   0.2097    
+#> beta_1_3   -7.612e-03  6.424e-03  -1.185 -2.020e-02  4.979e-03   0.1180    
+#> beta_2_1    5.061e-01  1.473e-02  34.362  4.772e-01  5.349e-01   <2e-16 ***
+#> beta_2_2    5.924e-01  1.149e-02  51.567  5.698e-01  6.149e-01   <2e-16 ***
+#> beta_2_3    3.603e-03  8.271e-03   0.436 -1.261e-02  1.981e-02   0.3316    
+#> beta_3_1   -8.437e-02  1.027e-02  -8.215 -1.045e-01 -6.424e-02   <2e-16 ***
+#> beta_3_2    3.819e-01  1.025e-02  37.273  3.618e-01  4.020e-01   <2e-16 ***
+#> beta_3_3    5.099e-01  9.995e-03  51.015  4.903e-01  5.295e-01   <2e-16 ***
+#> psi_1_1     9.994e-02  4.469e-03  22.365  9.119e-02  1.087e-01   <2e-16 ***
+#> psi_2_1    -6.454e-04  1.578e-03  -0.409 -3.739e-03  2.448e-03   0.3413    
+#> psi_3_1    -6.049e-04  1.458e-03  -0.415 -3.462e-03  2.253e-03   0.3391    
+#> psi_2_2     1.042e-01  3.753e-03  27.767  9.684e-02  1.116e-01   <2e-16 ***
+#> psi_3_2     8.876e-04  1.462e-03   0.607 -1.977e-03  3.753e-03   0.2718    
+#> psi_3_3     9.242e-02  4.085e-03  22.626  8.442e-02  1.004e-01   <2e-16 ***
+#> theta_1_1   2.007e-01  3.747e-03  53.562  1.934e-01  2.080e-01   <2e-16 ***
+#> theta_2_2   1.941e-01  3.659e-03  53.052  1.869e-01  2.013e-01   <2e-16 ***
+#> theta_3_3   2.077e-01  4.181e-03  49.678  1.995e-01  2.159e-01   <2e-16 ***
+#> mu0_1_1    -1.046e-02  5.176e-02  -0.202 -1.119e-01  9.098e-02   0.4199    
+#> mu0_2_1    -1.364e-01  7.315e-02  -1.864 -2.798e-01  6.999e-03   0.0311 *  
+#> mu0_3_1     7.357e-02  6.367e-02   1.155 -5.123e-02  1.984e-01   0.1240    
+#> sigma0_1_1  1.456e-01  3.749e-02   3.883  7.209e-02  2.191e-01   0.0001 ***
+#> sigma0_2_1  6.123e-02  3.805e-02   1.609 -1.336e-02  1.358e-01   0.0538 .  
+#> sigma0_3_1  2.338e-02  3.212e-02   0.728 -3.957e-02  8.634e-02   0.2333    
+#> sigma0_2_2  3.924e-01  7.628e-02   5.144  2.429e-01  5.419e-01   <2e-16 ***
+#> sigma0_3_2  1.563e-01  4.900e-02   3.190  6.024e-02  2.523e-01   0.0007 ***
+#> sigma0_3_3  2.300e-01  5.756e-02   3.996  1.172e-01  3.428e-01   <2e-16 ***
+#> ---
+#> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+#> 
+#> -2 log-likelihood value at convergence = 265103.99
+#> AIC = 265163.99
+#> BIC = 265428.59
+```
+
+
+
+### Parameter Estimates
+
+
+``` r
+alpha_hat
+#> [1] -7.482091e-05  9.771779e-04  1.185204e-03
+beta_hat
+#>             [,1]        [,2]         [,3]
+#> [1,]  0.69780139 0.006914791 -0.007611952
+#> [2,]  0.50607855 0.592355283  0.003602732
+#> [3,] -0.08436625 0.381881593  0.509883330
+psi_hat
+#>               [,1]          [,2]          [,3]
+#> [1,]  0.0999439866 -0.0006454149 -0.0006049144
+#> [2,] -0.0006454149  0.1041965235  0.0008876247
+#> [3,] -0.0006049144  0.0008876247  0.0924224996
+theta_hat
+#>           [,1]      [,2]      [,3]
+#> [1,] 0.2007056 0.0000000 0.0000000
+#> [2,] 0.0000000 0.1941158 0.0000000
+#> [3,] 0.0000000 0.0000000 0.2077269
+mu0_hat
+#> [1] -0.01046285 -0.13638224  0.07357103
+sigma0_hat
+#>            [,1]       [,2]       [,3]
+#> [1,] 0.14557753 0.06123054 0.02338447
+#> [2,] 0.06123054 0.39236542 0.15627195
+#> [3,] 0.02338447 0.15627195 0.23001929
+```
+
+## References
+
+
+
+
