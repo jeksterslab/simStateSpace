@@ -6,11 +6,12 @@
 #include <RcppArmadillo.h>
 // [[Rcpp::depends(RcppArmadillo)]]
 
-bool TestPhi(const arma::mat& phi);
+bool TestPhi(const arma::mat& phi, const double a_target = 0.0,
+             const double auto_ubound = 0.0);
 
-bool TestStability(const arma::mat& x);
+bool TestStability(const arma::mat& x, const double a_target = 0.0);
 
-bool TestStationarity(const arma::mat& x);
+bool TestStationarity(const arma::mat& x, const double r_target = 1.0);
 
 double SpectralRadius(const arma::mat& x);
 
