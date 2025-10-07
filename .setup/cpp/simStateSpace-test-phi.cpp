@@ -18,6 +18,13 @@
 //'
 //' @param phi Numeric matrix.
 //'   The drift matrix (\eqn{\boldsymbol{\Phi}}).
+//' @param a_target Numeric scalar specifying the stability threshold
+//'   for the real part of the eigenvalues.
+//'   The default `0.0` corresponds to the imaginary axis;
+//'   values less than `0.0` enforce a stricter stability margin.
+//' @param auto_ubound Numeric scalar specifying the upper bound
+//'   for the diagonal elements of \eqn{\boldsymbol{\Phi}}.
+//'   Default is `0.0`, requiring all diagonal values to be \eqn{\leq 0}.
 //'
 //' @examples
 //' phi <- matrix(
@@ -34,8 +41,10 @@
 //' @keywords simStateSpace test linsde
 //' @export
 // [[Rcpp::export]]
-bool TestPhi(const arma::mat& phi) {
+bool TestPhi(const arma::mat& phi, const double a_target = 0.0,
+             const double auto_ubound = 0.0) {
   arma::vec phi_diag = phi.diag(0);
   arma::cx_vec eigenvalues_phi = arma::eig_gen(phi);
-  return arma::all(arma::real(eigenvalues_phi) < 0) && arma::all(phi_diag <= 0);
+  return arma::all(arma::real(eigenvalues_phi) < a_target) &&
+         arma::all(phi_diag <= auto_ubound);
 }

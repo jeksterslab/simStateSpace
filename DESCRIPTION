@@ -1,6 +1,6 @@
 Package: simStateSpace
 Title: Simulate Data from State Space Models
-Version: 1.2.12.9000
+Version: 1.2.13
 Authors@R: c(
     person(given = "Ivan Jacob Agaloos",
            family = "Pesigan",
@@ -33,7 +33,7 @@ Roxygen: list(markdown = TRUE)
 Depends:
     R (>= 3.5.0)
 LinkingTo: 
-    Rcpp,
+    Rcpp (>= 1.0.12),
     RcppArmadillo (>= 15.0.2-2)
 Imports: 
     Rcpp,
@@ -44,5 +44,5 @@ Suggests:
     testthat,
     expm,
     dynr
-SystemRequirements: GNU GSL (>= 2.0)
+SystemRequirements: GNU GSL (>= 2.5)
 RoxygenNote: 7.3.3.9000

@@ -30,26 +30,6 @@ inline bool matrix_in_bounds(const arma::mat& x, const arma::mat* lb_ptr,
   return true;
 }
 
-inline double spectral_radius(const arma::mat& x) {
-  arma::cx_vec evals = arma::eig_gen(x);
-  arma::vec mags = arma::abs(evals);
-  return mags.max();
-}
-
-inline bool shrink_to_radius(arma::mat& x, const double r_target,
-                             const double rho_trigger) {
-  const double rho = spectral_radius(x);
-  if (!std::isfinite(rho)) return false;
-  if (rho >= rho_trigger && rho > 0.0) {
-    const double s = r_target / rho;  // s < 1 when rho > r_target
-    if (s < 1.0) {
-      x *= s;  // minimal scaling to meet r_target
-      return true;
-    }
-  }
-  return false;
-}
-
 //' Simulate Transition Matrices
 //' from the Multivariate Normal Distribution
 //'
@@ -68,6 +48,8 @@ inline bool shrink_to_radius(arma::mat& x, const double r_target,
 //'   Cholesky factorization (`t(chol(vcov_beta_vec))`)
 //'   of the sampling variance-covariance matrix of
 //'   \eqn{\mathrm{vec} \left( \boldsymbol{\beta} \right)}.
+//' @param r_target Numeric scalar specifying the stationarity threshold.
+//'   Values less than 1 indicate stricter stationarity criteria.
 //' @param beta_lbound Optional numeric matrix of same dim as `beta`.
 //'   Use NA for no lower bound.
 //' @param beta_ubound Optional numeric matrix of same dim as `beta`.
@@ -75,12 +57,6 @@ inline bool shrink_to_radius(arma::mat& x, const double r_target,
 //' @param bound Logical;
 //'   if TRUE, resample until all elements respect bounds (NA bounds ignored).
 //' @param max_iter Safety cap on resampling attempts per draw.
-//' @param shrink Logical;
-//'   if TRUE, apply spectral shrinkage when `rho >= rho_trigger`.
-//' @param r_target Target spectral radius after shrinkage (e.g., 0.98).
-//' @param rho_trigger Shrink only if `rho >= rho_trigger`
-//'   (e.g., 1.0 to shrink only nonstationary draws;
-//'   use 0.97 to also shrink "near-unit" draws).
 //' @return Returns a list of random transition matrices.
 //'
 //' @examples
@@ -102,12 +78,10 @@ inline bool shrink_to_radius(arma::mat& x, const double r_target,
 // [[Rcpp::export]]
 Rcpp::List SimBetaN(
     const arma::uword& n, const arma::mat& beta,
-    const arma::mat& vcov_beta_vec_l,
+    const arma::mat& vcov_beta_vec_l, const double r_target = 1.0,
     Rcpp::Nullable<Rcpp::NumericMatrix> beta_lbound = R_NilValue,
     Rcpp::Nullable<Rcpp::NumericMatrix> beta_ubound = R_NilValue,
-    const bool bound = false, const arma::uword max_iter = 100000,
-    const bool shrink = false, const double r_target = 0.97,
-    const double rho_trigger = 0.98) {
+    const bool bound = false, const arma::uword max_iter = 100000) {
   const arma::uword nr = beta.n_rows, nc = beta.n_cols;
   const arma::uword p = nr * nc;
 
@@ -182,12 +156,7 @@ Rcpp::List SimBetaN(
 
       if (!bounds_ok(beta_i)) continue;
 
-      if (shrink) {
-        bool shrank = shrink_to_radius(beta_i, r_target, rho_trigger);
-        if (shrank && !bounds_ok(beta_i)) continue;
-      }
-
-      if (!TestStationarity(beta_i)) continue;
+      if (!TestStationarity(beta_i, r_target)) continue;
 
       out[i] = beta_i;
       break;

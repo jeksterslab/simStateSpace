@@ -189,23 +189,23 @@
 #' @keywords simStateSpace transformation linsde
 #' @export
 LinSDE2SSM <- function(iota, phi, sigma_l, delta_t) {
-    .Call(`_simStateSpace_LinSDE2SSM`, iota, phi, sigma_l, delta_t)
+    .Call('_simStateSpace_LinSDE2SSM', PACKAGE = 'simStateSpace', iota, phi, sigma_l, delta_t)
 }
 
 .LinSDECovEta <- function(phi, sigma) {
-    .Call(`_simStateSpace_LinSDECovEta`, phi, sigma)
+    .Call('_simStateSpace_LinSDECovEta', PACKAGE = 'simStateSpace', phi, sigma)
 }
 
 .LinSDECovY <- function(lambda, theta, cov_eta) {
-    .Call(`_simStateSpace_LinSDECovY`, lambda, theta, cov_eta)
+    .Call('_simStateSpace_LinSDECovY', PACKAGE = 'simStateSpace', lambda, theta, cov_eta)
 }
 
 .LinSDEMeanEta <- function(phi, iota) {
-    .Call(`_simStateSpace_LinSDEMeanEta`, phi, iota)
+    .Call('_simStateSpace_LinSDEMeanEta', PACKAGE = 'simStateSpace', phi, iota)
 }
 
 .LinSDEMeanY <- function(nu, lambda, mean_eta) {
-    .Call(`_simStateSpace_LinSDEMeanY`, nu, lambda, mean_eta)
+    .Call('_simStateSpace_LinSDEMeanY', PACKAGE = 'simStateSpace', nu, lambda, mean_eta)
 }
 
 #' Project Matrix to Hurwitz Stability
@@ -261,7 +261,7 @@ LinSDE2SSM <- function(iota, phi, sigma_l, delta_t) {
 #' @keywords simStateSpace stability linsde
 #' @export
 ProjectToHurwitz <- function(x, margin = 1e-3) {
-    .Call(`_simStateSpace_ProjectToHurwitz`, x, margin)
+    .Call('_simStateSpace_ProjectToHurwitz', PACKAGE = 'simStateSpace', x, margin)
 }
 
 #' Project Matrix to Stability
@@ -320,7 +320,7 @@ ProjectToHurwitz <- function(x, margin = 1e-3) {
 #' @keywords simStateSpace stability ssm
 #' @export
 ProjectToStability <- function(x, margin = 0.98, tol = 1e-12) {
-    .Call(`_simStateSpace_ProjectToStability`, x, margin, tol)
+    .Call('_simStateSpace_ProjectToStability', PACKAGE = 'simStateSpace', x, margin, tol)
 }
 
 #' Simulate Intercept Vectors
@@ -353,7 +353,7 @@ ProjectToStability <- function(x, margin = 0.98, tol = 1e-12) {
 #' @keywords simStateSpace ssm
 #' @export
 SimAlphaN <- function(n, alpha, vcov_alpha_l) {
-    .Call(`_simStateSpace_SimAlphaN`, n, alpha, vcov_alpha_l)
+    .Call('_simStateSpace_SimAlphaN', PACKAGE = 'simStateSpace', n, alpha, vcov_alpha_l)
 }
 
 #' Simulate Transition Matrices
@@ -400,7 +400,7 @@ SimAlphaN <- function(n, alpha, vcov_alpha_l) {
 #' @keywords simStateSpace ssm
 #' @export
 SimBetaN2 <- function(n, beta, vcov_beta_vec_l, margin = 0.98, tol = 1e-12) {
-    .Call(`_simStateSpace_SimBetaN2`, n, beta, vcov_beta_vec_l, margin, tol)
+    .Call('_simStateSpace_SimBetaN2', PACKAGE = 'simStateSpace', n, beta, vcov_beta_vec_l, margin, tol)
 }
 
 #' Simulate Transition Matrices
@@ -421,6 +421,8 @@ SimBetaN2 <- function(n, beta, vcov_beta_vec_l, margin = 0.98, tol = 1e-12) {
 #'   Cholesky factorization (`t(chol(vcov_beta_vec))`)
 #'   of the sampling variance-covariance matrix of
 #'   \eqn{\mathrm{vec} \left( \boldsymbol{\beta} \right)}.
+#' @param r_target Numeric scalar specifying the stationarity threshold.
+#'   Values less than 1 indicate stricter stationarity criteria.
 #' @param beta_lbound Optional numeric matrix of same dim as `beta`.
 #'   Use NA for no lower bound.
 #' @param beta_ubound Optional numeric matrix of same dim as `beta`.
@@ -428,12 +430,6 @@ SimBetaN2 <- function(n, beta, vcov_beta_vec_l, margin = 0.98, tol = 1e-12) {
 #' @param bound Logical;
 #'   if TRUE, resample until all elements respect bounds (NA bounds ignored).
 #' @param max_iter Safety cap on resampling attempts per draw.
-#' @param shrink Logical;
-#'   if TRUE, apply spectral shrinkage when `rho >= rho_trigger`.
-#' @param r_target Target spectral radius after shrinkage (e.g., 0.98).
-#' @param rho_trigger Shrink only if `rho >= rho_trigger`
-#'   (e.g., 1.0 to shrink only nonstationary draws;
-#'   use 0.97 to also shrink "near-unit" draws).
 #' @return Returns a list of random transition matrices.
 #'
 #' @examples
@@ -452,8 +448,8 @@ SimBetaN2 <- function(n, beta, vcov_beta_vec_l, margin = 0.98, tol = 1e-12) {
 #' @family Simulation of State Space Models Data Functions
 #' @keywords simStateSpace ssm
 #' @export
-SimBetaN <- function(n, beta, vcov_beta_vec_l, beta_lbound = NULL, beta_ubound = NULL, bound = FALSE, max_iter = 100000L, shrink = FALSE, r_target = 0.97, rho_trigger = 0.98) {
-    .Call(`_simStateSpace_SimBetaN`, n, beta, vcov_beta_vec_l, beta_lbound, beta_ubound, bound, max_iter, shrink, r_target, rho_trigger)
+SimBetaN <- function(n, beta, vcov_beta_vec_l, r_target = 1.0, beta_lbound = NULL, beta_ubound = NULL, bound = FALSE, max_iter = 100000L) {
+    .Call('_simStateSpace_SimBetaN', PACKAGE = 'simStateSpace', n, beta, vcov_beta_vec_l, r_target, beta_lbound, beta_ubound, bound, max_iter)
 }
 
 #' Simulate Diagonal Covariance Matrices
@@ -491,7 +487,7 @@ SimBetaN <- function(n, beta, vcov_beta_vec_l, beta_lbound = NULL, beta_ubound =
 #' @keywords simStateSpace ssm
 #' @export
 SimCovDiagN <- function(n, sigma_diag, vcov_sigma_diag_l) {
-    .Call(`_simStateSpace_SimCovDiagN`, n, sigma_diag, vcov_sigma_diag_l)
+    .Call('_simStateSpace_SimCovDiagN', PACKAGE = 'simStateSpace', n, sigma_diag, vcov_sigma_diag_l)
 }
 
 #' Simulate Covariance Matrices
@@ -540,7 +536,7 @@ SimCovDiagN <- function(n, sigma_diag, vcov_sigma_diag_l) {
 #' @keywords simStateSpace ssm
 #' @export
 SimCovN <- function(n, sigma, vcov_sigma_vech_l) {
-    .Call(`_simStateSpace_SimCovN`, n, sigma, vcov_sigma_vech_l)
+    .Call('_simStateSpace_SimCovN', PACKAGE = 'simStateSpace', n, sigma, vcov_sigma_vech_l)
 }
 
 #' Simulate Intercept Vectors
@@ -573,7 +569,7 @@ SimCovN <- function(n, sigma, vcov_sigma_vech_l) {
 #' @keywords simStateSpace ssm
 #' @export
 SimIotaN <- function(n, iota, vcov_iota_l) {
-    .Call(`_simStateSpace_SimIotaN`, n, iota, vcov_iota_l)
+    .Call('_simStateSpace_SimIotaN', PACKAGE = 'simStateSpace', n, iota, vcov_iota_l)
 }
 
 #' Simulate Intercept Vectors
@@ -606,7 +602,7 @@ SimIotaN <- function(n, iota, vcov_iota_l) {
 #' @keywords simStateSpace ssm
 #' @export
 SimNuN <- function(n, nu, vcov_nu_l) {
-    .Call(`_simStateSpace_SimNuN`, n, nu, vcov_nu_l)
+    .Call('_simStateSpace_SimNuN', PACKAGE = 'simStateSpace', n, nu, vcov_nu_l)
 }
 
 #' Simulate Random Drift Matrices
@@ -650,7 +646,7 @@ SimNuN <- function(n, nu, vcov_nu_l) {
 #' @keywords simStateSpace linsde
 #' @export
 SimPhiN2 <- function(n, phi, vcov_phi_vec_l, margin = 1e-3) {
-    .Call(`_simStateSpace_SimPhiN2`, n, phi, vcov_phi_vec_l, margin)
+    .Call('_simStateSpace_SimPhiN2', PACKAGE = 'simStateSpace', n, phi, vcov_phi_vec_l, margin)
 }
 
 #' Simulate Random Drift Matrices
@@ -671,6 +667,13 @@ SimPhiN2 <- function(n, phi, vcov_phi_vec_l, margin = 1e-3) {
 #'   Cholesky factorization (`t(chol(vcov_phi_vec))`)
 #'   of the sampling variance-covariance matrix of
 #'   \eqn{\mathrm{vec} \left( \boldsymbol{\Phi} \right)}.
+#' @param a_target Numeric scalar specifying the stability threshold
+#'   for the real part of the eigenvalues.
+#'   The default `0.0` corresponds to the imaginary axis;
+#'   values less than `0.0` enforce a stricter stability margin.
+#' @param auto_ubound Numeric scalar specifying the upper bound
+#'   for the diagonal elements of \eqn{\boldsymbol{\Phi}}.
+#'   Default is `0.0`, requiring all diagonal values to be \eqn{\leq 0}.
 #' @param phi_lbound Optional numeric matrix of same dim as `phi`.
 #'   Use NA for no lower bound.
 #' @param phi_ubound Optional numeric matrix of same dim as `phi`.
@@ -696,68 +699,68 @@ SimPhiN2 <- function(n, phi, vcov_phi_vec_l, margin = 1e-3) {
 #' @family Simulation of State Space Models Data Functions
 #' @keywords simStateSpace linsde
 #' @export
-SimPhiN <- function(n, phi, vcov_phi_vec_l, phi_lbound = NULL, phi_ubound = NULL, bound = FALSE, max_iter = 100000L) {
-    .Call(`_simStateSpace_SimPhiN`, n, phi, vcov_phi_vec_l, phi_lbound, phi_ubound, bound, max_iter)
+SimPhiN <- function(n, phi, vcov_phi_vec_l, a_target = 0.0, auto_ubound = 0.0, phi_lbound = NULL, phi_ubound = NULL, bound = FALSE, max_iter = 100000L) {
+    .Call('_simStateSpace_SimPhiN', PACKAGE = 'simStateSpace', n, phi, vcov_phi_vec_l, a_target, auto_ubound, phi_lbound, phi_ubound, bound, max_iter)
 }
 
 .SimSSMFixed0 <- function(n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l, nu, lambda, theta_l) {
-    .Call(`_simStateSpace_SimSSMFixed0`, n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l, nu, lambda, theta_l)
+    .Call('_simStateSpace_SimSSMFixed0', PACKAGE = 'simStateSpace', n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l, nu, lambda, theta_l)
 }
 
 .SimSSMFixed1 <- function(n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l, nu, lambda, theta_l, x, gamma) {
-    .Call(`_simStateSpace_SimSSMFixed1`, n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l, nu, lambda, theta_l, x, gamma)
+    .Call('_simStateSpace_SimSSMFixed1', PACKAGE = 'simStateSpace', n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l, nu, lambda, theta_l, x, gamma)
 }
 
 .SimSSMFixed2 <- function(n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l, nu, lambda, theta_l, x, gamma, kappa) {
-    .Call(`_simStateSpace_SimSSMFixed2`, n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l, nu, lambda, theta_l, x, gamma, kappa)
+    .Call('_simStateSpace_SimSSMFixed2', PACKAGE = 'simStateSpace', n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l, nu, lambda, theta_l, x, gamma, kappa)
 }
 
 .SimSSMIVary0 <- function(n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l, nu, lambda, theta_l) {
-    .Call(`_simStateSpace_SimSSMIVary0`, n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l, nu, lambda, theta_l)
+    .Call('_simStateSpace_SimSSMIVary0', PACKAGE = 'simStateSpace', n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l, nu, lambda, theta_l)
 }
 
 .SimSSMIVary1 <- function(n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l, nu, lambda, theta_l, x, gamma) {
-    .Call(`_simStateSpace_SimSSMIVary1`, n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l, nu, lambda, theta_l, x, gamma)
+    .Call('_simStateSpace_SimSSMIVary1', PACKAGE = 'simStateSpace', n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l, nu, lambda, theta_l, x, gamma)
 }
 
 .SimSSMIVary2 <- function(n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l, nu, lambda, theta_l, x, gamma, kappa) {
-    .Call(`_simStateSpace_SimSSMIVary2`, n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l, nu, lambda, theta_l, x, gamma, kappa)
+    .Call('_simStateSpace_SimSSMIVary2', PACKAGE = 'simStateSpace', n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l, nu, lambda, theta_l, x, gamma, kappa)
 }
 
 .SimSSMLatFixed0 <- function(n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l) {
-    .Call(`_simStateSpace_SimSSMLatFixed0`, n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l)
+    .Call('_simStateSpace_SimSSMLatFixed0', PACKAGE = 'simStateSpace', n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l)
 }
 
 .SimSSMLatFixed1 <- function(n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l, x, gamma) {
-    .Call(`_simStateSpace_SimSSMLatFixed1`, n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l, x, gamma)
+    .Call('_simStateSpace_SimSSMLatFixed1', PACKAGE = 'simStateSpace', n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l, x, gamma)
 }
 
 .SimSSMLatIVary0 <- function(n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l) {
-    .Call(`_simStateSpace_SimSSMLatIVary0`, n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l)
+    .Call('_simStateSpace_SimSSMLatIVary0', PACKAGE = 'simStateSpace', n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l)
 }
 
 .SimSSMLatIVary1 <- function(n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l, x, gamma) {
-    .Call(`_simStateSpace_SimSSMLatIVary1`, n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l, x, gamma)
+    .Call('_simStateSpace_SimSSMLatIVary1', PACKAGE = 'simStateSpace', n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l, x, gamma)
 }
 
 .SimSSMLinSDEIVary0 <- function(n, time, delta_t, mu0, sigma0_l, iota, phi, sigma_l, nu, lambda, theta_l, ou = FALSE) {
-    .Call(`_simStateSpace_SimSSMLinSDEIVary0`, n, time, delta_t, mu0, sigma0_l, iota, phi, sigma_l, nu, lambda, theta_l, ou)
+    .Call('_simStateSpace_SimSSMLinSDEIVary0', PACKAGE = 'simStateSpace', n, time, delta_t, mu0, sigma0_l, iota, phi, sigma_l, nu, lambda, theta_l, ou)
 }
 
 .SimSSMLinSDEIVary1 <- function(n, time, delta_t, mu0, sigma0_l, iota, phi, sigma_l, nu, lambda, theta_l, x, gamma, ou = FALSE) {
-    .Call(`_simStateSpace_SimSSMLinSDEIVary1`, n, time, delta_t, mu0, sigma0_l, iota, phi, sigma_l, nu, lambda, theta_l, x, gamma, ou)
+    .Call('_simStateSpace_SimSSMLinSDEIVary1', PACKAGE = 'simStateSpace', n, time, delta_t, mu0, sigma0_l, iota, phi, sigma_l, nu, lambda, theta_l, x, gamma, ou)
 }
 
 .SimSSMLinSDEIVary2 <- function(n, time, delta_t, mu0, sigma0_l, iota, phi, sigma_l, nu, lambda, theta_l, x, gamma, kappa, ou = FALSE) {
-    .Call(`_simStateSpace_SimSSMLinSDEIVary2`, n, time, delta_t, mu0, sigma0_l, iota, phi, sigma_l, nu, lambda, theta_l, x, gamma, kappa, ou)
+    .Call('_simStateSpace_SimSSMLinSDEIVary2', PACKAGE = 'simStateSpace', n, time, delta_t, mu0, sigma0_l, iota, phi, sigma_l, nu, lambda, theta_l, x, gamma, kappa, ou)
 }
 
 .SolveLya <- function(A, Q) {
-    .Call(`_simStateSpace_SolveLya`, A, Q)
+    .Call('_simStateSpace_SolveLya', PACKAGE = 'simStateSpace', A, Q)
 }
 
 .SolveSyl <- function(A, B, C) {
-    .Call(`_simStateSpace_SolveSyl`, A, B, C)
+    .Call('_simStateSpace_SolveSyl', PACKAGE = 'simStateSpace', A, B, C)
 }
 
 #' Spectral Abscissa
@@ -796,7 +799,7 @@ SimPhiN <- function(n, phi, vcov_phi_vec_l, phi_lbound = NULL, phi_ubound = NULL
 #' @keywords simStateSpace stability linsde
 #' @export
 SpectralAbscissa <- function(x) {
-    .Call(`_simStateSpace_SpectralAbscissa`, x)
+    .Call('_simStateSpace_SpectralAbscissa', PACKAGE = 'simStateSpace', x)
 }
 
 #' Spectral Radius
@@ -839,23 +842,23 @@ SpectralAbscissa <- function(x) {
 #' @keywords simStateSpace stability ssm
 #' @export
 SpectralRadius <- function(x) {
-    .Call(`_simStateSpace_SpectralRadius`, x)
+    .Call('_simStateSpace_SpectralRadius', PACKAGE = 'simStateSpace', x)
 }
 
 .SSMCovEta <- function(beta, psi) {
-    .Call(`_simStateSpace_SSMCovEta`, beta, psi)
+    .Call('_simStateSpace_SSMCovEta', PACKAGE = 'simStateSpace', beta, psi)
 }
 
 .SSMCovY <- function(lambda, theta, cov_eta) {
-    .Call(`_simStateSpace_SSMCovY`, lambda, theta, cov_eta)
+    .Call('_simStateSpace_SSMCovY', PACKAGE = 'simStateSpace', lambda, theta, cov_eta)
 }
 
 .SSMMeanEta <- function(beta, alpha) {
-    .Call(`_simStateSpace_SSMMeanEta`, beta, alpha)
+    .Call('_simStateSpace_SSMMeanEta', PACKAGE = 'simStateSpace', beta, alpha)
 }
 
 .SSMMeanY <- function(nu, lambda, mean_eta) {
-    .Call(`_simStateSpace_SSMMeanY`, nu, lambda, mean_eta)
+    .Call('_simStateSpace_SSMMeanY', PACKAGE = 'simStateSpace', nu, lambda, mean_eta)
 }
 
 #' Test Hurwitz Stability of a Drift Matrix
@@ -901,7 +904,7 @@ SpectralRadius <- function(x) {
 #' @keywords simStateSpace test linsde
 #' @export
 TestPhiHurwitz <- function(phi, eps = 0.0) {
-    .Call(`_simStateSpace_TestPhiHurwitz`, phi, eps)
+    .Call('_simStateSpace_TestPhiHurwitz', PACKAGE = 'simStateSpace', phi, eps)
 }
 
 #' Test the Drift Matrix
@@ -916,6 +919,13 @@ TestPhiHurwitz <- function(phi, eps = 0.0) {
 #'
 #' @param phi Numeric matrix.
 #'   The drift matrix (\eqn{\boldsymbol{\Phi}}).
+#' @param a_target Numeric scalar specifying the stability threshold
+#'   for the real part of the eigenvalues.
+#'   The default `0.0` corresponds to the imaginary axis;
+#'   values less than `0.0` enforce a stricter stability margin.
+#' @param auto_ubound Numeric scalar specifying the upper bound
+#'   for the diagonal elements of \eqn{\boldsymbol{\Phi}}.
+#'   Default is `0.0`, requiring all diagonal values to be \eqn{\leq 0}.
 #'
 #' @examples
 #' phi <- matrix(
@@ -931,8 +941,8 @@ TestPhiHurwitz <- function(phi, eps = 0.0) {
 #' @family Simulation of State Space Models Data Functions
 #' @keywords simStateSpace test linsde
 #' @export
-TestPhi <- function(phi) {
-    .Call(`_simStateSpace_TestPhi`, phi)
+TestPhi <- function(phi, a_target = 0.0, auto_ubound = 0.0) {
+    .Call('_simStateSpace_TestPhi', PACKAGE = 'simStateSpace', phi, a_target, auto_ubound)
 }
 
 #' Test Stability
@@ -945,6 +955,10 @@ TestPhi <- function(phi) {
 #' @author Ivan Jacob Agaloos Pesigan
 #'
 #' @param x Numeric matrix.
+#' @param a_target Numeric scalar specifying the stability threshold
+#'   for the real part of the eigenvalues.
+#'   The default `0.0` corresponds to the imaginary axis;
+#'   values less than `0.0` enforce a stricter stability margin.
 #'
 #' @examples
 #' x <- matrix(
@@ -960,8 +974,8 @@ TestPhi <- function(phi) {
 #' @family Simulation of State Space Models Data Functions
 #' @keywords simStateSpace test linsde
 #' @export
-TestStability <- function(x) {
-    .Call(`_simStateSpace_TestStability`, x)
+TestStability <- function(x, a_target = 0.0) {
+    .Call('_simStateSpace_TestStability', PACKAGE = 'simStateSpace', x, a_target)
 }
 
 #' Test Stationarity
@@ -974,6 +988,8 @@ TestStability <- function(x) {
 #' @author Ivan Jacob Agaloos Pesigan
 #'
 #' @param x Numeric matrix.
+#' @param r_target Numeric scalar specifying the stationarity threshold.
+#'   Values less than 1 indicate stricter stationarity criteria.
 #'
 #' @examples
 #' x <- matrix(
@@ -991,7 +1007,7 @@ TestStability <- function(x) {
 #' @family Simulation of State Space Models Data Functions
 #' @keywords simStateSpace test ssm
 #' @export
-TestStationarity <- function(x) {
-    .Call(`_simStateSpace_TestStationarity`, x)
+TestStationarity <- function(x, r_target = 1.0) {
+    .Call('_simStateSpace_TestStationarity', PACKAGE = 'simStateSpace', x, r_target)
 }
 

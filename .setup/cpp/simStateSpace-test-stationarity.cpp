@@ -16,6 +16,8 @@
 //' @author Ivan Jacob Agaloos Pesigan
 //'
 //' @param x Numeric matrix.
+//' @param r_target Numeric scalar specifying the stationarity threshold.
+//'   Values less than 1 indicate stricter stationarity criteria.
 //'
 //' @examples
 //' x <- matrix(
@@ -34,7 +36,7 @@
 //' @keywords simStateSpace test ssm
 //' @export
 // [[Rcpp::export]]
-bool TestStationarity(const arma::mat& x) {
+bool TestStationarity(const arma::mat& x, const double r_target = 1.0) {
   arma::cx_vec eigenvalues = arma::eig_gen(x);
-  return arma::all(arma::abs(eigenvalues) < 1.0);
+  return arma::all(arma::abs(eigenvalues) < r_target);
 }
