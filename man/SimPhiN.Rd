@@ -9,7 +9,7 @@ SimPhiN(
   n,
   phi,
   vcov_phi_vec_l,
-  a_target = 0,
+  margin = 0,
   auto_ubound = 0,
   phi_lbound = NULL,
   phi_ubound = NULL,
@@ -29,7 +29,7 @@ Cholesky factorization (\code{t(chol(vcov_phi_vec))})
 of the sampling variance-covariance matrix of
 \eqn{\mathrm{vec} \left( \boldsymbol{\Phi} \right)}.}
 
-\item{a_target}{Numeric scalar specifying the stability threshold
+\item{margin}{Numeric scalar specifying the stability threshold
 for the real part of the eigenvalues.
 The default \code{0.0} corresponds to the imaginary axis;
 values less than \code{0.0} enforce a stricter stability margin.}

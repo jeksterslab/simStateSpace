@@ -421,7 +421,7 @@ SimBetaN2 <- function(n, beta, vcov_beta_vec_l, margin = 0.98, tol = 1e-12) {
 #'   Cholesky factorization (`t(chol(vcov_beta_vec))`)
 #'   of the sampling variance-covariance matrix of
 #'   \eqn{\mathrm{vec} \left( \boldsymbol{\beta} \right)}.
-#' @param r_target Numeric scalar specifying the stationarity threshold.
+#' @param margin Numeric scalar specifying the stationarity threshold.
 #'   Values less than 1 indicate stricter stationarity criteria.
 #' @param beta_lbound Optional numeric matrix of same dim as `beta`.
 #'   Use NA for no lower bound.
@@ -448,8 +448,8 @@ SimBetaN2 <- function(n, beta, vcov_beta_vec_l, margin = 0.98, tol = 1e-12) {
 #' @family Simulation of State Space Models Data Functions
 #' @keywords simStateSpace ssm
 #' @export
-SimBetaN <- function(n, beta, vcov_beta_vec_l, r_target = 1.0, beta_lbound = NULL, beta_ubound = NULL, bound = FALSE, max_iter = 100000L) {
-    .Call(`_simStateSpace_SimBetaN`, n, beta, vcov_beta_vec_l, r_target, beta_lbound, beta_ubound, bound, max_iter)
+SimBetaN <- function(n, beta, vcov_beta_vec_l, margin = 1.0, beta_lbound = NULL, beta_ubound = NULL, bound = FALSE, max_iter = 100000L) {
+    .Call(`_simStateSpace_SimBetaN`, n, beta, vcov_beta_vec_l, margin, beta_lbound, beta_ubound, bound, max_iter)
 }
 
 #' Simulate Diagonal Covariance Matrices
@@ -667,7 +667,7 @@ SimPhiN2 <- function(n, phi, vcov_phi_vec_l, margin = 1e-3) {
 #'   Cholesky factorization (`t(chol(vcov_phi_vec))`)
 #'   of the sampling variance-covariance matrix of
 #'   \eqn{\mathrm{vec} \left( \boldsymbol{\Phi} \right)}.
-#' @param a_target Numeric scalar specifying the stability threshold
+#' @param margin Numeric scalar specifying the stability threshold
 #'   for the real part of the eigenvalues.
 #'   The default `0.0` corresponds to the imaginary axis;
 #'   values less than `0.0` enforce a stricter stability margin.
@@ -699,8 +699,8 @@ SimPhiN2 <- function(n, phi, vcov_phi_vec_l, margin = 1e-3) {
 #' @family Simulation of State Space Models Data Functions
 #' @keywords simStateSpace linsde
 #' @export
-SimPhiN <- function(n, phi, vcov_phi_vec_l, a_target = 0.0, auto_ubound = 0.0, phi_lbound = NULL, phi_ubound = NULL, bound = FALSE, max_iter = 100000L) {
-    .Call(`_simStateSpace_SimPhiN`, n, phi, vcov_phi_vec_l, a_target, auto_ubound, phi_lbound, phi_ubound, bound, max_iter)
+SimPhiN <- function(n, phi, vcov_phi_vec_l, margin = 0.0, auto_ubound = 0.0, phi_lbound = NULL, phi_ubound = NULL, bound = FALSE, max_iter = 100000L) {
+    .Call(`_simStateSpace_SimPhiN`, n, phi, vcov_phi_vec_l, margin, auto_ubound, phi_lbound, phi_ubound, bound, max_iter)
 }
 
 .SimSSMFixed0 <- function(n, time, delta_t, mu0, sigma0_l, alpha, beta, psi_l, nu, lambda, theta_l) {
@@ -919,7 +919,7 @@ TestPhiHurwitz <- function(phi, eps = 0.0) {
 #'
 #' @param phi Numeric matrix.
 #'   The drift matrix (\eqn{\boldsymbol{\Phi}}).
-#' @param a_target Numeric scalar specifying the stability threshold
+#' @param margin Numeric scalar specifying the stability threshold
 #'   for the real part of the eigenvalues.
 #'   The default `0.0` corresponds to the imaginary axis;
 #'   values less than `0.0` enforce a stricter stability margin.
@@ -941,8 +941,8 @@ TestPhiHurwitz <- function(phi, eps = 0.0) {
 #' @family Simulation of State Space Models Data Functions
 #' @keywords simStateSpace test linsde
 #' @export
-TestPhi <- function(phi, a_target = 0.0, auto_ubound = 0.0) {
-    .Call(`_simStateSpace_TestPhi`, phi, a_target, auto_ubound)
+TestPhi <- function(phi, margin = 0.0, auto_ubound = 0.0) {
+    .Call(`_simStateSpace_TestPhi`, phi, margin, auto_ubound)
 }
 
 #' Test Stability
@@ -955,7 +955,7 @@ TestPhi <- function(phi, a_target = 0.0, auto_ubound = 0.0) {
 #' @author Ivan Jacob Agaloos Pesigan
 #'
 #' @param x Numeric matrix.
-#' @param a_target Numeric scalar specifying the stability threshold
+#' @param margin Numeric scalar specifying the stability threshold
 #'   for the real part of the eigenvalues.
 #'   The default `0.0` corresponds to the imaginary axis;
 #'   values less than `0.0` enforce a stricter stability margin.
@@ -974,8 +974,8 @@ TestPhi <- function(phi, a_target = 0.0, auto_ubound = 0.0) {
 #' @family Simulation of State Space Models Data Functions
 #' @keywords simStateSpace test linsde
 #' @export
-TestStability <- function(x, a_target = 0.0) {
-    .Call(`_simStateSpace_TestStability`, x, a_target)
+TestStability <- function(x, margin = 0.0) {
+    .Call(`_simStateSpace_TestStability`, x, margin)
 }
 
 #' Test Stationarity
@@ -988,7 +988,7 @@ TestStability <- function(x, a_target = 0.0) {
 #' @author Ivan Jacob Agaloos Pesigan
 #'
 #' @param x Numeric matrix.
-#' @param r_target Numeric scalar specifying the stationarity threshold.
+#' @param margin Numeric scalar specifying the stationarity threshold.
 #'   Values less than 1 indicate stricter stationarity criteria.
 #'
 #' @examples
@@ -1007,7 +1007,7 @@ TestStability <- function(x, a_target = 0.0) {
 #' @family Simulation of State Space Models Data Functions
 #' @keywords simStateSpace test ssm
 #' @export
-TestStationarity <- function(x, r_target = 1.0) {
-    .Call(`_simStateSpace_TestStationarity`, x, r_target)
+TestStationarity <- function(x, margin = 1.0) {
+    .Call(`_simStateSpace_TestStationarity`, x, margin)
 }
 

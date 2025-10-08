@@ -4,12 +4,12 @@
 \alias{TestStationarity}
 \title{Test Stationarity}
 \usage{
-TestStationarity(x, r_target = 1)
+TestStationarity(x, margin = 1)
 }
 \arguments{
 \item{x}{Numeric matrix.}
 
-\item{r_target}{Numeric scalar specifying the stationarity threshold.
+\item{margin}{Numeric scalar specifying the stationarity threshold.
 Values less than 1 indicate stricter stationarity criteria.}
 }
 \description{

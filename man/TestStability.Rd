@@ -4,12 +4,12 @@
 \alias{TestStability}
 \title{Test Stability}
 \usage{
-TestStability(x, a_target = 0)
+TestStability(x, margin = 0)
 }
 \arguments{
 \item{x}{Numeric matrix.}
 
-\item{a_target}{Numeric scalar specifying the stability threshold
+\item{margin}{Numeric scalar specifying the stability threshold
 for the real part of the eigenvalues.
 The default \code{0.0} corresponds to the imaginary axis;
 values less than \code{0.0} enforce a stricter stability margin.}
