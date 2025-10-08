@@ -9,7 +9,7 @@ SimBetaN(
   n,
   beta,
   vcov_beta_vec_l,
-  r_target = 1,
+  margin = 1,
   beta_lbound = NULL,
   beta_ubound = NULL,
   bound = FALSE,
@@ -28,7 +28,7 @@ Cholesky factorization (\code{t(chol(vcov_beta_vec))})
 of the sampling variance-covariance matrix of
 \eqn{\mathrm{vec} \left( \boldsymbol{\beta} \right)}.}
 
-\item{r_target}{Numeric scalar specifying the stationarity threshold.
+\item{margin}{Numeric scalar specifying the stationarity threshold.
 Values less than 1 indicate stricter stationarity criteria.}
 
 \item{beta_lbound}{Optional numeric matrix of same dim as \code{beta}.

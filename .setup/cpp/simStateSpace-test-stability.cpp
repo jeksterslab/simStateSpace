@@ -16,7 +16,7 @@
 //' @author Ivan Jacob Agaloos Pesigan
 //'
 //' @param x Numeric matrix.
-//' @param a_target Numeric scalar specifying the stability threshold
+//' @param margin Numeric scalar specifying the stability threshold
 //'   for the real part of the eigenvalues.
 //'   The default `0.0` corresponds to the imaginary axis;
 //'   values less than `0.0` enforce a stricter stability margin.
@@ -36,7 +36,7 @@
 //' @keywords simStateSpace test linsde
 //' @export
 // [[Rcpp::export]]
-bool TestStability(const arma::mat& x, const double a_target = 0.0) {
+bool TestStability(const arma::mat& x, const double margin = 0.0) {
   arma::cx_vec eigenvalues = arma::eig_gen(x);
-  return arma::all(arma::real(eigenvalues) < a_target);
+  return arma::all(arma::real(eigenvalues) < margin);
 }

@@ -24,7 +24,7 @@
 //'   Cholesky factorization (`t(chol(vcov_phi_vec))`)
 //'   of the sampling variance-covariance matrix of
 //'   \eqn{\mathrm{vec} \left( \boldsymbol{\Phi} \right)}.
-//' @param a_target Numeric scalar specifying the stability threshold
+//' @param margin Numeric scalar specifying the stability threshold
 //'   for the real part of the eigenvalues.
 //'   The default `0.0` corresponds to the imaginary axis;
 //'   values less than `0.0` enforce a stricter stability margin.
@@ -58,7 +58,7 @@
 //' @export
 // [[Rcpp::export]]
 Rcpp::List SimPhiN(const arma::uword& n, const arma::mat& phi,
-                   const arma::mat& vcov_phi_vec_l, const double a_target = 0.0,
+                   const arma::mat& vcov_phi_vec_l, const double margin = 0.0,
                    const double auto_ubound = 0.0,
                    Rcpp::Nullable<Rcpp::NumericMatrix> phi_lbound = R_NilValue,
                    Rcpp::Nullable<Rcpp::NumericMatrix> phi_ubound = R_NilValue,
@@ -132,7 +132,7 @@ Rcpp::List SimPhiN(const arma::uword& n, const arma::mat& phi,
 
       if (!bounds_ok(phi_i)) continue;
 
-      if (!TestPhi(phi_i, a_target, auto_ubound)) continue;
+      if (!TestPhi(phi_i, margin, auto_ubound)) continue;
 
       output[i] = phi_i;
       break;

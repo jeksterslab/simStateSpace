@@ -48,7 +48,7 @@ inline bool matrix_in_bounds(const arma::mat& x, const arma::mat* lb_ptr,
 //'   Cholesky factorization (`t(chol(vcov_beta_vec))`)
 //'   of the sampling variance-covariance matrix of
 //'   \eqn{\mathrm{vec} \left( \boldsymbol{\beta} \right)}.
-//' @param r_target Numeric scalar specifying the stationarity threshold.
+//' @param margin Numeric scalar specifying the stationarity threshold.
 //'   Values less than 1 indicate stricter stationarity criteria.
 //' @param beta_lbound Optional numeric matrix of same dim as `beta`.
 //'   Use NA for no lower bound.
@@ -78,7 +78,7 @@ inline bool matrix_in_bounds(const arma::mat& x, const arma::mat* lb_ptr,
 // [[Rcpp::export]]
 Rcpp::List SimBetaN(
     const arma::uword& n, const arma::mat& beta,
-    const arma::mat& vcov_beta_vec_l, const double r_target = 1.0,
+    const arma::mat& vcov_beta_vec_l, const double margin = 1.0,
     Rcpp::Nullable<Rcpp::NumericMatrix> beta_lbound = R_NilValue,
     Rcpp::Nullable<Rcpp::NumericMatrix> beta_ubound = R_NilValue,
     const bool bound = false, const arma::uword max_iter = 100000) {
@@ -156,7 +156,7 @@ Rcpp::List SimBetaN(
 
       if (!bounds_ok(beta_i)) continue;
 
-      if (!TestStationarity(beta_i, r_target)) continue;
+      if (!TestStationarity(beta_i, margin)) continue;
 
       out[i] = beta_i;
       break;
