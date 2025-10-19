@@ -5,9 +5,11 @@
 #' The steady-state mean vector
 #' for the observed variables
 #' in the linear stochastic differential equation model
-#' \eqn{\mathrm{Mean} \left( \boldsymbol{\eta} \right)}
+#' \eqn{\mathrm{Mean} \left( \mathbf{y} \right)}
 #' is given by
 #' \deqn{
+#'   \mathrm{Mean} \left( \mathbf{y} \right)
+#'   =
 #'   \boldsymbol{\nu}
 #'   +
 #'   \boldsymbol{\Lambda}
