@@ -1,3 +1,9 @@
+# simStateSpace 1.2.12.9000
+
+## Patch
+
+* Minor edits to documentation.
+
 # simStateSpace 1.2.12
 
 ## Patch
