@@ -1,4 +1,4 @@
-.PHONY: all build rproject clean cleanall cleanpkg cleanproj cleanpush cleantinytex bib bibrproject clone coverage data dependencies readme docs dotfiles install latex lint local localforce pdf pkg pkgdown project push quarto style tinytex tinytexforce vignettes
+.PHONY: all build clean cleanall cleanpkg cleanproj cleanpush cleantinytex bib bibrproject clone coverage data dependencies readme docs dotfiles install latex lint local localforce pdf pkg pkgdown project push quarto style tinytex tinytexforce vignettes
 
 push: build docs latex coverage cleanpush
 

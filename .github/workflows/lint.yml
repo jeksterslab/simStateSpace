@@ -16,7 +16,7 @@ jobs:
       GITHUB_PAT: ${{ secrets.PAT }}
 
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
 
       - uses: r-lib/actions/setup-r@v2
         with:
@@ -27,15 +27,41 @@ jobs:
           extra-packages: any::lintr, local::.
           needs: lint
 
-      - name: .lintr
-        run: |
-          FILE=.setup/lint/.lintr
-          if [ -f "$FILE" ]; then
-            cp "$FILE" .
-          fi
-
       - name: Lint
-        run: lintr::lint_package()
+        run: |
+          linters <- lintr::linters_with_defaults(
+            lintr::object_name_linter(
+              styles = c(
+                "CamelCase",
+                "snake_case",
+                "symbols"
+              )
+            )
+          )
+          exclusions <- list(
+            "renv",
+            "packrat",
+            ".library",
+            file.path("R", "RcppExports.R")
+          )
+          keep <- vapply(
+            X = exclusions,
+            FUN = function(x) file.exists(x),
+            FUN.VALUE = logical(1)
+          )
+          exclusions <- exclusions[keep]
+          if (length(exclusions) == 0L) {
+            lintr::lint_dir(
+              path = ".",
+              linters = linters
+            )
+          } else {
+            lintr::lint_dir(
+              path = ".",
+              linters = linters,
+              exclusions = exclusions
+            )
+          }
         shell: Rscript {0}
         env:
           LINTR_ERROR_ON_LINT: true

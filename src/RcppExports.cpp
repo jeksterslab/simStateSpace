@@ -128,6 +128,26 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// SimBetaNCovariate
+Rcpp::List SimBetaNCovariate(const arma::uword& n, const arma::mat& beta0, const arma::mat& vcov_beta_vec_l, const arma::mat& beta1, const Rcpp::List& x, const double margin, Rcpp::Nullable<Rcpp::NumericMatrix> beta_lbound, Rcpp::Nullable<Rcpp::NumericMatrix> beta_ubound, const bool bound, const arma::uword max_iter);
+RcppExport SEXP _simStateSpace_SimBetaNCovariate(SEXP nSEXP, SEXP beta0SEXP, SEXP vcov_beta_vec_lSEXP, SEXP beta1SEXP, SEXP xSEXP, SEXP marginSEXP, SEXP beta_lboundSEXP, SEXP beta_uboundSEXP, SEXP boundSEXP, SEXP max_iterSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::uword& >::type n(nSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type beta0(beta0SEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type vcov_beta_vec_l(vcov_beta_vec_lSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type beta1(beta1SEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const double >::type margin(marginSEXP);
+    Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::NumericMatrix> >::type beta_lbound(beta_lboundSEXP);
+    Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::NumericMatrix> >::type beta_ubound(beta_uboundSEXP);
+    Rcpp::traits::input_parameter< const bool >::type bound(boundSEXP);
+    Rcpp::traits::input_parameter< const arma::uword >::type max_iter(max_iterSEXP);
+    rcpp_result_gen = Rcpp::wrap(SimBetaNCovariate(n, beta0, vcov_beta_vec_l, beta1, x, margin, beta_lbound, beta_ubound, bound, max_iter));
+    return rcpp_result_gen;
+END_RCPP
+}
 // SimBetaN
 Rcpp::List SimBetaN(const arma::uword& n, const arma::mat& beta, const arma::mat& vcov_beta_vec_l, const double margin, Rcpp::Nullable<Rcpp::NumericMatrix> beta_lbound, Rcpp::Nullable<Rcpp::NumericMatrix> beta_ubound, const bool bound, const arma::uword max_iter);
 RcppExport SEXP _simStateSpace_SimBetaN(SEXP nSEXP, SEXP betaSEXP, SEXP vcov_beta_vec_lSEXP, SEXP marginSEXP, SEXP beta_lboundSEXP, SEXP beta_uboundSEXP, SEXP boundSEXP, SEXP max_iterSEXP) {
@@ -209,6 +229,27 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const arma::mat& >::type vcov_phi_vec_l(vcov_phi_vec_lSEXP);
     Rcpp::traits::input_parameter< const double >::type margin(marginSEXP);
     rcpp_result_gen = Rcpp::wrap(SimPhiN2(n, phi, vcov_phi_vec_l, margin));
+    return rcpp_result_gen;
+END_RCPP
+}
+// SimPhiNCovariate
+Rcpp::List SimPhiNCovariate(const arma::uword& n, const arma::mat& phi0, const arma::mat& vcov_phi_vec_l, const arma::mat& phi1, const Rcpp::List& x, const double margin, const double auto_ubound, Rcpp::Nullable<Rcpp::NumericMatrix> phi_lbound, Rcpp::Nullable<Rcpp::NumericMatrix> phi_ubound, const bool bound, const arma::uword max_iter);
+RcppExport SEXP _simStateSpace_SimPhiNCovariate(SEXP nSEXP, SEXP phi0SEXP, SEXP vcov_phi_vec_lSEXP, SEXP phi1SEXP, SEXP xSEXP, SEXP marginSEXP, SEXP auto_uboundSEXP, SEXP phi_lboundSEXP, SEXP phi_uboundSEXP, SEXP boundSEXP, SEXP max_iterSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::uword& >::type n(nSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type phi0(phi0SEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type vcov_phi_vec_l(vcov_phi_vec_lSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type phi1(phi1SEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const double >::type margin(marginSEXP);
+    Rcpp::traits::input_parameter< const double >::type auto_ubound(auto_uboundSEXP);
+    Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::NumericMatrix> >::type phi_lbound(phi_lboundSEXP);
+    Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::NumericMatrix> >::type phi_ubound(phi_uboundSEXP);
+    Rcpp::traits::input_parameter< const bool >::type bound(boundSEXP);
+    Rcpp::traits::input_parameter< const arma::uword >::type max_iter(max_iterSEXP);
+    rcpp_result_gen = Rcpp::wrap(SimPhiNCovariate(n, phi0, vcov_phi_vec_l, phi1, x, margin, auto_ubound, phi_lbound, phi_ubound, bound, max_iter));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -671,12 +712,14 @@ static const R_CallMethodDef CallEntries[] = {
     {"_simStateSpace_ProjectToStability", (DL_FUNC) &_simStateSpace_ProjectToStability, 3},
     {"_simStateSpace_SimAlphaN", (DL_FUNC) &_simStateSpace_SimAlphaN, 3},
     {"_simStateSpace_SimBetaN2", (DL_FUNC) &_simStateSpace_SimBetaN2, 5},
+    {"_simStateSpace_SimBetaNCovariate", (DL_FUNC) &_simStateSpace_SimBetaNCovariate, 10},
     {"_simStateSpace_SimBetaN", (DL_FUNC) &_simStateSpace_SimBetaN, 8},
     {"_simStateSpace_SimCovDiagN", (DL_FUNC) &_simStateSpace_SimCovDiagN, 3},
     {"_simStateSpace_SimCovN", (DL_FUNC) &_simStateSpace_SimCovN, 3},
     {"_simStateSpace_SimIotaN", (DL_FUNC) &_simStateSpace_SimIotaN, 3},
     {"_simStateSpace_SimNuN", (DL_FUNC) &_simStateSpace_SimNuN, 3},
     {"_simStateSpace_SimPhiN2", (DL_FUNC) &_simStateSpace_SimPhiN2, 4},
+    {"_simStateSpace_SimPhiNCovariate", (DL_FUNC) &_simStateSpace_SimPhiNCovariate, 11},
     {"_simStateSpace_SimPhiN", (DL_FUNC) &_simStateSpace_SimPhiN, 9},
     {"_simStateSpace_SimSSMFixed0", (DL_FUNC) &_simStateSpace_SimSSMFixed0, 11},
     {"_simStateSpace_SimSSMFixed1", (DL_FUNC) &_simStateSpace_SimSSMFixed1, 13},

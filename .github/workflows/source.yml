@@ -21,7 +21,7 @@ jobs:
     steps:
       -
         name: Checkout 
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
       -
         name: Clean
         run: |
@@ -41,6 +41,11 @@ jobs:
           mv ./* "$WD/r_source_code"
           cd ..
           rm -rf "$DIR"
+      - 
+        name: Reset working tree
+        run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          git reset --hard HEAD
       - 
         name: Push to the src branch
         uses: s0/git-publish-subdir-action@develop

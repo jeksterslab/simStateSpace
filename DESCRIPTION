@@ -1,6 +1,6 @@
 Package: simStateSpace
 Title: Simulate Data from State Space Models
-Version: 1.2.12.9000
+Version: 1.2.12.9001
 Authors@R: c(
     person(given = "Ivan Jacob Agaloos",
            family = "Pesigan",
@@ -12,12 +12,12 @@ Authors@R: c(
            role = "ctb",
            email = "mar60@psu.edu",
            comment = c(ORCID = "0000-0002-3956-604X")),
-    person(given = "Sy-Miin",,
+    person(given = "Sy-Miin",
            family = "Chow",
            role = "ctb",
            email = "quc16@psu.edu",
            comment = c(ORCID = "0000-0003-1938-027X"))
-    )    
+    )
 Description: Provides a streamlined and user-friendly framework
     for simulating data in state space models,
     particularly when the number of subjects/units (n) exceeds one,

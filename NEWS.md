@@ -1,3 +1,9 @@
+# simStateSpace 1.2.12.9001
+
+## Patch
+
+* Added the `SimBetaNCovariate()` and `SimPhiNCovariate()` functions.
+
 # simStateSpace 1.2.12.9000
 
 ## Patch

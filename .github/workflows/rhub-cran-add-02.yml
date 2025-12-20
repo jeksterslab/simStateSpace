@@ -39,7 +39,7 @@ jobs:
       image: ${{ matrix.container.image }}
     steps:
       - name: Checkout src repo
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           ref: 'src'
 

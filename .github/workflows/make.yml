@@ -10,6 +10,7 @@ on:
 jobs:
 
   build:
+    if: github.event_name != 'push' || !contains(github.event.head_commit.message, '[skip ci]')
     runs-on: ubuntu-latest
     container:
       image: ijapesigan/docs
@@ -23,7 +24,7 @@ jobs:
     steps:
       -
         name: Checkout 
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
       -
         name: Clean
         run: |
@@ -39,4 +40,4 @@ jobs:
         uses: devops-infra/action-commit-push@master
         with:
           github_token: ${{ secrets.PAT }}
-          commit_message: "Automated build."
+          commit_message: "Automated build [skip ci]."

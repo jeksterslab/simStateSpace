@@ -362,7 +362,7 @@ mu0_hat <- unname(
     )
   ]
 )
-unname(mu0_hat)
+mu0_hat <- unname(mu0_hat)
 sigma0_hat <- matrix(
   data = estimates[
     c(
@@ -437,7 +437,7 @@ mu0_hat <- unname(
     )
   ]
 )
-unname(mu0_hat)
+mu0_hat - unname(mu0_hat)
 sigma0_hat <- matrix(
   data = estimates[
     c(
