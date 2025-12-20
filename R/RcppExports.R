@@ -403,6 +403,73 @@ SimBetaN2 <- function(n, beta, vcov_beta_vec_l, margin = 0.98, tol = 1e-12) {
     .Call(`_simStateSpace_SimBetaN2`, n, beta, vcov_beta_vec_l, margin, tol)
 }
 
+#' Simulate Transition Matrices with a Covariate
+#' from the Multivariate Normal Distribution
+#'
+#' This function simulates random transition matrices from a multivariate
+#' normal distribution, allowing the mean transition matrix to vary as a
+#' linear function of a covariate.
+#' The function ensures that the generated transition matrices are stationary
+#' using [TestStationarity()] with a rejection sampling approach.
+#'
+#' @author Ivan Jacob Agaloos Pesigan
+#'
+#' @param n Positive integer.
+#'   Number of replications.
+#' @param beta0 Numeric matrix.
+#'   Baseline transition matrix \eqn{\boldsymbol{\beta}_0}
+#'   corresponding to \eqn{\mathbf{x} = \mathbf{0}}.
+#' @param vcov_beta_vec_l Numeric matrix.
+#'   Cholesky factorization (`t(chol(vcov_beta_vec))`)
+#'   of the sampling variance-covariance matrix of
+#'   \eqn{\mathrm{vec} \left( \boldsymbol{\beta} \right)}.
+#' @param beta1 Numeric matrix.
+#'   Matrix of covariate effects mapping \eqn{\mathbf{x}} to
+#'   \eqn{\mathrm{vec}(\boldsymbol{\beta})}.
+#' @param x List of numeric vectors.
+#'   Covariate values.
+#' @param margin Numeric scalar specifying the stationarity threshold.
+#'   Values less than 1 indicate stricter stationarity criteria.
+#' @param beta_lbound Optional numeric matrix of same dim as `beta`.
+#'   Use NA for no lower bound.
+#' @param beta_ubound Optional numeric matrix of same dim as `beta`.
+#'   Use NA for no upper bound.
+#' @param bound Logical;
+#'   if TRUE, resample until all elements respect bounds (NA bounds ignored).
+#' @param max_iter Safety cap on resampling attempts per draw.
+#' @return Returns a list of random transition matrices.
+#'
+#' @examples
+#' n <- 5
+#' beta0 <- matrix(
+#'   data = c(
+#'     0.7, 0.5, -0.1,
+#'     0.0, 0.6, 0.4,
+#'     0, 0, 0.5
+#'   ),
+#'   nrow = 3
+#' )
+#' vcov_beta_vec_l <- t(chol(0.001 * diag(9)))
+#' # One scalar covariate per replication
+#' beta1 <- matrix(data = 0, nrow = 9, ncol = 1)
+#' beta1[1, 1] <- 0.10  # x shifts beta[1,1]
+#' x <- list(c(0), c(1), c(-1), c(0.5), c(2))
+#'
+#' SimBetaNCovariate(
+#'   n = n,
+#'   beta0 = beta0,
+#'   vcov_beta_vec_l = vcov_beta_vec_l,
+#'   beta1 = beta1,
+#'   x = x
+#' )
+#'
+#' @family Simulation of State Space Models Data Functions
+#' @keywords simStateSpace ssm
+#' @export
+SimBetaNCovariate <- function(n, beta0, vcov_beta_vec_l, beta1, x, margin = 1.0, beta_lbound = NULL, beta_ubound = NULL, bound = FALSE, max_iter = 100000L) {
+    .Call(`_simStateSpace_SimBetaNCovariate`, n, beta0, vcov_beta_vec_l, beta1, x, margin, beta_lbound, beta_ubound, bound, max_iter)
+}
+
 #' Simulate Transition Matrices
 #' from the Multivariate Normal Distribution
 #'
@@ -647,6 +714,77 @@ SimNuN <- function(n, nu, vcov_nu_l) {
 #' @export
 SimPhiN2 <- function(n, phi, vcov_phi_vec_l, margin = 1e-3) {
     .Call(`_simStateSpace_SimPhiN2`, n, phi, vcov_phi_vec_l, margin)
+}
+
+#' Simulate Random Drift Matrices with a Covariate
+#' from the Multivariate Normal Distribution
+#'
+#' This function simulates random drift matrices
+#' from the multivariate normal distribution,
+#' allowing the mean drift matrix to vary
+#' as a linear function of a covariate
+#' The function ensures that the generated drift matrices are stable
+#' using [TestPhi()].
+#'
+#' @author Ivan Jacob Agaloos Pesigan
+#'
+#' @param n Positive integer.
+#'   Number of replications.
+#' @param phi0 Numeric matrix.
+#'   Baseline drift matrix (\eqn{\boldsymbol{\Phi}_0}).
+#' @param vcov_phi_vec_l Numeric matrix.
+#'   Cholesky factorization (`t(chol(vcov_phi_vec))`)
+#'   of the sampling variance-covariance matrix of
+#'   \eqn{\mathrm{vec} \left( \boldsymbol{\Phi} \right)}.
+#' @param phi1 Numeric matrix.
+#'   Matrix of covariate effects mapping \eqn{\mathbf{x}} to
+#'   \eqn{\mathrm{vec}(\boldsymbol{\Phi})}.
+#' @param x List of numeric vectors.
+#'   Covariate values.
+#' @param margin Numeric scalar specifying the stability threshold
+#'   for the real part of the eigenvalues.
+#'   The default `0.0` corresponds to the imaginary axis;
+#'   values less than `0.0` enforce a stricter stability margin.
+#' @param auto_ubound Numeric scalar specifying the upper bound
+#'   for the diagonal elements of \eqn{\boldsymbol{\Phi}}.
+#'   Default is `0.0`, requiring all diagonal values to be \eqn{\leq 0}.
+#' @param phi_lbound Optional numeric matrix of same dim as `phi`.
+#'   Use NA for no lower bound.
+#' @param phi_ubound Optional numeric matrix of same dim as `phi`.
+#'   Use NA for no upper bound.
+#' @param bound Logical;
+#'   if TRUE, resample until all elements respect bounds (NA bounds ignored).
+#' @param max_iter Safety cap on resampling attempts per draw.
+#' @return Returns a list of random drift matrices.
+#'
+#' @examples
+#' n <- 5
+#' phi0 <- matrix(
+#'   data = c(
+#'     -0.357, 0.771, -0.450,
+#'     0.0, -0.511, 0.729,
+#'     0, 0, -0.693
+#'   ),
+#'   nrow = 3
+#' )
+#' vcov_phi_vec_l <- t(chol(0.001 * diag(9)))
+#' # One scalar covariate per replication
+#' phi1 <- matrix(data = 0, nrow = 9, ncol = 1)
+#' phi1[1, 1] <- 0.10  # x shifts phi[1,1]
+#' x <- list(c(0), c(1), c(-1), c(0.5), c(2))
+#' SimPhiNCovariate(
+#'   n = n,
+#'   phi0 = phi0,
+#'   vcov_phi_vec_l = vcov_phi_vec_l,
+#'   phi1 = phi1,
+#'   x = x
+#' )
+#'
+#' @family Simulation of State Space Models Data Functions
+#' @keywords simStateSpace linsde
+#' @export
+SimPhiNCovariate <- function(n, phi0, vcov_phi_vec_l, phi1, x, margin = 0.0, auto_ubound = 0.0, phi_lbound = NULL, phi_ubound = NULL, bound = FALSE, max_iter = 100000L) {
+    .Call(`_simStateSpace_SimPhiNCovariate`, n, phi0, vcov_phi_vec_l, phi1, x, margin, auto_ubound, phi_lbound, phi_ubound, bound, max_iter)
 }
 
 #' Simulate Random Drift Matrices
