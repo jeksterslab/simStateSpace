@@ -1,6 +1,6 @@
 # Changelog
 
-## simStateSpace 1.2.12.9001
+## simStateSpace 1.2.13
 
 ### Patch
 
@@ -9,12 +9,6 @@
   and
   [`SimPhiNCovariate()`](https://github.com/jeksterslab/simStateSpace/reference/SimPhiNCovariate.md)
   functions.
-
-## simStateSpace 1.2.12.9000
-
-### Patch
-
-- Minor edits to documentation.
 
 ## simStateSpace 1.2.12
 

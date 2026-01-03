@@ -330,8 +330,8 @@ results <- dynr::dynr.cook(
 #> 
 #> Doing end processing
 #> Successful trial
-#> Total Time: 1.52728 
-#> Backend Time: 1.516864
+#> Total Time: 1.529921 
+#> Backend Time: 1.518549
 ```
 
 ## Summary
@@ -418,7 +418,7 @@ fit <- lavaan::growth(
   data = data
 )
 lavaan::summary(fit)
-#> lavaan 0.6-20 ended normally after 34 iterations
+#> lavaan 0.6-21 ended normally after 34 iterations
 #> 
 #>   Estimator                                         ML
 #>   Optimization method                           NLMINB
@@ -508,7 +508,7 @@ effect sizes for direct, indirect, and total effects in continuous-time
 mediation models. *Psychological Methods*.
 <https://doi.org/10.1037/met0000779>
 
-R Core Team. (2024). *R: A language and environment for statistical
+R Core Team. (2025). *R: A language and environment for statistical
 computing*. R Foundation for Statistical Computing.
 <https://www.R-project.org/>
 
