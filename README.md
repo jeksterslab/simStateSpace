@@ -68,16 +68,6 @@ To cite `simStateSpace` in publications, please cite Pesigan et al.
 <div id="refs" class="references csl-bib-body hanging-indent"
 entry-spacing="0" line-spacing="2">
 
-<div id="ref-Chow-Ho-Hamaker-etal-2010" class="csl-entry">
-
-Chow, S.-M., Ho, M. R., Hamaker, E. L., & Dolan, C. V. (2010).
-Equivalence and differences between structural equation modeling and
-state-space modeling techniques. *Structural Equation Modeling: A
-Multidisciplinary Journal*, *17*(2), 303–332.
-<https://doi.org/10.1080/10705511003661553>
-
-</div>
-
 <div id="ref-Pesigan-Russell-Chow-2025o" class="csl-entry">
 
 Pesigan, I. J. A., Russell, M. A., & Chow, S.-M. (2025). Inferences and

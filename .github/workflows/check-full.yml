@@ -22,23 +22,27 @@ jobs:
       matrix:
         config:
           # macos-latest
-          - {os: macos-latest,   r: 'release'}
-          - {os: macos-latest,   r: 'devel', http-user-agent: 'release'}
+          - {os: macos-latest,     r: 'release'}
+          - {os: macos-latest,     r: 'devel', http-user-agent: 'release'}
           # windows
-          - {os: windows-latest, r: 'release'}
+          - {os: windows-latest,   r: 'release'}
+          - {os: windows-11-arm,   r: 'release'}
           # Use 3.6 to trigger usage of RTools35
-          - {os: windows-latest, r: '3.6'}
+          - {os: windows-latest,   r: '3.6'}
           # use 4.0 or 4.1 to check with rtools40's older compiler
-          - {os: windows-latest, r: 'oldrel-4'}
+          - {os: windows-latest,   r: 'oldrel-4'}
           # ubuntu
-          - {os: ubuntu-latest,  r: 'devel', http-user-agent: 'release'}
-          - {os: ubuntu-latest,  r: 'release'}
-          - {os: ubuntu-latest,  r: 'oldrel-1'}
-          - {os: ubuntu-latest,  r: 'oldrel-2'}
-          - {os: ubuntu-latest,  r: 'oldrel-3'}
-          - {os: ubuntu-latest,  r: 'oldrel-4'}
+          - {os: ubuntu-latest,    r: 'devel', http-user-agent: 'release'}
+          - {os: ubuntu-latest,    r: 'release'}
+          - {os: ubuntu-latest,    r: 'oldrel-1'}
+          - {os: ubuntu-latest,    r: 'oldrel-2'}
+          - {os: ubuntu-latest,    r: 'oldrel-3'}
+          - {os: ubuntu-latest,    r: 'oldrel-4'}
           # arm64
+          - {os: ubuntu-24.04-arm, r: 'devel', http-user-agent: 'release'}
           - {os: ubuntu-24.04-arm, r: 'release' }
+          - {os: ubuntu-22.04-arm, r: 'devel', http-user-agent: 'release'}
+          - {os: ubuntu-22.04-arm, r: 'release' }
 
     env:
       GITHUB_PAT: ${{ secrets.PAT }}
