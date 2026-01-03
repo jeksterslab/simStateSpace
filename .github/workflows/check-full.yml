@@ -21,9 +21,6 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          # macos-13
-          - {os: macos-13,       r: 'release'}
-          - {os: macos-13,       r: 'devel', http-user-agent: 'release'}
           # macos-latest
           - {os: macos-latest,   r: 'release'}
           - {os: macos-latest,   r: 'devel', http-user-agent: 'release'}
@@ -41,10 +38,11 @@ jobs:
           - {os: ubuntu-latest,  r: 'oldrel-3'}
           - {os: ubuntu-latest,  r: 'oldrel-4'}
           # arm64
-          - {os: ubuntu-22.04-arm, r: 'release' }
+          - {os: ubuntu-24.04-arm, r: 'release' }
 
     env:
       GITHUB_PAT: ${{ secrets.PAT }}
+      GITHUB_ACTIONS: "true"
       R_KEEP_PKG_SOURCE: yes
 
     steps:

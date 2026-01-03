@@ -17,6 +17,7 @@ jobs:
       group: latex-${{ github.event_name != 'pull_request' || github.run_id }}
     env:
       GITHUB_PAT: ${{ secrets.PAT }}
+      GITHUB_ACTIONS: "true"
     permissions:
       contents: write
 

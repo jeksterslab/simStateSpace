@@ -1,15 +1,15 @@
 ---
 title: "The Linear Growth Curve Model"
 author: "Ivan Jacob Agaloos Pesigan"
-date: "2025-12-19"
+date: "2026-01-03"
 bibliography: "vignettes.bib"
 csl: https://raw.githubusercontent.com/citation-style-language/styles/master/apa.csl
 nocite: |
-  @RCoreTeam-2024
+  @RCoreTeam-2025
   @Ou-Hunter-Chow-2019
   @Chow-Ho-Hamaker-etal-2010
   @Rosseel-2012
-  @Pesigan-Russell-Chow-2025a
+  @Pesigan-Russell-Chow-2025o
 output:
   rmarkdown::html_vignette:
     toc: true
@@ -197,7 +197,7 @@ theta_l # theta_l <- t(chol(theta))
 
 ### Visualizing the Dynamics Without Measurement Error (n = 5 with Different Initial Condition)
 
-<img src="fig-vignettes-lin-growth-no-error-lin-growth-1.png" width="3300" />
+<img src="fig-vignettes-lin-growth-no-error-lin-growth-1.png" alt="" width="3300" />
 
 ### Using the `SimSSMLinGrowth` Function from the `simStateSpace` Package to Simulate Data
 
@@ -232,7 +232,7 @@ summary(data)
 plot(sim)
 ```
 
-<img src="fig-vignettes-lin-growth-error-lin-growth-1.png" width="3300" />
+<img src="fig-vignettes-lin-growth-error-lin-growth-1.png" alt="" width="3300" />
 
 ## Model Fitting
 
@@ -320,7 +320,7 @@ model <- dynr::dynr.model(
 )
 ```
 
-<img src="fig-vignettes-lin-growth-model-lin-growth-1.png" width="3300" />
+<img src="fig-vignettes-lin-growth-model-lin-growth-1.png" alt="" width="3300" />
 
 ### Fit the Model
 
@@ -347,8 +347,8 @@ results <- dynr::dynr.cook(
 #> 
 #> Doing end processing
 #> Successful trial
-#> Total Time: 1.52728 
-#> Backend Time: 1.516864
+#> Total Time: 1.529921 
+#> Backend Time: 1.518549
 ```
 
 ## Summary
@@ -437,7 +437,7 @@ fit <- lavaan::growth(
   data = data
 )
 lavaan::summary(fit)
-#> lavaan 0.6-20 ended normally after 34 iterations
+#> lavaan 0.6-21 ended normally after 34 iterations
 #> 
 #>   Estimator                                         ML
 #>   Optimization method                           NLMINB

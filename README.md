@@ -78,7 +78,7 @@ Multidisciplinary Journal*, *17*(2), 303–332.
 
 </div>
 
-<div id="ref-Pesigan-Russell-Chow-2025a" class="csl-entry">
+<div id="ref-Pesigan-Russell-Chow-2025o" class="csl-entry">
 
 Pesigan, I. J. A., Russell, M. A., & Chow, S.-M. (2025). Inferences and
 effect sizes for direct, indirect, and total effects in continuous-time

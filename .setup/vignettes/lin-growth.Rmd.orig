@@ -5,11 +5,11 @@ date: "`r Sys.Date()`"
 bibliography: "vignettes.bib"
 csl: https://raw.githubusercontent.com/citation-style-language/styles/master/apa.csl
 nocite: |
-  @RCoreTeam-2024
+  @RCoreTeam-2025
   @Ou-Hunter-Chow-2019
   @Chow-Ho-Hamaker-etal-2010
   @Rosseel-2012
-  @Pesigan-Russell-Chow-2025a
+  @Pesigan-Russell-Chow-2025o
 output:
   rmarkdown::html_vignette:
     toc: true

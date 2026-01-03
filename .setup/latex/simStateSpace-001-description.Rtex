@@ -79,8 +79,8 @@ Provides a streamlined and user-friendly framework
 for simulating data in state space models,
 particularly when the number of subjects/units ($n$) exceeds one,
 a scenario commonly encountered in social and behavioral sciences.
-For an introduction to state space models in social and behavioral sciences,
-refer to \Textcite{Chow-Ho-Hamaker-etal-2010}.
+This package was designed to generate data for the simulations
+performed in Pesigan, Russell, and Chow (2025: \url{https://doi.org/10.1037/met0000779}).
 
 \section*{Installation}
 
@@ -102,9 +102,13 @@ See
 \href{https://jeksterslab.github.io/simStateSpace/index.html}{GitHub Pages}
 for package documentation.
 
+\section*{Citation}
+
+To cite \texttt{simStateSpace} in publications, please cite \Textcite{Pesigan-Russell-Chow-2025o}.
+
 \nocite{RCoreTeam-2025}
 
-\nocite{Pesigan-Russell-Chow-2025a}
+\nocite{Pesigan-Russell-Chow-2025o}
 
 \printbibliography
 

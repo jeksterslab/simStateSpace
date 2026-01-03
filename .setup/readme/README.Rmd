@@ -7,7 +7,7 @@ csl: https://raw.githubusercontent.com/citation-style-language/styles/master/apa
 nocite: |
   @RCoreTeam-2025
   @Chow-Ho-Hamaker-etal-2010
-  @Pesigan-Russell-Chow-2025a
+  @Pesigan-Russell-Chow-2025o
 ---
 
 <!-- README.md is generated from .setup/readme/README.Rmd. Please edit that file -->
@@ -70,6 +70,6 @@ for package documentation.
 
 ## Citation
 
-To cite `simStateSpace` in publications, please cite @Pesigan-Russell-Chow-2025a.
+To cite `simStateSpace` in publications, please cite @Pesigan-Russell-Chow-2025o.
 
 ## References

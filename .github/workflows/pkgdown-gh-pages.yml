@@ -18,6 +18,7 @@ jobs:
       group: pkgdown-gh-pages-${{ github.event_name != 'pull_request' || github.run_id }}
     env:
       GITHUB_PAT: ${{ secrets.PAT }}
+      GITHUB_ACTIONS: "true"
     permissions:
       contents: write
 
@@ -35,7 +36,7 @@ jobs:
         name: Add .nojekyll
         run: touch pkgdown/.nojekyll
       -
-        name: Deploy to GitHub pages
+        name: Deploy to GitHub pages ��
         uses: JamesIves/github-pages-deploy-action@v4.5.0
         with:
           clean: true

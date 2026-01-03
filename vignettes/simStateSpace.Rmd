@@ -7,7 +7,7 @@ csl: https://raw.githubusercontent.com/citation-style-language/styles/master/apa
 nocite: |
   @RCoreTeam-2025
   @Chow-Ho-Hamaker-etal-2010
-  @Pesigan-Russell-Chow-2025a
+  @Pesigan-Russell-Chow-2025o
 vignette: >
   %\VignetteIndexEntry{simStateSpace: Simulate Data from State Space Models}
   %\VignetteEngine{knitr::rmarkdown}
@@ -72,6 +72,6 @@ for package documentation.
 
 ## Citation
 
-To cite `simStateSpace` in publications, please cite @Pesigan-Russell-Chow-2025a.
+To cite `simStateSpace` in publications, please cite @Pesigan-Russell-Chow-2025o.
 
 ## References

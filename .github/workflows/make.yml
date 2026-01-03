@@ -16,6 +16,7 @@ jobs:
       image: ijapesigan/docs
     env:
       GITHUB_PAT: ${{ secrets.PAT }}
+      GITHUB_ACTIONS: "true"
     permissions:
       contents: write
       packages: read
