@@ -60,12 +60,6 @@ To cite `simStateSpace` in publications, please cite Pesigan et al.
 
 ## References
 
-Chow, S.-M., Ho, M. R., Hamaker, E. L., & Dolan, C. V. (2010).
-Equivalence and differences between structural equation modeling and
-state-space modeling techniques. *Structural Equation Modeling: A
-Multidisciplinary Journal*, *17*(2), 303–332.
-<https://doi.org/10.1080/10705511003661553>
-
 Pesigan, I. J. A., Russell, M. A., & Chow, S.-M. (2025). Inferences and
 effect sizes for direct, indirect, and total effects in continuous-time
 mediation models. *Psychological Methods*.
