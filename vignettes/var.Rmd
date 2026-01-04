@@ -1,7 +1,7 @@
 ---
 title: "The Vector Autoregressive Model"
 author: "Ivan Jacob Agaloos Pesigan"
-date: "2026-01-03"
+date: "2026-01-04"
 bibliography: "vignettes.bib"
 csl: https://raw.githubusercontent.com/citation-style-language/styles/master/apa.csl
 nocite: |
@@ -411,8 +411,8 @@ results <- dynr::dynr.cook(
 #> 
 #> Doing end processing
 #> Successful trial
-#> Total Time: 1.351651 
-#> Backend Time: 1.351493
+#> Total Time: 1.395497 
+#> Backend Time: 1.395319
 ```
 
 ## Summary
