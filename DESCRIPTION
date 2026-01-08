@@ -1,6 +1,6 @@
 Package: simStateSpace
 Title: Simulate Data from State Space Models
-Version: 1.2.13
+Version: 1.2.14
 Authors@R: c(
     person(given = "Ivan Jacob Agaloos",
            family = "Pesigan",
@@ -45,4 +45,3 @@ Suggests:
     expm,
     dynr
 SystemRequirements: GNU GSL (>= 2.5)
-RoxygenNote: 7.3.3.9000

@@ -1,3 +1,9 @@
+# simStateSpace 1.2.14
+
+## Patch
+
+* `CXX_STD = CXX17` in Makevars
+
 # simStateSpace 1.2.13
 
 ## Patch
