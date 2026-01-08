@@ -8,7 +8,7 @@ message: 'To cite package "simStateSpace" in publications use:'
 type: software
 license: GPL-3.0-or-later
 title: 'simStateSpace: Simulate Data from State Space Models'
-version: 1.2.13
+version: 1.2.14
 doi: 10.1037/met0000779
 identifiers:
 - type: doi
@@ -43,7 +43,7 @@ preferred-citation:
   year: '2025'
   doi: 10.1037/met0000779
   journal: Psychological Methods
-  notes: R package version 1.2.13
+  notes: R package version 1.2.14
 repository: https://CRAN.R-project.org/package=simStateSpace
 repository-code: https://github.com/jeksterslab/simStateSpace
 url: https://jeksterslab.github.io/simStateSpace/

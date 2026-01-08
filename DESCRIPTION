@@ -45,3 +45,4 @@ Suggests:
     expm,
     dynr
 SystemRequirements: GNU GSL (>= 2.5)
+RoxygenNote: 7.3.3.9000
