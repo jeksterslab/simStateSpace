@@ -33,20 +33,20 @@ sessionInfo()
 #> [1] stats     graphics  grDevices utils     datasets  methods   base     
 #> 
 #> other attached packages:
-#> [1] simStateSpace_1.2.14
+#> [1] simStateSpace_1.2.14.9000
 #> 
 #> loaded via a namespace (and not attached):
 #>  [1] tidyselect_1.2.1    hdrcde_3.4          dplyr_1.1.4        
 #>  [4] farver_2.1.2        S7_0.2.1            bitops_1.0-9       
 #>  [7] latex2exp_0.9.6     RCurl_1.98-1.17     pracma_2.4.6       
-#> [10] rpart_4.1.24        lifecycle_1.0.4     cluster_2.1.8.1    
+#> [10] rpart_4.1.24        lifecycle_1.0.5     cluster_2.1.8.1    
 #> [13] survival_3.8-3      magrittr_2.0.4      compiler_4.5.2     
-#> [16] rlang_1.1.6         tools_4.5.2         rProject_0.0.23    
+#> [16] rlang_1.1.7         tools_4.5.2         rProject_0.0.23    
 #> [19] knitr_1.51          labeling_0.4.3      mclust_6.1.2       
 #> [22] mnormt_2.1.1        plyr_1.8.9          dynr_0.1.16-114    
 #> [25] RColorBrewer_1.1-3  rainbow_3.8         abind_1.4-8        
 #> [28] KernSmooth_2.23-26  expm_1.0-0          fda_6.3.0          
-#> [31] withr_3.0.2         purrr_1.2.0         numDeriv_2016.8-1.1
+#> [31] withr_3.0.2         purrr_1.2.1         numDeriv_2016.8-1.1
 #> [34] nnet_7.3-20         grid_4.5.2          pcaPP_2.0-5        
 #> [37] stats4_4.5.2        lavaan_0.6-21       jomo_2.7-6         
 #> [40] xtable_1.8-4        colorspace_2.1-2    mice_3.19.0        
@@ -76,8 +76,13 @@ sessionInfo()
 installed.packages()[, c("Package", "Version")]
 #>                   Package             Version      
 #> devtools          "devtools"          "2.4.6.9000" 
+#> gert              "gert"              "2.3.0"      
+#> later             "later"             "1.4.5"      
+#> lifecycle         "lifecycle"         "1.0.5"      
+#> purrr             "purrr"             "1.2.1"      
+#> rlang             "rlang"             "1.1.7"      
 #> rProject          "rProject"          "0.0.23"     
-#> simStateSpace     "simStateSpace"     "1.2.14"     
+#> simStateSpace     "simStateSpace"     "1.2.14.9000"
 #> abind             "abind"             "1.4-8"      
 #> Amelia            "Amelia"            "1.8.3"      
 #> arm               "arm"               "1.14-4"     
@@ -497,7 +502,7 @@ installed.packages()[, c("Package", "Version")]
     #> Socket(s):                               1
     #> Stepping:                                0
     #> Frequency boost:                         enabled
-    #> CPU(s) scaling MHz:                      61%
+    #> CPU(s) scaling MHz:                      78%
     #> CPU max MHz:                             5060.9761
     #> CPU min MHz:                             1219.5129
     #> BogoMIPS:                                4990.55
@@ -530,6 +535,6 @@ installed.packages()[, c("Package", "Version")]
 ## Memory
 
     #>                total        used        free      shared  buff/cache   available
-    #> Mem:            44Gi       6.6Gi        32Gi       122Mi       5.8Gi        37Gi
-    #> Swap:           31Gi        26Mi        31Gi
-    #> Total:          76Gi       6.7Gi        64Gi
+    #> Mem:            44Gi       6.4Gi        22Gi        91Mi        16Gi        38Gi
+    #> Swap:           31Gi        53Mi        31Gi
+    #> Total:          76Gi       6.5Gi        54Gi

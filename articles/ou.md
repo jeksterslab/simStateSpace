@@ -513,8 +513,8 @@ results <- dynr::dynr.cook(
 #> Warning in sqrt(diag(x$inv.hessian)): NaNs produced
 #> Warning: These parameters may have untrustworthy standard errors: sigma0_1_1,
 #> sigma0_2_1.
-#> Total Time: 38.88542 
-#> Backend Time: 38.87829
+#> Total Time: 39.50471 
+#> Backend Time: 39.49775
 ```
 
 ## Summary

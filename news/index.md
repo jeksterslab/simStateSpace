@@ -1,6 +1,14 @@
 # Changelog
 
+## simStateSpace 1.2.14.9000
+
+### Patch
+
+- Latest development version.
+
 ## simStateSpace 1.2.14
+
+CRAN release: 2026-01-10
 
 ### Patch
 
