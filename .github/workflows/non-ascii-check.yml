@@ -1,0 +1,44 @@
+name: Non-ASCII Check
+
+on:
+  workflow_run:
+    workflows: [ "Make Project" ]
+    types:
+      - completed
+  workflow_dispatch:
+
+jobs:
+  grep-non-ascii:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Find non-ASCII characters
+        shell: bash
+        run: |
+          set -euo pipefail
+          EXCLUDES=(
+            "./.git"
+            "./.git/*"
+            "./inst/GPL3/LICENSE.md"
+            "./README.md"
+            "./LICENSE.md"
+          )
+          OR_EXCLUDES=()
+          for pat in "${EXCLUDES[@]}"; do
+            OR_EXCLUDES+=( -path "$pat" -o )
+          done
+          unset 'OR_EXCLUDES[-1]'  # drop trailing -o
+          mapfile -d '' files < <(
+            find . \
+              \( "${OR_EXCLUDES[@]}" \) -prune -o \
+              -type f -print0
+          )
+          if grep -nH -I --color=always -P '[^\x00-\x7F]' "${files[@]}"; then
+            echo
+            echo "Non-ASCII characters found. Please remove/replace them."
+            exit 1
+          else
+            echo "No non-ASCII characters found."
+          fi
