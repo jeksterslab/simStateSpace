@@ -1,6 +1,6 @@
-# Simulate Data from the Ornstein–Uhlenbeck Model using a State Space Model Parameterization (Individual-Varying Parameters)
+# Simulate Data from the Ornstein-Uhlenbeck Model using a State Space Model Parameterization (Individual-Varying Parameters)
 
-This function simulates data from the Ornstein–Uhlenbeck model using a
+This function simulates data from the Ornstein-Uhlenbeck model using a
 state space model parameterization. It assumes that the parameters can
 vary across individuals.
 
@@ -153,7 +153,7 @@ less the `n`, the function will cycle through the available values.
 Chow, S.-M., Ho, M. R., Hamaker, E. L., & Dolan, C. V. (2010).
 Equivalence and differences between structural equation modeling and
 state-space modeling techniques. *Structural Equation Modeling: A
-Multidisciplinary Journal*, 17(2), 303–332.
+Multidisciplinary Journal*, 17(2), 303-332.
 [doi:10.1080/10705511003661553](https://doi.org/10.1080/10705511003661553)
 
 Chow, S.-M., Losardo, D., Park, J., & Molenaar, P. C. M. (2023).
@@ -167,11 +167,11 @@ Kalman filter. Cambridge University Press.
 
 Oravecz, Z., Tuerlinckx, F., & Vandekerckhove, J. (2011). A hierarchical
 latent stochastic differential equation model for affective dynamics.
-Psychological Methods, 16 (4), 468–490.
+Psychological Methods, 16 (4), 468-490.
 [doi:10.1037/a0024375](https://doi.org/10.1037/a0024375)
 
 Uhlenbeck, G. E., & Ornstein, L. S. (1930). On the theory of the
-brownian motion. Physical Review, 36 (5), 823–841.
+brownian motion. Physical Review, 36 (5), 823-841.
 [doi:10.1103/physrev.36.823](https://doi.org/10.1103/physrev.36.823)
 
 ## See also

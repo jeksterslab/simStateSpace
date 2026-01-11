@@ -114,10 +114,10 @@
 ## Ornstein–Uhlenbeck Model
 
 - [`SimSSMOUFixed()`](https://github.com/jeksterslab/simStateSpace/reference/SimSSMOUFixed.md)
-  : Simulate Data from the Ornstein–Uhlenbeck Model using a State Space
+  : Simulate Data from the Ornstein-Uhlenbeck Model using a State Space
   Model Parameterization (Fixed Parameters)
 - [`SimSSMOUIVary()`](https://github.com/jeksterslab/simStateSpace/reference/SimSSMOUIVary.md)
-  : Simulate Data from the Ornstein–Uhlenbeck Model using a State Space
+  : Simulate Data from the Ornstein-Uhlenbeck Model using a State Space
   Model Parameterization (Individual-Varying Parameters)
 
 ## Transformation
