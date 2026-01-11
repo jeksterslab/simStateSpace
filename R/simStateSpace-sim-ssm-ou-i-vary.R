@@ -1,10 +1,10 @@
 #' Simulate Data from the
-#' Ornstein–Uhlenbeck Model
+#' Ornstein-Uhlenbeck Model
 #' using a State Space Model Parameterization
 #' (Individual-Varying Parameters)
 #'
 #' This function simulates data from the
-#' Ornstein–Uhlenbeck model
+#' Ornstein-Uhlenbeck model
 #' using a state space model parameterization.
 #' It assumes that the parameters can vary
 #' across individuals.
