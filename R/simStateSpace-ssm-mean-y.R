@@ -28,11 +28,8 @@
 #'
 #' @author Ivan Jacob Agaloos Pesigan
 #'
-#' @param mean_eta Numeric vector.
-#'   Steady-state mean vector
-#'   of the latent variables
-#'   \eqn{\mathrm{Mean} \left( \boldsymbol{\eta} \right)}.
 #' @inheritParams SimSSMFixed
+#' @inheritParams SSMInterceptY
 #'
 #' @examples
 #' beta <- matrix(

@@ -25,6 +25,7 @@
 #' @author Ivan Jacob Agaloos Pesigan
 #'
 #' @inheritParams SimSSMFixed
+#' @inheritParams SSMInterceptY
 #'
 #' @examples
 #' beta <- matrix(
