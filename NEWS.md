@@ -2,7 +2,7 @@
 
 ## Patch
 
-* Latest development version.
+* Added the `SSMInterceptEta()` and `SSMInterceptY()` functions.
 
 # simStateSpace 1.2.14
 

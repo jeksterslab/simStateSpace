@@ -627,6 +627,31 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// SSMInterceptEta
+Rcpp::NumericVector SSMInterceptEta(const arma::mat& beta, const arma::vec& mean_eta);
+RcppExport SEXP _simStateSpace_SSMInterceptEta(SEXP betaSEXP, SEXP mean_etaSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::mat& >::type beta(betaSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type mean_eta(mean_etaSEXP);
+    rcpp_result_gen = Rcpp::wrap(SSMInterceptEta(beta, mean_eta));
+    return rcpp_result_gen;
+END_RCPP
+}
+// SSMInterceptY
+Rcpp::NumericVector SSMInterceptY(const arma::vec& mean_y, const arma::vec& mean_eta, const arma::mat& lambda);
+RcppExport SEXP _simStateSpace_SSMInterceptY(SEXP mean_ySEXP, SEXP mean_etaSEXP, SEXP lambdaSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::vec& >::type mean_y(mean_ySEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type mean_eta(mean_etaSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type lambda(lambdaSEXP);
+    rcpp_result_gen = Rcpp::wrap(SSMInterceptY(mean_y, mean_eta, lambda));
+    return rcpp_result_gen;
+END_RCPP
+}
 // SSMMeanEta
 Rcpp::NumericVector SSMMeanEta(const arma::mat& beta, const arma::vec& alpha);
 RcppExport SEXP _simStateSpace_SSMMeanEta(SEXP betaSEXP, SEXP alphaSEXP) {
@@ -740,6 +765,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_simStateSpace_SpectralRadius", (DL_FUNC) &_simStateSpace_SpectralRadius, 1},
     {"_simStateSpace_SSMCovEta", (DL_FUNC) &_simStateSpace_SSMCovEta, 2},
     {"_simStateSpace_SSMCovY", (DL_FUNC) &_simStateSpace_SSMCovY, 3},
+    {"_simStateSpace_SSMInterceptEta", (DL_FUNC) &_simStateSpace_SSMInterceptEta, 2},
+    {"_simStateSpace_SSMInterceptY", (DL_FUNC) &_simStateSpace_SSMInterceptY, 3},
     {"_simStateSpace_SSMMeanEta", (DL_FUNC) &_simStateSpace_SSMMeanEta, 2},
     {"_simStateSpace_SSMMeanY", (DL_FUNC) &_simStateSpace_SSMMeanY, 3},
     {"_simStateSpace_TestPhiHurwitz", (DL_FUNC) &_simStateSpace_TestPhiHurwitz, 2},

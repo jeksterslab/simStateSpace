@@ -991,6 +991,14 @@ SpectralRadius <- function(x) {
     .Call(`_simStateSpace_SSMCovY`, lambda, theta, cov_eta)
 }
 
+.SSMInterceptEta <- function(beta, mean_eta) {
+    .Call(`_simStateSpace_SSMInterceptEta`, beta, mean_eta)
+}
+
+.SSMInterceptY <- function(mean_y, mean_eta, lambda) {
+    .Call(`_simStateSpace_SSMInterceptY`, mean_y, mean_eta, lambda)
+}
+
 .SSMMeanEta <- function(beta, alpha) {
     .Call(`_simStateSpace_SSMMeanEta`, beta, alpha)
 }
