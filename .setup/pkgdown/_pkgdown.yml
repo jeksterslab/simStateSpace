@@ -27,7 +27,7 @@ reference:
 - title: Linear Stochastic Differential Equation Model
   contents:
   - has_keyword("linsde")
-- title: Ornstein–Uhlenbeck Model
+- title: Ornstein-Uhlenbeck Model
   contents:
   - has_keyword("ou")
 - title: Transformation
