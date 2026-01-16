@@ -71,6 +71,8 @@ Other Simulation of State Space Models Data Functions:
 \code{\link{ProjectToHurwitz}()},
 \code{\link{SSMCovEta}()},
 \code{\link{SSMCovY}()},
+\code{\link{SSMInterceptEta}()},
+\code{\link{SSMInterceptY}()},
 \code{\link{SSMMeanEta}()},
 \code{\link{SSMMeanY}()},
 \code{\link{SimAlphaN}()},
