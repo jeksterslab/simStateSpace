@@ -117,7 +117,7 @@
 - [`TestStability()`](https://github.com/jeksterslab/simStateSpace/reference/TestStability.md)
   : Test Stability
 
-## Ornstein–Uhlenbeck Model
+## Ornstein-Uhlenbeck Model
 
 - [`SimSSMOUFixed()`](https://github.com/jeksterslab/simStateSpace/reference/SimSSMOUFixed.md)
   : Simulate Data from the Ornstein-Uhlenbeck Model using a State Space
