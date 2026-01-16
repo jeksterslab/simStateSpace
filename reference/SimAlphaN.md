@@ -40,6 +40,8 @@ Other Simulation of State Space Models Data Functions:
 [`ProjectToStability()`](https://github.com/jeksterslab/simStateSpace/reference/ProjectToStability.md),
 [`SSMCovEta()`](https://github.com/jeksterslab/simStateSpace/reference/SSMCovEta.md),
 [`SSMCovY()`](https://github.com/jeksterslab/simStateSpace/reference/SSMCovY.md),
+[`SSMInterceptEta()`](https://github.com/jeksterslab/simStateSpace/reference/SSMInterceptEta.md),
+[`SSMInterceptY()`](https://github.com/jeksterslab/simStateSpace/reference/SSMInterceptY.md),
 [`SSMMeanEta()`](https://github.com/jeksterslab/simStateSpace/reference/SSMMeanEta.md),
 [`SSMMeanY()`](https://github.com/jeksterslab/simStateSpace/reference/SSMMeanY.md),
 [`SimBetaN()`](https://github.com/jeksterslab/simStateSpace/reference/SimBetaN.md),
@@ -80,33 +82,33 @@ alpha <- c(0, 0, 0)
 vcov_alpha_l <- t(chol(0.001 * diag(3)))
 SimAlphaN(n = n, alpha = alpha, vcov_alpha_l = vcov_alpha_l)
 #> [[1]]
-#> [1] -0.020575349  0.001385859  0.035564236
+#> [1]  0.03556424  0.03424429 -0.04451615
 #> 
 #> [[2]]
-#> [1] -0.04451615  0.03050132 -0.02610542
+#> [1] -0.02610542 -0.08441763  0.00295405
 #> 
 #> [[3]]
-#> [1]  0.00295405  0.00641909 -0.01880957
+#> [1] -0.01880957 -0.01665823  0.06389629
 #> 
 #> [[4]]
-#> [1]  0.0638962949 -0.0004094139  0.0385942726
+#> [1]  0.03859427  0.04366238 -0.00969072
 #> 
 #> [[5]]
-#> [1] -0.009690720  0.006371313  0.011313655
+#> [1]  0.011313655 -0.002664596 -0.012832273
 #> 
 #> [[6]]
-#> [1] -0.01283227 -0.06108355 -0.04104300
+#> [1] -0.041042996  0.003983328 -0.001098922
 #> 
 #> [[7]]
-#> [1] -0.001098922  0.048238135 -0.028804885
+#> [1] -0.02880489  0.02077902 -0.01763396
 #> 
 #> [[8]]
-#> [1] -0.01763396 -0.00591308  0.02505656
+#> [1]  0.02505656 -0.01742727  0.02516893
 #> 
 #> [[9]]
-#> [1]  0.02516893 -0.05903032  0.01244699
+#> [1]  0.01244699 -0.03988741  0.02048583
 #> 
 #> [[10]]
-#> [1] 0.020485834 0.001943539 0.011134900
+#> [1]  0.01113490 -0.05527155 -0.02740924
 #> 
 ```

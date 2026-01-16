@@ -62,6 +62,12 @@ computing*. R Foundation for Statistical Computing.
 - [`SSMCovY()`](https://github.com/jeksterslab/simStateSpace/reference/SSMCovY.md)
   : Steady-State Covariance Matrix for the Observed Variables in the
   State Space Model
+- [`SSMInterceptEta()`](https://github.com/jeksterslab/simStateSpace/reference/SSMInterceptEta.md)
+  : Intercept from Steady-State Mean Vector for the Latent Variables in
+  the State Space Model
+- [`SSMInterceptY()`](https://github.com/jeksterslab/simStateSpace/reference/SSMInterceptY.md)
+  : Intercept from Steady-State Mean Vector for the Observed Variables
+  in the State Space Model
 - [`SSMMeanEta()`](https://github.com/jeksterslab/simStateSpace/reference/SSMMeanEta.md)
   : Steady-State Mean Vector for the Latent Variables in the State Space
   Model

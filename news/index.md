@@ -4,7 +4,11 @@
 
 ### Patch
 
-- Latest development version.
+- Added the
+  [`SSMInterceptEta()`](https://github.com/jeksterslab/simStateSpace/reference/SSMInterceptEta.md)
+  and
+  [`SSMInterceptY()`](https://github.com/jeksterslab/simStateSpace/reference/SSMInterceptY.md)
+  functions.
 
 ## simStateSpace 1.2.14
 
