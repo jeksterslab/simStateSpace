@@ -78,6 +78,21 @@ lapply(
             ) <= tol
           )
         )
+        testthat::expect_true(
+          all(
+            (
+              c(
+                nu
+              ) - c(
+                simStateSpace::SSMInterceptY(
+                  mean_y = mu_y,
+                  mean_eta = mu0,
+                  lambda = lambda
+                )
+              )
+            ) <= tol
+          )
+        )
       }
     )
   },
