@@ -506,8 +506,8 @@ results <- dynr::dynr.cook(
 #> 
 #> Doing end processing
 #> Successful trial
-#> Total Time: 26.56645 
-#> Backend Time: 26.56027
+#> Total Time: 27.49601 
+#> Backend Time: 27.48997
 ```
 
 ## Summary
