@@ -1,4 +1,4 @@
-name: rhub (additional CRAN checks - 02)
+name: rhub (additional CRAN checks - 03)
 
 on:
   workflow_run:
@@ -17,14 +17,16 @@ jobs:
       fail-fast: false
       matrix:
         container:
-          - name: gcc13
-            image: ghcr.io/r-hub/containers/gcc13:latest
-          - name: gcc14
-            image: ghcr.io/r-hub/containers/gcc14:latest
-          - name: gcc15
-            image: ghcr.io/r-hub/containers/gcc15:latest
-          - name: gcc-asan
-            image: ghcr.io/r-hub/containers/gcc-asan:latest
+          - name: intel
+            image: ghcr.io/r-hub/containers/intel:latest
+          - name: lto
+            image: ghcr.io/r-hub/containers/lto:latest
+          - name: mkl
+            image: ghcr.io/r-hub/containers/mkl:latest
+          - name: rchk
+            image: ghcr.io/r-hub/containers/rchk:latest
+          - name: valgrind
+            image: ghcr.io/r-hub/containers/valgrind:latest
     name: ${{ matrix.container.name }}
     container:
       image: ${{ matrix.container.image }}
