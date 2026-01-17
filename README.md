@@ -10,10 +10,10 @@ Ivan Jacob Agaloos Pesigan
 [![CRAN
 Status](https://www.r-pkg.org/badges/version/simStateSpace)](https://cran.r-project.org/package=simStateSpace)
 [![R-Universe
-Status](https://jeksterslab.r-universe.dev/badges/simStateSpace)](https://jeksterslab.r-universe.dev/simStateSpace)
+Status](https://jeksterslab.r-universe.dev/badges/simStateSpace)](https://jeksterslab.r-universe.dev)
 [![Make
 Project](https://github.com/jeksterslab/simStateSpace/actions/workflows/make.yml/badge.svg)](https://github.com/jeksterslab/simStateSpace/actions/workflows/make.yml)
-[![R-CMD-check](https://github.com/jeksterslab/simStateSpace/actions/workflows/check-full.yml/badge.svg)](https://github.com/jeksterslab/simStateSpace/actions/workflows/check-full.yml)
+[![R-CMD-check-standard](https://github.com/jeksterslab/simStateSpace/actions/workflows/check-standard.yml/badge.svg)](https://github.com/jeksterslab/simStateSpace/actions/workflows/check-standard.yml)
 [![R Package Test
 Coverage](https://github.com/jeksterslab/simStateSpace/actions/workflows/test-coverage.yml/badge.svg)](https://github.com/jeksterslab/simStateSpace/actions/workflows/test-coverage.yml)
 [![Lint R
