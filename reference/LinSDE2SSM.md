@@ -41,7 +41,7 @@ Returns a list of state space parameters:
 
 - `beta`: Numeric matrix. Transition matrix relating the values of the
   latent variables from the previous time point to the current time
-  point. (\\\boldsymbol{\beta}\\).
+  point (\\\boldsymbol{\beta}\\).
 
 - `psi_l`: Numeric matrix. Cholesky factorization (`t(chol(psi))`) of
   the process noise covariance matrix \\\boldsymbol{\Psi}\\.

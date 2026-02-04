@@ -27,5 +27,5 @@ https://doi.org/10.1037/met0000779
       year = {2025},
       doi = {10.1037/met0000779},
       journal = {Psychological Methods},
-      note = {R package version 1.2.14.9000},
+      note = {R package version 1.2.15},
     }
