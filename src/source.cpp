@@ -175,7 +175,7 @@ arma::mat ProjectToHurwitz(const arma::mat& x, const double margin);
 //'     (\eqn{\boldsymbol{\alpha}}).
 //'   - `beta`: Numeric matrix.
 //'     Transition matrix relating the values of the latent variables
-//'     from the previous time point to the current time point.
+//'     from the previous time point to the current time point
 //'     (\eqn{\boldsymbol{\beta}}).
 //'   - `psi_l`: Numeric matrix.
 //'     Cholesky factorization (`t(chol(psi))`)

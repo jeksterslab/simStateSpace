@@ -36,7 +36,7 @@ Vector of constant values for the dynamic model
 (\eqn{\boldsymbol{\alpha}}).
 \item \code{beta}: Numeric matrix.
 Transition matrix relating the values of the latent variables
-from the previous time point to the current time point.
+from the previous time point to the current time point
 (\eqn{\boldsymbol{\beta}}).
 \item \code{psi_l}: Numeric matrix.
 Cholesky factorization (\code{t(chol(psi))})
