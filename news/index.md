@@ -2,6 +2,8 @@
 
 ## simStateSpace 1.2.15
 
+CRAN release: 2026-02-06
+
 ### Patch
 
 - Added the
