@@ -100,19 +100,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// SimAlphaN
-Rcpp::List SimAlphaN(const arma::uword& n, const arma::vec& alpha, const arma::mat& vcov_alpha_l);
-RcppExport SEXP _simStateSpace_SimAlphaN(SEXP nSEXP, SEXP alphaSEXP, SEXP vcov_alpha_lSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const arma::uword& >::type n(nSEXP);
-    Rcpp::traits::input_parameter< const arma::vec& >::type alpha(alphaSEXP);
-    Rcpp::traits::input_parameter< const arma::mat& >::type vcov_alpha_l(vcov_alpha_lSEXP);
-    rcpp_result_gen = Rcpp::wrap(SimAlphaN(n, alpha, vcov_alpha_l));
-    return rcpp_result_gen;
-END_RCPP
-}
 // SimBetaN2
 Rcpp::List SimBetaN2(const arma::uword& n, const arma::mat& beta, const arma::mat& vcov_beta_vec_l, const double margin, const double tol);
 RcppExport SEXP _simStateSpace_SimBetaN2(SEXP nSEXP, SEXP betaSEXP, SEXP vcov_beta_vec_lSEXP, SEXP marginSEXP, SEXP tolSEXP) {
@@ -192,29 +179,16 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// SimIotaN
-Rcpp::List SimIotaN(const arma::uword& n, const arma::vec& iota, const arma::mat& vcov_iota_l);
-RcppExport SEXP _simStateSpace_SimIotaN(SEXP nSEXP, SEXP iotaSEXP, SEXP vcov_iota_lSEXP) {
+// SimMVN
+Rcpp::List SimMVN(const arma::uword& n, const arma::vec& mu, const arma::mat& sigma_l);
+RcppExport SEXP _simStateSpace_SimMVN(SEXP nSEXP, SEXP muSEXP, SEXP sigma_lSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const arma::uword& >::type n(nSEXP);
-    Rcpp::traits::input_parameter< const arma::vec& >::type iota(iotaSEXP);
-    Rcpp::traits::input_parameter< const arma::mat& >::type vcov_iota_l(vcov_iota_lSEXP);
-    rcpp_result_gen = Rcpp::wrap(SimIotaN(n, iota, vcov_iota_l));
-    return rcpp_result_gen;
-END_RCPP
-}
-// SimNuN
-Rcpp::List SimNuN(const arma::uword& n, const arma::vec& nu, const arma::mat& vcov_nu_l);
-RcppExport SEXP _simStateSpace_SimNuN(SEXP nSEXP, SEXP nuSEXP, SEXP vcov_nu_lSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const arma::uword& >::type n(nSEXP);
-    Rcpp::traits::input_parameter< const arma::vec& >::type nu(nuSEXP);
-    Rcpp::traits::input_parameter< const arma::mat& >::type vcov_nu_l(vcov_nu_lSEXP);
-    rcpp_result_gen = Rcpp::wrap(SimNuN(n, nu, vcov_nu_l));
+    Rcpp::traits::input_parameter< const arma::vec& >::type mu(muSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type sigma_l(sigma_lSEXP);
+    rcpp_result_gen = Rcpp::wrap(SimMVN(n, mu, sigma_l));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -735,14 +709,12 @@ static const R_CallMethodDef CallEntries[] = {
     {"_simStateSpace_LinSDEMeanY", (DL_FUNC) &_simStateSpace_LinSDEMeanY, 3},
     {"_simStateSpace_ProjectToHurwitz", (DL_FUNC) &_simStateSpace_ProjectToHurwitz, 2},
     {"_simStateSpace_ProjectToStability", (DL_FUNC) &_simStateSpace_ProjectToStability, 3},
-    {"_simStateSpace_SimAlphaN", (DL_FUNC) &_simStateSpace_SimAlphaN, 3},
     {"_simStateSpace_SimBetaN2", (DL_FUNC) &_simStateSpace_SimBetaN2, 5},
     {"_simStateSpace_SimBetaNCovariate", (DL_FUNC) &_simStateSpace_SimBetaNCovariate, 10},
     {"_simStateSpace_SimBetaN", (DL_FUNC) &_simStateSpace_SimBetaN, 8},
     {"_simStateSpace_SimCovDiagN", (DL_FUNC) &_simStateSpace_SimCovDiagN, 3},
     {"_simStateSpace_SimCovN", (DL_FUNC) &_simStateSpace_SimCovN, 3},
-    {"_simStateSpace_SimIotaN", (DL_FUNC) &_simStateSpace_SimIotaN, 3},
-    {"_simStateSpace_SimNuN", (DL_FUNC) &_simStateSpace_SimNuN, 3},
+    {"_simStateSpace_SimMVN", (DL_FUNC) &_simStateSpace_SimMVN, 3},
     {"_simStateSpace_SimPhiN2", (DL_FUNC) &_simStateSpace_SimPhiN2, 4},
     {"_simStateSpace_SimPhiNCovariate", (DL_FUNC) &_simStateSpace_SimPhiNCovariate, 11},
     {"_simStateSpace_SimPhiN", (DL_FUNC) &_simStateSpace_SimPhiN, 9},
