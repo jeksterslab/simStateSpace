@@ -25,8 +25,8 @@ You can install the development version of `simStateSpace` from
 
 ``` r
 
-if (!require("remotes")) install.packages("remotes")
-remotes::install_github("jeksterslab/simStateSpace")
+if (!require("pak")) install.packages("pak")
+pak::pkg_install("jeksterslab/simStateSpace")
 ```
 
 ## More Information
@@ -95,6 +95,10 @@ computing*. R Foundation for Statistical Computing.
 - [`SimIotaN()`](https://github.com/jeksterslab/simStateSpace/reference/SimIotaN.md)
   : Simulate Intercept Vectors in a Continuous-Time Vector
   Autoregressive Model from the Multivariate Normal Distribution
+- [`SimMVN()`](https://github.com/jeksterslab/simStateSpace/reference/SimMVN.md)
+  : Simulate Vectors from the Multivariate Normal Distribution
+- [`SimMuN()`](https://github.com/jeksterslab/simStateSpace/reference/SimMuN.md)
+  : Simulate Set Point Vectors from the Multivariate Normal Distribution
 - [`SimNuN()`](https://github.com/jeksterslab/simStateSpace/reference/SimNuN.md)
   : Simulate Intercept Vectors in a Discrete-Time Vector Autoregressive
   Model from the Multivariate Normal Distribution
@@ -218,17 +222,6 @@ computing*. R Foundation for Statistical Computing.
   Print Method for an Object of Class `simstatespace`
 
 # Articles
-
-### Examples
-
-- [The Linear Growth Curve
-  Model](https://github.com/jeksterslab/simStateSpace/articles/lin-growth.md):
-- [The State Space
-  Model](https://github.com/jeksterslab/simStateSpace/articles/ssm.md):
-- [The Vector Autoregressive
-  Model](https://github.com/jeksterslab/simStateSpace/articles/var.md):
-- [The Ornstein-Uhlenbeck
-  Model](https://github.com/jeksterslab/simStateSpace/articles/ou.md):
 
 ### Session Information
 

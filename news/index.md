@@ -1,5 +1,20 @@
 # Changelog
 
+## simStateSpace 1.2.15.9000
+
+### Patch
+
+- Added the
+  [`SimMVN()`](https://github.com/jeksterslab/simStateSpace/reference/SimMVN.md)
+  function.
+- Consolidated the
+  [`SimAlphaN()`](https://github.com/jeksterslab/simStateSpace/reference/SimAlphaN.md),
+  [`SimIotaN()`](https://github.com/jeksterslab/simStateSpace/reference/SimIotaN.md),
+  [`SimNuN()`](https://github.com/jeksterslab/simStateSpace/reference/SimNuN.md),
+  and
+  [`SimMuN()`](https://github.com/jeksterslab/simStateSpace/reference/SimMuN.md)
+  functions.
+
 ## simStateSpace 1.2.15
 
 CRAN release: 2026-02-06

@@ -51,6 +51,8 @@ Other Simulation of State Space Models Data Functions:
 [`SimCovDiagN()`](https://github.com/jeksterslab/simStateSpace/reference/SimCovDiagN.md),
 [`SimCovN()`](https://github.com/jeksterslab/simStateSpace/reference/SimCovN.md),
 [`SimIotaN()`](https://github.com/jeksterslab/simStateSpace/reference/SimIotaN.md),
+[`SimMVN()`](https://github.com/jeksterslab/simStateSpace/reference/SimMVN.md),
+[`SimMuN()`](https://github.com/jeksterslab/simStateSpace/reference/SimMuN.md),
 [`SimPhiN()`](https://github.com/jeksterslab/simStateSpace/reference/SimPhiN.md),
 [`SimPhiN2()`](https://github.com/jeksterslab/simStateSpace/reference/SimPhiN2.md),
 [`SimPhiNCovariate()`](https://github.com/jeksterslab/simStateSpace/reference/SimPhiNCovariate.md),
@@ -82,33 +84,33 @@ nu <- c(0, 0, 0)
 vcov_nu_l <- t(chol(0.001 * diag(3)))
 SimNuN(n = n, nu = nu, vcov_nu_l = vcov_nu_l)
 #> [[1]]
-#> [1]  0.01834558  0.01113590 -0.06179864
+#> [1] -0.04222285  0.02084666 -0.03931101
 #> 
 #> [[2]]
-#> [1] -0.036221215 -0.004993000  0.004195649
+#> [1] -0.004789062  0.016136026  0.018097132
 #> 
 #> [[3]]
-#> [1] 0.05200811 0.01056376 0.01108836
+#> [1]  0.01085130 -0.02608582 -0.04753395
 #> 
 #> [[4]]
-#> [1] 0.018110223 0.006361179 0.005058385
+#> [1] -0.01433089  0.05631861  0.01262215
 #> 
 #> [[5]]
-#> [1]  0.02579201 -0.03922788  0.01735349
+#> [1] -0.046983449  0.042547809 -0.004569174
 #> 
 #> [[6]]
-#> [1] 0.01468496 0.02095482 0.01274581
+#> [1]  0.001425817 -0.036680008  0.013492232
 #> 
 #> [[7]]
-#> [1]  0.029038781  0.007515091 -0.004008343
+#> [1]  0.0005504809 -0.0274337166  0.0001175252
 #> 
 #> [[8]]
-#> [1]  0.06372791 -0.03531067  0.01063186
+#> [1]  0.02653194 -0.01752359 -0.04563322
 #> 
 #> [[9]]
-#> [1] -0.033914896  0.003523242 -0.034511046
+#> [1]  0.004622456  0.015697562 -0.046784864
 #> 
 #> [[10]]
-#> [1]  0.008503482 -0.050140839 -0.080797255
+#> [1]  0.008370418 -0.009142480 -0.040588705
 #> 
 ```

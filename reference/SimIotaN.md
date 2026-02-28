@@ -50,6 +50,8 @@ Other Simulation of State Space Models Data Functions:
 [`SimBetaNCovariate()`](https://github.com/jeksterslab/simStateSpace/reference/SimBetaNCovariate.md),
 [`SimCovDiagN()`](https://github.com/jeksterslab/simStateSpace/reference/SimCovDiagN.md),
 [`SimCovN()`](https://github.com/jeksterslab/simStateSpace/reference/SimCovN.md),
+[`SimMVN()`](https://github.com/jeksterslab/simStateSpace/reference/SimMVN.md),
+[`SimMuN()`](https://github.com/jeksterslab/simStateSpace/reference/SimMuN.md),
 [`SimNuN()`](https://github.com/jeksterslab/simStateSpace/reference/SimNuN.md),
 [`SimPhiN()`](https://github.com/jeksterslab/simStateSpace/reference/SimPhiN.md),
 [`SimPhiN2()`](https://github.com/jeksterslab/simStateSpace/reference/SimPhiN2.md),

@@ -43,6 +43,10 @@
 - [`SimIotaN()`](https://github.com/jeksterslab/simStateSpace/reference/SimIotaN.md)
   : Simulate Intercept Vectors in a Continuous-Time Vector
   Autoregressive Model from the Multivariate Normal Distribution
+- [`SimMVN()`](https://github.com/jeksterslab/simStateSpace/reference/SimMVN.md)
+  : Simulate Vectors from the Multivariate Normal Distribution
+- [`SimMuN()`](https://github.com/jeksterslab/simStateSpace/reference/SimMuN.md)
+  : Simulate Set Point Vectors from the Multivariate Normal Distribution
 - [`SimNuN()`](https://github.com/jeksterslab/simStateSpace/reference/SimNuN.md)
   : Simulate Intercept Vectors in a Discrete-Time Vector Autoregressive
   Model from the Multivariate Normal Distribution
