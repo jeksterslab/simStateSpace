@@ -84,16 +84,20 @@ performed in Pesigan, Russell, and Chow (2025: \url{https://doi.org/10.1037/met0
 
 \section*{Installation}
 
-You can install the released version of
-\texttt{simStateSpace}
-from
-\href{https://github.com/jeksterslab/simStateSpace}{GitHub}
-with:
+You can install the CRAN release of \texttt{simStateSpace} with:
 
 %% begin.rcode
 % #| eval = FALSE
-% install.packages("remotes")
-% remotes::install_github("jeksterslab/simStateSpace")
+% install.packages("simStateSpace")
+%% end.rcode
+
+You can install the development version of \texttt{simStateSpace} from
+\href{https://github.com/jeksterslab/simStateSpace}{GitHub} with:
+
+%% begin.rcode
+% #| eval = FALSE
+% if (!require("pak")) install.packages("pak")
+% pak::pkg_install("jeksterslab/simStateSpace")
 %% end.rcode
 
 \section*{More Information}

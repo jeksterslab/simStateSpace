@@ -49,8 +49,8 @@ You can install the development version of `simStateSpace` from
 [GitHub](https://github.com/jeksterslab/simStateSpace) with:
 
 ``` r
-if (!require("remotes")) install.packages("remotes")
-remotes::install_github("jeksterslab/simStateSpace")
+if (!require("pak")) install.packages("pak")
+pak::pkg_install("jeksterslab/simStateSpace")
 ```
 
 ## More Information

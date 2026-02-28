@@ -1,3 +1,10 @@
+# simStateSpace 1.2.15.9000
+
+## Patch
+
+* Added the `SimMVN()` function.
+* Consolidated the `SimAlphaN()`, `SimIotaN()`, `SimNuN()`, and  `SimMuN()` functions.
+
 # simStateSpace 1.2.15
 
 ## Patch
