@@ -1,18 +1,19 @@
 #!/bin/bash
 #SBATCH --nodes=1
-#SBATCH --exclusive
-#SBATCH --mem=0
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=1
+#SBATCH --mem=4G
 #SBATCH --time=2-00:00:00
 #SBATCH --output=make.out
 #SBATCH --error=make.err
 
 # Define an array of directories
 directories=(
-  "/scratch/ibp5092/simStateSpace"
+  "/home/ibp5092/Downloads/simStateSpace"
 )
 
 # SIF path
-sif_path="/scratch/ibp5092/sif/docs.sif"
+sif_path="/home/ibp5092/work/docs.sif"
 
 # Iterate over directories
 for dir in "${directories[@]}"; do
