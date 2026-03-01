@@ -89,6 +89,20 @@ lapply(
             ) <= tol
           )
         )
+        testthat::expect_true(
+          all(
+            (
+              c(
+                iota
+              ) - c(
+                simStateSpace::LinSDEInterceptEta(
+                  phi = phi,
+                  mean_eta = mu
+                )
+              )
+            ) <= tol
+          )
+        )
       }
     )
   },

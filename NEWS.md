@@ -4,6 +4,7 @@
 
 * Added the `SimMVN()` function.
 * Consolidated the `SimAlphaN()`, `SimIotaN()`, `SimNuN()`, and  `SimMuN()` functions.
+* Added the `LinSDEInterceptEta()` and `LinSDEInterceptY()` functions.
 
 # simStateSpace 1.2.15
 

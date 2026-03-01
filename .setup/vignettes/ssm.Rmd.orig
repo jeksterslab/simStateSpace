@@ -35,8 +35,8 @@ knitr::opts_chunk$set(
 ```{r}
 #| echo = FALSE
 set.seed(42)
-n <- 100
-time <- 1000
+n <- 50 # 100
+time <- 100 # 1000
 k <- p <- 3
 iden <- diag(k)
 null_vec <- rep(x = 0, times = k)
