@@ -41,6 +41,12 @@ reference:
   - has_keyword("methods")
 
 articles:
+- title: Examples
+  contents:
+  - lin-growth
+  - ssm
+  - var
+  - ou
 - title: Session Information
   contents:
   - session

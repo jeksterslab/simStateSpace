@@ -1,0 +1,667 @@
+---
+title: "The Ornstein-Uhlenbeck Model"
+author: "Ivan Jacob Agaloos Pesigan"
+date: "`r Sys.Date()`"
+bibliography: "vignettes.bib"
+csl: https://raw.githubusercontent.com/citation-style-language/styles/master/apa.csl
+nocite: |
+  @RCoreTeam-2025
+  @Ou-Hunter-Chow-2019
+  @Chow-Losardo-Park-etal-2023
+  @Uhlenbeck-Ornstein-1930
+  @Chow-Ho-Hamaker-etal-2010
+  @Deboeck-Preacher-2015
+  @Oravecz-Tuerlinckx-Vandekerckhove-2011
+  @Pesigan-Russell-Chow-2025a
+output:
+  rmarkdown::html_vignette:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{The Ornstein-Uhlenbeck Model}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r}
+#| include = FALSE
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  fig.path = "fig-vignettes-ou-",
+  fig.cap = "",
+  fig.width = 11,
+  fig.height = 8,
+  fig.retina = 2,
+  dpi = 300,
+  comment = "#>"
+)
+```
+
+```{r}
+#| echo = FALSE
+set.seed(42)
+n <- 100
+time <- 1000
+delta_t <- 0.10
+k <- p <- 3
+iden <- diag(k)
+null_vec <- rep(x = 0, times = k)
+iota <- null_vec
+mu <- null_vec
+phi <- matrix(
+  data = c(
+    -0.357,
+    0.771,
+    -0.450,
+    0.0,
+    -0.511,
+    0.729,
+    0,
+    0,
+    -0.693
+  ),
+  nrow = k
+)
+beta_var1 <- expm::expm(
+  phi
+)
+sigma <- matrix(
+  data = c(
+    0.24455556,
+    0.02201587,
+    -0.05004762,
+    0.02201587,
+    0.07067800,
+    0.01539456,
+    -0.05004762,
+    0.01539456,
+    0.07553061
+  ),
+  nrow = p
+)
+sigma_l <- t(chol(sigma))
+nu <- null_vec
+lambda <- iden
+theta <- 0.2 * iden
+theta_l <- t(chol(theta))
+mu0 <- simStateSpace::LinSDEMeanEta(
+  phi = phi,
+  iota = iota
+)
+# mu0 <- null_vec
+sigma0 <- simStateSpace::LinSDECovEta(
+  phi = phi,
+  sigma = sigma
+)
+# sigma0 <- matrix(
+#   data = c(
+#     1.0, 0.2, 0.2,
+#     0.2, 1.0, 0.2,
+#     0.2, 0.2, 1.0
+#   ),
+#   nrow = 3
+# )
+sigma0_l <- t(chol(sigma0))
+```
+
+## Model
+
+The measurement model is given by
+\begin{equation}
+  \mathbf{y}_{i, t}
+  =
+  \boldsymbol{\nu}
+  +
+  \boldsymbol{\Lambda}
+  \boldsymbol{\eta}_{i, t}
+  +
+  \boldsymbol{\varepsilon}_{i, t},
+  \quad
+  \mathrm{with}
+  \quad
+  \boldsymbol{\varepsilon}_{i, t}
+  \sim
+  \mathcal{N}
+  \left(
+  \mathbf{0},
+  \boldsymbol{\Theta}
+  \right)
+\end{equation}
+where
+$\mathbf{y}_{i, t}$,
+$\boldsymbol{\eta}_{i, t}$,
+and
+$\boldsymbol{\varepsilon}_{i, t}$
+are random variables
+and
+$\boldsymbol{\nu}$,
+$\boldsymbol{\Lambda}$,
+and
+$\boldsymbol{\Theta}$
+are model parameters.
+$\mathbf{y}_{i, t}$
+represents a vector of observed random variables,
+$\boldsymbol{\eta}_{i, t}$
+a vector of latent random variables,
+and
+$\boldsymbol{\varepsilon}_{i, t}$
+a vector of random measurement errors,
+at time $t$ and individual $i$.
+$\boldsymbol{\nu}$
+denotes a vector of intercepts,
+$\boldsymbol{\Lambda}$
+a matrix of factor loadings,
+and
+$\boldsymbol{\Theta}$
+the covariance matrix of
+$\boldsymbol{\varepsilon}$.
+
+An alternative representation of the measurement error
+is given by
+\begin{equation}
+  \boldsymbol{\varepsilon}_{i, t}
+  =
+  \boldsymbol{\Theta}^{\frac{1}{2}}
+  \mathbf{z}_{i, t},
+  \quad
+  \mathrm{with}
+  \quad
+  \mathbf{z}_{i, t}
+  \sim
+  \mathcal{N}
+  \left(
+  \mathbf{0},
+  \mathbf{I}
+  \right)
+\end{equation}
+where
+$\mathbf{z}_{i, t}$ is a vector of
+independent standard normal random variables and
+$\left( \boldsymbol{\Theta}^{\frac{1}{2}} \right) \left( \boldsymbol{\Theta}^{\frac{1}{2}} \right)^{\prime} = \boldsymbol{\Theta}$ .
+
+The dynamic structure is given by
+\begin{equation}
+  \mathrm{d} \boldsymbol{\eta}_{i, t}
+  =
+  \boldsymbol{\Phi}
+  \left(
+  \boldsymbol{\eta}_{i, t}
+  -
+  \boldsymbol{\mu}
+  \right)
+  \mathrm{d}t
+  +
+  \boldsymbol{\Sigma}^{\frac{1}{2}}
+  \mathrm{d}
+  \mathbf{W}_{i, t}
+\end{equation}
+where
+$\boldsymbol{\mu}$
+is the long-term mean or equilibrium level,
+$\boldsymbol{\Phi}$
+is the rate of mean reversion,
+determining how quickly the variable returns to its mean,
+$\boldsymbol{\Sigma}$
+is the matrix of volatility
+or randomness in the process, and
+$\mathrm{d}\boldsymbol{W}$
+is a Wiener process or Brownian motion,
+which represents random fluctuations.
+
+## Data Generation
+
+### Notation
+
+Let $t = `r time`$ be the number of time points and $n = `r n`$ be the number of individuals.
+
+Let the measurement model intecept vector $\boldsymbol{\nu}$ be given by
+
+\begin{equation}
+\boldsymbol{\nu}
+=
+\left(
+\begin{array}{c}
+  `r nu[1]` \\
+  `r nu[2]` \\
+  `r nu[3]` \\
+\end{array}
+\right) .
+\end{equation}
+
+Let the factor loadings matrix $\boldsymbol{\Lambda}$ be given by
+
+\begin{equation}
+\boldsymbol{\Lambda}
+=
+\left(
+\begin{array}{ccc}
+  `r lambda[1, 1]` & `r lambda[1, 2]` & `r lambda[1, 3]` \\
+  `r lambda[2, 1]` & `r lambda[2, 2]` & `r lambda[2, 3]` \\
+  `r lambda[3, 1]` & `r lambda[3, 2]` & `r lambda[3, 3]` \\
+\end{array}
+\right) .
+\end{equation}
+
+Let the measurement error covariance matrix $\boldsymbol{\Theta}$ be given by
+
+\begin{equation}
+\boldsymbol{\Theta}
+=
+\left(
+\begin{array}{ccc}
+  `r theta[1, 1]` & `r theta[1, 2]` & `r theta[1, 3]` \\
+  `r theta[2, 1]` & `r theta[2, 2]` & `r theta[2, 3]` \\
+  `r theta[3, 1]` & `r theta[3, 2]` & `r theta[3, 3]` \\
+\end{array}
+\right) .
+\end{equation}
+
+Let the initial condition
+$\boldsymbol{\eta}_{0}$
+be given by
+
+\begin{equation}
+\boldsymbol{\eta}_{0} \sim \mathcal{N} \left( \boldsymbol{\mu}_{\boldsymbol{\eta} \mid 0}, \boldsymbol{\Sigma}_{\boldsymbol{\eta} \mid 0} \right)
+\end{equation}
+
+\begin{equation}
+\boldsymbol{\mu}_{\boldsymbol{\eta} \mid 0}
+=
+\left(
+\begin{array}{c}
+  `r mu0[1]` \\
+  `r mu0[2]` \\
+  `r mu0[3]` \\
+\end{array}
+\right)
+\end{equation}
+
+\begin{equation}
+\boldsymbol{\Sigma}_{\boldsymbol{\eta} \mid 0}
+=
+\left(
+\begin{array}{ccc}
+  `r sigma0[1, 1]` & `r sigma0[1, 2]` & `r sigma0[1, 3]` \\
+  `r sigma0[2, 1]` & `r sigma0[2, 2]` & `r sigma0[2, 3]` \\
+  `r sigma0[3, 1]` & `r sigma0[3, 2]` & `r sigma0[3, 3]` \\
+\end{array}
+\right) .
+\end{equation}
+
+Let the long-term mean vector $\boldsymbol{\mu}$ be given by
+
+\begin{equation}
+\boldsymbol{\mu}
+=
+\left(
+\begin{array}{c}
+  `r mu[1]` \\
+  `r mu[2]` \\
+  `r mu[3]` \\
+\end{array}
+\right) .
+\end{equation}
+
+Let the rate of mean reversion matrix $\boldsymbol{\Phi}$ be given by
+
+\begin{equation}
+\boldsymbol{\Phi}
+=
+\left(
+\begin{array}{ccc}
+  `r phi[1, 1]` & `r phi[1, 2]` & `r phi[1, 3]` \\
+  `r phi[2, 1]` & `r phi[2, 2]` & `r phi[2, 3]` \\
+  `r phi[3, 1]` & `r phi[3, 2]` & `r phi[3, 3]` \\
+\end{array}
+\right) .
+\end{equation}
+
+Let the dynamic process noise covariance matrix $\boldsymbol{\Sigma}$ be given by
+
+\begin{equation}
+\boldsymbol{\Sigma}
+=
+\left(
+\begin{array}{ccc}
+  `r sigma[1, 1]` & `r sigma[1, 2]` & `r sigma[1, 3]` \\
+  `r sigma[2, 1]` & `r sigma[2, 2]` & `r sigma[2, 3]` \\
+  `r sigma[3, 1]` & `r sigma[3, 2]` & `r sigma[3, 3]` \\
+\end{array}
+\right) .
+\end{equation}
+
+Let $\Delta t = `r delta_t`$.
+
+### R Function Arguments
+
+```{r}
+n
+time
+delta_t
+mu0
+sigma0
+sigma0_l # sigma0_l <- t(chol(sigma0))
+mu
+phi
+sigma
+sigma_l # sigma_l <- t(chol(sigma))
+nu
+lambda
+theta
+theta_l # theta_l <- t(chol(theta))
+```
+
+### Visualizing the Dynamics Without Measurement Error and Process Noise (n = 5 with Different Initial Condition)
+
+```{r no-error-ou}
+#| echo = FALSE
+library(simStateSpace)
+sim <- SimSSMOUFixed(
+  n = 5,
+  time = length(seq(from = 0, to = 20, by = delta_t)),
+  delta_t = delta_t,
+  mu0 = mu0,
+  sigma0_l = sigma0_l,
+  mu = mu,
+  phi = phi,
+  sigma_l = matrix(
+    data = 0,
+    nrow = p,
+    ncol = p
+  ),
+  nu = nu,
+  lambda = lambda,
+  theta_l = matrix(
+    data = 0,
+    nrow = k,
+    ncol = k
+  ),
+  type = 0
+)
+plot(sim, type = "l")
+```
+
+### Using the `SimSSMOUFixed` Function from the `simStateSpace` Package to Simulate Data
+
+```{r error-ou}
+library(simStateSpace)
+sim <- SimSSMOUFixed(
+  n = n,
+  time = time,
+  delta_t = delta_t,
+  mu0 = mu0,
+  sigma0_l = sigma0_l,
+  mu = mu,
+  phi = phi,
+  sigma_l = sigma_l,
+  nu = nu,
+  lambda = lambda,
+  theta_l = theta_l,
+  type = 0
+)
+data <- as.data.frame(sim)
+head(data)
+summary(data)
+plot(sim)
+```
+
+## Model Fitting
+
+### Prepare Data
+
+```{r}
+dynr_data <- dynr::dynr.data(
+  dataframe = data,
+  id = "id",
+  time = "time",
+  observed = c("y1", "y2", "y3")
+)
+```
+
+### Prepare Initial Condition
+
+```{r}
+dynr_initial <- dynr::prep.initial(
+  values.inistate = mu0,
+  params.inistate = c("mu0_1_1", "mu0_2_1", "mu0_3_1"),
+  values.inicov = sigma0,
+  params.inicov = matrix(
+    data = c(
+      "sigma0_1_1", "sigma0_2_1", "sigma0_3_1",
+      "sigma0_2_1", "sigma0_2_2", "sigma0_3_2",
+      "sigma0_3_1", "sigma0_3_2", "sigma0_3_3"
+    ),
+    nrow = 3
+  )
+)
+```
+
+### Prepare Measurement Model
+
+```{r}
+dynr_measurement <- dynr::prep.measurement(
+  values.load = diag(3),
+  params.load = matrix(data = "fixed", nrow = 3, ncol = 3),
+  state.names = c("eta_1", "eta_2", "eta_3"),
+  obs.names = c("y1", "y2", "y3")
+)
+```
+
+### Prepare Dynamic Process
+
+```{r}
+dynr_dynamics <- dynr::prep.formulaDynamics(
+  formula = list(  
+    eta_1 ~ (phi_1_1 * (eta_1 - mu_1_1)) + (phi_1_2 * (eta_2 - mu_2_1)) + (phi_1_3 * (eta_3 - mu_3_1)),
+    eta_2 ~ (phi_2_1 * (eta_1 - mu_1_1)) + (phi_2_2 * (eta_2 - mu_2_1)) + (phi_2_3 * (eta_3 - mu_3_1)),
+    eta_3 ~ (phi_3_1 * (eta_1 - mu_1_1)) + (phi_3_2 * (eta_2 - mu_2_1)) + (phi_3_3 * (eta_3 - mu_3_1))
+  ),
+  startval = c(
+    mu_1_1 = mu[1], mu_2_1 = mu[2], mu_3_1 = mu[3],
+    phi_1_1 = phi[1, 1], phi_1_2 = phi[1, 2], phi_1_3 = phi[1, 3],
+    phi_2_1 = phi[2, 1], phi_2_2 = phi[2, 2], phi_2_3 = phi[2, 3],
+    phi_3_1 = phi[3, 1], phi_3_2 = phi[3, 2], phi_3_3 = phi[3, 3]
+  ),
+  isContinuousTime = TRUE
+)
+```
+
+### Prepare Process Noise
+
+```{r}
+dynr_noise <- dynr::prep.noise(
+  values.latent = sigma,
+  params.latent = matrix(
+    data = c(
+      "sigma_1_1", "sigma_2_1", "sigma_3_1",
+      "sigma_2_1", "sigma_2_2", "sigma_3_2",
+      "sigma_3_1", "sigma_3_2", "sigma_3_3"
+    ),
+    nrow = 3
+  ),
+  values.observed = theta,
+  params.observed = matrix(
+    data = c(
+      "theta_1_1", "fixed", "fixed",
+      "fixed", "theta_2_2", "fixed",
+      "fixed", "fixed", "theta_3_3"
+    ),
+    nrow = 3
+  )
+)
+```
+
+### Prepare the Model
+
+```{r}
+model <- dynr::dynr.model(
+  data = dynr_data,
+  initial = dynr_initial,
+  measurement = dynr_measurement,
+  dynamics = dynr_dynamics,
+  noise = dynr_noise,
+  outfile = "ou.c"
+)
+```
+
+Add lower and upper bounds to aid in the optimization.
+
+```{r}
+model$lb[
+  c(
+    "phi_1_1",
+    "phi_1_2",
+    "phi_1_3",
+    "phi_2_1",
+    "phi_2_2",
+    "phi_2_3",
+    "phi_3_1",
+    "phi_3_2",
+    "phi_3_3"
+  )
+] <- -1.5
+model$ub[
+  c(
+    "phi_1_1",
+    "phi_1_2",
+    "phi_1_3",
+    "phi_2_1",
+    "phi_2_2",
+    "phi_2_3",
+    "phi_3_1",
+    "phi_3_2",
+    "phi_3_3"
+  )
+] <- +1.5
+```
+
+```{r model-ou}
+#| echo = FALSE
+dynr::plotFormula(
+  dynrModel = model,
+  ParameterAs = model$"param.names",
+  printDyn = TRUE,
+  printMeas = TRUE
+)
+```
+
+### Fit the Model
+
+```{r}
+results <- dynr::dynr.cook(
+  model,
+  debug_flag = TRUE,
+  verbose = FALSE
+)
+```
+
+## Summary
+
+```{r}
+summary(results)
+```
+
+```{r}
+#| echo = FALSE
+estimates <- coef(results)
+estimates_cov <- vcov(results)
+mu0_hat <- unname(
+  estimates[
+    c(
+      "mu0_1_1",
+      "mu0_2_1",
+      "mu0_3_1"
+    )
+  ]
+)
+mu0_hat <- unname(mu0_hat)
+sigma0_hat <- matrix(
+  data = estimates[
+    c(
+      "sigma0_1_1",
+      "sigma0_2_1",
+      "sigma0_3_1",
+      "sigma0_2_1",
+      "sigma0_2_2",
+      "sigma0_3_2",
+      "sigma0_3_1",
+      "sigma0_3_2",
+      "sigma0_3_3"
+    )
+  ],
+  nrow = 3
+)
+mu_hat <- unname(
+  estimates[
+    c(
+      "mu_1_1",
+      "mu_2_1",
+      "mu_3_1"
+    )
+  ]
+)
+phi_hat <- matrix(
+  data = estimates[
+    c(
+      "phi_1_1",
+      "phi_2_1",
+      "phi_3_1",
+      "phi_1_2",
+      "phi_2_2",
+      "phi_3_2",
+      "phi_1_3",
+      "phi_2_3",
+      "phi_3_3"
+    )
+  ],
+  nrow = 3
+)
+sigma_hat <- matrix(
+  data = estimates[
+    c(
+      "sigma_1_1",
+      "sigma_2_1",
+      "sigma_3_1",
+      "sigma_2_1",
+      "sigma_2_2",
+      "sigma_3_2",
+      "sigma_3_1",
+      "sigma_3_2",
+      "sigma_3_3"
+    )
+  ],
+  nrow = 3
+)
+theta_hat <- diag(3)
+diag(theta_hat) <- estimates[
+  c(
+    "theta_1_1",
+    "theta_2_2",
+    "theta_3_3"
+  )
+]
+```
+
+### Parameter Estimates
+
+```{r}
+mu_hat
+phi_hat
+sigma_hat
+theta_hat
+mu0_hat
+sigma0_hat
+beta_var1_hat <- expm::expm(phi_hat)
+beta_var1_hat
+```
+
+## References
+
+```{r}
+#| include = FALSE
+unlink(c("ou.c", "ou.s", "ou.so", "ou.o"))
+```
+
+```{r}
+#| include = FALSE
+rm(list = ls())
+```
