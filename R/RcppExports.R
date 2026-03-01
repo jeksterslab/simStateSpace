@@ -200,6 +200,10 @@ LinSDE2SSM <- function(iota, phi, sigma_l, delta_t) {
     .Call(`_simStateSpace_LinSDECovY`, lambda, theta, cov_eta)
 }
 
+.LinSDEInterceptEta <- function(phi, mean_eta) {
+    .Call(`_simStateSpace_LinSDEInterceptEta`, phi, mean_eta)
+}
+
 .LinSDEMeanEta <- function(phi, iota) {
     .Call(`_simStateSpace_LinSDEMeanEta`, phi, iota)
 }

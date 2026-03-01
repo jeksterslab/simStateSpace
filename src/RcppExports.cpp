@@ -50,6 +50,18 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// LinSDEInterceptEta
+Rcpp::NumericVector LinSDEInterceptEta(const arma::mat& phi, const arma::vec& mean_eta);
+RcppExport SEXP _simStateSpace_LinSDEInterceptEta(SEXP phiSEXP, SEXP mean_etaSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::mat& >::type phi(phiSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type mean_eta(mean_etaSEXP);
+    rcpp_result_gen = Rcpp::wrap(LinSDEInterceptEta(phi, mean_eta));
+    return rcpp_result_gen;
+END_RCPP
+}
 // LinSDEMeanEta
 Rcpp::NumericVector LinSDEMeanEta(const arma::mat phi, const arma::vec iota);
 RcppExport SEXP _simStateSpace_LinSDEMeanEta(SEXP phiSEXP, SEXP iotaSEXP) {
@@ -705,6 +717,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_simStateSpace_LinSDE2SSM", (DL_FUNC) &_simStateSpace_LinSDE2SSM, 4},
     {"_simStateSpace_LinSDECovEta", (DL_FUNC) &_simStateSpace_LinSDECovEta, 2},
     {"_simStateSpace_LinSDECovY", (DL_FUNC) &_simStateSpace_LinSDECovY, 3},
+    {"_simStateSpace_LinSDEInterceptEta", (DL_FUNC) &_simStateSpace_LinSDEInterceptEta, 2},
     {"_simStateSpace_LinSDEMeanEta", (DL_FUNC) &_simStateSpace_LinSDEMeanEta, 2},
     {"_simStateSpace_LinSDEMeanY", (DL_FUNC) &_simStateSpace_LinSDEMeanY, 3},
     {"_simStateSpace_ProjectToHurwitz", (DL_FUNC) &_simStateSpace_ProjectToHurwitz, 2},

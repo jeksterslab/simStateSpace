@@ -200,6 +200,8 @@ Cambridge University Press.
 Other Simulation of State Space Models Data Functions: 
 \code{\link{LinSDECovEta}()},
 \code{\link{LinSDECovY}()},
+\code{\link{LinSDEInterceptEta}()},
+\code{\link{LinSDEInterceptY}()},
 \code{\link{LinSDEMeanEta}()},
 \code{\link{LinSDEMeanY}()},
 \code{\link{ProjectToHurwitz}()},
