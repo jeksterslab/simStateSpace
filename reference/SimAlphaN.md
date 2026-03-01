@@ -34,6 +34,8 @@ Other Simulation of State Space Models Data Functions:
 [`LinSDE2SSM()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDE2SSM.md),
 [`LinSDECovEta()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDECovEta.md),
 [`LinSDECovY()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDECovY.md),
+[`LinSDEInterceptEta()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDEInterceptEta.md),
+[`LinSDEInterceptY()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDEInterceptY.md),
 [`LinSDEMeanEta()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDEMeanEta.md),
 [`LinSDEMeanY()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDEMeanY.md),
 [`ProjectToHurwitz()`](https://github.com/jeksterslab/simStateSpace/reference/ProjectToHurwitz.md),
@@ -84,33 +86,33 @@ alpha <- c(0, 0, 0)
 vcov_alpha_l <- t(chol(0.001 * diag(3)))
 SimAlphaN(n = n, alpha = alpha, vcov_alpha_l = vcov_alpha_l)
 #> [[1]]
-#> [1]  0.03556424  0.03424429 -0.04451615
+#> [1] -0.04451615  0.03050132 -0.02610542
 #> 
 #> [[2]]
-#> [1] -0.02610542 -0.08441763  0.00295405
+#> [1]  0.00295405  0.00641909 -0.01880957
 #> 
 #> [[3]]
-#> [1] -0.01880957 -0.01665823  0.06389629
+#> [1]  0.0638962949 -0.0004094139  0.0385942726
 #> 
 #> [[4]]
-#> [1]  0.03859427  0.04366238 -0.00969072
+#> [1] -0.009690720  0.006371313  0.011313655
 #> 
 #> [[5]]
-#> [1]  0.011313655 -0.002664596 -0.012832273
+#> [1] -0.01283227 -0.06108355 -0.04104300
 #> 
 #> [[6]]
-#> [1] -0.041042996  0.003983328 -0.001098922
+#> [1] -0.001098922  0.048238135 -0.028804885
 #> 
 #> [[7]]
-#> [1] -0.02880489  0.02077902 -0.01763396
+#> [1] -0.01763396 -0.00591308  0.02505656
 #> 
 #> [[8]]
-#> [1]  0.02505656 -0.01742727  0.02516893
+#> [1]  0.02516893 -0.05903032  0.01244699
 #> 
 #> [[9]]
-#> [1]  0.01244699 -0.03988741  0.02048583
+#> [1] 0.020485834 0.001943539 0.011134900
 #> 
 #> [[10]]
-#> [1]  0.01113490 -0.05527155 -0.02740924
+#> [1] -0.02740924 -0.06607776 -0.01481660
 #> 
 ```

@@ -88,6 +88,12 @@
 - [`LinSDECovY()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDECovY.md)
   : Steady-State Covariance Matrix for the Observed Variables in the
   Linear Stochastic Differential Equation Model
+- [`LinSDEInterceptEta()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDEInterceptEta.md)
+  : Intercept from Steady-State Mean Vector for the Latent Variables in
+  the Linear Stochastic Differential Equation Model
+- [`LinSDEInterceptY()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDEInterceptY.md)
+  : Intercept from Steady-State Mean Vector for the Observed Variables
+  in the Linear Stochastic Differential Equation Model
 - [`LinSDEMeanEta()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDEMeanEta.md)
   : Steady-State Mean Vector for the Latent Variables in the Linear
   Stochastic Differential Equation Model

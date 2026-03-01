@@ -84,6 +84,8 @@ Other Simulation of State Space Models Data Functions:
 [`LinSDE2SSM()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDE2SSM.md),
 [`LinSDECovEta()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDECovEta.md),
 [`LinSDECovY()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDECovY.md),
+[`LinSDEInterceptEta()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDEInterceptEta.md),
+[`LinSDEInterceptY()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDEInterceptY.md),
 [`LinSDEMeanEta()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDEMeanEta.md),
 [`LinSDEMeanY()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDEMeanY.md),
 [`ProjectToHurwitz()`](https://github.com/jeksterslab/simStateSpace/reference/ProjectToHurwitz.md),
@@ -152,33 +154,33 @@ SimBetaNCovariate(
   x = x
 )
 #> [[1]]
-#>             [,1]       [,2]         [,3]
-#> [1,]  0.74284297 0.01446261 -0.002043949
-#> [2,]  0.48430026 0.58948165  0.001537672
-#> [3,] -0.07907666 0.37758361  0.495462488
+#>            [,1]        [,2]         [,3]
+#> [1,]  0.7209233 -0.02241639 -0.004537512
+#> [2,]  0.5144626  0.59795605 -0.016906034
+#> [3,] -0.1105184  0.40153767  0.504346010
 #> 
 #> [[2]]
-#>            [,1]        [,2]        [,3]
-#> [1,]  0.8043460 0.004087614 -0.02657330
-#> [2,]  0.5009306 0.610956032  0.06268561
-#> [3,] -0.1370391 0.420064618  0.53629846
+#>             [,1]       [,2]        [,3]
+#> [1,]  0.76296094 0.02006462 0.036298455
+#> [2,]  0.50408761 0.57342670 0.004114273
+#> [3,] -0.08904397 0.46268561 0.534090175
 #> 
 #> [[3]]
-#>            [,1]       [,2]       [,3]
-#> [1,]  0.6340902 0.01974464 0.02682031
-#> [2,]  0.5014228 0.60876051 0.04162174
-#> [3,] -0.1113340 0.35350421 0.52992448
+#>             [,1]        [,2]         [,3]
+#> [1,]  0.58866605 -0.04649579  0.029924476
+#> [2,]  0.51974464  0.62682031 -0.009478689
+#> [3,] -0.09123949  0.44162174  0.474892572
 #> 
 #> [[4]]
 #>            [,1]        [,2]        [,3]
-#> [1,]  0.7248926 -0.07374598 0.002912312
-#> [2,]  0.5376623  0.58398763 0.038392832
-#> [3,] -0.1181411  0.35794732 0.469290227
+#> [1,]  0.7318589 -0.04205268 -0.03070977
+#> [2,]  0.4262540  0.60291231 -0.01042189
+#> [3,] -0.1160124  0.43839283  0.44531002
 #> 
 #> [[5]]
-#>            [,1]        [,2]         [,3]
-#> [1,]  0.8453100 -0.01530127 0.0595277334
-#> [2,]  0.4995039  0.64748942 0.0006538527
-#> [3,] -0.1704366  0.39839450 0.5065986906
+#>             [,1]         [,2]         [,3]
+#> [1,]  0.82956340 -0.001605503  0.006598691
+#> [2,]  0.48469873  0.659527733 -0.053251434
+#> [3,] -0.05251058  0.400653853  0.518960943
 #> 
 ```

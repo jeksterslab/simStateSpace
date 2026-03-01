@@ -14,6 +14,11 @@
   and
   [`SimMuN()`](https://github.com/jeksterslab/simStateSpace/reference/SimMuN.md)
   functions.
+- Added the
+  [`LinSDEInterceptEta()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDEInterceptEta.md)
+  and
+  [`LinSDEInterceptY()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDEInterceptY.md)
+  functions.
 
 ## simStateSpace 1.2.15
 
