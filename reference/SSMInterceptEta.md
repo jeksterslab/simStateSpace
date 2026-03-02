@@ -5,7 +5,7 @@ The intercept vector for the latent variables in the state space model
 \mathrm{Mean} \left( \boldsymbol{\eta} \right) - \boldsymbol{\beta}
 \mathrm{Mean} \left( \boldsymbol{\eta} \right) \$\$ where
 \\\boldsymbol{\beta}\\ is the transition matrix relating the values of
-the latent variables at the previous to the current time point,
+the latent variables at the previous to the current time point and
 \\\mathrm{Mean} \left( \boldsymbol{\eta} \right)\\ is the steady-state
 mean vector for the latent variables.
 

@@ -4,7 +4,7 @@ The intercept vector for the latent variables in the linear stochastic
 differential equation model \\\boldsymbol{\iota}\\ is given by \$\$
 \boldsymbol{\iota} = - \boldsymbol{\Phi} \mathrm{Mean} \left(
 \boldsymbol{\eta} \right) \$\$ where \\\boldsymbol{\Phi}\\ is the drift
-matrix, \\\mathrm{Mean} \left( \boldsymbol{\eta} \right)\\ is the
+matrix and \\\mathrm{Mean} \left( \boldsymbol{\eta} \right)\\ is the
 steady-state mean vector for the latent variables.
 
 ## Usage
