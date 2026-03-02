@@ -193,11 +193,30 @@ SimSSMOUIVary <- function(n, time, delta_t = 1.0,
                           nu, lambda, theta_l,
                           type = 0,
                           x = NULL, gamma = NULL, kappa = NULL) {
-  stopifnot(type %in% c(0, 1, 2))
+  stopifnot(
+    type %in% c(0, 1, 2)
+  )
   covariates <- FALSE
   if (type > 0) {
     covariates <- TRUE
   }
+  call <- match.call()
+  args <- list(
+    n = n, time = time, delta_t = delta_t,
+    mu0 = mu0, sigma0_l = sigma0_l,
+    iota = mu, phi = phi, sigma_l = sigma_l,
+    nu = nu, lambda = lambda, theta_l = theta_l,
+    type = type,
+    x = x, gamma = gamma, kappa = kappa,
+    ou = TRUE
+  )
+  model <- list(
+    model = "ou",
+    covariates = covariates,
+    fixed = FALSE,
+    vary_i = TRUE
+  )
+  fun <- "SimSSMOUIVary"
   if (type == 0) {
     data <- .SimSSMLinSDEIVary0(
       n = n,
@@ -261,24 +280,11 @@ SimSSMOUIVary <- function(n, time, delta_t = 1.0,
     )
   }
   out <- list(
-    call = match.call(),
-    args = list(
-      n = n, time = time,
-      mu0 = mu0, sigma0_l = sigma0_l,
-      iota = mu, phi = phi, sigma_l = sigma_l,
-      nu = nu, lambda = lambda, theta_l = theta_l,
-      type = type,
-      x = x, gamma = gamma, kappa = kappa,
-      ou = TRUE
-    ),
-    model = list(
-      model = "ou",
-      covariates = covariates,
-      fixed = FALSE,
-      vary_i = TRUE
-    ),
+    call = call,
+    args = args,
+    model = model,
     data = data,
-    fun = "SimSSMOUIVary"
+    fun = fun
   )
   class(out) <- c(
     "simstatespace",

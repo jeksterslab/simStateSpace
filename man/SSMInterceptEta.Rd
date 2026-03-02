@@ -35,7 +35,7 @@ is given by
 where
 \eqn{\boldsymbol{\beta}}
 is the transition matrix relating the values of the latent variables
-at the previous to the current time point,
+at the previous to the current time point and
 \eqn{\mathrm{Mean} \left( \boldsymbol{\eta} \right)}
 is the steady-state mean vector
 for the latent variables.

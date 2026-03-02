@@ -218,11 +218,28 @@ SimSSMVARFixed <- function(n, time,
                            alpha, beta, psi_l,
                            type = 0,
                            x = NULL, gamma = NULL) {
-  stopifnot(type %in% c(0, 1))
+  stopifnot(
+    type %in% c(0, 1)
+  )
   covariates <- FALSE
   if (type > 0) {
     covariates <- TRUE
   }
+  call <- match.call()
+  args <- list(
+    n = n, time = time,
+    mu0 = mu0, sigma0_l = sigma0_l,
+    alpha = alpha, beta = beta, psi_l = psi_l,
+    type = type,
+    x = x, gamma = gamma
+  )
+  model <- list(
+    model = "var",
+    covariates = covariates,
+    fixed = TRUE,
+    vary_i = FALSE
+  )
+  fun <- "SimSSMVARFixed"
   if (type == 0) {
     data <- .SimSSMLatFixed0(
       n = n,
@@ -247,22 +264,11 @@ SimSSMVARFixed <- function(n, time,
     )
   }
   out <- list(
-    call = match.call(),
-    args = list(
-      n = n, time = time,
-      mu0 = mu0, sigma0_l = sigma0_l,
-      alpha = alpha, beta = beta, psi_l = psi_l,
-      type = type,
-      x = x, gamma = gamma
-    ),
-    model = list(
-      model = "var",
-      covariates = covariates,
-      fixed = TRUE,
-      vary_i = FALSE
-    ),
+    call = call,
+    args = args,
+    model = model,
     data = data,
-    fun = "SimSSMVARFixed"
+    fun = fun
   )
   class(out) <- c(
     "simstatespace",

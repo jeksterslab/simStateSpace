@@ -140,7 +140,9 @@ SimSSMLinGrowthIVary <- function(n, time,
                                  mu0, sigma0_l, theta_l,
                                  type = 0,
                                  x = NULL, gamma = NULL, kappa = NULL) {
-  stopifnot(type %in% c(0, 1, 2))
+  stopifnot(
+    type %in% c(0, 1, 2)
+  )
   p <- 2
   k <- 1
   stopifnot(
@@ -183,6 +185,22 @@ SimSSMLinGrowthIVary <- function(n, time,
       nrow = k
     )
   )
+  call <- match.call()
+  args <- list(
+    n = n, time = time,
+    mu0 = mu0, sigma0_l = sigma0_l,
+    alpha = alpha, beta = beta, psi_l = psi_l,
+    nu = nu, lambda = lambda, theta_l = theta_l,
+    type = type,
+    x = x, gamma = gamma, kappa = kappa
+  )
+  model <- list(
+    model = "lingrowth",
+    covariates = covariates,
+    fixed = FALSE,
+    vary_i = TRUE
+  )
+  fun <- "SimSSMLinGrowthIVary"
   if (type == 0) {
     data <- .SimSSMIVary0(
       n = n,
@@ -243,23 +261,11 @@ SimSSMLinGrowthIVary <- function(n, time,
     )
   }
   out <- list(
-    call = match.call(),
-    args = list(
-      n = n, time = time,
-      mu0 = mu0, sigma0_l = sigma0_l,
-      alpha = alpha, beta = beta, psi_l = psi_l,
-      nu = nu, lambda = lambda, theta_l = theta_l,
-      type = type,
-      x = x, gamma = gamma, kappa = kappa
-    ),
-    model = list(
-      model = "lingrowth",
-      covariates = covariates,
-      fixed = FALSE,
-      vary_i = TRUE
-    ),
+    call = call,
+    args = args,
+    model = model,
     data = data,
-    fun = "SimSSMLinGrowthIVary"
+    fun = fun
   )
   class(out) <- c(
     "simstatespace",

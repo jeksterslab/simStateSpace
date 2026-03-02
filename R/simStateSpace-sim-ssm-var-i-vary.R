@@ -113,11 +113,28 @@ SimSSMVARIVary <- function(n, time,
                            alpha, beta, psi_l,
                            type = 0,
                            x = NULL, gamma = NULL) {
-  stopifnot(type %in% c(0, 1))
+  stopifnot(
+    type %in% c(0, 1)
+  )
   covariates <- FALSE
   if (type > 0) {
     covariates <- TRUE
   }
+  call <- match.call()
+  args <- list(
+    n = n, time = time,
+    mu0 = mu0, sigma0_l = sigma0_l,
+    alpha = alpha, beta = beta, psi_l = psi_l,
+    type = type,
+    x = x, gamma = gamma
+  )
+  model <- list(
+    model = "var",
+    covariates = covariates,
+    fixed = FALSE,
+    vary_i = TRUE
+  )
+  fun <- "SimSSMVARIVary"
   if (type == 0) {
     data <- .SimSSMLatIVary0(
       n = n,
@@ -148,22 +165,11 @@ SimSSMVARIVary <- function(n, time,
     )
   }
   out <- list(
-    call = match.call(),
-    args = list(
-      n = n, time = time,
-      mu0 = mu0, sigma0_l = sigma0_l,
-      alpha = alpha, beta = beta, psi_l = psi_l,
-      type = type,
-      x = x, gamma = gamma
-    ),
-    model = list(
-      model = "var",
-      covariates = covariates,
-      fixed = FALSE,
-      vary_i = TRUE
-    ),
+    call = call,
+    args = args,
+    model = model,
     data = data,
-    fun = "SimSSMVARIVary"
+    fun = fun
   )
   class(out) <- c(
     "simstatespace",

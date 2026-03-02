@@ -15,7 +15,7 @@
 #' }
 #' where
 #' \eqn{\boldsymbol{\Phi}}
-#' is the drift matrix,
+#' is the drift matrix and
 #' \eqn{\mathrm{Mean} \left( \boldsymbol{\eta} \right)}
 #' is the steady-state mean vector
 #' for the latent variables.
