@@ -34,7 +34,7 @@ SimMuN(n = n, mu = mu, vcov_mu_l = vcov_mu_l)
 
 }
 \seealso{
-Other Simulation of State Space Models Data Functions: 
+Other Simulation of State Space Models Data Functions:
 \code{\link{LinSDE2SSM}()},
 \code{\link{LinSDECovEta}()},
 \code{\link{LinSDECovY}()},

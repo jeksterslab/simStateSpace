@@ -36,7 +36,7 @@ SimNuN(n = n, nu = nu, vcov_nu_l = vcov_nu_l)
 
 }
 \seealso{
-Other Simulation of State Space Models Data Functions: 
+Other Simulation of State Space Models Data Functions:
 \code{\link{LinSDE2SSM}()},
 \code{\link{LinSDECovEta}()},
 \code{\link{LinSDECovY}()},
