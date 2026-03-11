@@ -229,6 +229,9 @@ dynr_data <- dynr::dynr.data(
   time = "time",
   observed = "y1"
 )
+#> Registered S3 method overwritten by 'car':
+#>   method           from
+#>   na.action.merMod lme4
 ```
 
 ### Prepare Initial Condition
@@ -330,8 +333,8 @@ results <- dynr::dynr.cook(
 #> 
 #> Doing end processing
 #> Successful trial
-#> Total Time: 1.093303 
-#> Backend Time: 1.083967
+#> Total Time: 1.227332 
+#> Backend Time: 1.220214
 ```
 
 ## Summary
