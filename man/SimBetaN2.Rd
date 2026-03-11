@@ -52,7 +52,7 @@ SimBetaN2(n = n, beta = beta, vcov_beta_vec_l = vcov_beta_vec_l)
 
 }
 \seealso{
-Other Simulation of State Space Models Data Functions: 
+Other Simulation of State Space Models Data Functions:
 \code{\link{LinSDE2SSM}()},
 \code{\link{LinSDECovEta}()},
 \code{\link{LinSDECovY}()},

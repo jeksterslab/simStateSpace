@@ -1,7 +1,7 @@
 ---
 title: "The State Space Model"
 author: "Ivan Jacob Agaloos Pesigan"
-date: "2026-03-02"
+date: "2026-03-11"
 bibliography: "vignettes.bib"
 csl: https://raw.githubusercontent.com/citation-style-language/styles/master/apa.csl
 nocite: |
@@ -539,8 +539,8 @@ results <- dynr::dynr.cook(
 #> 
 #> Doing end processing
 #> Successful trial
-#> Total Time: 1.173445 
-#> Backend Time: 1.173273
+#> Total Time: 1.331511 
+#> Backend Time: 1.331388
 ```
 
 ## Summary

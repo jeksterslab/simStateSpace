@@ -322,7 +322,7 @@ Physical Review,
 \doi{10.1103/physrev.36.823}
 }
 \seealso{
-Other Simulation of State Space Models Data Functions: 
+Other Simulation of State Space Models Data Functions:
 \code{\link{LinSDE2SSM}()},
 \code{\link{LinSDECovEta}()},
 \code{\link{LinSDECovY}()},

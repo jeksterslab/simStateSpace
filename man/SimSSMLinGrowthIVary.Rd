@@ -201,7 +201,7 @@ and state-space modeling techniques.
 \doi{10.1080/10705511003661553}
 }
 \seealso{
-Other Simulation of State Space Models Data Functions: 
+Other Simulation of State Space Models Data Functions:
 \code{\link{LinSDE2SSM}()},
 \code{\link{LinSDECovEta}()},
 \code{\link{LinSDECovY}()},
@@ -245,7 +245,7 @@ Other Simulation of State Space Models Data Functions:
 \code{\link{TestStability}()},
 \code{\link{TestStationarity}()}
 
-Other Simulation of State Space Models Data Functions: 
+Other Simulation of State Space Models Data Functions:
 \code{\link{LinSDE2SSM}()},
 \code{\link{LinSDECovEta}()},
 \code{\link{LinSDECovY}()},
