@@ -65,6 +65,6 @@ effect sizes for direct, indirect, and total effects in continuous-time
 mediation models. *Psychological Methods*.
 <https://doi.org/10.1037/met0000779>
 
-R Core Team. (2025). *R: A language and environment for statistical
+R Core Team. (2026). *R: A language and environment for statistical
 computing*. R Foundation for Statistical Computing.
 <https://www.R-project.org/>

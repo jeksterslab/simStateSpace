@@ -333,8 +333,8 @@ results <- dynr::dynr.cook(
 #> 
 #> Doing end processing
 #> Successful trial
-#> Total Time: 1.227332 
-#> Backend Time: 1.220214
+#> Total Time: 1.340733 
+#> Backend Time: 1.332704
 ```
 
 ## Summary
@@ -344,12 +344,12 @@ results <- dynr::dynr.cook(
 summary(results)
 #> Coefficients:
 #>           Estimate Std. Error t value ci.lower ci.upper Pr(>|t|)    
-#> theta     0.601118   0.004914  122.34 0.591488 0.610749   <2e-16 ***
-#> mu0_0     0.607320   0.015112   40.19 0.577701 0.636939   <2e-16 ***
-#> mu0_1     0.995218   0.007992  124.53 0.979554 1.010882   <2e-16 ***
-#> sigma0_00 1.911144   0.032346   59.08 1.847747 1.974541   <2e-16 ***
-#> sigma0_01 0.602476   0.013016   46.29 0.576966 0.627987   <2e-16 ***
-#> sigma0_11 0.578077   0.009046   63.90 0.560347 0.595807   <2e-16 ***
+#> theta     0.601118   0.004905  122.55 0.591504 0.610733   <2e-16 ***
+#> mu0_0     0.607320   0.015078   40.28 0.577768 0.636872   <2e-16 ***
+#> mu0_1     0.995218   0.007988  124.58 0.979561 1.010875   <2e-16 ***
+#> sigma0_00 1.911144   0.032301   59.17 1.847836 1.974452   <2e-16 ***
+#> sigma0_01 0.602476   0.013008   46.32 0.576981 0.627972   <2e-16 ***
+#> sigma0_11 0.578077   0.009032   64.00 0.560374 0.595779   <2e-16 ***
 #> ---
 #> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 #> 
@@ -421,7 +421,7 @@ fit <- lavaan::growth(
   data = data
 )
 lavaan::summary(fit)
-#> lavaan 0.6-21 ended normally after 34 iterations
+#> lavaan 0.6-21 ended normally after 36 iterations
 #> 
 #>   Estimator                                         ML
 #>   Optimization method                           NLMINB
@@ -511,7 +511,7 @@ effect sizes for direct, indirect, and total effects in continuous-time
 mediation models. *Psychological Methods*.
 <https://doi.org/10.1037/met0000779>
 
-R Core Team. (2025). *R: A language and environment for statistical
+R Core Team. (2026). *R: A language and environment for statistical
 computing*. R Foundation for Statistical Computing.
 <https://www.R-project.org/>
 

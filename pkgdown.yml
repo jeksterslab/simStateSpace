@@ -1,4 +1,4 @@
-pandoc: '3.9'
+pandoc: 3.9.0.2
 pkgdown: 2.2.0
 pkgdown_sha: ~
 articles:
@@ -8,7 +8,7 @@ articles:
   simStateSpace: simStateSpace.html
   ssm: ssm.html
   var: var.html
-last_built: 2026-03-11T14:16Z
+last_built: 2026-03-22T18:58Z
 urls:
   reference: https://github.com/jeksterslab/simStateSpace/reference
   article: https://github.com/jeksterslab/simStateSpace/articles
