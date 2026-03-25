@@ -1,8 +1,7 @@
-#!/bin/bash
+#! /bin/bash
 #SBATCH --nodes=1
-#SBATCH --ntasks=1
-#SBATCH --cpus-per-task=1
-#SBATCH --mem=4G
+#SBATCH --exclusive
+#SBATCH --mem=0
 #SBATCH --time=2-00:00:00
 #SBATCH --output=make.out
 #SBATCH --error=make.err
