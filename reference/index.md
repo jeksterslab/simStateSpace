@@ -76,6 +76,10 @@
 - [`SimSSMVARIVary()`](https://github.com/jeksterslab/simStateSpace/reference/SimSSMVARIVary.md)
   : Simulate Data from the Vector Autoregressive Model
   (Individual-Varying Parameters)
+- [`VAR2CTVAR()`](https://github.com/jeksterslab/simStateSpace/reference/VAR2CTVAR.md)
+  : Convert VAR Parameters to CTVAR Parameters
+- [`VAR2SVAR()`](https://github.com/jeksterslab/simStateSpace/reference/VAR2SVAR.md)
+  : Convert VAR Parameters to SVAR Parameters
 
 ## Linear Stochastic Differential Equation Model
 
@@ -102,6 +106,8 @@
   Stochastic Differential Equation Model
 - [`ProjectToHurwitz()`](https://github.com/jeksterslab/simStateSpace/reference/ProjectToHurwitz.md)
   : Project Matrix to Hurwitz Stability
+- [`SVAR2CTVAR()`](https://github.com/jeksterslab/simStateSpace/reference/SVAR2CTVAR.md)
+  : Convert SVAR Parameters to CTVAR Parameters
 - [`SimPhiN()`](https://github.com/jeksterslab/simStateSpace/reference/SimPhiN.md)
   : Simulate Random Drift Matrices from the Multivariate Normal
   Distribution
@@ -126,6 +132,8 @@
   : Test Hurwitz Stability of a Drift Matrix
 - [`TestStability()`](https://github.com/jeksterslab/simStateSpace/reference/TestStability.md)
   : Test Stability
+- [`VAR2CTVAR()`](https://github.com/jeksterslab/simStateSpace/reference/VAR2CTVAR.md)
+  : Convert VAR Parameters to CTVAR Parameters
 
 ## Ornstein-Uhlenbeck Model
 
@@ -141,6 +149,12 @@
 - [`LinSDE2SSM()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDE2SSM.md)
   : Convert Parameters from the Linear Stochastic Differential Equation
   Model to State Space Model Parameterization
+- [`SVAR2CTVAR()`](https://github.com/jeksterslab/simStateSpace/reference/SVAR2CTVAR.md)
+  : Convert SVAR Parameters to CTVAR Parameters
+- [`VAR2CTVAR()`](https://github.com/jeksterslab/simStateSpace/reference/VAR2CTVAR.md)
+  : Convert VAR Parameters to CTVAR Parameters
+- [`VAR2SVAR()`](https://github.com/jeksterslab/simStateSpace/reference/VAR2SVAR.md)
+  : Convert VAR Parameters to SVAR Parameters
 
 ## Tests
 

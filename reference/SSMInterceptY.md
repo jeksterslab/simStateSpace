@@ -49,6 +49,7 @@ Other Simulation of State Space Models Data Functions:
 [`SSMInterceptEta()`](https://github.com/jeksterslab/simStateSpace/reference/SSMInterceptEta.md),
 [`SSMMeanEta()`](https://github.com/jeksterslab/simStateSpace/reference/SSMMeanEta.md),
 [`SSMMeanY()`](https://github.com/jeksterslab/simStateSpace/reference/SSMMeanY.md),
+[`SVAR2CTVAR()`](https://github.com/jeksterslab/simStateSpace/reference/SVAR2CTVAR.md),
 [`SimAlphaN()`](https://github.com/jeksterslab/simStateSpace/reference/SimAlphaN.md),
 [`SimBetaN()`](https://github.com/jeksterslab/simStateSpace/reference/SimBetaN.md),
 [`SimBetaN2()`](https://github.com/jeksterslab/simStateSpace/reference/SimBetaN2.md),
@@ -76,7 +77,9 @@ Other Simulation of State Space Models Data Functions:
 [`TestPhi()`](https://github.com/jeksterslab/simStateSpace/reference/TestPhi.md),
 [`TestPhiHurwitz()`](https://github.com/jeksterslab/simStateSpace/reference/TestPhiHurwitz.md),
 [`TestStability()`](https://github.com/jeksterslab/simStateSpace/reference/TestStability.md),
-[`TestStationarity()`](https://github.com/jeksterslab/simStateSpace/reference/TestStationarity.md)
+[`TestStationarity()`](https://github.com/jeksterslab/simStateSpace/reference/TestStationarity.md),
+[`VAR2CTVAR()`](https://github.com/jeksterslab/simStateSpace/reference/VAR2CTVAR.md),
+[`VAR2SVAR()`](https://github.com/jeksterslab/simStateSpace/reference/VAR2SVAR.md)
 
 ## Author
 

@@ -1,6 +1,19 @@
 # Changelog
 
+## simStateSpace 1.2.17
+
+### Patch
+
+- Added the
+  [`VAR2SVAR()`](https://github.com/jeksterslab/simStateSpace/reference/VAR2SVAR.md),
+  [`SVAR2CTVAR()`](https://github.com/jeksterslab/simStateSpace/reference/SVAR2CTVAR.md),
+  and
+  [`VAR2CTVAR()`](https://github.com/jeksterslab/simStateSpace/reference/VAR2CTVAR.md)
+  functions.
+
 ## simStateSpace 1.2.16
+
+CRAN release: 2026-03-25
 
 ### Patch
 
