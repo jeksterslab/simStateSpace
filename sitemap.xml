@@ -26,7 +26,6 @@
 <url><loc>https://github.com/jeksterslab/simStateSpace/reference/SSMInterceptY.html</loc></url>
 <url><loc>https://github.com/jeksterslab/simStateSpace/reference/SSMMeanEta.html</loc></url>
 <url><loc>https://github.com/jeksterslab/simStateSpace/reference/SSMMeanY.html</loc></url>
-<url><loc>https://github.com/jeksterslab/simStateSpace/reference/SVAR2CTVAR.html</loc></url>
 <url><loc>https://github.com/jeksterslab/simStateSpace/reference/SimAlphaN.html</loc></url>
 <url><loc>https://github.com/jeksterslab/simStateSpace/reference/SimBetaN.html</loc></url>
 <url><loc>https://github.com/jeksterslab/simStateSpace/reference/SimBetaN2.html</loc></url>
@@ -56,8 +55,6 @@
 <url><loc>https://github.com/jeksterslab/simStateSpace/reference/TestPhiHurwitz.html</loc></url>
 <url><loc>https://github.com/jeksterslab/simStateSpace/reference/TestStability.html</loc></url>
 <url><loc>https://github.com/jeksterslab/simStateSpace/reference/TestStationarity.html</loc></url>
-<url><loc>https://github.com/jeksterslab/simStateSpace/reference/VAR2CTVAR.html</loc></url>
-<url><loc>https://github.com/jeksterslab/simStateSpace/reference/VAR2SVAR.html</loc></url>
 <url><loc>https://github.com/jeksterslab/simStateSpace/reference/as.data.frame.simstatespace.html</loc></url>
 <url><loc>https://github.com/jeksterslab/simStateSpace/reference/as.matrix.simstatespace.html</loc></url>
 <url><loc>https://github.com/jeksterslab/simStateSpace/reference/index.html</loc></url>
