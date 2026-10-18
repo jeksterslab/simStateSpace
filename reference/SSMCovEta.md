@@ -1,14 +1,14 @@
 # Steady-State Covariance Matrix for the Latent Variables in the State Space Model
 
 The steady-state covariance matrix for the latent variables in the state
-space model \\\mathrm{Cov} \left( \boldsymbol{\eta} \right)\\ is given
+space model \\(\mathrm{Cov} \left( \boldsymbol{\eta} \right)\\) is given
 by \$\$ \mathrm{vec} \left( \mathrm{Cov} \left( \boldsymbol{\eta}
 \right) \right) = \left( \mathbf{I} - \boldsymbol{\beta} \otimes
 \boldsymbol{\beta} \right)^{-1} \mathrm{vec} \left( \boldsymbol{\Psi}
-\right) \$\$ where \\\boldsymbol{\beta}\\ is the transition matrix
+\right) \$\$ where \\(\boldsymbol{\beta}\\) is the transition matrix
 relating the values of the latent variables at the previous to the
-current time point and \\\boldsymbol{\Psi}\\ is the covariance matrix of
-volatility or randomness in the process.
+current time point and \\(\boldsymbol{\Psi}\\) is the covariance matrix
+of volatility or randomness in the process.
 
 ## Usage
 
@@ -22,23 +22,26 @@ SSMCovEta(beta, psi)
 
   Numeric matrix. Transition matrix relating the values of the latent
   variables at the previous to the current time point
-  (\\\boldsymbol{\beta}\\).
+  (\\(\boldsymbol{\beta}\\)).
 
 - psi:
 
   Numeric matrix. The covariance matrix of the process noise
-  (\\\boldsymbol{\Psi}\\).
+  (\\(\boldsymbol{\Psi}\\)).
 
 ## See also
 
 Other Simulation of State Space Models Data Functions:
-[`LinSDE2SSM()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDE2SSM.md),
+[`CompanionMat()`](https://github.com/jeksterslab/simStateSpace/reference/CompanionMat.md),
+[`ExpMat()`](https://github.com/jeksterslab/simStateSpace/reference/ExpMat.md),
+[`LinSDECovDeltaT()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDECovDeltaT.md),
 [`LinSDECovEta()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDECovEta.md),
 [`LinSDECovY()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDECovY.md),
 [`LinSDEInterceptEta()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDEInterceptEta.md),
 [`LinSDEInterceptY()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDEInterceptY.md),
 [`LinSDEMeanEta()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDEMeanEta.md),
 [`LinSDEMeanY()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDEMeanY.md),
+[`LogMat()`](https://github.com/jeksterslab/simStateSpace/reference/LogMat.md),
 [`ProjectToHurwitz()`](https://github.com/jeksterslab/simStateSpace/reference/ProjectToHurwitz.md),
 [`ProjectToStability()`](https://github.com/jeksterslab/simStateSpace/reference/ProjectToStability.md),
 [`SSMCovY()`](https://github.com/jeksterslab/simStateSpace/reference/SSMCovY.md),

@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">simStateSpace</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.16</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.17</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -34,6 +34,24 @@
       <small>Source: <a href="https://github.com/jeksterslab/simStateSpace/blob/main/NEWS.md"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.2.17" id="simstatespace-1217">simStateSpace 1.2.17<a class="anchor" aria-label="anchor" href="#simstatespace-1217"></a></h2>
+<div class="section level3">
+<h3 id="patch-1-2-17">Patch<a class="anchor" aria-label="anchor" href="#patch-1-2-17"></a></h3>
+<ul><li>Added <code><a href="../reference/ExpMat.html">ExpMat()</a></code> and <code><a href="../reference/LogMat.html">LogMat()</a></code> for matrix exponentials and real principal matrix logarithms, and <code><a href="../reference/CompanionMat.html">CompanionMat()</a></code> for VAR block companion matrices.</li>
+<li>Added <code><a href="../reference/CTVAR2SSM.html">CTVAR2SSM()</a></code> for exact sampling of higher-order derivative states and <code><a href="../reference/SSM2LinSDE.html">SSM2LinSDE()</a></code> for continuous-time recovery using the principal matrix logarithm, with checks for uniquely recoverable intercepts and positive-semidefinite diffusion.</li>
+<li>Updated <code><a href="../reference/LinSDE2SSM.html">LinSDE2SSM()</a></code> to integrate intercepts and diffusion with block matrix exponentials, supporting singular drifts and semidefinite noise. Covariance integration uses interval subdivision to avoid overflow for strongly decaying drifts.</li>
+<li>Added <code><a href="../reference/LinSDECovDeltaT.html">LinSDECovDeltaT()</a></code> for the process noise covariance accumulated over a sampling interval in the linear SDE model.</li>
+<li>
+<code><a href="../reference/SSM2LinSDE.html">SSM2LinSDE()</a></code> rejects a singular <code>beta</code> (non-finite matrix logarithm) and has a separate tolerance, <code>tol_psi_l</code>, for checking that <code>psi_l</code> is lower triangular; <code>tol</code> now applies only to the imaginary part of the matrix logarithm.</li>
+<li>Semidefinite noise covariances are factored with an eigendecomposition, so <code><a href="../reference/LinSDE2SSM.html">LinSDE2SSM()</a></code> and <code><a href="../reference/SSM2LinSDE.html">SSM2LinSDE()</a></code> no longer reject rank-deficient covariances because of rounding error.</li>
+<li>Added input validation to the linear SDE mean, covariance, and intercept functions and expanded transformation tests with analytic reference cases.</li>
+<li>Fixed <code><a href="../reference/SSMInterceptY.html">SSMInterceptY()</a></code> and <code><a href="../reference/LinSDEInterceptY.html">LinSDEInterceptY()</a></code>, which returned <code>mean_y + lambda %*% mean_eta</code> instead of <code>mean_y - lambda %*% mean_eta</code> (since 1.2.15).</li>
+<li>Replaced the Monte Carlo and smoke tests with exact references: the simulators are checked against a plain R state space recursion, and the moment functions against their defining equations.</li>
+<li>Fixed <code><a href="../reference/SimSSMLinSDEIVary.html">SimSSMLinSDEIVary()</a></code> and <code><a href="../reference/SimSSMOUIVary.html">SimSSMOUIVary()</a></code> failing for singular drifts, semidefinite diffusion, and undamped oscillators: they now discretize with <code><a href="../reference/LinSDE2SSM.html">LinSDE2SSM()</a></code>, once per distinct parameter set.</li>
+<li>All <code>Sim*</code> functions now share one simulation kernel and one set of input checks, with informative errors for invalid dimensions, non-finite values, and missing covariates. The same seed gives the same data as before.</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.2.16" id="simstatespace-1216">simStateSpace 1.2.16<a class="anchor" aria-label="anchor" href="#simstatespace-1216"></a></h2><p class="text-muted">CRAN release: 2026-03-25</p>
 <div class="section level3">
@@ -176,7 +194,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer></div>

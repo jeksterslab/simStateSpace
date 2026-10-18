@@ -1,13 +1,13 @@
 # Steady-State Covariance Matrix for the Observed Variables in the Linear Stochastic Differential Equation Model
 
 The steady-state covariance matrix for the observed variables in the
-linear stochastic differential equation model \\\mathrm{Cov} \left(
-\mathbf{y} \right)\\ is given by \$\$ \mathrm{Cov} \left( \mathbf{y}
+linear stochastic differential equation model \\(\mathrm{Cov} \left(
+\mathbf{y} \right)\\) is given by \$\$ \mathrm{Cov} \left( \mathbf{y}
 \right) = \boldsymbol{\Lambda} \mathrm{Cov} \left( \boldsymbol{\eta}
 \right) \boldsymbol{\Lambda}^{\prime} + \boldsymbol{\Theta} \$\$ where
-\\\boldsymbol{\Lambda}\\ is the matrix of factor loadings,
-\\\boldsymbol{\Theta}\\ is the covariance matrix of the measurement
-error, and \\\mathrm{Cov} \left( \boldsymbol{\eta} \right)\\ is the
+\\(\boldsymbol{\Lambda}\\) is the matrix of factor loadings,
+\\(\boldsymbol{\Theta}\\) is the covariance matrix of the measurement
+error, and \\(\mathrm{Cov} \left( \boldsymbol{\eta} \right)\\) is the
 steady-state covariance matrix for the latent variables.
 
 ## Usage
@@ -21,12 +21,12 @@ LinSDECovY(lambda, theta, cov_eta)
 - lambda:
 
   Numeric matrix. Factor loading matrix linking the latent variables to
-  the observed variables (\\\boldsymbol{\Lambda}\\).
+  the observed variables (\\(\boldsymbol{\Lambda}\\)).
 
 - theta:
 
   Numeric matrix. The covariance matrix of the measurement error
-  (\\\boldsymbol{\Theta}\\).
+  (\\(\boldsymbol{\Theta}\\)).
 
 - cov_eta:
 
@@ -36,12 +36,15 @@ LinSDECovY(lambda, theta, cov_eta)
 ## See also
 
 Other Simulation of State Space Models Data Functions:
-[`LinSDE2SSM()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDE2SSM.md),
+[`CompanionMat()`](https://github.com/jeksterslab/simStateSpace/reference/CompanionMat.md),
+[`ExpMat()`](https://github.com/jeksterslab/simStateSpace/reference/ExpMat.md),
+[`LinSDECovDeltaT()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDECovDeltaT.md),
 [`LinSDECovEta()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDECovEta.md),
 [`LinSDEInterceptEta()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDEInterceptEta.md),
 [`LinSDEInterceptY()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDEInterceptY.md),
 [`LinSDEMeanEta()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDEMeanEta.md),
 [`LinSDEMeanY()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDEMeanY.md),
+[`LogMat()`](https://github.com/jeksterslab/simStateSpace/reference/LogMat.md),
 [`ProjectToHurwitz()`](https://github.com/jeksterslab/simStateSpace/reference/ProjectToHurwitz.md),
 [`ProjectToStability()`](https://github.com/jeksterslab/simStateSpace/reference/ProjectToStability.md),
 [`SSMCovEta()`](https://github.com/jeksterslab/simStateSpace/reference/SSMCovEta.md),

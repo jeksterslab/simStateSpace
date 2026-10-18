@@ -1,11 +1,12 @@
 # Steady-State Mean Vector for the Latent Variables in the Linear Stochastic Differential Equation Model
 
 The steady-state mean vector for the latent variables in the linear
-stochastic differential equation model \\\mathrm{Mean} \left(
-\boldsymbol{\eta} \right)\\ is given by \$\$ \mathrm{Mean} \left(
+stochastic differential equation model \\(\mathrm{Mean} \left(
+\boldsymbol{\eta} \right)\\) is given by \$\$ \mathrm{Mean} \left(
 \boldsymbol{\eta} \right) = -\boldsymbol{\Phi}^{-1} \boldsymbol{\iota}
-\$\$ where \\\boldsymbol{\Phi}\\ is the drift matrix, and
-\\\boldsymbol{\iota}\\ is an unobserved term that is constant over time.
+\$\$ where \\(\boldsymbol{\Phi}\\) is the drift matrix, and
+\\(\boldsymbol{\iota}\\) is an unobserved term that is constant over
+time.
 
 ## Usage
 
@@ -17,24 +18,27 @@ LinSDEMeanEta(phi, iota)
 
 - phi:
 
-  Numeric matrix. The drift matrix which represents the rate of change
-  of the solution in the absence of any random fluctuations
-  (\\\boldsymbol{\Phi}\\).
+  Numeric \\(q \times q\\) matrix. The drift matrix which represents the
+  rate of change of the solution in the absence of any random
+  fluctuations (\\(\boldsymbol{\Phi}\\)).
 
 - iota:
 
-  Numeric vector. An unobserved term that is constant over time
-  (\\\boldsymbol{\iota}\\).
+  Numeric vector of length \\(q\\). An unobserved term that is constant
+  over time (\\(\boldsymbol{\iota}\\)).
 
 ## See also
 
 Other Simulation of State Space Models Data Functions:
-[`LinSDE2SSM()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDE2SSM.md),
+[`CompanionMat()`](https://github.com/jeksterslab/simStateSpace/reference/CompanionMat.md),
+[`ExpMat()`](https://github.com/jeksterslab/simStateSpace/reference/ExpMat.md),
+[`LinSDECovDeltaT()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDECovDeltaT.md),
 [`LinSDECovEta()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDECovEta.md),
 [`LinSDECovY()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDECovY.md),
 [`LinSDEInterceptEta()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDEInterceptEta.md),
 [`LinSDEInterceptY()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDEInterceptY.md),
 [`LinSDEMeanY()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDEMeanY.md),
+[`LogMat()`](https://github.com/jeksterslab/simStateSpace/reference/LogMat.md),
 [`ProjectToHurwitz()`](https://github.com/jeksterslab/simStateSpace/reference/ProjectToHurwitz.md),
 [`ProjectToStability()`](https://github.com/jeksterslab/simStateSpace/reference/ProjectToStability.md),
 [`SSMCovEta()`](https://github.com/jeksterslab/simStateSpace/reference/SSMCovEta.md),

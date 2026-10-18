@@ -1,9 +1,9 @@
 # Test Hurwitz Stability of a Drift Matrix
 
-Returns `TRUE` iff the drift matrix \\\boldsymbol{\Phi}\\ is
+Returns `TRUE` iff the drift matrix \\(\boldsymbol{\Phi}\\) is
 Hurwitz-stable, i.e., all eigenvalues have real parts strictly less than
-`-eps`. Setting `eps = 0` enforces the usual strict condition \\\max
-\Re\\\lambda_i(\boldsymbol{\Phi})\\ \< 0\\. A small positive `eps`
+`-eps`. Setting `eps = 0` enforces the usual strict condition \\(\max
+\Re\\{\lambda_i(\boldsymbol{\Phi})\\} \< 0\\). A small positive `eps`
 (e.g., `1e-12`) can be used to guard against floating-point round-off.
 
 ## Usage
@@ -16,23 +16,26 @@ TestPhiHurwitz(phi, eps = 0)
 
 - phi:
 
-  Numeric matrix. The drift matrix (\\\boldsymbol{\Phi}\\).
+  Numeric matrix. The drift matrix (\\(\boldsymbol{\Phi}\\)).
 
 - eps:
 
   Nonnegative numeric tolerance (default `0.0`). The test checks
-  \\\Re(\lambda_i) \< -\text{eps}\\ for all eigenvalues.
+  \\(\Re(\lambda_i) \< -\text{eps}\\) for all eigenvalues.
 
 ## See also
 
 Other Simulation of State Space Models Data Functions:
-[`LinSDE2SSM()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDE2SSM.md),
+[`CompanionMat()`](https://github.com/jeksterslab/simStateSpace/reference/CompanionMat.md),
+[`ExpMat()`](https://github.com/jeksterslab/simStateSpace/reference/ExpMat.md),
+[`LinSDECovDeltaT()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDECovDeltaT.md),
 [`LinSDECovEta()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDECovEta.md),
 [`LinSDECovY()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDECovY.md),
 [`LinSDEInterceptEta()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDEInterceptEta.md),
 [`LinSDEInterceptY()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDEInterceptY.md),
 [`LinSDEMeanEta()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDEMeanEta.md),
 [`LinSDEMeanY()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDEMeanY.md),
+[`LogMat()`](https://github.com/jeksterslab/simStateSpace/reference/LogMat.md),
 [`ProjectToHurwitz()`](https://github.com/jeksterslab/simStateSpace/reference/ProjectToHurwitz.md),
 [`ProjectToStability()`](https://github.com/jeksterslab/simStateSpace/reference/ProjectToStability.md),
 [`SSMCovEta()`](https://github.com/jeksterslab/simStateSpace/reference/SSMCovEta.md),

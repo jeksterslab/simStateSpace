@@ -18,7 +18,7 @@ SpectralAbscissa(x)
 
 ## Value
 
-Numeric value \\\alpha(x) = \max \Re(\lambda_i(x))\\.
+Numeric value \\(\alpha(x) = \max \Re(\lambda_i(x))\\).
 
 ## Author
 

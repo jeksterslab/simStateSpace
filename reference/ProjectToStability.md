@@ -20,7 +20,7 @@ ProjectToStability(x, margin = 0.98, tol = 1e-12)
 
 - margin:
 
-  Double in \\(0, 1)\\. Target upper bound for the spectral radius
+  Double in \\((0, 1)\\). Target upper bound for the spectral radius
   (default = 0.98).
 
 - tol:
@@ -36,20 +36,23 @@ satisfy the stability constraint.
 ## Details
 
 The projection is performed by multiplying the matrix by a constant
-factor \\c = \frac{\text{margin}}{\rho + \text{tol}}\\, where \\\rho\\
-is the spectral radius and `tol` is a small positive number to prevent
-division by zero.
+factor \\(c = \frac{\text{margin}}{\rho + \text{tol}}\\), where
+\\(\rho\\) is the spectral radius and `tol` is a small positive number
+to prevent division by zero.
 
 ## See also
 
 Other Simulation of State Space Models Data Functions:
-[`LinSDE2SSM()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDE2SSM.md),
+[`CompanionMat()`](https://github.com/jeksterslab/simStateSpace/reference/CompanionMat.md),
+[`ExpMat()`](https://github.com/jeksterslab/simStateSpace/reference/ExpMat.md),
+[`LinSDECovDeltaT()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDECovDeltaT.md),
 [`LinSDECovEta()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDECovEta.md),
 [`LinSDECovY()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDECovY.md),
 [`LinSDEInterceptEta()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDEInterceptEta.md),
 [`LinSDEInterceptY()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDEInterceptY.md),
 [`LinSDEMeanEta()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDEMeanEta.md),
 [`LinSDEMeanY()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDEMeanY.md),
+[`LogMat()`](https://github.com/jeksterslab/simStateSpace/reference/LogMat.md),
 [`ProjectToHurwitz()`](https://github.com/jeksterslab/simStateSpace/reference/ProjectToHurwitz.md),
 [`SSMCovEta()`](https://github.com/jeksterslab/simStateSpace/reference/SSMCovEta.md),
 [`SSMCovY()`](https://github.com/jeksterslab/simStateSpace/reference/SSMCovY.md),

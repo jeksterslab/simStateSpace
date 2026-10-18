@@ -19,17 +19,17 @@ SimBetaN2(n, beta, vcov_beta_vec_l, margin = 0.98, tol = 1e-12)
 
 - beta:
 
-  Numeric matrix. The transition matrix (\\\boldsymbol{\beta}\\).
+  Numeric matrix. The transition matrix (\\(\boldsymbol{\beta}\\)).
 
 - vcov_beta_vec_l:
 
   Numeric matrix. Cholesky factorization (`t(chol(vcov_beta_vec))`) of
-  the sampling variance-covariance matrix of \\\mathrm{vec} \left(
-  \boldsymbol{\beta} \right)\\.
+  the sampling variance-covariance matrix of \\(\mathrm{vec} \left(
+  \boldsymbol{\beta} \right)\\).
 
 - margin:
 
-  Double in \\(0, 1)\\. Target upper bound for the spectral radius
+  Double in \\((0, 1)\\). Target upper bound for the spectral radius
   (default = 0.98).
 
 - tol:
@@ -44,13 +44,16 @@ Returns a list of random transition matrices.
 ## See also
 
 Other Simulation of State Space Models Data Functions:
-[`LinSDE2SSM()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDE2SSM.md),
+[`CompanionMat()`](https://github.com/jeksterslab/simStateSpace/reference/CompanionMat.md),
+[`ExpMat()`](https://github.com/jeksterslab/simStateSpace/reference/ExpMat.md),
+[`LinSDECovDeltaT()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDECovDeltaT.md),
 [`LinSDECovEta()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDECovEta.md),
 [`LinSDECovY()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDECovY.md),
 [`LinSDEInterceptEta()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDEInterceptEta.md),
 [`LinSDEInterceptY()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDEInterceptY.md),
 [`LinSDEMeanEta()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDEMeanEta.md),
 [`LinSDEMeanY()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDEMeanY.md),
+[`LogMat()`](https://github.com/jeksterslab/simStateSpace/reference/LogMat.md),
 [`ProjectToHurwitz()`](https://github.com/jeksterslab/simStateSpace/reference/ProjectToHurwitz.md),
 [`ProjectToStability()`](https://github.com/jeksterslab/simStateSpace/reference/ProjectToStability.md),
 [`SSMCovEta()`](https://github.com/jeksterslab/simStateSpace/reference/SSMCovEta.md),

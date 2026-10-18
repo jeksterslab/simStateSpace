@@ -29,13 +29,13 @@ SimPhiN(
 
 - phi:
 
-  Numeric matrix. The drift matrix (\\\boldsymbol{\Phi}\\).
+  Numeric matrix. The drift matrix (\\(\boldsymbol{\Phi}\\)).
 
 - vcov_phi_vec_l:
 
   Numeric matrix. Cholesky factorization (`t(chol(vcov_phi_vec))`) of
-  the sampling variance-covariance matrix of \\\mathrm{vec} \left(
-  \boldsymbol{\Phi} \right)\\.
+  the sampling variance-covariance matrix of \\(\mathrm{vec} \left(
+  \boldsymbol{\Phi} \right)\\).
 
 - margin:
 
@@ -46,8 +46,8 @@ SimPhiN(
 - auto_ubound:
 
   Numeric scalar specifying the upper bound for the diagonal elements of
-  \\\boldsymbol{\Phi}\\. Default is `0.0`, requiring all diagonal values
-  to be \\\leq 0\\.
+  \\(\boldsymbol{\Phi}\\). Default is `0.0`, requiring all diagonal
+  values to be \\(\leq 0\\).
 
 - phi_lbound:
 
@@ -75,13 +75,16 @@ Returns a list of random drift matrices.
 ## See also
 
 Other Simulation of State Space Models Data Functions:
-[`LinSDE2SSM()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDE2SSM.md),
+[`CompanionMat()`](https://github.com/jeksterslab/simStateSpace/reference/CompanionMat.md),
+[`ExpMat()`](https://github.com/jeksterslab/simStateSpace/reference/ExpMat.md),
+[`LinSDECovDeltaT()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDECovDeltaT.md),
 [`LinSDECovEta()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDECovEta.md),
 [`LinSDECovY()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDECovY.md),
 [`LinSDEInterceptEta()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDEInterceptEta.md),
 [`LinSDEInterceptY()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDEInterceptY.md),
 [`LinSDEMeanEta()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDEMeanEta.md),
 [`LinSDEMeanY()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDEMeanY.md),
+[`LogMat()`](https://github.com/jeksterslab/simStateSpace/reference/LogMat.md),
 [`ProjectToHurwitz()`](https://github.com/jeksterslab/simStateSpace/reference/ProjectToHurwitz.md),
 [`ProjectToStability()`](https://github.com/jeksterslab/simStateSpace/reference/ProjectToStability.md),
 [`SSMCovEta()`](https://github.com/jeksterslab/simStateSpace/reference/SSMCovEta.md),

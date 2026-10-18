@@ -1,13 +1,13 @@
 # Steady-State Mean Vector for the Observed Variables in the State Space Model
 
 The steady-state mean vector for the observed variables in the state
-space model \\\mathrm{Mean} \left( \mathbf{y} \right)\\ is given by \$\$
-\mathrm{Mean} \left( \mathbf{y} \right) = \boldsymbol{\nu} +
+space model \\(\mathrm{Mean} \left( \mathbf{y} \right)\\) is given by
+\$\$ \mathrm{Mean} \left( \mathbf{y} \right) = \boldsymbol{\nu} +
 \boldsymbol{\Lambda} \mathrm{Mean} \left( \boldsymbol{\eta} \right) \$\$
-where \\\boldsymbol{\nu}\\ is the vector of intercept values for the
-measurement model, \\\boldsymbol{\Lambda}\\ is the matrix of factor
-loadings, and \\\mathrm{Mean} \left( \boldsymbol{\eta} \right)\\ is the
-steady-state mean vector for the latent variables.
+where \\(\boldsymbol{\nu}\\) is the vector of intercept values for the
+measurement model, \\(\boldsymbol{\Lambda}\\) is the matrix of factor
+loadings, and \\(\mathrm{Mean} \left( \boldsymbol{\eta} \right)\\) is
+the steady-state mean vector for the latent variables.
 
 ## Usage
 
@@ -20,28 +20,31 @@ SSMMeanY(nu, lambda, mean_eta)
 - nu:
 
   Numeric vector. Vector of intercept values for the measurement model
-  (\\\boldsymbol{\nu}\\).
+  (\\(\boldsymbol{\nu}\\)).
 
 - lambda:
 
   Numeric matrix. Factor loading matrix linking the latent variables to
-  the observed variables (\\\boldsymbol{\Lambda}\\).
+  the observed variables (\\(\boldsymbol{\Lambda}\\)).
 
 - mean_eta:
 
   Numeric vector. Steady-state mean vector of the latent variables
-  \\\mathrm{Mean} \left( \boldsymbol{\eta} \right)\\.
+  \\(\mathrm{Mean} \left( \boldsymbol{\eta} \right)\\).
 
 ## See also
 
 Other Simulation of State Space Models Data Functions:
-[`LinSDE2SSM()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDE2SSM.md),
+[`CompanionMat()`](https://github.com/jeksterslab/simStateSpace/reference/CompanionMat.md),
+[`ExpMat()`](https://github.com/jeksterslab/simStateSpace/reference/ExpMat.md),
+[`LinSDECovDeltaT()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDECovDeltaT.md),
 [`LinSDECovEta()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDECovEta.md),
 [`LinSDECovY()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDECovY.md),
 [`LinSDEInterceptEta()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDEInterceptEta.md),
 [`LinSDEInterceptY()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDEInterceptY.md),
 [`LinSDEMeanEta()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDEMeanEta.md),
 [`LinSDEMeanY()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDEMeanY.md),
+[`LogMat()`](https://github.com/jeksterslab/simStateSpace/reference/LogMat.md),
 [`ProjectToHurwitz()`](https://github.com/jeksterslab/simStateSpace/reference/ProjectToHurwitz.md),
 [`ProjectToStability()`](https://github.com/jeksterslab/simStateSpace/reference/ProjectToStability.md),
 [`SSMCovEta()`](https://github.com/jeksterslab/simStateSpace/reference/SSMCovEta.md),

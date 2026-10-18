@@ -45,26 +45,26 @@ SimSSMOUIVary(
 - mu0:
 
   List of numeric vectors. Each element of the list is the mean of
-  initial latent variable values (\\\boldsymbol{\mu}\_{\boldsymbol{\eta}
-  \mid 0}\\).
+  initial latent variable values
+  (\\(\boldsymbol{\mu}\_{\boldsymbol{\eta} \mid 0}\\)).
 
 - sigma0_l:
 
   List of numeric matrices. Each element of the list is the Cholesky
   factorization (`t(chol(sigma0))`) of the covariance matrix of initial
-  latent variable values (\\\boldsymbol{\Sigma}\_{\boldsymbol{\eta} \mid
-  0}\\).
+  latent variable values (\\(\boldsymbol{\Sigma}\_{\boldsymbol{\eta}
+  \mid 0}\\)).
 
 - mu:
 
   List of numeric vectors. Each element of the list is the long-term
-  mean or equilibrium level (\\\boldsymbol{\mu}\\).
+  mean or equilibrium level (\\(\boldsymbol{\mu}\\)).
 
 - phi:
 
   List of numeric matrix. Each element of the list is the drift matrix
   which represents the rate of change of the solution in the absence of
-  any random fluctuations (\\\boldsymbol{\Phi}\\). It also represents
+  any random fluctuations (\\(\boldsymbol{\Phi}\\)). It also represents
   the rate of mean reversion, determining how quickly the variable
   returns to its mean.
 
@@ -72,24 +72,24 @@ SimSSMOUIVary(
 
   List of numeric matrix. Each element of the list is the Cholesky
   factorization (`t(chol(sigma))`) of the covariance matrix of
-  volatility or randomness in the process \\\boldsymbol{\Sigma}\\.
+  volatility or randomness in the process \\(\boldsymbol{\Sigma}\\).
 
 - nu:
 
   List of numeric vectors. Each element of the list is the vector of
-  intercept values for the measurement model (\\\boldsymbol{\nu}\\).
+  intercept values for the measurement model (\\(\boldsymbol{\nu}\\)).
 
 - lambda:
 
   List of numeric matrices. Each element of the list is the factor
   loading matrix linking the latent variables to the observed variables
-  (\\\boldsymbol{\Lambda}\\).
+  (\\(\boldsymbol{\Lambda}\\)).
 
 - theta_l:
 
   List of numeric matrices. Each element of the list is the Cholesky
   factorization (`t(chol(theta))`) of the covariance matrix of the
-  measurement error (\\\boldsymbol{\Theta}\\).
+  measurement error (\\(\boldsymbol{\Theta}\\)).
 
 - type:
 
@@ -107,13 +107,13 @@ SimSSMOUIVary(
 
   List of numeric matrices. Each element of the list is the matrix
   linking the covariates to the latent variables at current time point
-  (\\\boldsymbol{\Gamma}\\).
+  (\\(\boldsymbol{\Gamma}\\)).
 
 - kappa:
 
   List of numeric matrices. Each element of the list is the matrix
   linking the covariates to the observed variables at current time point
-  (\\\boldsymbol{\kappa}\\).
+  (\\(\boldsymbol{\kappa}\\)).
 
 ## Value
 
@@ -177,13 +177,16 @@ brownian motion. Physical Review, 36 (5), 823-841.
 ## See also
 
 Other Simulation of State Space Models Data Functions:
-[`LinSDE2SSM()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDE2SSM.md),
+[`CompanionMat()`](https://github.com/jeksterslab/simStateSpace/reference/CompanionMat.md),
+[`ExpMat()`](https://github.com/jeksterslab/simStateSpace/reference/ExpMat.md),
+[`LinSDECovDeltaT()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDECovDeltaT.md),
 [`LinSDECovEta()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDECovEta.md),
 [`LinSDECovY()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDECovY.md),
 [`LinSDEInterceptEta()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDEInterceptEta.md),
 [`LinSDEInterceptY()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDEInterceptY.md),
 [`LinSDEMeanEta()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDEMeanEta.md),
 [`LinSDEMeanY()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDEMeanY.md),
+[`LogMat()`](https://github.com/jeksterslab/simStateSpace/reference/LogMat.md),
 [`ProjectToHurwitz()`](https://github.com/jeksterslab/simStateSpace/reference/ProjectToHurwitz.md),
 [`ProjectToStability()`](https://github.com/jeksterslab/simStateSpace/reference/ProjectToStability.md),
 [`SSMCovEta()`](https://github.com/jeksterslab/simStateSpace/reference/SSMCovEta.md),

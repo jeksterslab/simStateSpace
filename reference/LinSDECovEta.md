@@ -1,14 +1,14 @@
 # Steady-State Covariance Matrix for the Latent Variables in the Linear Stochastic Differential Equation Model
 
 The steady-state covariance matrix for the latent variables in the
-linear stochastic differential equation model \\\mathrm{Cov} \left(
-\boldsymbol{\eta} \right)\\ is the solution to the Sylvester equation,
+linear stochastic differential equation model \\(\mathrm{Cov} \left(
+\boldsymbol{\eta} \right)\\) is the solution to the Sylvester equation,
 i.e. \$\$ \mathbf{A} \mathbf{X} + \mathbf{X} \mathbf{B} + \mathbf{C} =
-\mathbf{0} , \$\$ where \\\mathbf{X}\\ is unknown, \\\mathbf{A} =
-\boldsymbol{\Phi}\\, \\\mathbf{B} = \boldsymbol{\Phi}^{\prime}\\, and
-\\\mathbf{C} = \boldsymbol{\Sigma}\\ where \\\boldsymbol{\Phi}\\ is the
-drift matrix and \\\boldsymbol{\Sigma}\\ is the covariance matrix of
-volatility or randomness in the process.
+\mathbf{0} , \$\$ where \\(\mathbf{X}\\) is unknown, \\(\mathbf{A} =
+\boldsymbol{\Phi}\\), \\(\mathbf{B} = \boldsymbol{\Phi}^{\prime}\\), and
+\\(\mathbf{C} = \boldsymbol{\Sigma}\\) where \\(\boldsymbol{\Phi}\\) is
+the drift matrix and \\(\boldsymbol{\Sigma}\\) is the covariance matrix
+of volatility or randomness in the process.
 
 ## Usage
 
@@ -20,24 +20,27 @@ LinSDECovEta(phi, sigma)
 
 - phi:
 
-  Numeric matrix. The drift matrix which represents the rate of change
-  of the solution in the absence of any random fluctuations
-  (\\\boldsymbol{\Phi}\\).
+  Numeric \\(q \times q\\) matrix. The drift matrix which represents the
+  rate of change of the solution in the absence of any random
+  fluctuations (\\(\boldsymbol{\Phi}\\)).
 
 - sigma:
 
   Numeric matrix. The covariance matrix of volatility or randomness in
-  the process (\\\boldsymbol{\Sigma}\\).
+  the process (\\(\boldsymbol{\Sigma}\\)).
 
 ## See also
 
 Other Simulation of State Space Models Data Functions:
-[`LinSDE2SSM()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDE2SSM.md),
+[`CompanionMat()`](https://github.com/jeksterslab/simStateSpace/reference/CompanionMat.md),
+[`ExpMat()`](https://github.com/jeksterslab/simStateSpace/reference/ExpMat.md),
+[`LinSDECovDeltaT()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDECovDeltaT.md),
 [`LinSDECovY()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDECovY.md),
 [`LinSDEInterceptEta()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDEInterceptEta.md),
 [`LinSDEInterceptY()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDEInterceptY.md),
 [`LinSDEMeanEta()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDEMeanEta.md),
 [`LinSDEMeanY()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDEMeanY.md),
+[`LogMat()`](https://github.com/jeksterslab/simStateSpace/reference/LogMat.md),
 [`ProjectToHurwitz()`](https://github.com/jeksterslab/simStateSpace/reference/ProjectToHurwitz.md),
 [`ProjectToStability()`](https://github.com/jeksterslab/simStateSpace/reference/ProjectToStability.md),
 [`SSMCovEta()`](https://github.com/jeksterslab/simStateSpace/reference/SSMCovEta.md),

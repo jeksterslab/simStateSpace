@@ -55,12 +55,12 @@ SimSSMLinGrowth(
 - gamma:
 
   Numeric matrix. Matrix linking the covariates to the latent variables
-  at current time point (\\\boldsymbol{\Gamma}\\).
+  at current time point (\\(\boldsymbol{\Gamma}\\)).
 
 - kappa:
 
   Numeric matrix. Matrix linking the covariates to the observed
-  variables at current time point (\\\boldsymbol{\kappa}\\).
+  variables at current time point (\\(\boldsymbol{\kappa}\\)).
 
 ## Value
 
@@ -93,71 +93,71 @@ following elements:
 ### Type 0
 
 The measurement model is given by \$\$ Y\_{i, t} = \left(
-\begin{array}{cc} 1 & 0 \\ \end{array} \right) \left( \begin{array}{c}
-\eta\_{0\_{i, t}} \\ \eta\_{1\_{i, t}} \\ \end{array} \right) +
+\begin{array}{cc} 1 & 0 \\\\ \end{array} \right) \left( \begin{array}{c}
+\eta\_{0\_{i, t}} \\\\ \eta\_{1\_{i, t}} \\\\ \end{array} \right) +
 \boldsymbol{\varepsilon}\_{i, t}, \quad \mathrm{with} \quad
 \boldsymbol{\varepsilon}\_{i, t} \sim \mathcal{N} \left( 0, \theta
-\right) \$\$ where \\Y\_{i, t}\\, \\\eta\_{0\_{i, t}}\\, \\\eta\_{1\_{i,
-t}}\\, and \\\boldsymbol{\varepsilon}\_{i, t}\\ are random variables and
-\\\theta\\ is a model parameter. \\Y\_{i, t}\\ is the observed random
-variable at time \\t\\ and individual \\i\\, \\\eta\_{0\_{i, t}}\\
-(intercept) and \\\eta\_{1\_{i, t}}\\ (slope) form a vector of latent
-random variables at time \\t\\ and individual \\i\\, and
-\\\boldsymbol{\varepsilon}\_{i, t}\\ a vector of random measurement
-errors at time \\t\\ and individual \\i\\. \\\theta\\ is the variance of
-\\\boldsymbol{\varepsilon}\\.
+\right) \$\$ where \\(Y\_{i, t}\\), \\(\eta\_{0\_{i, t}}\\),
+\\(\eta\_{1\_{i, t}}\\), and \\(\boldsymbol{\varepsilon}\_{i, t}\\) are
+random variables and \\(\theta\\) is a model parameter. \\(Y\_{i, t}\\)
+is the observed random variable at time \\(t\\) and individual \\(i\\),
+\\(\eta\_{0\_{i, t}}\\) (intercept) and \\(\eta\_{1\_{i, t}}\\) (slope)
+form a vector of latent random variables at time \\(t\\) and individual
+\\(i\\), and \\(\boldsymbol{\varepsilon}\_{i, t}\\) a vector of random
+measurement errors at time \\(t\\) and individual \\(i\\). \\(\theta\\)
+is the variance of \\(\boldsymbol{\varepsilon}\\).
 
 The dynamic structure is given by \$\$ \left( \begin{array}{c}
-\eta\_{0\_{i, t}} \\ \eta\_{1\_{i, t}} \\ \end{array} \right) = \left(
-\begin{array}{cc} 1 & 1 \\ 0 & 1 \\ \end{array} \right) \left(
-\begin{array}{c} \eta\_{0\_{i, t - 1}} \\ \eta\_{1\_{i, t - 1}} \\
-\end{array} \right) . \$\$
+\eta\_{0\_{i, t}} \\\\ \eta\_{1\_{i, t}} \\\\ \end{array} \right) =
+\left( \begin{array}{cc} 1 & 1 \\\\ 0 & 1 \\\\ \end{array} \right)
+\left( \begin{array}{c} \eta\_{0\_{i, t - 1}} \\\\ \eta\_{1\_{i, t - 1}}
+\\\\ \end{array} \right) . \$\$
 
 The mean vector and covariance matrix of the intercept and slope are
 captured in the mean vector and covariance matrix of the initial
 condition given by \$\$ \boldsymbol{\mu}\_{\boldsymbol{\eta} \mid 0} =
-\left( \begin{array}{c} \mu\_{\eta\_{0}} \\ \mu\_{\eta\_{1}} \\
+\left( \begin{array}{c} \mu\_{\eta\_{0}} \\\\ \mu\_{\eta\_{1}} \\\\
 \end{array} \right) \quad \mathrm{and,} \$\$
 
 \$\$ \boldsymbol{\Sigma}\_{\boldsymbol{\eta} \mid 0} = \left(
 \begin{array}{cc} \sigma^{2}\_{\eta\_{0}} & \sigma\_{\eta\_{0},
-\eta\_{1}} \\ \sigma\_{\eta\_{1}, \eta\_{0}} & \sigma^{2}\_{\eta\_{1}}
-\\ \end{array} \right) . \$\$
+\eta\_{1}} \\\\ \sigma\_{\eta\_{1}, \eta\_{0}} & \sigma^{2}\_{\eta\_{1}}
+\\\\ \end{array} \right) . \$\$
 
 ### Type 1
 
 The measurement model is given by \$\$ Y\_{i, t} = \left(
-\begin{array}{cc} 1 & 0 \\ \end{array} \right) \left( \begin{array}{c}
-\eta\_{0\_{i, t}} \\ \eta\_{1\_{i, t}} \\ \end{array} \right) +
+\begin{array}{cc} 1 & 0 \\\\ \end{array} \right) \left( \begin{array}{c}
+\eta\_{0\_{i, t}} \\\\ \eta\_{1\_{i, t}} \\\\ \end{array} \right) +
 \boldsymbol{\varepsilon}\_{i, t}, \quad \mathrm{with} \quad
 \boldsymbol{\varepsilon}\_{i, t} \sim \mathcal{N} \left( 0, \theta
 \right) . \$\$
 
 The dynamic structure is given by \$\$ \left( \begin{array}{c}
-\eta\_{0\_{i, t}} \\ \eta\_{1\_{i, t}} \\ \end{array} \right) = \left(
-\begin{array}{cc} 1 & 1 \\ 0 & 1 \\ \end{array} \right) \left(
-\begin{array}{c} \eta\_{0\_{i, t - 1}} \\ \eta\_{1\_{i, t - 1}} \\
-\end{array} \right) + \boldsymbol{\Gamma} \mathbf{x}\_{i, t} \$\$ where
-\\\mathbf{x}\_{i, t}\\ represents a vector of covariates at time \\t\\
-and individual \\i\\, and \\\boldsymbol{\Gamma}\\ the coefficient matrix
-linking the covariates to the latent variables.
+\eta\_{0\_{i, t}} \\\\ \eta\_{1\_{i, t}} \\\\ \end{array} \right) =
+\left( \begin{array}{cc} 1 & 1 \\\\ 0 & 1 \\\\ \end{array} \right)
+\left( \begin{array}{c} \eta\_{0\_{i, t - 1}} \\\\ \eta\_{1\_{i, t - 1}}
+\\\\ \end{array} \right) + \boldsymbol{\Gamma} \mathbf{x}\_{i, t} \$\$
+where \\(\mathbf{x}\_{i, t}\\) represents a vector of covariates at time
+\\(t\\) and individual \\(i\\), and \\(\boldsymbol{\Gamma}\\) the
+coefficient matrix linking the covariates to the latent variables.
 
 ### Type 2
 
 The measurement model is given by \$\$ Y\_{i, t} = \left(
-\begin{array}{cc} 1 & 0 \\ \end{array} \right) \left( \begin{array}{c}
-\eta\_{0\_{i, t}} \\ \eta\_{1\_{i, t}} \\ \end{array} \right) +
+\begin{array}{cc} 1 & 0 \\\\ \end{array} \right) \left( \begin{array}{c}
+\eta\_{0\_{i, t}} \\\\ \eta\_{1\_{i, t}} \\\\ \end{array} \right) +
 \boldsymbol{\kappa} \mathbf{x}\_{i, t} + \boldsymbol{\varepsilon}\_{i,
 t}, \quad \mathrm{with} \quad \boldsymbol{\varepsilon}\_{i, t} \sim
-\mathcal{N} \left( 0, \theta \right) \$\$ where \\\boldsymbol{\kappa}\\
-represents the coefficient matrix linking the covariates to the observed
-variables.
+\mathcal{N} \left( 0, \theta \right) \$\$ where
+\\(\boldsymbol{\kappa}\\) represents the coefficient matrix linking the
+covariates to the observed variables.
 
 The dynamic structure is given by \$\$ \left( \begin{array}{c}
-\eta\_{0\_{i, t}} \\ \eta\_{1\_{i, t}} \\ \end{array} \right) = \left(
-\begin{array}{cc} 1 & 1 \\ 0 & 1 \\ \end{array} \right) \left(
-\begin{array}{c} \eta\_{0\_{i, t - 1}} \\ \eta\_{1\_{i, t - 1}} \\
-\end{array} \right) + \boldsymbol{\Gamma} \mathbf{x}\_{i, t} . \$\$
+\eta\_{0\_{i, t}} \\\\ \eta\_{1\_{i, t}} \\\\ \end{array} \right) =
+\left( \begin{array}{cc} 1 & 1 \\\\ 0 & 1 \\\\ \end{array} \right)
+\left( \begin{array}{c} \eta\_{0\_{i, t - 1}} \\\\ \eta\_{1\_{i, t - 1}}
+\\\\ \end{array} \right) + \boldsymbol{\Gamma} \mathbf{x}\_{i, t} . \$\$
 
 ## References
 
@@ -170,13 +170,16 @@ Multidisciplinary Journal*, 17(2), 303-332.
 ## See also
 
 Other Simulation of State Space Models Data Functions:
-[`LinSDE2SSM()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDE2SSM.md),
+[`CompanionMat()`](https://github.com/jeksterslab/simStateSpace/reference/CompanionMat.md),
+[`ExpMat()`](https://github.com/jeksterslab/simStateSpace/reference/ExpMat.md),
+[`LinSDECovDeltaT()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDECovDeltaT.md),
 [`LinSDECovEta()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDECovEta.md),
 [`LinSDECovY()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDECovY.md),
 [`LinSDEInterceptEta()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDEInterceptEta.md),
 [`LinSDEInterceptY()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDEInterceptY.md),
 [`LinSDEMeanEta()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDEMeanEta.md),
 [`LinSDEMeanY()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDEMeanY.md),
+[`LogMat()`](https://github.com/jeksterslab/simStateSpace/reference/LogMat.md),
 [`ProjectToHurwitz()`](https://github.com/jeksterslab/simStateSpace/reference/ProjectToHurwitz.md),
 [`ProjectToStability()`](https://github.com/jeksterslab/simStateSpace/reference/ProjectToStability.md),
 [`SSMCovEta()`](https://github.com/jeksterslab/simStateSpace/reference/SSMCovEta.md),

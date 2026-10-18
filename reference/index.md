@@ -2,8 +2,12 @@
 
 ## State Space Model
 
+- [`CTVAR2SSM()`](https://github.com/jeksterslab/simStateSpace/reference/CTVAR2SSM.md)
+  : Convert CTVAR Parameters to State Space Parameters
 - [`ProjectToStability()`](https://github.com/jeksterslab/simStateSpace/reference/ProjectToStability.md)
   : Project Matrix to Stability
+- [`SSM2LinSDE()`](https://github.com/jeksterslab/simStateSpace/reference/SSM2LinSDE.md)
+  : Convert State Space Parameters to Linear SDE Parameters
 - [`SSMCovEta()`](https://github.com/jeksterslab/simStateSpace/reference/SSMCovEta.md)
   : Steady-State Covariance Matrix for the Latent Variables in the State
   Space Model
@@ -70,6 +74,8 @@
 
 ## Vector Autoregressive Model
 
+- [`CompanionMat()`](https://github.com/jeksterslab/simStateSpace/reference/CompanionMat.md)
+  : Create a Block Companion Matrix
 - [`SimSSMVARFixed()`](https://github.com/jeksterslab/simStateSpace/reference/SimSSMVARFixed.md)
   : Simulate Data from the Vector Autoregressive Model (Fixed
   Parameters)
@@ -79,9 +85,13 @@
 
 ## Linear Stochastic Differential Equation Model
 
+- [`ExpMat()`](https://github.com/jeksterslab/simStateSpace/reference/ExpMat.md)
+  : Matrix Exponential
 - [`LinSDE2SSM()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDE2SSM.md)
-  : Convert Parameters from the Linear Stochastic Differential Equation
-  Model to State Space Model Parameterization
+  : Convert Linear SDE Parameters to State Space Parameters
+- [`LinSDECovDeltaT()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDECovDeltaT.md)
+  : Interval Covariance Matrix in the Linear Stochastic Differential
+  Equation Model
 - [`LinSDECovEta()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDECovEta.md)
   : Steady-State Covariance Matrix for the Latent Variables in the
   Linear Stochastic Differential Equation Model
@@ -100,8 +110,12 @@
 - [`LinSDEMeanY()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDEMeanY.md)
   : Steady-State Mean Vector for the Observed Variables in the Linear
   Stochastic Differential Equation Model
+- [`LogMat()`](https://github.com/jeksterslab/simStateSpace/reference/LogMat.md)
+  : Matrix Logarithm
 - [`ProjectToHurwitz()`](https://github.com/jeksterslab/simStateSpace/reference/ProjectToHurwitz.md)
   : Project Matrix to Hurwitz Stability
+- [`SSM2LinSDE()`](https://github.com/jeksterslab/simStateSpace/reference/SSM2LinSDE.md)
+  : Convert State Space Parameters to Linear SDE Parameters
 - [`SimPhiN()`](https://github.com/jeksterslab/simStateSpace/reference/SimPhiN.md)
   : Simulate Random Drift Matrices from the Multivariate Normal
   Distribution
@@ -138,9 +152,12 @@
 
 ## Transformation
 
+- [`CTVAR2SSM()`](https://github.com/jeksterslab/simStateSpace/reference/CTVAR2SSM.md)
+  : Convert CTVAR Parameters to State Space Parameters
 - [`LinSDE2SSM()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDE2SSM.md)
-  : Convert Parameters from the Linear Stochastic Differential Equation
-  Model to State Space Model Parameterization
+  : Convert Linear SDE Parameters to State Space Parameters
+- [`SSM2LinSDE()`](https://github.com/jeksterslab/simStateSpace/reference/SSM2LinSDE.md)
+  : Convert State Space Parameters to Linear SDE Parameters
 
 ## Tests
 

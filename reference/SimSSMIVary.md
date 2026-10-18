@@ -44,49 +44,49 @@ SimSSMIVary(
 - mu0:
 
   List of numeric vectors. Each element of the list is the mean of
-  initial latent variable values (\\\boldsymbol{\mu}\_{\boldsymbol{\eta}
-  \mid 0}\\).
+  initial latent variable values
+  (\\(\boldsymbol{\mu}\_{\boldsymbol{\eta} \mid 0}\\)).
 
 - sigma0_l:
 
   List of numeric matrices. Each element of the list is the Cholesky
   factorization (`t(chol(sigma0))`) of the covariance matrix of initial
-  latent variable values (\\\boldsymbol{\Sigma}\_{\boldsymbol{\eta} \mid
-  0}\\).
+  latent variable values (\\(\boldsymbol{\Sigma}\_{\boldsymbol{\eta}
+  \mid 0}\\)).
 
 - alpha:
 
   List of numeric vectors. Each element of the list is the vector of
-  constant values for the dynamic model (\\\boldsymbol{\alpha}\\).
+  constant values for the dynamic model (\\(\boldsymbol{\alpha}\\)).
 
 - beta:
 
   List of numeric matrices. Each element of the list is the transition
   matrix relating the values of the latent variables at the previous to
-  the current time point (\\\boldsymbol{\beta}\\).
+  the current time point (\\(\boldsymbol{\beta}\\)).
 
 - psi_l:
 
   List of numeric matrices. Each element of the list is the Cholesky
   factorization (`t(chol(psi))`) of the covariance matrix of the process
-  noise (\\\boldsymbol{\Psi}\\).
+  noise (\\(\boldsymbol{\Psi}\\)).
 
 - nu:
 
   List of numeric vectors. Each element of the list is the vector of
-  intercept values for the measurement model (\\\boldsymbol{\nu}\\).
+  intercept values for the measurement model (\\(\boldsymbol{\nu}\\)).
 
 - lambda:
 
   List of numeric matrices. Each element of the list is the factor
   loading matrix linking the latent variables to the observed variables
-  (\\\boldsymbol{\Lambda}\\).
+  (\\(\boldsymbol{\Lambda}\\)).
 
 - theta_l:
 
   List of numeric matrices. Each element of the list is the Cholesky
   factorization (`t(chol(theta))`) of the covariance matrix of the
-  measurement error (\\\boldsymbol{\Theta}\\).
+  measurement error (\\(\boldsymbol{\Theta}\\)).
 
 - type:
 
@@ -104,13 +104,13 @@ SimSSMIVary(
 
   List of numeric matrices. Each element of the list is the matrix
   linking the covariates to the latent variables at current time point
-  (\\\boldsymbol{\Gamma}\\).
+  (\\(\boldsymbol{\Gamma}\\)).
 
 - kappa:
 
   List of numeric matrices. Each element of the list is the matrix
   linking the covariates to the observed variables at current time point
-  (\\\boldsymbol{\kappa}\\).
+  (\\(\boldsymbol{\kappa}\\)).
 
 ## Value
 
@@ -157,13 +157,16 @@ Multidisciplinary Journal*, 17(2), 303-332.
 ## See also
 
 Other Simulation of State Space Models Data Functions:
-[`LinSDE2SSM()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDE2SSM.md),
+[`CompanionMat()`](https://github.com/jeksterslab/simStateSpace/reference/CompanionMat.md),
+[`ExpMat()`](https://github.com/jeksterslab/simStateSpace/reference/ExpMat.md),
+[`LinSDECovDeltaT()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDECovDeltaT.md),
 [`LinSDECovEta()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDECovEta.md),
 [`LinSDECovY()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDECovY.md),
 [`LinSDEInterceptEta()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDEInterceptEta.md),
 [`LinSDEInterceptY()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDEInterceptY.md),
 [`LinSDEMeanEta()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDEMeanEta.md),
 [`LinSDEMeanY()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDEMeanY.md),
+[`LogMat()`](https://github.com/jeksterslab/simStateSpace/reference/LogMat.md),
 [`ProjectToHurwitz()`](https://github.com/jeksterslab/simStateSpace/reference/ProjectToHurwitz.md),
 [`ProjectToStability()`](https://github.com/jeksterslab/simStateSpace/reference/ProjectToStability.md),
 [`SSMCovEta()`](https://github.com/jeksterslab/simStateSpace/reference/SSMCovEta.md),

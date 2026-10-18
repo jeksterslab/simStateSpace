@@ -1,0 +1,139 @@
+# Interval Covariance Matrix in the Linear Stochastic Differential Equation Model
+
+The covariance matrix of the process noise accumulated over a sampling
+interval \\(\Delta t\\) in the linear stochastic differential equation
+model, i.e. \$\$ \boldsymbol{\Psi}\_{\Delta t} = \int\_{0}^{\Delta t}
+\exp \left( s \boldsymbol{\Phi} \right) \boldsymbol{\Sigma} \exp \left(
+s \boldsymbol{\Phi}^{\prime} \right) \mathrm{d} s , \$\$ where
+\\(\boldsymbol{\Phi}\\) is the drift matrix and
+\\(\boldsymbol{\Sigma}\\) is the covariance matrix of volatility or
+randomness in the process.
+
+## Usage
+
+``` r
+LinSDECovDeltaT(phi, sigma, delta_t = 1)
+```
+
+## Arguments
+
+- phi:
+
+  Numeric \\(q \times q\\) matrix. The drift matrix which represents the
+  rate of change of the solution in the absence of any random
+  fluctuations (\\(\boldsymbol{\Phi}\\)).
+
+- sigma:
+
+  Numeric matrix. Symmetric matrix, usually the covariance matrix of
+  volatility or randomness in the process (\\(\boldsymbol{\Sigma}\\)).
+
+- delta_t:
+
+  Positive finite numeric scalar. Sampling interval \\(\Delta t\\).
+
+## Value
+
+Returns a symmetric numeric matrix (\\(\boldsymbol{\Psi}\_{\Delta
+t}\\)).
+
+## Details
+
+The integral is computed with the block matrix exponential of Van Loan
+(1978), composed over subintervals so that strongly decaying drifts do
+not overflow. The drift may be singular (for example,
+\\(\boldsymbol{\Phi} = \mathbf{0}\\) gives \\(\Delta t
+\boldsymbol{\Sigma}\\)). The map is linear in \\(\boldsymbol{\Sigma}\\),
+so `sigma` may be any symmetric matrix, not only a covariance matrix.
+For a positive semidefinite `sigma`, the result is the process noise
+covariance `psi_l %*% t(psi_l)` returned by
+[`LinSDE2SSM()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDE2SSM.md).
+
+## References
+
+Van Loan, C. F. (1978). Computing integrals involving the matrix
+exponential. *IEEE Transactions on Automatic Control*, *23*(3), 395–404.
+[doi:10.1109/TAC.1978.1101743](https://doi.org/10.1109/TAC.1978.1101743)
+
+## See also
+
+Other Simulation of State Space Models Data Functions:
+[`CompanionMat()`](https://github.com/jeksterslab/simStateSpace/reference/CompanionMat.md),
+[`ExpMat()`](https://github.com/jeksterslab/simStateSpace/reference/ExpMat.md),
+[`LinSDECovEta()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDECovEta.md),
+[`LinSDECovY()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDECovY.md),
+[`LinSDEInterceptEta()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDEInterceptEta.md),
+[`LinSDEInterceptY()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDEInterceptY.md),
+[`LinSDEMeanEta()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDEMeanEta.md),
+[`LinSDEMeanY()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDEMeanY.md),
+[`LogMat()`](https://github.com/jeksterslab/simStateSpace/reference/LogMat.md),
+[`ProjectToHurwitz()`](https://github.com/jeksterslab/simStateSpace/reference/ProjectToHurwitz.md),
+[`ProjectToStability()`](https://github.com/jeksterslab/simStateSpace/reference/ProjectToStability.md),
+[`SSMCovEta()`](https://github.com/jeksterslab/simStateSpace/reference/SSMCovEta.md),
+[`SSMCovY()`](https://github.com/jeksterslab/simStateSpace/reference/SSMCovY.md),
+[`SSMInterceptEta()`](https://github.com/jeksterslab/simStateSpace/reference/SSMInterceptEta.md),
+[`SSMInterceptY()`](https://github.com/jeksterslab/simStateSpace/reference/SSMInterceptY.md),
+[`SSMMeanEta()`](https://github.com/jeksterslab/simStateSpace/reference/SSMMeanEta.md),
+[`SSMMeanY()`](https://github.com/jeksterslab/simStateSpace/reference/SSMMeanY.md),
+[`SimAlphaN()`](https://github.com/jeksterslab/simStateSpace/reference/SimAlphaN.md),
+[`SimBetaN()`](https://github.com/jeksterslab/simStateSpace/reference/SimBetaN.md),
+[`SimBetaN2()`](https://github.com/jeksterslab/simStateSpace/reference/SimBetaN2.md),
+[`SimBetaNCovariate()`](https://github.com/jeksterslab/simStateSpace/reference/SimBetaNCovariate.md),
+[`SimCovDiagN()`](https://github.com/jeksterslab/simStateSpace/reference/SimCovDiagN.md),
+[`SimCovN()`](https://github.com/jeksterslab/simStateSpace/reference/SimCovN.md),
+[`SimIotaN()`](https://github.com/jeksterslab/simStateSpace/reference/SimIotaN.md),
+[`SimMVN()`](https://github.com/jeksterslab/simStateSpace/reference/SimMVN.md),
+[`SimMuN()`](https://github.com/jeksterslab/simStateSpace/reference/SimMuN.md),
+[`SimNuN()`](https://github.com/jeksterslab/simStateSpace/reference/SimNuN.md),
+[`SimPhiN()`](https://github.com/jeksterslab/simStateSpace/reference/SimPhiN.md),
+[`SimPhiN2()`](https://github.com/jeksterslab/simStateSpace/reference/SimPhiN2.md),
+[`SimPhiNCovariate()`](https://github.com/jeksterslab/simStateSpace/reference/SimPhiNCovariate.md),
+[`SimSSMFixed()`](https://github.com/jeksterslab/simStateSpace/reference/SimSSMFixed.md),
+[`SimSSMIVary()`](https://github.com/jeksterslab/simStateSpace/reference/SimSSMIVary.md),
+[`SimSSMLinGrowth()`](https://github.com/jeksterslab/simStateSpace/reference/SimSSMLinGrowth.md),
+[`SimSSMLinGrowthIVary()`](https://github.com/jeksterslab/simStateSpace/reference/SimSSMLinGrowthIVary.md),
+[`SimSSMLinSDEFixed()`](https://github.com/jeksterslab/simStateSpace/reference/SimSSMLinSDEFixed.md),
+[`SimSSMLinSDEIVary()`](https://github.com/jeksterslab/simStateSpace/reference/SimSSMLinSDEIVary.md),
+[`SimSSMOUFixed()`](https://github.com/jeksterslab/simStateSpace/reference/SimSSMOUFixed.md),
+[`SimSSMOUIVary()`](https://github.com/jeksterslab/simStateSpace/reference/SimSSMOUIVary.md),
+[`SimSSMVARFixed()`](https://github.com/jeksterslab/simStateSpace/reference/SimSSMVARFixed.md),
+[`SimSSMVARIVary()`](https://github.com/jeksterslab/simStateSpace/reference/SimSSMVARIVary.md),
+[`SpectralRadius()`](https://github.com/jeksterslab/simStateSpace/reference/SpectralRadius.md),
+[`TestPhi()`](https://github.com/jeksterslab/simStateSpace/reference/TestPhi.md),
+[`TestPhiHurwitz()`](https://github.com/jeksterslab/simStateSpace/reference/TestPhiHurwitz.md),
+[`TestStability()`](https://github.com/jeksterslab/simStateSpace/reference/TestStability.md),
+[`TestStationarity()`](https://github.com/jeksterslab/simStateSpace/reference/TestStationarity.md)
+
+## Author
+
+Ivan Jacob Agaloos Pesigan
+
+## Examples
+
+``` r
+phi <- matrix(
+  data = c(
+    -0.357, 0.771, -0.450,
+    0.0, -0.511, 0.729,
+    0.0, 0.0, -0.693
+  ),
+  nrow = 3
+)
+sigma <- matrix(
+  data = c(
+    0.24455556, 0.02201587, -0.05004762,
+    0.02201587, 0.07067800, 0.01539456,
+    -0.05004762, 0.01539456, 0.07553061
+  ),
+  nrow = 3
+)
+LinSDECovDeltaT(
+  phi = phi,
+  sigma = sigma,
+  delta_t = 1.0
+)
+#>             [,1]        [,2]         [,3]
+#> [1,]  0.17479162 0.071389045 -0.045893045
+#> [2,]  0.07138904 0.079226364  0.004766117
+#> [3,] -0.04589305 0.004766117  0.058979885
+```

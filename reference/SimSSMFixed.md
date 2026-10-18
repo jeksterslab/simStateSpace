@@ -44,44 +44,45 @@ SimSSMFixed(
 - mu0:
 
   Numeric vector. Mean of initial latent variable values
-  (\\\boldsymbol{\mu}\_{\boldsymbol{\eta} \mid 0}\\).
+  (\\(\boldsymbol{\mu}\_{\boldsymbol{\eta} \mid 0}\\)).
 
 - sigma0_l:
 
   Numeric matrix. Cholesky factorization (`t(chol(sigma0))`) of the
   covariance matrix of initial latent variable values
-  (\\\boldsymbol{\Sigma}\_{\boldsymbol{\eta} \mid 0}\\).
+  (\\(\boldsymbol{\Sigma}\_{\boldsymbol{\eta} \mid 0}\\)).
 
 - alpha:
 
   Numeric vector. Vector of constant values for the dynamic model
-  (\\\boldsymbol{\alpha}\\).
+  (\\(\boldsymbol{\alpha}\\)).
 
 - beta:
 
   Numeric matrix. Transition matrix relating the values of the latent
   variables at the previous to the current time point
-  (\\\boldsymbol{\beta}\\).
+  (\\(\boldsymbol{\beta}\\)).
 
 - psi_l:
 
   Numeric matrix. Cholesky factorization (`t(chol(psi))`) of the
-  covariance matrix of the process noise (\\\boldsymbol{\Psi}\\).
+  covariance matrix of the process noise (\\(\boldsymbol{\Psi}\\)).
 
 - nu:
 
   Numeric vector. Vector of intercept values for the measurement model
-  (\\\boldsymbol{\nu}\\).
+  (\\(\boldsymbol{\nu}\\)).
 
 - lambda:
 
   Numeric matrix. Factor loading matrix linking the latent variables to
-  the observed variables (\\\boldsymbol{\Lambda}\\).
+  the observed variables (\\(\boldsymbol{\Lambda}\\)).
 
 - theta_l:
 
   Numeric matrix. Cholesky factorization (`t(chol(theta))`) of the
-  covariance matrix of the measurement error (\\\boldsymbol{\Theta}\\).
+  covariance matrix of the measurement error
+  (\\(\boldsymbol{\Theta}\\)).
 
 - type:
 
@@ -96,12 +97,12 @@ SimSSMFixed(
 - gamma:
 
   Numeric matrix. Matrix linking the covariates to the latent variables
-  at current time point (\\\boldsymbol{\Gamma}\\).
+  at current time point (\\(\boldsymbol{\Gamma}\\)).
 
 - kappa:
 
   Numeric matrix. Matrix linking the covariates to the observed
-  variables at current time point (\\\boldsymbol{\kappa}\\).
+  variables at current time point (\\(\boldsymbol{\kappa}\\)).
 
 ## Value
 
@@ -137,52 +138,54 @@ The measurement model is given by \$\$ \mathbf{y}\_{i, t} =
 \boldsymbol{\nu} + \boldsymbol{\Lambda} \boldsymbol{\eta}\_{i, t} +
 \boldsymbol{\varepsilon}\_{i, t}, \quad \mathrm{with} \quad
 \boldsymbol{\varepsilon}\_{i, t} \sim \mathcal{N} \left( \mathbf{0},
-\boldsymbol{\Theta} \right) \$\$ where \\\mathbf{y}\_{i, t}\\,
-\\\boldsymbol{\eta}\_{i, t}\\, and \\\boldsymbol{\varepsilon}\_{i, t}\\
-are random variables and \\\boldsymbol{\nu}\\, \\\boldsymbol{\Lambda}\\,
-and \\\boldsymbol{\Theta}\\ are model parameters. \\\mathbf{y}\_{i, t}\\
-represents a vector of observed random variables,
-\\\boldsymbol{\eta}\_{i, t}\\ a vector of latent random variables, and
-\\\boldsymbol{\varepsilon}\_{i, t}\\ a vector of random measurement
-errors, at time \\t\\ and individual \\i\\. \\\boldsymbol{\nu}\\ denotes
-a vector of intercepts, \\\boldsymbol{\Lambda}\\ a matrix of factor
-loadings, and \\\boldsymbol{\Theta}\\ the covariance matrix of
-\\\boldsymbol{\varepsilon}\\.
+\boldsymbol{\Theta} \right) \$\$ where \\(\mathbf{y}\_{i, t}\\),
+\\(\boldsymbol{\eta}\_{i, t}\\), and \\(\boldsymbol{\varepsilon}\_{i,
+t}\\) are random variables and \\(\boldsymbol{\nu}\\),
+\\(\boldsymbol{\Lambda}\\), and \\(\boldsymbol{\Theta}\\) are model
+parameters. \\(\mathbf{y}\_{i, t}\\) represents a vector of observed
+random variables, \\(\boldsymbol{\eta}\_{i, t}\\) a vector of latent
+random variables, and \\(\boldsymbol{\varepsilon}\_{i, t}\\) a vector of
+random measurement errors, at time \\(t\\) and individual \\(i\\).
+\\(\boldsymbol{\nu}\\) denotes a vector of intercepts,
+\\(\boldsymbol{\Lambda}\\) a matrix of factor loadings, and
+\\(\boldsymbol{\Theta}\\) the covariance matrix of
+\\(\boldsymbol{\varepsilon}\\).
 
 An alternative representation of the measurement error is given by \$\$
 \boldsymbol{\varepsilon}\_{i, t} = \boldsymbol{\Theta}^{\frac{1}{2}}
 \mathbf{z}\_{i, t}, \quad \mathrm{with} \quad \mathbf{z}\_{i, t} \sim
 \mathcal{N} \left( \mathbf{0}, \mathbf{I} \right) \$\$ where
-\\\mathbf{z}\_{i, t}\\ is a vector of independent standard normal random
-variables and \\ \left( \boldsymbol{\Theta}^{\frac{1}{2}} \right) \left(
-\boldsymbol{\Theta}^{\frac{1}{2}} \right)^{\prime} = \boldsymbol{\Theta}
-. \\
+\\(\mathbf{z}\_{i, t}\\) is a vector of independent standard normal
+random variables and \\( \left( \boldsymbol{\Theta}^{\frac{1}{2}}
+\right) \left( \boldsymbol{\Theta}^{\frac{1}{2}} \right)^{\prime} =
+\boldsymbol{\Theta} . \\)
 
 The dynamic structure is given by \$\$ \boldsymbol{\eta}\_{i, t} =
 \boldsymbol{\alpha} + \boldsymbol{\beta} \boldsymbol{\eta}\_{i, t - 1} +
 \boldsymbol{\zeta}\_{i, t}, \quad \mathrm{with} \quad
 \boldsymbol{\zeta}\_{i, t} \sim \mathcal{N} \left( \mathbf{0},
-\boldsymbol{\Psi} \right) \$\$ where \\\boldsymbol{\eta}\_{i, t}\\,
-\\\boldsymbol{\eta}\_{i, t - 1}\\, and \\\boldsymbol{\zeta}\_{i, t}\\
-are random variables, and \\\boldsymbol{\alpha}\\,
-\\\boldsymbol{\beta}\\, and \\\boldsymbol{\Psi}\\ are model parameters.
-Here, \\\boldsymbol{\eta}\_{i, t}\\ is a vector of latent variables at
-time \\t\\ and individual \\i\\, \\\boldsymbol{\eta}\_{i, t - 1}\\
-represents a vector of latent variables at time \\t - 1\\ and individual
-\\i\\, and \\\boldsymbol{\zeta}\_{i, t}\\ represents a vector of dynamic
-noise at time \\t\\ and individual \\i\\. \\\boldsymbol{\alpha}\\
-denotes a vector of intercepts, \\\boldsymbol{\beta}\\ a matrix of
+\boldsymbol{\Psi} \right) \$\$ where \\(\boldsymbol{\eta}\_{i, t}\\),
+\\(\boldsymbol{\eta}\_{i, t - 1}\\), and \\(\boldsymbol{\zeta}\_{i,
+t}\\) are random variables, and \\(\boldsymbol{\alpha}\\),
+\\(\boldsymbol{\beta}\\), and \\(\boldsymbol{\Psi}\\) are model
+parameters. Here, \\(\boldsymbol{\eta}\_{i, t}\\) is a vector of latent
+variables at time \\(t\\) and individual \\(i\\),
+\\(\boldsymbol{\eta}\_{i, t - 1}\\) represents a vector of latent
+variables at time \\(t - 1\\) and individual \\(i\\), and
+\\(\boldsymbol{\zeta}\_{i, t}\\) represents a vector of dynamic noise at
+time \\(t\\) and individual \\(i\\). \\(\boldsymbol{\alpha}\\) denotes a
+vector of intercepts, \\(\boldsymbol{\beta}\\) a matrix of
 autoregression and cross regression coefficients, and
-\\\boldsymbol{\Psi}\\ the covariance matrix of \\\boldsymbol{\zeta}\_{i,
-t}\\.
+\\(\boldsymbol{\Psi}\\) the covariance matrix of
+\\(\boldsymbol{\zeta}\_{i, t}\\).
 
 An alternative representation of the dynamic noise is given by \$\$
 \boldsymbol{\zeta}\_{i, t} = \boldsymbol{\Psi}^{\frac{1}{2}}
 \mathbf{z}\_{i, t}, \quad \mathrm{with} \quad \mathbf{z}\_{i, t} \sim
-\mathcal{N} \left( \mathbf{0}, \mathbf{I} \right) \$\$ where \\ \left(
+\mathcal{N} \left( \mathbf{0}, \mathbf{I} \right) \$\$ where \\( \left(
 \boldsymbol{\Psi}^{\frac{1}{2}} \right) \left(
 \boldsymbol{\Psi}^{\frac{1}{2}} \right)^{\prime} = \boldsymbol{\Psi} .
-\\
+\\)
 
 ### Type 1
 
@@ -197,9 +200,9 @@ The dynamic structure is given by \$\$ \boldsymbol{\eta}\_{i, t} =
 \boldsymbol{\Gamma} \mathbf{x}\_{i, t} + \boldsymbol{\zeta}\_{i, t},
 \quad \mathrm{with} \quad \boldsymbol{\zeta}\_{i, t} \sim \mathcal{N}
 \left( \mathbf{0}, \boldsymbol{\Psi} \right) \$\$ where
-\\\mathbf{x}\_{i, t}\\ represents a vector of covariates at time \\t\\
-and individual \\i\\, and \\\boldsymbol{\Gamma}\\ the coefficient matrix
-linking the covariates to the latent variables.
+\\(\mathbf{x}\_{i, t}\\) represents a vector of covariates at time
+\\(t\\) and individual \\(i\\), and \\(\boldsymbol{\Gamma}\\) the
+coefficient matrix linking the covariates to the latent variables.
 
 ### Type 2
 
@@ -208,7 +211,7 @@ The measurement model is given by \$\$ \mathbf{y}\_{i, t} =
 \boldsymbol{\kappa} \mathbf{x}\_{i, t} + \boldsymbol{\varepsilon}\_{i,
 t}, \quad \mathrm{with} \quad \boldsymbol{\varepsilon}\_{i, t} \sim
 \mathcal{N} \left( \mathbf{0}, \boldsymbol{\Theta} \right) \$\$ where
-\\\boldsymbol{\kappa}\\ represents the coefficient matrix linking the
+\\(\boldsymbol{\kappa}\\) represents the coefficient matrix linking the
 covariates to the observed variables.
 
 The dynamic structure is given by \$\$ \boldsymbol{\eta}\_{i, t} =
@@ -228,13 +231,16 @@ Multidisciplinary Journal*, 17(2), 303-332.
 ## See also
 
 Other Simulation of State Space Models Data Functions:
-[`LinSDE2SSM()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDE2SSM.md),
+[`CompanionMat()`](https://github.com/jeksterslab/simStateSpace/reference/CompanionMat.md),
+[`ExpMat()`](https://github.com/jeksterslab/simStateSpace/reference/ExpMat.md),
+[`LinSDECovDeltaT()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDECovDeltaT.md),
 [`LinSDECovEta()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDECovEta.md),
 [`LinSDECovY()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDECovY.md),
 [`LinSDEInterceptEta()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDEInterceptEta.md),
 [`LinSDEInterceptY()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDEInterceptY.md),
 [`LinSDEMeanEta()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDEMeanEta.md),
 [`LinSDEMeanY()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDEMeanY.md),
+[`LogMat()`](https://github.com/jeksterslab/simStateSpace/reference/LogMat.md),
 [`ProjectToHurwitz()`](https://github.com/jeksterslab/simStateSpace/reference/ProjectToHurwitz.md),
 [`ProjectToStability()`](https://github.com/jeksterslab/simStateSpace/reference/ProjectToStability.md),
 [`SSMCovEta()`](https://github.com/jeksterslab/simStateSpace/reference/SSMCovEta.md),

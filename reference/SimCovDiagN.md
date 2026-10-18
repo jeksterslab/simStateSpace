@@ -18,13 +18,13 @@ SimCovDiagN(n, sigma_diag, vcov_sigma_diag_l)
 
 - sigma_diag:
 
-  Numeric matrix. The covariance matrix (\\\boldsymbol{\Sigma}\\).
+  Numeric matrix. The covariance matrix (\\(\boldsymbol{\Sigma}\\)).
 
 - vcov_sigma_diag_l:
 
   Numeric matrix. Cholesky factorization (`t(chol(vcov_sigma_vech))`) of
-  the sampling variance-covariance matrix of \\\mathrm{vech} \left(
-  \boldsymbol{\Sigma} \right)\\.
+  the sampling variance-covariance matrix of \\(\mathrm{vech} \left(
+  \boldsymbol{\Sigma} \right)\\).
 
 ## Value
 
@@ -33,13 +33,16 @@ Returns a list of random diagonal covariance matrices.
 ## See also
 
 Other Simulation of State Space Models Data Functions:
-[`LinSDE2SSM()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDE2SSM.md),
+[`CompanionMat()`](https://github.com/jeksterslab/simStateSpace/reference/CompanionMat.md),
+[`ExpMat()`](https://github.com/jeksterslab/simStateSpace/reference/ExpMat.md),
+[`LinSDECovDeltaT()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDECovDeltaT.md),
 [`LinSDECovEta()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDECovEta.md),
 [`LinSDECovY()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDECovY.md),
 [`LinSDEInterceptEta()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDEInterceptEta.md),
 [`LinSDEInterceptY()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDEInterceptY.md),
 [`LinSDEMeanEta()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDEMeanEta.md),
 [`LinSDEMeanY()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDEMeanY.md),
+[`LogMat()`](https://github.com/jeksterslab/simStateSpace/reference/LogMat.md),
 [`ProjectToHurwitz()`](https://github.com/jeksterslab/simStateSpace/reference/ProjectToHurwitz.md),
 [`ProjectToStability()`](https://github.com/jeksterslab/simStateSpace/reference/ProjectToStability.md),
 [`SSMCovEta()`](https://github.com/jeksterslab/simStateSpace/reference/SSMCovEta.md),

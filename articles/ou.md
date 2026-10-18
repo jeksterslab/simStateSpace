@@ -90,7 +90,7 @@ which represents random fluctuations.
 
 ### Notation
 
-Let $`t = 1000`$ be the number of time points and $`n = 100`$ be the
+Let $`t = 200`$ be the number of time points and $`n = 10`$ be the
 number of individuals.
 
 Let the measurement model intecept vector $`\boldsymbol{\nu}`$ be given
@@ -232,61 +232,59 @@ Let $`\Delta t = 0.1`$.
 
 ### R Function Arguments
 
-``` r
-
-n
-#> [1] 100
-time
-#> [1] 1000
-delta_t
-#> [1] 0.1
-mu0
-#> [1] 0 0 0
-sigma0
-#>           [,1]      [,2]      [,3]
-#> [1,] 0.3425148 0.3296023 0.0343817
-#> [2,] 0.3296023 0.5664625 0.2545955
-#> [3,] 0.0343817 0.2545955 0.2999909
-sigma0_l # sigma0_l <- t(chol(sigma0))
-#>            [,1]      [,2]      [,3]
-#> [1,] 0.58524763 0.0000000 0.0000000
-#> [2,] 0.56318429 0.4992855 0.0000000
-#> [3,] 0.05874726 0.4436540 0.3157701
-mu
-#> [1] 0 0 0
-phi
-#>        [,1]   [,2]   [,3]
-#> [1,] -0.357  0.000  0.000
-#> [2,]  0.771 -0.511  0.000
-#> [3,] -0.450  0.729 -0.693
-sigma
-#>             [,1]       [,2]        [,3]
-#> [1,]  0.24455556 0.02201587 -0.05004762
-#> [2,]  0.02201587 0.07067800  0.01539456
-#> [3,] -0.05004762 0.01539456  0.07553061
-sigma_l # sigma_l <- t(chol(sigma))
-#>             [,1]      [,2]     [,3]
-#> [1,]  0.49452559 0.0000000 0.000000
-#> [2,]  0.04451917 0.2620993 0.000000
-#> [3,] -0.10120330 0.0759256 0.243975
-nu
-#> [1] 0 0 0
-lambda
-#>      [,1] [,2] [,3]
-#> [1,]    1    0    0
-#> [2,]    0    1    0
-#> [3,]    0    0    1
-theta
-#>      [,1] [,2] [,3]
-#> [1,]  0.2  0.0  0.0
-#> [2,]  0.0  0.2  0.0
-#> [3,]  0.0  0.0  0.2
-theta_l # theta_l <- t(chol(theta))
-#>           [,1]      [,2]      [,3]
-#> [1,] 0.4472136 0.0000000 0.0000000
-#> [2,] 0.0000000 0.4472136 0.0000000
-#> [3,] 0.0000000 0.0000000 0.4472136
-```
+\
+`n`\
+`#> [1] 10`\
+`time`\
+`#> [1] 200`\
+`delta_t`\
+`#> [1] 0.1`\
+`mu0`\
+`#> [1] 0 0 0`\
+`sigma0`\
+`#>           [,1]      [,2]      [,3]`\
+`#> [1,] 0.3425148 0.3296023 0.0343817`\
+`#> [2,] 0.3296023 0.5664625 0.2545955`\
+`#> [3,] 0.0343817 0.2545955 0.2999909`\
+`sigma0_l`` ``# sigma0_l <- t(chol(sigma0))`\
+`#>            [,1]      [,2]      [,3]`\
+`#> [1,] 0.58524763 0.0000000 0.0000000`\
+`#> [2,] 0.56318429 0.4992855 0.0000000`\
+`#> [3,] 0.05874726 0.4436540 0.3157701`\
+`mu`\
+`#> [1] 0 0 0`\
+`phi`\
+`#>        [,1]   [,2]   [,3]`\
+`#> [1,] -0.357  0.000  0.000`\
+`#> [2,]  0.771 -0.511  0.000`\
+`#> [3,] -0.450  0.729 -0.693`\
+`sigma`\
+`#>             [,1]       [,2]        [,3]`\
+`#> [1,]  0.24455556 0.02201587 -0.05004762`\
+`#> [2,]  0.02201587 0.07067800  0.01539456`\
+`#> [3,] -0.05004762 0.01539456  0.07553061`\
+`sigma_l`` ``# sigma_l <- t(chol(sigma))`\
+`#>             [,1]      [,2]     [,3]`\
+`#> [1,]  0.49452559 0.0000000 0.000000`\
+`#> [2,]  0.04451917 0.2620993 0.000000`\
+`#> [3,] -0.10120330 0.0759256 0.243975`\
+`nu`\
+`#> [1] 0 0 0`\
+`lambda`\
+`#>      [,1] [,2] [,3]`\
+`#> [1,]    1    0    0`\
+`#> [2,]    0    1    0`\
+`#> [3,]    0    0    1`\
+`theta`\
+`#>      [,1] [,2] [,3]`\
+`#> [1,]  0.2  0.0  0.0`\
+`#> [2,]  0.0  0.2  0.0`\
+`#> [3,]  0.0  0.0  0.2`\
+`theta_l`` ``# theta_l <- t(chol(theta))`\
+`#>           [,1]      [,2]      [,3]`\
+`#> [1,] 0.4472136 0.0000000 0.0000000`\
+`#> [2,] 0.0000000 0.4472136 0.0000000`\
+`#> [3,] 0.0000000 0.0000000 0.4472136`
 
 ### Visualizing the Dynamics Without Measurement Error and Process Noise (n = 5 with Different Initial Condition)
 
@@ -294,49 +292,47 @@ theta_l # theta_l <- t(chol(theta))
 
 ### Using the `SimSSMOUFixed` Function from the `simStateSpace` Package to Simulate Data
 
-``` r
-
-library(simStateSpace)
-sim <- SimSSMOUFixed(
-  n = n,
-  time = time,
-  delta_t = delta_t,
-  mu0 = mu0,
-  sigma0_l = sigma0_l,
-  mu = mu,
-  phi = phi,
-  sigma_l = sigma_l,
-  nu = nu,
-  lambda = lambda,
-  theta_l = theta_l,
-  type = 0
-)
-data <- as.data.frame(sim)
-head(data)
-#>   id time          y1         y2         y3
-#> 1  1  0.0  0.45047365 -1.2185550  0.6708638
-#> 2  1  0.1 -0.84190461  0.1242594  0.1813493
-#> 3  1  0.2  0.47289651 -0.2398710  0.5995107
-#> 4  1  0.3  0.04089817 -0.6547109  0.4674929
-#> 5  1  0.4 -1.37222946 -0.2010512 -0.3341885
-#> 6  1  0.5 -0.62410106  0.5262251 -0.1892906
-summary(data)
-#>        id              time             y1                  y2           
-#>  Min.   :  1.00   Min.   : 0.00   Min.   :-3.387237   Min.   :-3.561919  
-#>  1st Qu.: 25.75   1st Qu.:24.98   1st Qu.:-0.497505   1st Qu.:-0.593119  
-#>  Median : 50.50   Median :49.95   Median : 0.002308   Median : 0.002867  
-#>  Mean   : 50.50   Mean   :49.95   Mean   : 0.002420   Mean   : 0.001311  
-#>  3rd Qu.: 75.25   3rd Qu.:74.92   3rd Qu.: 0.507538   3rd Qu.: 0.600379  
-#>  Max.   :100.00   Max.   :99.90   Max.   : 3.381345   Max.   : 3.415473  
-#>        y3            
-#>  Min.   :-2.9091510  
-#>  1st Qu.:-0.4779403  
-#>  Median : 0.0006008  
-#>  Mean   : 0.0019631  
-#>  3rd Qu.: 0.4815267  
-#>  Max.   : 3.0074722
-plot(sim)
-```
+\
+[`library`](https://rdrr.io/r/base/library.html)`(`[`simStateSpace`](https://github.com/jeksterslab/simStateSpace)`)`\
+`sim`` ``<-`` `[`SimSSMOUFixed`](https://github.com/jeksterslab/simStateSpace/reference/SimSSMOUFixed.md)`(`\
+`  n ``=`` ``n``,`\
+`  time ``=`` ``time``,`\
+`  delta_t ``=`` ``delta_t``,`\
+`  mu0 ``=`` ``mu0``,`\
+`  sigma0_l ``=`` ``sigma0_l``,`\
+`  mu ``=`` ``mu``,`\
+`  phi ``=`` ``phi``,`\
+`  sigma_l ``=`` ``sigma_l``,`\
+`  nu ``=`` ``nu``,`\
+`  lambda ``=`` ``lambda``,`\
+`  theta_l ``=`` ``theta_l``,`\
+`  type ``=`` ``0`\
+`)`\
+`data`` ``<-`` `[`as.data.frame`](https://rdrr.io/r/base/as.data.frame.html)`(``sim``)`\
+[`head`](https://rdrr.io/r/utils/head.html)`(``data``)`\
+`#>   id time          y1         y2         y3`\
+`#> 1  1  0.0  0.45047365 -1.2185550  0.6708638`\
+`#> 2  1  0.1 -0.84190461  0.1242594  0.1813493`\
+`#> 3  1  0.2  0.47289651 -0.2398710  0.5995107`\
+`#> 4  1  0.3  0.04089817 -0.6547109  0.4674929`\
+`#> 5  1  0.4 -1.37222946 -0.2010512 -0.3341885`\
+`#> 6  1  0.5 -0.62410106  0.5262251 -0.1892906`\
+[`summary`](https://rdrr.io/r/base/summary.html)`(``data``)`\
+`#>        id            time              y1                 y2         `\
+`#>  Min.   : 1.0   Min.   : 0.000   Min.   :-2.25288   Min.   :-2.7497  `\
+`#>  1st Qu.: 3.0   1st Qu.: 4.975   1st Qu.:-0.35833   1st Qu.:-0.3289  `\
+`#>  Median : 5.5   Median : 9.950   Median : 0.09071   Median : 0.1856  `\
+`#>  Mean   : 5.5   Mean   : 9.950   Mean   : 0.11195   Mean   : 0.1852  `\
+`#>  3rd Qu.: 8.0   3rd Qu.:14.925   3rd Qu.: 0.54617   3rd Qu.: 0.6858  `\
+`#>  Max.   :10.0   Max.   :19.900   Max.   : 2.83007   Max.   : 3.3403  `\
+`#>        y3         `\
+`#>  Min.   :-1.9782  `\
+`#>  1st Qu.:-0.3253  `\
+`#>  Median : 0.1306  `\
+`#>  Mean   : 0.1034  `\
+`#>  3rd Qu.: 0.5321  `\
+`#>  Max.   : 2.4172`\
+[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``sim``)`
 
 ![](fig-vignettes-ou-error-ou-1.png)![](fig-vignettes-ou-error-ou-2.png)![](fig-vignettes-ou-error-ou-3.png)
 
@@ -344,259 +340,237 @@ plot(sim)
 
 ### Prepare Data
 
-``` r
-
-dynr_data <- dynr::dynr.data(
-  dataframe = data,
-  id = "id",
-  time = "time",
-  observed = c("y1", "y2", "y3")
-)
-```
+\
+`dynr_data`` ``<-`` ``dynr``::`[`dynr.data`](https://rdrr.io/pkg/dynr/man/dynr.data.html)`(`\
+`  dataframe ``=`` ``data``,`\
+`  id ``=`` ``"id"``,`\
+`  time ``=`` ``"time"``,`\
+`  observed ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"y1"``, ``"y2"``, ``"y3"``)`\
+`)`
 
 ### Prepare Initial Condition
 
-``` r
-
-dynr_initial <- dynr::prep.initial(
-  values.inistate = mu0,
-  params.inistate = c("mu0_1_1", "mu0_2_1", "mu0_3_1"),
-  values.inicov = sigma0,
-  params.inicov = matrix(
-    data = c(
-      "sigma0_1_1", "sigma0_2_1", "sigma0_3_1",
-      "sigma0_2_1", "sigma0_2_2", "sigma0_3_2",
-      "sigma0_3_1", "sigma0_3_2", "sigma0_3_3"
-    ),
-    nrow = 3
-  )
-)
-```
+\
+`dynr_initial`` ``<-`` ``dynr``::`[`prep.initial`](https://rdrr.io/pkg/dynr/man/prep.initial.html)`(`\
+`  values.inistate ``=`` ``mu0``,`\
+`  params.inistate ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"mu0_1_1"``, ``"mu0_2_1"``, ``"mu0_3_1"``)``,`\
+`  values.inicov ``=`` ``sigma0``,`\
+`  params.inicov ``=`` `[`matrix`](https://rdrr.io/r/base/matrix.html)`(`\
+`    data ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(`\
+`      ``"sigma0_1_1"``, ``"sigma0_2_1"``, ``"sigma0_3_1"``,`\
+`      ``"sigma0_2_1"``, ``"sigma0_2_2"``, ``"sigma0_3_2"``,`\
+`      ``"sigma0_3_1"``, ``"sigma0_3_2"``, ``"sigma0_3_3"`\
+`    ``)``,`\
+`    nrow ``=`` ``3`\
+`  ``)`\
+`)`
 
 ### Prepare Measurement Model
 
-``` r
-
-dynr_measurement <- dynr::prep.measurement(
-  values.load = diag(3),
-  params.load = matrix(data = "fixed", nrow = 3, ncol = 3),
-  state.names = c("eta_1", "eta_2", "eta_3"),
-  obs.names = c("y1", "y2", "y3")
-)
-```
+\
+`dynr_measurement`` ``<-`` ``dynr``::`[`prep.measurement`](https://rdrr.io/pkg/dynr/man/prep.measurement.html)`(`\
+`  values.load ``=`` `[`diag`](https://rdrr.io/r/base/diag.html)`(``3``)``,`\
+`  params.load ``=`` `[`matrix`](https://rdrr.io/r/base/matrix.html)`(``data ``=`` ``"fixed"``, nrow ``=`` ``3``, ncol ``=`` ``3``)``,`\
+`  state.names ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"eta_1"``, ``"eta_2"``, ``"eta_3"``)``,`\
+`  obs.names ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"y1"``, ``"y2"``, ``"y3"``)`\
+`)`
 
 ### Prepare Dynamic Process
 
-``` r
-
-dynr_dynamics <- dynr::prep.formulaDynamics(
-  formula = list(  
-    eta_1 ~ (phi_1_1 * (eta_1 - mu_1_1)) + (phi_1_2 * (eta_2 - mu_2_1)) + (phi_1_3 * (eta_3 - mu_3_1)),
-    eta_2 ~ (phi_2_1 * (eta_1 - mu_1_1)) + (phi_2_2 * (eta_2 - mu_2_1)) + (phi_2_3 * (eta_3 - mu_3_1)),
-    eta_3 ~ (phi_3_1 * (eta_1 - mu_1_1)) + (phi_3_2 * (eta_2 - mu_2_1)) + (phi_3_3 * (eta_3 - mu_3_1))
-  ),
-  startval = c(
-    mu_1_1 = mu[1], mu_2_1 = mu[2], mu_3_1 = mu[3],
-    phi_1_1 = phi[1, 1], phi_1_2 = phi[1, 2], phi_1_3 = phi[1, 3],
-    phi_2_1 = phi[2, 1], phi_2_2 = phi[2, 2], phi_2_3 = phi[2, 3],
-    phi_3_1 = phi[3, 1], phi_3_2 = phi[3, 2], phi_3_3 = phi[3, 3]
-  ),
-  isContinuousTime = TRUE
-)
-```
+\
+`dynr_dynamics`` ``<-`` ``dynr``::`[`prep.formulaDynamics`](https://rdrr.io/pkg/dynr/man/prep.formulaDynamics.html)`(`\
+`  formula ``=`` `[`list`](https://rdrr.io/r/base/list.html)`(``  `\
+`    ``eta_1`` ``~`` ``(``phi_1_1`` ``*`` ``(``eta_1`` ``-`` ``mu_1_1``)``)`` ``+`` ``(``phi_1_2`` ``*`` ``(``eta_2`` ``-`` ``mu_2_1``)``)`` ``+`` ``(``phi_1_3`` ``*`` ``(``eta_3`` ``-`` ``mu_3_1``)``)``,`\
+`    ``eta_2`` ``~`` ``(``phi_2_1`` ``*`` ``(``eta_1`` ``-`` ``mu_1_1``)``)`` ``+`` ``(``phi_2_2`` ``*`` ``(``eta_2`` ``-`` ``mu_2_1``)``)`` ``+`` ``(``phi_2_3`` ``*`` ``(``eta_3`` ``-`` ``mu_3_1``)``)``,`\
+`    ``eta_3`` ``~`` ``(``phi_3_1`` ``*`` ``(``eta_1`` ``-`` ``mu_1_1``)``)`` ``+`` ``(``phi_3_2`` ``*`` ``(``eta_2`` ``-`` ``mu_2_1``)``)`` ``+`` ``(``phi_3_3`` ``*`` ``(``eta_3`` ``-`` ``mu_3_1``)``)`\
+`  ``)``,`\
+`  startval ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(`\
+`    mu_1_1 ``=`` ``mu``[``1``]``, mu_2_1 ``=`` ``mu``[``2``]``, mu_3_1 ``=`` ``mu``[``3``]``,`\
+`    phi_1_1 ``=`` ``phi``[``1``, ``1``]``, phi_1_2 ``=`` ``phi``[``1``, ``2``]``, phi_1_3 ``=`` ``phi``[``1``, ``3``]``,`\
+`    phi_2_1 ``=`` ``phi``[``2``, ``1``]``, phi_2_2 ``=`` ``phi``[``2``, ``2``]``, phi_2_3 ``=`` ``phi``[``2``, ``3``]``,`\
+`    phi_3_1 ``=`` ``phi``[``3``, ``1``]``, phi_3_2 ``=`` ``phi``[``3``, ``2``]``, phi_3_3 ``=`` ``phi``[``3``, ``3``]`\
+`  ``)``,`\
+`  isContinuousTime ``=`` ``TRUE`\
+`)`
 
 ### Prepare Process Noise
 
-``` r
-
-dynr_noise <- dynr::prep.noise(
-  values.latent = sigma,
-  params.latent = matrix(
-    data = c(
-      "sigma_1_1", "sigma_2_1", "sigma_3_1",
-      "sigma_2_1", "sigma_2_2", "sigma_3_2",
-      "sigma_3_1", "sigma_3_2", "sigma_3_3"
-    ),
-    nrow = 3
-  ),
-  values.observed = theta,
-  params.observed = matrix(
-    data = c(
-      "theta_1_1", "fixed", "fixed",
-      "fixed", "theta_2_2", "fixed",
-      "fixed", "fixed", "theta_3_3"
-    ),
-    nrow = 3
-  )
-)
-```
+\
+`dynr_noise`` ``<-`` ``dynr``::`[`prep.noise`](https://rdrr.io/pkg/dynr/man/prep.noise.html)`(`\
+`  values.latent ``=`` ``sigma``,`\
+`  params.latent ``=`` `[`matrix`](https://rdrr.io/r/base/matrix.html)`(`\
+`    data ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(`\
+`      ``"sigma_1_1"``, ``"sigma_2_1"``, ``"sigma_3_1"``,`\
+`      ``"sigma_2_1"``, ``"sigma_2_2"``, ``"sigma_3_2"``,`\
+`      ``"sigma_3_1"``, ``"sigma_3_2"``, ``"sigma_3_3"`\
+`    ``)``,`\
+`    nrow ``=`` ``3`\
+`  ``)``,`\
+`  values.observed ``=`` ``theta``,`\
+`  params.observed ``=`` `[`matrix`](https://rdrr.io/r/base/matrix.html)`(`\
+`    data ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(`\
+`      ``"theta_1_1"``, ``"fixed"``, ``"fixed"``,`\
+`      ``"fixed"``, ``"theta_2_2"``, ``"fixed"``,`\
+`      ``"fixed"``, ``"fixed"``, ``"theta_3_3"`\
+`    ``)``,`\
+`    nrow ``=`` ``3`\
+`  ``)`\
+`)`
 
 ### Prepare the Model
 
-``` r
-
-model <- dynr::dynr.model(
-  data = dynr_data,
-  initial = dynr_initial,
-  measurement = dynr_measurement,
-  dynamics = dynr_dynamics,
-  noise = dynr_noise,
-  outfile = "ou.c"
-)
-```
+\
+`model`` ``<-`` ``dynr``::`[`dynr.model`](https://rdrr.io/pkg/dynr/man/dynr.model.html)`(`\
+`  data ``=`` ``dynr_data``,`\
+`  initial ``=`` ``dynr_initial``,`\
+`  measurement ``=`` ``dynr_measurement``,`\
+`  dynamics ``=`` ``dynr_dynamics``,`\
+`  noise ``=`` ``dynr_noise``,`\
+`  outfile ``=`` ``"ou.c"`\
+`)`
 
 Add lower and upper bounds to aid in the optimization.
 
-``` r
-
-model$lb[
-  c(
-    "phi_1_1",
-    "phi_1_2",
-    "phi_1_3",
-    "phi_2_1",
-    "phi_2_2",
-    "phi_2_3",
-    "phi_3_1",
-    "phi_3_2",
-    "phi_3_3"
-  )
-] <- -1.5
-model$ub[
-  c(
-    "phi_1_1",
-    "phi_1_2",
-    "phi_1_3",
-    "phi_2_1",
-    "phi_2_2",
-    "phi_2_3",
-    "phi_3_1",
-    "phi_3_2",
-    "phi_3_3"
-  )
-] <- +1.5
-```
+\
+`model``$``lb``[`\
+`  `[`c`](https://rdrr.io/r/base/c.html)`(`\
+`    ``"phi_1_1"``,`\
+`    ``"phi_1_2"``,`\
+`    ``"phi_1_3"``,`\
+`    ``"phi_2_1"``,`\
+`    ``"phi_2_2"``,`\
+`    ``"phi_2_3"``,`\
+`    ``"phi_3_1"``,`\
+`    ``"phi_3_2"``,`\
+`    ``"phi_3_3"`\
+`  ``)`\
+`]`` ``<-`` ``-``1.5`\
+`model``$``ub``[`\
+`  `[`c`](https://rdrr.io/r/base/c.html)`(`\
+`    ``"phi_1_1"``,`\
+`    ``"phi_1_2"``,`\
+`    ``"phi_1_3"``,`\
+`    ``"phi_2_1"``,`\
+`    ``"phi_2_2"``,`\
+`    ``"phi_2_3"``,`\
+`    ``"phi_3_1"``,`\
+`    ``"phi_3_2"``,`\
+`    ``"phi_3_3"`\
+`  ``)`\
+`]`` ``<-`` ``+``1.5`
 
 ![](fig-vignettes-ou-model-ou-1.png)
 
 ### Fit the Model
 
-``` r
-
-results <- dynr::dynr.cook(
-  model,
-  debug_flag = TRUE,
-  verbose = FALSE
-)
-#> [1] "Get ready!!!!"
-#> using C compiler: ‘gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0’
-#> Optimization function called.
-#> Starting Hessian calculation ...
-#> Finished Hessian calculation.
-#> Original exit flag:  3 
-#> Modified exit flag:  3 
-#> Optimization terminated successfully: ftol_rel or ftol_abs was reached. 
-#> Original fitted parameters:  -0.001486414 -0.003474606 0.001459749 -0.3876957 
-#> 0.0497315 -0.05068424 0.7575202 -0.5020978 -0.001002782 -0.4483666 0.7166069 
-#> -0.6816382 -1.397824 0.08915739 -0.2066158 -2.670695 0.287372 -2.880188 
-#> -1.615787 -1.611792 -1.602987 0.01193792 -0.03514586 -0.0202138 -1.023004 
-#> 0.9898615 0.1951522 -1.492855 0.876229 -2.109101 
-#> 
-#> Transformed fitted parameters:  -0.001486414 -0.003474606 0.001459749 
-#> -0.3876957 0.0497315 -0.05068424 0.7575202 -0.5020978 -0.001002782 -0.4483666 
-#> 0.7166069 -0.6816382 0.2471341 0.02203383 -0.05106181 0.07116856 0.01533478 
-#> 0.07238944 0.1987341 0.1995297 0.2012944 0.01193792 -0.03514586 -0.0202138 
-#> 0.3595134 0.3558685 0.07015983 0.5769907 0.2663636 0.3075816 
-#> 
-#> Doing end processing
-#> Warning in sqrt(diag(iHess)): NaNs produced
-#> Warning in sqrt(diag(x$inv.hessian)): NaNs produced
-#> Warning: These parameters may have untrustworthy standard errors: sigma0_1_1,
-#> sigma0_2_1.
-#> Total Time: 39.33717 
-#> Backend Time: 39.33029
-```
+\
+`results`` ``<-`` ``dynr``::`[`dynr.cook`](https://rdrr.io/pkg/dynr/man/dynr.cook.html)`(`\
+`  ``model``,`\
+`  debug_flag ``=`` ``TRUE``,`\
+`  verbose ``=`` ``FALSE`\
+`)`\
+`#> [1] "Get ready!!!!"`\
+`#> using C compiler: ‘gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0’`\
+`#> Optimization function called.`\
+`#> Starting Hessian calculation ...`\
+`#> Finished Hessian calculation.`\
+`#> Original exit flag:  3 `\
+`#> Modified exit flag:  3 `\
+`#> Optimization terminated successfully: ftol_rel or ftol_abs was reached. `\
+`#> Original fitted parameters:  0.08283144 0.1453763 0.09458133 -0.7229715 `\
+`#> 0.3040495 -0.1753704 0.6566509 -0.4967513 0.04628819 -0.1656435 0.4463284 `\
+`#> -0.4893126 -1.260945 0.07872374 -0.2825057 -2.53622 0.1628742 -3.298738 `\
+`#> -1.633867 -1.639133 -1.59292 0.1528623 0.08530866 0.0648912 -4.928975 7.66686 `\
+`#> 4.019894 -3.32551 -1.394416 -7.401379 `\
+`#> `\
+`#> Transformed fitted parameters:  0.08283144 0.1453763 0.09458133 -0.7229715 `\
+`#> 0.3040495 -0.1753704 0.6566509 -0.4967513 0.04628819 -0.1656435 0.4463284 `\
+`#> -0.4893126 0.283386 0.0223092 -0.08005815 0.08092138 0.006591481 0.06164672 `\
+`#> 0.1951734 0.1941483 0.203331 0.1528623 0.08530866 0.0648912 0.007233912 `\
+`#> 0.05546139 0.02907956 0.4611689 0.1728138 0.1874164 `\
+`#> `\
+`#> Doing end processing`\
+`#> Warning in sqrt(diag(x$inv.hessian)): NaNs produced`\
+`#> Successful trial`\
+`#> Total Time: 1.959645 `\
+`#> Backend Time: 1.942731`
 
 ## Summary
 
-``` r
-
-summary(results)
-#> Coefficients:
-#>             Estimate Std. Error t value  ci.lower  ci.upper Pr(>|t|)    
-#> mu_1_1     -0.001486   0.014463  -0.103 -0.029833  0.026860   0.4591    
-#> mu_2_1     -0.003475   0.023224  -0.150 -0.048992  0.042043   0.4405    
-#> mu_3_1      0.001460   0.014728   0.099 -0.027406  0.030326   0.4605    
-#> phi_1_1    -0.387696   0.039562  -9.800 -0.465235 -0.310156   <2e-16 ***
-#> phi_1_2     0.049731   0.034658   1.435 -0.018196  0.117659   0.0757 .  
-#> phi_1_3    -0.050684   0.026390  -1.921 -0.102408  0.001040   0.0274 *  
-#> phi_2_1     0.757520   0.024418  31.023  0.709662  0.805379   <2e-16 ***
-#> phi_2_2    -0.502098   0.021619 -23.225 -0.544470 -0.459726   <2e-16 ***
-#> phi_2_3    -0.001003   0.016417  -0.061 -0.033180  0.031174   0.4756    
-#> phi_3_1    -0.448367   0.025634 -17.491 -0.498608 -0.398125   <2e-16 ***
-#> phi_3_2     0.716607   0.022660  31.624  0.672194  0.761019   <2e-16 ***
-#> phi_3_3    -0.681638   0.017286 -39.433 -0.715518 -0.647759   <2e-16 ***
-#> sigma_1_1   0.247134   0.007041  35.098  0.233333  0.260935   <2e-16 ***
-#> sigma_2_1   0.022034   0.002723   8.092  0.016697  0.027371   <2e-16 ***
-#> sigma_3_1  -0.051062   0.002879 -17.733 -0.056706 -0.045418   <2e-16 ***
-#> sigma_2_2   0.071169   0.001970  36.120  0.067307  0.075030   <2e-16 ***
-#> sigma_3_2   0.015335   0.001384  11.076  0.012621  0.018048   <2e-16 ***
-#> sigma_3_3   0.072389   0.002092  34.601  0.068289  0.076490   <2e-16 ***
-#> theta_1_1   0.198734   0.001174 169.300  0.196433  0.201035   <2e-16 ***
-#> theta_2_2   0.199530   0.001002 199.040  0.197565  0.201494   <2e-16 ***
-#> theta_3_3   0.201294   0.001016 198.086  0.199303  0.203286   <2e-16 ***
-#> mu0_1_1     0.011938   0.068751   0.174 -0.122812  0.146687   0.4311    
-#> mu0_2_1    -0.035146   0.088382  -0.398 -0.208371  0.138079   0.3454    
-#> mu0_3_1    -0.020214   0.064115  -0.315 -0.145876  0.105448   0.3763    
-#> sigma0_1_1  0.359513        NaN      NA       NaN       NaN       NA    
-#> sigma0_2_1  0.355868        NaN      NA       NaN       NaN       NA    
-#> sigma0_3_1  0.070160   0.048955   1.433 -0.025791  0.166111   0.0759 .  
-#> sigma0_2_2  0.576991   0.091692   6.293  0.397278  0.756704   <2e-16 ***
-#> sigma0_3_2  0.266364   0.065448   4.070  0.138088  0.394639   <2e-16 ***
-#> sigma0_3_3  0.307582   0.051535   5.968  0.206575  0.408589   <2e-16 ***
-#> ---
-#> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-#> 
-#> -2 log-likelihood value at convergence = 429162.30
-#> AIC = 429222.30
-#> BIC = 429507.68
-```
+\
+[`summary`](https://rdrr.io/r/base/summary.html)`(``results``)`\
+`#> Coefficients:`\
+`#>             Estimate Std. Error t value  ci.lower  ci.upper Pr(>|t|)    `\
+`#> mu_1_1      0.082831   0.094877   0.873 -0.103124  0.268787   0.1914    `\
+`#> mu_2_1      0.145376   0.150119   0.968 -0.148851  0.439604   0.1665    `\
+`#> mu_3_1      0.094581   0.095324   0.992 -0.092250  0.281413   0.1606    `\
+`#> phi_1_1    -0.722972   0.304583  -2.374 -1.319943 -0.126000   0.0089 ** `\
+`#> phi_1_2     0.304050   0.268004   1.134 -0.221230  0.829329   0.1284    `\
+`#> phi_1_3    -0.175370   0.213814  -0.820 -0.594438  0.243697   0.2061    `\
+`#> phi_2_1     0.656651   0.195301   3.362  0.273868  1.039433   0.0004 ***`\
+`#> phi_2_2    -0.496751   0.175118  -2.837 -0.839975 -0.153527   0.0023 ** `\
+`#> phi_2_3     0.046288   0.136213   0.340 -0.220684  0.313261   0.3670    `\
+`#> phi_3_1    -0.165643   0.173438  -0.955 -0.505575  0.174288   0.1698    `\
+`#> phi_3_2     0.446328   0.154272   2.893  0.143962  0.748695   0.0019 ** `\
+`#> phi_3_3    -0.489313   0.121141  -4.039 -0.726745 -0.251880   <2e-16 ***`\
+`#> sigma_1_1   0.283386   0.055981   5.062  0.173664  0.393107   <2e-16 ***`\
+`#> sigma_2_1   0.022309   0.022335   0.999 -0.021467  0.066086   0.1590    `\
+`#> sigma_3_1  -0.080058   0.022192  -3.608 -0.123553 -0.036563   0.0002 ***`\
+`#> sigma_2_2   0.080921   0.016739   4.834  0.048113  0.113729   <2e-16 ***`\
+`#> sigma_3_2   0.006591   0.010735   0.614 -0.014449  0.027632   0.2696    `\
+`#> sigma_3_3   0.061647   0.014056   4.386  0.034098  0.089195   <2e-16 ***`\
+`#> theta_1_1   0.195173   0.008275  23.587  0.178956  0.211391   <2e-16 ***`\
+`#> theta_2_2   0.194148   0.007030  27.618  0.180370  0.207926   <2e-16 ***`\
+`#> theta_3_3   0.203331   0.007207  28.211  0.189205  0.217457   <2e-16 ***`\
+`#> mu0_1_1     0.152862   0.089204   1.714 -0.021974  0.327698   0.0434 *  `\
+`#> mu0_2_1     0.085309   0.226054   0.377 -0.357749  0.528367   0.3530    `\
+`#> mu0_3_1     0.064891   0.151573   0.428 -0.232187  0.361969   0.3343    `\
+`#> sigma0_1_1  0.007234   0.016038   0.451 -0.024200  0.038668   0.3260    `\
+`#> sigma0_2_1  0.055461   0.062418   0.889 -0.066875  0.177798   0.1872    `\
+`#> sigma0_3_1  0.029080   0.041812   0.695 -0.052871  0.111030   0.2434    `\
+`#> sigma0_2_2  0.461169   0.228771   2.016  0.012785  0.909553   0.0220 *  `\
+`#> sigma0_3_2  0.172814   0.121690   1.420 -0.065694  0.411321   0.0779 .  `\
+`#> sigma0_3_3  0.187416   0.102727   1.824 -0.013924  0.388757   0.0341 *  `\
+`#> ---`\
+`#> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1`\
+`#> `\
+`#> -2 log-likelihood value at convergence = 8521.43`\
+`#> AIC = 8581.43`\
+`#> BIC = 8749.46`
 
 ### Parameter Estimates
 
-``` r
-
-mu_hat
-#> [1] -0.001486414 -0.003474606  0.001459749
-phi_hat
-#>            [,1]       [,2]         [,3]
-#> [1,] -0.3876957  0.0497315 -0.050684239
-#> [2,]  0.7575202 -0.5020978 -0.001002782
-#> [3,] -0.4483666  0.7166069 -0.681638168
-sigma_hat
-#>             [,1]       [,2]        [,3]
-#> [1,]  0.24713412 0.02203383 -0.05106181
-#> [2,]  0.02203383 0.07116856  0.01533478
-#> [3,] -0.05106181 0.01533478  0.07238944
-theta_hat
-#>           [,1]      [,2]      [,3]
-#> [1,] 0.1987341 0.0000000 0.0000000
-#> [2,] 0.0000000 0.1995297 0.0000000
-#> [3,] 0.0000000 0.0000000 0.2012944
-mu0_hat
-#> [1]  0.01193792 -0.03514586 -0.02021380
-sigma0_hat
-#>            [,1]      [,2]       [,3]
-#> [1,] 0.35951339 0.3558685 0.07015983
-#> [2,] 0.35586848 0.5769907 0.26636364
-#> [3,] 0.07015983 0.2663636 0.30758162
-beta_var1_hat <- expm::expm(phi_hat)
-beta_var1_hat
-#>            [,1]       [,2]        [,3]
-#> [1,]  0.6952025 0.02134302 -0.03008700
-#> [2,]  0.4901232 0.61421636 -0.01200378
-#> [3,] -0.1042377 0.39410024  0.50935760
-```
+\
+`mu_hat`\
+`#> [1] 0.08283144 0.14537632 0.09458133`\
+`phi_hat`\
+`#>            [,1]       [,2]        [,3]`\
+`#> [1,] -0.7229715  0.3040495 -0.17537045`\
+`#> [2,]  0.6566509 -0.4967513  0.04628819`\
+`#> [3,] -0.1656435  0.4463284 -0.48931262`\
+`sigma_hat`\
+`#>             [,1]        [,2]         [,3]`\
+`#> [1,]  0.28338597 0.022309204 -0.080058151`\
+`#> [2,]  0.02230920 0.080921382  0.006591481`\
+`#> [3,] -0.08005815 0.006591481  0.061646718`\
+`theta_hat`\
+`#>           [,1]      [,2]     [,3]`\
+`#> [1,] 0.1951734 0.0000000 0.000000`\
+`#> [2,] 0.0000000 0.1941483 0.000000`\
+`#> [3,] 0.0000000 0.0000000 0.203331`\
+`mu0_hat`\
+`#> [1] 0.15286229 0.08530866 0.06489120`\
+`sigma0_hat`\
+`#>             [,1]       [,2]       [,3]`\
+`#> [1,] 0.007233912 0.05546139 0.02907956`\
+`#> [2,] 0.055461391 0.46116889 0.17281383`\
+`#> [3,] 0.029079563 0.17281383 0.18741639`\
+`beta_var1_hat`` ``<-`` ``simStateSpace``::`[`ExpMat`](https://github.com/jeksterslab/simStateSpace/reference/ExpMat.md)`(``phi_hat``)`\
+`beta_var1_hat`\
+`#>              [,1]      [,2]         [,3]`\
+`#> [1,]  0.541538486 0.1495829 -0.095629580`\
+`#> [2,]  0.369668974 0.6672313 -0.003926662`\
+`#> [3,] -0.009502609 0.2683484  0.622663227`
 
 ## References
 
@@ -606,15 +580,10 @@ state-space modeling techniques. *Structural Equation Modeling: A
 Multidisciplinary Journal*, *17*(2), 303–332.
 <https://doi.org/10.1080/10705511003661553>
 
-Chow, S.-M., Losardo, D., Park, J., & Molenaar, P. C. M. (2023).
+Chow, S.-M., Losardo, D., Park, J. J., & Molenaar, P. C. M. (2023).
 Continuous-time dynamic models: Connections to structural equation
 models and other discrete-time models. In R. H. Hoyle (Ed.), *Handbook
 of structural equation modeling* (2nd ed.). The Guilford Press.
-
-Deboeck, P. R., & Preacher, K. J. (2015). No need to be discrete: A
-method for continuous time mediation analysis. *Structural Equation
-Modeling: A Multidisciplinary Journal*, *23*(1), 61–75.
-<https://doi.org/10.1080/10705511.2014.973960>
 
 Oravecz, Z., Tuerlinckx, F., & Vandekerckhove, J. (2011). A hierarchical
 latent stochastic differential equation model for affective dynamics.
@@ -624,6 +593,11 @@ latent stochastic differential equation model for affective dynamics.
 Ou, L., Hunter, M. D., & Chow, S.-M. (2019). What’s for dynr: A package
 for linear and nonlinear dynamic modeling in R. *The R Journal*,
 *11*(1), 91. <https://doi.org/10.32614/rj-2019-012>
+
+Pesigan, I. J. A., Russell, M. A., & Chow, S.-M. (2025). Inferences and
+effect sizes for direct, indirect, and total effects in continuous-time
+mediation models. *Psychological Methods*.
+<https://doi.org/10.1037/met0000779>
 
 R Core Team. (2026). *R: A language and environment for statistical
 computing*. R Foundation for Statistical Computing.

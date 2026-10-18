@@ -21,11 +21,11 @@ effect sizes for direct, indirect, and total effects in continuous-time
 mediation models. Psychological Methods.
 https://doi.org/10.1037/met0000779
 
-    @Article{,
-      author = {Ivan Jacob Agaloos Pesigan and Michael A. Russell and Sy-Miin Chow},
-      title = {Inferences and effect sizes for direct, indirect, and total effects in continuous-time mediation models},
-      year = {2025},
-      doi = {10.1037/met0000779},
-      journal = {Psychological Methods},
-      note = {R package version 1.2.16},
-    }
+@Article{,\
+  author = {Ivan Jacob Agaloos Pesigan and Michael A. Russell and Sy-Miin Chow},\
+  title = {Inferences and effect sizes for direct, indirect, and total effects in continuous-time mediation models},\
+  year = {2025},\
+  doi = {10.1037/met0000779},\
+  journal = {Psychological Methods},\
+  note = {R package version 1.2.17},\
+}

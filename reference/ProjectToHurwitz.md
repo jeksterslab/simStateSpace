@@ -21,7 +21,7 @@ ProjectToHurwitz(x, margin = 0.001)
 - margin:
 
   Positive numeric. Target buffer inside the Hurwitz region; the result
-  satisfies \\\max \Re\\\lambda_i(x^\star)\\ \le -\text{margin}\\
+  satisfies \\(\max \Re\\{\lambda_i(x^\star)\\} \le -\text{margin}\\)
   (default `1e-3`).
 
 ## Value
@@ -32,19 +32,22 @@ satisfy the Hurwitz stability constraint.
 ## Details
 
 The projection is performed by subtracting a multiple of the identity:
-\$\$x^\star = x - (\alpha + \text{margin}) I,\$\$ where \\\alpha = \max
-\Re\\\lambda_i(x)\\\\ is the spectral abscissa.
+\$\$x^\star = x - (\alpha + \text{margin}) I,\$\$ where \\(\alpha = \max
+\Re\\{\lambda_i(x)\\}\\) is the spectral abscissa.
 
 ## See also
 
 Other Simulation of State Space Models Data Functions:
-[`LinSDE2SSM()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDE2SSM.md),
+[`CompanionMat()`](https://github.com/jeksterslab/simStateSpace/reference/CompanionMat.md),
+[`ExpMat()`](https://github.com/jeksterslab/simStateSpace/reference/ExpMat.md),
+[`LinSDECovDeltaT()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDECovDeltaT.md),
 [`LinSDECovEta()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDECovEta.md),
 [`LinSDECovY()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDECovY.md),
 [`LinSDEInterceptEta()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDEInterceptEta.md),
 [`LinSDEInterceptY()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDEInterceptY.md),
 [`LinSDEMeanEta()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDEMeanEta.md),
 [`LinSDEMeanY()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDEMeanY.md),
+[`LogMat()`](https://github.com/jeksterslab/simStateSpace/reference/LogMat.md),
 [`ProjectToStability()`](https://github.com/jeksterslab/simStateSpace/reference/ProjectToStability.md),
 [`SSMCovEta()`](https://github.com/jeksterslab/simStateSpace/reference/SSMCovEta.md),
 [`SSMCovY()`](https://github.com/jeksterslab/simStateSpace/reference/SSMCovY.md),
