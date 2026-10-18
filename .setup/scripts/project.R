@@ -22,7 +22,6 @@ rproject_ver <- NULL
 pkg_cran <- c(
   "Rcpp",
   "RcppArmadillo",
-  "expm",
   "lavaan"
 )
 

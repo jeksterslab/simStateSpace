@@ -84,11 +84,6 @@ Rcpp::List SimPhiNCovariate(
   const arma::uword nr = phi0.n_rows, nc = phi0.n_cols;
   const arma::uword p = nr * nc;
 
-  // if (vcov_phi_vec_l.n_rows != p || vcov_phi_vec_l.n_cols != p) {
-  //   Rcpp::stop("vcov_phi_vec_l must be p x p with p = nrow(phi0) *
-  //   ncol(phi0).");
-  // }
-
   // Bounds & masks
   arma::mat lb, ub;
   arma::umat has_lb_el(nr, nc, arma::fill::zeros);

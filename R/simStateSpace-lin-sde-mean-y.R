@@ -59,7 +59,34 @@
 #' @family Simulation of State Space Models Data Functions
 #' @keywords simStateSpace linsde
 #' @export
-LinSDEMeanY <- function(nu, lambda, mean_eta) {
+LinSDEMeanY <- function(nu,
+                        lambda,
+                        mean_eta) {
+  if (is.matrix(nu)) {
+    dim(nu) <- NULL
+  }
+  if (is.matrix(mean_eta)) {
+    dim(mean_eta) <- NULL
+  }
+  stopifnot(
+    "`nu` must be a vector." = is.null(dim(nu)),
+    "`nu` must be numeric." = is.numeric(nu),
+    "`nu` must contain only finite values." = all(is.finite(nu)),
+    "`lambda` must be a matrix." = is.matrix(lambda),
+    "`lambda` must be numeric." = is.numeric(lambda),
+    "`lambda` must contain only finite values." = all(is.finite(lambda)),
+    "`mean_eta` must be a vector." = is.null(dim(mean_eta)),
+    "`mean_eta` must be numeric." = is.numeric(mean_eta),
+    "`mean_eta` must contain only finite values." = all(is.finite(mean_eta)),
+    "`nrow(lambda)` and `length(nu)` must match." = identical(
+      x = nrow(lambda),
+      y = length(nu)
+    ),
+    "`ncol(lambda)` and `length(mean_eta)` must match." = identical(
+      x = ncol(lambda),
+      y = length(mean_eta)
+    )
+  )
   .LinSDEMeanY(
     nu = nu,
     lambda = lambda,

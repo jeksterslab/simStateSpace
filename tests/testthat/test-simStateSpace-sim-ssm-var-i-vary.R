@@ -8,124 +8,73 @@ lapply(
       text,
       {
         testthat::skip_on_cran()
-        # prepare parameters
-        # In this example, beta varies across individuals.
-        set.seed(42)
-        ## number of individuals
+        # parameters are lists of length 2, recycled over n = 5
         n <- 5
-        ## time points
-        time <- 50
-        ## dynamic structure
-        p <- 3
-        mu0 <- list(
-          rep(x = 0, times = p)
-        )
-        sigma0 <- 0.001 * diag(p)
-        sigma0_l <- list(
-          t(chol(sigma0))
-        )
-        alpha <- list(
-          rep(x = 0, times = p)
-        )
-        beta <- SimBetaN(
-          n = 5,
-          beta = 0.1 * diag(p),
-          vcov_beta_vec_l = t(
-            chol(
-              0.1 * diag(p^2)
-            )
-          )
-        )
-        psi <- 0.001 * diag(p)
-        psi_l <- list(
-          t(chol(psi))
-        )
-        ## covariates
+        time <- 8
+        p <- 2
         j <- 2
+        mu0 <- list(c(1, -1), c(0, 0.5))
+        sigma0_l <- list(
+          t(chol(matrix(data = c(1, 0.3, 0.3, 0.5), nrow = p))),
+          diag(c(0.5, 0.2))
+        )
+        alpha <- list(c(0.2, -0.1), c(0, 0.3))
+        beta <- list(
+          matrix(data = c(0.6, 0.1, -0.2, 0.4), nrow = p),
+          matrix(data = c(0.3, -0.2, 0.1, 0.5), nrow = p)
+        )
+        psi_l <- list(
+          t(chol(matrix(data = c(0.3, 0.1, 0.1, 0.2), nrow = p))),
+          diag(c(0.1, 0.4))
+        )
+        set.seed(42)
         x <- lapply(
           X = seq_len(n),
           FUN = function(i) {
-            matrix(
-              data = stats::rnorm(n = time * j),
-              nrow = j,
-              ncol = time
-            )
+            matrix(data = stats::rnorm(n = j * time), nrow = j, ncol = time)
           }
         )
         gamma <- list(
-          diag(x = 0.10, nrow = p, ncol = j)
+          matrix(data = c(0.5, 0, -0.3, 0.2), nrow = p),
+          matrix(data = c(0, 0.4, 0.1, 0), nrow = p)
         )
-
-        # Type 0
-        ssm <- SimSSMVARIVary(
-          n = n,
-          time = time,
-          mu0 = mu0,
-          sigma0_l = sigma0_l,
-          alpha = alpha,
-          beta = beta,
-          psi_l = psi_l,
-          type = 0
-        )
-
-        as.data.frame.simstatespace(ssm, eta = TRUE)
-        as.data.frame.simstatespace(ssm, eta = FALSE)
-        as.data.frame.simstatespace(ssm, eta = TRUE, long = FALSE)
-        as.data.frame.simstatespace(ssm, eta = FALSE, long = FALSE)
-        as.data.frame.simstatespace(ssm, burnin = 5, reset_time = TRUE)
-        as.data.frame.simstatespace(ssm, burnin = 5, reset_time = FALSE)
-        as.matrix.simstatespace(ssm, eta = TRUE)
-        as.matrix.simstatespace(ssm, eta = FALSE)
-        as.matrix.simstatespace(ssm, eta = TRUE, long = FALSE)
-        as.matrix.simstatespace(ssm, eta = FALSE, long = FALSE)
-        as.matrix.simstatespace(ssm, burnin = 5, reset_time = TRUE)
-        as.matrix.simstatespace(ssm, burnin = 5, reset_time = FALSE)
-        print.simstatespace(ssm)
-        plot.simstatespace(ssm, id = 1:3, time = 0:4)
-        plot.simstatespace(ssm, eta = TRUE)
-        plot.simstatespace(ssm, burnin = 5, reset_time = FALSE)
-
-        # Type 1
-        ssm <- SimSSMVARIVary(
-          n = n,
-          time = time,
-          mu0 = mu0,
-          sigma0_l = sigma0_l,
-          alpha = alpha,
-          beta = beta,
-          psi_l = psi_l,
-          type = 1,
-          x = x,
-          gamma = gamma
-        )
-
-        as.data.frame.simstatespace(ssm, eta = TRUE)
-        as.data.frame.simstatespace(ssm, eta = FALSE)
-        as.data.frame.simstatespace(ssm, eta = TRUE, long = FALSE)
-        as.data.frame.simstatespace(ssm, eta = FALSE, long = FALSE)
-        as.data.frame.simstatespace(ssm, burnin = 5, reset_time = TRUE)
-        as.data.frame.simstatespace(ssm, burnin = 5, reset_time = FALSE)
-        as.matrix.simstatespace(ssm, eta = TRUE)
-        as.matrix.simstatespace(ssm, eta = FALSE)
-        as.matrix.simstatespace(ssm, eta = TRUE, long = FALSE)
-        as.matrix.simstatespace(ssm, eta = FALSE, long = FALSE)
-        as.matrix.simstatespace(ssm, burnin = 5, reset_time = TRUE)
-        as.matrix.simstatespace(ssm, burnin = 5, reset_time = FALSE)
-        print.simstatespace(ssm)
-        plot.simstatespace(ssm, id = 1:3, time = 0:4)
-        plot.simstatespace(ssm, eta = TRUE)
-        plot.simstatespace(ssm, burnin = 5, reset_time = FALSE)
-
-        testthat::expect_error(
-          as.matrix.simstatespace(ssm, burnin = time),
-          regexp = paste0(
-            "`burnin` should not be greater than the measurement occasions.\n"
+        for (type in 0:1) {
+          set.seed(type)
+          ssm <- SimSSMVARIVary(
+            n = n,
+            time = time,
+            mu0 = mu0,
+            sigma0_l = sigma0_l,
+            alpha = alpha,
+            beta = beta,
+            psi_l = psi_l,
+            type = type,
+            x = x,
+            gamma = gamma
           )
-        )
-
-        testthat::expect_true(
-          TRUE
-        )
+          set.seed(type)
+          noise <- .RefNoise(n = n, time = time, p = p)
+          ref <- .RefSim(
+            noise = noise,
+            delta_t = 1,
+            mu0 = mu0,
+            sigma0_l = sigma0_l,
+            alpha = alpha,
+            beta = beta,
+            psi_l = psi_l,
+            x = if (type > 0) x,
+            gamma = if (type > 0) gamma
+          )
+          .RefExpectData(object = ssm, ref = ref)
+          .RefExpectMethods(object = ssm, ref = ref)
+          .RefExpectModel(
+            object = ssm,
+            model = "var",
+            type = type,
+            fixed = FALSE,
+            fun = "SimSSMVARIVary"
+          )
+        }
       }
     )
   },

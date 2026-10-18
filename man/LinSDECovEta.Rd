@@ -9,7 +9,7 @@ Linear Stochastic Differential Equation Model}
 LinSDECovEta(phi, sigma)
 }
 \arguments{
-\item{phi}{Numeric matrix.
+\item{phi}{Numeric \eqn{q \times q} matrix.
 The drift matrix
 which represents the rate of change of the solution
 in the absence of any random fluctuations
@@ -69,12 +69,15 @@ LinSDECovEta(
 }
 \seealso{
 Other Simulation of State Space Models Data Functions:
-\code{\link[=LinSDE2SSM]{LinSDE2SSM()}},
+\code{\link[=CompanionMat]{CompanionMat()}},
+\code{\link[=ExpMat]{ExpMat()}},
+\code{\link[=LinSDECovDeltaT]{LinSDECovDeltaT()}},
 \code{\link[=LinSDECovY]{LinSDECovY()}},
 \code{\link[=LinSDEInterceptEta]{LinSDEInterceptEta()}},
 \code{\link[=LinSDEInterceptY]{LinSDEInterceptY()}},
 \code{\link[=LinSDEMeanEta]{LinSDEMeanEta()}},
 \code{\link[=LinSDEMeanY]{LinSDEMeanY()}},
+\code{\link[=LogMat]{LogMat()}},
 \code{\link[=ProjectToHurwitz]{ProjectToHurwitz()}},
 \code{\link[=ProjectToStability]{ProjectToStability()}},
 \code{\link[=SSMCovEta]{SSMCovEta()}},

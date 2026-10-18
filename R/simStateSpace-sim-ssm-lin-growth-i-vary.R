@@ -140,9 +140,6 @@ SimSSMLinGrowthIVary <- function(n, time,
                                  mu0, sigma0_l, theta_l,
                                  type = 0,
                                  x = NULL, gamma = NULL, kappa = NULL) {
-  stopifnot(
-    type %in% c(0, 1, 2)
-  )
   p <- 2
   k <- 1
   stopifnot(
@@ -201,65 +198,28 @@ SimSSMLinGrowthIVary <- function(n, time,
     vary_i = TRUE
   )
   fun <- "SimSSMLinGrowthIVary"
-  if (type == 0) {
-    data <- .SimSSMIVary0(
-      n = n,
-      time = time,
-      delta_t = 1.0,
-      mu0 = rep(x = mu0, length.out = n),
-      sigma0_l = rep(x = sigma0_l, length.out = n),
-      alpha = rep(x = alpha, length.out = n),
-      beta = rep(x = beta, length.out = n),
-      psi_l = rep(x = psi_l, length.out = n),
-      nu = rep(x = nu, length.out = n),
-      lambda = rep(x = lambda, length.out = n),
-      theta_l = rep(x = theta_l, length.out = n)
-    )
-  }
-  if (type == 1) {
-    stopifnot(
-      !is.null(x),
-      !is.null(gamma)
-    )
-    data <- .SimSSMIVary1(
-      n = n,
-      time = time,
-      delta_t = 1.0,
-      mu0 = rep(x = mu0, length.out = n),
-      sigma0_l = rep(x = sigma0_l, length.out = n),
-      alpha = rep(x = alpha, length.out = n),
-      beta = rep(x = beta, length.out = n),
-      psi_l = rep(x = psi_l, length.out = n),
-      nu = rep(x = nu, length.out = n),
-      lambda = rep(x = lambda, length.out = n),
-      theta_l = rep(x = theta_l, length.out = n),
-      x = rep(x = x, length.out = n),
-      gamma = rep(x = gamma, length.out = n)
-    )
-  }
-  if (type == 2) {
-    stopifnot(
-      !is.null(x),
-      !is.null(gamma),
-      !is.null(kappa)
-    )
-    data <- .SimSSMIVary2(
-      n = n,
-      time = time,
-      delta_t = 1.0,
-      mu0 = rep(x = mu0, length.out = n),
-      sigma0_l = rep(x = sigma0_l, length.out = n),
-      alpha = rep(x = alpha, length.out = n),
-      beta = rep(x = beta, length.out = n),
-      psi_l = rep(x = psi_l, length.out = n),
-      nu = rep(x = nu, length.out = n),
-      lambda = rep(x = lambda, length.out = n),
-      theta_l = rep(x = theta_l, length.out = n),
-      x = rep(x = x, length.out = n),
-      gamma = rep(x = gamma, length.out = n),
-      kappa = rep(x = kappa, length.out = n)
-    )
-  }
+  .CheckSimulation(
+    n = n, time = time, delta_t = 1.0,
+    par = list(
+      mu0 = mu0, sigma0_l = sigma0_l,
+      alpha = alpha, beta = beta, psi_l = psi_l,
+      nu = nu, lambda = lambda, theta_l = theta_l
+    ),
+    type = type, types = 0:2,
+    x = x, gamma = gamma, kappa = kappa,
+    fixed = FALSE
+  )
+  data <- .SimSSMData(
+    n = n,
+    time = time,
+    delta_t = 1.0,
+    mu0 = mu0, sigma0_l = sigma0_l,
+    alpha = alpha, beta = beta, psi_l = psi_l,
+    nu = nu, lambda = lambda, theta_l = theta_l,
+    type = type,
+    x = x, gamma = gamma, kappa = kappa,
+    fixed = FALSE
+  )
   out <- list(
     call = call,
     args = args,

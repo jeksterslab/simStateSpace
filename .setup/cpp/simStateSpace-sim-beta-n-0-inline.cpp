@@ -1,5 +1,5 @@
 // -----------------------------------------------------------------------------
-// edit .setup/cpp/simStateSpace-sim-beta-n-0.cpp
+// edit .setup/cpp/simStateSpace-sim-beta-n-0-inline.cpp
 // Ivan Jacob Agaloos Pesigan
 // -----------------------------------------------------------------------------
 

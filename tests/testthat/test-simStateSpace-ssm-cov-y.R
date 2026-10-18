@@ -9,79 +9,33 @@ lapply(
       text,
       {
         testthat::skip_on_cran()
-        set.seed(42)
-        n <- 1000
-        time <- 1000
-        k <- p <- 3
-        iden <- diag(k)
-        null_vec <- rep(x = 0, times = k)
-        alpha <- null_vec
-        beta <- matrix(
-          data = c(
-            0.7,
-            0.5,
-            -0.1,
-            0.0,
-            0.6,
-            0.4,
-            0,
-            0,
-            0.5
-          ),
-          nrow = k
+        lambda <- matrix(
+          data = c(1, 0.8, 0, 0, 0, 0, 1, 0.6, 0, 0, 0, 1),
+          nrow = 4
         )
-        psi <- 0.1 * iden
-        psi_l <- t(chol(psi))
-        nu <- rep(x = 1, times = k)
-        lambda <- iden
-        theta <- iden
-        theta <- 0.2 * iden
-        theta_l <- t(chol(theta))
-        mu0 <- simStateSpace::SSMMeanEta(
-          beta = beta,
-          alpha = alpha
+        theta <- diag(c(0.2, 0.3, 0.4, 0.5))
+        cov_eta <- matrix(
+          data = c(1, 0.3, 0, 0.3, 0.5, 0.1, 0, 0.1, 0.8),
+          nrow = 3
         )
-        sigma0 <- simStateSpace::SSMCovEta(
-          beta = beta,
-          psi = psi
-        )
-        sigma0_l <- t(chol(sigma0))
-        sigma_y <- simStateSpace::SSMCovY(
+        cov_y <- SSMCovY(
           lambda = lambda,
           theta = theta,
-          cov_eta = sigma0
+          cov_eta = cov_eta
         )
-        sim <- simStateSpace::SimSSMFixed(
-          n = n,
-          time = time,
-          mu0 = mu0,
-          sigma0_l = sigma0_l,
-          alpha = alpha,
-          beta = beta,
-          psi_l = psi_l,
-          nu = nu,
-          lambda = lambda,
-          theta_l = theta_l,
-          type = 0
+        testthat::expect_identical(
+          object = dim(cov_y),
+          expected = c(4L, 4L)
         )
-        data <- as.matrix(sim, eta = TRUE)
-        y <- data[, paste0("y", seq_len(p))]
+        # cov_y = lambda cov_eta lambda' + theta
         testthat::expect_true(
           all(
-            (
-              c(
-                sigma0
-              ) - c(
-                cov(
-                  y
-                )
-              )
-            ) <= tol
+            abs(cov_y - (lambda %*% cov_eta %*% t(lambda) + theta)) <= tol
           )
         )
       }
     )
   },
   text = "test-simStateSpace-ssm-cov-y",
-  tol = 0.01
+  tol = 1e-10
 )

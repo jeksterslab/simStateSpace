@@ -77,11 +77,6 @@ Rcpp::List SimBetaNCovariate(
   const arma::uword nr = beta0.n_rows, nc = beta0.n_cols;
   const arma::uword p = nr * nc;
 
-  // if (vcov_beta_vec_l.n_rows != p || vcov_beta_vec_l.n_cols != p) {
-  //   Rcpp::stop("vcov_beta_vec_l must be p x p with p = nrow(beta0) *
-  //   ncol(beta0).");
-  // }
-
   arma::mat lb, ub;
   arma::umat has_lb_el(nr, nc, arma::fill::zeros);
   arma::umat has_ub_el(nr, nc, arma::fill::zeros);

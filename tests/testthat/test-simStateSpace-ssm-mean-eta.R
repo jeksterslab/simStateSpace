@@ -9,81 +9,32 @@ lapply(
       text,
       {
         testthat::skip_on_cran()
-        set.seed(42)
-        n <- 1000
-        time <- 1000
-        k <- p <- 3
-        iden <- diag(k)
-        null_vec <- rep(x = 0, times = k)
-        alpha <- null_vec
+        alpha <- c(0.5, -0.2, 1)
         beta <- matrix(
-          data = c(
-            0.7,
-            0.5,
-            -0.1,
-            0.0,
-            0.6,
-            0.4,
-            0,
-            0,
-            0.5
-          ),
-          nrow = k
+          data = c(0.7, 0.5, -0.1, 0.0, 0.6, 0.4, 0, 0, 0.5),
+          nrow = 3
         )
-        psi <- 0.1 * iden
-        psi_l <- t(chol(psi))
-        nu <- rep(x = 1, times = k)
-        lambda <- iden
-        theta <- iden
-        theta_l <- t(chol(theta))
-        mu0 <- simStateSpace::SSMMeanEta(
+        mean_eta <- SSMMeanEta(
           beta = beta,
           alpha = alpha
         )
-        sigma0 <- simStateSpace::SSMCovEta(
-          beta = beta,
-          psi = psi
+        testthat::expect_true(
+          is.null(dim(mean_eta)) && length(mean_eta) == 3
         )
-        sigma0_l <- t(chol(sigma0))
-        sim <- simStateSpace::SimSSMFixed(
-          n = n,
-          time = time,
-          mu0 = mu0,
-          sigma0_l = sigma0_l,
-          alpha = alpha,
-          beta = beta,
-          psi_l = psi_l,
-          nu = nu,
-          lambda = lambda,
-          theta_l = theta_l,
-          type = 0
-        )
-        data <- as.matrix(sim, eta = TRUE)
-        eta <- data[, paste0("eta", seq_len(p))]
+        # mean = alpha + beta mean
         testthat::expect_true(
           all(
-            (
-              c(
-                mu0
-              ) - c(
-                colMeans(
-                  eta
-                )
-              )
-            ) <= tol
+            abs(mean_eta - c(alpha + beta %*% mean_eta)) <= tol
           )
         )
+        # round trip
         testthat::expect_true(
           all(
-            (
-              c(
-                alpha
-              ) - c(
-                simStateSpace::SSMInterceptEta(
-                  beta = beta,
-                  mean_eta = mu0
-                )
-              )
+            abs(
+              SSMInterceptEta(
+                beta = beta,
+                mean_eta = mean_eta
+              ) - alpha
             ) <= tol
           )
         )
@@ -91,5 +42,5 @@ lapply(
     )
   },
   text = "test-simStateSpace-ssm-mean-eta",
-  tol = 0.01
+  tol = 1e-10
 )

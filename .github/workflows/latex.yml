@@ -7,6 +7,10 @@ on:
       - completed
   workflow_dispatch:
 
+permissions:
+  contents: read
+  packages: write
+
 jobs:
 
   build:
@@ -23,7 +27,7 @@ jobs:
 
     steps:
       - name: Checkout 
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Make Project
         run: make build

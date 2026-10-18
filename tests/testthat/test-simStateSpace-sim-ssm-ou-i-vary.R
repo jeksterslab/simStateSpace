@@ -8,192 +8,108 @@ lapply(
       text,
       {
         testthat::skip_on_cran()
-        # prepare parameters
-        # In this example, phi varies across individuals.
-        set.seed(42)
-        ## number of individuals
+        # parameters are lists of length 2, recycled over n = 5;
+        # the second person has mu = 0 and sigma_l = 0
         n <- 5
-        ## time points
-        time <- 50
-        delta_t <- 0.10
-        ## dynamic structure
+        time <- 8
+        delta_t <- 0.5
         p <- 2
-        mu0 <- list(
-          c(-3.0, 1.5)
-        )
-        sigma0 <- 0.001 * diag(p)
+        k <- 3
+        j <- 2
+        mu0 <- list(c(1, -1), c(0, 0.5))
         sigma0_l <- list(
-          t(chol(sigma0))
+          t(chol(matrix(data = c(1, 0.3, 0.3, 0.5), nrow = p))),
+          diag(c(0.5, 0.2))
         )
-        mu <- list(
-          c(5.76, 5.18)
-        )
-        phi <- SimPhiN(
-          n = 5,
-          phi = -0.1 * diag(p),
-          vcov_phi_vec_l = t(
-            chol(
-              0.1 * diag(p^2)
-            )
-          )
-        )
-        sigma <- matrix(
-          data = c(
-            2.79,
-            0.06,
-            0.06,
-            3.27
-          ),
-          nrow = p
+        mu <- list(c(0.5, -0.3), c(0, 0))
+        phi <- list(
+          # complex eigenvalues -0.4 +/- 0.6i
+          matrix(data = c(-0.4, -0.6, 0.6, -0.4), nrow = p),
+          # real eigenvalues
+          matrix(data = c(-0.5, 0.2, 0.1, -0.8), nrow = p)
         )
         sigma_l <- list(
-          t(chol(sigma))
+          t(chol(matrix(data = c(0.3, 0.1, 0.1, 0.2), nrow = p))),
+          matrix(data = 0, nrow = p, ncol = p)
         )
-        ## measurement model
-        k <- 2
-        nu <- list(
-          rep(x = 0, times = k)
-        )
+        nu <- list(c(0.5, 1, -0.5), c(0, 0, 1))
         lambda <- list(
-          diag(k)
+          matrix(data = c(1, 0.8, 0, 0, 0.5, 1), nrow = k),
+          matrix(data = c(1, 0, 0.3, 0, 1, 0.7), nrow = k)
         )
-        theta <- 0.001 * diag(k)
-        theta_l <- list(
-          t(chol(theta))
-        )
-        ## covariates
-        j <- 2
+        theta_l <- list(diag(c(0.2, 0.3, 0.4)), diag(c(0.5, 0.1, 0.2)))
+        set.seed(42)
         x <- lapply(
           X = seq_len(n),
           FUN = function(i) {
-            matrix(
-              data = stats::rnorm(n = time * j),
-              nrow = j,
-              ncol = time
-            )
+            matrix(data = stats::rnorm(n = j * time), nrow = j, ncol = time)
           }
         )
         gamma <- list(
-          diag(x = 0.10, nrow = p, ncol = j)
+          matrix(data = c(0.5, 0, -0.3, 0.2), nrow = p),
+          matrix(data = c(0, 0.4, 0.1, 0), nrow = p)
         )
         kappa <- list(
-          diag(x = 0.10, nrow = k, ncol = j)
+          matrix(data = c(0.1, 0.2, 0.3, -0.1, 0, 0.4), nrow = k),
+          matrix(data = c(0, 0.3, 0, 0.2, 0.1, 0), nrow = k)
         )
-
-        # Type 0
-        ssm <- SimSSMOUIVary(
-          n = n,
-          time = time,
-          delta_t = delta_t,
-          mu0 = mu0,
-          sigma0_l = sigma0_l,
-          mu = mu,
-          phi = phi,
-          sigma_l = sigma_l,
-          nu = nu,
-          lambda = lambda,
-          theta_l = theta_l,
-          type = 0
+        disc <- lapply(
+          X = 1:2,
+          FUN = function(i) {
+            .RefDiscretize(
+              iota = -phi[[i]] %*% mu[[i]],
+              phi = phi[[i]],
+              sigma = sigma_l[[i]] %*% t(sigma_l[[i]]),
+              delta_t = delta_t
+            )
+          }
         )
-
-        as.data.frame.simstatespace(ssm, eta = TRUE)
-        as.data.frame.simstatespace(ssm, eta = FALSE)
-        as.data.frame.simstatespace(ssm, eta = TRUE, long = FALSE)
-        as.data.frame.simstatespace(ssm, eta = FALSE, long = FALSE)
-        as.data.frame.simstatespace(ssm, burnin = 5, reset_time = TRUE)
-        as.data.frame.simstatespace(ssm, burnin = 5, reset_time = FALSE)
-        as.matrix.simstatespace(ssm, eta = TRUE)
-        as.matrix.simstatespace(ssm, eta = FALSE)
-        as.matrix.simstatespace(ssm, eta = TRUE, long = FALSE)
-        as.matrix.simstatespace(ssm, eta = FALSE, long = FALSE)
-        as.matrix.simstatespace(ssm, burnin = 5, reset_time = TRUE)
-        as.matrix.simstatespace(ssm, burnin = 5, reset_time = FALSE)
-        print.simstatespace(ssm)
-        plot.simstatespace(ssm, id = 1:3, time = (0:4) * 0.10)
-        plot.simstatespace(ssm, eta = TRUE)
-        plot.simstatespace(ssm, burnin = 5, reset_time = FALSE)
-
-        # Type 1
-        ssm <- SimSSMOUIVary(
-          n = n,
-          time = time,
-          delta_t = delta_t,
-          mu0 = mu0,
-          sigma0_l = sigma0_l,
-          mu = mu,
-          phi = phi,
-          sigma_l = sigma_l,
-          nu = nu,
-          lambda = lambda,
-          theta_l = theta_l,
-          type = 1,
-          x = x,
-          gamma = gamma
-        )
-
-        as.data.frame.simstatespace(ssm, eta = TRUE)
-        as.data.frame.simstatespace(ssm, eta = FALSE)
-        as.data.frame.simstatespace(ssm, eta = TRUE, long = FALSE)
-        as.data.frame.simstatespace(ssm, eta = FALSE, long = FALSE)
-        as.data.frame.simstatespace(ssm, burnin = 5, reset_time = TRUE)
-        as.data.frame.simstatespace(ssm, burnin = 5, reset_time = FALSE)
-        as.matrix.simstatespace(ssm, eta = TRUE)
-        as.matrix.simstatespace(ssm, eta = FALSE)
-        as.matrix.simstatespace(ssm, eta = TRUE, long = FALSE)
-        as.matrix.simstatespace(ssm, eta = FALSE, long = FALSE)
-        as.matrix.simstatespace(ssm, burnin = 5, reset_time = TRUE)
-        as.matrix.simstatespace(ssm, burnin = 5, reset_time = FALSE)
-        print.simstatespace(ssm)
-        plot.simstatespace(ssm, id = 1:3, time = (0:4) * 0.10)
-        plot.simstatespace(ssm, eta = TRUE)
-        plot.simstatespace(ssm, burnin = 5, reset_time = FALSE)
-
-        # Type 2
-        ssm <- SimSSMOUIVary(
-          n = n,
-          time = time,
-          delta_t = delta_t,
-          mu0 = mu0,
-          sigma0_l = sigma0_l,
-          mu = mu,
-          phi = phi,
-          sigma_l = sigma_l,
-          nu = nu,
-          lambda = lambda,
-          theta_l = theta_l,
-          type = 2,
-          x = x,
-          gamma = gamma,
-          kappa = kappa
-        )
-
-        as.data.frame.simstatespace(ssm, eta = TRUE)
-        as.data.frame.simstatespace(ssm, eta = FALSE)
-        as.data.frame.simstatespace(ssm, eta = TRUE, long = FALSE)
-        as.data.frame.simstatespace(ssm, eta = FALSE, long = FALSE)
-        as.data.frame.simstatespace(ssm, burnin = 5, reset_time = TRUE)
-        as.data.frame.simstatespace(ssm, burnin = 5, reset_time = FALSE)
-        as.matrix.simstatespace(ssm, eta = TRUE)
-        as.matrix.simstatespace(ssm, eta = FALSE)
-        as.matrix.simstatespace(ssm, eta = TRUE, long = FALSE)
-        as.matrix.simstatespace(ssm, eta = FALSE, long = FALSE)
-        as.matrix.simstatespace(ssm, burnin = 5, reset_time = TRUE)
-        as.matrix.simstatespace(ssm, burnin = 5, reset_time = FALSE)
-        print.simstatespace(ssm)
-        plot.simstatespace(ssm, id = 1:3, time = (0:4) * 0.10)
-        plot.simstatespace(ssm, eta = TRUE)
-        plot.simstatespace(ssm, burnin = 5, reset_time = FALSE)
-
-        testthat::expect_error(
-          as.matrix.simstatespace(ssm, burnin = time),
-          regexp = paste0(
-            "`burnin` should not be greater than the measurement occasions.\n"
+        for (type in 0:2) {
+          set.seed(type)
+          ssm <- SimSSMOUIVary(
+            n = n,
+            time = time,
+            delta_t = delta_t,
+            mu0 = mu0,
+            sigma0_l = sigma0_l,
+            mu = mu,
+            phi = phi,
+            sigma_l = sigma_l,
+            nu = nu,
+            lambda = lambda,
+            theta_l = theta_l,
+            type = type,
+            x = x,
+            gamma = gamma,
+            kappa = kappa
           )
-        )
-
-        testthat::expect_true(
-          TRUE
-        )
+          set.seed(type)
+          noise <- .RefNoise(n = n, time = time, p = p, k = k)
+          ref <- .RefSim(
+            noise = noise,
+            delta_t = delta_t,
+            mu0 = mu0,
+            sigma0_l = sigma0_l,
+            alpha = lapply(X = disc, FUN = "[[", "alpha"),
+            beta = lapply(X = disc, FUN = "[[", "beta"),
+            psi_l = lapply(X = disc, FUN = "[[", "psi_l"),
+            nu = nu,
+            lambda = lambda,
+            theta_l = theta_l,
+            x = if (type > 0) x,
+            gamma = if (type > 0) gamma,
+            kappa = if (type > 1) kappa
+          )
+          .RefExpectData(object = ssm, ref = ref)
+          .RefExpectMethods(object = ssm, ref = ref)
+          .RefExpectModel(
+            object = ssm,
+            model = "ou",
+            type = type,
+            fixed = FALSE,
+            fun = "SimSSMOUIVary"
+          )
+        }
       }
     )
   },

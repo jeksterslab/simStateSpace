@@ -53,6 +53,7 @@ lapply(
     testthat::test_that(
       paste(text, "Hurwitz"),
       {
+        testthat::skip_on_cran()
         phi <- matrix(
           data = c(
             0.10, -0.40,
@@ -60,7 +61,6 @@ lapply(
           ),
           nrow = 2
         )
-        testthat::skip_on_cran()
         testthat::expect_true(
           !TestPhiHurwitz(phi = phi)
         )

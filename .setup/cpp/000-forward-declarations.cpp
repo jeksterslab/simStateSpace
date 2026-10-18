@@ -21,3 +21,6 @@ arma::mat ProjectToStability(const arma::mat& x, const double margin,
 double SpectralAbscissa(const arma::mat& x);
 
 arma::mat ProjectToHurwitz(const arma::mat& x, const double margin);
+
+Rcpp::List LinSDE2SSM(const arma::vec&, const arma::mat&, const arma::mat&,
+                      double);

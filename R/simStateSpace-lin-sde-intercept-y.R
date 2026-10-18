@@ -61,7 +61,34 @@
 #' @family Simulation of State Space Models Data Functions
 #' @keywords simStateSpace linsde
 #' @export
-LinSDEInterceptY <- function(mean_y, mean_eta, lambda) {
+LinSDEInterceptY <- function(mean_y,
+                             mean_eta,
+                             lambda) {
+  if (is.matrix(mean_y)) {
+    dim(mean_y) <- NULL
+  }
+  if (is.matrix(mean_eta)) {
+    dim(mean_eta) <- NULL
+  }
+  stopifnot(
+    "`mean_y` must be a vector." = is.null(dim(mean_y)),
+    "`mean_y` must be numeric." = is.numeric(mean_y),
+    "`mean_y` must contain only finite values." = all(is.finite(mean_y)),
+    "`mean_eta` must be a vector." = is.null(dim(mean_eta)),
+    "`mean_eta` must be numeric." = is.numeric(mean_eta),
+    "`mean_eta` must contain only finite values." = all(is.finite(mean_eta)),
+    "`lambda` must be a matrix." = is.matrix(lambda),
+    "`lambda` must be numeric." = is.numeric(lambda),
+    "`lambda` must contain only finite values." = all(is.finite(lambda)),
+    "`nrow(lambda)` and `length(mean_y)` must match." = identical(
+      x = nrow(lambda),
+      y = length(mean_y)
+    ),
+    "`ncol(lambda)` and `length(mean_eta)` must match." = identical(
+      x = ncol(lambda),
+      y = length(mean_eta)
+    )
+  )
   .SSMInterceptY(
     mean_y = mean_y,
     mean_eta = mean_eta,

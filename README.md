@@ -66,7 +66,7 @@ To cite `simStateSpace` in publications, please cite Pesigan et al.
 ## References
 
 <div id="refs" class="references csl-bib-body hanging-indent"
-entry-spacing="0" line-spacing="2">
+data-entry-spacing="0" data-line-spacing="2">
 
 <div id="ref-Pesigan-Russell-Chow-2025o" class="csl-entry">
 

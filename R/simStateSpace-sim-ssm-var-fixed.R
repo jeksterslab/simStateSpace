@@ -218,9 +218,6 @@ SimSSMVARFixed <- function(n, time,
                            alpha, beta, psi_l,
                            type = 0,
                            x = NULL, gamma = NULL) {
-  stopifnot(
-    type %in% c(0, 1)
-  )
   covariates <- FALSE
   if (type > 0) {
     covariates <- TRUE
@@ -240,29 +237,26 @@ SimSSMVARFixed <- function(n, time,
     vary_i = FALSE
   )
   fun <- "SimSSMVARFixed"
-  if (type == 0) {
-    data <- .SimSSMLatFixed0(
-      n = n,
-      time = time,
-      delta_t = 1.0,
+  .CheckSimulation(
+    n = n, time = time, delta_t = 1.0,
+    par = list(
       mu0 = mu0, sigma0_l = sigma0_l,
       alpha = alpha, beta = beta, psi_l = psi_l
-    )
-  }
-  if (type == 1) {
-    stopifnot(
-      !is.null(x),
-      !is.null(gamma)
-    )
-    data <- .SimSSMLatFixed1(
-      n = n,
-      time = time,
-      delta_t = 1.0,
-      mu0 = mu0, sigma0_l = sigma0_l,
-      alpha = alpha, beta = beta, psi_l = psi_l,
-      x = x, gamma = gamma
-    )
-  }
+    ),
+    type = type, types = 0:1,
+    x = x, gamma = gamma,
+    fixed = TRUE
+  )
+  data <- .SimSSMData(
+    n = n,
+    time = time,
+    delta_t = 1.0,
+    mu0 = mu0, sigma0_l = sigma0_l,
+    alpha = alpha, beta = beta, psi_l = psi_l,
+    type = type,
+    x = x, gamma = gamma,
+    fixed = TRUE
+  )
   out <- list(
     call = call,
     args = args,

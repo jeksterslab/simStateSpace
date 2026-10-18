@@ -8,139 +8,61 @@ lapply(
       text,
       {
         testthat::skip_on_cran()
-        # prepare parameters
-        set.seed(42)
-        ## number of individuals
-        n <- 5
-        ## time points
-        time <- 50
-        ## dynamic structure
-        p <- 2
-        mu0 <- c(0.615, 1.006)
-        sigma0 <- matrix(
-          data = c(
-            1.932,
-            0.618,
-            0.618,
-            0.587
-          ),
-          nrow = p
-        )
-        sigma0_l <- t(chol(sigma0))
-        ## measurement model
-        k <- 1
-        theta <- 0.50
-        theta_l <- sqrt(theta)
-        ## covariates
+        n <- 3
+        time <- 8
         j <- 2
+        mu0 <- c(0.6, 0.3)
+        sigma0_l <- t(chol(matrix(data = c(1, 0.2, 0.2, 0.5), nrow = 2)))
+        theta_l <- 0.5
+        set.seed(42)
         x <- lapply(
           X = seq_len(n),
           FUN = function(i) {
-            matrix(
-              data = rnorm(n = j * time),
-              nrow = j
-            )
+            matrix(data = stats::rnorm(n = j * time), nrow = j, ncol = time)
           }
         )
-        gamma <- diag(x = 0.10, nrow = p, ncol = j)
-        kappa <- diag(x = 0.10, nrow = k, ncol = j)
-
-        # Type 0
-        ssm <- SimSSMLinGrowth(
-          n = n,
-          time = time,
-          mu0 = mu0,
-          sigma0_l = sigma0_l,
-          theta_l = theta_l,
-          type = 0
-        )
-
-        as.data.frame.simstatespace(ssm, eta = TRUE)
-        as.data.frame.simstatespace(ssm, eta = FALSE)
-        as.data.frame.simstatespace(ssm, eta = TRUE, long = FALSE)
-        as.data.frame.simstatespace(ssm, eta = FALSE, long = FALSE)
-        as.data.frame.simstatespace(ssm, burnin = 5, reset_time = TRUE)
-        as.data.frame.simstatespace(ssm, burnin = 5, reset_time = FALSE)
-        as.matrix.simstatespace(ssm, eta = TRUE)
-        as.matrix.simstatespace(ssm, eta = FALSE)
-        as.matrix.simstatespace(ssm, eta = TRUE, long = FALSE)
-        as.matrix.simstatespace(ssm, eta = FALSE, long = FALSE)
-        as.matrix.simstatespace(ssm, burnin = 5, reset_time = TRUE)
-        as.matrix.simstatespace(ssm, burnin = 5, reset_time = FALSE)
-        print.simstatespace(ssm)
-        plot.simstatespace(ssm, id = 1:3, time = 0:4)
-        plot.simstatespace(ssm, eta = TRUE)
-        plot.simstatespace(ssm, burnin = 5, reset_time = FALSE)
-
-        # Type 1
-        ssm <- SimSSMLinGrowth(
-          n = n,
-          time = time,
-          mu0 = mu0,
-          sigma0_l = sigma0_l,
-          theta_l = theta_l,
-          type = 1,
-          x = x,
-          gamma = gamma
-        )
-
-        as.data.frame.simstatespace(ssm, eta = TRUE)
-        as.data.frame.simstatespace(ssm, eta = FALSE)
-        as.data.frame.simstatespace(ssm, eta = TRUE, long = FALSE)
-        as.data.frame.simstatespace(ssm, eta = FALSE, long = FALSE)
-        as.data.frame.simstatespace(ssm, burnin = 5, reset_time = TRUE)
-        as.data.frame.simstatespace(ssm, burnin = 5, reset_time = FALSE)
-        as.matrix.simstatespace(ssm, eta = TRUE)
-        as.matrix.simstatespace(ssm, eta = FALSE)
-        as.matrix.simstatespace(ssm, eta = TRUE, long = FALSE)
-        as.matrix.simstatespace(ssm, eta = FALSE, long = FALSE)
-        as.matrix.simstatespace(ssm, burnin = 5, reset_time = TRUE)
-        as.matrix.simstatespace(ssm, burnin = 5, reset_time = FALSE)
-        print.simstatespace(ssm)
-        plot.simstatespace(ssm, id = 1:3, time = 0:4)
-        plot.simstatespace(ssm, eta = TRUE)
-        plot.simstatespace(ssm, burnin = 5, reset_time = FALSE)
-
-        # Type 2
-        ssm <- SimSSMLinGrowth(
-          n = n,
-          time = time,
-          mu0 = mu0,
-          sigma0_l = sigma0_l,
-          theta_l = theta_l,
-          type = 2,
-          x = x,
-          gamma = gamma,
-          kappa = kappa
-        )
-
-        as.data.frame.simstatespace(ssm, eta = TRUE)
-        as.data.frame.simstatespace(ssm, eta = FALSE)
-        as.data.frame.simstatespace(ssm, eta = TRUE, long = FALSE)
-        as.data.frame.simstatespace(ssm, eta = FALSE, long = FALSE)
-        as.data.frame.simstatespace(ssm, burnin = 5, reset_time = TRUE)
-        as.data.frame.simstatespace(ssm, burnin = 5, reset_time = FALSE)
-        as.matrix.simstatespace(ssm, eta = TRUE)
-        as.matrix.simstatespace(ssm, eta = FALSE)
-        as.matrix.simstatespace(ssm, eta = TRUE, long = FALSE)
-        as.matrix.simstatespace(ssm, eta = FALSE, long = FALSE)
-        as.matrix.simstatespace(ssm, burnin = 5, reset_time = TRUE)
-        as.matrix.simstatespace(ssm, burnin = 5, reset_time = FALSE)
-        print.simstatespace(ssm)
-        plot.simstatespace(ssm, id = 1:3, time = 0:4)
-        plot.simstatespace(ssm, eta = TRUE)
-        plot.simstatespace(ssm, burnin = 5, reset_time = FALSE)
-
-        testthat::expect_error(
-          as.matrix.simstatespace(ssm, burnin = time),
-          regexp = paste0(
-            "`burnin` should not be greater than the measurement occasions.\n"
+        gamma <- matrix(data = c(0.5, 0, -0.3, 0.2), nrow = 2)
+        kappa <- matrix(data = c(0.1, -0.2), nrow = 1)
+        for (type in 0:2) {
+          set.seed(type)
+          ssm <- SimSSMLinGrowth(
+            n = n,
+            time = time,
+            mu0 = mu0,
+            sigma0_l = sigma0_l,
+            theta_l = theta_l,
+            type = type,
+            x = x,
+            gamma = gamma,
+            kappa = kappa
           )
-        )
-
-        testthat::expect_true(
-          TRUE
-        )
+          set.seed(type)
+          noise <- .RefNoise(n = n, time = time, p = 2, k = 1)
+          ref <- .RefSim(
+            noise = noise,
+            delta_t = 1,
+            mu0 = mu0,
+            sigma0_l = sigma0_l,
+            alpha = c(0, 0),
+            beta = rbind(c(1, 1), c(0, 1)),
+            psi_l = matrix(data = 0, nrow = 2, ncol = 2),
+            nu = 0,
+            lambda = matrix(data = c(1, 0), nrow = 1),
+            theta_l = matrix(data = theta_l),
+            x = if (type > 0) x,
+            gamma = if (type > 0) gamma,
+            kappa = if (type > 1) kappa
+          )
+          .RefExpectData(object = ssm, ref = ref)
+          .RefExpectMethods(object = ssm, ref = ref)
+          .RefExpectModel(
+            object = ssm,
+            model = "lingrowth",
+            type = type,
+            fixed = TRUE,
+            fun = "SimSSMLinGrowth"
+          )
+        }
       }
     )
   },

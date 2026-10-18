@@ -8,172 +8,82 @@ lapply(
       text,
       {
         testthat::skip_on_cran()
-        set.seed(42)
-        ## number of individuals
-        n <- 5
-        ## time points
-        time <- 50
-        delta_t <- 0.10
-        ## dynamic structure
+        n <- 3
+        time <- 8
+        delta_t <- 0.5
         p <- 2
-        mu0 <- c(-3.0, 1.5)
-        sigma0 <- 0.001 * diag(p)
-        sigma0_l <- t(chol(sigma0))
-        mu <- c(5.76, 5.18)
-        phi <- matrix(
-          data = c(
-            -0.10,
-            0.05,
-            0.05,
-            -0.10
-          ),
-          nrow = p
-        )
-        sigma <- matrix(
-          data = c(
-            2.79,
-            0.06,
-            0.06,
-            3.27
-          ),
-          nrow = p
-        )
-        sigma_l <- t(chol(sigma))
-        ## measurement model
-        k <- 2
-        nu <- rep(x = 0, times = k)
-        lambda <- diag(k)
-        theta <- 0.001 * diag(k)
-        theta_l <- t(chol(theta))
-        ## covariates
+        k <- 3
         j <- 2
+        mu0 <- c(1, -1)
+        sigma0_l <- t(chol(matrix(data = c(1, 0.3, 0.3, 0.5), nrow = p)))
+        mu <- c(0.5, -0.3)
+        # complex eigenvalues -0.4 +/- 0.6i
+        phi <- matrix(data = c(-0.4, -0.6, 0.6, -0.4), nrow = p)
+        sigma_l <- t(chol(matrix(data = c(0.3, 0.1, 0.1, 0.2), nrow = p)))
+        nu <- c(0.5, 1, -0.5)
+        lambda <- matrix(data = c(1, 0.8, 0, 0, 0.5, 1), nrow = k)
+        theta_l <- diag(c(0.2, 0.3, 0.4))
+        set.seed(42)
         x <- lapply(
           X = seq_len(n),
           FUN = function(i) {
-            matrix(
-              data = stats::rnorm(n = time * j),
-              nrow = j,
-              ncol = time
-            )
+            matrix(data = stats::rnorm(n = j * time), nrow = j, ncol = time)
           }
         )
-        gamma <- diag(x = 0.10, nrow = p, ncol = j)
-        kappa <- diag(x = 0.10, nrow = k, ncol = j)
-
-        # Type 0
-        ssm <- SimSSMOUFixed(
-          n = n,
-          time = time,
-          delta_t = delta_t,
-          mu0 = mu0,
-          sigma0_l = sigma0_l,
-          mu = mu,
+        gamma <- matrix(data = c(0.5, 0, -0.3, 0.2), nrow = p)
+        kappa <- matrix(data = c(0.1, 0.2, 0.3, -0.1, 0, 0.4), nrow = k)
+        disc <- .RefDiscretize(
+          iota = -phi %*% mu,
           phi = phi,
-          sigma_l = sigma_l,
-          nu = nu,
-          lambda = lambda,
-          theta_l = theta_l,
-          type = 0
+          sigma = sigma_l %*% t(sigma_l),
+          delta_t = delta_t
         )
-
-        as.data.frame.simstatespace(ssm, eta = TRUE)
-        as.data.frame.simstatespace(ssm, eta = FALSE)
-        as.data.frame.simstatespace(ssm, eta = TRUE, long = FALSE)
-        as.data.frame.simstatespace(ssm, eta = FALSE, long = FALSE)
-        as.data.frame.simstatespace(ssm, burnin = 5, reset_time = TRUE)
-        as.data.frame.simstatespace(ssm, burnin = 5, reset_time = FALSE)
-        as.matrix.simstatespace(ssm, eta = TRUE)
-        as.matrix.simstatespace(ssm, eta = FALSE)
-        as.matrix.simstatespace(ssm, eta = TRUE, long = FALSE)
-        as.matrix.simstatespace(ssm, eta = FALSE, long = FALSE)
-        as.matrix.simstatespace(ssm, burnin = 5, reset_time = TRUE)
-        as.matrix.simstatespace(ssm, burnin = 5, reset_time = FALSE)
-        print.simstatespace(ssm)
-        plot.simstatespace(ssm, id = 1:3, time = (0:4) * 0.10)
-        plot.simstatespace(ssm, eta = TRUE)
-        plot.simstatespace(ssm, burnin = 5, reset_time = FALSE)
-
-        # Type 1
-        ssm <- SimSSMOUFixed(
-          n = n,
-          time = time,
-          delta_t = delta_t,
-          mu0 = mu0,
-          sigma0_l = sigma0_l,
-          mu = mu,
-          phi = phi,
-          sigma_l = sigma_l,
-          nu = nu,
-          lambda = lambda,
-          theta_l = theta_l,
-          type = 1,
-          x = x,
-          gamma = gamma
-        )
-
-        as.data.frame.simstatespace(ssm, eta = TRUE)
-        as.data.frame.simstatespace(ssm, eta = FALSE)
-        as.data.frame.simstatespace(ssm, eta = TRUE, long = FALSE)
-        as.data.frame.simstatespace(ssm, eta = FALSE, long = FALSE)
-        as.data.frame.simstatespace(ssm, burnin = 5, reset_time = TRUE)
-        as.data.frame.simstatespace(ssm, burnin = 5, reset_time = FALSE)
-        as.matrix.simstatespace(ssm, eta = TRUE)
-        as.matrix.simstatespace(ssm, eta = FALSE)
-        as.matrix.simstatespace(ssm, eta = TRUE, long = FALSE)
-        as.matrix.simstatespace(ssm, eta = FALSE, long = FALSE)
-        as.matrix.simstatespace(ssm, burnin = 5, reset_time = TRUE)
-        as.matrix.simstatespace(ssm, burnin = 5, reset_time = FALSE)
-        print.simstatespace(ssm)
-        plot.simstatespace(ssm, id = 1:3, time = (0:4) * 0.10)
-        plot.simstatespace(ssm, eta = TRUE)
-        plot.simstatespace(ssm, burnin = 5, reset_time = FALSE)
-
-        # Type 2
-        ssm <- SimSSMOUFixed(
-          n = n,
-          time = time,
-          delta_t = delta_t,
-          mu0 = mu0,
-          sigma0_l = sigma0_l,
-          mu = mu,
-          phi = phi,
-          sigma_l = sigma_l,
-          nu = nu,
-          lambda = lambda,
-          theta_l = theta_l,
-          type = 2,
-          x = x,
-          gamma = gamma,
-          kappa = kappa
-        )
-
-        as.data.frame.simstatespace(ssm, eta = TRUE)
-        as.data.frame.simstatespace(ssm, eta = FALSE)
-        as.data.frame.simstatespace(ssm, eta = TRUE, long = FALSE)
-        as.data.frame.simstatespace(ssm, eta = FALSE, long = FALSE)
-        as.data.frame.simstatespace(ssm, burnin = 5, reset_time = TRUE)
-        as.data.frame.simstatespace(ssm, burnin = 5, reset_time = FALSE)
-        as.matrix.simstatespace(ssm, eta = TRUE)
-        as.matrix.simstatespace(ssm, eta = FALSE)
-        as.matrix.simstatespace(ssm, eta = TRUE, long = FALSE)
-        as.matrix.simstatespace(ssm, eta = FALSE, long = FALSE)
-        as.matrix.simstatespace(ssm, burnin = 5, reset_time = TRUE)
-        as.matrix.simstatespace(ssm, burnin = 5, reset_time = FALSE)
-        print.simstatespace(ssm)
-        plot.simstatespace(ssm, id = 1:3, time = (0:4) * 0.10)
-        plot.simstatespace(ssm, eta = TRUE)
-        plot.simstatespace(ssm, burnin = 5, reset_time = FALSE)
-
-        testthat::expect_error(
-          as.matrix.simstatespace(ssm, burnin = time),
-          regexp = paste0(
-            "`burnin` should not be greater than the measurement occasions.\n"
+        for (type in 0:2) {
+          set.seed(type)
+          ssm <- SimSSMOUFixed(
+            n = n,
+            time = time,
+            delta_t = delta_t,
+            mu0 = mu0,
+            sigma0_l = sigma0_l,
+            mu = mu,
+            phi = phi,
+            sigma_l = sigma_l,
+            nu = nu,
+            lambda = lambda,
+            theta_l = theta_l,
+            type = type,
+            x = x,
+            gamma = gamma,
+            kappa = kappa
           )
-        )
-
-        testthat::expect_true(
-          TRUE
-        )
+          set.seed(type)
+          noise <- .RefNoise(n = n, time = time, p = p, k = k)
+          ref <- .RefSim(
+            noise = noise,
+            delta_t = delta_t,
+            mu0 = mu0,
+            sigma0_l = sigma0_l,
+            alpha = disc$alpha,
+            beta = disc$beta,
+            psi_l = disc$psi_l,
+            nu = nu,
+            lambda = lambda,
+            theta_l = theta_l,
+            x = if (type > 0) x,
+            gamma = if (type > 0) gamma,
+            kappa = if (type > 1) kappa
+          )
+          .RefExpectData(object = ssm, ref = ref)
+          .RefExpectMethods(object = ssm, ref = ref)
+          .RefExpectModel(
+            object = ssm,
+            model = "ou",
+            type = type,
+            fixed = TRUE,
+            fun = "SimSSMOUFixed"
+          )
+        }
       }
     )
   },

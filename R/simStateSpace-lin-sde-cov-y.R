@@ -71,10 +71,48 @@
 #' @family Simulation of State Space Models Data Functions
 #' @keywords simStateSpace linsde
 #' @export
-LinSDECovY <- function(lambda, theta, cov_eta) {
+LinSDECovY <- function(lambda,
+                       theta,
+                       cov_eta) {
+  tol <- sqrt(.Machine$double.eps)
+  stopifnot(
+    "`lambda` must be a matrix." = is.matrix(lambda),
+    "`lambda` must be numeric." = is.numeric(lambda),
+    "`lambda` must contain only finite values." = all(is.finite(lambda)),
+    "`theta` must be a matrix." = is.matrix(theta),
+    "`theta` must be numeric." = is.numeric(theta),
+    "`theta` must contain only finite values." = all(is.finite(theta)),
+    "`theta` must be a square matrix." = nrow(theta) == ncol(theta),
+    "`theta` must be symmetric." = isTRUE(
+      all.equal(
+        target = theta,
+        current = t(theta),
+        tolerance = tol
+      )
+    ),
+    "`cov_eta` must be a matrix." = is.matrix(cov_eta),
+    "`cov_eta` must be numeric." = is.numeric(cov_eta),
+    "`cov_eta` must contain only finite values." = all(is.finite(cov_eta)),
+    "`cov_eta` must be a square matrix." = nrow(cov_eta) == ncol(cov_eta),
+    "`cov_eta` must be symmetric." = isTRUE(
+      all.equal(
+        target = cov_eta,
+        current = t(cov_eta),
+        tolerance = tol
+      )
+    ),
+    "`nrow(lambda)` and `nrow(theta)` must match." = identical(
+      x = nrow(lambda),
+      y = nrow(theta)
+    ),
+    "`ncol(lambda)` and `ncol(cov_eta)` must match." = identical(
+      x = ncol(lambda),
+      y = ncol(cov_eta)
+    )
+  )
   .LinSDECovY(
     lambda = lambda,
-    theta = theta,
-    cov_eta = cov_eta
+    theta = (theta + t(theta)) / 2,
+    cov_eta = (cov_eta + t(cov_eta)) / 2
   )
 }

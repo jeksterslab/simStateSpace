@@ -12,7 +12,7 @@ nocite: |
   @Chow-Ho-Hamaker-etal-2010
   @Deboeck-Preacher-2015
   @Oravecz-Tuerlinckx-Vandekerckhove-2011
-  @Pesigan-Russell-Chow-2025a
+  @Pesigan-Russell-Chow-2025o
 output:
   rmarkdown::html_vignette:
     toc: true
@@ -39,8 +39,8 @@ knitr::opts_chunk$set(
 ```{r}
 #| echo = FALSE
 set.seed(42)
-n <- 100
-time <- 1000
+n <- 10 # 100
+time <- 200 # 1000
 delta_t <- 0.10
 k <- p <- 3
 iden <- diag(k)
@@ -61,7 +61,7 @@ phi <- matrix(
   ),
   nrow = k
 )
-beta_var1 <- expm::expm(
+beta_var1 <- simStateSpace::ExpMat(
   phi
 )
 sigma <- matrix(
@@ -650,7 +650,7 @@ sigma_hat
 theta_hat
 mu0_hat
 sigma0_hat
-beta_var1_hat <- expm::expm(phi_hat)
+beta_var1_hat <- simStateSpace::ExpMat(phi_hat)
 beta_var1_hat
 ```
 

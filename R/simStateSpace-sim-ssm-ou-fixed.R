@@ -414,6 +414,17 @@ SimSSMOUFixed <- function(n, time, delta_t = 1.0,
                           nu, lambda, theta_l,
                           type = 0,
                           x = NULL, gamma = NULL, kappa = NULL) {
+  .CheckSimulation(
+    n = n, time = time, delta_t = delta_t,
+    par = list(
+      mu0 = mu0, sigma0_l = sigma0_l,
+      mu = mu, phi = phi, sigma_l = sigma_l,
+      nu = nu, lambda = lambda, theta_l = theta_l
+    ),
+    type = type, types = 0:2,
+    x = x, gamma = gamma, kappa = kappa,
+    fixed = TRUE
+  )
   iota <- -phi %*% mu
   ssm <- LinSDE2SSM(
     iota = iota,

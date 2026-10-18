@@ -32,9 +32,8 @@ Number of individuals.}
 \item{time}{Positive integer.
 Number of time points.}
 
-\item{delta_t}{Numeric.
-Time interval
-(\eqn{\Delta_t}).}
+\item{delta_t}{Positive finite numeric scalar.
+Sampling interval \eqn{\Delta t}.}
 
 \item{mu0}{Numeric vector.
 Mean of initial latent variable values
@@ -46,21 +45,22 @@ of the covariance matrix
 of initial latent variable values
 (\eqn{\boldsymbol{\Sigma}_{\boldsymbol{\eta} \mid 0}}).}
 
-\item{iota}{Numeric vector.
+\item{iota}{Numeric vector of length \eqn{q}.
 An unobserved term that is constant over time
 (\eqn{\boldsymbol{\iota}}).}
 
-\item{phi}{Numeric matrix.
+\item{phi}{Numeric \eqn{q \times q} matrix.
 The drift matrix
 which represents the rate of change of the solution
 in the absence of any random fluctuations
 (\eqn{\boldsymbol{\Phi}}).}
 
-\item{sigma_l}{Numeric matrix.
-Cholesky factorization (\code{t(chol(sigma))})
-of the covariance matrix of volatility
-or randomness in the process
-(\eqn{\boldsymbol{\Sigma}}).}
+\item{sigma_l}{Numeric \eqn{q \times q} matrix.
+Lower triangular factor of the continuous-time diffusion covariance:
+\code{sigma_l \%*\% t(sigma_l)}. For a positive-definite covariance matrix
+\code{sigma}, use \code{t(chol(sigma))}.
+The factor must be lower triangular with a non-negative diagonal.
+Zero and positive-semidefinite covariances are allowed.}
 
 \item{nu}{Numeric vector.
 Vector of intercept values for the measurement model
@@ -541,13 +541,16 @@ Cambridge University Press.
 }
 \seealso{
 Other Simulation of State Space Models Data Functions:
-\code{\link[=LinSDE2SSM]{LinSDE2SSM()}},
+\code{\link[=CompanionMat]{CompanionMat()}},
+\code{\link[=ExpMat]{ExpMat()}},
+\code{\link[=LinSDECovDeltaT]{LinSDECovDeltaT()}},
 \code{\link[=LinSDECovEta]{LinSDECovEta()}},
 \code{\link[=LinSDECovY]{LinSDECovY()}},
 \code{\link[=LinSDEInterceptEta]{LinSDEInterceptEta()}},
 \code{\link[=LinSDEInterceptY]{LinSDEInterceptY()}},
 \code{\link[=LinSDEMeanEta]{LinSDEMeanEta()}},
 \code{\link[=LinSDEMeanY]{LinSDEMeanY()}},
+\code{\link[=LogMat]{LogMat()}},
 \code{\link[=ProjectToHurwitz]{ProjectToHurwitz()}},
 \code{\link[=ProjectToStability]{ProjectToStability()}},
 \code{\link[=SSMCovEta]{SSMCovEta()}},

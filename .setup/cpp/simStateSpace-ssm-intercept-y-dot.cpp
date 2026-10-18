@@ -9,6 +9,6 @@
 Rcpp::NumericVector SSMInterceptY(const arma::vec& mean_y,
                                   const arma::vec& mean_eta,
                                   const arma::mat& lambda) {
-  arma::vec output = mean_y + lambda * mean_eta;
+  arma::vec output = mean_y - lambda * mean_eta;
   return Rcpp::NumericVector(output.begin(), output.end());
 }

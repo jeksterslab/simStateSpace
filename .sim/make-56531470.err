@@ -1,0 +1,641 @@
+
+
+Secrets read from ~/.config/rproject/secrets.R: GITHUB_PAT, DOCKER_HUB_ACCESS_TOKEN, QUARTO_PUB_AUTH_TOKEN, CODECOV_TOKEN
+
+
+
+
+Installing rProject ijapesigan/rProject@45f37090d3edf17aa33a4ba213ce00ddee97f7ba into .library (dependencies from the image).
+
+
+ 
+→ Package library at '/storage/home/ibp5092/Downloads/simStateSpace/.library'.
+→ Will install 1 package.
+→ The package (0 B) is cached.
++ rProject   0.0.48 [bld][cmp] (GitHub: 45f3709)
+  
+ℹ No downloads are needed, 1 pkg is cached
+✔ Installed rProject 0.0.48 (github::ijapesigan/rProject@45f3709) (1.4s)
+✔ 1 pkg: added 1 [4.5s]
+
+
+AI instructions for simStateSpace (package): wrote AGENTS.md, CLAUDE.md, copilot-instructions.md.
+
+
+Cloning into '/tmp/Rtmp9UZP1L/dotfiles1a3d9fb6ff1ad'...
+
+
+Overleaf size check of /storage/home/ibp5092/Downloads/simStateSpace:
+[pass] Editable text: 1.6 MB (limit 7 MB)
+[pass] Text file size: none over 2 MB
+[pass] File size: none over 50 MB
+[pass] Number of files: 256 files (limit 2000 )
+[pass] Total size: 1.7 MB (recommended under 100 MB)
+[pass] Duplicates: none
+
+Largest editable text files:
+      0.99 MB  .setup/latex/bib/bib.bib
+      0.03 MB  LICENSE.md
+      0.01 MB  .sim/make.out
+      0.01 MB  tests/testthat/test-simStateSpace-transformations-reference.R
+      0.01 MB  .setup/ai/specs/2026-10-17-refactor.md
+      0.01 MB  R/simStateSpace-sim-ssm-fixed.R
+      0.01 MB  R/simStateSpace-methods-simstatespace.R
+      0.01 MB  .setup/vignettes/ou.Rmd.orig
+      0.01 MB  .setup/vignettes/ssm.Rmd.orig
+      0.01 MB  tests/testthat/helper-simStateSpace-reference.R
+
+Largest files:
+      0.99 MB  .setup/latex/bib/bib.bib
+      0.15 MB  .setup/ai/refactor/golden-2026-10-17.Rds
+      0.03 MB  LICENSE.md
+      0.01 MB  .sim/make.out
+      0.01 MB  tests/testthat/test-simStateSpace-transformations-reference.R
+      0.01 MB  .setup/ai/specs/2026-10-17-refactor.md
+      0.01 MB  R/simStateSpace-sim-ssm-fixed.R
+      0.01 MB  R/simStateSpace-methods-simstatespace.R
+      0.01 MB  .setup/vignettes/ou.Rmd.orig
+      0.01 MB  .setup/vignettes/ssm.Rmd.orig
+
+
+First time using roxygen2. Upgrading automatically...
+ℹ Setting Config/roxygen2/version to "8.1.1.9000"
+ℹ Loading simStateSpace
+ℹ Re-compiling simStateSpace (debug build)
+✖ RcppExports.R:238: @description Could not resolve link to topic
+  "ProjectToStability" in the dependencies or base packages..
+ℹ If you haven't documented "ProjectToStability" yet, or just changed its name,
+  this is normal. Once "ProjectToStability" is documented, this warning goes
+  away.
+ℹ Make sure that the name of the topic is spelled correctly.
+ℹ Always list the linked package as a dependency.
+ℹ Alternatively, you can fully qualify the link with a package name.
+✖ RcppExports.R:284: @description Could not resolve link to topic
+  "TestStationarity" in the dependencies or base packages..
+ℹ If you haven't documented "TestStationarity" yet, or just changed its name,
+  this is normal. Once "TestStationarity" is documented, this warning goes
+  away.
+ℹ Make sure that the name of the topic is spelled correctly.
+ℹ Always list the linked package as a dependency.
+ℹ Alternatively, you can fully qualify the link with a package name.
+✖ RcppExports.R:351: @description Could not resolve link to topic
+  "TestStationarity" in the dependencies or base packages..
+ℹ If you haven't documented "TestStationarity" yet, or just changed its name,
+  this is normal. Once "TestStationarity" is documented, this warning goes
+  away.
+ℹ Make sure that the name of the topic is spelled correctly.
+ℹ Always list the linked package as a dependency.
+ℹ Alternatively, you can fully qualify the link with a package name.
+✖ RcppExports.R:492: @description Could not resolve link to topic
+  "ProjectToHurwitz" in the dependencies or base packages..
+ℹ If you haven't documented "ProjectToHurwitz" yet, or just changed its name,
+  this is normal. Once "ProjectToHurwitz" is documented, this warning goes
+  away.
+ℹ Make sure that the name of the topic is spelled correctly.
+ℹ Always list the linked package as a dependency.
+ℹ Alternatively, you can fully qualify the link with a package name.
+✖ RcppExports.R:535: @description Could not resolve link to topic "TestPhi" in
+  the dependencies or base packages..
+ℹ If you haven't documented "TestPhi" yet, or just changed its name, this is
+  normal. Once "TestPhi" is documented, this warning goes away.
+ℹ Make sure that the name of the topic is spelled correctly.
+ℹ Always list the linked package as a dependency.
+ℹ Alternatively, you can fully qualify the link with a package name.
+✖ RcppExports.R:606: @description Could not resolve link to topic "TestPhi" in
+  the dependencies or base packages..
+ℹ If you haven't documented "TestPhi" yet, or just changed its name, this is
+  normal. Once "TestPhi" is documented, this warning goes away.
+ℹ Make sure that the name of the topic is spelled correctly.
+ℹ Always list the linked package as a dependency.
+ℹ Alternatively, you can fully qualify the link with a package name.
+✖ simStateSpace-exact-ctvar-2-ssm.R:23: @details Could not resolve link to
+  topic "LinSDE2SSM" in the dependencies or base packages..
+ℹ If you haven't documented "LinSDE2SSM" yet, or just changed its name, this is
+  normal. Once "LinSDE2SSM" is documented, this warning goes away.
+ℹ Make sure that the name of the topic is spelled correctly.
+ℹ Always list the linked package as a dependency.
+ℹ Alternatively, you can fully qualify the link with a package name.
+✖ simStateSpace-exact-ctvar-2-ssm.R:115: @seealso Could not resolve link to
+  topic "LinSDE2SSM" in the dependencies or base packages..
+ℹ If you haven't documented "LinSDE2SSM" yet, or just changed its name, this is
+  normal. Once "LinSDE2SSM" is documented, this warning goes away.
+ℹ Make sure that the name of the topic is spelled correctly.
+ℹ Always list the linked package as a dependency.
+ℹ Alternatively, you can fully qualify the link with a package name.
+✖ simStateSpace-exact-ctvar-2-ssm.R:115: @seealso Could not resolve link to
+  topic "SSM2LinSDE" in the dependencies or base packages..
+ℹ If you haven't documented "SSM2LinSDE" yet, or just changed its name, this is
+  normal. Once "SSM2LinSDE" is documented, this warning goes away.
+ℹ Make sure that the name of the topic is spelled correctly.
+ℹ Always list the linked package as a dependency.
+ℹ Alternatively, you can fully qualify the link with a package name.
+✖ simStateSpace-exact-lin-sde-2-ssm.R:117: @seealso Could not resolve link to
+  topic "SSM2LinSDE" in the dependencies or base packages..
+ℹ If you haven't documented "SSM2LinSDE" yet, or just changed its name, this is
+  normal. Once "SSM2LinSDE" is documented, this warning goes away.
+ℹ Make sure that the name of the topic is spelled correctly.
+ℹ Always list the linked package as a dependency.
+ℹ Alternatively, you can fully qualify the link with a package name.
+✖ simStateSpace-exact-lin-sde-2-ssm.R:117: @seealso Could not resolve link to
+  topic "CTVAR2SSM" in the dependencies or base packages..
+ℹ If you haven't documented "CTVAR2SSM" yet, or just changed its name, this is
+  normal. Once "CTVAR2SSM" is documented, this warning goes away.
+ℹ Make sure that the name of the topic is spelled correctly.
+ℹ Always list the linked package as a dependency.
+ℹ Alternatively, you can fully qualify the link with a package name.
+✖ simStateSpace-exact-ssm-2-lin-sde.R:27: @details Could not resolve link to
+  topic "LinSDE2SSM" in the dependencies or base packages..
+ℹ If you haven't documented "LinSDE2SSM" yet, or just changed its name, this is
+  normal. Once "LinSDE2SSM" is documented, this warning goes away.
+ℹ Make sure that the name of the topic is spelled correctly.
+ℹ Always list the linked package as a dependency.
+ℹ Alternatively, you can fully qualify the link with a package name.
+✖ simStateSpace-exact-ssm-2-lin-sde.R:113: @seealso Could not resolve link to
+  topic "LinSDE2SSM" in the dependencies or base packages..
+ℹ If you haven't documented "LinSDE2SSM" yet, or just changed its name, this is
+  normal. Once "LinSDE2SSM" is documented, this warning goes away.
+ℹ Make sure that the name of the topic is spelled correctly.
+ℹ Always list the linked package as a dependency.
+ℹ Alternatively, you can fully qualify the link with a package name.
+✖ simStateSpace-exact-ssm-2-lin-sde.R:113: @seealso Could not resolve link to
+  topic "CTVAR2SSM" in the dependencies or base packages..
+ℹ If you haven't documented "CTVAR2SSM" yet, or just changed its name, this is
+  normal. Once "CTVAR2SSM" is documented, this warning goes away.
+ℹ Make sure that the name of the topic is spelled correctly.
+ℹ Always list the linked package as a dependency.
+ℹ Alternatively, you can fully qualify the link with a package name.
+✖ simStateSpace-lin-sde-cov-delta-t.R:25: @details Could not resolve link to
+  topic "LinSDE2SSM" in the dependencies or base packages..
+ℹ If you haven't documented "LinSDE2SSM" yet, or just changed its name, this is
+  normal. Once "LinSDE2SSM" is documented, this warning goes away.
+ℹ Make sure that the name of the topic is spelled correctly.
+ℹ Always list the linked package as a dependency.
+ℹ Alternatively, you can fully qualify the link with a package name.
+✖ simStateSpace-sim-ssm-i-vary.R:27: @param Could not resolve link to topic
+  "SimSSMFixed" in the dependencies or base packages..
+ℹ If you haven't documented "SimSSMFixed" yet, or just changed its name, this
+  is normal. Once "SimSSMFixed" is documented, this warning goes away.
+ℹ Make sure that the name of the topic is spelled correctly.
+ℹ Always list the linked package as a dependency.
+ℹ Alternatively, you can fully qualify the link with a package name.
+✖ simStateSpace-sim-ssm-lin-growth-i-vary.R:22: @param Could not resolve link
+  to topic "SimSSMLinGrowth" in the dependencies or base packages..
+ℹ If you haven't documented "SimSSMLinGrowth" yet, or just changed its name,
+  this is normal. Once "SimSSMLinGrowth" is documented, this warning goes away.
+ℹ Make sure that the name of the topic is spelled correctly.
+ℹ Always list the linked package as a dependency.
+ℹ Alternatively, you can fully qualify the link with a package name.
+✖ simStateSpace-sim-ssm-lin-sde-i-vary.R:30: @param Could not resolve link to
+  topic "SimSSMLinSDEFixed" in the dependencies or base packages..
+ℹ If you haven't documented "SimSSMLinSDEFixed" yet, or just changed its name,
+  this is normal. Once "SimSSMLinSDEFixed" is documented, this warning goes
+  away.
+ℹ Make sure that the name of the topic is spelled correctly.
+ℹ Always list the linked package as a dependency.
+ℹ Alternatively, you can fully qualify the link with a package name.
+✖ simStateSpace-sim-ssm-ou-i-vary.R:30: @param Could not resolve link to topic
+  "SimSSMOUFixed" in the dependencies or base packages..
+ℹ If you haven't documented "SimSSMOUFixed" yet, or just changed its name, this
+  is normal. Once "SimSSMOUFixed" is documented, this warning goes away.
+ℹ Make sure that the name of the topic is spelled correctly.
+ℹ Always list the linked package as a dependency.
+ℹ Alternatively, you can fully qualify the link with a package name.
+✖ simStateSpace-sim-ssm-var-i-vary.R:25: @param Could not resolve link to topic
+  "SimSSMVARFixed" in the dependencies or base packages..
+ℹ If you haven't documented "SimSSMVARFixed" yet, or just changed its name,
+  this is normal. Once "SimSSMVARFixed" is documented, this warning goes away.
+ℹ Make sure that the name of the topic is spelled correctly.
+ℹ Always list the linked package as a dependency.
+ℹ Alternatively, you can fully qualify the link with a package name.
+Writing 'ExpMat.Rd'
+Writing 'LogMat.Rd'
+Writing 'ProjectToHurwitz.Rd'
+Writing 'ProjectToStability.Rd'
+Writing 'SimBetaN2.Rd'
+Writing 'SimBetaNCovariate.Rd'
+Writing 'SimBetaN.Rd'
+Writing 'SimCovDiagN.Rd'
+Writing 'SimCovN.Rd'
+Writing 'SimPhiN2.Rd'
+Writing 'SimPhiNCovariate.Rd'
+Writing 'SimPhiN.Rd'
+Writing 'SpectralAbscissa.Rd'
+Writing 'SpectralRadius.Rd'
+Writing 'TestPhiHurwitz.Rd'
+Writing 'TestPhi.Rd'
+Writing 'TestStability.Rd'
+Writing 'TestStationarity.Rd'
+Writing 'CompanionMat.Rd'
+Writing 'CTVAR2SSM.Rd'
+Writing 'LinSDE2SSM.Rd'
+Writing 'SSM2LinSDE.Rd'
+Writing 'LinSDECovDeltaT.Rd'
+Writing 'LinSDECovEta.Rd'
+Writing 'LinSDECovY.Rd'
+Writing 'LinSDEInterceptEta.Rd'
+Writing 'LinSDEInterceptY.Rd'
+Writing 'LinSDEMeanEta.Rd'
+Writing 'LinSDEMeanY.Rd'
+Writing 'as.data.frame.simstatespace.Rd'
+Writing 'as.matrix.simstatespace.Rd'
+Writing 'plot.simstatespace.Rd'
+Writing 'print.simstatespace.Rd'
+Writing 'simStateSpace-package.Rd'
+Writing 'SimMVN.Rd'
+Writing 'SimNuN.Rd'
+Writing 'SimAlphaN.Rd'
+Writing 'SimIotaN.Rd'
+Writing 'SimMuN.Rd'
+Writing 'SimSSMFixed.Rd'
+Writing 'SimSSMIVary.Rd'
+Writing 'SimSSMLinGrowthIVary.Rd'
+Writing 'SimSSMLinGrowth.Rd'
+Writing 'SimSSMLinSDEFixed.Rd'
+Writing 'SimSSMLinSDEIVary.Rd'
+Writing 'SimSSMOUFixed.Rd'
+Writing 'SimSSMOUIVary.Rd'
+Writing 'SimSSMVARFixed.Rd'
+Writing 'SimSSMVARIVary.Rd'
+Writing 'SSMCovEta.Rd'
+Writing 'SSMCovY.Rd'
+Writing 'SSMInterceptEta.Rd'
+Writing 'SSMInterceptY.Rd'
+Writing 'SSMMeanEta.Rd'
+Writing 'SSMMeanY.Rd'
+ℹ Updating simStateSpace documentation
+ℹ Loading simStateSpace
+Writing 'NAMESPACE'
+ 
+→ Package library at '/storage/home/ibp5092/Downloads/simStateSpace/.library', '/usr/local/lib/R/site-library', and '/usr/local/lib/R/library'.
+→ The package (0 B) is cached.
+✔ All system requirements are already installed.
+  
+ℹ No downloads are needed
+✔ :  [3.9s]
+
+
+processing file: /storage/home/ibp5092/Downloads/simStateSpace/vignettes/lin-growth.Rmd.orig
+output file: /storage/home/ibp5092/Downloads/simStateSpace/vignettes/lin-growth.Rmd
+
+
+
+processing file: /storage/home/ibp5092/Downloads/simStateSpace/vignettes/ou.Rmd.orig
+output file: /storage/home/ibp5092/Downloads/simStateSpace/vignettes/ou.Rmd
+
+
+
+processing file: /storage/home/ibp5092/Downloads/simStateSpace/vignettes/session.Rmd.orig
+output file: /storage/home/ibp5092/Downloads/simStateSpace/vignettes/session.Rmd
+
+
+
+processing file: /storage/home/ibp5092/Downloads/simStateSpace/vignettes/ssm.Rmd.orig
+output file: /storage/home/ibp5092/Downloads/simStateSpace/vignettes/ssm.Rmd
+
+
+
+processing file: /storage/home/ibp5092/Downloads/simStateSpace/vignettes/var.Rmd.orig
+output file: /storage/home/ibp5092/Downloads/simStateSpace/vignettes/var.Rmd
+
+ℹ Loading simStateSpace
+ℹ Re-compiling simStateSpace (debug build)
+ℹ Updating simStateSpace documentation
+ℹ Loading simStateSpace
+Writing 'NAMESPACE'
+ 
+→ Package library at '/storage/home/ibp5092/Downloads/simStateSpace/.library', '/usr/local/lib/R/site-library', and '/usr/local/lib/R/library'.
+→ The package (0 B) is cached.
+✔ All system requirements are already installed.
+  
+ℹ No downloads are needed
+✔ :  [3.6s]
+
+
+processing file: README.Rmd
+output file: README.knit.md
+
+[WARNING] Deprecated: --mathjax. Use --math-method=mathjax[:URL] instead.
+
+Preview created: /storage/home/ibp5092/Downloads/simStateSpace/README.html
+
+Output created: README.md
+Converting parsed Rd's to LaTeX .....
+Warning in texi2dvi(file = file, pdf = TRUE, clean = clean, quiet = quiet,  :
+  texi2dvi script/program not available, using emulation
+Error in texi2dvi(file = file, pdf = TRUE, clean = clean, quiet = quiet,  : 
+  unable to run pdflatex on 'Rd2.tex'
+LaTeX errors:
+! Undefined control sequence.
+<argument> \{\Beta 
+                   _1, \Beta _2, \ldots , \Beta _p\}
+l.363 ...{\{\Beta_1, \Beta_2, \ldots, \Beta_p\}}{}
+                                                  ,
+! Undefined control sequence.
+<argument> \{\Beta _1, \Beta 
+                             _2, \ldots , \Beta _p\}
+l.363 ...{\{\Beta_1, \Beta_2, \ldots, \Beta_p\}}{}
+                                                  ,
+! Undefined control sequence.
+<argument> \{\Beta _1, \Beta _2, \ldots , \Beta 
+                                                _p\}
+l.363 ...{\{\Beta_1, \Beta_2, \ldots, \Beta_p\}}{}
+                                                  ,
+! Undefined control sequence.
+<recently read> \Beta 
+                      
+l.364 where each \eqn{\Beta_j}{}
+                                 is a \eqn{q \times q}{} matrix.
+Warning in texi2dvi(file = file, pdf = TRUE, clean = clean, quiet = quiet,  :
+  texi2dvi script/program not available, using emulation
+Error in texi2dvi(file = file, pdf = TRUE, clean = clean, quiet = quiet,  : 
+  unable to run pdflatex on 'Rd2.tex'
+LaTeX errors:
+! Undefined control sequence.
+<argument> \{\Beta 
+                   _1, \Beta _2, \ldots , \Beta _p\}
+l.363 ...{\{\Beta_1, \Beta_2, \ldots, \Beta_p\}}{}
+                                                  ,
+! Undefined control sequence.
+<argument> \{\Beta _1, \Beta 
+                             _2, \ldots , \Beta _p\}
+l.363 ...{\{\Beta_1, \Beta_2, \ldots, \Beta_p\}}{}
+                                                  ,
+! Undefined control sequence.
+<argument> \{\Beta _1, \Beta _2, \ldots , \Beta 
+                                                _p\}
+l.363 ...{\{\Beta_1, \Beta_2, \ldots, \Beta_p\}}{}
+                                                  ,
+! Undefined control sequence.
+<recently read> \Beta 
+                      
+l.364 where each \eqn{\Beta_j}{}
+                                 is a \eqn{q \times q}{} matrix.
+Error in running tools::texi2pdf()
+Warning message:
+In file.copy(from = man, to = file.path(path, ".setup", "build")) :
+  problem copying /storage/home/ibp5092/Downloads/simStateSpace/simStateSpace.pdf to /storage/home/ibp5092/Downloads/simStateSpace/.setup/build/simStateSpace.pdf: No such file or directory
+✔ '/storage/home/ibp5092/Downloads/simStateSpace/CITATION.cff' generated.
+✔ '/storage/home/ibp5092/Downloads/simStateSpace/CITATION.cff' is valid.
+
+
+processing file: /storage/home/ibp5092/Downloads/simStateSpace/.setup/latex/simStateSpace-001-description.Rtex
+output file: /storage/home/ibp5092/Downloads/simStateSpace/detritus/tex/simStateSpace-001-description.tex
+
+
+
+processing file: /storage/home/ibp5092/Downloads/simStateSpace/.setup/latex/simStateSpace-999-session.Rtex
+output file: /storage/home/ibp5092/Downloads/simStateSpace/detritus/tex/simStateSpace-999-session.tex
+
+
+
+processing file: /storage/home/ibp5092/Downloads/simStateSpace/.setup/latex/simStateSpace-zzz-references.Rtex
+output file: /storage/home/ibp5092/Downloads/simStateSpace/detritus/tex/simStateSpace-zzz-references.tex
+
+
+
+processing file: /storage/home/ibp5092/Downloads/simStateSpace/.setup/latex/simStateSpace-zzz-tests-benchmark.Rtex
+output file: /storage/home/ibp5092/Downloads/simStateSpace/detritus/tex/simStateSpace-zzz-tests-benchmark.tex
+
+
+
+processing file: /storage/home/ibp5092/Downloads/simStateSpace/.setup/latex/simStateSpace-zzz-tests-external.Rtex
+output file: /storage/home/ibp5092/Downloads/simStateSpace/detritus/tex/simStateSpace-zzz-tests-external.tex
+
+
+
+processing file: /storage/home/ibp5092/Downloads/simStateSpace/.setup/latex/simStateSpace-zzz-tests-internal.Rtex
+output file: /storage/home/ibp5092/Downloads/simStateSpace/detritus/tex/simStateSpace-zzz-tests-internal.tex
+
+
+
+processing file: /storage/home/ibp5092/Downloads/simStateSpace/.setup/latex/simStateSpace-zzz-tests-staging.Rtex
+output file: /storage/home/ibp5092/Downloads/simStateSpace/detritus/tex/simStateSpace-zzz-tests-staging.tex
+
+Use of uninitialized value in concatenation (.) or string at (eval 9) line 1.
+Latexmk: Missing bbl file '.setup/latex/pdf/simStateSpace-001-description.bbl' in following:
+ No file simStateSpace-001-description.bbl.
+Latexmk: Using biber to make bibliography file(s).
+Latexmk: Using biber to make bibliography file(s).
+Latexmk: Using biber to make bibliography file(s).
+Latexmk: Using biber to make bibliography file(s).
+Latexmk: Missing bbl file '.setup/latex/pdf/simStateSpace-999-session.bbl' in following:
+ No file simStateSpace-999-session.bbl.
+Latexmk: Using biber to make bibliography file(s).
+Latexmk: Using biber to make bibliography file(s).
+Latexmk: Using biber to make bibliography file(s).
+Latexmk: Using biber to make bibliography file(s).
+Latexmk: Missing bbl file '.setup/latex/pdf/simStateSpace-zzz-references.bbl' in following:
+ No file simStateSpace-zzz-references.bbl.
+Latexmk: Using biber to make bibliography file(s).
+Latexmk: Using biber to make bibliography file(s).
+Latexmk: Using biber to make bibliography file(s).
+Latexmk: Using biber to make bibliography file(s).
+Latexmk: ====Problematic refs and citations with line #s in .tex file:
+  ! LaTeX Error: Unicode character ̈ (U+0308)
+Latexmk: Missing bbl file '.setup/latex/pdf/simStateSpace-zzz-tests-benchmark.bbl' in following:
+ No file simStateSpace-zzz-tests-benchmark.bbl.
+Latexmk: Using biber to make bibliography file(s).
+Latexmk: Using biber to make bibliography file(s).
+Latexmk: Using biber to make bibliography file(s).
+Latexmk: Using biber to make bibliography file(s).
+Latexmk: Missing bbl file '.setup/latex/pdf/simStateSpace-zzz-tests-external.bbl' in following:
+ No file simStateSpace-zzz-tests-external.bbl.
+Latexmk: Using biber to make bibliography file(s).
+Latexmk: Using biber to make bibliography file(s).
+Latexmk: Using biber to make bibliography file(s).
+Latexmk: Using biber to make bibliography file(s).
+Latexmk: Missing bbl file '.setup/latex/pdf/simStateSpace-zzz-tests-internal.bbl' in following:
+ No file simStateSpace-zzz-tests-internal.bbl.
+Latexmk: Using biber to make bibliography file(s).
+Latexmk: Using biber to make bibliography file(s).
+Latexmk: Using biber to make bibliography file(s).
+Latexmk: Using biber to make bibliography file(s).
+Latexmk: Missing bbl file '.setup/latex/pdf/simStateSpace-zzz-tests-staging.bbl' in following:
+ No file simStateSpace-zzz-tests-staging.bbl.
+Latexmk: Using biber to make bibliography file(s).
+Latexmk: Using biber to make bibliography file(s).
+Latexmk: Using biber to make bibliography file(s).
+Latexmk: Using biber to make bibliography file(s).
+
+------------
+Latexmk: Some operations failed, for the following tex file(s)
+  /storage/home/ibp5092/Downloads/simStateSpace/detritus/tex/simStateSpace-zzz-references.tex
+── Installing package simStateSpace into temporary library ─────────────────────
+Error: 
+! in callr subprocess.
+Caused by error in `build_reference_index(pkg)`:
+! In _pkgdown.yml, 1 topic missing from index: "CompanionMat".
+ℹ Either add to the reference index, or use `@keywords internal` to drop from
+  the index.
+---
+Standard error:
+── Initialising site ───────────────────────────────────────────────────────────
+Copying <pkgdown>/BS5/assets/katex-auto.js to katex-auto.js
+Copying <pkgdown>/BS5/assets/lightswitch.js to lightswitch.js
+Copying <pkgdown>/BS5/assets/link.svg to link.svg
+Copying <pkgdown>/BS5/assets/pkgdown.js to pkgdown.js
+Updating deps/JetBrains_Mono-0.4.10/font.css
+Updating
+deps/JetBrains_Mono-0.4.10/tDbY2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKxTN1OVgaY.woff2
+Updating
+deps/JetBrains_Mono-0.4.10/tDbY2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKxTNFOVgaY.woff2
+Updating
+deps/JetBrains_Mono-0.4.10/tDbY2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKxTNVOVgaY.woff2
+Updating
+deps/JetBrains_Mono-0.4.10/tDbY2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKxTOVOVgaY.woff2
+Updating
+deps/JetBrains_Mono-0.4.10/tDbY2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKxTOlOV.woff2
+Updating
+deps/JetBrains_Mono-0.4.10/tDbY2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKxTPlOVgaY.woff2
+Updating
+deps/Roboto-0.4.10/KFOMCnqEu92Fr1ME7kSn66aGLdTylUAMQXC89YmC2DPNWubEbVmQiArmlw.woff2
+Updating
+deps/Roboto-0.4.10/KFOMCnqEu92Fr1ME7kSn66aGLdTylUAMQXC89YmC2DPNWubEbVmUiAo.woff2
+Updating
+deps/Roboto-0.4.10/KFOMCnqEu92Fr1ME7kSn66aGLdTylUAMQXC89YmC2DPNWubEbVmXiArmlw.woff2
+Updating
+deps/Roboto-0.4.10/KFOMCnqEu92Fr1ME7kSn66aGLdTylUAMQXC89YmC2DPNWubEbVmYiArmlw.woff2
+Updating
+deps/Roboto-0.4.10/KFOMCnqEu92Fr1ME7kSn66aGLdTylUAMQXC89YmC2DPNWubEbVmZiArmlw.woff2
+Updating
+deps/Roboto-0.4.10/KFOMCnqEu92Fr1ME7kSn66aGLdTylUAMQXC89YmC2DPNWubEbVmaiArmlw.woff2
+Updating
+deps/Roboto-0.4.10/KFOMCnqEu92Fr1ME7kSn66aGLdTylUAMQXC89YmC2DPNWubEbVmbiArmlw.woff2
+Updating
+deps/Roboto-0.4.10/KFOMCnqEu92Fr1ME7kSn66aGLdTylUAMQXC89YmC2DPNWubEbVn6iArmlw.woff2
+Updating
+deps/Roboto-0.4.10/KFOMCnqEu92Fr1ME7kSn66aGLdTylUAMQXC89YmC2DPNWubEbVnoiArmlw.woff2
+Updating deps/Roboto-0.4.10/font.css
+Updating
+deps/Roboto_Slab-0.4.10/BngbUXZYTXPIvIBgJJSb6s3BzlRRfKOFbvjojISmY2RjRdE.woff2
+Updating
+deps/Roboto_Slab-0.4.10/BngbUXZYTXPIvIBgJJSb6s3BzlRRfKOFbvjojISmYGRjRdE.woff2
+Updating
+deps/Roboto_Slab-0.4.10/BngbUXZYTXPIvIBgJJSb6s3BzlRRfKOFbvjojISmYWRjRdE.woff2
+Updating
+deps/Roboto_Slab-0.4.10/BngbUXZYTXPIvIBgJJSb6s3BzlRRfKOFbvjojISmYmRjRdE.woff2
+Updating
+deps/Roboto_Slab-0.4.10/BngbUXZYTXPIvIBgJJSb6s3BzlRRfKOFbvjojISma2RjRdE.woff2
+Updating
+deps/Roboto_Slab-0.4.10/BngbUXZYTXPIvIBgJJSb6s3BzlRRfKOFbvjojISmb2Rj.woff2
+Updating
+deps/Roboto_Slab-0.4.10/BngbUXZYTXPIvIBgJJSb6s3BzlRRfKOFbvjojISmbGRjRdE.woff2
+Updating deps/Roboto_Slab-0.4.10/font.css
+Updating deps/bootstrap-5.3.8/bootstrap.bundle.min.js
+Updating deps/bootstrap-5.3.8/bootstrap.bundle.min.js.map
+Updating deps/bootstrap-5.3.8/bootstrap.min.css
+Updating deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js
+Updating deps/clipboard.js-2.0.11/clipboard.min.js
+Updating deps/font-awesome-6.5.2/css/all.css
+Updating deps/font-awesome-6.5.2/css/all.min.css
+Updating deps/font-awesome-6.5.2/css/v4-shims.css
+Updating deps/font-awesome-6.5.2/css/v4-shims.min.css
+Updating deps/font-awesome-6.5.2/webfonts/fa-brands-400.ttf
+Updating deps/font-awesome-6.5.2/webfonts/fa-brands-400.woff2
+Updating deps/font-awesome-6.5.2/webfonts/fa-regular-400.ttf
+Updating deps/font-awesome-6.5.2/webfonts/fa-regular-400.woff2
+Updating deps/font-awesome-6.5.2/webfonts/fa-solid-900.ttf
+Updating deps/font-awesome-6.5.2/webfonts/fa-solid-900.woff2
+Updating deps/font-awesome-6.5.2/webfonts/fa-v4compatibility.ttf
+Updating deps/font-awesome-6.5.2/webfonts/fa-v4compatibility.woff2
+Updating deps/headroom-0.11.0/headroom.min.js
+Updating deps/headroom-0.11.0/jQuery.headroom.min.js
+Updating deps/jquery-3.6.0/jquery-3.6.0.js
+Updating deps/jquery-3.6.0/jquery-3.6.0.min.js
+Updating deps/jquery-3.6.0/jquery-3.6.0.min.map
+Updating deps/search-1.0.0/autocomplete.jquery.min.js
+Updating deps/search-1.0.0/fuse.min.js
+Updating deps/search-1.0.0/mark.min.js
+── Building pkgdown site for package simStateSpace ─────────────────────────────
+Reading from: /storage/home/ibp5092/Downloads/simStateSpace
+Writing to: /storage/home/ibp5092/Downloads/simStateSpace/pkgdown
+── Sitrep ──────────────────────────────────────────────────────────────────────
+✔ URLs ok.
+✔ Favicons ok.
+✔ Open graph metadata ok.
+[WARNING] Deprecated: --mathml. Use --math-method=mathml instead.
+[WARNING] Deprecated: --mathml. Use --math-method=mathml instead.
+✔ Articles metadata ok.
+[WARNING] Deprecated: --mathml. Use --math-method=mathml instead.
+[WARNING] Deprecated: --mathml. Use --math-method=mathml instead.
+[WARNING] Deprecated: --mathml. Use --math-method=mathml instead.
+[WARNING] Deprecated: --mathml. Use --math-method=mathml instead.
+[WARNING] Deprecated: --mathml. Use --math-method=mathml instead.
+[WARNING] Deprecated: --mathml. Use --math-method=mathml instead.
+[WARNING] Deprecated: --mathml. Use --math-method=mathml instead.
+[WARNING] Deprecated: --mathml. Use --math-method=mathml instead.
+✖ Reference metadata not ok.
+  In _pkgdown.yml, 1 topic missing from index: "CompanionMat".
+  Either add to the reference index, or use `@keywords internal` to drop from
+  the index.
+── Initialising site ───────────────────────────────────────────────────────────
+── Building home ───────────────────────────────────────────────────────────────
+[WARNING] Deprecated: --mathml. Use --math-method=mathml instead.
+[WARNING] Deprecated: --mathml. Use --math-method=mathml instead.
+Writing `authors.html`
+Reading AGENTS.md
+[WARNING] Deprecated: --mathml. Use --math-method=mathml instead.
+[WARNING] Deprecated: --mathml. Use --math-method=mathml instead.
+[WARNING] Deprecated: --mathml. Use --math-method=mathml instead.
+Writing `AGENTS.html`
+Reading CLAUDE.md
+[WARNING] Deprecated: --mathml. Use --math-method=mathml instead.
+[WARNING] Deprecated: --mathml. Use --math-method=mathml instead.
+[WARNING] Deprecated: --mathml. Use --math-method=mathml instead.
+Writing `CLAUDE.html`
+Reading .github/copilot-instructions.md
+[WARNING] Deprecated: --mathml. Use --math-method=mathml instead.
+[WARNING] Deprecated: --mathml. Use --math-method=mathml instead.
+[WARNING] Deprecated: --mathml. Use --math-method=mathml instead.
+Writing `copilot-instructions.html`
+Reading LICENSE.md
+[WARNING] Deprecated: --mathml. Use --math-method=mathml instead.
+[WARNING] Deprecated: --mathml. Use --math-method=mathml instead.
+[WARNING] Deprecated: --mathml. Use --math-method=mathml instead.
+Writing `LICENSE.html`
+Reading README.md
+[WARNING] Deprecated: --mathml. Use --math-method=mathml instead.
+[WARNING] Deprecated: --mathml. Use --math-method=mathml instead.
+[WARNING] Deprecated: --mathml. Use --math-method=mathml instead.
+Writing `index.html`
+[WARNING] Deprecated: --mathml. Use --math-method=mathml instead.
+[WARNING] Deprecated: --mathml. Use --math-method=mathml instead.
+Writing `404.html`
+── Building function reference ─────────────────────────────────────────────────
+[WARNING] Deprecated: --mathml. Use --math-method=mathml instead.
+[WARNING] Deprecated: --mathml. Use --math-method=mathml instead.
+[WARNING] Deprecated: --mathml. Use --math-method=mathml instead.
+[WARNING] Deprecated: --mathml. Use --math-method=mathml instead.
+[WARNING] Deprecated: --mathml. Use --math-method=mathml instead.
+[WARNING] Deprecated: --mathml. Use --math-method=mathml instead.
+[WARNING] Deprecated: --mathml. Use --math-method=mathml instead.
+[WARNING] Deprecated: --mathml. Use --math-method=mathml instead.
+[WARNING] Deprecated: --mathml. Use --math-method=mathml instead.
+[WARNING] Deprecated: --mathml. Use --math-method=mathml instead.
+---
+Backtrace:
+1. rProject::Site("/storage/home/ibp5092/Downloads/simStateSpace")
+2. pkgdown::build_site(pkg = path, preview = FALSE)
+3. pkgdown:::build_site_external(pkg = pkg, examples = examples, run_dont_run = run_don…
+4. callr::r(function(..., cli_colors, hyperlinks) { …
+5. callr:::get_result(output = out, options)
+6. callr:::throw(callr_remote_error(remerr, output), parent = fix_msg(remerr[[3]]))
+---
+Subprocess backtrace:
+ 1. pkgdown::build_site(...)
+ 2. pkgdown:::build_site_local(pkg = pkg, examples = examples, run_dont_run = run_dont_r…
+ 3. pkgdown::build_reference(pkg, lazy = lazy, examples = examples, run_dont_run = run_…
+ 4. pkgdown::build_reference_index(pkg)
+ 5. pkgdown::render_page(pkg, "reference-index", data = data_reference_index(pkg), …
+ 6. pkgdown:::render_page_html(pkg, name = name, data = data, depth = depth)
+ 7. pkgdown:::modify_list(data_template(pkg, depth = depth), data)
+ 8. pkgdown:::data_reference_index(pkg)
+ 9. pkgdown:::check_missing_topics(rows, pkg, error_call = error_call)
+10. pkgdown:::config_abort(pkg, c("{sum(missing)} topic{?s} missing from index: {.val {p…
+11. cli::cli_abort(message, ..., call = call, .envir = .envir)
+12. | rlang::abort(message, ..., call = call, use_cli_format = TRUE, …
+13. | rlang:::signal_abort(cnd, .file)
+14. | base::signalCondition(cnd)
+15. global (function (e) …
+Execution halted
+make: *** [Makefile:151: pkgdown] Error 1
