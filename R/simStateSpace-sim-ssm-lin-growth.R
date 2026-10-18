@@ -331,9 +331,6 @@ SimSSMLinGrowth <- function(n, time,
                             mu0, sigma0_l, theta_l,
                             type = 0,
                             x = NULL, gamma = NULL, kappa = NULL) {
-  stopifnot(
-    type %in% c(0, 1, 2)
-  )
   p <- 2
   k <- 1
   stopifnot(
@@ -381,47 +378,28 @@ SimSSMLinGrowth <- function(n, time,
     vary_i = FALSE
   )
   fun <- "SimSSMLinGrowth"
-  if (type == 0) {
-    data <- .SimSSMFixed0(
-      n = n,
-      time = time,
-      delta_t = 1.0,
+  .CheckSimulation(
+    n = n, time = time, delta_t = 1.0,
+    par = list(
       mu0 = mu0, sigma0_l = sigma0_l,
       alpha = alpha, beta = beta, psi_l = psi_l,
       nu = nu, lambda = lambda, theta_l = theta_l
-    )
-  }
-  if (type == 1) {
-    stopifnot(
-      !is.null(x),
-      !is.null(gamma)
-    )
-    data <- .SimSSMFixed1(
-      n = n,
-      time = time,
-      delta_t = 1.0,
-      mu0 = mu0, sigma0_l = sigma0_l,
-      alpha = alpha, beta = beta, psi_l = psi_l,
-      nu = nu, lambda = lambda, theta_l = theta_l,
-      x = x, gamma = gamma
-    )
-  }
-  if (type == 2) {
-    stopifnot(
-      !is.null(x),
-      !is.null(gamma),
-      !is.null(kappa)
-    )
-    data <- .SimSSMFixed2(
-      n = n,
-      time = time,
-      delta_t = 1.0,
-      mu0 = mu0, sigma0_l = sigma0_l,
-      alpha = alpha, beta = beta, psi_l = psi_l,
-      nu = nu, lambda = lambda, theta_l = theta_l,
-      x = x, gamma = gamma, kappa = kappa
-    )
-  }
+    ),
+    type = type, types = 0:2,
+    x = x, gamma = gamma, kappa = kappa,
+    fixed = TRUE
+  )
+  data <- .SimSSMData(
+    n = n,
+    time = time,
+    delta_t = 1.0,
+    mu0 = mu0, sigma0_l = sigma0_l,
+    alpha = alpha, beta = beta, psi_l = psi_l,
+    nu = nu, lambda = lambda, theta_l = theta_l,
+    type = type,
+    x = x, gamma = gamma, kappa = kappa,
+    fixed = TRUE
+  )
   out <- list(
     call = call,
     args = args,

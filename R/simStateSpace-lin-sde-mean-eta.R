@@ -41,7 +41,24 @@
 #' @family Simulation of State Space Models Data Functions
 #' @keywords simStateSpace linsde
 #' @export
-LinSDEMeanEta <- function(phi, iota) {
+LinSDEMeanEta <- function(phi,
+                          iota) {
+  if (is.matrix(iota)) {
+    dim(iota) <- NULL
+  }
+  stopifnot(
+    "`phi` must be a matrix." = is.matrix(phi),
+    "`phi` must be numeric." = is.numeric(phi),
+    "`phi` must contain only finite values." = all(is.finite(phi)),
+    "`phi` must be a square matrix." = nrow(phi) == ncol(phi),
+    "`iota` must be a vector." = is.null(dim(iota)),
+    "`iota` must be numeric." = is.numeric(iota),
+    "`iota` must contain only finite values." = all(is.finite(iota)),
+    "`nrow(phi)` and `length(iota)` must match." = identical(
+      x = nrow(phi),
+      y = length(iota)
+    )
+  )
   .LinSDEMeanEta(
     phi = phi,
     iota = iota

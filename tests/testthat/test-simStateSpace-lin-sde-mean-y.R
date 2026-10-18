@@ -9,109 +9,62 @@ lapply(
       text,
       {
         testthat::skip_on_cran()
-        set.seed(42)
-        n <- 1000
-        time <- 1000
-        delta_t <- 0.10
-        k <- p <- 3
-        iden <- diag(k)
-        null_vec <- rep(x = 0, times = k)
-        iota <- rep(x = 1, times = p)
-        phi <- matrix(
-          data = c(
-            -0.357,
-            0.771,
-            -0.450,
-            0.0,
-            -0.511,
-            0.729,
-            0,
-            0,
-            -0.693
-          ),
-          nrow = k
+        nu <- c(0.5, 1, -0.5, 0.2)
+        lambda <- matrix(
+          data = c(1, 0.8, 0, 0, 0, 0, 1, 0.6, 0, 0, 0, 1),
+          nrow = 4
         )
-        sigma <- matrix(
-          data = c(
-            0.24455556,
-            0.02201587,
-            -0.05004762,
-            0.02201587,
-            0.07067800,
-            0.01539456,
-            -0.05004762,
-            0.01539456,
-            0.07553061
-          ),
-          nrow = p
-        )
-        sigma_l <- t(chol(sigma))
-        nu <- rep(x = 1, times = k)
-        lambda <- iden
-        theta <- iden
-        theta_l <- t(chol(theta))
-        mu0 <- simStateSpace::LinSDEMeanEta(
-          phi = phi,
-          iota = iota
-        )
-        mu <- mu0
-        mu_y <- simStateSpace::LinSDEMeanY(
+        mean_eta <- c(1, -2, 0.5)
+        mean_y <- LinSDEMeanY(
           nu = nu,
           lambda = lambda,
-          mean_eta = mu0
+          mean_eta = mean_eta
         )
-        sigma0 <- simStateSpace::LinSDECovEta(
-          phi = phi,
-          sigma = sigma
+        testthat::expect_true(
+          is.null(dim(mean_y)) && length(mean_y) == 4
         )
-        sigma0_l <- t(chol(sigma0))
-        sim <- simStateSpace::SimSSMOUFixed(
-          n = n,
-          time = time,
-          delta_t = delta_t,
-          mu0 = mu0,
-          sigma0_l = sigma0_l,
-          mu = mu,
-          phi = phi,
-          sigma_l = sigma_l,
-          nu = nu,
-          lambda = lambda,
-          theta_l = theta_l,
-          type = 0
-        )
-        data <- as.matrix(sim, eta = TRUE)
-        y <- data[, paste0("y", seq_len(p))]
+        # mean_y = nu + lambda mean_eta
         testthat::expect_true(
           all(
-            (
-              c(
-                mu_y
-              ) - c(
-                colMeans(
-                  y
-                )
-              )
+            abs(mean_y - c(nu + lambda %*% mean_eta)) <= tol
+          )
+        )
+        # round trip
+        testthat::expect_true(
+          all(
+            abs(
+              LinSDEInterceptY(
+                mean_y = mean_y,
+                mean_eta = mean_eta,
+                lambda = lambda
+              ) - nu
             ) <= tol
           )
         )
-        testthat::expect_true(
-          all(
-            (
-              c(
-                nu
-              ) - c(
-                simStateSpace::LinSDEInterceptY(
-                  mean_y = mu_y,
-                  mean_eta = mu0,
-                  lambda = lambda
-                )
-              )
-            ) <= tol
+        # column matrices are accepted as vectors
+        testthat::expect_identical(
+          object = LinSDEMeanY(
+            nu = matrix(data = nu),
+            lambda = lambda,
+            mean_eta = matrix(data = mean_eta)
+          ),
+          expected = mean_y
+        )
+        testthat::expect_identical(
+          object = LinSDEInterceptY(
+            mean_y = matrix(data = mean_y),
+            mean_eta = matrix(data = mean_eta),
+            lambda = lambda
+          ),
+          expected = LinSDEInterceptY(
+            mean_y = mean_y,
+            mean_eta = mean_eta,
+            lambda = lambda
           )
         )
       }
     )
   },
   text = "test-simStateSpace-lin-sde-mean-y",
-  tol = 0.01
+  tol = 1e-10
 )

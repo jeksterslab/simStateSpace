@@ -9,87 +9,35 @@ lapply(
       text,
       {
         testthat::skip_on_cran()
-        set.seed(42)
-        n <- 1000
-        time <- 1000
-        k <- p <- 3
-        iden <- diag(k)
-        null_vec <- rep(x = 0, times = k)
-        alpha <- null_vec
-        beta <- matrix(
-          data = c(
-            0.7,
-            0.5,
-            -0.1,
-            0.0,
-            0.6,
-            0.4,
-            0,
-            0,
-            0.5
-          ),
-          nrow = k
+        nu <- c(0.5, 1, -0.5, 0.2)
+        lambda <- matrix(
+          data = c(1, 0.8, 0, 0, 0, 0, 1, 0.6, 0, 0, 0, 1),
+          nrow = 4
         )
-        psi <- 0.1 * iden
-        psi_l <- t(chol(psi))
-        nu <- rep(x = 1, times = k)
-        lambda <- iden
-        theta <- iden
-        theta_l <- t(chol(theta))
-        mu0 <- simStateSpace::SSMMeanEta(
-          beta = beta,
-          alpha = alpha
-        )
-        mu_y <- simStateSpace::SSMMeanY(
+        mean_eta <- c(1, -2, 0.5)
+        mean_y <- SSMMeanY(
           nu = nu,
           lambda = lambda,
-          mean_eta = mu0
+          mean_eta = mean_eta
         )
-        sigma0 <- simStateSpace::SSMCovEta(
-          beta = beta,
-          psi = psi
+        testthat::expect_true(
+          is.null(dim(mean_y)) && length(mean_y) == 4
         )
-        sigma0_l <- t(chol(sigma0))
-        sim <- simStateSpace::SimSSMFixed(
-          n = n,
-          time = time,
-          mu0 = mu0,
-          sigma0_l = sigma0_l,
-          alpha = alpha,
-          beta = beta,
-          psi_l = psi_l,
-          nu = nu,
-          lambda = lambda,
-          theta_l = theta_l,
-          type = 0
-        )
-        data <- as.matrix(sim, eta = TRUE)
-        y <- data[, paste0("y", seq_len(p))]
+        # mean_y = nu + lambda mean_eta
         testthat::expect_true(
           all(
-            (
-              c(
-                mu_y
-              ) - c(
-                colMeans(
-                  y
-                )
-              )
-            ) <= tol
+            abs(mean_y - c(nu + lambda %*% mean_eta)) <= tol
           )
         )
+        # round trip
         testthat::expect_true(
           all(
-            (
-              c(
-                nu
-              ) - c(
-                simStateSpace::SSMInterceptY(
-                  mean_y = mu_y,
-                  mean_eta = mu0,
-                  lambda = lambda
-                )
-              )
+            abs(
+              SSMInterceptY(
+                mean_y = mean_y,
+                mean_eta = mean_eta,
+                lambda = lambda
+              ) - nu
             ) <= tol
           )
         )
@@ -97,5 +45,5 @@ lapply(
     )
   },
   text = "test-simStateSpace-ssm-mean-y",
-  tol = 0.01
+  tol = 1e-10
 )

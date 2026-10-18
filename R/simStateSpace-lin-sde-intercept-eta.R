@@ -45,7 +45,24 @@
 #' @family Simulation of State Space Models Data Functions
 #' @keywords simStateSpace linsde
 #' @export
-LinSDEInterceptEta <- function(phi, mean_eta) {
+LinSDEInterceptEta <- function(phi,
+                               mean_eta) {
+  if (is.matrix(mean_eta)) {
+    dim(mean_eta) <- NULL
+  }
+  stopifnot(
+    "`phi` must be a matrix." = is.matrix(phi),
+    "`phi` must be numeric." = is.numeric(phi),
+    "`phi` must contain only finite values." = all(is.finite(phi)),
+    "`phi` must be a square matrix." = nrow(phi) == ncol(phi),
+    "`mean_eta` must be a vector." = is.null(dim(mean_eta)),
+    "`mean_eta` must be numeric." = is.numeric(mean_eta),
+    "`mean_eta` must contain only finite values." = all(is.finite(mean_eta)),
+    "`nrow(phi)` and `length(mean_eta)` must match." = identical(
+      x = nrow(phi),
+      y = length(mean_eta)
+    )
+  )
   .LinSDEInterceptEta(
     phi = phi,
     mean_eta = mean_eta

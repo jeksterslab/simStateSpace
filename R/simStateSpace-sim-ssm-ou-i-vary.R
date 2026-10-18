@@ -193,9 +193,6 @@ SimSSMOUIVary <- function(n, time, delta_t = 1.0,
                           nu, lambda, theta_l,
                           type = 0,
                           x = NULL, gamma = NULL, kappa = NULL) {
-  stopifnot(
-    type %in% c(0, 1, 2)
-  )
   covariates <- FALSE
   if (type > 0) {
     covariates <- TRUE
@@ -217,68 +214,36 @@ SimSSMOUIVary <- function(n, time, delta_t = 1.0,
     vary_i = TRUE
   )
   fun <- "SimSSMOUIVary"
-  if (type == 0) {
-    data <- .SimSSMLinSDEIVary0(
-      n = n,
-      time = time,
-      delta_t = delta_t,
-      mu0 = rep(x = mu0, length.out = n),
-      sigma0_l = rep(x = sigma0_l, length.out = n),
-      iota = rep(x = mu, length.out = n),
-      phi = rep(x = phi, length.out = n),
-      sigma_l = rep(x = sigma_l, length.out = n),
-      nu = rep(x = nu, length.out = n),
-      lambda = rep(x = lambda, length.out = n),
-      theta_l = rep(x = theta_l, length.out = n),
-      ou = TRUE
-    )
-  }
-  if (type == 1) {
-    stopifnot(
-      !is.null(x),
-      !is.null(gamma)
-    )
-    data <- .SimSSMLinSDEIVary1(
-      n = n,
-      time = time,
-      delta_t = delta_t,
-      mu0 = rep(x = mu0, length.out = n),
-      sigma0_l = rep(x = sigma0_l, length.out = n),
-      iota = rep(x = mu, length.out = n),
-      phi = rep(x = phi, length.out = n),
-      sigma_l = rep(x = sigma_l, length.out = n),
-      nu = rep(x = nu, length.out = n),
-      lambda = rep(x = lambda, length.out = n),
-      theta_l = rep(x = theta_l, length.out = n),
-      x = rep(x = x, length.out = n),
-      gamma = rep(x = gamma, length.out = n),
-      ou = TRUE
-    )
-  }
-  if (type == 2) {
-    stopifnot(
-      !is.null(x),
-      !is.null(gamma),
-      !is.null(kappa)
-    )
-    data <- .SimSSMLinSDEIVary2(
-      n = n,
-      time = time,
-      delta_t = delta_t,
-      mu0 = rep(x = mu0, length.out = n),
-      sigma0_l = rep(x = sigma0_l, length.out = n),
-      iota = rep(x = mu, length.out = n),
-      phi = rep(x = phi, length.out = n),
-      sigma_l = rep(x = sigma_l, length.out = n),
-      nu = rep(x = nu, length.out = n),
-      lambda = rep(x = lambda, length.out = n),
-      theta_l = rep(x = theta_l, length.out = n),
-      x = rep(x = x, length.out = n),
-      gamma = rep(x = gamma, length.out = n),
-      kappa = rep(x = kappa, length.out = n),
-      ou = TRUE
-    )
-  }
+  .CheckSimulation(
+    n = n, time = time, delta_t = delta_t,
+    par = list(
+      mu0 = mu0, sigma0_l = sigma0_l,
+      mu = mu, phi = phi, sigma_l = sigma_l,
+      nu = nu, lambda = lambda, theta_l = theta_l
+    ),
+    type = type, types = 0:2,
+    x = x, gamma = gamma, kappa = kappa,
+    fixed = FALSE
+  )
+  ssm <- .LinSDE2SSMSets(
+    n = n,
+    iota = mu,
+    phi = phi,
+    sigma_l = sigma_l,
+    delta_t = delta_t,
+    ou = TRUE
+  )
+  data <- .SimSSMData(
+    n = n,
+    time = time,
+    delta_t = delta_t,
+    mu0 = mu0, sigma0_l = sigma0_l,
+    alpha = ssm$alpha, beta = ssm$beta, psi_l = ssm$psi_l,
+    nu = nu, lambda = lambda, theta_l = theta_l,
+    type = type,
+    x = x, gamma = gamma, kappa = kappa,
+    fixed = FALSE
+  )
   out <- list(
     call = call,
     args = args,

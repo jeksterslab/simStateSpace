@@ -67,13 +67,16 @@ SimBetaN(n = n, beta = beta, vcov_beta_vec_l = vcov_beta_vec_l)
 }
 \seealso{
 Other Simulation of State Space Models Data Functions:
-\code{\link[=LinSDE2SSM]{LinSDE2SSM()}},
+\code{\link[=CompanionMat]{CompanionMat()}},
+\code{\link[=ExpMat]{ExpMat()}},
+\code{\link[=LinSDECovDeltaT]{LinSDECovDeltaT()}},
 \code{\link[=LinSDECovEta]{LinSDECovEta()}},
 \code{\link[=LinSDECovY]{LinSDECovY()}},
 \code{\link[=LinSDEInterceptEta]{LinSDEInterceptEta()}},
 \code{\link[=LinSDEInterceptY]{LinSDEInterceptY()}},
 \code{\link[=LinSDEMeanEta]{LinSDEMeanEta()}},
 \code{\link[=LinSDEMeanY]{LinSDEMeanY()}},
+\code{\link[=LogMat]{LogMat()}},
 \code{\link[=ProjectToHurwitz]{ProjectToHurwitz()}},
 \code{\link[=ProjectToStability]{ProjectToStability()}},
 \code{\link[=SSMCovEta]{SSMCovEta()}},

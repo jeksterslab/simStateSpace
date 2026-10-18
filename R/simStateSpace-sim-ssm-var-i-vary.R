@@ -113,9 +113,6 @@ SimSSMVARIVary <- function(n, time,
                            alpha, beta, psi_l,
                            type = 0,
                            x = NULL, gamma = NULL) {
-  stopifnot(
-    type %in% c(0, 1)
-  )
   covariates <- FALSE
   if (type > 0) {
     covariates <- TRUE
@@ -135,35 +132,26 @@ SimSSMVARIVary <- function(n, time,
     vary_i = TRUE
   )
   fun <- "SimSSMVARIVary"
-  if (type == 0) {
-    data <- .SimSSMLatIVary0(
-      n = n,
-      time = time,
-      delta_t = 1.0,
-      mu0 = rep(x = mu0, length.out = n),
-      sigma0_l = rep(x = sigma0_l, length.out = n),
-      alpha = rep(x = alpha, length.out = n),
-      beta = rep(x = beta, length.out = n),
-      psi_l = rep(x = psi_l, length.out = n)
-    )
-  }
-  if (type == 1) {
-    stopifnot(
-      !is.null(x),
-      !is.null(gamma)
-    )
-    data <- .SimSSMLatIVary1(
-      n = n,
-      time = time,
-      delta_t = 1.0,
-      mu0 = rep(x = mu0, length.out = n),
-      sigma0_l = rep(x = sigma0_l, length.out = n),
-      alpha = rep(x = alpha, length.out = n),
-      beta = rep(x = beta, length.out = n),
-      psi_l = rep(x = psi_l, length.out = n),
-      x = x, gamma = rep(x = gamma, length.out = n)
-    )
-  }
+  .CheckSimulation(
+    n = n, time = time, delta_t = 1.0,
+    par = list(
+      mu0 = mu0, sigma0_l = sigma0_l,
+      alpha = alpha, beta = beta, psi_l = psi_l
+    ),
+    type = type, types = 0:1,
+    x = x, gamma = gamma,
+    fixed = FALSE
+  )
+  data <- .SimSSMData(
+    n = n,
+    time = time,
+    delta_t = 1.0,
+    mu0 = mu0, sigma0_l = sigma0_l,
+    alpha = alpha, beta = beta, psi_l = psi_l,
+    type = type,
+    x = x, gamma = gamma,
+    fixed = FALSE
+  )
   out <- list(
     call = call,
     args = args,

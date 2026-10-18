@@ -9,94 +9,32 @@ lapply(
       text,
       {
         testthat::skip_on_cran()
-        set.seed(42)
-        n <- 1000
-        time <- 1000
-        delta_t <- 0.10
-        k <- p <- 3
-        iden <- diag(k)
-        null_vec <- rep(x = 0, times = k)
-        iota <- rep(x = 1, times = p)
-        phi <- matrix(
-          data = c(
-            -0.357,
-            0.771,
-            -0.450,
-            0.0,
-            -0.511,
-            0.729,
-            0,
-            0,
-            -0.693
-          ),
-          nrow = k
+        lambda <- matrix(
+          data = c(1, 0.8, 0, 0, 0, 0, 1, 0.6, 0, 0, 0, 1),
+          nrow = 4
         )
-        sigma <- matrix(
-          data = c(
-            0.24455556,
-            0.02201587,
-            -0.05004762,
-            0.02201587,
-            0.07067800,
-            0.01539456,
-            -0.05004762,
-            0.01539456,
-            0.07553061
-          ),
-          nrow = p
+        theta <- diag(c(0.2, 0.3, 0.4, 0.5))
+        cov_eta <- matrix(
+          data = c(1, 0.3, 0, 0.3, 0.5, 0.1, 0, 0.1, 0.8),
+          nrow = 3
         )
-        sigma_l <- t(chol(sigma))
-        nu <- rep(x = 1, times = k)
-        lambda <- iden
-        theta <- iden
-        theta_l <- t(chol(theta))
-        mu0 <- simStateSpace::LinSDEMeanEta(
-          phi = phi,
-          iota = iota
-        )
-        mu <- mu0
-        sigma0 <- simStateSpace::LinSDECovEta(
-          phi = phi,
-          sigma = sigma
-        )
-        sigma0_l <- t(chol(sigma0))
-        sigma_y <- simStateSpace::LinSDECovY(
+        cov_y <- LinSDECovY(
           lambda = lambda,
           theta = theta,
-          cov_eta = sigma0
+          cov_eta = cov_eta
         )
-        sim <- simStateSpace::SimSSMOUFixed(
-          n = n,
-          time = time,
-          delta_t = delta_t,
-          mu0 = mu0,
-          sigma0_l = sigma0_l,
-          mu = mu,
-          phi = phi,
-          sigma_l = sigma_l,
-          nu = nu,
-          lambda = lambda,
-          theta_l = theta_l,
-          type = 0
+        testthat::expect_true(
+          isSymmetric(cov_y)
         )
-        data <- as.matrix(sim, eta = TRUE)
-        y <- data[, paste0("y", seq_len(p))]
+        # cov_y = lambda cov_eta lambda' + theta
         testthat::expect_true(
           all(
-            (
-              c(
-                sigma_y
-              ) - c(
-                cov(
-                  y
-                )
-              )
-            ) <= tol
+            abs(cov_y - (lambda %*% cov_eta %*% t(lambda) + theta)) <= tol
           )
         )
       }
     )
   },
   text = "test-simStateSpace-lin-sde-cov-y",
-  tol = 0.01
+  tol = 1e-10
 )

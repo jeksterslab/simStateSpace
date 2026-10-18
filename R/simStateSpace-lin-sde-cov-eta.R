@@ -58,9 +58,30 @@
 #' @family Simulation of State Space Models Data Functions
 #' @keywords simStateSpace linsde
 #' @export
-LinSDECovEta <- function(phi, sigma) {
+LinSDECovEta <- function(phi,
+                         sigma) {
+  stopifnot(
+    "`phi` must be a matrix." = is.matrix(phi),
+    "`phi` must be numeric." = is.numeric(phi),
+    "`phi` must contain only finite values." = all(is.finite(phi)),
+    "`phi` must be a square matrix." = nrow(phi) == ncol(phi),
+    "`sigma` must be a matrix." = is.matrix(sigma),
+    "`sigma` must be numeric." = is.numeric(sigma),
+    "`sigma` must contain only finite values." = all(is.finite(sigma)),
+    "`phi` and `sigma` must have the same dimensions." = identical(
+      x = dim(phi),
+      y = dim(sigma)
+    ),
+    "`sigma` must be symmetric." = isTRUE(
+      all.equal(
+        target = sigma,
+        current = t(sigma),
+        tolerance = sqrt(.Machine$double.eps)
+      )
+    )
+  )
   .LinSDECovEta(
     phi = phi,
-    sigma = sigma
+    sigma = (sigma + t(sigma)) / 2
   )
 }

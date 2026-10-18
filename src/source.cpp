@@ -21,228 +21,366 @@ arma::mat ProjectToStability(const arma::mat& x, const double margin,
 double SpectralAbscissa(const arma::mat& x);
 
 arma::mat ProjectToHurwitz(const arma::mat& x, const double margin);
+
+Rcpp::List LinSDE2SSM(const arma::vec&, const arma::mat&, const arma::mat&,
+                      double);
 // -----------------------------------------------------------------------------
-// edit .setup/cpp/simStateSpace-lin-sde-2-ssm.cpp
+// edit .setup/cpp/001-transformation-helpers.cpp
+// Ivan Jacob Agaloos Pesigan
+// -----------------------------------------------------------------------------
+
+#include <RcppArmadillo.h>
+
+#include <limits>
+// [[Rcpp::depends(RcppArmadillo)]]
+
+arma::mat AccumulatedCovariance(const arma::mat& a, const arma::mat& q,
+                                const double delta_t) {
+  const arma::uword n = a.n_rows;
+  // Van Loan's block contains both A and -A. Even a stable drift can
+  // overflow on a long interval, so integrate a short step and compose
+  // covariances using Q(2h) = Q(h) + exp(Ah) Q(h) exp(Ah)'.
+  const double scaled_norm = arma::norm(a, "inf") * delta_t;
+  if (!std::isfinite(scaled_norm)) {
+    // # nocov start
+    Rcpp::stop("Scaled drift must be finite for covariance integration.");
+    // # nocov end
+  }
+  const int steps = scaled_norm > 1.0
+                        ? static_cast<int>(std::ceil(std::log2(scaled_norm)))
+                        : 0;
+  const double h = std::ldexp(delta_t, -steps);
+  arma::mat block = arma::zeros(2 * n, 2 * n);
+
+  block.submat(0, 0, n - 1, n - 1) = -a;
+  block.submat(0, n, n - 1, 2 * n - 1) = q;
+  block.submat(n, n, 2 * n - 1, 2 * n - 1) = a.t();
+
+  arma::mat exp_block;
+  if (!arma::expmat(exp_block, block * h)) {
+    // # nocov start
+    Rcpp::stop("Matrix exponential for accumulated covariance failed.");
+    // # nocov end
+  }
+
+  arma::mat exp_a;
+  if (!arma::expmat(exp_a, a * h)) {
+    Rcpp::stop("Matrix exponential for companion drift failed.");  // # nocov
+  }
+
+  arma::mat out = exp_a * exp_block.submat(0, n, n - 1, 2 * n - 1);
+  out = 0.5 * (out + out.t());
+  for (int j = 0; j < steps; ++j) {
+    out = out + exp_a * out * exp_a.t();
+    out = 0.5 * (out + out.t());
+    if (j + 1 < steps) exp_a = exp_a * exp_a;
+  }
+
+  return out;
+}
+
+// A semidefinite lower factor, without adding artificial process noise.
+arma::mat LowerCholPSD(const arma::mat& x, const std::string& name) {
+  const arma::mat sym = 0.5 * (x + x.t());
+  if (!sym.is_finite()) Rcpp::stop(name + " must be finite.");
+  const arma::uword n = sym.n_rows;
+  arma::mat out;
+  if (arma::chol(out, sym, "lower")) return out;
+  const double scale = arma::norm(sym, "inf");
+  out.zeros(n, n);
+  if (scale == 0.0) return out;
+  const double tol = 100.0 * std::numeric_limits<double>::epsilon() * n * scale;
+  arma::vec values;
+  arma::mat vectors;
+  if (!arma::eig_sym(values, vectors, sym) || values.min() < -tol) {
+    Rcpp::stop(name + " is not positive semidefinite.");
+  }
+  // Unpivoted Cholesky amplifies rounding on rank-deficient input. Instead,
+  // factor sym = root * root' with clamped eigenvalues; the QR step
+  // root' = Q R gives sym = R' R, so R' is a lower triangular factor.
+  const arma::mat root =
+      vectors * arma::diagmat(arma::sqrt(arma::clamp(values, 0.0, scale)));
+  arma::mat q, r;
+  if (!arma::qr(q, r, root.t())) {
+    Rcpp::stop(name + " factorization failed.");  // # nocov
+  }
+  out = arma::trimatl(r.t());
+  for (arma::uword j = 0; j < n; ++j) {
+    if (out(j, j) < 0.0) out.col(j) *= -1.0;
+  }
+  if (arma::norm(out * out.t() - sym, "inf") > 10.0 * tol) {
+    Rcpp::stop(name + " factorization residual is too large.");  // # nocov
+  }
+  return out;
+}
+
+// Integral from 0 to h of exp(A s), valid even when A is singular.
+arma::mat IntegratedExponential(const arma::mat& a, const double h) {
+  const arma::uword n = a.n_rows;
+  arma::mat block(2 * n, 2 * n, arma::fill::zeros);
+  block.submat(0, 0, n - 1, n - 1) = a;
+  block.submat(0, n, n - 1, 2 * n - 1) = arma::eye(n, n);
+  arma::mat result;
+  if (!arma::expmat(result, block * h) || !result.is_finite()) {
+    Rcpp::stop("Integrated matrix exponential failed.");  // # nocov
+  }
+  return result.submat(0, n, n - 1, 2 * n - 1);
+}
+
+// Exact discretization of d eta = (iota + phi eta) dt + sigma_l dW over
+// delta_t. The only discretization path: valid for a singular drift, a
+// semidefinite diffusion, and eigenvalue pairs with lambda_i + lambda_j = 0.
+void DiscretizeLinSDE(const arma::vec& iota, const arma::mat& phi,
+                      const arma::mat& sigma_l, const double delta_t,
+                      arma::vec& alpha, arma::mat& beta, arma::mat& psi_l) {
+  if (!arma::expmat(beta, phi * delta_t) || !beta.is_finite()) {
+    Rcpp::stop("Matrix exponential of the drift failed.");  // # nocov
+  }
+  alpha = iota.is_zero() ? iota : IntegratedExponential(phi, delta_t) * iota;
+  psi_l = sigma_l.is_zero()
+              ? arma::mat(sigma_l)
+              : LowerCholPSD(
+                    AccumulatedCovariance(phi, sigma_l * sigma_l.t(), delta_t),
+                    "psi");
+}
+
+// Derivative state is (y, y', ..., y^(p-1)), unlike the VAR lag companion.
+arma::mat DerivativeCompanion(const Rcpp::List& phi) {
+  const arma::mat first = Rcpp::as<arma::mat>(phi[0]);
+  const arma::uword q = first.n_rows, p = phi.size(), n = p * q;
+  arma::mat a(n, n, arma::fill::zeros);
+  for (arma::uword j = 0; j < p; ++j) {
+    a.submat(n - q, j * q, n - 1, (j + 1) * q - 1) =
+        Rcpp::as<arma::mat>(phi[j]);
+    if (j + 1 < p)
+      a.submat(j * q, (j + 1) * q, (j + 1) * q - 1, (j + 2) * q - 1) =
+          arma::eye(q, q);
+  }
+  return a;
+}
+// -----------------------------------------------------------------------------
+// edit .setup/cpp/simStateSpace-companion-mat-dot.cpp
+// Ivan Jacob Agaloos Pesigan
+// -----------------------------------------------------------------------------
+
+#include <RcppArmadillo.h>
+// [[Rcpp::depends(RcppArmadillo)]]
+// [[Rcpp::export(.CompanionMat)]]
+arma::mat CompanionMat(const Rcpp::List& x) {
+  const R_xlen_t order_r = x.size();
+  Rcpp::NumericMatrix x_1_r(x[0]);
+  const arma::uword q = static_cast<arma::uword>(x_1_r.nrow());
+  const arma::uword order = static_cast<arma::uword>(order_r);
+  const arma::uword n = q * order;
+  arma::mat out = arma::zeros(n, n);
+  const arma::mat identity = arma::eye(q, q);
+  for (arma::uword i = 0; i < order; i++) {
+    Rcpp::NumericMatrix x_i_r(x[i]);
+    const arma::mat x_i(x_i_r.begin(), x_i_r.nrow(), x_i_r.ncol(), false);
+    out.submat(0, i * q, q - 1, ((i + 1) * q) - 1) = x_i;
+  }
+  for (arma::uword i = 1; i < order; i++) {
+    out.submat(i * q, (i - 1) * q, ((i + 1) * q) - 1, (i * q) - 1) = identity;
+  }
+  return out;
+}
+// -----------------------------------------------------------------------------
+// edit .setup/cpp/simStateSpace-exact-ctvar-2-ssm-dot.cpp
+// Ivan Jacob Agaloos Pesigan
+// -----------------------------------------------------------------------------
+
+#include <RcppArmadillo.h>
+// [[Rcpp::depends(RcppArmadillo)]]
+// [[Rcpp::export(.CTVAR2SSM)]]
+Rcpp::List CTVAR2SSM(const arma::vec& iota, const Rcpp::List& phi,
+                     const arma::mat& sigma_l, const double delta_t) {
+  const arma::mat a = DerivativeCompanion(phi);
+  const arma::uword n = a.n_rows, q = iota.n_elem;
+  arma::vec b(n, arma::fill::zeros);
+  b.tail(q) = iota;
+  arma::mat g(n, n, arma::fill::zeros);
+  g.submat(n - q, n - q, n - 1, n - 1) = sigma_l;
+  Rcpp::List out = LinSDE2SSM(b, a, g, delta_t);
+  arma::mat lambda(q, n, arma::fill::zeros);
+  lambda.submat(0, 0, q - 1, q - 1) = arma::eye(q, q);
+  out["lambda"] = lambda;
+  return out;
+}
+// -----------------------------------------------------------------------------
+// edit .setup/cpp/simStateSpace-lin-sde-2-ssm-dot.cpp
+// Ivan Jacob Agaloos Pesigan
+// -----------------------------------------------------------------------------
+
+#include <RcppArmadillo.h>
+// [[Rcpp::depends(RcppArmadillo)]]
+// [[Rcpp::export(.LinSDE2SSM)]]
+Rcpp::List LinSDE2SSM(const arma::vec& iota, const arma::mat& phi,
+                      const arma::mat& sigma_l, const double delta_t) {
+  arma::vec alpha;
+  arma::mat beta, psi_l;
+  DiscretizeLinSDE(iota, phi, sigma_l, delta_t, alpha, beta, psi_l);
+  return Rcpp::List::create(Rcpp::Named("alpha") = alpha,
+                            Rcpp::Named("beta") = beta,
+                            Rcpp::Named("psi_l") = psi_l);
+}
+// -----------------------------------------------------------------------------
+// edit .setup/cpp/simStateSpace-exact-ssm-2-lin-sde-dot.cpp
+// Ivan Jacob Agaloos Pesigan
+// -----------------------------------------------------------------------------
+
+#include <RcppArmadillo.h>
+// [[Rcpp::depends(RcppArmadillo)]]
+// [[Rcpp::export(.SSM2LinSDE)]]
+Rcpp::List SSM2LinSDE(const arma::vec& alpha, const arma::mat& beta,
+                      const arma::mat& psi_l, const double delta_t,
+                      const double tol) {
+  const arma::uword p = beta.n_rows;
+  arma::mat I = arma::eye(p, p);
+  arma::cx_mat log_beta;
+  if (!arma::logmat(log_beta, beta)) {
+    Rcpp::stop("Matrix logarithm of beta failed.");
+  }
+  if (!log_beta.is_finite()) {
+    Rcpp::stop("Matrix logarithm of beta is not finite.");
+  }
+  const double max_imag = arma::abs(arma::imag(log_beta)).max();
+  if (!(max_imag <= tol)) {
+    Rcpp::stop("Matrix logarithm of beta has a non-negligible imaginary part.");
+  }
+  arma::mat phi = arma::real(log_beta) / delta_t;
+  arma::vec iota;
+  if (!arma::solve(iota, IntegratedExponential(phi, delta_t), alpha,
+                   arma::solve_opts::no_approx)) {
+    // # nocov start
+    Rcpp::stop("Continuous-time intercept is not uniquely recoverable.");
+    // # nocov end
+  }
+  const arma::mat psi = psi_l * psi_l.t();
+  const arma::mat generator = arma::kron(I, phi) + arma::kron(phi, I);
+  arma::vec sigma_vec;
+  if (!arma::solve(sigma_vec, IntegratedExponential(generator, delta_t),
+                   arma::vectorise(psi), arma::solve_opts::no_approx)) {
+    // # nocov start
+    Rcpp::stop("Continuous-time diffusion is not uniquely recoverable.");
+    // # nocov end
+  }
+  const arma::mat sigma_l =
+      LowerCholPSD(arma::reshape(sigma_vec, p, p), "sigma");
+  return Rcpp::List::create(Rcpp::Named("iota") = iota,
+                            Rcpp::Named("phi") = phi,
+                            Rcpp::Named("sigma_l") = sigma_l);
+}
+// -----------------------------------------------------------------------------
+// edit .setup/cpp/simStateSpace-exp-mat-log-mat.cpp
 // Ivan Jacob Agaloos Pesigan
 // -----------------------------------------------------------------------------
 
 #include <RcppArmadillo.h>
 // [[Rcpp::depends(RcppArmadillo)]]
 
-//' Convert Parameters from the Linear Stochastic Differential Equation Model
-//' to State Space Model Parameterization
+//' Matrix Exponential
 //'
-//' This function converts parameters from
-//' the linear stochastic differential equation model
-//' to state space model parameterization.
-//'
-//' @details Let the linear stochastic equation model be given by
-//'   \deqn{
-//'     \mathrm{d}
-//'     \boldsymbol{\eta}_{i, t}
-//'     =
-//'     \left(
-//'       \boldsymbol{\iota}
-//'       +
-//'       \boldsymbol{\Phi}
-//'       \boldsymbol{\eta}_{i, t}
-//'     \right)
-//'     \mathrm{d} t
-//'     +
-//'     \boldsymbol{\Sigma}^{\frac{1}{2}}
-//'     \mathrm{d}
-//'     \mathbf{W}_{i, t}
-//'   }
-//'   for individual \eqn{i} and time \eqn{t}.
-//'   The discrete-time state space model
-//'   given below
-//'   represents the discrete-time solution
-//'   for the linear stochastic differential equation.
-//'   \deqn{
-//'     \boldsymbol{\eta}_{i, t_{{l_{i}}}}
-//'     =
-//'     \boldsymbol{\alpha}_{\Delta t_{{l_{i}}}}
-//'     +
-//'     \boldsymbol{\beta}_{\Delta t_{{l_{i}}}}
-//'     \boldsymbol{\eta}_{i, t_{l_{i} - 1}}
-//'     +
-//'     \boldsymbol{\zeta}_{i, t_{{l_{i}}}},
-//'     \quad
-//'     \mathrm{with}
-//'     \quad
-//'     \boldsymbol{\zeta}_{i, t_{{l_{i}}}}
-//'     \sim
-//'     \mathcal{N}
-//'     \left(
-//'     \mathbf{0},
-//'     \boldsymbol{\Psi}_{\Delta t_{{l_{i}}}}
-//'     \right)
-//'   }
-//'   with
-//'   \deqn{
-//'       \boldsymbol{\beta}_{\Delta t_{{l_{i}}}}
-//'       =
-//'       \exp{
-//'         \left(
-//'           \Delta t
-//'           \boldsymbol{\Phi}
-//'         \right)
-//'       },
-//'   }
-//'
-//'   \deqn{
-//'       \boldsymbol{\alpha}_{\Delta t_{{l_{i}}}}
-//'       =
-//'       \boldsymbol{\Phi}^{-1}
-//'       \left(
-//'         \boldsymbol{\beta} - \mathbf{I}_{p}
-//'       \right)
-//'       \boldsymbol{\iota}, \quad \mathrm{and}
-//'   }
-//'
-//'   \deqn{
-//'       \mathrm{vec}
-//'       \left(
-//'         \boldsymbol{\Psi}_{\Delta t_{{l_{i}}}}
-//'       \right)
-//'       =
-//'       \left[
-//'         \left(
-//'           \boldsymbol{\Phi} \otimes \mathbf{I}_{p}
-//'         \right)
-//'         +
-//'         \left(
-//'           \mathbf{I}_{p} \otimes \boldsymbol{\Phi}
-//'         \right)
-//'       \right]
-//'       \left[
-//'         \exp
-//'         \left(
-//'           \left[
-//'             \left(
-//'               \boldsymbol{\Phi} \otimes \mathbf{I}_{p}
-//'             \right)
-//'             +
-//'             \left(
-//'               \mathbf{I}_{p} \otimes \boldsymbol{\Phi}
-//'             \right)
-//'           \right]
-//'           \Delta t
-//'         \right)
-//'         -
-//'         \mathbf{I}_{p \times p}
-//'       \right]
-//'       \mathrm{vec}
-//'       \left(
-//'         \boldsymbol{\Sigma}
-//'       \right)
-//'   }
-//'   where \eqn{t} denotes continuous-time processes
-//'   that can be defined by any arbitrary time point,
-//'   \eqn{t_{l_{i}}} the \eqn{l^\mathrm{th}}
-//'   observed measurement occassion for individual \eqn{i},
-//'   \eqn{p} the number of latent variables and
-//'   \eqn{\Delta t} the time interval.
-//'
-//' @references
-//'   Harvey, A. C. (1990).
-//'   Forecasting, structural time series models and the Kalman filter.
-//'   Cambridge University Press.
-//'   \doi{10.1017/cbo9781107049994}
+//' Computes the matrix exponential of a square numeric matrix using the
+//' Armadillo linear algebra library.
 //'
 //' @author Ivan Jacob Agaloos Pesigan
 //'
-//' @param iota Numeric vector.
-//'   An unobserved term that is constant over time
-//'   (\eqn{\boldsymbol{\iota}}).
-//' @param phi Numeric matrix.
-//'   The drift matrix
-//'   which represents the rate of change of the solution
-//'   in the absence of any random fluctuations
-//'   (\eqn{\boldsymbol{\Phi}}).
-//' @param sigma_l Numeric matrix.
-//'   Cholesky factorization (`t(chol(sigma))`)
-//'   of the covariance matrix of volatility
-//'   or randomness in the process
-//'   (\eqn{\boldsymbol{\Sigma}}).
-//' @param delta_t Numeric.
-//'   Time interval
-//'   (\eqn{\Delta_t}).
+//' @param x A square numeric matrix.
 //'
-//' @return Returns a list of state space parameters:
-//'   - `alpha`: Numeric vector.
-//'     Vector of constant values for the dynamic model
-//'     (\eqn{\boldsymbol{\alpha}}).
-//'   - `beta`: Numeric matrix.
-//'     Transition matrix relating the values of the latent variables
-//'     from the previous time point to the current time point
-//'     (\eqn{\boldsymbol{\beta}}).
-//'   - `psi_l`: Numeric matrix.
-//'     Cholesky factorization (`t(chol(psi))`)
-//'     of the process noise covariance matrix
-//'     \eqn{\boldsymbol{\Psi}}.
+//' @return
+//' A numeric matrix containing the matrix exponential of `x`.
 //'
 //' @examples
-//' p <- 2
-//' iota <- c(0.317, 0.230)
-//' phi <- matrix(
+//' a <- matrix(
 //'   data = c(
-//'    -0.10,
-//'    0.05,
-//'    0.05,
-//'    -0.10
-//'  ),
-//'  nrow = p
-//' )
-//' sigma <- matrix(
-//'   data = c(
-//'     2.79,
-//'     0.06,
-//'     0.06,
-//'     3.27
+//'     -0.40,  0.10,
+//'     -0.05, -0.30
 //'   ),
-//'   nrow = p
+//'   nrow = 2,
+//'   ncol = 2
 //' )
-//' sigma_l <- t(chol(sigma))
-//' delta_t <- 0.10
 //'
-//' LinSDE2SSM(
-//'   iota = iota,
-//'   phi = phi,
-//'   sigma_l = sigma_l,
-//'   delta_t = delta_t
-//' )
+//' b <- ExpMat(x = a)
+//' b
+//'
+//' a <- LogMat(x = b)
+//' a
 //'
 //' @family Simulation of State Space Models Data Functions
-//' @keywords simStateSpace transformation linsde
+//' @keywords simStateSpace linsde
 //' @export
 // [[Rcpp::export]]
-Rcpp::List LinSDE2SSM(const arma::vec& iota, const arma::mat& phi,
-                      const arma::mat& sigma_l, const double delta_t) {
-  arma::mat I = arma::eye(iota.n_elem, iota.n_elem);
-  arma::mat beta = arma::expmat(phi * delta_t);
-  arma::vec alpha(iota.n_elem, arma::fill::none);
-  arma::mat psi_l = arma::mat(iota.n_elem, iota.n_elem, arma::fill::none);
-  // alpha = iota.is_zero() ? iota : arma::inv(phi) * (beta - I) * iota;
-  alpha = iota.is_zero() ? iota : arma::solve(phi, (beta - I) * iota);
-  if (sigma_l.is_zero()) {
-    psi_l = sigma_l;
-  } else {
-    arma::mat J =
-        arma::eye(iota.n_elem * iota.n_elem, iota.n_elem * iota.n_elem);
-    arma::mat phi_hashtag = arma::kron(phi, I) + arma::kron(I, phi);
-    arma::vec sigma_vec = arma::vectorise(sigma_l * sigma_l.t());
-    // arma::vec psi_vec = arma::inv(phi_hashtag) * (arma::expmat(phi_hashtag *
-    // delta_t) - J) * sigma_vec;
-    arma::vec psi_vec = arma::solve(
-        phi_hashtag, (arma::expmat(phi_hashtag * delta_t) - J) * sigma_vec);
-    psi_l =
-        arma::chol(arma::reshape(psi_vec, iota.n_elem, iota.n_elem), "lower");
+arma::mat ExpMat(const arma::mat& x) {
+  if (x.n_rows != x.n_cols) {
+    Rcpp::stop("`x` must be a square matrix.");
   }
-  // output
+  arma::mat out;
+  const bool success = arma::expmat(out, x);
+  if (!success) {
+    // # nocov start
+    Rcpp::stop("Armadillo failed to compute the matrix exponential.");
+    // # nocov end
+  }
+  return out;
+}
+// -----------------------------------------------------------------------------
+// edit .setup/cpp/simStateSpace-lin-sde-2-ssm-sets-dot.cpp
+// Ivan Jacob Agaloos Pesigan
+// -----------------------------------------------------------------------------
+
+#include <RcppArmadillo.h>
+
+#include <numeric>
+// [[Rcpp::depends(RcppArmadillo)]]
+
+// Discretize the individual-varying linear SDE once per parameter set.
+// Person i uses iota, phi, and sigma_l at i modulo each list's length, so
+// the sets repeat with the least common multiple m of the lengths (at most
+// n), and person i uses set i modulo m. With `ou = true`, `iota` holds mu
+// and the intercept is -phi mu.
+// [[Rcpp::export(.LinSDE2SSMSets)]]
+Rcpp::List LinSDE2SSMSets(const arma::uword n, const Rcpp::List& iota,
+                          const Rcpp::List& phi, const Rcpp::List& sigma_l,
+                          const double delta_t, const bool ou) {
+  arma::uword m = 1;
+  for (const arma::uword length : {static_cast<arma::uword>(iota.size()),
+                                   static_cast<arma::uword>(phi.size()),
+                                   static_cast<arma::uword>(sigma_l.size())}) {
+    m = std::lcm(m, length);
+    if (m >= n) {
+      m = n;
+      break;
+    }
+  }
+  Rcpp::List alpha(m), beta(m), psi_l(m);
+  for (arma::uword s = 0; s < m; ++s) {
+    const arma::mat phi_s = phi[s % phi.size()];
+    arma::vec iota_s = Rcpp::as<arma::vec>(iota[s % iota.size()]);
+    if (ou && !iota_s.is_zero()) iota_s = -phi_s * iota_s;
+    arma::vec alpha_s;
+    arma::mat beta_s, psi_l_s;
+    DiscretizeLinSDE(iota_s, phi_s,
+                     Rcpp::as<arma::mat>(sigma_l[s % sigma_l.size()]), delta_t,
+                     alpha_s, beta_s, psi_l_s);
+    alpha[s] = alpha_s;
+    beta[s] = beta_s;
+    psi_l[s] = psi_l_s;
+  }
   return Rcpp::List::create(Rcpp::Named("alpha") = alpha,
                             Rcpp::Named("beta") = beta,
                             Rcpp::Named("psi_l") = psi_l);
+}
+// -----------------------------------------------------------------------------
+// edit .setup/cpp/simStateSpace-lin-sde-cov-delta-t-dot.cpp
+// Ivan Jacob Agaloos Pesigan
+// -----------------------------------------------------------------------------
+
+#include <RcppArmadillo.h>
+// [[Rcpp::depends(RcppArmadillo)]]
+// [[Rcpp::export(.LinSDECovDeltaT)]]
+arma::mat LinSDECovDeltaT(const arma::mat& phi, const arma::mat& sigma,
+                          const double delta_t) {
+  return AccumulatedCovariance(phi, sigma, delta_t);
 }
 // -----------------------------------------------------------------------------
 // edit .setup/cpp/simStateSpace-lin-sde-cov-eta-dot.cpp
@@ -307,6 +445,71 @@ Rcpp::NumericVector LinSDEMeanY(const arma::vec& nu, const arma::mat& lambda,
                                 const arma::vec& mean_eta) {
   arma::vec output = nu + lambda * mean_eta;
   return Rcpp::NumericVector(output.begin(), output.end());
+}
+// -----------------------------------------------------------------------------
+// edit .setup/cpp/simStateSpace-log-mat.cpp
+// Ivan Jacob Agaloos Pesigan
+// -----------------------------------------------------------------------------
+
+#include <RcppArmadillo.h>
+// [[Rcpp::depends(RcppArmadillo)]]
+
+//' Matrix Logarithm
+//'
+//' Computes the real-valued principal matrix logarithm of a square numeric
+//' matrix using the Armadillo linear algebra library.
+//'
+//' @param x A square numeric matrix.
+//' @param tol A positive numeric scalar giving the tolerance used to determine
+//'   whether the imaginary component of the matrix logarithm is negligible.
+//'   The default is `1e-10`.
+//'
+//' @return
+//' A numeric matrix containing the real part of the matrix logarithm of `x`.
+//'
+//' @examples
+//' a <- matrix(
+//'   data = c(
+//'     -0.40,  0.10,
+//'     -0.05, -0.30
+//'   ),
+//'   nrow = 2,
+//'   ncol = 2
+//' )
+//'
+//' b <- ExpMat(x = a)
+//' b
+//'
+//' a <- LogMat(x = b)
+//' a
+//'
+//' @family Simulation of State Space Models Data Functions
+//' @keywords simStateSpace linsde
+//' @export
+// [[Rcpp::export]]
+arma::mat LogMat(const arma::mat& x, const double tol = 1e-10) {
+  if (x.n_rows != x.n_cols) {
+    Rcpp::stop("`x` must be a square matrix.");
+  }
+  if (!x.is_finite()) {
+    Rcpp::stop("`x` must contain only finite values.");
+  }
+  if (!std::isfinite(tol)) {
+    Rcpp::stop("`tol` must be finite.");
+  }
+  if (tol <= 0.0) {
+    Rcpp::stop("`tol` must be positive.");
+  }
+  arma::cx_mat out;
+  const bool success = arma::logmat(out, x);
+  if (!success) {
+    Rcpp::stop("Armadillo failed to compute the matrix logarithm.");  // # nocov
+  }
+  const double imag_norm = arma::norm(arma::imag(out), "inf");
+  if (!std::isfinite(imag_norm) || imag_norm > tol) {
+    Rcpp::stop("Matrix logarithm has a non-negligible imaginary component.");
+  }
+  return arma::real(out);
 }
 // -----------------------------------------------------------------------------
 // .setup/cpp/simStateSpace-project-to-hurwitz.cpp
@@ -449,7 +652,7 @@ arma::mat ProjectToStability(const arma::mat& x, const double margin = 0.98,
   return c * x;
 }
 // -----------------------------------------------------------------------------
-// edit .setup/cpp/simStateSpace-sim-beta-n-0.cpp
+// edit .setup/cpp/simStateSpace-sim-beta-n-0-inline.cpp
 // Ivan Jacob Agaloos Pesigan
 // -----------------------------------------------------------------------------
 
@@ -626,11 +829,6 @@ Rcpp::List SimBetaNCovariate(
   const arma::uword nr = beta0.n_rows, nc = beta0.n_cols;
   const arma::uword p = nr * nc;
 
-  // if (vcov_beta_vec_l.n_rows != p || vcov_beta_vec_l.n_cols != p) {
-  //   Rcpp::stop("vcov_beta_vec_l must be p x p with p = nrow(beta0) *
-  //   ncol(beta0).");
-  // }
-
   arma::mat lb, ub;
   arma::umat has_lb_el(nr, nc, arma::fill::zeros);
   arma::umat has_ub_el(nr, nc, arma::fill::zeros);
@@ -766,11 +964,6 @@ Rcpp::List SimBetaN(
     const bool bound = false, const arma::uword max_iter = 100000) {
   const arma::uword nr = beta.n_rows, nc = beta.n_cols;
   const arma::uword p = nr * nc;
-
-  // if (vcov_beta_vec_l.n_rows != p || vcov_beta_vec_l.n_cols != p) {
-  //   Rcpp::stop("vcov_beta_vec_l must be p x p with p = nrow(beta) *
-  //   ncol(beta).");
-  // }
 
   arma::mat lb, ub;
   arma::umat has_lb_el(nr, nc, arma::fill::zeros);
@@ -1164,11 +1357,6 @@ Rcpp::List SimPhiNCovariate(
   const arma::uword nr = phi0.n_rows, nc = phi0.n_cols;
   const arma::uword p = nr * nc;
 
-  // if (vcov_phi_vec_l.n_rows != p || vcov_phi_vec_l.n_cols != p) {
-  //   Rcpp::stop("vcov_phi_vec_l must be p x p with p = nrow(phi0) *
-  //   ncol(phi0).");
-  // }
-
   // Bounds & masks
   arma::mat lb, ub;
   arma::umat has_lb_el(nr, nc, arma::fill::zeros);
@@ -1308,11 +1496,6 @@ Rcpp::List SimPhiN(const arma::uword& n, const arma::mat& phi,
   const arma::uword nr = phi.n_rows, nc = phi.n_cols;
   const arma::uword p = nr * nc;
 
-  // if (vcov_phi_vec_l.n_rows != p || vcov_phi_vec_l.n_cols != p) {
-  //   Rcpp::stop("vcov_phi_vec_l must be p x p with p = nrow(phi) *
-  //   ncol(phi).");
-  // }
-
   // Bounds & masks
   arma::mat lb, ub;
   arma::umat has_lb_el(nr, nc, arma::fill::zeros);
@@ -1383,909 +1566,122 @@ Rcpp::List SimPhiN(const arma::uword& n, const arma::mat& phi,
   return output;
 }
 // -----------------------------------------------------------------------------
-// edit .setup/cpp/simStateSpace-sim-ssm-fixed-0-dot.cpp
+// edit .setup/cpp/simStateSpace-sim-ssm-kernel-dot.cpp
 // Ivan Jacob Agaloos Pesigan
 // -----------------------------------------------------------------------------
 
 #include <RcppArmadillo.h>
+
+#include <vector>
 // [[Rcpp::depends(RcppArmadillo)]]
-// [[Rcpp::export(.SimSSMFixed0)]]
-Rcpp::List SimSSMFixed0(const arma::uword& n, const arma::uword& time,
-                        const double delta_t, const arma::vec& mu0,
-                        const arma::mat& sigma0_l, const arma::vec& alpha,
-                        const arma::mat& beta, const arma::mat& psi_l,
-                        const arma::vec& nu, const arma::mat& lambda,
-                        const arma::mat& theta_l) {
-  // Step 1: Determine dimensions
-  // int p = mu0.n_elem; // number of latent variables
-  // int k = nu.n_elem; // number of observed variables
-  arma::vec time_vec =
-      arma::linspace(0, (time - 1) * delta_t, time);  // time vector
-  arma::vec id_template(time, arma::fill::zeros);
 
-  // Step 2: Initialize the output list
-  Rcpp::List output(n);
-
-  // Step 3: Generate data per individual
-  for (arma::uword i = 0; i < n; i++) {
-    // Step 3.1: Create matrices of latent, observed, and id variables
-    arma::mat eta(mu0.n_elem, time, arma::fill::zeros);
-    arma::mat y(nu.n_elem, time, arma::fill::zeros);
-    arma::vec id = id_template;
-    id.fill(i + 1);
-    // Step 3.2: Generate initial condition
-    eta.col(0) = mu0 + (sigma0_l * arma::randn(mu0.n_elem));
-    y.col(0) = nu + (lambda * eta.col(0)) + (theta_l * arma::randn(nu.n_elem));
-    // Step 3.3: Data generation loop
-    for (arma::uword t = 1; t < time; t++) {
-      eta.col(t) =
-          alpha + (beta * eta.col(t - 1)) + (psi_l * arma::randn(mu0.n_elem));
-      y.col(t) =
-          nu + (lambda * eta.col(t)) + (theta_l * arma::randn(nu.n_elem));
+// Parameter sets as Armadillo matrices, converted once;
+// vectors become column vectors.
+std::vector<arma::mat> SimSSMSets(const Rcpp::List& x) {
+  std::vector<arma::mat> out(x.size());
+  for (R_xlen_t i = 0; i < x.size(); ++i) {
+    if (Rf_isMatrix(x[i])) {
+      out[i] = Rcpp::as<arma::mat>(x[i]);
+    } else {
+      out[i] = Rcpp::as<arma::vec>(x[i]);
     }
-    // Step 3.4 Save results in a list
-    output[i] = Rcpp::List::create(
-        Rcpp::Named("id") = id, Rcpp::Named("time") = time_vec,
-        Rcpp::Named("y") = y.t(), Rcpp::Named("eta") = eta.t());
   }
-
-  // Step 4: Return results
-  return output;
+  return out;
 }
-// -----------------------------------------------------------------------------
-// edit .setup/cpp/simStateSpace-sim-ssm-fixed-1-dot.cpp
-// Ivan Jacob Agaloos Pesigan
-// -----------------------------------------------------------------------------
 
-#include <RcppArmadillo.h>
-// [[Rcpp::depends(RcppArmadillo)]]
-// [[Rcpp::export(.SimSSMFixed1)]]
-Rcpp::List SimSSMFixed1(const arma::uword& n, const arma::uword& time,
-                        const double delta_t, const arma::vec& mu0,
-                        const arma::mat& sigma0_l, const arma::vec& alpha,
-                        const arma::mat& beta, const arma::mat& psi_l,
-                        const arma::vec& nu, const arma::mat& lambda,
-                        const arma::mat& theta_l, const Rcpp::List& x,
-                        const arma::mat& gamma) {
-  // Step 1: Determine dimensions
-  // int p = mu0.n_elem; // number of latent variables
-  // int k = nu.n_elem; // number of observed variables
-  arma::vec time_vec =
-      arma::linspace(0, (time - 1) * delta_t, time);  // time vector
-  arma::vec id_template(time, arma::fill::zeros);
-
-  // Step 2: Initialize the output list
-  Rcpp::List output(n);
-
-  // Step 3: Generate data per individual
-  for (arma::uword i = 0; i < n; i++) {
-    // Step 3.1: Create matrices of latent, observed, covariate, and id
-    // variables
-    arma::mat eta(mu0.n_elem, time, arma::fill::zeros);
-    arma::mat y(nu.n_elem, time, arma::fill::zeros);
-    arma::mat x_i = x[i];
-    arma::vec id = id_template;
-    id.fill(i + 1);
-    // Step 3.2: Generate initial condition
-    eta.col(0) =
-        mu0 + (sigma0_l * arma::randn(mu0.n_elem)) + (gamma * x_i.col(0));
-    y.col(0) = nu + (lambda * eta.col(0)) + (theta_l * arma::randn(nu.n_elem));
-    // Step 3.3: Data generation loop
-    for (arma::uword t = 1; t < time; t++) {
-      eta.col(t) = alpha + (beta * eta.col(t - 1)) +
-                   (psi_l * arma::randn(mu0.n_elem)) + (gamma * x_i.col(t));
-      y.col(t) =
-          nu + (lambda * eta.col(t)) + (theta_l * arma::randn(nu.n_elem));
-    }
-    // Step 3.4 Save results in a list
-    output[i] = Rcpp::List::create(
-        Rcpp::Named("id") = id, Rcpp::Named("time") = time_vec,
-        Rcpp::Named("y") = y.t(), Rcpp::Named("eta") = eta.t(),
-        Rcpp::Named("x") = x_i.t());
-  }
-
-  // Step 4: Return results
-  return output;
-}
-// -----------------------------------------------------------------------------
-// edit .setup/cpp/simStateSpace-sim-ssm-fixed-2-dot.cpp
-// Ivan Jacob Agaloos Pesigan
-// -----------------------------------------------------------------------------
-
-#include <RcppArmadillo.h>
-// [[Rcpp::depends(RcppArmadillo)]]
-// [[Rcpp::export(.SimSSMFixed2)]]
-Rcpp::List SimSSMFixed2(const arma::uword& n, const arma::uword& time,
-                        const double delta_t, const arma::vec& mu0,
-                        const arma::mat& sigma0_l, const arma::vec& alpha,
-                        const arma::mat& beta, const arma::mat& psi_l,
-                        const arma::vec& nu, const arma::mat& lambda,
-                        const arma::mat& theta_l, const Rcpp::List& x,
-                        const arma::mat& gamma, const arma::mat& kappa) {
-  // Step 1: Determine dimensions
-  // int p = mu0.n_elem; // number of latent variables
-  // int k = nu.n_elem; // number of observed variables
-  arma::vec time_vec =
-      arma::linspace(0, (time - 1) * delta_t, time);  // time vector
-  arma::vec id_template(time, arma::fill::zeros);
-
-  // Step 2: Initialize the output list
-  Rcpp::List output(n);
-
-  // Step 3: Generate data per individual
-  for (arma::uword i = 0; i < n; i++) {
-    // Step 3.1: Create matrices of latent, observed, covariate, and id
-    // variables
-    arma::mat eta(mu0.n_elem, time, arma::fill::zeros);
-    arma::mat y(nu.n_elem, time, arma::fill::zeros);
-    arma::mat x_i = x[i];
-    arma::vec id = id_template;
-    id.fill(i + 1);
-    // Step 3.2: Generate initial condition
-    eta.col(0) =
-        mu0 + (sigma0_l * arma::randn(mu0.n_elem)) + (gamma * x_i.col(0));
-    y.col(0) = nu + (lambda * eta.col(0)) + (theta_l * arma::randn(nu.n_elem)) +
-               (kappa * x_i.col(0));
-    // Step 3.3: Data generation loop
-    for (arma::uword t = 1; t < time; t++) {
-      eta.col(t) = alpha + (beta * eta.col(t - 1)) +
-                   (psi_l * arma::randn(mu0.n_elem)) + (gamma * x_i.col(t));
-      y.col(t) = nu + (lambda * eta.col(t)) +
-                 (theta_l * arma::randn(nu.n_elem)) + (kappa * x_i.col(t));
-    }
-    // Step 3.4 Save results in a list
-    output[i] = Rcpp::List::create(
-        Rcpp::Named("id") = id, Rcpp::Named("time") = time_vec,
-        Rcpp::Named("y") = y.t(), Rcpp::Named("eta") = eta.t(),
-        Rcpp::Named("x") = x_i.t());
-  }
-
-  // Step 4: Return results
-  return output;
-}
-// -----------------------------------------------------------------------------
-// edit .setup/cpp/simStateSpace-sim-ssm-i-vary-0-dot.cpp
-// Ivan Jacob Agaloos Pesigan
-// -----------------------------------------------------------------------------
-
-#include <RcppArmadillo.h>
-// [[Rcpp::depends(RcppArmadillo)]]
-// [[Rcpp::export(.SimSSMIVary0)]]
-Rcpp::List SimSSMIVary0(const arma::uword& n, const arma::uword& time,
-                        const double delta_t, const Rcpp::List& mu0,
-                        const Rcpp::List& sigma0_l, const Rcpp::List& alpha,
-                        const Rcpp::List& beta, const Rcpp::List& psi_l,
-                        const Rcpp::List& nu, const Rcpp::List& lambda,
-                        const Rcpp::List& theta_l) {
-  // Step 1: Determine dimensions
-  arma::vec mu0_i = mu0[0];
-  arma::vec nu_i = nu[0];
-  // int p = mu0_i.n_elem; // number of latent variables
-  // int k = nu_i.n_elem; // number of observed variables
-  arma::vec time_vec =
-      arma::linspace(0, (time - 1) * delta_t, time);  // time vector
-  arma::vec id_template(time, arma::fill::zeros);
-
-  // Step 2: Initialize the output list
-  Rcpp::List output(n);
-
-  // Step 3: Generate data per individual
-  for (arma::uword i = 0; i < n; i++) {
-    // Step 3.1: Create matrices of latent, observed, and id variables
-    arma::mat eta(mu0_i.n_elem, time, arma::fill::zeros);
-    arma::mat y(nu_i.n_elem, time, arma::fill::zeros);
-    arma::vec id = id_template;
-    id.fill(i + 1);
-
-    // Step 3.2: Extract the ith parameter
-    arma::vec mu0_i = Rcpp::as<arma::vec>(mu0[i]);
-    arma::mat sigma0_l_i = sigma0_l[i];
-    arma::vec alpha_i = Rcpp::as<arma::vec>(alpha[i]);
-    arma::mat beta_i = beta[i];
-    arma::mat psi_l_i = psi_l[i];
-    arma::vec nu_i = Rcpp::as<arma::vec>(nu[i]);
-    arma::mat lambda_i = lambda[i];
-    arma::mat theta_l_i = theta_l[i];
-
-    // Step 3.3: Generate initial condition
-    eta.col(0) = mu0_i + (sigma0_l_i * arma::randn(mu0_i.n_elem));
-    y.col(0) =
-        nu_i + (lambda_i * eta.col(0)) + (theta_l_i * arma::randn(nu_i.n_elem));
-    // Step 3.4: Data generation loop
-    for (arma::uword t = 1; t < time; t++) {
-      eta.col(t) = alpha_i + (beta_i * eta.col(t - 1)) +
-                   (psi_l_i * arma::randn(mu0_i.n_elem));
-      y.col(t) = nu_i + (lambda_i * eta.col(t)) +
-                 (theta_l_i * arma::randn(nu_i.n_elem));
-    }
-    // Step 3.4 Save results in a list
-    output[i] = Rcpp::List::create(
-        Rcpp::Named("id") = id, Rcpp::Named("time") = time_vec,
-        Rcpp::Named("y") = y.t(), Rcpp::Named("eta") = eta.t());
-  }
-
-  // Step 4: Return results
-  return output;
-}
-// -----------------------------------------------------------------------------
-// edit .setup/cpp/simStateSpace-sim-ssm-i-vary-1-dot.cpp
-// Ivan Jacob Agaloos Pesigan
-// -----------------------------------------------------------------------------
-
-#include <RcppArmadillo.h>
-// [[Rcpp::depends(RcppArmadillo)]]
-// [[Rcpp::export(.SimSSMIVary1)]]
-Rcpp::List SimSSMIVary1(const arma::uword& n, const arma::uword& time,
-                        const double delta_t, const Rcpp::List& mu0,
-                        const Rcpp::List& sigma0_l, const Rcpp::List& alpha,
-                        const Rcpp::List& beta, const Rcpp::List& psi_l,
-                        const Rcpp::List& nu, const Rcpp::List& lambda,
-                        const Rcpp::List& theta_l, const Rcpp::List& x,
-                        const Rcpp::List& gamma) {
-  // Step 1: Determine dimensions
-  arma::vec mu0_i = mu0[0];
-  arma::vec nu_i = nu[0];
-  // int p = mu0_i.n_elem; // number of latent variables
-  // int k = nu_i.n_elem; // number of observed variables
-  arma::vec time_vec =
-      arma::linspace(0, (time - 1) * delta_t, time);  // time vector
-  arma::vec id_template(time, arma::fill::zeros);
-
-  // Step 2: Initialize the output list
-  Rcpp::List output(n);
-
-  // Step 3: Generate data per individual
-  for (arma::uword i = 0; i < n; i++) {
-    // Step 3.1: Create matrices of latent, observed, covariate, and id
-    // variables
-    arma::mat eta(mu0_i.n_elem, time, arma::fill::zeros);
-    arma::mat y(nu_i.n_elem, time, arma::fill::zeros);
-    arma::mat x_i = x[i];
-    arma::vec id = id_template;
-    id.fill(i + 1);
-
-    // Step 3.2: Extract the ith parameter
-    arma::vec mu0_i = Rcpp::as<arma::vec>(mu0[i]);
-    arma::mat sigma0_l_i = sigma0_l[i];
-    arma::vec alpha_i = Rcpp::as<arma::vec>(alpha[i]);
-    arma::mat beta_i = beta[i];
-    arma::mat psi_l_i = psi_l[i];
-    arma::vec nu_i = Rcpp::as<arma::vec>(nu[i]);
-    arma::mat lambda_i = lambda[i];
-    arma::mat theta_l_i = theta_l[i];
-    arma::mat gamma_i = gamma[i];
-
-    // Step 3.3: Generate initial condition
-    eta.col(0) = mu0_i + (sigma0_l_i * arma::randn(mu0_i.n_elem)) +
-                 (gamma_i * x_i.col(0));
-    y.col(0) =
-        nu_i + (lambda_i * eta.col(0)) + (theta_l_i * arma::randn(nu_i.n_elem));
-    // Step 3.4: Data generation loop
-    for (arma::uword t = 1; t < time; t++) {
-      eta.col(t) = alpha_i + (beta_i * eta.col(t - 1)) +
-                   (psi_l_i * arma::randn(mu0_i.n_elem)) +
-                   (gamma_i * x_i.col(t));
-      y.col(t) = nu_i + (lambda_i * eta.col(t)) +
-                 (theta_l_i * arma::randn(nu_i.n_elem));
-    }
-    // Step 3.5 Save results in a list
-    output[i] = Rcpp::List::create(
-        Rcpp::Named("id") = id, Rcpp::Named("time") = time_vec,
-        Rcpp::Named("y") = y.t(), Rcpp::Named("eta") = eta.t(),
-        Rcpp::Named("x") = x_i.t());
-  }
-
-  // Step 4: Return results
-  return output;
-}
-// -----------------------------------------------------------------------------
-// edit .setup/cpp/simStateSpace-sim-ssm-i-vary-2-dot.cpp
-// Ivan Jacob Agaloos Pesigan
-// -----------------------------------------------------------------------------
-
-#include <RcppArmadillo.h>
-// [[Rcpp::depends(RcppArmadillo)]]
-// [[Rcpp::export(.SimSSMIVary2)]]
-Rcpp::List SimSSMIVary2(const arma::uword& n, const arma::uword& time,
+// One simulation kernel for every state space model.
+// Each parameter is a list of parameter sets;
+// person i uses set i modulo the length of the list.
+// Latent-only models pass empty `nu`, `lambda`, and `theta_l` (y = eta).
+// Models without covariates pass empty `x` and `gamma`,
+// and models without covariates in the measurement model pass empty `kappa`.
+// [[Rcpp::export(.SimSSMKernel)]]
+Rcpp::List SimSSMKernel(const arma::uword n, const arma::uword time,
                         const double delta_t, const Rcpp::List& mu0,
                         const Rcpp::List& sigma0_l, const Rcpp::List& alpha,
                         const Rcpp::List& beta, const Rcpp::List& psi_l,
                         const Rcpp::List& nu, const Rcpp::List& lambda,
                         const Rcpp::List& theta_l, const Rcpp::List& x,
                         const Rcpp::List& gamma, const Rcpp::List& kappa) {
-  // Step 1: Determine dimensions
-  arma::vec mu0_i = mu0[0];
-  arma::vec nu_i = nu[0];
-  // int p = mu0_i.n_elem; // number of latent variables
-  // int k = nu_i.n_elem; // number of observed variables
-  arma::vec time_vec =
-      arma::linspace(0, (time - 1) * delta_t, time);  // time vector
-  arma::vec id_template(time, arma::fill::zeros);
-
-  // Step 2: Initialize the output list
+  const bool latent = nu.size() == 0;
+  const bool covariates = gamma.size() > 0;
+  const bool covariates_y = kappa.size() > 0;
+  const std::vector<arma::mat> mu0_s = SimSSMSets(mu0);
+  const std::vector<arma::mat> sigma0_l_s = SimSSMSets(sigma0_l);
+  const std::vector<arma::mat> alpha_s = SimSSMSets(alpha);
+  const std::vector<arma::mat> beta_s = SimSSMSets(beta);
+  const std::vector<arma::mat> psi_l_s = SimSSMSets(psi_l);
+  const std::vector<arma::mat> nu_s = SimSSMSets(nu);
+  const std::vector<arma::mat> lambda_s = SimSSMSets(lambda);
+  const std::vector<arma::mat> theta_l_s = SimSSMSets(theta_l);
+  const std::vector<arma::mat> x_s = SimSSMSets(x);
+  const std::vector<arma::mat> gamma_s = SimSSMSets(gamma);
+  const std::vector<arma::mat> kappa_s = SimSSMSets(kappa);
+  const arma::uword p = mu0_s[0].n_elem;
+  const arma::uword k = latent ? 0 : nu_s[0].n_elem;
+  // arma::randn draws normal deviates in pairs, so a draw of odd length
+  // discards its last deviate. Padding the state and the measurement block
+  // to even length makes one draw per person reproduce the draws of earlier
+  // versions, one call per block and time point (same seed, same data).
+  const arma::uword p2 = p + p % 2;
+  const arma::uword k2 = k + k % 2;
+  const arma::span state(0, p - 1);
+  const arma::vec time_vec = arma::linspace(0, (time - 1) * delta_t, time);
   Rcpp::List output(n);
-
-  // Step 3: Generate data per individual
-  for (arma::uword i = 0; i < n; i++) {
-    // Step 3.1: Create matrices of latent, observed, covariate, and id
-    // variables
-    arma::mat eta(mu0_i.n_elem, time, arma::fill::zeros);
-    arma::mat y(nu_i.n_elem, time, arma::fill::zeros);
-    arma::mat x_i = x[i];
-    arma::vec id = id_template;
-    id.fill(i + 1);
-
-    // Step 3.2: Extract the ith parameter
-    arma::vec mu0_i = Rcpp::as<arma::vec>(mu0[i]);
-    arma::mat sigma0_l_i = sigma0_l[i];
-    arma::vec alpha_i = Rcpp::as<arma::vec>(alpha[i]);
-    arma::mat beta_i = beta[i];
-    arma::mat psi_l_i = psi_l[i];
-    arma::vec nu_i = Rcpp::as<arma::vec>(nu[i]);
-    arma::mat lambda_i = lambda[i];
-    arma::mat theta_l_i = theta_l[i];
-    arma::mat gamma_i = gamma[i];
-    arma::mat kappa_i = kappa[i];
-
-    // Step 3.3: Generate initial condition
-    eta.col(0) = mu0_i + (sigma0_l_i * arma::randn(mu0_i.n_elem)) +
-                 (gamma_i * x_i.col(0));
-    y.col(0) = nu_i + (lambda_i * eta.col(0)) +
-               (theta_l_i * arma::randn(nu_i.n_elem)) + (kappa_i * x_i.col(0));
-    // Step 3.4: Data generation loop
-    for (arma::uword t = 1; t < time; t++) {
-      eta.col(t) = alpha_i + (beta_i * eta.col(t - 1)) +
-                   (psi_l_i * arma::randn(mu0_i.n_elem)) +
-                   (gamma_i * x_i.col(t));
-      y.col(t) = nu_i + (lambda_i * eta.col(t)) +
-                 (theta_l_i * arma::randn(nu_i.n_elem)) +
-                 (kappa_i * x_i.col(t));
+  for (arma::uword i = 0; i < n; ++i) {
+    const arma::mat& beta_i = beta_s[i % beta_s.size()];
+    const arma::mat z = arma::randn(p2 + k2, time);
+    // everything but beta eta_{t - 1}, then the recursion
+    arma::mat eta(p, time);
+    eta.col(0) = mu0_s[i % mu0_s.size()] +
+                 sigma0_l_s[i % sigma0_l_s.size()] * z(state, 0);
+    if (time > 1) {
+      const arma::span later(1, time - 1);
+      eta.cols(later) = psi_l_s[i % psi_l_s.size()] * z(state, later);
+      eta.cols(later).each_col() += arma::vec(alpha_s[i % alpha_s.size()]);
     }
-    // Step 3.5 Save results in a list
-    output[i] = Rcpp::List::create(
-        Rcpp::Named("id") = id, Rcpp::Named("time") = time_vec,
-        Rcpp::Named("y") = y.t(), Rcpp::Named("eta") = eta.t(),
-        Rcpp::Named("x") = x_i.t());
-  }
-
-  // Step 4: Return results
-  return output;
-}
-// -----------------------------------------------------------------------------
-// edit .setup/cpp/simStateSpace-sim-ssm-lat-fixed-0-dot.cpp
-// Ivan Jacob Agaloos Pesigan
-// -----------------------------------------------------------------------------
-
-#include <RcppArmadillo.h>
-// [[Rcpp::depends(RcppArmadillo)]]
-// [[Rcpp::export(.SimSSMLatFixed0)]]
-Rcpp::List SimSSMLatFixed0(const arma::uword& n, const arma::uword& time,
-                           const double delta_t, const arma::vec& mu0,
-                           const arma::mat& sigma0_l, const arma::vec& alpha,
-                           const arma::mat& beta, const arma::mat& psi_l) {
-  // Step 1: Determine dimensions
-  // int p = mu0.n_elem; // number of latent variables
-  // int k = p; // number of observed variables
-  arma::vec time_vec =
-      arma::linspace(0, (time - 1) * delta_t, time);  // time vector
-  arma::vec id_template(time, arma::fill::zeros);
-
-  // Step 2: Initialize the output list
-  Rcpp::List output(n);
-
-  // Step 3: Generate data per individual
-  for (arma::uword i = 0; i < n; i++) {
-    // Step 3.1: Create matrices of latent, observed, and id variables
-    arma::mat eta(mu0.n_elem, time, arma::fill::zeros);
-    arma::mat y(mu0.n_elem, time, arma::fill::zeros);
-    arma::vec id = id_template;
-    id.fill(i + 1);
-
-    // Step 3.2: Generate initial condition
-    eta.col(0) = mu0 + (sigma0_l * arma::randn(mu0.n_elem));
-    y.col(0) = eta.col(0);
-    // Step 3.3: Data generation loop
-    for (arma::uword t = 1; t < time; t++) {
-      eta.col(t) =
-          alpha + (beta * eta.col(t - 1)) + (psi_l * arma::randn(mu0.n_elem));
-      y.col(t) = eta.col(t);
+    arma::mat x_i;
+    if (covariates) {
+      x_i = x_s[i % x_s.size()];
+      eta += gamma_s[i % gamma_s.size()] * x_i;
     }
-    // Step 3.4 Save results in a list
-    output[i] = Rcpp::List::create(
-        Rcpp::Named("id") = id, Rcpp::Named("time") = time_vec,
-        Rcpp::Named("y") = y.t(), Rcpp::Named("eta") = eta.t());
-  }
-
-  // Step 4: Return results
-  return output;
-}
-// -----------------------------------------------------------------------------
-// edit .setup/cpp/simStateSpace-sim-ssm-lat-fixed-1-dot.cpp
-// Ivan Jacob Agaloos Pesigan
-// -----------------------------------------------------------------------------
-
-#include <RcppArmadillo.h>
-// [[Rcpp::depends(RcppArmadillo)]]
-// [[Rcpp::export(.SimSSMLatFixed1)]]
-Rcpp::List SimSSMLatFixed1(const arma::uword& n, const arma::uword& time,
-                           const double delta_t, const arma::vec& mu0,
-                           const arma::mat& sigma0_l, const arma::vec& alpha,
-                           const arma::mat& beta, const arma::mat& psi_l,
-                           const Rcpp::List& x, const arma::mat& gamma) {
-  // Step 1: Determine dimensions
-  // int p = mu0.n_elem; // number of latent variables
-  // int k = p; // number of observed variables
-  arma::vec time_vec =
-      arma::linspace(0, (time - 1) * delta_t, time);  // time vector
-  arma::vec id_template(time, arma::fill::zeros);
-
-  // Step 2: Initialize the output list
-  Rcpp::List output(n);
-
-  // Step 3: Generate data per individual
-  for (arma::uword i = 0; i < n; i++) {
-    // Step 3.1: Create matrices of latent, observed, covariate, and id
-    // variables
-    arma::mat eta(mu0.n_elem, time, arma::fill::zeros);
-    arma::mat y(mu0.n_elem, time, arma::fill::zeros);
-    arma::mat x_i = x[i];
-    arma::vec id = id_template;
-    id.fill(i + 1);
-
-    // Step 3.2: Generate initial condition
-    eta.col(0) =
-        mu0 + (sigma0_l * arma::randn(mu0.n_elem)) + (gamma * x_i.col(0));
-    y.col(0) = eta.col(0);
-    // Step 3.3: Data generation loop
-    for (arma::uword t = 1; t < time; t++) {
-      eta.col(t) = alpha + (beta * eta.col(t - 1)) +
-                   (psi_l * arma::randn(mu0.n_elem)) + (gamma * x_i.col(t));
-      y.col(t) = eta.col(t);
+    // plain loops: small matrix-vector products without temporaries
+    const double* b = beta_i.memptr();
+    double* e = eta.memptr();
+    for (arma::uword t = 1; t < time; ++t) {
+      const double* prev = e + (t - 1) * p;
+      double* curr = e + t * p;
+      for (arma::uword c = 0; c < p; ++c) {
+        const double prev_c = prev[c];
+        const double* b_c = b + c * p;
+        for (arma::uword r = 0; r < p; ++r) curr[r] += b_c[r] * prev_c;
+      }
     }
-    // Step 3.4 Save results in a list
-    output[i] = Rcpp::List::create(
-        Rcpp::Named("id") = id, Rcpp::Named("time") = time_vec,
-        Rcpp::Named("y") = y.t(), Rcpp::Named("eta") = eta.t(),
-        Rcpp::Named("x") = x_i.t());
-  }
-
-  // Step 4: Return results
-  return output;
-}
-// -----------------------------------------------------------------------------
-// edit .setup/cpp/simStateSpace-sim-ssm-lat-i-vary-0-dot.cpp
-// Ivan Jacob Agaloos Pesigan
-// -----------------------------------------------------------------------------
-
-#include <RcppArmadillo.h>
-// [[Rcpp::depends(RcppArmadillo)]]
-// [[Rcpp::export(.SimSSMLatIVary0)]]
-Rcpp::List SimSSMLatIVary0(const arma::uword& n, const arma::uword& time,
-                           const double delta_t, const Rcpp::List& mu0,
-                           const Rcpp::List& sigma0_l, const Rcpp::List& alpha,
-                           const Rcpp::List& beta, const Rcpp::List& psi_l) {
-  // Step 1: Determine dimensions
-  arma::vec mu0_i = mu0[0];
-  // int p = mu0_i.n_elem; // number of latent variables
-  // int k = p; // number of observed variables
-  arma::vec time_vec =
-      arma::linspace(0, (time - 1) * delta_t, time);  // time vector
-  arma::vec id_template(time, arma::fill::zeros);
-
-  // Step 2: Initialize the output list
-  Rcpp::List output(n);
-
-  // Step 3: Generate data per individual
-  for (arma::uword i = 0; i < n; i++) {
-    // Step 3.1: Create matrices of latent, observed, and id variables
-    arma::mat eta(mu0_i.n_elem, time, arma::fill::zeros);
-    arma::mat y(mu0_i.n_elem, time, arma::fill::zeros);
-    arma::vec id = id_template;
-    id.fill(i + 1);
-
-    // Step 3.2: Extract the ith parameter
-    arma::vec mu0_i = Rcpp::as<arma::vec>(mu0[i]);
-    arma::mat sigma0_l_i = sigma0_l[i];
-    arma::vec alpha_i = Rcpp::as<arma::vec>(alpha[i]);
-    arma::mat beta_i = beta[i];
-    arma::mat psi_l_i = psi_l[i];
-
-    // Step 3.3: Generate initial condition
-    eta.col(0) = mu0_i + (sigma0_l_i * arma::randn(mu0_i.n_elem));
-    y.col(0) = eta.col(0);
-    // Step 3.4: Data generation loop
-    for (arma::uword t = 1; t < time; t++) {
-      eta.col(t) = alpha_i + (beta_i * eta.col(t - 1)) +
-                   (psi_l_i * arma::randn(mu0_i.n_elem));
-      y.col(t) = eta.col(t);
-    }
-    // Step 3.5 Save results in a list
-    output[i] = Rcpp::List::create(
-        Rcpp::Named("id") = id, Rcpp::Named("time") = time_vec,
-        Rcpp::Named("y") = y.t(), Rcpp::Named("eta") = eta.t());
-  }
-
-  // Step 4: Return results
-  return output;
-}
-// -----------------------------------------------------------------------------
-// edit .setup/cpp/simStateSpace-sim-ssm-lat-i-vary-1-dot.cpp
-// Ivan Jacob Agaloos Pesigan
-// -----------------------------------------------------------------------------
-
-#include <RcppArmadillo.h>
-// [[Rcpp::depends(RcppArmadillo)]]
-// [[Rcpp::export(.SimSSMLatIVary1)]]
-Rcpp::List SimSSMLatIVary1(const arma::uword& n, const arma::uword& time,
-                           const double delta_t, const Rcpp::List& mu0,
-                           const Rcpp::List& sigma0_l, const Rcpp::List& alpha,
-                           const Rcpp::List& beta, const Rcpp::List& psi_l,
-                           const Rcpp::List& x, const Rcpp::List& gamma) {
-  // Step 1: Determine dimensions
-  arma::vec mu0_i = mu0[0];
-  // int p = mu0_i.n_elem; // number of latent variables
-  // int k = p; // number of observed variables
-  arma::vec time_vec =
-      arma::linspace(0, (time - 1) * delta_t, time);  // time vector
-  arma::vec id_template(time, arma::fill::zeros);
-
-  // Step 2: Initialize the output list
-  Rcpp::List output(n);
-
-  // Step 3: Generate data per individual
-  for (arma::uword i = 0; i < n; i++) {
-    // Step 3.1: Create matrices of latent, observed, covariate, and id
-    // variables
-    arma::mat eta(mu0_i.n_elem, time, arma::fill::zeros);
-    arma::mat y(mu0_i.n_elem, time, arma::fill::zeros);
-    arma::mat x_i = x[i];
-    arma::vec id = id_template;
-    id.fill(i + 1);
-
-    // Step 3.2: Extract the ith parameter
-    arma::vec mu0_i = Rcpp::as<arma::vec>(mu0[i]);
-    arma::mat sigma0_l_i = sigma0_l[i];
-    arma::vec alpha_i = Rcpp::as<arma::vec>(alpha[i]);
-    arma::mat beta_i = beta[i];
-    arma::mat psi_l_i = psi_l[i];
-    arma::mat gamma_i = gamma[i];
-
-    // Step 3.3: Generate initial condition
-    eta.col(0) = mu0_i + (sigma0_l_i * arma::randn(mu0_i.n_elem)) +
-                 (gamma_i * x_i.col(0));
-    y.col(0) = eta.col(0);
-    // Step 3.4: Data generation loop
-    for (arma::uword t = 1; t < time; t++) {
-      eta.col(t) = alpha_i + (beta_i * eta.col(t - 1)) +
-                   (psi_l_i * arma::randn(mu0_i.n_elem)) +
-                   (gamma_i * x_i.col(t));
-      y.col(t) = eta.col(t);
-    }
-    // Step 3.5 Save results in a list
-    output[i] = Rcpp::List::create(
-        Rcpp::Named("id") = id, Rcpp::Named("time") = time_vec,
-        Rcpp::Named("y") = y.t(), Rcpp::Named("eta") = eta.t(),
-        Rcpp::Named("x") = x_i.t());
-  }
-
-  // Step 4: Return results
-  return output;
-}
-#include <RcppArmadillo.h>
-// [[Rcpp::depends(RcppArmadillo)]]
-// [[Rcpp::export(.SimSSMLinSDEIVary0)]]
-Rcpp::List SimSSMLinSDEIVary0(const arma::uword& n, const arma::uword& time,
-                              const double delta_t, const Rcpp::List& mu0,
-                              const Rcpp::List& sigma0_l,
-                              const Rcpp::List& iota, const Rcpp::List& phi,
-                              const Rcpp::List& sigma_l, const Rcpp::List& nu,
-                              const Rcpp::List& lambda,
-                              const Rcpp::List& theta_l,
-                              const bool ou = false) {
-  // Step 1: Determine dimensions
-  arma::vec mu0_i = mu0[0];
-  arma::vec nu_i = nu[0];
-  // int p = mu0_i.n_elem; // number of latent variables
-  // int k = nu_i.n_elem; // number of observed variables
-  arma::vec time_vec =
-      arma::linspace(0, (time - 1) * delta_t, time);  // time vector
-  arma::vec id_template(time, arma::fill::zeros);
-  arma::mat I = arma::eye(mu0_i.n_elem, mu0_i.n_elem);
-  arma::mat J =
-      arma::eye(mu0_i.n_elem * mu0_i.n_elem, mu0_i.n_elem * mu0_i.n_elem);
-
-  // Step 2: Initialize the output list
-  Rcpp::List output(n);
-
-  // Step 3: Generate data per individual
-  for (arma::uword i = 0; i < n; i++) {
-    // Step 3.1: Create matrices of latent, observed, and id variables
-    arma::mat eta(mu0_i.n_elem, time, arma::fill::zeros);
-    arma::mat y(nu_i.n_elem, time, arma::fill::zeros);
-    arma::vec id = id_template;
-    id.fill(i + 1);
-
-    // Step 3.2: Extract the ith parameter
-    arma::vec mu0_i = Rcpp::as<arma::vec>(mu0[i]);
-    arma::mat sigma0_l_i = sigma0_l[i];
-    arma::vec iota_i = Rcpp::as<arma::vec>(iota[i]);
-    arma::mat phi_i = phi[i];
-    arma::mat sigma_l_i = sigma_l[i];
-    arma::vec nu_i = Rcpp::as<arma::vec>(nu[i]);
-    arma::mat lambda_i = lambda[i];
-    arma::mat theta_l_i = theta_l[i];
-
-    // Step 3.3: Calculate state space parameters
-    // if (ou) {
-    //   iota_i = (-1 * phi_i) * iota_i;
-    // }
-    // arma::mat phi_hashtag_i = arma::kron(phi_i, I) + arma::kron(I, phi_i);
-    // arma::vec sigma_vec_i = arma::vectorise(sigma_l_i * sigma_l_i.t());
-    // arma::vec psi_vec_i = arma::inv(phi_hashtag_i) *
-    // (arma::expmat(phi_hashtag_i * delta_t) - J) * sigma_vec_i; arma::mat
-    // psi_l_i = arma::chol(arma::reshape(psi_vec_i, mu0_i.n_elem,
-    // mu0_i.n_elem), "lower"); arma::mat beta_i = arma::expmat(phi_i *
-    // delta_t); arma::vec alpha_i = arma::inv(phi_i) * (beta_i - I) * iota_i;
-    if (ou && !iota_i.is_zero()) {
-      iota_i = (-1 * phi_i) * iota_i;
-    }
-    arma::vec alpha_i = arma::vec(mu0_i.n_elem);
-    arma::mat beta_i = arma::expmat(phi_i * delta_t);
-    // alpha_i = iota_i.is_zero() ? iota_i : arma::inv(phi_i) * (beta_i - I) *
-    // iota_i;
-    alpha_i =
-        iota_i.is_zero() ? iota_i : arma::solve(phi_i, (beta_i - I) * iota_i);
-    arma::mat psi_l_i = arma::mat(mu0_i.n_elem, mu0_i.n_elem, arma::fill::none);
-    if (sigma_l_i.is_zero()) {
-      psi_l_i = sigma_l_i;
+    const arma::mat eta_t = eta.t();
+    arma::mat y_t;
+    if (latent) {
+      y_t = eta_t;
     } else {
-      arma::mat phi_hashtag_i = arma::kron(phi_i, I) + arma::kron(I, phi_i);
-      arma::vec sigma_vec_i = arma::vectorise(sigma_l_i * sigma_l_i.t());
-      // arma::vec psi_vec_i = arma::inv(phi_hashtag_i) *
-      // (arma::expmat(phi_hashtag_i * delta_t) - J) * sigma_vec_i;
-      arma::vec psi_vec_i = arma::solve(
-          phi_hashtag_i,
-          (arma::expmat(phi_hashtag_i * delta_t) - J) * sigma_vec_i);
-      psi_l_i = arma::chol(arma::reshape(psi_vec_i, mu0_i.n_elem, mu0_i.n_elem),
-                           "lower");
+      y_t = eta_t * lambda_s[i % lambda_s.size()].t() +
+            z.rows(p2, p2 + k - 1).t() * theta_l_s[i % theta_l_s.size()].t();
+      y_t.each_row() += arma::rowvec(nu_s[i % nu_s.size()].t());
+      if (covariates_y) {
+        y_t += x_i.t() * kappa_s[i % kappa_s.size()].t();
+      }
     }
-
-    // Step 3.4: Generate initial condition
-    eta.col(0) = mu0_i + (sigma0_l_i * arma::randn(mu0_i.n_elem));
-    y.col(0) =
-        nu_i + (lambda_i * eta.col(0)) + (theta_l_i * arma::randn(nu_i.n_elem));
-    // Step 3.4: Data generation loop
-    for (arma::uword t = 1; t < time; t++) {
-      eta.col(t) = alpha_i + (beta_i * eta.col(t - 1)) +
-                   (psi_l_i * arma::randn(mu0_i.n_elem));
-      y.col(t) = nu_i + (lambda_i * eta.col(t)) +
-                 (theta_l_i * arma::randn(nu_i.n_elem));
-    }
-    // Step 3.5 Save results in a list
-    output[i] = Rcpp::List::create(
-        Rcpp::Named("id") = id, Rcpp::Named("time") = time_vec,
-        Rcpp::Named("y") = y.t(), Rcpp::Named("eta") = eta.t());
-  }
-
-  // Step 4: Return results
-  return output;
-}
-// -----------------------------------------------------------------------------
-// edit .setup/cpp/simStateSpace-sim-ssm-lin-sde-i-vary-1-dot.cpp
-// Ivan Jacob Agaloos Pesigan
-// -----------------------------------------------------------------------------
-
-#include <RcppArmadillo.h>
-// [[Rcpp::depends(RcppArmadillo)]]
-// [[Rcpp::export(.SimSSMLinSDEIVary1)]]
-Rcpp::List SimSSMLinSDEIVary1(const arma::uword& n, const arma::uword& time,
-                              const double delta_t, const Rcpp::List& mu0,
-                              const Rcpp::List& sigma0_l,
-                              const Rcpp::List& iota, const Rcpp::List& phi,
-                              const Rcpp::List& sigma_l, const Rcpp::List& nu,
-                              const Rcpp::List& lambda,
-                              const Rcpp::List& theta_l, const Rcpp::List& x,
-                              const Rcpp::List& gamma, const bool ou = false) {
-  // Step 1: Determine dimensions
-  arma::vec mu0_i = mu0[0];
-  arma::vec nu_i = nu[0];
-  // int p = mu0_i.n_elem; // number of latent variables
-  // int k = nu_i.n_elem; // number of observed variables
-  arma::vec time_vec =
-      arma::linspace(0, (time - 1) * delta_t, time);  // time vector
-  arma::vec id_template(time, arma::fill::zeros);
-  arma::mat I = arma::eye(mu0_i.n_elem, mu0_i.n_elem);
-  arma::mat J =
-      arma::eye(mu0_i.n_elem * mu0_i.n_elem, mu0_i.n_elem * mu0_i.n_elem);
-
-  // Step 2: Initialize the output list
-  Rcpp::List output(n);
-
-  // Step 3: Generate data per individual
-  for (arma::uword i = 0; i < n; i++) {
-    // Step 3.1: Create matrices of latent, observed, and id variables
-    arma::mat eta(mu0_i.n_elem, time, arma::fill::zeros);
-    arma::mat y(nu_i.n_elem, time, arma::fill::zeros);
-    arma::mat x_i = x[i];
-    arma::vec id = id_template;
+    arma::vec id(time);
     id.fill(i + 1);
-
-    // Step 3.2: Extract the ith parameter
-    arma::vec mu0_i = Rcpp::as<arma::vec>(mu0[i]);
-    arma::mat sigma0_l_i = sigma0_l[i];
-    arma::vec iota_i = Rcpp::as<arma::vec>(iota[i]);
-    arma::mat phi_i = phi[i];
-    arma::mat sigma_l_i = sigma_l[i];
-    arma::vec nu_i = Rcpp::as<arma::vec>(nu[i]);
-    arma::mat lambda_i = lambda[i];
-    arma::mat theta_l_i = theta_l[i];
-    arma::mat gamma_i = gamma[i];
-
-    // Step 3.3: Calculate state space parameters
-    // if (ou) {
-    //   iota_i = (-1 * phi_i) * iota_i;
-    // }
-    // arma::mat phi_hashtag_i = arma::kron(phi_i, I) + arma::kron(I, phi_i);
-    // arma::vec sigma_vec_i = arma::vectorise(sigma_l_i * sigma_l_i.t());
-    // arma::vec psi_vec_i = arma::inv(phi_hashtag_i) *
-    // (arma::expmat(phi_hashtag_i * delta_t) - J) * sigma_vec_i; arma::mat
-    // psi_l_i = arma::chol(arma::reshape(psi_vec_i, mu0_i.n_elem,
-    // mu0_i.n_elem), "lower"); arma::mat beta_i = arma::expmat(phi_i *
-    // delta_t); arma::vec alpha_i = arma::inv(phi_i) * (beta_i - I) * iota_i;
-    if (ou && !iota_i.is_zero()) {
-      iota_i = (-1 * phi_i) * iota_i;
-    }
-    arma::vec alpha_i = arma::vec(mu0_i.n_elem);
-    arma::mat beta_i = arma::expmat(phi_i * delta_t);
-    // alpha_i = iota_i.is_zero() ? iota_i : arma::inv(phi_i) * (beta_i - I) *
-    // iota_i;
-    alpha_i =
-        iota_i.is_zero() ? iota_i : arma::solve(phi_i, (beta_i - I) * iota_i);
-    arma::mat psi_l_i = arma::mat(mu0_i.n_elem, mu0_i.n_elem, arma::fill::none);
-    if (sigma_l_i.is_zero()) {
-      psi_l_i = sigma_l_i;
+    if (covariates) {
+      output[i] = Rcpp::List::create(
+          Rcpp::Named("id") = id, Rcpp::Named("time") = time_vec,
+          Rcpp::Named("y") = y_t, Rcpp::Named("eta") = eta_t,
+          Rcpp::Named("x") = x_i.t());
     } else {
-      arma::mat phi_hashtag_i = arma::kron(phi_i, I) + arma::kron(I, phi_i);
-      arma::vec sigma_vec_i = arma::vectorise(sigma_l_i * sigma_l_i.t());
-      // arma::vec psi_vec_i = arma::inv(phi_hashtag_i) *
-      // (arma::expmat(phi_hashtag_i * delta_t) - J) * sigma_vec_i;
-      arma::vec psi_vec_i = arma::solve(
-          phi_hashtag_i,
-          (arma::expmat(phi_hashtag_i * delta_t) - J) * sigma_vec_i);
-      psi_l_i = arma::chol(arma::reshape(psi_vec_i, mu0_i.n_elem, mu0_i.n_elem),
-                           "lower");
+      output[i] = Rcpp::List::create(
+          Rcpp::Named("id") = id, Rcpp::Named("time") = time_vec,
+          Rcpp::Named("y") = y_t, Rcpp::Named("eta") = eta_t);
     }
-
-    // Step 3.4: Generate initial condition
-    eta.col(0) = mu0_i + (sigma0_l_i * arma::randn(mu0_i.n_elem)) +
-                 (gamma_i * x_i.col(0));
-    y.col(0) =
-        nu_i + (lambda_i * eta.col(0)) + (theta_l_i * arma::randn(nu_i.n_elem));
-    // Step 3.4: Data generation loop
-    for (arma::uword t = 1; t < time; t++) {
-      eta.col(t) = alpha_i + (beta_i * eta.col(t - 1)) +
-                   (psi_l_i * arma::randn(mu0_i.n_elem)) +
-                   (gamma_i * x_i.col(t));
-      y.col(t) = nu_i + (lambda_i * eta.col(t)) +
-                 (theta_l_i * arma::randn(nu_i.n_elem));
-    }
-    // Step 3.5 Save results in a list
-    output[i] = Rcpp::List::create(
-        Rcpp::Named("id") = id, Rcpp::Named("time") = time_vec,
-        Rcpp::Named("y") = y.t(), Rcpp::Named("eta") = eta.t(),
-        Rcpp::Named("x") = x_i.t());
   }
-
-  // Step 4: Return results
-  return output;
-}
-// -----------------------------------------------------------------------------
-// edit .setup/cpp/simStateSpace-sim-ssm-lin-sde-i-vary-2-dot.cpp
-// Ivan Jacob Agaloos Pesigan
-// -----------------------------------------------------------------------------
-
-#include <RcppArmadillo.h>
-// [[Rcpp::depends(RcppArmadillo)]]
-// [[Rcpp::export(.SimSSMLinSDEIVary2)]]
-Rcpp::List SimSSMLinSDEIVary2(
-    const arma::uword& n, const arma::uword& time, const double delta_t,
-    const Rcpp::List& mu0, const Rcpp::List& sigma0_l, const Rcpp::List& iota,
-    const Rcpp::List& phi, const Rcpp::List& sigma_l, const Rcpp::List& nu,
-    const Rcpp::List& lambda, const Rcpp::List& theta_l, const Rcpp::List& x,
-    const Rcpp::List& gamma, const Rcpp::List& kappa, const bool ou = false) {
-  // Step 1: Determine dimensions
-  arma::vec mu0_i = mu0[0];
-  arma::vec nu_i = nu[0];
-  // int p = mu0_i.n_elem; // number of latent variables
-  // int k = nu_i.n_elem; // number of observed variables
-  arma::vec time_vec =
-      arma::linspace(0, (time - 1) * delta_t, time);  // time vector
-  arma::vec id_template(time, arma::fill::zeros);
-  arma::mat I = arma::eye(mu0_i.n_elem, mu0_i.n_elem);
-  arma::mat J =
-      arma::eye(mu0_i.n_elem * mu0_i.n_elem, mu0_i.n_elem * mu0_i.n_elem);
-
-  // Step 2: Initialize the output list
-  Rcpp::List output(n);
-
-  // Step 3: Generate data per individual
-  for (arma::uword i = 0; i < n; i++) {
-    // Step 3.1: Create matrices of latent, observed, and id variables
-    arma::mat eta(mu0_i.n_elem, time, arma::fill::zeros);
-    arma::mat y(nu_i.n_elem, time, arma::fill::zeros);
-    arma::mat x_i = x[i];
-    arma::vec id = id_template;
-    id.fill(i + 1);
-
-    // Step 3.2: Extract the ith parameter
-    arma::vec mu0_i = Rcpp::as<arma::vec>(mu0[i]);
-    arma::mat sigma0_l_i = sigma0_l[i];
-    arma::vec iota_i = Rcpp::as<arma::vec>(iota[i]);
-    arma::mat phi_i = phi[i];
-    arma::mat sigma_l_i = sigma_l[i];
-    arma::vec nu_i = Rcpp::as<arma::vec>(nu[i]);
-    arma::mat lambda_i = lambda[i];
-    arma::mat theta_l_i = theta_l[i];
-    arma::mat gamma_i = gamma[i];
-    arma::mat kappa_i = kappa[i];
-
-    // Step 3.3: Calculate state space parameters
-    // if (ou) {
-    //   iota_i = (-1 * phi_i) * iota_i;
-    // }
-    // arma::mat phi_hashtag_i = arma::kron(phi_i, I) + arma::kron(I, phi_i);
-    // arma::vec sigma_vec_i = arma::vectorise(sigma_l_i * sigma_l_i.t());
-    // arma::vec psi_vec_i = arma::inv(phi_hashtag_i) *
-    // (arma::expmat(phi_hashtag_i * delta_t) - J) * sigma_vec_i; arma::mat
-    // psi_l_i = arma::chol(arma::reshape(psi_vec_i, mu0_i.n_elem,
-    // mu0_i.n_elem), "lower"); arma::mat beta_i = arma::expmat(phi_i *
-    // delta_t); arma::vec alpha_i = arma::inv(phi_i) * (beta_i - I) * iota_i;
-    if (ou && !iota_i.is_zero()) {
-      iota_i = (-1 * phi_i) * iota_i;
-    }
-    arma::vec alpha_i = arma::vec(mu0_i.n_elem);
-    arma::mat beta_i = arma::expmat(phi_i * delta_t);
-    // alpha_i = iota_i.is_zero() ? iota_i : arma::inv(phi_i) * (beta_i - I) *
-    // iota_i;
-    alpha_i =
-        iota_i.is_zero() ? iota_i : arma::solve(phi_i, (beta_i - I) * iota_i);
-    arma::mat psi_l_i = arma::mat(mu0_i.n_elem, mu0_i.n_elem, arma::fill::none);
-    if (sigma_l_i.is_zero()) {
-      psi_l_i = sigma_l_i;
-    } else {
-      arma::mat phi_hashtag_i = arma::kron(phi_i, I) + arma::kron(I, phi_i);
-      arma::vec sigma_vec_i = arma::vectorise(sigma_l_i * sigma_l_i.t());
-      // arma::vec psi_vec_i = arma::inv(phi_hashtag_i) *
-      // (arma::expmat(phi_hashtag_i * delta_t) - J) * sigma_vec_i;
-      arma::vec psi_vec_i = arma::solve(
-          phi_hashtag_i,
-          (arma::expmat(phi_hashtag_i * delta_t) - J) * sigma_vec_i);
-      psi_l_i = arma::chol(arma::reshape(psi_vec_i, mu0_i.n_elem, mu0_i.n_elem),
-                           "lower");
-    }
-
-    // Step 3.4: Generate initial condition
-    eta.col(0) = mu0_i + (sigma0_l_i * arma::randn(mu0_i.n_elem)) +
-                 (gamma_i * x_i.col(0));
-    y.col(0) = nu_i + (lambda_i * eta.col(0)) +
-               (theta_l_i * arma::randn(nu_i.n_elem)) + (kappa_i * x_i.col(0));
-    // Step 3.4: Data generation loop
-    for (arma::uword t = 1; t < time; t++) {
-      eta.col(t) = alpha_i + (beta_i * eta.col(t - 1)) +
-                   (psi_l_i * arma::randn(mu0_i.n_elem)) +
-                   (gamma_i * x_i.col(t));
-      y.col(t) = nu_i + (lambda_i * eta.col(t)) +
-                 (theta_l_i * arma::randn(nu_i.n_elem)) +
-                 (kappa_i * x_i.col(t));
-    }
-    // Step 3.5 Save results in a list
-    output[i] = Rcpp::List::create(
-        Rcpp::Named("id") = id, Rcpp::Named("time") = time_vec,
-        Rcpp::Named("y") = y.t(), Rcpp::Named("eta") = eta.t(),
-        Rcpp::Named("x") = x_i.t());
-  }
-
-  // Step 4: Return results
   return output;
 }
 // -----------------------------------------------------------------------------
@@ -2467,7 +1863,7 @@ Rcpp::NumericVector SSMInterceptEta(const arma::mat& beta,
 Rcpp::NumericVector SSMInterceptY(const arma::vec& mean_y,
                                   const arma::vec& mean_eta,
                                   const arma::mat& lambda) {
-  arma::vec output = mean_y + lambda * mean_eta;
+  arma::vec output = mean_y - lambda * mean_eta;
   return Rcpp::NumericVector(output.begin(), output.end());
 }
 // -----------------------------------------------------------------------------
