@@ -206,6 +206,33 @@ transition matrix <span class="math inline">\(\boldsymbol{\beta} = \exp
 \left( \boldsymbol{\Phi} \Delta t \right)\)</span>, the matrix
 exponential. <code><a href="../reference/SimSSMOUFixed.html">SimSSMOUFixed()</a></code> uses this exact discretization
 to simulate the data, so no approximation error is introduced.</p>
+<div class="section level3">
+<h3 id="diagrams">Diagrams<a class="anchor" aria-label="anchor" href="#diagrams"></a>
+</h3>
+<div class="float">
+<img src="fig-vignettes-ou-path.png" style="width:100.0%" alt="Path diagram of the OU model."><div class="figcaption">Path diagram of the OU model.</div>
+</div>
+<p>The model as a drift diagram. Unlike the other diagrams, the arrows
+act continuously in time, not from one occasion to the next. The arrows
+between the latent processes are the nonzero elements of the drift
+matrix <span class="math inline">\(\boldsymbol{\Phi}\)</span>: <span class="math inline">\(\phi_{jk}\)</span> is the effect of <span class="math inline">\(\eta_{k}\)</span> on the rate of change of <span class="math inline">\(\eta_{j}\)</span>. The loops <span class="math inline">\(\phi_{jj}\)</span> are the self-feedback effects;
+negative values pull each process back to its mean <span class="math inline">\(\boldsymbol{\mu}\)</span>. <span class="math inline">\(W_{j}\)</span> are the Wiener processes that drive
+the random fluctuations; <span class="math inline">\(\boldsymbol{\Sigma}\)</span> holds their variances
+and covariances. Each process is measured with error, <span class="math inline">\(\varepsilon_{j}\)</span>, with variance <span class="math inline">\(\theta_{jj}\)</span>.</p>
+<div class="float">
+<img src="fig-vignettes-ou-ssm.png" style="width:100.0%" alt="State space form of the OU model."><div class="figcaption">State space form of the OU model.</div>
+</div>
+<p>The same model in state space form, at the occasions of measurement,
+<span class="math inline">\(\Delta t\)</span> apart. The exact
+discretization gives the transition matrix <span class="math inline">\(\boldsymbol{\beta}\)</span> and the process noise
+covariance matrix <span class="math inline">\(\boldsymbol{\Psi}\)</span>
+from <span class="math inline">\(\boldsymbol{\Phi}\)</span>, <span class="math inline">\(\boldsymbol{\Sigma}\)</span>, and <span class="math inline">\(\Delta t\)</span>; <span class="math inline">\(\boldsymbol{\Lambda}\)</span> maps the state to
+the observed variables, and <span class="math inline">\(\boldsymbol{\Theta}\)</span> is the covariance
+matrix of the measurement error. <code><a href="../reference/SimSSMOUFixed.html">SimSSMOUFixed()</a></code> takes
+<code>phi</code>, <code>lambda</code>, <code>delta_t</code>, and the
+Cholesky factors of <span class="math inline">\(\boldsymbol{\Sigma}\)</span> and <span class="math inline">\(\boldsymbol{\Theta}\)</span> (<code>sigma_l</code>
+and <code>theta_l</code>), and does the discretization itself.</p>
+</div>
 </div>
 <div class="section level2">
 <h2 id="data-generation">Data Generation<a class="anchor" aria-label="anchor" href="#data-generation"></a>
@@ -656,8 +683,8 @@ names.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Doing end processing</span></span>
 <span><span class="co">#&gt; Successful trial</span></span>
-<span><span class="co">#&gt; Total Time: 46.36572 </span></span>
-<span><span class="co">#&gt; Backend Time: 45.95015</span></span></code></pre></div>
+<span><span class="co">#&gt; Total Time: 47.2449 </span></span>
+<span><span class="co">#&gt; Backend Time: 46.84859</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">

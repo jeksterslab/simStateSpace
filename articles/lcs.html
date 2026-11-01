@@ -224,6 +224,41 @@ the initial true levels and the slopes, <span class="math display">\[\begin{equa
 <p>For example, a positive covariance between the initial level and the
 slope of the same variable means that individuals who start higher also
 tend to gain more each year.</p>
+<div class="section level3">
+<h3 id="diagrams">Diagrams<a class="anchor" aria-label="anchor" href="#diagrams"></a>
+</h3>
+<div class="float">
+<img src="fig-vignettes-lcs-path.png" style="width:100.0%" alt="Path diagram of the dual change score model."><div class="figcaption">Path diagram of the dual change score
+model.</div>
+</div>
+<p>The bivariate dual change score model as a path diagram, for the
+first three occasions. The true level at each occasion, <span class="math inline">\(\eta_{1}\)</span> or <span class="math inline">\(\eta_{2}\)</span>, is the previous level plus the
+latent change <span class="math inline">\(\Delta \eta_{1}\)</span> or
+<span class="math inline">\(\Delta \eta_{2}\)</span> (the arrows with a
+loading of 1). Each change is the slope (<span class="math inline">\(\eta_{3}\)</span> or <span class="math inline">\(\eta_{4}\)</span>), plus the self-feedback effect
+(<span class="math inline">\(b_{1}\)</span> or <span class="math inline">\(b_{2}\)</span>) of the previous level of the same
+variable, plus the coupling effect (<span class="math inline">\(g_{12}\)</span> or <span class="math inline">\(g_{21}\)</span>) of the previous level of the
+other variable. <span class="math inline">\(\varepsilon_{1}\)</span> and
+<span class="math inline">\(\varepsilon_{2}\)</span> are the measurement
+errors. The initial levels and the slopes all covary; to keep the
+diagram readable, only <span class="math inline">\(\sigma_{12}\)</span>,
+<span class="math inline">\(\sigma_{13}\)</span>, <span class="math inline">\(\sigma_{24}\)</span>, and <span class="math inline">\(\sigma_{34}\)</span> are drawn.</p>
+<div class="float">
+<img src="fig-vignettes-lcs-ssm.png" style="width:100.0%" alt="State space form of the dual change score model."><div class="figcaption">State space form of the dual change score
+model.</div>
+</div>
+<p>The same model in state space form. All the latent variables at one
+occasion form the state vector <span class="math inline">\(\boldsymbol{\eta}_{t}\)</span>, and all the
+observed variables form <span class="math inline">\(\mathbf{y}_{t}\)</span>. <span class="math inline">\(\boldsymbol{\beta}\)</span> carries the state from
+one occasion to the next, <span class="math inline">\(\boldsymbol{\Lambda}\)</span> maps the state to
+the observed variables, and <span class="math inline">\(\boldsymbol{\Theta}\)</span> is the covariance
+matrix of the measurement error <span class="math inline">\(\boldsymbol{\varepsilon}_{t}\)</span>. The latent
+changes are not states: writing each change into the level gives the
+first two rows of <span class="math inline">\(\boldsymbol{\beta}\)</span>. There is no process
+noise. <code><a href="../reference/SimSSMFixed.html">SimSSMFixed()</a></code> takes <code>beta</code>,
+<code>lambda</code>, and the Cholesky factor of <span class="math inline">\(\boldsymbol{\Theta}\)</span>
+(<code>theta_l</code>); <code>psi_l</code> is a matrix of zeros.</p>
+</div>
 </div>
 <div class="section level2">
 <h2 id="data-generation">Data Generation<a class="anchor" aria-label="anchor" href="#data-generation"></a>
@@ -534,8 +569,8 @@ names.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Doing end processing</span></span>
 <span><span class="co">#&gt; Successful trial</span></span>
-<span><span class="co">#&gt; Total Time: 5.482355 </span></span>
-<span><span class="co">#&gt; Backend Time: 5.475349</span></span></code></pre></div>
+<span><span class="co">#&gt; Total Time: 5.37442 </span></span>
+<span><span class="co">#&gt; Backend Time: 5.367714</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">

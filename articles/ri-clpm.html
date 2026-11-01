@@ -243,6 +243,36 @@ well-being. The within-person components have mean zero, because they
 are deviations from the traits, and are uncorrelated with the traits.
 <span class="math inline">\(\sigma_{33}\)</span>, <span class="math inline">\(\sigma_{44}\)</span>, and <span class="math inline">\(\sigma_{34}\)</span> are their variances and
 covariance at the first occasion.</p>
+<div class="section level3">
+<h3 id="diagrams">Diagrams<a class="anchor" aria-label="anchor" href="#diagrams"></a>
+</h3>
+<div class="float">
+<img src="fig-vignettes-ri-clpm-path.png" style="width:100.0%" alt="Path diagram of the RI-CLPM."><div class="figcaption">Path diagram of the RI-CLPM.</div>
+</div>
+<p>The RI-CLPM as a path diagram, for the first three occasions. Squares
+are observed variables and circles are latent variables. The traits
+<span class="math inline">\(\eta_{1}\)</span> and <span class="math inline">\(\eta_{2}\)</span> load on every occasion with a
+loading of 1 and covary (<span class="math inline">\(\sigma_{12}\)</span>). The within-person
+components <span class="math inline">\(\eta_{3}\)</span> and <span class="math inline">\(\eta_{4}\)</span> carry the dynamics: the
+horizontal arrows are the autoregressive effects and the diagonal arrows
+the cross-lagged effects. <span class="math inline">\(\zeta_{3}\)</span>
+and <span class="math inline">\(\zeta_{4}\)</span> are the new parts of
+the deviations on each occasion, with covariance <span class="math inline">\(\psi_{34}\)</span>, and <span class="math inline">\(\sigma_{34}\)</span> is the covariance of the
+within-person components at the first occasion.</p>
+<div class="float">
+<img src="fig-vignettes-ri-clpm-ssm.png" style="width:100.0%" alt="State space form of the RI-CLPM."><div class="figcaption">State space form of the RI-CLPM.</div>
+</div>
+<p>The same model in state space form. All the latent variables at one
+occasion form the state vector <span class="math inline">\(\boldsymbol{\eta}_{t}\)</span>, and all the
+observed variables form <span class="math inline">\(\mathbf{y}_{t}\)</span>. <span class="math inline">\(\boldsymbol{\beta}\)</span> carries the state from
+one occasion to the next, <span class="math inline">\(\boldsymbol{\Lambda}\)</span> maps the state to
+the observed variables, and <span class="math inline">\(\boldsymbol{\Psi}\)</span> is the covariance
+matrix of the process noise <span class="math inline">\(\boldsymbol{\zeta}_{t}\)</span>. The traits are
+states with a transition of 1 and no process noise, so they keep their
+values over time. <code><a href="../reference/SimSSMFixed.html">SimSSMFixed()</a></code> takes <code>beta</code>,
+<code>lambda</code>, and the Cholesky factor of <span class="math inline">\(\boldsymbol{\Psi}\)</span> (<code>psi_l</code>);
+<code>theta_l</code> is a matrix of zeros.</p>
+</div>
 </div>
 <div class="section level2">
 <h2 id="data-generation">Data Generation<a class="anchor" aria-label="anchor" href="#data-generation"></a>
@@ -597,8 +627,8 @@ names.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Doing end processing</span></span>
 <span><span class="co">#&gt; Successful trial</span></span>
-<span><span class="co">#&gt; Total Time: 2.429735 </span></span>
-<span><span class="co">#&gt; Backend Time: 2.422813</span></span></code></pre></div>
+<span><span class="co">#&gt; Total Time: 2.455073 </span></span>
+<span><span class="co">#&gt; Backend Time: 2.449058</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">

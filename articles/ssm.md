@@ -112,6 +112,43 @@ The functions in `simStateSpace` take this square root, the lower
 triangular Cholesky factor, as the arguments `psi_l` (for
 \\(\boldsymbol{\Psi}\\)) and `theta_l` (for \\(\boldsymbol{\Theta}\\)).
 
+### Diagrams
+
+![Path diagram of the state space model.](fig-vignettes-ssm-path.png)
+
+Path diagram of the state space model.
+
+The model as a path diagram, for the first three occasions. Squares are
+observed variables and circles are latent variables. Each latent
+variable \\(\eta\_{j}\\) has one indicator \\(y\_{j}\\) with a loading
+of 1 and measurement error \\(\varepsilon\_{j}\\) with variance
+\\(\theta\_{jj}\\). The horizontal arrows are the autoregressive effects
+and the diagonal arrows the cross-lagged effects; only the nonzero
+elements of \\(\boldsymbol{\beta}\\) in this example are drawn
+(\\(\eta\_{1}\\) affects \\(\eta\_{2}\\) and \\(\eta\_{3}\\), and
+\\(\eta\_{2}\\) affects \\(\eta\_{3}\\)). \\(\zeta\_{j}\\) is the
+process noise, with variance \\(\psi\_{jj}\\), and the curved arrows on
+the left are the covariances of the latent variables at the first
+occasion.
+
+![State space form of the state space model.](fig-vignettes-ssm-ssm.png)
+
+State space form of the state space model.
+
+The same model in state space form. All the latent variables at one
+occasion form the state vector \\(\boldsymbol{\eta}\_{t}\\), and all the
+observed variables form \\(\mathbf{y}\_{t}\\). \\(\boldsymbol{\beta}\\)
+carries the state from one occasion to the next,
+\\(\boldsymbol{\Lambda}\\) maps the state to the observed variables,
+\\(\boldsymbol{\Psi}\\) is the covariance matrix of the process noise
+\\(\boldsymbol{\zeta}\_{t}\\), and \\(\boldsymbol{\Theta}\\) the
+covariance matrix of the measurement error
+\\(\boldsymbol{\varepsilon}\_{t}\\).
+[`SimSSMFixed()`](https://github.com/jeksterslab/simStateSpace/reference/SimSSMFixed.md)
+takes `beta`, `lambda`, and the Cholesky factors of
+\\(\boldsymbol{\Psi}\\) and \\(\boldsymbol{\Theta}\\) (`psi_l` and
+`theta_l`).
+
 ## Data Generation
 
 ### Notation
@@ -477,8 +514,8 @@ The plot below shows the model equations with the parameter names.
 `#> Warning in sqrt(diag(x$inv.hessian)): NaNs produced`\
 `#> Warning: These parameters may have untrustworthy standard errors: sigma0_2_1,`\
 `#> sigma0_3_1.`\
-`#> Total Time: 27.30079 `\
-`#> Backend Time: 26.90893`
+`#> Total Time: 27.24204 `\
+`#> Backend Time: 26.87385`
 
 ## Summary
 

@@ -92,6 +92,44 @@ For example, a positive covariance between the initial level and the
 slope of the same variable means that individuals who start higher also
 tend to gain more each year.
 
+### Diagrams
+
+![Path diagram of the dual change score
+model.](fig-vignettes-lcs-path.png)
+
+Path diagram of the dual change score model.
+
+The bivariate dual change score model as a path diagram, for the first
+three occasions. The true level at each occasion, \\(\eta\_{1}\\) or
+\\(\eta\_{2}\\), is the previous level plus the latent change \\(\Delta
+\eta\_{1}\\) or \\(\Delta \eta\_{2}\\) (the arrows with a loading of 1).
+Each change is the slope (\\(\eta\_{3}\\) or \\(\eta\_{4}\\)), plus the
+self-feedback effect (\\(b\_{1}\\) or \\(b\_{2}\\)) of the previous
+level of the same variable, plus the coupling effect (\\(g\_{12}\\) or
+\\(g\_{21}\\)) of the previous level of the other variable.
+\\(\varepsilon\_{1}\\) and \\(\varepsilon\_{2}\\) are the measurement
+errors. The initial levels and the slopes all covary; to keep the
+diagram readable, only \\(\sigma\_{12}\\), \\(\sigma\_{13}\\),
+\\(\sigma\_{24}\\), and \\(\sigma\_{34}\\) are drawn.
+
+![State space form of the dual change score
+model.](fig-vignettes-lcs-ssm.png)
+
+State space form of the dual change score model.
+
+The same model in state space form. All the latent variables at one
+occasion form the state vector \\(\boldsymbol{\eta}\_{t}\\), and all the
+observed variables form \\(\mathbf{y}\_{t}\\). \\(\boldsymbol{\beta}\\)
+carries the state from one occasion to the next,
+\\(\boldsymbol{\Lambda}\\) maps the state to the observed variables, and
+\\(\boldsymbol{\Theta}\\) is the covariance matrix of the measurement
+error \\(\boldsymbol{\varepsilon}\_{t}\\). The latent changes are not
+states: writing each change into the level gives the first two rows of
+\\(\boldsymbol{\beta}\\). There is no process noise.
+[`SimSSMFixed()`](https://github.com/jeksterslab/simStateSpace/reference/SimSSMFixed.md)
+takes `beta`, `lambda`, and the Cholesky factor of
+\\(\boldsymbol{\Theta}\\) (`theta_l`); `psi_l` is a matrix of zeros.
+
 ## Data Generation
 
 ### Notation
@@ -374,8 +412,8 @@ The plot below shows the model equations with the parameter names.
 `#> `\
 `#> Doing end processing`\
 `#> Successful trial`\
-`#> Total Time: 5.482355 `\
-`#> Backend Time: 5.475349`
+`#> Total Time: 5.37442 `\
+`#> Backend Time: 5.367714`
 
 ## Summary
 

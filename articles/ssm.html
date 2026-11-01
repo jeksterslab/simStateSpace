@@ -230,6 +230,38 @@ root of the covariance matrix. The functions in
 <code>simStateSpace</code> take this square root, the lower triangular
 Cholesky factor, as the arguments <code>psi_l</code> (for <span class="math inline">\(\boldsymbol{\Psi}\)</span>) and
 <code>theta_l</code> (for <span class="math inline">\(\boldsymbol{\Theta}\)</span>).</p>
+<div class="section level3">
+<h3 id="diagrams">Diagrams<a class="anchor" aria-label="anchor" href="#diagrams"></a>
+</h3>
+<div class="float">
+<img src="fig-vignettes-ssm-path.png" style="width:100.0%" alt="Path diagram of the state space model."><div class="figcaption">Path diagram of the state space model.</div>
+</div>
+<p>The model as a path diagram, for the first three occasions. Squares
+are observed variables and circles are latent variables. Each latent
+variable <span class="math inline">\(\eta_{j}\)</span> has one indicator
+<span class="math inline">\(y_{j}\)</span> with a loading of 1 and
+measurement error <span class="math inline">\(\varepsilon_{j}\)</span>
+with variance <span class="math inline">\(\theta_{jj}\)</span>. The
+horizontal arrows are the autoregressive effects and the diagonal arrows
+the cross-lagged effects; only the nonzero elements of <span class="math inline">\(\boldsymbol{\beta}\)</span> in this example are
+drawn (<span class="math inline">\(\eta_{1}\)</span> affects <span class="math inline">\(\eta_{2}\)</span> and <span class="math inline">\(\eta_{3}\)</span>, and <span class="math inline">\(\eta_{2}\)</span> affects <span class="math inline">\(\eta_{3}\)</span>). <span class="math inline">\(\zeta_{j}\)</span> is the process noise, with
+variance <span class="math inline">\(\psi_{jj}\)</span>, and the curved
+arrows on the left are the covariances of the latent variables at the
+first occasion.</p>
+<div class="float">
+<img src="fig-vignettes-ssm-ssm.png" style="width:100.0%" alt="State space form of the state space model."><div class="figcaption">State space form of the state space model.</div>
+</div>
+<p>The same model in state space form. All the latent variables at one
+occasion form the state vector <span class="math inline">\(\boldsymbol{\eta}_{t}\)</span>, and all the
+observed variables form <span class="math inline">\(\mathbf{y}_{t}\)</span>. <span class="math inline">\(\boldsymbol{\beta}\)</span> carries the state from
+one occasion to the next, <span class="math inline">\(\boldsymbol{\Lambda}\)</span> maps the state to
+the observed variables, <span class="math inline">\(\boldsymbol{\Psi}\)</span> is the covariance
+matrix of the process noise <span class="math inline">\(\boldsymbol{\zeta}_{t}\)</span>, and <span class="math inline">\(\boldsymbol{\Theta}\)</span> the covariance matrix
+of the measurement error <span class="math inline">\(\boldsymbol{\varepsilon}_{t}\)</span>.
+<code><a href="../reference/SimSSMFixed.html">SimSSMFixed()</a></code> takes <code>beta</code>, <code>lambda</code>,
+and the Cholesky factors of <span class="math inline">\(\boldsymbol{\Psi}\)</span> and <span class="math inline">\(\boldsymbol{\Theta}\)</span> (<code>psi_l</code>
+and <code>theta_l</code>).</p>
+</div>
 </div>
 <div class="section level2">
 <h2 id="data-generation">Data Generation<a class="anchor" aria-label="anchor" href="#data-generation"></a>
@@ -644,8 +676,8 @@ names.</p>
 <span><span class="co">#&gt; Warning in sqrt(diag(x$inv.hessian)): NaNs produced</span></span>
 <span><span class="co">#&gt; Warning: These parameters may have untrustworthy standard errors: sigma0_2_1,</span></span>
 <span><span class="co">#&gt; sigma0_3_1.</span></span>
-<span><span class="co">#&gt; Total Time: 27.30079 </span></span>
-<span><span class="co">#&gt; Backend Time: 26.90893</span></span></code></pre></div>
+<span><span class="co">#&gt; Total Time: 27.24204 </span></span>
+<span><span class="co">#&gt; Backend Time: 26.87385</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">

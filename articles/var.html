@@ -180,6 +180,33 @@ square root of <span class="math inline">\(\boldsymbol{\Psi}\)</span>.
 The functions in <code>simStateSpace</code> take this square root, the
 lower triangular Cholesky factor of <span class="math inline">\(\boldsymbol{\Psi}\)</span>, as the argument
 <code>psi_l</code>.</p>
+<div class="section level3">
+<h3 id="diagrams">Diagrams<a class="anchor" aria-label="anchor" href="#diagrams"></a>
+</h3>
+<div class="float">
+<img src="fig-vignettes-var-path.png" style="width:100.0%" alt="Path diagram of the VAR model."><div class="figcaption">Path diagram of the VAR model.</div>
+</div>
+<p>The model as a path diagram, for the first three occasions. The
+variables are observed (squares) and have no measurement error. The
+horizontal arrows are the autoregressive effects and the diagonal arrows
+the cross-lagged effects; only the nonzero elements of <span class="math inline">\(\boldsymbol{\beta}\)</span> in this example are
+drawn. <span class="math inline">\(\zeta_{j}\)</span> is the process
+noise, with variance <span class="math inline">\(\psi_{jj}\)</span>, and
+the curved arrows on the left are the covariances of the variables at
+the first occasion.</p>
+<div class="float">
+<img src="fig-vignettes-var-ssm.png" style="width:100.0%" alt="State space form of the VAR model."><div class="figcaption">State space form of the VAR model.</div>
+</div>
+<p>The same model in state space form. The observed variables are the
+state, <span class="math inline">\(\mathbf{y}_{t} =
+\boldsymbol{\eta}_{t}\)</span>, so <span class="math inline">\(\boldsymbol{\Lambda}\)</span> is the identity
+matrix and there is no measurement error. <span class="math inline">\(\boldsymbol{\beta}\)</span> carries the state from
+one occasion to the next, and <span class="math inline">\(\boldsymbol{\Psi}\)</span> is the covariance
+matrix of the process noise <span class="math inline">\(\boldsymbol{\zeta}_{t}\)</span>.
+<code><a href="../reference/SimSSMVARFixed.html">SimSSMVARFixed()</a></code> takes <code>beta</code> and the Cholesky
+factor of <span class="math inline">\(\boldsymbol{\Psi}\)</span>
+(<code>psi_l</code>).</p>
+</div>
 </div>
 <div class="section level2">
 <h2 id="data-generation">Data Generation<a class="anchor" aria-label="anchor" href="#data-generation"></a>
@@ -518,8 +545,8 @@ below shows the model equations with the parameter names.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Doing end processing</span></span>
 <span><span class="co">#&gt; Successful trial</span></span>
-<span><span class="co">#&gt; Total Time: 23.52952 </span></span>
-<span><span class="co">#&gt; Backend Time: 23.13537</span></span></code></pre></div>
+<span><span class="co">#&gt; Total Time: 23.53514 </span></span>
+<span><span class="co">#&gt; Backend Time: 23.17039</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">

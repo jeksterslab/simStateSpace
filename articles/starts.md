@@ -73,6 +73,37 @@ is how much individuals differ in it. The autoregressive trait has mean
 zero, because the stable trait carries the mean, and \\(\sigma\_{22}\\)
 is its variance at the first occasion. The two traits are uncorrelated.
 
+### Diagrams
+
+![Path diagram of the STARTS model.](fig-vignettes-starts-path.png)
+
+Path diagram of the STARTS model.
+
+The STARTS model as a path diagram, for the first three occasions. The
+stable trait \\(\eta\_{1}\\) loads on every occasion with a loading
+of 1. The autoregressive trait \\(\eta\_{2}\\) carries over from one
+occasion to the next with the autoregressive effect \\(\beta\_{22}\\)
+and gets a new part \\(\zeta\_{2}\\), with variance \\(\psi\_{22}\\), on
+each occasion. The state \\(\varepsilon\\), with variance \\(\theta\\),
+is new on every occasion.
+
+![State space form of the STARTS model.](fig-vignettes-starts-ssm.png)
+
+State space form of the STARTS model.
+
+The same model in state space form. All the latent variables at one
+occasion form the state vector \\(\boldsymbol{\eta}\_{t}\\), and all the
+observed variables form \\(\mathbf{y}\_{t}\\). \\(\boldsymbol{\beta}\\)
+carries the state from one occasion to the next,
+\\(\boldsymbol{\Lambda}\\) maps the state to the observed variables,
+\\(\boldsymbol{\Psi}\\) is the covariance matrix of the process noise
+\\(\boldsymbol{\zeta}\_{t}\\), and \\(\boldsymbol{\Theta}\\) is the
+variance of the state.
+[`SimSSMFixed()`](https://github.com/jeksterslab/simStateSpace/reference/SimSSMFixed.md)
+takes `beta`, `lambda`, and the Cholesky factors of
+\\(\boldsymbol{\Psi}\\) and \\(\boldsymbol{\Theta}\\) (`psi_l` and
+`theta_l`).
+
 ## Data Generation
 
 ### Notation
@@ -331,8 +362,8 @@ The plot below shows the model equations with the parameter names.
 `#> `\
 `#> Doing end processing`\
 `#> Successful trial`\
-`#> Total Time: 46.42492 `\
-`#> Backend Time: 46.04418`
+`#> Total Time: 46.7627 `\
+`#> Backend Time: 46.39977`
 
 ## Summary
 

@@ -101,6 +101,39 @@ the traits. \\(\sigma\_{33}\\), \\(\sigma\_{44}\\), and
 \\(\sigma\_{34}\\) are their variances and covariance at the first
 occasion.
 
+### Diagrams
+
+![Path diagram of the RI-CLPM.](fig-vignettes-ri-clpm-path.png)
+
+Path diagram of the RI-CLPM.
+
+The RI-CLPM as a path diagram, for the first three occasions. Squares
+are observed variables and circles are latent variables. The traits
+\\(\eta\_{1}\\) and \\(\eta\_{2}\\) load on every occasion with a
+loading of 1 and covary (\\(\sigma\_{12}\\)). The within-person
+components \\(\eta\_{3}\\) and \\(\eta\_{4}\\) carry the dynamics: the
+horizontal arrows are the autoregressive effects and the diagonal arrows
+the cross-lagged effects. \\(\zeta\_{3}\\) and \\(\zeta\_{4}\\) are the
+new parts of the deviations on each occasion, with covariance
+\\(\psi\_{34}\\), and \\(\sigma\_{34}\\) is the covariance of the
+within-person components at the first occasion.
+
+![State space form of the RI-CLPM.](fig-vignettes-ri-clpm-ssm.png)
+
+State space form of the RI-CLPM.
+
+The same model in state space form. All the latent variables at one
+occasion form the state vector \\(\boldsymbol{\eta}\_{t}\\), and all the
+observed variables form \\(\mathbf{y}\_{t}\\). \\(\boldsymbol{\beta}\\)
+carries the state from one occasion to the next,
+\\(\boldsymbol{\Lambda}\\) maps the state to the observed variables, and
+\\(\boldsymbol{\Psi}\\) is the covariance matrix of the process noise
+\\(\boldsymbol{\zeta}\_{t}\\). The traits are states with a transition
+of 1 and no process noise, so they keep their values over time.
+[`SimSSMFixed()`](https://github.com/jeksterslab/simStateSpace/reference/SimSSMFixed.md)
+takes `beta`, `lambda`, and the Cholesky factor of
+\\(\boldsymbol{\Psi}\\) (`psi_l`); `theta_l` is a matrix of zeros.
+
 ## Data Generation
 
 ### Notation
@@ -400,8 +433,8 @@ The plot below shows the model equations with the parameter names.
 `#> `\
 `#> Doing end processing`\
 `#> Successful trial`\
-`#> Total Time: 2.429735 `\
-`#> Backend Time: 2.422813`
+`#> Total Time: 2.455073 `\
+`#> Backend Time: 2.449058`
 
 ## Summary
 

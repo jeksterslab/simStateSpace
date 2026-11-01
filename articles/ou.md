@@ -103,6 +103,41 @@ discrete-time vector autoregressive model with transition matrix
 uses this exact discretization to simulate the data, so no approximation
 error is introduced.
 
+### Diagrams
+
+![Path diagram of the OU model.](fig-vignettes-ou-path.png)
+
+Path diagram of the OU model.
+
+The model as a drift diagram. Unlike the other diagrams, the arrows act
+continuously in time, not from one occasion to the next. The arrows
+between the latent processes are the nonzero elements of the drift
+matrix \\(\boldsymbol{\Phi}\\): \\(\phi\_{jk}\\) is the effect of
+\\(\eta\_{k}\\) on the rate of change of \\(\eta\_{j}\\). The loops
+\\(\phi\_{jj}\\) are the self-feedback effects; negative values pull
+each process back to its mean \\(\boldsymbol{\mu}\\). \\(W\_{j}\\) are
+the Wiener processes that drive the random fluctuations;
+\\(\boldsymbol{\Sigma}\\) holds their variances and covariances. Each
+process is measured with error, \\(\varepsilon\_{j}\\), with variance
+\\(\theta\_{jj}\\).
+
+![State space form of the OU model.](fig-vignettes-ou-ssm.png)
+
+State space form of the OU model.
+
+The same model in state space form, at the occasions of measurement,
+\\(\Delta t\\) apart. The exact discretization gives the transition
+matrix \\(\boldsymbol{\beta}\\) and the process noise covariance matrix
+\\(\boldsymbol{\Psi}\\) from \\(\boldsymbol{\Phi}\\),
+\\(\boldsymbol{\Sigma}\\), and \\(\Delta t\\);
+\\(\boldsymbol{\Lambda}\\) maps the state to the observed variables, and
+\\(\boldsymbol{\Theta}\\) is the covariance matrix of the measurement
+error.
+[`SimSSMOUFixed()`](https://github.com/jeksterslab/simStateSpace/reference/SimSSMOUFixed.md)
+takes `phi`, `lambda`, `delta_t`, and the Cholesky factors of
+\\(\boldsymbol{\Sigma}\\) and \\(\boldsymbol{\Theta}\\) (`sigma_l` and
+`theta_l`), and does the discretization itself.
+
 ## Data Generation
 
 ### Notation
@@ -509,8 +544,8 @@ The plot below shows the model equations with the parameter names.
 `#> `\
 `#> Doing end processing`\
 `#> Successful trial`\
-`#> Total Time: 46.36572 `\
-`#> Backend Time: 45.95015`
+`#> Total Time: 47.2449 `\
+`#> Backend Time: 46.84859`
 
 ## Summary
 

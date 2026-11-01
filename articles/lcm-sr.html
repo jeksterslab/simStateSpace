@@ -224,6 +224,36 @@ intercepts), and the variances and covariance of the residuals at the
 first occasion. The residuals have mean zero, because they are
 deviations from the trajectories, and are uncorrelated with the
 intercepts and slopes.</p>
+<div class="section level3">
+<h3 id="diagrams">Diagrams<a class="anchor" aria-label="anchor" href="#diagrams"></a>
+</h3>
+<div class="float">
+<img src="fig-vignettes-lcm-sr-path.png" style="width:100.0%" alt="Path diagram of the LCM-SR."><div class="figcaption">Path diagram of the LCM-SR.</div>
+</div>
+<p>The LCM-SR as a path diagram, for the first three occasions. The
+intercepts <span class="math inline">\(\eta_{1}\)</span> and <span class="math inline">\(\eta_{2}\)</span> load on every occasion with a
+loading of 1, and the slopes <span class="math inline">\(\eta_{3}\)</span> and <span class="math inline">\(\eta_{4}\)</span> with loadings <span class="math inline">\(0, 1, 2, \ldots\)</span>. The structured residuals
+<span class="math inline">\(\eta_{5}\)</span> and <span class="math inline">\(\eta_{6}\)</span> carry the dynamics: the
+horizontal arrows are the autoregressive effects and the diagonal arrows
+the cross-lagged effects. <span class="math inline">\(\zeta_{5}\)</span>
+and <span class="math inline">\(\zeta_{6}\)</span> are the new parts of
+the residuals on each occasion, with covariance <span class="math inline">\(\psi_{56}\)</span>. The intercepts and slopes all
+covary; to keep the diagram readable, only <span class="math inline">\(\sigma_{12}\)</span>, <span class="math inline">\(\sigma_{13}\)</span>, and <span class="math inline">\(\sigma_{24}\)</span> are drawn.</p>
+<div class="float">
+<img src="fig-vignettes-lcm-sr-ssm.png" style="width:100.0%" alt="State space form of the LCM-SR."><div class="figcaption">State space form of the LCM-SR.</div>
+</div>
+<p>The same model in state space form. All the latent variables at one
+occasion form the state vector <span class="math inline">\(\boldsymbol{\eta}_{t}\)</span>, and all the
+observed variables form <span class="math inline">\(\mathbf{y}_{t}\)</span>. <span class="math inline">\(\boldsymbol{\beta}\)</span> carries the state from
+one occasion to the next, <span class="math inline">\(\boldsymbol{\Lambda}\)</span> maps the state to
+the observed variables, and <span class="math inline">\(\boldsymbol{\Psi}\)</span> is the covariance
+matrix of the process noise <span class="math inline">\(\boldsymbol{\zeta}_{t}\)</span>. In the state
+space form, <span class="math inline">\(\eta_{1}\)</span> and <span class="math inline">\(\eta_{2}\)</span> are the current levels of the
+trajectories (the intercepts at the first occasion): <span class="math inline">\(\boldsymbol{\beta}\)</span> adds the slope to the
+level at each occasion. <code><a href="../reference/SimSSMFixed.html">SimSSMFixed()</a></code> takes
+<code>beta</code>, <code>lambda</code>, and the Cholesky factor of <span class="math inline">\(\boldsymbol{\Psi}\)</span> (<code>psi_l</code>);
+<code>theta_l</code> is a matrix of zeros.</p>
+</div>
 </div>
 <div class="section level2">
 <h2 id="data-generation">Data Generation<a class="anchor" aria-label="anchor" href="#data-generation"></a>
@@ -599,8 +629,8 @@ names.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Doing end processing</span></span>
 <span><span class="co">#&gt; Successful trial</span></span>
-<span><span class="co">#&gt; Total Time: 7.207033 </span></span>
-<span><span class="co">#&gt; Backend Time: 7.200523</span></span></code></pre></div>
+<span><span class="co">#&gt; Total Time: 7.239855 </span></span>
+<span><span class="co">#&gt; Backend Time: 7.233323</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">

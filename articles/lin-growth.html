@@ -197,6 +197,34 @@ and <span class="math inline">\(\sigma^{2}_{\eta_{1}}\)</span> are how
 much individuals differ in them, and <span class="math inline">\(\sigma_{\eta_{0}, \eta_{1}}\)</span> is their
 covariance, for example, positive if individuals who start higher also
 grow faster.</p>
+<div class="section level3">
+<h3 id="diagrams">Diagrams<a class="anchor" aria-label="anchor" href="#diagrams"></a>
+</h3>
+<div class="float">
+<img src="fig-vignettes-lin-growth-path.png" style="width:100.0%" alt="Path diagram of the linear growth curve model."><div class="figcaption">Path diagram of the linear growth curve
+model.</div>
+</div>
+<p>The model as a path diagram. The intercept <span class="math inline">\(\eta_{0}\)</span> loads on every occasion with a
+loading of 1, and the slope <span class="math inline">\(\eta_{1}\)</span> with loadings <span class="math inline">\(0, 1, 2, \ldots, T - 1\)</span>, so the slope is
+the change per occasion. <span class="math inline">\(\varepsilon_{t}\)</span> is the measurement error,
+with variance <span class="math inline">\(\theta\)</span>, and <span class="math inline">\(\sigma_{\eta_{0}, \eta_{1}}\)</span> is the
+covariance of the intercept and the slope.</p>
+<div class="float">
+<img src="fig-vignettes-lin-growth-ssm.png" style="width:100.0%" alt="State space form of the linear growth curve model."><div class="figcaption">State space form of the linear growth curve
+model.</div>
+</div>
+<p>The same model in state space form. The state holds the current level
+<span class="math inline">\(\eta_{0}\)</span> and the slope <span class="math inline">\(\eta_{1}\)</span>. <span class="math inline">\(\boldsymbol{\beta}\)</span> adds the slope to the
+level at each occasion and keeps the slope, <span class="math inline">\(\boldsymbol{\Lambda}\)</span> picks the level, and
+<span class="math inline">\(\theta\)</span> is the measurement error
+variance. There is no process noise: the loadings of the path diagram
+are produced by the transition, and the differences between individuals
+come from the initial condition. <code><a href="../reference/SimSSMLinGrowth.html">SimSSMLinGrowth()</a></code> fixes
+<span class="math inline">\(\boldsymbol{\beta}\)</span> and <span class="math inline">\(\boldsymbol{\Lambda}\)</span> and takes
+<code>mu0</code> and the Cholesky factors of the initial covariance
+matrix and of <span class="math inline">\(\theta\)</span>
+(<code>sigma0_l</code> and <code>theta_l</code>).</p>
+</div>
 </div>
 <div class="section level2">
 <h2 id="data-generation">Data Generation<a class="anchor" aria-label="anchor" href="#data-generation"></a>
@@ -449,8 +477,8 @@ names.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Doing end processing</span></span>
 <span><span class="co">#&gt; Successful trial</span></span>
-<span><span class="co">#&gt; Total Time: 23.4759 </span></span>
-<span><span class="co">#&gt; Backend Time: 23.08971</span></span></code></pre></div>
+<span><span class="co">#&gt; Total Time: 23.52865 </span></span>
+<span><span class="co">#&gt; Backend Time: 23.1697</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">

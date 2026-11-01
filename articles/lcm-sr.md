@@ -89,6 +89,42 @@ first occasion. The residuals have mean zero, because they are
 deviations from the trajectories, and are uncorrelated with the
 intercepts and slopes.
 
+### Diagrams
+
+![Path diagram of the LCM-SR.](fig-vignettes-lcm-sr-path.png)
+
+Path diagram of the LCM-SR.
+
+The LCM-SR as a path diagram, for the first three occasions. The
+intercepts \\(\eta\_{1}\\) and \\(\eta\_{2}\\) load on every occasion
+with a loading of 1, and the slopes \\(\eta\_{3}\\) and \\(\eta\_{4}\\)
+with loadings \\(0, 1, 2, \ldots\\). The structured residuals
+\\(\eta\_{5}\\) and \\(\eta\_{6}\\) carry the dynamics: the horizontal
+arrows are the autoregressive effects and the diagonal arrows the
+cross-lagged effects. \\(\zeta\_{5}\\) and \\(\zeta\_{6}\\) are the new
+parts of the residuals on each occasion, with covariance
+\\(\psi\_{56}\\). The intercepts and slopes all covary; to keep the
+diagram readable, only \\(\sigma\_{12}\\), \\(\sigma\_{13}\\), and
+\\(\sigma\_{24}\\) are drawn.
+
+![State space form of the LCM-SR.](fig-vignettes-lcm-sr-ssm.png)
+
+State space form of the LCM-SR.
+
+The same model in state space form. All the latent variables at one
+occasion form the state vector \\(\boldsymbol{\eta}\_{t}\\), and all the
+observed variables form \\(\mathbf{y}\_{t}\\). \\(\boldsymbol{\beta}\\)
+carries the state from one occasion to the next,
+\\(\boldsymbol{\Lambda}\\) maps the state to the observed variables, and
+\\(\boldsymbol{\Psi}\\) is the covariance matrix of the process noise
+\\(\boldsymbol{\zeta}\_{t}\\). In the state space form, \\(\eta\_{1}\\)
+and \\(\eta\_{2}\\) are the current levels of the trajectories (the
+intercepts at the first occasion): \\(\boldsymbol{\beta}\\) adds the
+slope to the level at each occasion.
+[`SimSSMFixed()`](https://github.com/jeksterslab/simStateSpace/reference/SimSSMFixed.md)
+takes `beta`, `lambda`, and the Cholesky factor of
+\\(\boldsymbol{\Psi}\\) (`psi_l`); `theta_l` is a matrix of zeros.
+
 ## Data Generation
 
 ### Notation
@@ -418,8 +454,8 @@ The plot below shows the model equations with the parameter names.
 `#> `\
 `#> Doing end processing`\
 `#> Successful trial`\
-`#> Total Time: 7.207033 `\
-`#> Backend Time: 7.200523`
+`#> Total Time: 7.239855 `\
+`#> Backend Time: 7.233323`
 
 ## Summary
 

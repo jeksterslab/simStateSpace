@@ -207,6 +207,30 @@ stable trait and <span class="math inline">\(\sigma_{11}\)</span> is how
 much individuals differ in it. The autoregressive trait has mean zero,
 because the stable trait carries the mean, and <span class="math inline">\(\sigma_{22}\)</span> is its variance at the first
 occasion. The two traits are uncorrelated.</p>
+<div class="section level3">
+<h3 id="diagrams">Diagrams<a class="anchor" aria-label="anchor" href="#diagrams"></a>
+</h3>
+<div class="float">
+<img src="fig-vignettes-starts-path.png" style="width:100.0%" alt="Path diagram of the STARTS model."><div class="figcaption">Path diagram of the STARTS model.</div>
+</div>
+<p>The STARTS model as a path diagram, for the first three occasions.
+The stable trait <span class="math inline">\(\eta_{1}\)</span> loads on
+every occasion with a loading of 1. The autoregressive trait <span class="math inline">\(\eta_{2}\)</span> carries over from one occasion
+to the next with the autoregressive effect <span class="math inline">\(\beta_{22}\)</span> and gets a new part <span class="math inline">\(\zeta_{2}\)</span>, with variance <span class="math inline">\(\psi_{22}\)</span>, on each occasion. The state
+<span class="math inline">\(\varepsilon\)</span>, with variance <span class="math inline">\(\theta\)</span>, is new on every occasion.</p>
+<div class="float">
+<img src="fig-vignettes-starts-ssm.png" style="width:100.0%" alt="State space form of the STARTS model."><div class="figcaption">State space form of the STARTS model.</div>
+</div>
+<p>The same model in state space form. All the latent variables at one
+occasion form the state vector <span class="math inline">\(\boldsymbol{\eta}_{t}\)</span>, and all the
+observed variables form <span class="math inline">\(\mathbf{y}_{t}\)</span>. <span class="math inline">\(\boldsymbol{\beta}\)</span> carries the state from
+one occasion to the next, <span class="math inline">\(\boldsymbol{\Lambda}\)</span> maps the state to
+the observed variables, <span class="math inline">\(\boldsymbol{\Psi}\)</span> is the covariance
+matrix of the process noise <span class="math inline">\(\boldsymbol{\zeta}_{t}\)</span>, and <span class="math inline">\(\boldsymbol{\Theta}\)</span> is the variance of
+the state. <code><a href="../reference/SimSSMFixed.html">SimSSMFixed()</a></code> takes <code>beta</code>,
+<code>lambda</code>, and the Cholesky factors of <span class="math inline">\(\boldsymbol{\Psi}\)</span> and <span class="math inline">\(\boldsymbol{\Theta}\)</span> (<code>psi_l</code>
+and <code>theta_l</code>).</p>
+</div>
 </div>
 <div class="section level2">
 <h2 id="data-generation">Data Generation<a class="anchor" aria-label="anchor" href="#data-generation"></a>
@@ -474,8 +498,8 @@ names.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Doing end processing</span></span>
 <span><span class="co">#&gt; Successful trial</span></span>
-<span><span class="co">#&gt; Total Time: 46.42492 </span></span>
-<span><span class="co">#&gt; Backend Time: 46.04418</span></span></code></pre></div>
+<span><span class="co">#&gt; Total Time: 46.7627 </span></span>
+<span><span class="co">#&gt; Backend Time: 46.39977</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">

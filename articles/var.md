@@ -83,6 +83,34 @@ An alternative representation of the dynamic noise is given by
 square root, the lower triangular Cholesky factor of
 \\(\boldsymbol{\Psi}\\), as the argument `psi_l`.
 
+### Diagrams
+
+![Path diagram of the VAR model.](fig-vignettes-var-path.png)
+
+Path diagram of the VAR model.
+
+The model as a path diagram, for the first three occasions. The
+variables are observed (squares) and have no measurement error. The
+horizontal arrows are the autoregressive effects and the diagonal arrows
+the cross-lagged effects; only the nonzero elements of
+\\(\boldsymbol{\beta}\\) in this example are drawn. \\(\zeta\_{j}\\) is
+the process noise, with variance \\(\psi\_{jj}\\), and the curved arrows
+on the left are the covariances of the variables at the first occasion.
+
+![State space form of the VAR model.](fig-vignettes-var-ssm.png)
+
+State space form of the VAR model.
+
+The same model in state space form. The observed variables are the
+state, \\(\mathbf{y}\_{t} = \boldsymbol{\eta}\_{t}\\), so
+\\(\boldsymbol{\Lambda}\\) is the identity matrix and there is no
+measurement error. \\(\boldsymbol{\beta}\\) carries the state from one
+occasion to the next, and \\(\boldsymbol{\Psi}\\) is the covariance
+matrix of the process noise \\(\boldsymbol{\zeta}\_{t}\\).
+[`SimSSMVARFixed()`](https://github.com/jeksterslab/simStateSpace/reference/SimSSMVARFixed.md)
+takes `beta` and the Cholesky factor of \\(\boldsymbol{\Psi}\\)
+(`psi_l`).
+
 ## Data Generation
 
 ### Notation
@@ -388,8 +416,8 @@ equations with the parameter names.
 `#> `\
 `#> Doing end processing`\
 `#> Successful trial`\
-`#> Total Time: 23.52952 `\
-`#> Backend Time: 23.13537`
+`#> Total Time: 23.53514 `\
+`#> Backend Time: 23.17039`
 
 ## Summary
 
