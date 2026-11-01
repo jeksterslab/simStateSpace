@@ -1,10 +1,29 @@
-.PHONY: all build clean cleanall cleanpkg cleanproj cleanpush cleantinytex bib libcheck libformat bibrproject clone coverage data dependencies readme docs dotfiles aiglobal secretscan verify spec log sizecheck public ai manifest install latex lint local localforce pdf pkg pkgdown project push quarto style tinytex tinytexforce vignettes
+.PHONY: all build clean cleanall cleanpkg cleanproj cleanpush cleantinytex bib libcheck libformat bibrproject clone coverage data dependencies readme docs dotfiles aiglobal secretscan verify spec log sizecheck template tree public ai manifest install latex lint local localforce pdf pkg pkgdown project push quarto style tinytex tinytexforce vignettes upgrade
 
 push: build docs latex coverage cleanpush
 
 project:
 	@echo "\n\nBuilding project...\n\n"
-	@Rscript .setup/scripts/make-project.R ${PWD}
+	@# a project without make-project.R gets the current one from rProject on
+	@# GitHub (it installs the newest rProject first), so an older rProject in
+	@# the image cannot stop the build; Template() of the image only offline
+	@test -f .setup/scripts/make-project.R || Rscript -e "download.file(\"https://raw.githubusercontent.com/ijapesigan/rProject/main/inst/template/common/dot-setup/scripts/make-project.R\", \".setup/scripts/make-project.R\", quiet = TRUE)" || Rscript -e "rProject::Template(\"${PWD}\")"
+	@Rscript .setup/scripts/make-project.R ${PWD} ${LOCK}
+
+upgrade:
+	@echo "\n\nUpgrading rProject (the next make auto updates the lock)...\n\n"
+	@# a project without make-project.R gets the current one from rProject on
+	@# GitHub (it installs the newest rProject first), so an older rProject in
+	@# the image cannot stop the build; Template() of the image only offline
+	@test -f .setup/scripts/make-project.R || Rscript -e "download.file(\"https://raw.githubusercontent.com/ijapesigan/rProject/main/inst/template/common/dot-setup/scripts/make-project.R\", \".setup/scripts/make-project.R\", quiet = TRUE)" || Rscript -e "rProject::Template(\"${PWD}\")"
+	@Rscript .setup/scripts/make-project.R ${PWD} UPGRADE
+
+template:
+	@echo "\n\nWriting template files...\n\n"
+	@Rscript -e "rProject::Template(\"${PWD}\")"
+
+tree:
+	@Rscript -e "rProject::Tree(\"${PWD}\")"
 
 pkg:
 	@echo "\n\nInstalling packages...\n\n"
@@ -39,9 +58,12 @@ cleanproj:
 	@echo "\n\nCleaning project...\n\n"
 	@Rscript -e "rProject::CleanProj(\"${PWD}\")"
 
+# rProject (type <- "rProject" in project.R) rebuilds bib.bib
+# from the public lib-* repositories at every build; git runs without
+# the user's config (it may rewrite https to ssh) and never prompts
 bib:
-	@echo "\n\nCleaning project...\n\n"
-	@Rscript -e "rProject::Bib(\"${PWD}\", bib_lib = FALSE)"
+	@echo "\n\nBuilding bib.bib...\n\n"
+	@GIT_CONFIG_GLOBAL=/dev/null GIT_TERMINAL_PROMPT=0 Rscript -e "rProject::Bib(\"${PWD}\", bib_lib = $$(grep -q '^type <- \"rProject\"' .setup/scripts/project.R && echo TRUE || echo FALSE))"
 
 libcheck:
 	@echo "\n\nChecking the lib-* entries...\n\n"
@@ -187,6 +209,11 @@ clone:
 
 auto: clone
 	@Rscript -e "if (exists('Public', envir = asNamespace('rProject'))) rProject::Public(\"${PWD}\") else message('\n\nWARNING: rProject is older than 0.0.33; the public export was NOT checked. Run make project.\n\n')"
+	@Rscript -e "if (exists('Lock', envir = asNamespace('rProject'))) rProject::Lock(\"${PWD}\")"
 	@git add --all
 	@git commit -m "Automated build."
 	@git push origin main
+	@V=$$(sed -n 's/^Version: *//p' DESCRIPTION 2> /dev/null); \
+	if [ -n "$$V" ] && ! git rev-parse -q --verify "refs/tags/v$$V" > /dev/null; then \
+		git tag -a "v$$V" -m "v$$V" && git push origin "v$$V"; \
+	fi

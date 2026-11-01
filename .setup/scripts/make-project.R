@@ -170,21 +170,14 @@ if (!("pak" %in% pkg_installed)) {
 # install rProject alone into .library: pak looks only in `lib` for what is
 # installed, so with dependencies it would rebuild from source every package
 # the image already has (spec 2026-10-13-make-project-pak); the dependencies
-# come from the image, which .libPaths() keeps after .library. In GitHub
-# Actions, make cleanpkg has removed the image's packages (the container runs
-# as root), so there pak installs the dependencies too
-rproject_deps <- identical(Sys.getenv("GITHUB_ACTIONS"), "true")
+# come from the image, which .libPaths() keeps after .library, locally and in
+# GitHub Actions (rProject 0.0.57: make cleanpkg removes .library only)
 rproject_install <- function(ref) {
   message(
     paste0(
       "\n\nInstalling rProject ",
       ref,
-      " into .library",
-      ifelse(
-        rproject_deps,
-        " with its dependencies (GitHub Actions).\n\n",
-        " (dependencies from the image).\n\n"
-      )
+      " into .library (dependencies from the image).\n\n"
     )
   )
   rproject_missing <- paste0(
@@ -196,7 +189,8 @@ rproject_install <- function(ref) {
     expr = pak::pkg_install(
       pkg = ref,
       lib = dot_library_folder,
-      dependencies = if (rproject_deps) NA else FALSE
+      dependencies = FALSE,
+      upgrade = FALSE
     ),
     error = function(e) {
       stop(
@@ -239,65 +233,238 @@ rproject_install <- function(ref) {
     )
   }
 }
-# every project, rProject included: install rProject when it is missing,
-# and upgrade it when the installed copy is older than the GitHub HEAD
-# (or than rproject_ver)
-if (is.null(rproject_ver)) {
-  # pak does not upgrade an installed GitHub package,
-  # so install the current commit when the project's copy is older
-  rproject_head <- suppressWarnings(
-    system2(
-      command = "git",
-      args = c(
-        "ls-remote",
-        "https://github.com/ijapesigan/rProject.git",
-        "HEAD"
-      ),
-      stdout = TRUE,
-      stderr = FALSE,
-      env = c(
-        "GIT_CONFIG_GLOBAL=/dev/null",
-        "GIT_TERMINAL_PROMPT=0"
-      )
+# the rProject to install (rProject 0.0.57: lock by default): the one in
+# .setup/scripts/rproject.lock (written by make auto), locally and in GitHub
+# Actions, so that a rebuild uses the rProject that built the release;
+# make upgrade (or make project LOCK=FALSE) and a project without a lock
+# follow the current commit on GitHub
+rproject_mode <- toupper(c(args[2], "")[1])
+# docker-* follow the latest rProject at every build (no lock)
+# the project's type (project.R)
+rproject_type <- get0(
+  x = "type",
+  envir = globalenv(),
+  inherits = FALSE,
+  ifnotfound = ""
+)
+rproject_upgrade <- rproject_mode %in% c("UPGRADE", "FALSE") ||
+  identical(rproject_type, "docker")
+rproject_lock <- file.path(path, ".setup", "scripts", "rproject.lock")
+rproject_lock_env <- new.env()
+if (file.exists(rproject_lock)) {
+  sys.source(file = rproject_lock, envir = rproject_lock_env)
+}
+rproject_locked <- get0(
+  x = "rproject_sha",
+  envir = rproject_lock_env,
+  inherits = FALSE,
+  ifnotfound = NA_character_
+)
+if (rproject_upgrade) {
+  rproject_locked <- NA_character_
+  message(
+    paste0(
+      "\n\nmake upgrade: rProject follows GitHub; the next make auto",
+      " records it and the running image in the lock.\n\n"
     )
   )
-  rproject_head <- substr(
-    x = c(rproject_head, NA_character_)[1],
-    start = 1,
-    stop = 40
-  )
-  rproject_sha <- suppressWarnings(
-    utils::packageDescription(
-      pkg = "rProject",
-      lib.loc = dot_library_folder,
-      fields = "RemoteSha"
+} else if (!is.na(rproject_locked)) {
+  message(paste0("\n\nrProject from the lock: ", rproject_locked, "\n\n"))
+}
+rproject_head <- suppressWarnings(
+  system2(
+    command = "git",
+    args = c(
+      "ls-remote",
+      "https://github.com/ijapesigan/rProject.git",
+      "HEAD"
+    ),
+    stdout = TRUE,
+    stderr = FALSE,
+    env = c(
+      "GIT_CONFIG_GLOBAL=/dev/null",
+      "GIT_TERMINAL_PROMPT=0"
     )
   )
-  if (is.na(rproject_head)) {
-    if (is.na(rproject_sha)) {
-      rproject_install(ref = "ijapesigan/rProject")
-    } else {
-      message(
-        "\n\nCould not reach GitHub; keeping the installed rProject.\n\n"
+)
+rproject_head <- substr(
+  x = c(rproject_head, NA_character_)[1],
+  start = 1,
+  stop = 40
+)
+rproject_sha <- suppressWarnings(
+  utils::packageDescription(
+    pkg = "rProject",
+    lib.loc = dot_library_folder,
+    fields = "RemoteSha"
+  )
+)
+# the image must provide rProject's Imports at their minimum versions;
+# make project never installs them into .library
+rproject_imports <- function(ref) {
+  description <- tempfile()
+  ok <- suppressWarnings(
+    tryCatch(
+      expr = utils::download.file(
+        url = paste0(
+          "https://raw.githubusercontent.com/ijapesigan/rProject/",
+          ref,
+          "/DESCRIPTION"
+        ),
+        destfile = description,
+        quiet = TRUE
+      ) == 0,
+      error = function(e) FALSE
+    )
+  )
+  if (isTRUE(ok)) {
+    imports <- read.dcf(file = description, fields = "Imports")[1, 1]
+    imports <- trimws(strsplit(gsub("\n", " ", imports), ",")[[1]])
+    imports <- imports[nzchar(imports)]
+    name <- sub("\\s*\\(.*$", "", imports)
+    minimum <- ifelse(
+      grepl(">=", imports),
+      sub("^.*>=\\s*([^) ]+).*$", "\\1", imports),
+      NA_character_
+    )
+    have <- vapply(
+      X = name,
+      FUN = function(x) {
+        out <- suppressWarnings(
+          utils::packageDescription(pkg = x, fields = "Version")
+        )
+        ifelse(is.null(out) || is.na(out), NA_character_, out)
+      },
+      FUN.VALUE = character(1)
+    )
+    bad <- is.na(have) | (
+      !is.na(minimum) &
+        !is.na(have) &
+        mapply(
+          FUN = function(a, b) utils::compareVersion(a, b) < 0,
+          a = ifelse(is.na(have), "0", have),
+          b = ifelse(is.na(minimum), "0", minimum)
+        )
+    )
+    if (any(bad)) {
+      stop(
+        paste0(
+          "\n\nThe image does not provide what rProject ",
+          substr(ref, 1, 7),
+          " imports: ",
+          paste0(
+            name[bad],
+            ifelse(is.na(minimum[bad]), "", paste0(" (>= ", minimum[bad], ")")),
+            collapse = ", "
+          ),
+          ".\nRebuild docs.sif (build docs), or use the image that",
+          " built the release.\n\n"
+        ),
+        call. = FALSE
       )
     }
-  } else if (!identical(rproject_sha, rproject_head)) {
-    rproject_install(
-      ref = paste0(
-        "ijapesigan/rProject",
-        "@",
-        rproject_head
-      )
+  }
+  unlink(description)
+}
+rproject_target <- ifelse(
+  is.na(rproject_locked),
+  rproject_head,
+  rproject_locked
+)
+# rProject builds itself from source: install the working copy, so that make
+# runs this rProject (its GitHub HEAD is the last public release, which may
+# not read the current project files)
+rproject_self <- identical(rproject_type, "rProject")
+if (rproject_self) {
+  message("\n\nInstalling rProject from this folder into .library.\n\n")
+  # in a separate R process, so that this one loads the installed rProject
+  # (not a namespace left by roxygen); GitHub Actions only installs, with
+  # NAMESPACE and man/ as published (make all wrote them)
+  rproject_self_code <- paste0(
+    ".libPaths(c(\"", dot_library_folder, "\", .libPaths())); ",
+    if (identical(Sys.getenv("GITHUB_ACTIONS"), "true")) {
+      ""
+    } else {
+      paste0("devtools::document(pkg = \"", path, "\"); ")
+    },
+    "install.packages(\"", path, "\", repos = NULL, type = \"source\", ",
+    "lib = \"", dot_library_folder, "\")"
+  )
+  rproject_self_status <- system2(
+    command = file.path(R.home("bin"), "Rscript"),
+    args = c("-e", shQuote(rproject_self_code))
+  )
+  if (!identical(as.integer(rproject_self_status), 0L)) {
+    stop(
+      "\n\nrProject could not be installed from this folder.\n\n",
+      call. = FALSE
     )
   }
-} else {
+} else if (is.na(rproject_target)) {
+  if (is.na(rproject_sha)) {
+    rproject_install(ref = "ijapesigan/rProject")
+  } else {
+    message(
+      "\n\nCould not reach GitHub; keeping the installed rProject.\n\n"
+    )
+  }
+} else if (!identical(rproject_sha, rproject_target)) {
+  rproject_imports(ref = rproject_target)
   rproject_install(
     ref = paste0(
       "ijapesigan/rProject",
       "@",
-      rproject_ver
+      rproject_target
     )
   )
+}
+if (
+  !rproject_self &&
+    !is.na(rproject_locked) &&
+    !is.na(rproject_head) &&
+    !identical(rproject_locked, rproject_head)
+) {
+  message(
+    paste0(
+      "\n\nA newer rProject is on GitHub (",
+      substr(rproject_head, 1, 7),
+      "); the lock keeps ",
+      substr(rproject_locked, 1, 7),
+      ". make upgrade moves the project forward.\n\n"
+    )
+  )
+}
+# a local build in another image than the lock's: say so (an older sif is
+# the user's to keep; the next make auto records the running one)
+rproject_image <- get0(
+  x = "image",
+  envir = rproject_lock_env,
+  inherits = FALSE,
+  ifnotfound = NA_character_
+)
+if (
+  !is.na(rproject_image) &&
+    grepl("@", rproject_image) &&
+    file.exists("/.singularity.d/labels.json")
+) {
+  rproject_running <- grep(
+    pattern = "org.opencontainers.image.base.digest",
+    x = readLines("/.singularity.d/labels.json", warn = FALSE),
+    fixed = TRUE,
+    value = TRUE
+  )[1]
+  if (
+    !is.na(rproject_running) &&
+      !grepl(sub("^.*@", "", rproject_image), rproject_running, fixed = TRUE)
+  ) {
+    message(
+      paste0(
+        "\n\nThis sif is not the image in the lock (",
+        rproject_image,
+        "). The next make auto records the running image.\n\n"
+      )
+    )
+  }
 }
 rProject::Project(
   path = path
@@ -323,6 +490,12 @@ rProject::License(
   path = path,
   type = license
 )
+# template files of the project's type (rProject 0.0.53 or later)
+if (exists("Template", envir = asNamespace("rProject"))) {
+  rProject::Template(
+    path = path
+  )
+}
 # per-project AI instructions (rProject 0.0.34 or later)
 if (exists("AI", envir = asNamespace("rProject"))) {
   rProject::AI(

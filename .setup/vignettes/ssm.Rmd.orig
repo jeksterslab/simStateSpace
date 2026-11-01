@@ -32,8 +32,32 @@ knitr::opts_chunk$set(
 )
 ```
 
+## Overview
+
+A state space model describes variables that we cannot observe directly
+(latent states) and how they change over time,
+using repeated, error-prone measurements of them.
+It has two parts:
+a measurement model that links the observed variables to the latent states,
+and a dynamic model that describes how the latent states
+carry over and influence each other from one occasion to the next.
+
+This tutorial does three things:
+
+1. It writes a state space model
+   with a first-order vector autoregressive dynamic model.
+2. It simulates data from the model with `SimSSMFixed()`,
+   with every individual sharing the same parameters.
+3. It fits the model to the simulated data with the `dynr` package
+   and compares the estimates with the values used to simulate the data.
+
+No prior knowledge of state space models is needed.
+If the model without measurement error is enough for you,
+see the vignette on the vector autoregressive model.
+
 ```{r}
 #| echo = FALSE
+options(scipen = 999)
 set.seed(42)
 n <- 10 # 100
 time <- 200 # 1000
@@ -133,6 +157,19 @@ $\boldsymbol{\Theta}$
 the covariance matrix of
 $\boldsymbol{\varepsilon}$.
 
+In words,
+each observed variable is an intercept
+plus a weighted combination of the latent variables
+plus measurement error.
+The latent variables $\boldsymbol{\eta}_{i, t}$
+are the quantities we care about (for example, a person's true stress level),
+and the observed variables $\mathbf{y}_{i, t}$
+are noisy measurements of them.
+Separating measurement error from true change is
+the main reason to use a state space model:
+measurement error affects only the occasion it occurs on,
+while changes in the latent variables carry over in time.
+
 An alternative representation of the measurement error
 is given by
 \begin{equation}
@@ -210,6 +247,25 @@ $\boldsymbol{\Psi}$
 the covariance matrix of
 $\boldsymbol{\zeta}_{i, t}$.
 
+In words,
+each latent variable at time $t$ is a weighted sum of all the latent variables
+at time $t - 1$, plus an intercept and a random shock.
+The weights are the elements of $\boldsymbol{\beta}$:
+
+- A diagonal element $\beta_{jj}$ is the autoregressive effect,
+  how much of variable $j$ carries over to the next occasion.
+  Values closer to 1 mean the variable changes slowly (high inertia).
+- An off-diagonal element $\beta_{jk}$ is the cross-lagged effect
+  of variable $k$ at time $t - 1$ on variable $j$ at time $t$.
+  Note the order: the row is the outcome, the column is the predictor.
+
+The shocks $\boldsymbol{\zeta}_{i, t}$ stand for everything
+that moves the latent variables that the model does not explain.
+Unlike measurement error, a shock carries over to later occasions
+through $\boldsymbol{\beta}$.
+For the process to settle around a stable mean,
+all eigenvalues of $\boldsymbol{\beta}$ must have modulus less than 1.
+
 An alternative representation of the dynamic noise
 is given by
 \begin{equation}
@@ -230,6 +286,13 @@ is given by
 \end{equation}
 where
 $\left( \boldsymbol{\Psi}^{\frac{1}{2}} \right) \left( \boldsymbol{\Psi}^{\frac{1}{2}} \right)^{\prime} = \boldsymbol{\Psi}$ .
+This is how both kinds of noise are simulated:
+independent standard normal draws are multiplied by
+a square root of the covariance matrix.
+The functions in `simStateSpace` take this square root,
+the lower triangular Cholesky factor,
+as the arguments `psi_l` (for $\boldsymbol{\Psi}$)
+and `theta_l` (for $\boldsymbol{\Theta}$).
 
 ## Data Generation
 
@@ -237,7 +300,7 @@ $\left( \boldsymbol{\Psi}^{\frac{1}{2}} \right) \left( \boldsymbol{\Psi}^{\frac{
 
 Let $t = `r time`$ be the number of time points and $n = `r n`$ be the number of individuals.
 
-Let the measurement model intecept vector $\boldsymbol{\nu}$ be given by
+Let the measurement model intercept vector $\boldsymbol{\nu}$ be given by
 
 \begin{equation}
 \boldsymbol{\nu}
@@ -278,6 +341,11 @@ Let the measurement error covariance matrix $\boldsymbol{\Theta}$ be given by
 \end{array}
 \right) .
 \end{equation}
+
+With $\boldsymbol{\nu} = \mathbf{0}$ and $\boldsymbol{\Lambda} = \mathbf{I}$,
+each observed variable measures one latent variable,
+and $\boldsymbol{\Theta}$ adds measurement error with variance
+`r theta[1, 1]` to each.
 
 Let the initial condition
 $\boldsymbol{\eta}_{0}$
@@ -339,6 +407,17 @@ Let the transition matrix $\boldsymbol{\beta}$ be given by
 \right) .
 \end{equation}
 
+Read the columns as predictors and the rows as outcomes.
+Each variable carries over to the next occasion
+(autoregressive effects
+`r beta[1, 1]`, `r beta[2, 2]`, and `r beta[3, 3]`).
+In addition, $\eta_{1}$ predicts later $\eta_{2}$ (`r beta[2, 1]`),
+$\eta_{2}$ predicts later $\eta_{3}$ (`r beta[3, 2]`),
+and $\eta_{1}$ has a small negative effect on later $\eta_{3}$ (`r beta[3, 1]`).
+Because $\boldsymbol{\beta}$ is lower triangular,
+its eigenvalues are its diagonal elements, all less than 1,
+so the process is stable.
+
 Let the dynamic process noise $\boldsymbol{\Psi}$ be given by
 
 \begin{equation}
@@ -353,7 +432,16 @@ Let the dynamic process noise $\boldsymbol{\Psi}$ be given by
 \right) .
 \end{equation}
 
+The initial condition describes where each individual starts.
+Here, the mean vector and covariance matrix of $\boldsymbol{\eta}_{0}$
+are the model-implied mean and covariance of the stable process,
+computed with `SSMMeanEta()` and `SSMCovEta()`,
+so the data are stationary from the first time point.
+
 ### R Function Arguments
+
+The simulation functions take covariance matrices
+as lower triangular Cholesky factors (the arguments ending in `_l`).
 
 ```{r}
 n
@@ -372,6 +460,12 @@ theta_l # theta_l <- t(chol(theta))
 ```
 
 ### Visualizing the Dynamics Without Process Noise (n = 5 with Different Initial Condition)
+
+To see what $\boldsymbol{\beta}$ alone does,
+we first simulate five individuals with the process noise
+and the measurement error set to zero.
+Each individual starts at a different point,
+and the trajectories return to the mean at a speed set by $\boldsymbol{\beta}$.
 
 ```{r no-error-ssm}
 #| echo = FALSE
@@ -402,6 +496,12 @@ plot(sim, type = "l")
 
 ### Using the `SimSSMFixed` Function from the `simStateSpace` Package to Simulate Data
 
+Now we add the process noise and the measurement error
+and simulate the full data set.
+`as.data.frame()` returns the data in long format,
+one row per individual and time point,
+with the columns `id`, `time`, `y1`, `y2`, and `y3`.
+
 ```{r error-ssm}
 library(simStateSpace)
 sim <- SimSSMFixed(
@@ -425,7 +525,23 @@ plot(sim)
 
 ## Model Fitting
 
+We fit the model with `dynr`,
+which estimates state space models by maximum likelihood
+using the Kalman filter.
+The Kalman filter estimates the latent states occasion by occasion,
+weighing the model's prediction against the new measurement.
+
+A `dynr` model is built from pieces that match the equations above:
+the data, the initial condition, the measurement model,
+the dynamic model, and the noise.
+Each parameter gets a name (for example, `beta_2_1` for $\beta_{21}$`),
+and the same name used in two places means one shared parameter.
+The starting values are set to the population values for convenience;
+with real data, they would be rough guesses.
+
 ### Prepare Data
+
+Tell `dynr` which columns hold the individual, the time, and the observed variables.
 
 ```{r}
 dynr_data <- dynr::dynr.data(
@@ -437,6 +553,12 @@ dynr_data <- dynr::dynr.data(
 ```
 
 ### Prepare Initial Condition
+
+The mean $\boldsymbol{\mu}_{\boldsymbol{\eta} \mid 0}$
+and covariance $\boldsymbol{\Sigma}_{\boldsymbol{\eta} \mid 0}$
+of the initial state are estimated.
+The covariance matrix is symmetric,
+so `sigma0_2_1` appears both above and below the diagonal.
 
 ```{r}
 dynr_initial <- dynr::prep.initial(
@@ -456,6 +578,9 @@ dynr_initial <- dynr::prep.initial(
 
 ### Prepare Measurement Model
 
+The loadings $\boldsymbol{\Lambda}$ are an identity matrix
+with no free parameters (`"fixed"`).
+
 ```{r}
 dynr_measurement <- dynr::prep.measurement(
   values.load = diag(3),
@@ -466,6 +591,11 @@ dynr_measurement <- dynr::prep.measurement(
 ```
 
 ### Prepare Dynamic Process
+
+Each formula is one row of the dynamic equation:
+the intercept $\alpha_{j}$ plus the effects $\beta_{jk}$ of the three latent variables
+at the previous occasion.
+`isContinuousTime = FALSE` makes this a discrete-time model.
 
 ```{r}
 dynr_dynamics <- dynr::prep.formulaDynamics(
@@ -485,6 +615,11 @@ dynr_dynamics <- dynr::prep.formulaDynamics(
 ```
 
 ### Prepare Process Noise
+
+The process noise covariance $\boldsymbol{\Psi}$ is estimated in full.
+The measurement error covariance $\boldsymbol{\Theta}$ is diagonal:
+the three error variances are estimated,
+and the error covariances are fixed at zero.
 
 ```{r}
 dynr_noise <- dynr::prep.noise(
@@ -511,6 +646,9 @@ dynr_noise <- dynr::prep.noise(
 
 ### Prepare the Model
 
+The pieces are put together into one model.
+`dynr` writes the model as C code to `outfile` and compiles it.
+
 ```{r}
 model <- dynr::dynr.model(
   data = dynr_data,
@@ -521,6 +659,8 @@ model <- dynr::dynr.model(
   outfile = "ssm.c"
 )
 ```
+
+The plot below shows the model equations with the parameter names.
 
 ```{r model-ssm}
 #| echo = FALSE
@@ -543,6 +683,9 @@ results <- dynr::dynr.cook(
 ```
 
 ## Summary
+
+The summary lists each estimate with its standard error,
+$t$ value, confidence interval, and $p$ value.
 
 ```{r}
 summary(results)
@@ -629,6 +772,9 @@ diag(theta_hat) <- estimates[
 
 ### Parameter Estimates
 
+The estimates arranged as the matrices in the model,
+to compare with the population values in the Data Generation section.
+
 ```{r}
 alpha_hat
 beta_hat
@@ -636,6 +782,61 @@ psi_hat
 theta_hat
 mu0_hat
 sigma0_hat
+```
+
+## Table of Parameters and Estimates
+
+The table below puts each population value used to simulate the data
+next to its estimate.
+Bias is the estimate minus the population value.
+Because the model is fitted to a single simulated data set,
+this is the error of one estimate, not a Monte Carlo bias,
+which would average over many replications.
+The 95% confidence interval is the Wald interval,
+$\hat{\theta} \pm 1.96 \times \mathrm{SE}$,
+and `Covers` shows whether it contains the population value.
+
+```{r}
+EstimatesTable <- function(population, estimate, se) {
+  z <- stats::qnorm(p = 0.975)
+  ll <- estimate - z * se
+  ul <- estimate + z * se
+  data.frame(
+    Parameter = names(population),
+    Population = unname(population),
+    Estimate = unname(estimate),
+    SE = unname(se),
+    Bias = unname(estimate - population),
+    `2.5%` = unname(ll),
+    `97.5%` = unname(ul),
+    Covers = unname(population >= ll & population <= ul),
+    check.names = FALSE
+  )
+}
+```
+
+```{r}
+estimates <- coef(results)
+se <- sqrt(diag(vcov(results)))
+# the population value for each dynr parameter name,
+# for example, "beta_1_2" is beta[1, 2] and "mu0_2_1" is mu0[2]
+population <- vapply(
+  X = strsplit(x = names(estimates), split = "_"),
+  FUN = function(x) {
+    as.matrix(get(x[1]))[as.integer(x[2]), as.integer(x[3])]
+  },
+  FUN.VALUE = numeric(1)
+)
+names(population) <- names(estimates)
+knitr::kable(
+  x = EstimatesTable(
+    population = population,
+    estimate = estimates,
+    se = se
+  ),
+  digits = 3,
+  caption = "Population values and dynr estimates (one simulated data set)"
+)
 ```
 
 ## References

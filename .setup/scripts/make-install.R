@@ -22,7 +22,8 @@ if (
   if (length(deps) > 0) {
     file.copy(
       from = deps,
-      to = file.path(path, "R")
+      to = file.path(path, "R"),
+      overwrite = TRUE
     )
   }
   cpp <- list.files(
@@ -74,11 +75,13 @@ if (
     }
     file.copy(
       from = file.path(path, ".setup", "cpp", "Makevars"),
-      to = file.path(path, "src")
+      to = file.path(path, "src"),
+      overwrite = TRUE
     )
     file.copy(
       from = file.path(path, ".setup", "cpp", "Makevars.win"),
-      to = file.path(path, "src")
+      to = file.path(path, "src"),
+      overwrite = TRUE
     )
     close(cpp_file)
     Rcpp::compileAttributes(pkgdir = path)
@@ -89,6 +92,6 @@ if (
     unlink(namespace)
   }
   devtools::document(path)
-  devtools::install(path, dependencies = FALSE)
+  devtools::install(path, dependencies = FALSE, upgrade = FALSE)
 }
 warnings()

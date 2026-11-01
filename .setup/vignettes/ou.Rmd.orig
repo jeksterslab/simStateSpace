@@ -36,8 +36,38 @@ knitr::opts_chunk$set(
 )
 ```
 
+## Overview
+
+The Ornstein-Uhlenbeck (OU) model is a continuous-time model
+for variables that are pulled back toward an equilibrium level
+after they are pushed away from it,
+for example, mood returning to a person's usual level after a stressful event.
+Continuous time means the model describes change at every moment,
+not only at the occasions we measure,
+so the same parameters apply whether measurements are
+one hour or one day apart, and the spacing can differ between occasions.
+
+The model is a state space model with two parts:
+a measurement model that links the observed variables
+to the latent (unobserved) states,
+and a dynamic model, here a stochastic differential equation,
+that describes how the latent states change over time.
+
+This tutorial does three things:
+
+1. It writes the multivariate OU model as a state space model.
+2. It simulates data from the model with `SimSSMOUFixed()`,
+   with every individual sharing the same parameters.
+3. It fits the model to the simulated data with the `dynr` package
+   and compares the estimates with the values used to simulate the data.
+
+No prior knowledge of state space models is needed.
+The vignettes on the vector autoregressive model and the state space model
+cover the discrete-time versions.
+
 ```{r}
 #| echo = FALSE
+options(scipen = 999)
 set.seed(42)
 n <- 10 # 100
 time <- 200 # 1000
@@ -155,6 +185,19 @@ $\boldsymbol{\Theta}$
 the covariance matrix of
 $\boldsymbol{\varepsilon}$.
 
+In words,
+each observed variable is an intercept
+plus a weighted combination of the latent variables
+plus measurement error.
+The latent variables $\boldsymbol{\eta}_{i, t}$
+are the quantities we care about (for example, a person's true stress level),
+and the observed variables $\mathbf{y}_{i, t}$
+are noisy measurements of them.
+Separating measurement error from true change is
+the main reason to use a state space model:
+measurement error affects only the occasion it occurs on,
+while changes in the latent variables carry over in time.
+
 An alternative representation of the measurement error
 is given by
 \begin{equation}
@@ -207,13 +250,41 @@ $\mathrm{d}\boldsymbol{W}$
 is a Wiener process or Brownian motion,
 which represents random fluctuations.
 
+In words,
+$\mathrm{d} \boldsymbol{\eta}_{i, t}$
+is the change in the latent variables over a very short time $\mathrm{d}t$.
+The change has two parts:
+a pull toward the equilibrium $\boldsymbol{\mu}$,
+proportional to the distance $\boldsymbol{\eta}_{i, t} - \boldsymbol{\mu}$,
+and random fluctuations with covariance $\boldsymbol{\Sigma}$ per unit time.
+
+- With this sign convention, a diagonal element $\phi_{jj}$ is negative
+  for a variable that returns to its equilibrium.
+  The more negative it is, the faster the return.
+- An off-diagonal element $\phi_{jk}$ is the effect of
+  the distance of variable $k$ from its equilibrium
+  on the rate of change of variable $j$.
+  As in the discrete-time models, the row is the outcome
+  and the column is the predictor.
+
+For the process to settle around $\boldsymbol{\mu}$,
+all eigenvalues of $\boldsymbol{\Phi}$ must have negative real parts.
+
+Over a time interval $\Delta t$,
+the OU model implies a discrete-time vector autoregressive model
+with transition matrix
+$\boldsymbol{\beta} = \exp \left( \boldsymbol{\Phi} \Delta t \right)$,
+the matrix exponential.
+`SimSSMOUFixed()` uses this exact discretization to simulate the data,
+so no approximation error is introduced.
+
 ## Data Generation
 
 ### Notation
 
 Let $t = `r time`$ be the number of time points and $n = `r n`$ be the number of individuals.
 
-Let the measurement model intecept vector $\boldsymbol{\nu}$ be given by
+Let the measurement model intercept vector $\boldsymbol{\nu}$ be given by
 
 \begin{equation}
 \boldsymbol{\nu}
@@ -254,6 +325,11 @@ Let the measurement error covariance matrix $\boldsymbol{\Theta}$ be given by
 \end{array}
 \right) .
 \end{equation}
+
+With $\boldsymbol{\nu} = \mathbf{0}$ and $\boldsymbol{\Lambda} = \mathbf{I}$,
+each observed variable measures one latent variable,
+and $\boldsymbol{\Theta}$ adds measurement error with variance
+`r theta[1, 1]` to each.
 
 Let the initial condition
 $\boldsymbol{\eta}_{0}$
@@ -315,6 +391,16 @@ Let the rate of mean reversion matrix $\boldsymbol{\Phi}$ be given by
 \right) .
 \end{equation}
 
+Read the columns as predictors and the rows as outcomes.
+The diagonal elements are all negative,
+so each variable returns to its equilibrium.
+In addition, $\eta_{1}$ pushes up the change in $\eta_{2}$ (`r phi[2, 1]`),
+$\eta_{2}$ pushes up the change in $\eta_{3}$ (`r phi[3, 2]`),
+and $\eta_{1}$ pushes down the change in $\eta_{3}$ (`r phi[3, 1]`).
+Because $\boldsymbol{\Phi}$ is lower triangular,
+its eigenvalues are its diagonal elements, all negative,
+so the process is stable.
+
 Let the dynamic process noise covariance matrix $\boldsymbol{\Sigma}$ be given by
 
 \begin{equation}
@@ -331,7 +417,20 @@ Let the dynamic process noise covariance matrix $\boldsymbol{\Sigma}$ be given b
 
 Let $\Delta t = `r delta_t`$.
 
+The data are measured every `r delta_t` time units.
+For example, if the time unit is one day,
+the `r time` occasions span `r (time - 1) * delta_t` days.
+
+The initial condition describes where each individual starts.
+Here, the mean vector and covariance matrix of $\boldsymbol{\eta}_{0}$
+are the model-implied mean and covariance of the stable process,
+computed with `LinSDEMeanEta()` and `LinSDECovEta()`,
+so the data are stationary from the first time point.
+
 ### R Function Arguments
+
+The simulation functions take covariance matrices
+as lower triangular Cholesky factors (the arguments ending in `_l`).
 
 ```{r}
 n
@@ -351,6 +450,12 @@ theta_l # theta_l <- t(chol(theta))
 ```
 
 ### Visualizing the Dynamics Without Measurement Error and Process Noise (n = 5 with Different Initial Condition)
+
+To see what $\boldsymbol{\Phi}$ alone does,
+we first simulate five individuals with the process noise
+and the measurement error set to zero.
+Each individual starts at a different point,
+and the trajectories return to the equilibrium at a speed set by $\boldsymbol{\Phi}$.
 
 ```{r no-error-ou}
 #| echo = FALSE
@@ -382,6 +487,15 @@ plot(sim, type = "l")
 
 ### Using the `SimSSMOUFixed` Function from the `simStateSpace` Package to Simulate Data
 
+Now we add the process noise and the measurement error
+and simulate the full data set.
+`as.data.frame()` returns the data in long format,
+one row per individual and time point,
+with the columns `id`, `time`, `y1`, `y2`, and `y3`.
+The `time` column holds the actual measurement times
+(0, `r delta_t`, `r 2 * delta_t`, and so on),
+which the continuous-time model uses.
+
 ```{r error-ou}
 library(simStateSpace)
 sim <- SimSSMOUFixed(
@@ -406,7 +520,24 @@ plot(sim)
 
 ## Model Fitting
 
+We fit the model with `dynr`,
+which estimates state space models by maximum likelihood.
+For continuous-time models,
+`dynr` uses the time between measurements
+to get the implied discrete-time model for each interval,
+then applies the Kalman filter.
+
+A `dynr` model is built from pieces that match the equations above:
+the data, the initial condition, the measurement model,
+the dynamic model, and the noise.
+Each parameter gets a name (for example, `phi_2_1` for $\phi_{21}$`),
+and the same name used in two places means one shared parameter.
+The starting values are set to the population values for convenience;
+with real data, they would be rough guesses.
+
 ### Prepare Data
+
+Tell `dynr` which columns hold the individual, the time, and the observed variables.
 
 ```{r}
 dynr_data <- dynr::dynr.data(
@@ -418,6 +549,12 @@ dynr_data <- dynr::dynr.data(
 ```
 
 ### Prepare Initial Condition
+
+The mean $\boldsymbol{\mu}_{\boldsymbol{\eta} \mid 0}$
+and covariance $\boldsymbol{\Sigma}_{\boldsymbol{\eta} \mid 0}$
+of the initial state are estimated.
+The covariance matrix is symmetric,
+so `sigma0_2_1` appears both above and below the diagonal.
 
 ```{r}
 dynr_initial <- dynr::prep.initial(
@@ -437,6 +574,9 @@ dynr_initial <- dynr::prep.initial(
 
 ### Prepare Measurement Model
 
+The loadings $\boldsymbol{\Lambda}$ are an identity matrix
+with no free parameters (`"fixed"`).
+
 ```{r}
 dynr_measurement <- dynr::prep.measurement(
   values.load = diag(3),
@@ -447,6 +587,11 @@ dynr_measurement <- dynr::prep.measurement(
 ```
 
 ### Prepare Dynamic Process
+
+Each formula is the rate of change of one latent variable:
+the effects $\phi_{jk}$ of the distances of the three latent variables
+from their equilibria $\mu_{k}$.
+`isContinuousTime = TRUE` makes this a continuous-time model.
 
 ```{r}
 dynr_dynamics <- dynr::prep.formulaDynamics(
@@ -466,6 +611,11 @@ dynr_dynamics <- dynr::prep.formulaDynamics(
 ```
 
 ### Prepare Process Noise
+
+The diffusion covariance $\boldsymbol{\Sigma}$ is estimated in full.
+The measurement error covariance $\boldsymbol{\Theta}$ is diagonal:
+the three error variances are estimated,
+and the error covariances are fixed at zero.
 
 ```{r}
 dynr_noise <- dynr::prep.noise(
@@ -492,6 +642,9 @@ dynr_noise <- dynr::prep.noise(
 
 ### Prepare the Model
 
+The pieces are put together into one model.
+`dynr` writes the model as C code to `outfile` and compiles it.
+
 ```{r}
 model <- dynr::dynr.model(
   data = dynr_data,
@@ -503,7 +656,8 @@ model <- dynr::dynr.model(
 )
 ```
 
-Add lower and upper bounds to aid in the optimization.
+Add lower and upper bounds on the elements of $\boldsymbol{\Phi}$
+to keep the optimizer away from implausible values.
 
 ```{r}
 model$lb[
@@ -534,6 +688,8 @@ model$ub[
 ] <- +1.5
 ```
 
+The plot below shows the model equations with the parameter names.
+
 ```{r model-ou}
 #| echo = FALSE
 dynr::plotFormula(
@@ -555,6 +711,9 @@ results <- dynr::dynr.cook(
 ```
 
 ## Summary
+
+The summary lists each estimate with its standard error,
+$t$ value, confidence interval, and $p$ value.
 
 ```{r}
 summary(results)
@@ -643,6 +802,11 @@ diag(theta_hat) <- estimates[
 
 ### Parameter Estimates
 
+The estimates arranged as the matrices in the model,
+to compare with the population values in the Data Generation section.
+The last matrix, `beta_var1_hat`, is $\exp \left( \hat{\boldsymbol{\Phi}} \right)$,
+the implied discrete-time transition matrix over one time unit.
+
 ```{r}
 mu_hat
 phi_hat
@@ -652,6 +816,61 @@ mu0_hat
 sigma0_hat
 beta_var1_hat <- simStateSpace::ExpMat(phi_hat)
 beta_var1_hat
+```
+
+## Table of Parameters and Estimates
+
+The table below puts each population value used to simulate the data
+next to its estimate.
+Bias is the estimate minus the population value.
+Because the model is fitted to a single simulated data set,
+this is the error of one estimate, not a Monte Carlo bias,
+which would average over many replications.
+The 95% confidence interval is the Wald interval,
+$\hat{\theta} \pm 1.96 \times \mathrm{SE}$,
+and `Covers` shows whether it contains the population value.
+
+```{r}
+EstimatesTable <- function(population, estimate, se) {
+  z <- stats::qnorm(p = 0.975)
+  ll <- estimate - z * se
+  ul <- estimate + z * se
+  data.frame(
+    Parameter = names(population),
+    Population = unname(population),
+    Estimate = unname(estimate),
+    SE = unname(se),
+    Bias = unname(estimate - population),
+    `2.5%` = unname(ll),
+    `97.5%` = unname(ul),
+    Covers = unname(population >= ll & population <= ul),
+    check.names = FALSE
+  )
+}
+```
+
+```{r}
+estimates <- coef(results)
+se <- sqrt(diag(vcov(results)))
+# the population value for each dynr parameter name,
+# for example, "beta_1_2" is beta[1, 2] and "mu0_2_1" is mu0[2]
+population <- vapply(
+  X = strsplit(x = names(estimates), split = "_"),
+  FUN = function(x) {
+    as.matrix(get(x[1]))[as.integer(x[2]), as.integer(x[3])]
+  },
+  FUN.VALUE = numeric(1)
+)
+names(population) <- names(estimates)
+knitr::kable(
+  x = EstimatesTable(
+    population = population,
+    estimate = estimates,
+    se = se
+  ),
+  digits = 3,
+  caption = "Population values and dynr estimates (one simulated data set)"
+)
 ```
 
 ## References

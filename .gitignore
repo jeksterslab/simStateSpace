@@ -87,12 +87,18 @@ src/*.o
 src/*.so
 src/*.dll
 
+# LaTeX output: the CI builds it
+.setup/latex/pdf/
+
 # private: kept on Overleaf and the private repo, excluded from the public repo
 .setup/ai/
 .setup/logs/
 .setup/data-private/
 .setup/data-external/
 .setup/data-cache/
+.setup/todo/
+.setup/notes/
+.setup/repo/
 AGENTS.md
 CLAUDE.md
 .claude/

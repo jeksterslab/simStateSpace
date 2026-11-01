@@ -41,7 +41,5 @@ Imports:
 Suggests:
     knitr,
     rmarkdown,
-    testthat,
-    dynr
-SystemRequirements: GNU GSL (>= 2.5)
+    testthat
 Config/roxygen2/version: 8.1.1.9000

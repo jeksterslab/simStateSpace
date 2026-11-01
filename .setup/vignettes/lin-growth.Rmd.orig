@@ -33,8 +33,37 @@ knitr::opts_chunk$set(
 )
 ```
 
+## Overview
+
+The linear growth curve model describes individuals who each follow
+their own straight-line trajectory over time,
+for example, reading scores that start at different levels
+and grow at different rates.
+Each individual has a latent intercept (the level at the first occasion)
+and a latent slope (the change per occasion).
+The model estimates the average intercept and slope,
+how much individuals differ in them,
+and how much the measurements scatter around each trajectory.
+
+The growth curve model is usually fitted
+as a structural equation model (SEM).
+It can also be written as a state space model:
+the intercept and slope are latent states
+that are set at the first occasion and then follow a fixed rule.
+
+This tutorial does three things:
+
+1. It writes the linear growth curve model as a state space model.
+2. It simulates data from the model with `SimSSMLinGrowth()`.
+3. It fits the model to the simulated data with `dynr` (state space)
+   and with `lavaan` (SEM),
+   and compares both sets of estimates with the values used to simulate the data.
+
+No prior knowledge of state space models is needed.
+
 ```{r}
 #| echo = FALSE
+options(scipen = 999)
 set.seed(42)
 n <- 10000
 mu0 <- c(0.615, 1.006)
@@ -101,6 +130,12 @@ at time $t$ and individual $i$.
 $\theta$ is the variance of
 $\boldsymbol{\varepsilon}$.
 
+In words,
+the observed score is the current level of the trajectory,
+$\eta_{0_{i, t}}$, plus measurement error.
+The loading of the slope is 0, because the slope affects
+the score only through its effect on the level over time.
+
 The dynamic structure is given by
 \begin{equation}
   \left(
@@ -123,6 +158,17 @@ The dynamic structure is given by
   \end{array}
   \right) .
 \end{equation}
+
+In words,
+the level at each occasion is the previous level plus the slope,
+$\eta_{0_{i, t}} = \eta_{0_{i, t - 1}} + \eta_{1_{i, t - 1}}$,
+and the slope stays the same,
+$\eta_{1_{i, t}} = \eta_{1_{i, t - 1}}$.
+There is no process noise,
+so once an individual's intercept and slope are set,
+the trajectory is a straight line.
+All the variation in the trajectories between individuals
+comes from the initial condition below.
 
 The mean vector and covariance matrix of the intercept and slope
 are captured in the mean vector and covariance matrix
@@ -150,6 +196,13 @@ of the initial condition given by
   \end{array}
   \right) .
 \end{equation}
+
+Here, $\mu_{\eta_{0}}$ and $\mu_{\eta_{1}}$
+are the average intercept and slope,
+$\sigma^{2}_{\eta_{0}}$ and $\sigma^{2}_{\eta_{1}}$
+are how much individuals differ in them,
+and $\sigma_{\eta_{0}, \eta_{1}}$ is their covariance,
+for example, positive if individuals who start higher also grow faster.
 
 ## Data Generation
 
@@ -203,6 +256,9 @@ be given by
 
 ### R Function Arguments
 
+The simulation functions take covariance matrices
+as lower triangular Cholesky factors (the arguments ending in `_l`).
+
 ```{r}
 n
 time
@@ -214,6 +270,10 @@ theta_l # theta_l <- t(chol(theta))
 ```
 
 ### Visualizing the Dynamics Without Measurement Error (n = 5 with Different Initial Condition)
+
+Without measurement error, each of the five simulated individuals
+follows an exact straight line,
+with its own intercept and slope.
 
 ```{r no-error-lin-growth}
 #| echo = FALSE
@@ -230,6 +290,11 @@ plot(sim, type = "l")
 ```
 
 ### Using the `SimSSMLinGrowth` Function from the `simStateSpace` Package to Simulate Data
+
+Now we add the measurement error and simulate the full data set.
+`as.data.frame()` returns the data in long format,
+one row per individual and time point,
+with the columns `id`, `time`, and `y1`.
 
 ```{r error-lin-growth}
 library(simStateSpace)
@@ -249,7 +314,22 @@ plot(sim)
 
 ## Model Fitting
 
+We first fit the model with `dynr`,
+which estimates state space models by maximum likelihood
+using the Kalman filter.
+
+A `dynr` model is built from pieces that match the equations above:
+the data, the initial condition, the measurement model,
+the dynamic model, and the noise.
+Each parameter gets a name (for example, `sigma0_01` for $\sigma_{\eta_{0}, \eta_{1}}$`),
+and the same name used in two places means one shared parameter.
+The starting values are set to the population values for convenience;
+with real data, they would be rough guesses.
+The intercept and slope are indexed 0 and 1 in the parameter names.
+
 ### Prepare Data
+
+Tell `dynr` which columns hold the individual, the time, and the observed variables.
 
 ```{r}
 dynr_data <- dynr::dynr.data(
@@ -261,6 +341,12 @@ dynr_data <- dynr::dynr.data(
 ```
 
 ### Prepare Initial Condition
+
+The mean and covariance of the initial state are
+the means, variances, and covariance of the intercept and slope,
+so these are the main parameters of the growth model.
+The covariance matrix is symmetric,
+so `sigma0_01` appears both above and below the diagonal.
 
 ```{r}
 dynr_initial <- dynr::prep.initial(
@@ -279,6 +365,8 @@ dynr_initial <- dynr::prep.initial(
 
 ### Prepare Measurement Model
 
+The loadings $\left( 1, 0 \right)$ are fixed.
+
 ```{r}
 dynr_measurement <- dynr::prep.measurement(
   values.load = matrix(data = c(1, 0), nrow = 1),
@@ -289,6 +377,9 @@ dynr_measurement <- dynr::prep.measurement(
 ```
 
 ### Prepare Dynamic Process
+
+The two formulas are the two rows of the dynamic equation.
+They have no free parameters.
 
 ```{r}
 dynr_dynamics <- dynr::prep.formulaDynamics(
@@ -302,6 +393,9 @@ dynr_dynamics <- dynr::prep.formulaDynamics(
 
 ### Prepare Process Noise
 
+The process noise is fixed at zero,
+and the measurement error variance $\theta$ is estimated.
+
 ```{r}
 dynr_noise <- dynr::prep.noise(
   values.latent = matrix(data = 0, nrow = 2, ncol = 2),
@@ -313,6 +407,9 @@ dynr_noise <- dynr::prep.noise(
 
 ### Prepare the Model
 
+The pieces are put together into one model.
+`dynr` writes the model as C code to `outfile` and compiles it.
+
 ```{r}
 model <- dynr::dynr.model(
   data = dynr_data,
@@ -323,6 +420,8 @@ model <- dynr::dynr.model(
   outfile = "lin-growth.c"
 )
 ```
+
+The plot below shows the model equations with the parameter names.
 
 ```{r model-lin-growth}
 #| echo = FALSE
@@ -345,6 +444,9 @@ results <- dynr::dynr.cook(
 ```
 
 ## Summary
+
+The summary lists each estimate with its standard error,
+$t$ value, confidence interval, and $p$ value.
 
 ```{r}
 summary(results)
@@ -379,6 +481,9 @@ theta_hat <- estimates["theta"]
 
 ### Estimated Parameters
 
+The estimates arranged as the matrices in the model,
+to compare with the population values in the Data Generation section.
+
 ```{r}
 mu0_hat
 sigma0_hat
@@ -387,7 +492,16 @@ theta_hat
 
 ## Linear Growth Curve Model in Structural Equation Modeling
 
+The same model in SEM form, fitted with `lavaan`,
+should give nearly the same estimates.
+In SEM, the five occasions are five observed variables
+in one row per individual (wide format).
+The intercept factor has loadings of 1 on all occasions,
+and the slope factor has loadings 0, 1, 2, 3, and 4.
+
 ### Wide Data Set
+
+`as.data.frame()` with `long = FALSE` returns the data in wide format.
 
 ```{r}
 data <- as.data.frame(sim, long = FALSE)
@@ -395,6 +509,10 @@ head(data)
 ```
 
 ### Model
+
+The parameter labels match the dynr names.
+Giving the five error variances the same label, `theta`,
+constrains them to be equal, as in the state space model.
 
 ```{r}
 model <- "
@@ -427,8 +545,8 @@ lavaan::summary(fit)
 
 ```{r}
 #| echo = FALSE
-estimates <- lavaan::coef(results)
-estimates_cov <- lavaan::vcov(results)
+estimates <- lavaan::coef(fit)
+estimates_cov <- lavaan::vcov(fit)
 mu0_hat <- unname(
   estimates[
     c(
@@ -437,7 +555,7 @@ mu0_hat <- unname(
     )
   ]
 )
-mu0_hat - unname(mu0_hat)
+mu0_hat <- unname(mu0_hat)
 sigma0_hat <- matrix(
   data = estimates[
     c(
@@ -456,10 +574,90 @@ theta_hat <- unname(
 
 ### Estimated Parameters
 
+The estimates arranged as the matrices in the model,
+to compare with the population values in the Data Generation section.
+
 ```{r}
 mu0_hat
 sigma0_hat
 theta_hat
+```
+
+## Table of Parameters and Estimates
+
+The table below puts each population value used to simulate the data
+next to its estimate.
+Bias is the estimate minus the population value.
+Because the model is fitted to a single simulated data set,
+this is the error of one estimate, not a Monte Carlo bias,
+which would average over many replications.
+The 95% confidence interval is the Wald interval,
+$\hat{\theta} \pm 1.96 \times \mathrm{SE}$,
+and `Covers` shows whether it contains the population value.
+
+```{r}
+EstimatesTable <- function(population, estimate, se) {
+  z <- stats::qnorm(p = 0.975)
+  ll <- estimate - z * se
+  ul <- estimate + z * se
+  data.frame(
+    Parameter = names(population),
+    Population = unname(population),
+    Estimate = unname(estimate),
+    SE = unname(se),
+    Bias = unname(estimate - population),
+    `2.5%` = unname(ll),
+    `97.5%` = unname(ul),
+    Covers = unname(population >= ll & population <= ul),
+    check.names = FALSE
+  )
+}
+```
+
+```{r}
+population <- c(
+  mu0_0 = mu0[1],
+  mu0_1 = mu0[2],
+  sigma0_00 = sigma0[1, 1],
+  sigma0_01 = sigma0[1, 2],
+  sigma0_11 = sigma0[2, 2],
+  theta = theta
+)
+```
+
+### dynr
+
+```{r}
+estimates <- coef(results)[names(population)]
+se <- sqrt(diag(vcov(results)))
+names(se) <- names(coef(results))
+knitr::kable(
+  x = EstimatesTable(
+    population = population,
+    estimate = estimates,
+    se = se[names(population)]
+  ),
+  digits = 3,
+  caption = "Population values and dynr estimates (one simulated data set)"
+)
+```
+
+### lavaan
+
+```{r}
+pe <- lavaan::parameterEstimates(fit)
+# theta is one parameter shared by the five error variances
+pe <- pe[pe$label != "" & !duplicated(pe$label), ]
+rownames(pe) <- pe$label
+knitr::kable(
+  x = EstimatesTable(
+    population = population,
+    estimate = pe[names(population), "est"],
+    se = pe[names(population), "se"]
+  ),
+  digits = 3,
+  caption = "Population values and lavaan estimates (one simulated data set)"
+)
 ```
 
 ## References

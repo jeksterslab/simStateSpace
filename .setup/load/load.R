@@ -3,10 +3,8 @@
 #' @param rproj Object.
 #'   Output of `rprojroot::is_rstudio_project`
 Load <- function(rproj) {
-  # sources
-  # root/R
-  # root/.setup/r-dependencies
-  # root/.setup/r-miscellaneous
+  # sources the R scripts in the project's R, .setup/r-dependencies, and
+  # .setup/r-miscellaneous folders
   x <- list.files(
     path = rproj$find_file(
       "R"

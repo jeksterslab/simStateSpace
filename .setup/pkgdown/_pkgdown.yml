@@ -2,13 +2,8 @@ destination: pkgdown
 url: https://github.com/jeksterslab/simStateSpace/
 
 template:
-  params:
-    mathjax: true
   bootstrap: 5
-  includes:
-    in_header: |
-      <script id="MathJax-script" async
-              src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  math-rendering: mathjax
   bslib:
     base_font: {google: "Roboto"}
     heading_font: {google: "Roboto Slab"}
@@ -47,6 +42,12 @@ articles:
   - ssm
   - var
   - ou
+- title: Panel Models
+  contents:
+  - ri-clpm
+  - starts
+  - lcs
+  - lcm-sr
 - title: Session Information
   contents:
   - session

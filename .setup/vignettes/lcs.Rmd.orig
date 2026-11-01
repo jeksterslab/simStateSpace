@@ -1,0 +1,724 @@
+---
+title: "The Bivariate Dual Change Score Model"
+author: "Ivan Jacob Agaloos Pesigan"
+date: "`r Sys.Date()`"
+bibliography: "vignettes.bib"
+csl: https://raw.githubusercontent.com/citation-style-language/styles/master/apa.csl
+nocite: |
+  @RCoreTeam-2026
+  @Ou-Hunter-Chow-2019
+  @Chow-Ho-Hamaker-etal-2010
+  @Rosseel-2012
+  @Pesigan-Russell-Chow-2025o
+output:
+  rmarkdown::html_vignette:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{The Bivariate Dual Change Score Model}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r}
+#| include = FALSE
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  fig.path = "fig-vignettes-lcs-",
+  fig.cap = "",
+  fig.width = 11,
+  fig.height = 8,
+  fig.retina = 2,
+  dpi = 300,
+  comment = "#>"
+)
+```
+
+## Overview
+
+Latent change score models describe change itself
+[@McArdle-2009].
+Take vocabulary and reading comprehension measured once a year in children.
+From one occasion to the next, each child's vocabulary changes.
+In the dual change score model, the change has two sources:
+a constant amount each child gains every year (the slope),
+and an amount that depends on where the child stood the year before
+(the self-feedback).
+In the bivariate model, the change in one variable
+can also depend on the previous level of the other variable
+(the coupling),
+for example, if children with a larger vocabulary
+gain more in reading comprehension.
+
+The dual change score model is usually fitted
+as a structural equation model (SEM).
+It can also be written as a state space model:
+the true levels of the two variables are latent states,
+and the slopes are latent states that never change.
+
+This tutorial does three things:
+
+1. It writes the bivariate dual change score model as a state space model.
+2. It simulates data from the model with `SimSSMFixed()`.
+3. It fits the model to the simulated data with `dynr` (state space)
+   and with `lavaan` (SEM),
+   and compares both sets of estimates with the values used to simulate the data.
+
+No prior knowledge of state space models is needed.
+
+```{r}
+#| echo = FALSE
+options(scipen = 999)
+set.seed(42)
+n <- 10000
+time <- 6
+k <- 2
+p <- 4
+# self-feedback and coupling
+b_1 <- -0.2
+b_2 <- -0.3
+g_1_2 <- 0.1
+g_2_1 <- 0.2
+mu0 <- c(2, 1, 0.5, 0.4)
+sigma0 <- matrix(
+  data = c(
+    1.00, 0.30, 0.15, 0.05,
+    0.30, 1.00, 0.05, 0.15,
+    0.15, 0.05, 0.25, 0.05,
+    0.05, 0.15, 0.05, 0.25
+  ),
+  nrow = 4
+)
+sigma0_l <- t(chol(sigma0))
+alpha <- rep(x = 0, times = p)
+beta <- matrix(
+  data = c(
+    1 + b_1, g_2_1, 0, 0,
+    g_1_2, 1 + b_2, 0, 0,
+    1, 0, 1, 0,
+    0, 1, 0, 1
+  ),
+  nrow = 4
+)
+psi <- matrix(data = 0, nrow = p, ncol = p)
+psi_l <- psi
+nu <- rep(x = 0, times = k)
+lambda <- cbind(diag(2), matrix(data = 0, nrow = 2, ncol = 2))
+theta <- diag(c(0.2, 0.2))
+theta_l <- t(chol(theta))
+```
+
+## Model
+
+The measurement model is given by
+\begin{equation}
+  \left(
+  \begin{array}{c}
+    Y_{1_{i, t}} \\
+    Y_{2_{i, t}} \\
+  \end{array}
+  \right)
+  =
+  \left(
+  \begin{array}{cccc}
+    1 & 0 & 0 & 0 \\
+    0 & 1 & 0 & 0 \\
+  \end{array}
+  \right)
+  \left(
+  \begin{array}{c}
+    \eta_{1_{i, t}} \\
+    \eta_{2_{i, t}} \\
+    \eta_{3_{i, t}} \\
+    \eta_{4_{i, t}} \\
+  \end{array}
+  \right)
+  +
+  \left(
+  \begin{array}{c}
+    \varepsilon_{1_{i, t}} \\
+    \varepsilon_{2_{i, t}} \\
+  \end{array}
+  \right),
+  \quad
+  \mathrm{with}
+  \quad
+  \left(
+  \begin{array}{c}
+    \varepsilon_{1_{i, t}} \\
+    \varepsilon_{2_{i, t}} \\
+  \end{array}
+  \right)
+  \sim
+  \mathcal{N}
+  \left(
+  \mathbf{0},
+  \left(
+  \begin{array}{cc}
+    \theta_{11} & 0 \\
+    0 & \theta_{22} \\
+  \end{array}
+  \right)
+  \right)
+\end{equation}
+where $Y_{1_{i, t}}$ and $Y_{2_{i, t}}$
+are the two observed variables
+at time $t$ and individual $i$,
+$\eta_{1_{i, t}}$ and $\eta_{2_{i, t}}$ are their true levels,
+$\eta_{3_{i, t}}$ and $\eta_{4_{i, t}}$ are their slopes,
+and $\theta_{11}$ and $\theta_{22}$
+are the measurement error variances.
+
+In words,
+each observed score is the true level plus measurement error.
+The slopes have loadings of 0:
+they affect the scores only through the change in the true levels.
+
+The change in the true level of the first variable
+from occasion $t - 1$ to occasion $t$ is
+\begin{equation}
+  \Delta \eta_{1_{i, t}}
+  =
+  \eta_{3_{i, t - 1}}
+  +
+  b_{1} \eta_{1_{i, t - 1}}
+  +
+  g_{12} \eta_{2_{i, t - 1}} ,
+\end{equation}
+and similarly for the second variable,
+$\Delta \eta_{2_{i, t}} = \eta_{4_{i, t - 1}} + b_{2} \eta_{2_{i, t - 1}} + g_{21} \eta_{1_{i, t - 1}}$.
+The true level at occasion $t$ is the previous true level plus the change,
+$\eta_{1_{i, t}} = \eta_{1_{i, t - 1}} + \Delta \eta_{1_{i, t}}$.
+
+Writing the change into the level gives the dynamic structure
+\begin{equation}
+  \left(
+  \begin{array}{c}
+    \eta_{1_{i, t}} \\
+    \eta_{2_{i, t}} \\
+    \eta_{3_{i, t}} \\
+    \eta_{4_{i, t}} \\
+  \end{array}
+  \right)
+  =
+  \left(
+  \begin{array}{cccc}
+    1 + b_{1} & g_{12} & 1 & 0 \\
+    g_{21} & 1 + b_{2} & 0 & 1 \\
+    0 & 0 & 1 & 0 \\
+    0 & 0 & 0 & 1 \\
+  \end{array}
+  \right)
+  \left(
+  \begin{array}{c}
+    \eta_{1_{i, t - 1}} \\
+    \eta_{2_{i, t - 1}} \\
+    \eta_{3_{i, t - 1}} \\
+    \eta_{4_{i, t - 1}} \\
+  \end{array}
+  \right) .
+\end{equation}
+
+In words,
+$b_{1}$ and $b_{2}$ are the self-feedback effects:
+a negative value means that individuals who stand higher
+gain less, so the levels level off over time.
+$g_{12}$ is the coupling from the second variable to the first:
+a positive value means that a higher level of the second variable
+is followed by a larger gain in the first.
+$g_{21}$ is the reverse.
+The slopes stay the same over time.
+As in most applications of the model,
+there is no process noise:
+once the initial levels and the slopes are set,
+the true trajectories are fixed.
+
+The initial condition holds the means, variances, and covariances
+of the initial true levels and the slopes,
+\begin{equation}
+  \boldsymbol{\eta}_{i, 0}
+  \sim
+  \mathcal{N}
+  \left(
+  \boldsymbol{\mu}_{\boldsymbol{\eta} \mid 0},
+  \boldsymbol{\Sigma}_{\boldsymbol{\eta} \mid 0}
+  \right) .
+\end{equation}
+
+For example, a positive covariance between the initial level
+and the slope of the same variable means that individuals who start higher
+also tend to gain more each year.
+
+## Data Generation
+
+### Notation
+
+Let $t = `r time`$ be the number of time points and $n = `r n`$ be the number of individuals.
+
+Let the self-feedback effects be $b_{1} = `r b_1`$ and $b_{2} = `r b_2`$,
+and the coupling effects be $g_{12} = `r g_1_2`$ and $g_{21} = `r g_2_1`$,
+so that
+
+\begin{equation}
+\boldsymbol{\beta}
+=
+\left(
+\begin{array}{cccc}
+  `r beta[1, 1]` & `r beta[1, 2]` & `r beta[1, 3]` & `r beta[1, 4]` \\
+  `r beta[2, 1]` & `r beta[2, 2]` & `r beta[2, 3]` & `r beta[2, 4]` \\
+  `r beta[3, 1]` & `r beta[3, 2]` & `r beta[3, 3]` & `r beta[3, 4]` \\
+  `r beta[4, 1]` & `r beta[4, 2]` & `r beta[4, 3]` & `r beta[4, 4]` \\
+\end{array}
+\right) .
+\end{equation}
+
+Let the initial condition be
+
+\begin{equation}
+\boldsymbol{\mu}_{\boldsymbol{\eta} \mid 0}
+=
+\left(
+\begin{array}{c}
+  `r mu0[1]` \\
+  `r mu0[2]` \\
+  `r mu0[3]` \\
+  `r mu0[4]` \\
+\end{array}
+\right)
+\quad \mathrm{and,} \quad
+\boldsymbol{\Sigma}_{\boldsymbol{\eta} \mid 0}
+=
+\left(
+\begin{array}{cccc}
+  `r sigma0[1, 1]` & `r sigma0[1, 2]` & `r sigma0[1, 3]` & `r sigma0[1, 4]` \\
+  `r sigma0[2, 1]` & `r sigma0[2, 2]` & `r sigma0[2, 3]` & `r sigma0[2, 4]` \\
+  `r sigma0[3, 1]` & `r sigma0[3, 2]` & `r sigma0[3, 3]` & `r sigma0[3, 4]` \\
+  `r sigma0[4, 1]` & `r sigma0[4, 2]` & `r sigma0[4, 3]` & `r sigma0[4, 4]` \\
+\end{array}
+\right) ,
+\end{equation}
+
+and the measurement error variances be
+$\theta_{11} = `r theta[1, 1]`$ and $\theta_{22} = `r theta[2, 2]`$.
+
+### R Function Arguments
+
+The simulation functions take covariance matrices
+as lower triangular Cholesky factors (the arguments ending in `_l`).
+There is no process noise, so `psi` and `psi_l` are zero matrices.
+
+```{r}
+n
+time
+mu0
+sigma0
+sigma0_l # sigma0_l <- t(chol(sigma0))
+alpha
+beta
+psi
+psi_l
+nu
+lambda
+theta
+theta_l # theta_l <- t(chol(theta))
+```
+
+### Visualizing the Dynamics Without Measurement Error (n = 5 with Different Initial Condition)
+
+Without measurement error,
+each individual's true levels follow smooth curves
+that bend as the self-feedback slows the gains.
+
+```{r no-error-lcs}
+#| echo = FALSE
+library(simStateSpace)
+sim <- SimSSMFixed(
+  n = 5,
+  time = time,
+  mu0 = mu0,
+  sigma0_l = sigma0_l,
+  alpha = alpha,
+  beta = beta,
+  psi_l = psi_l,
+  nu = nu,
+  lambda = lambda,
+  theta_l = matrix(data = 0, nrow = k, ncol = k),
+  type = 0
+)
+plot(sim, type = "l")
+```
+
+### Using the `SimSSMFixed` Function from the `simStateSpace` Package to Simulate Data
+
+Now we add the measurement error and simulate the full data set.
+`as.data.frame()` returns the data in long format,
+one row per individual and time point,
+with the columns `id`, `time`, `y1`, and `y2`.
+
+```{r error-lcs}
+library(simStateSpace)
+sim <- SimSSMFixed(
+  n = n,
+  time = time,
+  mu0 = mu0,
+  sigma0_l = sigma0_l,
+  alpha = alpha,
+  beta = beta,
+  psi_l = psi_l,
+  nu = nu,
+  lambda = lambda,
+  theta_l = theta_l,
+  type = 0
+)
+data <- as.data.frame(sim)
+head(data)
+summary(data)
+plot(sim)
+```
+
+## Model Fitting
+
+We first fit the model with `dynr`,
+which estimates state space models by maximum likelihood
+using the Kalman filter.
+
+A `dynr` model is built from pieces that match the equations above:
+the data, the initial condition, the measurement model,
+the dynamic model, and the noise.
+Each parameter gets a name (for example, `g_1_2` for $g_{12}$),
+and the same name used in two places means one shared parameter.
+The starting values are set to the population values for convenience;
+with real data, they would be rough guesses.
+
+### Prepare Data
+
+Tell `dynr` which columns hold the individual, the time, and the observed variables.
+
+```{r}
+dynr_data <- dynr::dynr.data(
+  dataframe = data,
+  id = "id",
+  time = "time",
+  observed = c("y1", "y2")
+)
+```
+
+### Prepare Initial Condition
+
+The means, variances, and covariances
+of the initial true levels and the slopes are all estimated.
+
+```{r}
+dynr_initial <- dynr::prep.initial(
+  values.inistate = mu0,
+  params.inistate = c("mu0_1_1", "mu0_2_1", "mu0_3_1", "mu0_4_1"),
+  values.inicov = sigma0,
+  params.inicov = matrix(
+    data = c(
+      "sigma0_1_1", "sigma0_2_1", "sigma0_3_1", "sigma0_4_1",
+      "sigma0_2_1", "sigma0_2_2", "sigma0_3_2", "sigma0_4_2",
+      "sigma0_3_1", "sigma0_3_2", "sigma0_3_3", "sigma0_4_3",
+      "sigma0_4_1", "sigma0_4_2", "sigma0_4_3", "sigma0_4_4"
+    ),
+    nrow = 4
+  )
+)
+```
+
+### Prepare Measurement Model
+
+The loadings are fixed.
+
+```{r}
+dynr_measurement <- dynr::prep.measurement(
+  values.load = lambda,
+  params.load = matrix(data = "fixed", nrow = 2, ncol = 4),
+  state.names = c("eta_1", "eta_2", "eta_3", "eta_4"),
+  obs.names = c("y1", "y2")
+)
+```
+
+### Prepare Dynamic Process
+
+The first two formulas read as
+"the new true level is the previous level plus the change",
+with the change made of the slope, the self-feedback, and the coupling.
+The slopes carry over unchanged.
+
+```{r}
+dynr_dynamics <- dynr::prep.formulaDynamics(
+  formula = list(
+    eta_1 ~ eta_1 + eta_3 + b_1 * eta_1 + g_1_2 * eta_2,
+    eta_2 ~ eta_2 + eta_4 + b_2 * eta_2 + g_2_1 * eta_1,
+    eta_3 ~ eta_3,
+    eta_4 ~ eta_4
+  ),
+  startval = c(
+    b_1 = b_1, b_2 = b_2,
+    g_1_2 = g_1_2, g_2_1 = g_2_1
+  ),
+  isContinuousTime = FALSE
+)
+```
+
+### Prepare Process Noise
+
+The process noise is fixed at zero,
+and the two measurement error variances are estimated.
+
+```{r}
+dynr_noise <- dynr::prep.noise(
+  values.latent = psi,
+  params.latent = matrix(data = "fixed", nrow = 4, ncol = 4),
+  values.observed = theta,
+  params.observed = matrix(
+    data = c(
+      "theta_1_1", "fixed",
+      "fixed", "theta_2_2"
+    ),
+    nrow = 2
+  )
+)
+```
+
+### Prepare the Model
+
+The pieces are put together into one model.
+`dynr` writes the model as C code to `outfile` and compiles it.
+
+```{r}
+model <- dynr::dynr.model(
+  data = dynr_data,
+  initial = dynr_initial,
+  measurement = dynr_measurement,
+  dynamics = dynr_dynamics,
+  noise = dynr_noise,
+  outfile = "lcs.c"
+)
+```
+
+The plot below shows the model equations with the parameter names.
+
+```{r model-lcs}
+#| echo = FALSE
+dynr::plotFormula(
+  dynrModel = model,
+  ParameterAs = model$"param.names",
+  printDyn = TRUE,
+  printMeas = TRUE
+)
+```
+
+### Fit the Model
+
+```{r}
+results <- dynr::dynr.cook(
+  model,
+  debug_flag = TRUE,
+  verbose = FALSE
+)
+```
+
+## Summary
+
+The summary lists each estimate with its standard error,
+$t$ value, confidence interval, and $p$ value.
+
+```{r}
+summary(results)
+```
+
+## The Dual Change Score Model in Structural Equation Modeling
+
+The same model in SEM form, fitted with `lavaan`,
+should give nearly the same estimates.
+In SEM, each variable at each occasion is a separate observed variable
+in one row per individual (wide format).
+Each observed score has a true-level factor;
+each true level after the first is the previous true level
+plus a change factor;
+and each change factor is the slope
+plus the self-feedback and coupling effects.
+
+### Wide Data Set
+
+`as.data.frame()` with `long = FALSE` returns the data in wide format.
+
+```{r}
+data <- as.data.frame(sim, long = FALSE)
+head(data)
+```
+
+### Model
+
+The model has the same structure for every occasion,
+so we write it with `paste0()`.
+The parameter labels match the dynr names.
+Giving the self-feedback and coupling effects
+and the measurement error variances the same label on every occasion
+constrains them to be equal over time,
+as in the state space model.
+
+```{r}
+waves <- 0:(time - 1)
+now <- waves[-1]
+before <- waves[-time]
+model <- paste(
+  c(
+    "# true levels",
+    paste0("l1_", waves, " =~ 1 * y1_", waves),
+    paste0("l2_", waves, " =~ 1 * y2_", waves),
+    "# each true level is the previous level plus the change",
+    paste0("l1_", now, " ~ 1 * l1_", before),
+    paste0("l2_", now, " ~ 1 * l2_", before),
+    paste0("l1_", now, " ~~ 0 * l1_", now),
+    paste0("l2_", now, " ~~ 0 * l2_", now),
+    paste0("d1_", now, " =~ 1 * l1_", now),
+    paste0("d2_", now, " =~ 1 * l2_", now),
+    "# the change: self-feedback and coupling",
+    paste0("d1_", now, " ~ b_1 * l1_", before, " + g_1_2 * l2_", before),
+    paste0("d2_", now, " ~ b_2 * l2_", before, " + g_2_1 * l1_", before),
+    paste0("d1_", now, " ~~ 0 * d1_", now),
+    paste0("d2_", now, " ~~ 0 * d2_", now),
+    "# the change: slopes",
+    paste0("s1 =~ ", paste0("1 * d1_", now, collapse = " + ")),
+    paste0("s2 =~ ", paste0("1 * d2_", now, collapse = " + ")),
+    "# initial true levels and slopes: means",
+    "l1_0 ~ mu0_1_1 * 1",
+    "l2_0 ~ mu0_2_1 * 1",
+    "s1 ~ mu0_3_1 * 1",
+    "s2 ~ mu0_4_1 * 1",
+    "# initial true levels and slopes: variances and covariances",
+    "l1_0 ~~ sigma0_1_1 * l1_0",
+    "l2_0 ~~ sigma0_2_2 * l2_0",
+    "s1 ~~ sigma0_3_3 * s1",
+    "s2 ~~ sigma0_4_4 * s2",
+    "l1_0 ~~ sigma0_2_1 * l2_0",
+    "l1_0 ~~ sigma0_3_1 * s1",
+    "l1_0 ~~ sigma0_4_1 * s2",
+    "l2_0 ~~ sigma0_3_2 * s1",
+    "l2_0 ~~ sigma0_4_2 * s2",
+    "s1 ~~ sigma0_4_3 * s2",
+    "# measurement error variances, equal over time; no observed intercepts",
+    paste0("y1_", waves, " ~~ theta_1_1 * y1_", waves),
+    paste0("y2_", waves, " ~~ theta_2_2 * y2_", waves),
+    paste0("y1_", waves, " ~ 0 * 1"),
+    paste0("y2_", waves, " ~ 0 * 1")
+  ),
+  collapse = "\n"
+)
+cat(model)
+```
+
+`lavaan::lavaan()` adds nothing to the model by itself,
+so every parameter above is exactly the one written.
+
+```{r}
+fit <- lavaan::lavaan(
+  model = model,
+  data = data
+)
+lavaan::summary(fit)
+```
+
+## Table of Parameters and Estimates
+
+The table below puts each population value used to simulate the data
+next to its estimate.
+Bias is the estimate minus the population value.
+Because the model is fitted to a single simulated data set,
+this is the error of one estimate, not a Monte Carlo bias,
+which would average over many replications.
+The 95% confidence interval is the Wald interval,
+$\hat{\theta} \pm 1.96 \times \mathrm{SE}$,
+and `Covers` shows whether it contains the population value.
+
+```{r}
+EstimatesTable <- function(population, estimate, se) {
+  z <- stats::qnorm(p = 0.975)
+  ll <- estimate - z * se
+  ul <- estimate + z * se
+  data.frame(
+    Parameter = names(population),
+    Population = unname(population),
+    Estimate = unname(estimate),
+    SE = unname(se),
+    Bias = unname(estimate - population),
+    `2.5%` = unname(ll),
+    `97.5%` = unname(ul),
+    Covers = unname(population >= ll & population <= ul),
+    check.names = FALSE
+  )
+}
+```
+
+```{r}
+population <- c(
+  mu0_1_1 = mu0[1],
+  mu0_2_1 = mu0[2],
+  mu0_3_1 = mu0[3],
+  mu0_4_1 = mu0[4],
+  sigma0_1_1 = sigma0[1, 1],
+  sigma0_2_1 = sigma0[2, 1],
+  sigma0_3_1 = sigma0[3, 1],
+  sigma0_4_1 = sigma0[4, 1],
+  sigma0_2_2 = sigma0[2, 2],
+  sigma0_3_2 = sigma0[3, 2],
+  sigma0_4_2 = sigma0[4, 2],
+  sigma0_3_3 = sigma0[3, 3],
+  sigma0_4_3 = sigma0[4, 3],
+  sigma0_4_4 = sigma0[4, 4],
+  b_1 = b_1,
+  b_2 = b_2,
+  g_1_2 = g_1_2,
+  g_2_1 = g_2_1,
+  theta_1_1 = theta[1, 1],
+  theta_2_2 = theta[2, 2]
+)
+```
+
+### dynr
+
+```{r}
+estimates <- coef(results)[names(population)]
+se <- sqrt(diag(vcov(results)))
+names(se) <- names(coef(results))
+knitr::kable(
+  x = EstimatesTable(
+    population = population,
+    estimate = estimates,
+    se = se[names(population)]
+  ),
+  digits = 3,
+  caption = "Population values and dynr estimates (one simulated data set)"
+)
+```
+
+### lavaan
+
+```{r}
+pe <- lavaan::parameterEstimates(fit)
+# a label shared by several occasions is one parameter
+pe <- pe[pe$label != "" & !duplicated(pe$label), ]
+rownames(pe) <- pe$label
+knitr::kable(
+  x = EstimatesTable(
+    population = population,
+    estimate = pe[names(population), "est"],
+    se = pe[names(population), "se"]
+  ),
+  digits = 3,
+  caption = "Population values and lavaan estimates (one simulated data set)"
+)
+```
+
+## References
+
+```{r}
+#| include = FALSE
+unlink(c("lcs.c", "lcs.s", "lcs.so", "lcs.o"))
+```
+
+```{r}
+#| include = FALSE
+rm(list = ls())
+```

@@ -1,0 +1,624 @@
+---
+title: "The Stable Trait, Autoregressive Trait, and State Model"
+author: "Ivan Jacob Agaloos Pesigan"
+date: "`r Sys.Date()`"
+bibliography: "vignettes.bib"
+csl: https://raw.githubusercontent.com/citation-style-language/styles/master/apa.csl
+nocite: |
+  @RCoreTeam-2026
+  @Ou-Hunter-Chow-2019
+  @Chow-Ho-Hamaker-etal-2010
+  @Rosseel-2012
+  @Pesigan-Russell-Chow-2025o
+output:
+  rmarkdown::html_vignette:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{The Stable Trait, Autoregressive Trait, and State Model}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r}
+#| include = FALSE
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  fig.path = "fig-vignettes-starts-",
+  fig.cap = "",
+  fig.width = 11,
+  fig.height = 8,
+  fig.retina = 2,
+  dpi = 300,
+  comment = "#>"
+)
+```
+
+## Overview
+
+The stable trait, autoregressive trait, and state (STARTS) model
+divides a variable measured repeatedly on the same individuals
+into three parts [@Kenny-Zautra-1995; @Kenny-Zautra-2001].
+Take life satisfaction measured once a year.
+Part of it is a stable trait that does not change over the study.
+Part of it is an autoregressive trait that changes slowly:
+a good year tends to be followed by a fairly good year.
+The rest is a state that belongs to one occasion only,
+such as the mood on the day of the survey or measurement error.
+The model estimates how much of the variance belongs to each part
+and how strongly the autoregressive part carries over.
+
+The STARTS model is usually fitted
+as a structural equation model (SEM).
+It can also be written as a state space model:
+the stable trait is a latent state that never changes,
+the autoregressive trait is a latent state with first-order dynamics,
+and the state part is the measurement error.
+
+This tutorial does three things:
+
+1. It writes the STARTS model as a state space model.
+2. It simulates data from the model with `SimSSMFixed()`.
+3. It fits the model to the simulated data with `dynr` (state space)
+   and with `lavaan` (SEM),
+   and compares both sets of estimates with the values used to simulate the data.
+
+No prior knowledge of state space models is needed.
+
+```{r}
+#| echo = FALSE
+options(scipen = 999)
+set.seed(42)
+n <- 10000
+time <- 10
+k <- 1
+p <- 2
+mu_trait <- 3
+sigma_trait <- 0.5
+beta_ar <- 0.6
+psi_ar <- 0.32
+# stationary variance of the autoregressive trait
+sigma_ar <- psi_ar / (1 - beta_ar^2)
+mu0 <- c(mu_trait, 0)
+sigma0 <- diag(c(sigma_trait, sigma_ar))
+sigma0_l <- t(chol(sigma0))
+alpha <- c(0, 0)
+beta <- diag(c(1, beta_ar))
+psi <- diag(c(0, psi_ar))
+psi_l <- diag(c(0, sqrt(psi_ar)))
+nu <- 0
+lambda <- matrix(data = c(1, 1), nrow = 1)
+theta <- matrix(data = 0.3, nrow = 1, ncol = 1)
+theta_l <- t(chol(theta))
+```
+
+## Model
+
+The measurement model is given by
+\begin{equation}
+  Y_{i, t}
+  =
+  \left(
+  \begin{array}{cc}
+    1 & 1 \\
+  \end{array}
+  \right)
+  \left(
+  \begin{array}{c}
+    \eta_{1_{i, t}} \\
+    \eta_{2_{i, t}} \\
+  \end{array}
+  \right)
+  +
+  \varepsilon_{i, t},
+  \quad
+  \mathrm{with}
+  \quad
+  \varepsilon_{i, t}
+  \sim
+  \mathcal{N}
+  \left(
+  0,
+  \theta
+  \right)
+\end{equation}
+where $Y_{i, t}$ is the observed variable
+at time $t$ and individual $i$,
+$\eta_{1_{i, t}}$ is the stable trait,
+$\eta_{2_{i, t}}$ is the autoregressive trait,
+and $\varepsilon_{i, t}$ is the state.
+$\theta$ is the variance of the state.
+
+In words,
+the observed score is the sum of the three parts.
+The state $\varepsilon_{i, t}$ is new on every occasion
+and does not carry over,
+so it plays the role of measurement error in a state space model.
+
+The dynamic structure is given by
+\begin{equation}
+  \left(
+  \begin{array}{c}
+    \eta_{1_{i, t}} \\
+    \eta_{2_{i, t}} \\
+  \end{array}
+  \right)
+  =
+  \left(
+  \begin{array}{cc}
+    1 & 0 \\
+    0 & \beta_{22} \\
+  \end{array}
+  \right)
+  \left(
+  \begin{array}{c}
+    \eta_{1_{i, t - 1}} \\
+    \eta_{2_{i, t - 1}} \\
+  \end{array}
+  \right)
+  +
+  \left(
+  \begin{array}{c}
+    0 \\
+    \zeta_{2_{i, t}} \\
+  \end{array}
+  \right),
+  \quad
+  \mathrm{with}
+  \quad
+  \zeta_{2_{i, t}}
+  \sim
+  \mathcal{N}
+  \left(
+  0,
+  \psi_{22}
+  \right) .
+\end{equation}
+
+In words,
+the stable trait stays the same over time.
+The autoregressive trait keeps a proportion $\beta_{22}$
+of its previous value and adds a new part with variance $\psi_{22}$.
+The closer $\beta_{22}$ is to 1,
+the more slowly the autoregressive trait changes.
+
+The initial condition is given by
+\begin{equation}
+  \boldsymbol{\eta}_{i, 0}
+  \sim
+  \mathcal{N}
+  \left(
+  \left(
+  \begin{array}{c}
+    \mu_{1} \\
+    0 \\
+  \end{array}
+  \right),
+  \left(
+  \begin{array}{cc}
+    \sigma_{11} & 0 \\
+    0 & \sigma_{22} \\
+  \end{array}
+  \right)
+  \right) .
+\end{equation}
+
+Here, $\mu_{1}$ is the average stable trait
+and $\sigma_{11}$ is how much individuals differ in it.
+The autoregressive trait has mean zero,
+because the stable trait carries the mean,
+and $\sigma_{22}$ is its variance at the first occasion.
+The two traits are uncorrelated.
+
+## Data Generation
+
+### Notation
+
+Let $t = `r time`$ be the number of time points and $n = `r n`$ be the number of individuals.
+The STARTS model needs many occasions
+to tell the three parts apart,
+so this example has more occasions than the other vignettes.
+
+Let the stable trait have mean $\mu_{1} = `r mu_trait`$
+and variance $\sigma_{11} = `r sigma_trait`$.
+Let the autoregressive effect be $\beta_{22} = `r beta_ar`$,
+the process noise variance $\psi_{22} = `r psi_ar`$,
+and the state variance $\theta = `r theta[1, 1]`$.
+
+The autoregressive trait starts from its stationary distribution,
+so its variance at the first occasion is the variance it keeps
+at every later occasion,
+
+\begin{equation}
+\sigma_{22}
+=
+\frac{\psi_{22}}{1 - \beta_{22}^{2}}
+=
+`r round(sigma_ar, 3)` .
+\end{equation}
+
+With these values, the stable trait, the autoregressive trait,
+and the state contribute
+`r sigma_trait`, `r round(sigma_ar, 3)`, and `r theta[1, 1]`
+to the variance of the observed score on every occasion.
+
+### R Function Arguments
+
+The simulation functions take covariance matrices
+as lower triangular Cholesky factors (the arguments ending in `_l`).
+Because the stable trait has no process noise,
+`psi` has a row and a column of zeros,
+and its Cholesky factor is written directly.
+
+```{r}
+n
+time
+mu0
+sigma0
+sigma0_l # sigma0_l <- t(chol(sigma0))
+alpha
+beta
+psi
+psi_l
+nu
+lambda
+theta
+theta_l # theta_l <- t(chol(theta))
+```
+
+### Visualizing the Dynamics Without Process Noise and Measurement Error (n = 5 with Different Initial Condition)
+
+Without process noise and the state,
+each individual's autoregressive trait decays toward zero,
+so each trajectory settles at the individual's stable trait.
+
+```{r no-error-starts}
+#| echo = FALSE
+library(simStateSpace)
+sim <- SimSSMFixed(
+  n = 5,
+  time = time,
+  mu0 = mu0,
+  sigma0_l = sigma0_l,
+  alpha = alpha,
+  beta = beta,
+  psi_l = matrix(data = 0, nrow = p, ncol = p),
+  nu = nu,
+  lambda = lambda,
+  theta_l = matrix(data = 0, nrow = 1, ncol = 1),
+  type = 0
+)
+plot(sim, type = "l")
+```
+
+### Using the `SimSSMFixed` Function from the `simStateSpace` Package to Simulate Data
+
+Now we add the process noise and the state
+and simulate the full data set.
+`as.data.frame()` returns the data in long format,
+one row per individual and time point,
+with the columns `id`, `time`, and `y1`.
+
+```{r error-starts}
+library(simStateSpace)
+sim <- SimSSMFixed(
+  n = n,
+  time = time,
+  mu0 = mu0,
+  sigma0_l = sigma0_l,
+  alpha = alpha,
+  beta = beta,
+  psi_l = psi_l,
+  nu = nu,
+  lambda = lambda,
+  theta_l = theta_l,
+  type = 0
+)
+data <- as.data.frame(sim)
+head(data)
+summary(data)
+plot(sim)
+```
+
+## Model Fitting
+
+We first fit the model with `dynr`,
+which estimates state space models by maximum likelihood
+using the Kalman filter.
+
+A `dynr` model is built from pieces that match the equations above:
+the data, the initial condition, the measurement model,
+the dynamic model, and the noise.
+Each parameter gets a name (for example, `beta_2_2` for $\beta_{22}$),
+and the same name used in two places means one shared parameter.
+The starting values are set to the population values for convenience;
+with real data, they would be rough guesses.
+
+### Prepare Data
+
+Tell `dynr` which columns hold the individual, the time, and the observed variables.
+
+```{r}
+dynr_data <- dynr::dynr.data(
+  dataframe = data,
+  id = "id",
+  time = "time",
+  observed = "y1"
+)
+```
+
+### Prepare Initial Condition
+
+The mean of the stable trait and the variances of both traits
+at the first occasion are estimated.
+The mean of the autoregressive trait
+and the covariance of the two traits are fixed at zero.
+
+```{r}
+dynr_initial <- dynr::prep.initial(
+  values.inistate = mu0,
+  params.inistate = c("mu0_1_1", "fixed"),
+  values.inicov = sigma0,
+  params.inicov = matrix(
+    data = c(
+      "sigma0_1_1", "fixed",
+      "fixed", "sigma0_2_2"
+    ),
+    nrow = 2
+  )
+)
+```
+
+### Prepare Measurement Model
+
+The loadings $\left( 1, 1 \right)$ are fixed.
+
+```{r}
+dynr_measurement <- dynr::prep.measurement(
+  values.load = lambda,
+  params.load = matrix(data = "fixed", nrow = 1, ncol = 2),
+  state.names = c("eta_1", "eta_2"),
+  obs.names = "y1"
+)
+```
+
+### Prepare Dynamic Process
+
+The stable trait carries over unchanged;
+the autoregressive trait has the autoregressive effect $\beta_{22}$.
+
+```{r}
+dynr_dynamics <- dynr::prep.formulaDynamics(
+  formula = list(
+    eta_1 ~ eta_1,
+    eta_2 ~ beta_2_2 * eta_2
+  ),
+  startval = c(beta_2_2 = beta[2, 2]),
+  isContinuousTime = FALSE
+)
+```
+
+### Prepare Process Noise
+
+Only the autoregressive trait has process noise.
+The state variance $\theta$ is estimated.
+
+```{r}
+dynr_noise <- dynr::prep.noise(
+  values.latent = psi,
+  params.latent = matrix(
+    data = c(
+      "fixed", "fixed",
+      "fixed", "psi_2_2"
+    ),
+    nrow = 2
+  ),
+  values.observed = theta,
+  params.observed = "theta"
+)
+```
+
+### Prepare the Model
+
+The pieces are put together into one model.
+`dynr` writes the model as C code to `outfile` and compiles it.
+
+```{r}
+model <- dynr::dynr.model(
+  data = dynr_data,
+  initial = dynr_initial,
+  measurement = dynr_measurement,
+  dynamics = dynr_dynamics,
+  noise = dynr_noise,
+  outfile = "starts.c"
+)
+```
+
+The plot below shows the model equations with the parameter names.
+
+```{r model-starts}
+#| echo = FALSE
+dynr::plotFormula(
+  dynrModel = model,
+  ParameterAs = model$"param.names",
+  printDyn = TRUE,
+  printMeas = TRUE
+)
+```
+
+### Fit the Model
+
+```{r}
+results <- dynr::dynr.cook(
+  model,
+  debug_flag = TRUE,
+  verbose = FALSE
+)
+```
+
+## Summary
+
+The summary lists each estimate with its standard error,
+$t$ value, confidence interval, and $p$ value.
+
+```{r}
+summary(results)
+```
+
+## The STARTS Model in Structural Equation Modeling
+
+The same model in SEM form, fitted with `lavaan`,
+should give nearly the same estimates.
+In SEM, each occasion is a separate observed variable
+in one row per individual (wide format).
+The stable trait is a factor with loadings of 1 on all occasions,
+and the autoregressive trait is a factor on each occasion
+with a loading of 1 on that occasion.
+
+### Wide Data Set
+
+`as.data.frame()` with `long = FALSE` returns the data in wide format.
+
+```{r}
+data <- as.data.frame(sim, long = FALSE)
+head(data)
+```
+
+### Model
+
+The model has the same structure for every occasion,
+so we write it with `paste0()`.
+The parameter labels match the dynr names.
+Giving the autoregressive effect, the process noise variance,
+and the state variance the same label on every occasion
+constrains them to be equal over time,
+as in the state space model.
+
+```{r}
+waves <- 0:(time - 1)
+now <- waves[-1]
+before <- waves[-time]
+model <- paste(
+  c(
+    "# stable trait: loadings fixed at 1",
+    paste0("eta_1 =~ ", paste0("1 * y1_", waves, collapse = " + ")),
+    "# autoregressive trait on each occasion",
+    paste0("ar_", waves, " =~ 1 * y1_", waves),
+    "# autoregressive effect",
+    paste0("ar_", now, " ~ beta_2_2 * ar_", before),
+    "# autoregressive trait at the first occasion",
+    "ar_0 ~~ sigma0_2_2 * ar_0",
+    "# process noise at later occasions",
+    paste0("ar_", now, " ~~ psi_2_2 * ar_", now),
+    "# stable trait: mean and variance",
+    "eta_1 ~ mu0_1_1 * 1",
+    "eta_1 ~~ sigma0_1_1 * eta_1",
+    "# the two traits are uncorrelated",
+    "eta_1 ~~ 0 * ar_0",
+    "# state variance, equal over time; no observed intercepts",
+    paste0("y1_", waves, " ~~ theta * y1_", waves),
+    paste0("y1_", waves, " ~ 0 * 1")
+  ),
+  collapse = "\n"
+)
+cat(model)
+```
+
+`lavaan::lavaan()` adds nothing to the model by itself,
+so every parameter above is exactly the one written.
+
+```{r}
+fit <- lavaan::lavaan(
+  model = model,
+  data = data
+)
+lavaan::summary(fit)
+```
+
+## Table of Parameters and Estimates
+
+The table below puts each population value used to simulate the data
+next to its estimate.
+Bias is the estimate minus the population value.
+Because the model is fitted to a single simulated data set,
+this is the error of one estimate, not a Monte Carlo bias,
+which would average over many replications.
+The 95% confidence interval is the Wald interval,
+$\hat{\theta} \pm 1.96 \times \mathrm{SE}$,
+and `Covers` shows whether it contains the population value.
+
+```{r}
+EstimatesTable <- function(population, estimate, se) {
+  z <- stats::qnorm(p = 0.975)
+  ll <- estimate - z * se
+  ul <- estimate + z * se
+  data.frame(
+    Parameter = names(population),
+    Population = unname(population),
+    Estimate = unname(estimate),
+    SE = unname(se),
+    Bias = unname(estimate - population),
+    `2.5%` = unname(ll),
+    `97.5%` = unname(ul),
+    Covers = unname(population >= ll & population <= ul),
+    check.names = FALSE
+  )
+}
+```
+
+```{r}
+population <- c(
+  mu0_1_1 = mu0[1],
+  sigma0_1_1 = sigma0[1, 1],
+  sigma0_2_2 = sigma0[2, 2],
+  beta_2_2 = beta[2, 2],
+  psi_2_2 = psi[2, 2],
+  theta = theta[1, 1]
+)
+```
+
+### dynr
+
+```{r}
+estimates <- coef(results)[names(population)]
+se <- sqrt(diag(vcov(results)))
+names(se) <- names(coef(results))
+knitr::kable(
+  x = EstimatesTable(
+    population = population,
+    estimate = estimates,
+    se = se[names(population)]
+  ),
+  digits = 3,
+  caption = "Population values and dynr estimates (one simulated data set)"
+)
+```
+
+### lavaan
+
+```{r}
+pe <- lavaan::parameterEstimates(fit)
+# a label shared by several occasions is one parameter
+pe <- pe[pe$label != "" & !duplicated(pe$label), ]
+rownames(pe) <- pe$label
+knitr::kable(
+  x = EstimatesTable(
+    population = population,
+    estimate = pe[names(population), "est"],
+    se = pe[names(population), "se"]
+  ),
+  digits = 3,
+  caption = "Population values and lavaan estimates (one simulated data set)"
+)
+```
+
+## References
+
+```{r}
+#| include = FALSE
+unlink(c("starts.c", "starts.s", "starts.so", "starts.o"))
+```
+
+```{r}
+#| include = FALSE
+rm(list = ls())
+```

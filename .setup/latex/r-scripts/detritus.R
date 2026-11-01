@@ -49,11 +49,9 @@ Detritus <- function(path) {
     )
     close(con)
   }
-  return(
-    list(
-      detritus_folder = detritus_folder,
-      tex_folder = tex_folder,
-      tex_figures_folder = tex_figures_folder
-    )
+  list(
+    detritus_folder = detritus_folder,
+    tex_folder = tex_folder,
+    tex_figures_folder = tex_figures_folder
   )
 }

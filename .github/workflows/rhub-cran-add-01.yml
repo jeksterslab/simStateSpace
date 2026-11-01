@@ -6,11 +6,40 @@ on:
     types:
       - completed
   workflow_dispatch:
+    inputs:
+      latest:
+        description: "Run in the latest image and packages, not the lock's"
+        type: boolean
+        default: false
 
 jobs:
+  # the image and packages of the release (.setup/scripts/rproject.lock);
+  # a scheduled run, or a manual run with latest, uses the latest
+  image:
+    runs-on: ubuntu-latest
+    outputs:
+      image: ${{ steps.lock.outputs.image }}
+      snapshot: ${{ steps.lock.outputs.snapshot }}
+      r_version: ${{ steps.lock.outputs.r_version }}
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v7
+        with:
+          sparse-checkout: .setup/scripts
+      -
+        name: Read the lock
+        id: lock
+        env:
+          EVENT: ${{ github.event_name }}
+          LATEST: ${{ inputs.latest }}
+        run: bash .setup/scripts/image-lock.sh
+
   check:
+    needs: image
     runs-on: ubuntu-latest
     env:
+      RPROJECT_SNAPSHOT: ${{ needs.image.outputs.snapshot }}
       GITHUB_PAT: ${{ secrets.PAT }}
       GITHUB_ACTIONS: "true"
     strategy:
@@ -41,6 +70,26 @@ jobs:
         uses: actions/checkout@v7
         with:
           ref: 'src'
+
+      - name: Pin packages to the lock's snapshot
+        if: needs.image.outputs.snapshot != 'latest'
+        shell: Rscript {0}
+        run: |
+          # R-devel keeps the latest packages: an old snapshot may not build there
+          if (!grepl("devel|unstable", R.version$status, ignore.case = TRUE)) {
+            repo <- "https://packagemanager.posit.co/cran/"
+            if (Sys.info()[["sysname"]] == "Linux" && nzchar(Sys.which("lsb_release"))) {
+              codename <- system2("lsb_release", "-cs", stdout = TRUE)
+              repo <- paste0(repo, "__linux__/", codename, "/")
+            }
+            repo <- paste0(repo, Sys.getenv("RPROJECT_SNAPSHOT"))
+            cat(
+              sprintf("options(repos = c(CRAN = \"%s\"))\n", repo),
+              file = path.expand("~/.Rprofile"),
+              append = TRUE
+            )
+            message("Packages from ", repo)
+          }
 
       - name: Install dependencies
         run: |
