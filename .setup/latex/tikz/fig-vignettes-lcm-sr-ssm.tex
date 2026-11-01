@@ -1,0 +1,41 @@
+% State space diagram of the latent curve model with structured residuals (vignette lcm-sr).
+\documentclass[tikz, border = 6pt]{standalone}
+\usepackage{amsmath}
+\usepackage{bm}
+\usetikzlibrary{arrows.meta, positioning, calc}
+\tikzset{
+  lat/.style = {circle, draw, thick, minimum size = 13mm, inner sep = 0pt},
+  obs/.style = {rectangle, draw, thick, minimum size = 11mm, inner sep = 1pt},
+  noise/.style = {circle, draw, minimum size = 8mm, inner sep = 0pt},
+  reg/.style = {-{Stealth[length = 2.5mm]}, thick},
+  lab/.style = {font = \footnotesize, fill = white, inner sep = 1pt},
+  mat/.style = {font = \small, inner sep = 2pt, align = left},
+  dots/.style = {font = \Large}
+}
+\begin{document}
+\begin{tikzpicture}
+  % occasions
+  \node[lat] (e0) at (0, 0) {$\bm{\eta}_{t - 1}$};
+  \node[obs] (y0) at (0, 3) {$\mathbf{y}_{t - 1}$};
+  \draw[reg] (e0) -- node[lab] {$\bm{\Lambda}$} (y0);
+  \node[lat] (e1) at (4.5, 0) {$\bm{\eta}_{t}$};
+  \node[obs] (y1) at (4.5, 3) {$\mathbf{y}_{t}$};
+  \draw[reg] (e1) -- node[lab] {$\bm{\Lambda}$} (y1);
+  \node[noise] (z1) at (4.5, -2) {$\bm{\zeta}_{t}$};
+  \draw[reg] (z1) -- node[lab, right = 1mm] {$\bm{\Psi}$} (e1);
+  \node[lat] (e2) at (9.0, 0) {$\bm{\eta}_{t + 1}$};
+  \node[obs] (y2) at (9.0, 3) {$\mathbf{y}_{t + 1}$};
+  \draw[reg] (e2) -- node[lab] {$\bm{\Lambda}$} (y2);
+  \node[noise] (z2) at (9.0, -2) {$\bm{\zeta}_{t + 1}$};
+  \draw[reg] (z2) -- node[lab, right = 1mm] {$\bm{\Psi}$} (e2);
+  % transitions
+  \draw[reg] (e0) -- node[lab, above] {$\bm{\beta}$} (e1);
+  \draw[reg] (e1) -- node[lab, above] {$\bm{\beta}$} (e2);
+  \foreach \r in {0, 3} {
+    \node[dots] at (-1.5, \r) {$\cdots$};
+    \node[dots] at (10.5, \r) {$\cdots$};
+  }
+  % matrices
+  \node[mat, align = center, below] at (4.5, -3.0) {$\bm{\beta} = \begin{pmatrix} 1 & 0 & 1 & 0 & 0 & 0 \\ 0 & 1 & 0 & 1 & 0 & 0 \\ 0 & 0 & 1 & 0 & 0 & 0 \\ 0 & 0 & 0 & 1 & 0 & 0 \\ 0 & 0 & 0 & 0 & \beta_{55} & \beta_{56} \\ 0 & 0 & 0 & 0 & \beta_{65} & \beta_{66} \end{pmatrix}$ \qquad $\bm{\Lambda} = \begin{pmatrix} 1 & 0 & 0 & 0 & 1 & 0 \\ 0 & 1 & 0 & 0 & 0 & 1 \end{pmatrix}$ \\[3mm] $\bm{\Psi} = \begin{pmatrix} \mathbf{0} & \mathbf{0} \\ \mathbf{0} & \bm{\Psi}_{\mathrm{SR}} \end{pmatrix}, \ \bm{\Psi}_{\mathrm{SR}} = \begin{pmatrix} \psi_{55} & \psi_{56} \\ \psi_{65} & \psi_{66} \end{pmatrix}$ \\[3mm] $\bm{\eta}_{t} = \left( \eta_{1}, \ldots, \eta_{6} \right)^{\prime}$ (levels $\eta_{1}, \eta_{2}$; slopes $\eta_{3}, \eta_{4}$; structured residuals $\eta_{5}, \eta_{6}$), \quad $\mathbf{y}_{t} = \left( Y_{1}, Y_{2} \right)^{\prime}$; no measurement error};
+\end{tikzpicture}
+\end{document}

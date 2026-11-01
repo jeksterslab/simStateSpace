@@ -172,6 +172,24 @@ because the stable trait carries the mean,
 and $\sigma_{22}$ is its variance at the first occasion.
 The two traits are uncorrelated.
 
+### Diagrams
+
+
+
+![Path diagram of the STARTS model.](fig-vignettes-starts-path.png){width=100%}
+
+The STARTS model as a path diagram, for the first three occasions.
+The stable trait $\eta_{1}$ loads on every occasion with a loading of 1.
+The autoregressive trait $\eta_{2}$ carries over from one occasion to the next with the autoregressive effect $\beta_{22}$ and gets a new part $\zeta_{2}$, with variance $\psi_{22}$, on each occasion.
+The state $\varepsilon$, with variance $\theta$, is new on every occasion.
+
+![State space form of the STARTS model.](fig-vignettes-starts-ssm.png){width=100%}
+
+The same model in state space form.
+All the latent variables at one occasion form the state vector $\boldsymbol{\eta}_{t}$, and all the observed variables form $\mathbf{y}_{t}$.
+$\boldsymbol{\beta}$ carries the state from one occasion to the next, $\boldsymbol{\Lambda}$ maps the state to the observed variables, $\boldsymbol{\Psi}$ is the covariance matrix of the process noise $\boldsymbol{\zeta}_{t}$, and $\boldsymbol{\Theta}$ is the variance of the state.
+`SimSSMFixed()` takes `beta`, `lambda`, and the Cholesky factors of $\boldsymbol{\Psi}$ and $\boldsymbol{\Theta}$ (`psi_l` and `theta_l`).
+
 ## Data Generation
 
 ### Notation
@@ -458,8 +476,8 @@ results <- dynr::dynr.cook(
 #> 
 #> Doing end processing
 #> Successful trial
-#> Total Time: 46.42492 
-#> Backend Time: 46.04418
+#> Total Time: 46.7627 
+#> Backend Time: 46.39977
 ```
 
 ## Summary

@@ -272,6 +272,44 @@ The residuals have mean zero,
 because they are deviations from the trajectories,
 and are uncorrelated with the intercepts and slopes.
 
+### Diagrams
+
+```{r}
+#| include = FALSE
+# copy the model diagrams (built by `make latex` from `.setup/latex/tikz/`)
+root <- c(".", "..")[file.exists(file.path(c(".", ".."), ".setup"))][1]
+file.copy(
+  from = file.path(
+    root,
+    ".setup",
+    "latex",
+    "figures",
+    "png",
+    paste0("fig-vignettes-lcm-sr-", c("path", "ssm"), ".png")
+  ),
+  to = root,
+  overwrite = TRUE
+)
+```
+
+![Path diagram of the LCM-SR.](fig-vignettes-lcm-sr-path.png){width=100%}
+
+The LCM-SR as a path diagram, for the first three occasions.
+The intercepts $\eta_{1}$ and $\eta_{2}$ load on every occasion with a loading of 1, and the slopes $\eta_{3}$ and $\eta_{4}$ with loadings $0, 1, 2, \ldots$.
+The structured residuals $\eta_{5}$ and $\eta_{6}$ carry the dynamics: the horizontal arrows are the autoregressive effects and the diagonal arrows the cross-lagged effects.
+$\zeta_{5}$ and $\zeta_{6}$ are the new parts of the residuals on each occasion, with covariance $\psi_{56}$.
+The intercepts and slopes all covary; to keep the diagram readable, only $\sigma_{12}$, $\sigma_{13}$, and $\sigma_{24}$ are drawn.
+
+![State space form of the LCM-SR.](fig-vignettes-lcm-sr-ssm.png){width=100%}
+
+The same model in state space form.
+All the latent variables at one occasion form the state vector $\boldsymbol{\eta}_{t}$, and all the observed variables form $\mathbf{y}_{t}$.
+$\boldsymbol{\beta}$ carries the state from one occasion to the next, $\boldsymbol{\Lambda}$ maps the state to the observed variables, and $\boldsymbol{\Psi}$ is the covariance matrix of the process noise $\boldsymbol{\zeta}_{t}$.
+In the state space form, $\eta_{1}$ and $\eta_{2}$ are the current levels of the trajectories (the intercepts at the first occasion):
+$\boldsymbol{\beta}$ adds the slope to the level at each occasion.
+`SimSSMFixed()` takes `beta`, `lambda`, and the Cholesky factor of $\boldsymbol{\Psi}$ (`psi_l`);
+`theta_l` is a matrix of zeros.
+
 ## Data Generation
 
 ### Notation

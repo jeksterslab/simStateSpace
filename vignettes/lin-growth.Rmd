@@ -173,6 +173,24 @@ are how much individuals differ in them,
 and $\sigma_{\eta_{0}, \eta_{1}}$ is their covariance,
 for example, positive if individuals who start higher also grow faster.
 
+### Diagrams
+
+
+
+![Path diagram of the linear growth curve model.](fig-vignettes-lin-growth-path.png){width=100%}
+
+The model as a path diagram.
+The intercept $\eta_{0}$ loads on every occasion with a loading of 1, and the slope $\eta_{1}$ with loadings $0, 1, 2, \ldots, T - 1$, so the slope is the change per occasion.
+$\varepsilon_{t}$ is the measurement error, with variance $\theta$, and $\sigma_{\eta_{0}, \eta_{1}}$ is the covariance of the intercept and the slope.
+
+![State space form of the linear growth curve model.](fig-vignettes-lin-growth-ssm.png){width=100%}
+
+The same model in state space form.
+The state holds the current level $\eta_{0}$ and the slope $\eta_{1}$.
+$\boldsymbol{\beta}$ adds the slope to the level at each occasion and keeps the slope, $\boldsymbol{\Lambda}$ picks the level, and $\theta$ is the measurement error variance.
+There is no process noise: the loadings of the path diagram are produced by the transition, and the differences between individuals come from the initial condition.
+`SimSSMLinGrowth()` fixes $\boldsymbol{\beta}$ and $\boldsymbol{\Lambda}$ and takes `mu0` and the Cholesky factors of the initial covariance matrix and of $\theta$ (`sigma0_l` and `theta_l`).
+
 ## Data Generation
 
 ### Notation
@@ -445,8 +463,8 @@ results <- dynr::dynr.cook(
 #> 
 #> Doing end processing
 #> Successful trial
-#> Total Time: 23.4759 
-#> Backend Time: 23.08971
+#> Total Time: 23.52865 
+#> Backend Time: 23.1697
 ```
 
 ## Summary

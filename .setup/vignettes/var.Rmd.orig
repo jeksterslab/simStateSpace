@@ -217,6 +217,40 @@ The functions in `simStateSpace` take this square root,
 the lower triangular Cholesky factor of $\boldsymbol{\Psi}$,
 as the argument `psi_l`.
 
+### Diagrams
+
+```{r}
+#| include = FALSE
+# copy the model diagrams (built by `make latex` from `.setup/latex/tikz/`)
+root <- c(".", "..")[file.exists(file.path(c(".", ".."), ".setup"))][1]
+file.copy(
+  from = file.path(
+    root,
+    ".setup",
+    "latex",
+    "figures",
+    "png",
+    paste0("fig-vignettes-var-", c("path", "ssm"), ".png")
+  ),
+  to = root,
+  overwrite = TRUE
+)
+```
+
+![Path diagram of the VAR model.](fig-vignettes-var-path.png){width=100%}
+
+The model as a path diagram, for the first three occasions.
+The variables are observed (squares) and have no measurement error.
+The horizontal arrows are the autoregressive effects and the diagonal arrows the cross-lagged effects; only the nonzero elements of $\boldsymbol{\beta}$ in this example are drawn.
+$\zeta_{j}$ is the process noise, with variance $\psi_{jj}$, and the curved arrows on the left are the covariances of the variables at the first occasion.
+
+![State space form of the VAR model.](fig-vignettes-var-ssm.png){width=100%}
+
+The same model in state space form.
+The observed variables are the state, $\mathbf{y}_{t} = \boldsymbol{\eta}_{t}$, so $\boldsymbol{\Lambda}$ is the identity matrix and there is no measurement error.
+$\boldsymbol{\beta}$ carries the state from one occasion to the next, and $\boldsymbol{\Psi}$ is the covariance matrix of the process noise $\boldsymbol{\zeta}_{t}$.
+`SimSSMVARFixed()` takes `beta` and the Cholesky factor of $\boldsymbol{\Psi}$ (`psi_l`).
+
 ## Data Generation
 
 ### Notation

@@ -220,6 +220,27 @@ and are uncorrelated with the traits.
 $\sigma_{33}$, $\sigma_{44}$, and $\sigma_{34}$
 are their variances and covariance at the first occasion.
 
+### Diagrams
+
+
+
+![Path diagram of the RI-CLPM.](fig-vignettes-ri-clpm-path.png){width=100%}
+
+The RI-CLPM as a path diagram, for the first three occasions.
+Squares are observed variables and circles are latent variables.
+The traits $\eta_{1}$ and $\eta_{2}$ load on every occasion with a loading of 1 and covary ($\sigma_{12}$).
+The within-person components $\eta_{3}$ and $\eta_{4}$ carry the dynamics: the horizontal arrows are the autoregressive effects and the diagonal arrows the cross-lagged effects.
+$\zeta_{3}$ and $\zeta_{4}$ are the new parts of the deviations on each occasion, with covariance $\psi_{34}$, and $\sigma_{34}$ is the covariance of the within-person components at the first occasion.
+
+![State space form of the RI-CLPM.](fig-vignettes-ri-clpm-ssm.png){width=100%}
+
+The same model in state space form.
+All the latent variables at one occasion form the state vector $\boldsymbol{\eta}_{t}$, and all the observed variables form $\mathbf{y}_{t}$.
+$\boldsymbol{\beta}$ carries the state from one occasion to the next, $\boldsymbol{\Lambda}$ maps the state to the observed variables, and $\boldsymbol{\Psi}$ is the covariance matrix of the process noise $\boldsymbol{\zeta}_{t}$.
+The traits are states with a transition of 1 and no process noise, so they keep their values over time.
+`SimSSMFixed()` takes `beta`, `lambda`, and the Cholesky factor of $\boldsymbol{\Psi}$ (`psi_l`);
+`theta_l` is a matrix of zeros.
+
 ## Data Generation
 
 ### Notation
@@ -594,8 +615,8 @@ results <- dynr::dynr.cook(
 #> 
 #> Doing end processing
 #> Successful trial
-#> Total Time: 2.429735 
-#> Backend Time: 2.422813
+#> Total Time: 2.455073 
+#> Backend Time: 2.449058
 ```
 
 ## Summary
