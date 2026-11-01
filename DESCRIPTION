@@ -33,11 +33,10 @@ Roxygen: list(markdown = TRUE)
 Depends: R (>= 4.1.0)
 LinkingTo: Rcpp (>= 1.0.12), RcppArmadillo (>= 15.0.2-2)
 Imports: Rcpp (>= 1.0.12), stats
-Suggests: knitr, rmarkdown, testthat, dynr
-SystemRequirements: GNU GSL (>= 2.5)
+Suggests: knitr, rmarkdown, testthat
 Config/roxygen2/version: 8.1.1.9000
 NeedsCompilation: yes
-Packaged: 2026-10-18 04:12:24 UTC; root
+Packaged: 2026-11-01 00:44:35 UTC; root
 Author: Ivan Jacob Agaloos Pesigan [aut, cre, cph] (ORCID:
     <https://orcid.org/0000-0003-4818-8420>),
   Michael A. Russell [ctb] (ORCID:
