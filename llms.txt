@@ -32,15 +32,10 @@ package documentation.
 
 ## Citation
 
-To cite `simStateSpace` in publications, please cite Pesigan et al.
-(2025).
+To cite `simStateSpace` in publications, please cite
+(**Pesigan-Russell-Chow-2025o?**).
 
 ## References
-
-Pesigan, I. J. A., Russell, M. A., & Chow, S.-M. (2025). Inferences and
-effect sizes for direct, indirect, and total effects in continuous-time
-mediation models. *Psychological Methods*.
-<https://doi.org/10.1037/met0000779>
 
 R Core Team. (2026). *R: A language and environment for statistical
 computing*. R Foundation for Statistical Computing.
@@ -252,6 +247,17 @@ computing*. R Foundation for Statistical Computing.
   Model](https://github.com/jeksterslab/simStateSpace/articles/var.md):
 - [The Ornstein-Uhlenbeck
   Model](https://github.com/jeksterslab/simStateSpace/articles/ou.md):
+
+### Panel Models
+
+- [The Random Intercept Cross-Lagged Panel
+  Model](https://github.com/jeksterslab/simStateSpace/articles/ri-clpm.md):
+- [The Stable Trait, Autoregressive Trait, and State
+  Model](https://github.com/jeksterslab/simStateSpace/articles/starts.md):
+- [The Bivariate Dual Change Score
+  Model](https://github.com/jeksterslab/simStateSpace/articles/lcs.md):
+- [The Latent Curve Model with Structured
+  Residuals](https://github.com/jeksterslab/simStateSpace/articles/lcm-sr.md):
 
 ### Session Information
 

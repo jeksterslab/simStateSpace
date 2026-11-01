@@ -1,171 +1,150 @@
 # The Vector Autoregressive Model
 
+## Overview
+
+The vector autoregressive (VAR) model describes how a set of variables
+measured repeatedly on the same person carry over and influence each
+other from one occasion to the next. For example, today’s stress may
+predict tomorrow’s stress (carry-over), and today’s stress may also
+predict tomorrow’s negative affect (cross-lagged effect).
+
+This tutorial does three things:
+
+1.  It writes the first-order VAR model as a state space model.
+2.  It simulates data from the model with
+    [`SimSSMVARFixed()`](https://github.com/jeksterslab/simStateSpace/reference/SimSSMVARFixed.md),
+    with every individual sharing the same parameters.
+3.  It fits the model to the simulated data with the `dynr` package and
+    compares the estimates with the values used to simulate the data.
+
+No prior knowledge of state space models is needed. A state space model
+has two parts: a measurement model that links what we observe to
+underlying (latent) states, and a dynamic model that describes how those
+states change over time. In the VAR model, the variables are assumed to
+be measured without error, so the measurement part is simple, and all
+the interest is in the dynamics.
+
 ## Model
 
-The measurement model is given by
-``` math
-\begin{equation}
-  \mathbf{y}_{i, t}
-  =
-  \boldsymbol{\eta}_{i, t}
-\end{equation}
-```
-where $`\mathbf{y}_{i, t}`$ represents a vector of observed variables
-and $`\boldsymbol{\eta}_{i, t}`$ a vector of latent variables for
-individual $`i`$ and time $`t`$. Since the observed and latent variables
-are equal, we only generate data from the dynamic structure.
+The measurement model is given by \\\[\begin{equation} \mathbf{y}\_{i,
+t} = \boldsymbol{\eta}\_{i, t} \end{equation}\\\] where
+\\(\mathbf{y}\_{i, t}\\) represents a vector of observed variables and
+\\(\boldsymbol{\eta}\_{i, t}\\) a vector of latent variables for
+individual \\(i\\) and time \\(t\\). Since the observed and latent
+variables are equal, we only generate data from the dynamic structure.
 
-The dynamic structure is given by
-``` math
-\begin{equation}
-  \boldsymbol{\eta}_{i, t}
-  =
-  \boldsymbol{\alpha}
-  +
-  \boldsymbol{\beta}
-  \boldsymbol{\eta}_{i, t - 1}
-  +
-  \boldsymbol{\zeta}_{i, t},
-  \quad
-  \mathrm{with}
-  \quad
-  \boldsymbol{\zeta}_{i, t}
-  \sim
-  \mathcal{N}
-  \left(
-  \mathbf{0},
-  \boldsymbol{\Psi}
-  \right)
-\end{equation}
-```
-where $`\boldsymbol{\eta}_{i, t}`$, $`\boldsymbol{\eta}_{i, t - 1}`$,
-and $`\boldsymbol{\zeta}_{i, t}`$ are random variables, and
-$`\boldsymbol{\alpha}`$, $`\boldsymbol{\beta}`$, and
-$`\boldsymbol{\Psi}`$ are model parameters. Here,
-$`\boldsymbol{\eta}_{i, t}`$ is a vector of latent variables at time
-$`t`$ and individual $`i`$, $`\boldsymbol{\eta}_{i, t - 1}`$ represents
-a vector of latent variables at time $`t - 1`$ and individual $`i`$, and
-$`\boldsymbol{\zeta}_{i, t}`$ represents a vector of dynamic noise at
-time $`t`$ and individual $`i`$. $`\boldsymbol{\alpha}`$ denotes a
-vector of intercepts, $`\boldsymbol{\beta}`$ a matrix of autoregression
-and cross regression coefficients, and $`\boldsymbol{\Psi}`$ the
-covariance matrix of $`\boldsymbol{\zeta}_{i, t}`$.
+The dynamic structure is given by \\\[\begin{equation}
+\boldsymbol{\eta}\_{i, t} = \boldsymbol{\alpha} + \boldsymbol{\beta}
+\boldsymbol{\eta}\_{i, t - 1} + \boldsymbol{\zeta}\_{i, t}, \quad
+\mathrm{with} \quad \boldsymbol{\zeta}\_{i, t} \sim \mathcal{N} \left(
+\mathbf{0}, \boldsymbol{\Psi} \right) \end{equation}\\\] where
+\\(\boldsymbol{\eta}\_{i, t}\\), \\(\boldsymbol{\eta}\_{i, t - 1}\\),
+and \\(\boldsymbol{\zeta}\_{i, t}\\) are random variables, and
+\\(\boldsymbol{\alpha}\\), \\(\boldsymbol{\beta}\\), and
+\\(\boldsymbol{\Psi}\\) are model parameters. Here,
+\\(\boldsymbol{\eta}\_{i, t}\\) is a vector of latent variables at time
+\\(t\\) and individual \\(i\\), \\(\boldsymbol{\eta}\_{i, t - 1}\\)
+represents a vector of latent variables at time \\(t - 1\\) and
+individual \\(i\\), and \\(\boldsymbol{\zeta}\_{i, t}\\) represents a
+vector of dynamic noise at time \\(t\\) and individual \\(i\\).
+\\(\boldsymbol{\alpha}\\) denotes a vector of intercepts,
+\\(\boldsymbol{\beta}\\) a matrix of autoregression and cross regression
+coefficients, and \\(\boldsymbol{\Psi}\\) the covariance matrix of
+\\(\boldsymbol{\zeta}\_{i, t}\\).
+
+In words, each variable at time \\(t\\) is a weighted sum of all the
+variables at time \\(t - 1\\), plus an intercept and a random shock. The
+weights are the elements of \\(\boldsymbol{\beta}\\):
+
+- A diagonal element \\(\beta\_{jj}\\) is the autoregressive effect, how
+  much of variable \\(j\\) carries over to the next occasion. Values
+  closer to 1 mean the variable changes slowly (high inertia).
+- An off-diagonal element \\(\beta\_{jk}\\) is the cross-lagged effect
+  of variable \\(k\\) at time \\(t - 1\\) on variable \\(j\\) at time
+  \\(t\\). Note the order: the row is the outcome, the column is the
+  predictor.
+
+The shocks \\(\boldsymbol{\zeta}\_{i, t}\\) stand for everything that
+moves the variables that the model does not explain, for example, events
+that happen between occasions. For the process to settle around a stable
+mean, all eigenvalues of \\(\boldsymbol{\beta}\\) must have modulus less
+than 1.
 
 An alternative representation of the dynamic noise is given by
-``` math
-\begin{equation}
-  \boldsymbol{\zeta}_{i, t}
-  =
-  \boldsymbol{\Psi}^{\frac{1}{2}}
-  \mathbf{z}_{i, t},
-  \quad
-  \mathrm{with}
-  \quad
-  \mathbf{z}_{i, t}
-  \sim
-  \mathcal{N}
-  \left(
-  \mathbf{0},
-  \mathbf{I}
-  \right)
-\end{equation}
-```
-where
-$`\left( \boldsymbol{\Psi}^{\frac{1}{2}} \right) \left( \boldsymbol{\Psi}^{\frac{1}{2}} \right)^{\prime} = \boldsymbol{\Psi}`$
-.
+\\\[\begin{equation} \boldsymbol{\zeta}\_{i, t} =
+\boldsymbol{\Psi}^{\frac{1}{2}} \mathbf{z}\_{i, t}, \quad \mathrm{with}
+\quad \mathbf{z}\_{i, t} \sim \mathcal{N} \left( \mathbf{0}, \mathbf{I}
+\right) \end{equation}\\\] where \\(\left(
+\boldsymbol{\Psi}^{\frac{1}{2}} \right) \left(
+\boldsymbol{\Psi}^{\frac{1}{2}} \right)^{\prime} = \boldsymbol{\Psi}\\)
+. This is how the noise is simulated: independent standard normal draws
+\\(\mathbf{z}\_{i, t}\\) are multiplied by a square root of
+\\(\boldsymbol{\Psi}\\). The functions in `simStateSpace` take this
+square root, the lower triangular Cholesky factor of
+\\(\boldsymbol{\Psi}\\), as the argument `psi_l`.
 
 ## Data Generation
 
 ### Notation
 
-Let $`t = 200`$ be the number of time points and $`n = 10`$ be the
+Let \\(t = 200\\) be the number of time points and \\(n = 10\\) be the
 number of individuals.
 
-Let the initial condition $`\boldsymbol{\eta}_{0}`$ be given by
+Let the initial condition \\(\boldsymbol{\eta}\_{0}\\) be given by
 
-``` math
-\begin{equation}
-\boldsymbol{\eta}_{0} \sim \mathcal{N} \left( \boldsymbol{\mu}_{\boldsymbol{\eta} \mid 0}, \boldsymbol{\Sigma}_{\boldsymbol{\eta} \mid 0} \right)
-\end{equation}
-```
+\\\[\begin{equation} \boldsymbol{\eta}\_{0} \sim \mathcal{N} \left(
+\boldsymbol{\mu}\_{\boldsymbol{\eta} \mid 0},
+\boldsymbol{\Sigma}\_{\boldsymbol{\eta} \mid 0} \right)
+\end{equation}\\\]
 
-``` math
-\begin{equation}
-\boldsymbol{\mu}_{\boldsymbol{\eta} \mid 0}
-=
-\left(
-\begin{array}{c}
-  0 \\
-  0 \\
-  0 \\
-\end{array}
-\right)
-\end{equation}
-```
+\\\[\begin{equation} \boldsymbol{\mu}\_{\boldsymbol{\eta} \mid 0} =
+\left( \begin{array}{c} 0 \\\\ 0 \\\\ 0 \\\\ \end{array} \right)
+\end{equation}\\\]
 
-``` math
-\begin{equation}
-\boldsymbol{\Sigma}_{\boldsymbol{\eta} \mid 0}
-=
-\left(
-\begin{array}{ccc}
-  0.1960784 & 0.1183232 & 0.0298539 \\
-  0.1183232 & 0.3437711 & 0.1381855 \\
-  0.0298539 & 0.1381855 & 0.2663828 \\
-\end{array}
-\right) .
-\end{equation}
-```
+\\\[\begin{equation} \boldsymbol{\Sigma}\_{\boldsymbol{\eta} \mid 0} =
+\left( \begin{array}{ccc} 0.1960784 & 0.1183232 & 0.0298539 \\\\
+0.1183232 & 0.3437711 & 0.1381855 \\\\ 0.0298539 & 0.1381855 & 0.2663828
+\\\\ \end{array} \right) . \end{equation}\\\]
 
-Let the constant vector $`\boldsymbol{\alpha}`$ be given by
+Let the constant vector \\(\boldsymbol{\alpha}\\) be given by
 
-``` math
-\begin{equation}
-\boldsymbol{\alpha}
-=
-\left(
-\begin{array}{c}
-  0 \\
-  0 \\
-  0 \\
-\end{array}
-\right) .
-\end{equation}
-```
+\\\[\begin{equation} \boldsymbol{\alpha} = \left( \begin{array}{c} 0
+\\\\ 0 \\\\ 0 \\\\ \end{array} \right) . \end{equation}\\\]
 
-Let the transition matrix $`\boldsymbol{\beta}`$ be given by
+Let the transition matrix \\(\boldsymbol{\beta}\\) be given by
 
-``` math
-\begin{equation}
-\boldsymbol{\beta}
-=
-\left(
-\begin{array}{ccc}
-  0.7 & 0 & 0 \\
-  0.5 & 0.6 & 0 \\
-  -0.1 & 0.4 & 0.5 \\
-\end{array}
-\right) .
-\end{equation}
-```
+\\\[\begin{equation} \boldsymbol{\beta} = \left( \begin{array}{ccc} 0.7
+& 0 & 0 \\\\ 0.5 & 0.6 & 0 \\\\ -0.1 & 0.4 & 0.5 \\\\ \end{array}
+\right) . \end{equation}\\\]
 
-Let the dynamic process noise $`\boldsymbol{\Psi}`$ be given by
+Read the columns as predictors and the rows as outcomes. Each variable
+carries over to the next occasion (autoregressive effects 0.7, 0.6, and
+0.5). In addition, \\(\eta\_{1}\\) predicts later \\(\eta\_{2}\\) (0.5),
+\\(\eta\_{2}\\) predicts later \\(\eta\_{3}\\) (0.4), and
+\\(\eta\_{1}\\) has a small negative effect on later \\(\eta\_{3}\\)
+(-0.1). Because \\(\boldsymbol{\beta}\\) is lower triangular, its
+eigenvalues are its diagonal elements, all less than 1, so the process
+is stable.
 
-``` math
-\begin{equation}
-\boldsymbol{\Psi}
-=
-\left(
-\begin{array}{ccc}
-  0.1 & 0 & 0 \\
-  0 & 0.1 & 0 \\
-  0 & 0 & 0.1 \\
-\end{array}
-\right) .
-\end{equation}
-```
+Let the dynamic process noise \\(\boldsymbol{\Psi}\\) be given by
+
+\\\[\begin{equation} \boldsymbol{\Psi} = \left( \begin{array}{ccc} 0.1 &
+0 & 0 \\\\ 0 & 0.1 & 0 \\\\ 0 & 0 & 0.1 \\\\ \end{array} \right) .
+\end{equation}\\\]
+
+The initial condition describes where each individual starts. Here, the
+mean vector and covariance matrix of \\(\boldsymbol{\eta}\_{0}\\) are
+the model-implied mean and covariance of the stable process, computed
+with
+[`SSMMeanEta()`](https://github.com/jeksterslab/simStateSpace/reference/SSMMeanEta.md)
+and
+[`SSMCovEta()`](https://github.com/jeksterslab/simStateSpace/reference/SSMCovEta.md),
+so the data are stationary from the first time point.
 
 ### R Function Arguments
+
+The simulation functions take covariance matrices as lower triangular
+Cholesky factors (the arguments ending in `_l`).
 
 \
 `n`\
@@ -204,9 +183,19 @@ Let the dynamic process noise $`\boldsymbol{\Psi}`$ be given by
 
 ### Visualizing the Dynamics Without Process Noise (n = 5 with Different Initial Condition)
 
+To see what \\(\boldsymbol{\beta}\\) alone does, we first simulate five
+individuals with the process noise set to zero. Each individual starts
+at a different point, and the trajectories return to the mean at a speed
+set by \\(\boldsymbol{\beta}\\).
+
 ![](fig-vignettes-var-no-error-var-1.png)![](fig-vignettes-var-no-error-var-2.png)![](fig-vignettes-var-no-error-var-3.png)
 
 ### Using the `SimSSMVARFixed` Function from the `simStateSpace` Package to Simulate Data
+
+Now we add the process noise and simulate the full data set.
+[`as.data.frame()`](https://rdrr.io/r/base/as.data.frame.html) returns
+the data in long format, one row per individual and time point, with the
+columns `id`, `time`, `y1`, `y2`, and `y3`.
 
 \
 [`library`](https://rdrr.io/r/base/library.html)`(`[`simStateSpace`](https://github.com/jeksterslab/simStateSpace)`)`\
@@ -249,7 +238,19 @@ Let the dynamic process noise $`\boldsymbol{\Psi}`$ be given by
 
 ## Model Fitting
 
+We fit the model with `dynr`, which estimates state space models by
+maximum likelihood using the Kalman filter. A `dynr` model is built from
+pieces that match the equations above: the data, the initial condition,
+the measurement model, the dynamic model, and the noise. Each parameter
+gets a name (for example, `beta_2_1` for \\(\beta\_{21}\\)), and the
+same name used in two places means one shared parameter. The starting
+values are set to the population values for convenience; with real data,
+they would be rough guesses.
+
 ### Prepare Data
+
+Tell `dynr` which columns hold the individual, the time, and the
+observed variables.
 
 \
 `dynr_data`` ``<-`` ``dynr``::`[`dynr.data`](https://rdrr.io/pkg/dynr/man/dynr.data.html)`(`\
@@ -260,6 +261,11 @@ Let the dynamic process noise $`\boldsymbol{\Psi}`$ be given by
 `)`
 
 ### Prepare Initial Condition
+
+The mean \\(\boldsymbol{\mu}\_{\boldsymbol{\eta} \mid 0}\\) and
+covariance \\(\boldsymbol{\Sigma}\_{\boldsymbol{\eta} \mid 0}\\) of the
+initial state are estimated. The covariance matrix is symmetric, so
+`sigma0_2_1` appears both above and below the diagonal.
 
 \
 `dynr_initial`` ``<-`` ``dynr``::`[`prep.initial`](https://rdrr.io/pkg/dynr/man/prep.initial.html)`(`\
@@ -278,6 +284,10 @@ Let the dynamic process noise $`\boldsymbol{\Psi}`$ be given by
 
 ### Prepare Measurement Model
 
+The measurement model \\(\mathbf{y}\_{i, t} = \boldsymbol{\eta}\_{i,
+t}\\) is an identity matrix of loadings, with no free parameters
+(`"fixed"`).
+
 \
 `dynr_measurement`` ``<-`` ``dynr``::`[`prep.measurement`](https://rdrr.io/pkg/dynr/man/prep.measurement.html)`(`\
 `  values.load ``=`` `[`diag`](https://rdrr.io/r/base/diag.html)`(``3``)``,`\
@@ -287,6 +297,11 @@ Let the dynamic process noise $`\boldsymbol{\Psi}`$ be given by
 `)`
 
 ### Prepare Dynamic Process
+
+Each formula is one row of the dynamic equation: the intercept
+\\(\alpha\_{j}\\) plus the effects \\(\beta\_{jk}\\) of the three
+variables at the previous occasion. `isContinuousTime = FALSE` makes
+this a discrete-time model.
 
 \
 `dynr_dynamics`` ``<-`` ``dynr``::`[`prep.formulaDynamics`](https://rdrr.io/pkg/dynr/man/prep.formulaDynamics.html)`(`\
@@ -306,6 +321,10 @@ Let the dynamic process noise $`\boldsymbol{\Psi}`$ be given by
 
 ### Prepare Process Noise
 
+The latent noise covariance \\(\boldsymbol{\Psi}\\) is estimated. The
+measurement error covariance is fixed at zero, because the variables are
+measured without error in this model.
+
 \
 `dynr_noise`` ``<-`` ``dynr``::`[`prep.noise`](https://rdrr.io/pkg/dynr/man/prep.noise.html)`(`\
 `  values.latent ``=`` ``psi``,`\
@@ -322,6 +341,10 @@ Let the dynamic process noise $`\boldsymbol{\Psi}`$ be given by
 `)`
 
 ### Prepare the Model
+
+The pieces are put together into one model. `dynr` writes the model as C
+code to `outfile` and compiles it. The plot below shows the model
+equations with the parameter names.
 
 \
 `model`` ``<-`` ``dynr``::`[`dynr.model`](https://rdrr.io/pkg/dynr/man/dynr.model.html)`(`\
@@ -344,7 +367,7 @@ Let the dynamic process noise $`\boldsymbol{\Psi}`$ be given by
 `  verbose ``=`` ``FALSE`\
 `)`\
 `#> [1] "Get ready!!!!"`\
-`#> using C compiler: ‘gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0’`\
+`#> using C compiler: ‘gcc (Ubuntu 15.2.0-16ubuntu1) 15.2.0’`\
 `#> Optimization function called.`\
 `#> Starting Hessian calculation ...`\
 `#> Finished Hessian calculation.`\
@@ -354,53 +377,84 @@ Let the dynamic process noise $`\boldsymbol{\Psi}`$ be given by
 `#> Original fitted parameters:  -0.009659021 0.006326407 0.01105055 0.6699005 `\
 `#> 0.02336719 -0.008557283 0.4980157 0.610462 -0.01641327 -0.1277804 0.4459828 `\
 `#> 0.4777827 -2.325915 -0.05106317 -0.02204618 -2.285971 -0.02170302 -2.31359 `\
-`#> -0.1263982 -0.0330166 0.2370182 -1.476343 0.545595 0.1225164 -1.285094 `\
+`#> -0.1263982 -0.03301659 0.2370182 -1.476343 0.545595 0.1225164 -1.285094 `\
 `#> 0.3734002 -1.972366 `\
 `#> `\
 `#> Transformed fitted parameters:  -0.009659021 0.006326407 0.01105055 0.6699005 `\
 `#> 0.02336719 -0.008557283 0.4980157 0.610462 -0.01641327 -0.1277804 0.4459828 `\
 `#> 0.4777827 0.09769403 -0.004988567 -0.00215378 0.10193 -0.002096681 0.09900091 `\
-`#> -0.1263982 -0.0330166 0.2370182 0.2284717 0.124653 0.02799153 0.3446345 `\
+`#> -0.1263982 -0.03301659 0.2370182 0.2284717 0.124653 0.02799153 0.3446345 `\
 `#> 0.1185637 0.1811258 `\
 `#> `\
 `#> Doing end processing`\
 `#> Successful trial`\
-`#> Total Time: 58.46323 `\
-`#> Backend Time: 57.74241`
+`#> Total Time: 23.52952 `\
+`#> Backend Time: 23.13537`
 
 ## Summary
+
+The summary lists each estimate with its standard error, \\(t\\) value,
+confidence interval, and \\(p\\) value.
 
 \
 [`summary`](https://rdrr.io/r/base/summary.html)`(``results``)`\
 `#> Coefficients:`\
-`#>              Estimate Std. Error t value   ci.lower   ci.upper Pr(>|t|)    `\
-`#> alpha_1_1  -0.0096590  0.0070306  -1.374 -0.0234387  0.0041206   0.0848 .  `\
-`#> alpha_2_1   0.0063264  0.0071814   0.881 -0.0077488  0.0204017   0.1892    `\
-`#> alpha_3_1   0.0110505  0.0070774   1.561 -0.0028210  0.0249221   0.0593 .  `\
-`#> beta_1_1    0.6699005  0.0181368  36.936  0.6343530  0.7054480   <2e-16 ***`\
-`#> beta_1_2    0.0233672  0.0149701   1.561 -0.0059736  0.0527080   0.0594 .  `\
-`#> beta_1_3   -0.0085573  0.0150745  -0.568 -0.0381027  0.0209881   0.2852    `\
-`#> beta_2_1    0.4980157  0.0185257  26.882  0.4617061  0.5343254   <2e-16 ***`\
-`#> beta_2_2    0.6104620  0.0152910  39.923  0.5804922  0.6404318   <2e-16 ***`\
-`#> beta_2_3   -0.0164133  0.0153978  -1.066 -0.0465923  0.0137658   0.1433    `\
-`#> beta_3_1   -0.1277804  0.0182577  -6.999 -0.1635648 -0.0919960   <2e-16 ***`\
-`#> beta_3_2    0.4459828  0.0150698  29.594  0.4164465  0.4755191   <2e-16 ***`\
-`#> beta_3_3    0.4777827  0.0151750  31.485  0.4480402  0.5075251   <2e-16 ***`\
-`#> psi_1_1     0.0976940  0.0030970  31.544  0.0916240  0.1037641   <2e-16 ***`\
-`#> psi_2_1    -0.0049886  0.0022397  -2.227 -0.0093783 -0.0005988   0.0130 *  `\
-`#> psi_3_1    -0.0021538  0.0022051  -0.977 -0.0064756  0.0021680   0.1644    `\
-`#> psi_2_2     0.1019300  0.0032314  31.544  0.0955966  0.1082634   <2e-16 ***`\
-`#> psi_3_2    -0.0020967  0.0022523  -0.931 -0.0065111  0.0023177   0.1760    `\
-`#> psi_3_3     0.0990009  0.0031385  31.544  0.0928496  0.1051523   <2e-16 ***`\
-`#> mu0_1_1    -0.1263982  0.1511580  -0.836 -0.4226625  0.1698661   0.2016    `\
-`#> mu0_2_1    -0.0330166  0.1856481  -0.178 -0.3968802  0.3308470   0.4294    `\
-`#> mu0_3_1     0.2370182  0.1345854   1.761 -0.0267643  0.5008008   0.0392 *  `\
-`#> sigma0_1_1  0.2284717  0.1022045   2.235  0.0281546  0.4287887   0.0128 *  `\
-`#> sigma0_2_1  0.1246530  0.0970758   1.284 -0.0656120  0.3149180   0.0996 .  `\
-`#> sigma0_3_1  0.0279915  0.0649250   0.431 -0.0992592  0.1552422   0.3332    `\
-`#> sigma0_2_2  0.3446345  0.1540975   2.236  0.0426091  0.6466600   0.0127 *  `\
-`#> sigma0_3_2  0.1185637  0.0874131   1.356 -0.0527629  0.2898903   0.0876 .  `\
-`#> sigma0_3_3  0.1811258  0.0809848   2.237  0.0223985  0.3398530   0.0127 *  `\
+`#>              Estimate Std. Error t value   ci.lower   ci.upper`\
+`#> alpha_1_1  -0.0096590  0.0070306  -1.374 -0.0234387  0.0041206`\
+`#> alpha_2_1   0.0063264  0.0071814   0.881 -0.0077488  0.0204017`\
+`#> alpha_3_1   0.0110505  0.0070774   1.561 -0.0028210  0.0249221`\
+`#> beta_1_1    0.6699005  0.0181372  36.935  0.6343522  0.7054488`\
+`#> beta_1_2    0.0233672  0.0149701   1.561 -0.0059737  0.0527080`\
+`#> beta_1_3   -0.0085573  0.0150746  -0.568 -0.0381029  0.0209883`\
+`#> beta_2_1    0.4980157  0.0185263  26.882  0.4617049  0.5343266`\
+`#> beta_2_2    0.6104620  0.0152913  39.922  0.5804916  0.6404324`\
+`#> beta_2_3   -0.0164133  0.0153979  -1.066 -0.0465925  0.0137660`\
+`#> beta_3_1   -0.1277804  0.0182578  -6.999 -0.1635651 -0.0919957`\
+`#> beta_3_2    0.4459828  0.0150698  29.595  0.4164466  0.4755190`\
+`#> beta_3_3    0.4777827  0.0151749  31.485  0.4480403  0.5075250`\
+`#> psi_1_1     0.0976940  0.0030971  31.544  0.0916239  0.1037642`\
+`#> psi_2_1    -0.0049886  0.0022397  -2.227 -0.0093784 -0.0005988`\
+`#> psi_3_1    -0.0021538  0.0022051  -0.977 -0.0064756  0.0021681`\
+`#> psi_2_2     0.1019300  0.0032314  31.544  0.0955966  0.1082634`\
+`#> psi_3_2    -0.0020967  0.0022523  -0.931 -0.0065112  0.0023178`\
+`#> psi_3_3     0.0990009  0.0031385  31.544  0.0928495  0.1051523`\
+`#> mu0_1_1    -0.1263982  0.1511529  -0.836 -0.4226525  0.1698561`\
+`#> mu0_2_1    -0.0330166  0.1856236  -0.178 -0.3968322  0.3307990`\
+`#> mu0_3_1     0.2370182  0.1345815   1.761 -0.0267567  0.5007932`\
+`#> sigma0_1_1  0.2284717  0.1021394   2.237  0.0282821  0.4286613`\
+`#> sigma0_2_1  0.1246530  0.0971009   1.284 -0.0656613  0.3149673`\
+`#> sigma0_3_1  0.0279915  0.0649172   0.431 -0.0992439  0.1552270`\
+`#> sigma0_2_2  0.3446345  0.1541142   2.236  0.0425762  0.6466928`\
+`#> sigma0_3_2  0.1185637  0.0874441   1.356 -0.0528235  0.2899509`\
+`#> sigma0_3_3  0.1811258  0.0809860   2.237  0.0223961  0.3398554`\
+`#>                       Pr(>|t|)    `\
+`#> alpha_1_1               0.0848 .  `\
+`#> alpha_2_1               0.1892    `\
+`#> alpha_3_1               0.0593 .  `\
+`#> beta_1_1   <0.0000000000000002 ***`\
+`#> beta_1_2                0.0594 .  `\
+`#> beta_1_3                0.2852    `\
+`#> beta_2_1   <0.0000000000000002 ***`\
+`#> beta_2_2   <0.0000000000000002 ***`\
+`#> beta_2_3                0.1433    `\
+`#> beta_3_1   <0.0000000000000002 ***`\
+`#> beta_3_2   <0.0000000000000002 ***`\
+`#> beta_3_3   <0.0000000000000002 ***`\
+`#> psi_1_1    <0.0000000000000002 ***`\
+`#> psi_2_1                 0.0130 *  `\
+`#> psi_3_1                 0.1644    `\
+`#> psi_2_2    <0.0000000000000002 ***`\
+`#> psi_3_2                 0.1760    `\
+`#> psi_3_3    <0.0000000000000002 ***`\
+`#> mu0_1_1                 0.2016    `\
+`#> mu0_2_1                 0.4294    `\
+`#> mu0_3_1                 0.0392 *  `\
+`#> sigma0_1_1              0.0127 *  `\
+`#> sigma0_2_1              0.0997 .  `\
+`#> sigma0_3_1              0.3332    `\
+`#> sigma0_2_2              0.0127 *  `\
+`#> sigma0_3_2              0.0876 .  `\
+`#> sigma0_3_3              0.0127 *  `\
 `#> ---`\
 `#> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1`\
 `#> `\
@@ -409,6 +463,9 @@ Let the dynamic process noise $`\boldsymbol{\Psi}`$ be given by
 `#> BIC = 3403.83`
 
 ### Parameter Estimates
+
+The estimates arranged as the matrices in the model, to compare with the
+population values in the Data Generation section.
 
 \
 `alpha_hat`\
@@ -424,12 +481,96 @@ Let the dynamic process noise $`\boldsymbol{\Psi}`$ be given by
 `#> [2,] -0.004988567  0.101930001 -0.002096681`\
 `#> [3,] -0.002153780 -0.002096681  0.099000914`\
 `mu0_hat`\
-`#> [1] -0.1263982 -0.0330166  0.2370182`\
+`#> [1] -0.12639820 -0.03301659  0.23701823`\
 `sigma0_hat`\
 `#>            [,1]      [,2]       [,3]`\
 `#> [1,] 0.22847167 0.1246530 0.02799153`\
 `#> [2,] 0.12465301 0.3446345 0.11856369`\
 `#> [3,] 0.02799153 0.1185637 0.18112578`
+
+## Table of Parameters and Estimates
+
+The table below puts each population value used to simulate the data
+next to its estimate. Bias is the estimate minus the population value.
+Because the model is fitted to a single simulated data set, this is the
+error of one estimate, not a Monte Carlo bias, which would average over
+many replications. The 95% confidence interval is the Wald interval,
+\\(\hat{\theta} \pm 1.96 \times \mathrm{SE}\\), and `Covers` shows
+whether it contains the population value.
+
+\
+`EstimatesTable`` ``<-`` ``function``(``population``, ``estimate``, ``se``)`` ``{`\
+`  ``z`` ``<-`` ``stats``::`[`qnorm`](https://rdrr.io/r/stats/Normal.html)`(``p ``=`` ``0.975``)`\
+`  ``ll`` ``<-`` ``estimate`` ``-`` ``z`` ``*`` ``se`\
+`  ``ul`` ``<-`` ``estimate`` ``+`` ``z`` ``*`` ``se`\
+`  `[`data.frame`](https://rdrr.io/r/base/data.frame.html)`(`\
+`    Parameter ``=`` `[`names`](https://rdrr.io/r/base/names.html)`(``population``)``,`\
+`    Population ``=`` `[`unname`](https://rdrr.io/r/base/unname.html)`(``population``)``,`\
+`    Estimate ``=`` `[`unname`](https://rdrr.io/r/base/unname.html)`(``estimate``)``,`\
+`    SE ``=`` `[`unname`](https://rdrr.io/r/base/unname.html)`(``se``)``,`\
+`    Bias ``=`` `[`unname`](https://rdrr.io/r/base/unname.html)`(``estimate`` ``-`` ``population``)``,`\
+``     `2.5%`  ```=`` `[`unname`](https://rdrr.io/r/base/unname.html)`(``ll``)``,`\
+``     `97.5%`  ```=`` `[`unname`](https://rdrr.io/r/base/unname.html)`(``ul``)``,`\
+`    Covers ``=`` `[`unname`](https://rdrr.io/r/base/unname.html)`(``population`` ``>=`` ``ll`` ``&`` ``population`` ``<=`` ``ul``)``,`\
+`    check.names ``=`` ``FALSE`\
+`  ``)`\
+`}`
+
+\
+`estimates`` ``<-`` `[`coef`](https://rdrr.io/r/stats/coef.html)`(``results``)`\
+`se`` ``<-`` `[`sqrt`](https://rdrr.io/r/base/MathFun.html)`(`[`diag`](https://rdrr.io/r/base/diag.html)`(`[`vcov`](https://rdrr.io/r/stats/vcov.html)`(``results``)``)``)`\
+`# the population value for each dynr parameter name,`\
+`# for example, "beta_1_2" is beta[1, 2] and "mu0_2_1" is mu0[2]`\
+`population`` ``<-`` `[`vapply`](https://rdrr.io/r/base/lapply.html)`(`\
+`  X ``=`` `[`strsplit`](https://rdrr.io/r/base/strsplit.html)`(``x ``=`` `[`names`](https://rdrr.io/r/base/names.html)`(``estimates``)``, split ``=`` ``"_"``)``,`\
+`  FUN ``=`` ``function``(``x``)`` ``{`\
+`    `[`as.matrix`](https://rdrr.io/r/base/matrix.html)`(`[`get`](https://rdrr.io/r/base/get.html)`(``x``[``1``]``)``)``[`[`as.integer`](https://rdrr.io/r/base/integer.html)`(``x``[``2``]``)``, `[`as.integer`](https://rdrr.io/r/base/integer.html)`(``x``[``3``]``)``]`\
+`  ``}``,`\
+`  FUN.VALUE ``=`` `[`numeric`](https://rdrr.io/r/base/numeric.html)`(``1``)`\
+`)`\
+[`names`](https://rdrr.io/r/base/names.html)`(``population``)`` ``<-`` `[`names`](https://rdrr.io/r/base/names.html)`(``estimates``)`\
+`knitr``::`[`kable`](https://rdrr.io/pkg/knitr/man/kable.html)`(`\
+`  x ``=`` ``EstimatesTable``(`\
+`    population ``=`` ``population``,`\
+`    estimate ``=`` ``estimates``,`\
+`    se ``=`` ``se`\
+`  ``)``,`\
+`  digits ``=`` ``3``,`\
+`  caption ``=`` ``"Population values and dynr estimates (one simulated data set)"`\
+`)`
+
+| Parameter  | Population | Estimate |    SE |   Bias |   2.5% |  97.5% | Covers |
+|:-----------|-----------:|---------:|------:|-------:|-------:|-------:|:-------|
+| alpha_1_1  |      0.000 |   -0.010 | 0.007 | -0.010 | -0.023 |  0.004 | TRUE   |
+| alpha_2_1  |      0.000 |    0.006 | 0.007 |  0.006 | -0.008 |  0.020 | TRUE   |
+| alpha_3_1  |      0.000 |    0.011 | 0.007 |  0.011 | -0.003 |  0.025 | TRUE   |
+| beta_1_1   |      0.700 |    0.670 | 0.018 | -0.030 |  0.634 |  0.705 | TRUE   |
+| beta_1_2   |      0.000 |    0.023 | 0.015 |  0.023 | -0.006 |  0.053 | TRUE   |
+| beta_1_3   |      0.000 |   -0.009 | 0.015 | -0.009 | -0.038 |  0.021 | TRUE   |
+| beta_2_1   |      0.500 |    0.498 | 0.019 | -0.002 |  0.462 |  0.534 | TRUE   |
+| beta_2_2   |      0.600 |    0.610 | 0.015 |  0.010 |  0.580 |  0.640 | TRUE   |
+| beta_2_3   |      0.000 |   -0.016 | 0.015 | -0.016 | -0.047 |  0.014 | TRUE   |
+| beta_3_1   |     -0.100 |   -0.128 | 0.018 | -0.028 | -0.164 | -0.092 | TRUE   |
+| beta_3_2   |      0.400 |    0.446 | 0.015 |  0.046 |  0.416 |  0.476 | FALSE  |
+| beta_3_3   |      0.500 |    0.478 | 0.015 | -0.022 |  0.448 |  0.508 | TRUE   |
+| psi_1_1    |      0.100 |    0.098 | 0.003 | -0.002 |  0.092 |  0.104 | TRUE   |
+| psi_2_1    |      0.000 |   -0.005 | 0.002 | -0.005 | -0.009 | -0.001 | FALSE  |
+| psi_3_1    |      0.000 |   -0.002 | 0.002 | -0.002 | -0.006 |  0.002 | TRUE   |
+| psi_2_2    |      0.100 |    0.102 | 0.003 |  0.002 |  0.096 |  0.108 | TRUE   |
+| psi_3_2    |      0.000 |   -0.002 | 0.002 | -0.002 | -0.007 |  0.002 | TRUE   |
+| psi_3_3    |      0.100 |    0.099 | 0.003 | -0.001 |  0.093 |  0.105 | TRUE   |
+| mu0_1_1    |      0.000 |   -0.126 | 0.151 | -0.126 | -0.423 |  0.170 | TRUE   |
+| mu0_2_1    |      0.000 |   -0.033 | 0.186 | -0.033 | -0.397 |  0.331 | TRUE   |
+| mu0_3_1    |      0.000 |    0.237 | 0.135 |  0.237 | -0.027 |  0.501 | TRUE   |
+| sigma0_1_1 |      0.196 |    0.228 | 0.102 |  0.032 |  0.028 |  0.429 | TRUE   |
+| sigma0_2_1 |      0.118 |    0.125 | 0.097 |  0.006 | -0.066 |  0.315 | TRUE   |
+| sigma0_3_1 |      0.030 |    0.028 | 0.065 | -0.002 | -0.099 |  0.155 | TRUE   |
+| sigma0_2_2 |      0.344 |    0.345 | 0.154 |  0.001 |  0.043 |  0.647 | TRUE   |
+| sigma0_3_2 |      0.138 |    0.119 | 0.087 | -0.020 | -0.053 |  0.290 | TRUE   |
+| sigma0_3_3 |      0.266 |    0.181 | 0.081 | -0.085 |  0.022 |  0.340 | TRUE   |
+
+Population values and dynr estimates (one simulated data set) {.table
+style="width:99%;"}
 
 ## References
 
@@ -442,11 +583,6 @@ Multidisciplinary Journal*, *17*(2), 303–332.
 Ou, L., Hunter, M. D., & Chow, S.-M. (2019). What’s for dynr: A package
 for linear and nonlinear dynamic modeling in R. *The R Journal*,
 *11*(1), 91. <https://doi.org/10.32614/rj-2019-012>
-
-Pesigan, I. J. A., Russell, M. A., & Chow, S.-M. (2025). Inferences and
-effect sizes for direct, indirect, and total effects in continuous-time
-mediation models. *Psychological Methods*.
-<https://doi.org/10.1037/met0000779>
 
 R Core Team. (2026). *R: A language and environment for statistical
 computing*. R Foundation for Statistical Computing.

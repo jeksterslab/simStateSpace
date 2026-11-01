@@ -1,6 +1,7 @@
 # simStateSpace
 
-See `AGENTS.md` and `.setup/ai/project.md` for this project (package).
+See `AGENTS.md` and `.setup/ai/project.md` for this project (package,
+cran).
 
 - R: BigCamelCase functions; snake_case objects; `pkg::fn()` with named
   arguments; no explicit

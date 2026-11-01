@@ -1,14 +1,18 @@
-pandoc: 3.12.1
+pandoc: '3.13'
 pkgdown: 2.2.1
 pkgdown_sha: ~
 articles:
+  lcm-sr: lcm-sr.html
+  lcs: lcs.html
   lin-growth: lin-growth.html
   ou: ou.html
+  ri-clpm: ri-clpm.html
   session: session.html
   simStateSpace: simStateSpace.html
   ssm: ssm.html
+  starts: starts.html
   var: var.html
-last_built: 2026-10-18T04:12Z
+last_built: 2026-11-01T00:44Z
 urls:
   reference: https://github.com/jeksterslab/simStateSpace/reference
   article: https://github.com/jeksterslab/simStateSpace/articles
