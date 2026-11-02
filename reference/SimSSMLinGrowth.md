@@ -115,14 +115,14 @@ The dynamic structure is given by \$\$ \left( \begin{array}{c}
 
 The mean vector and covariance matrix of the intercept and slope are
 captured in the mean vector and covariance matrix of the initial
-condition given by \$\$ \boldsymbol{\mu}\_{\boldsymbol{\eta} \mid 0} =
-\left( \begin{array}{c} \mu\_{\eta\_{0}} \\\\ \mu\_{\eta\_{1}} \\\\
-\end{array} \right) \quad \mathrm{and,} \$\$
+condition given by \$\$ \boldsymbol{\mu}\_{0} = \left( \begin{array}{c}
+\mu\_{\eta\_{0}} \\\\ \mu\_{\eta\_{1}} \\\\ \end{array} \right) \quad
+\mathrm{and,} \$\$
 
-\$\$ \boldsymbol{\Sigma}\_{\boldsymbol{\eta} \mid 0} = \left(
-\begin{array}{cc} \sigma^{2}\_{\eta\_{0}} & \sigma\_{\eta\_{0},
-\eta\_{1}} \\\\ \sigma\_{\eta\_{1}, \eta\_{0}} & \sigma^{2}\_{\eta\_{1}}
-\\\\ \end{array} \right) . \$\$
+\$\$ \boldsymbol{\Sigma}\_{0} = \left( \begin{array}{cc}
+\sigma^{2}\_{\eta\_{0}} & \sigma\_{\eta\_{0}, \eta\_{1}} \\\\
+\sigma\_{\eta\_{1}, \eta\_{0}} & \sigma^{2}\_{\eta\_{1}} \\\\
+\end{array} \right) . \$\$
 
 ### Type 1
 

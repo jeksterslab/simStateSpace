@@ -30,46 +30,47 @@
 `#> [1] stats     graphics  grDevices utils     datasets  methods   base     `\
 `#> `\
 `#> other attached packages:`\
-`#> [1] simStateSpace_1.2.17`\
+`#> [1] OpenMx_2.22.11       simStateSpace_1.2.17`\
 `#> `\
 `#> loaded via a namespace (and not attached):`\
-`#>  [1] gtable_0.3.6        shape_1.4.6.1       xfun_0.62          `\
-`#>  [4] ggplot2_4.0.3       ks_1.15.3           lattice_0.23-1     `\
-`#>  [7] numDeriv_2016.8-1.1 quadprog_1.5-8      vctrs_0.7.3        `\
-`#> [10] tools_4.6.2         Rdpack_2.6.6        generics_0.1.4     `\
-`#> [13] parallel_4.6.2      stats4_4.6.2        tibble_3.3.1       `\
-`#> [16] cluster_2.1.8.3     pan_2.0             pkgconfig_2.0.3    `\
-`#> [19] fds_2.0             jomo_2.7-6          Matrix_1.7-6       `\
-`#> [22] KernSmooth_2.23-27  RColorBrewer_1.1-3  S7_0.2.2           `\
-`#> [25] lifecycle_1.0.5     compiler_4.6.2      farver_2.1.2       `\
-`#> [28] stringr_1.6.0       mnormt_2.1.2        codetools_0.2-20   `\
-`#> [31] carData_3.0-6       rainbow_3.8         glmnet_5.2         `\
-`#> [34] Formula_1.2-6       pracma_2.4.6        mice_3.19.0        `\
-`#> [37] car_3.1-5           pillar_1.11.1       nloptr_2.2.1       `\
-`#> [40] tidyr_1.3.2         MASS_7.3-66         reformulas_0.4.4   `\
-`#> [43] iterators_1.0.14    abind_1.4-8         rpart_4.1.27       `\
-`#> [46] boot_1.3-32         rProject_0.0.59     mclust_6.1.3       `\
-`#> [49] foreach_1.5.2       mitml_0.4-5         nlme_3.1-171       `\
-`#> [52] lavaan_0.7-3        tidyselect_1.2.1    mvtnorm_1.4-2      `\
-`#> [55] stringi_1.8.9       dplyr_1.2.1         reshape2_1.4.5     `\
-`#> [58] purrr_1.2.2         labeling_0.4.3      splines_4.6.2      `\
-`#> [61] pcaPP_2.0-7         latex2exp_0.9.8     grid_4.6.2         `\
-`#> [64] colorspace_2.1-4    cli_3.6.6.9000      magrittr_2.0.5     `\
-`#> [67] survival_3.8-12     pbivnorm_0.6.0      broom_1.0.13       `\
-`#> [70] withr_3.0.3         scales_1.4.0        backports_1.5.1    `\
-`#> [73] dynr_0.1.16-112     otel_0.2.0          nnet_7.3-21        `\
-`#> [76] lme4_2.1-0          deSolve_1.42        evaluate_1.0.5     `\
-`#> [79] knitr_1.52          rbibutils_2.4.1     rlang_1.3.0        `\
-`#> [82] Rcpp_1.1.2          hdrcde_3.5.0        xtable_1.8-8       `\
-`#> [85] glue_1.8.1          fda_6.3.0           minqa_1.2.8        `\
-`#> [88] R6_2.6.1            plyr_1.8.9`
+`#>  [1] tidyselect_1.2.1    hdrcde_3.5.0        dplyr_1.2.1        `\
+`#>  [4] farver_2.1.2        S7_0.2.2            latex2exp_0.9.8    `\
+`#>  [7] pracma_2.4.6        digest_0.6.39       rpart_4.1.27       `\
+`#> [10] lifecycle_1.0.5     cluster_2.1.8.3     survival_3.8-12    `\
+`#> [13] magrittr_2.0.5      compiler_4.6.2      rlang_1.3.0        `\
+`#> [16] tools_4.6.2         rProject_0.0.61     knitr_1.52         `\
+`#> [19] labeling_0.4.3      mclust_6.1.3        mnormt_2.1.2       `\
+`#> [22] plyr_1.8.9          dynr_0.1.16-112     RColorBrewer_1.1-3 `\
+`#> [25] rainbow_3.8         abind_1.4-8         KernSmooth_2.23-27 `\
+`#> [28] fda_6.3.0           withr_3.0.3         purrr_1.2.2        `\
+`#> [31] numDeriv_2016.8-1.1 nnet_7.3-21         grid_4.6.2         `\
+`#> [34] pcaPP_2.0-7         stats4_4.6.2        lavaan_0.7-3       `\
+`#> [37] jomo_2.7-6          xtable_1.8-8        colorspace_2.1-4   `\
+`#> [40] mice_3.19.0         ggplot2_4.0.3       scales_1.4.0       `\
+`#> [43] iterators_1.0.14    MASS_7.3-66         cli_3.6.6.9000     `\
+`#> [46] mvtnorm_1.4-2       reformulas_0.4.4    generics_0.1.4     `\
+`#> [49] otel_0.2.0          RcppParallel_6.2.1  reshape2_1.4.5     `\
+`#> [52] fds_2.0             minqa_1.2.8         stringr_1.6.0      `\
+`#> [55] splines_4.6.2       parallel_4.6.2      vctrs_0.7.3        `\
+`#> [58] boot_1.3-32         glmnet_5.2          Matrix_1.7-6       `\
+`#> [61] carData_3.0-6       car_3.1-5           mitml_0.4-5        `\
+`#> [64] Formula_1.2-6       foreach_1.5.2       tidyr_1.3.2        `\
+`#> [67] glue_1.8.1          nloptr_2.2.1        pan_2.0            `\
+`#> [70] codetools_0.2-20    stringi_1.8.9       shape_1.4.6.1      `\
+`#> [73] gtable_0.3.6        quadprog_1.5-8      lme4_2.1-0         `\
+`#> [76] tibble_3.3.1        pillar_1.11.1       deSolve_1.42       `\
+`#> [79] R6_2.6.1            Rdpack_2.6.6        ks_1.15.3          `\
+`#> [82] pbivnorm_0.6.0      evaluate_1.0.5      lattice_0.23-1     `\
+`#> [85] rbibutils_2.4.1     backports_1.5.1     broom_1.0.13       `\
+`#> [88] Rcpp_1.1.2          nlme_3.1-171        xfun_0.62          `\
+`#> [91] pkgconfig_2.0.3`
 
 ## Packages
 
 \
 [`installed.packages`](https://rdrr.io/r/utils/installed.packages.html)`(``)``[``, `[`c`](https://rdrr.io/r/base/c.html)`(``"Package"``, ``"Version"``)``]`\
 `#>                   Package             Version     `\
-`#> rProject          "rProject"          "0.0.59"    `\
+`#> rProject          "rProject"          "0.0.61"    `\
 `#> simStateSpace     "simStateSpace"     "1.2.17"    `\
 `#> abind             "abind"             "1.4-8"     `\
 `#> Amelia            "Amelia"            "1.8.3"     `\
@@ -232,7 +233,7 @@
 `#> ks                "ks"                "1.15.3"    `\
 `#> labeling          "labeling"          "0.4.3"     `\
 `#> Lahman            "Lahman"            "14.0-0"    `\
-`#> languageserver    "languageserver"    "0.3.20"    `\
+`#> languageserver    "languageserver"    "0.3.21"    `\
 `#> later             "later"             "1.4.8"     `\
 `#> latex2exp         "latex2exp"         "0.9.8"     `\
 `#> lava              "lava"              "1.10"      `\
@@ -266,7 +267,7 @@
 `#> minqa             "minqa"             "1.2.8"     `\
 `#> mitml             "mitml"             "0.4-5"     `\
 `#> mixopt            "mixopt"            "0.1.3"     `\
-`#> mize              "mize"              "0.2.5"     `\
+`#> mize              "mize"              "0.3.0"     `\
 `#> mlVAR             "mlVAR"             "0.7.3"     `\
 `#> mnormt            "mnormt"            "2.1.2"     `\
 `#> modeldata         "modeldata"         "1.6.0"     `\
@@ -364,7 +365,7 @@
 `#> roxygen2          "roxygen2"          "8.1.1.9000"`\
 `#> rpf               "rpf"               "1.0.15"    `\
 `#> RPostgres         "RPostgres"         "1.4.10"    `\
-`#> rProject          "rProject"          "0.0.59"    `\
+`#> rProject          "rProject"          "0.0.60"    `\
 `#> rprojroot         "rprojroot"         "2.1.1"     `\
 `#> rsample           "rsample"           "1.3.2"     `\
 `#> RSQLite           "RSQLite"           "3.53.3"    `\
@@ -412,7 +413,7 @@
 `#> tidyverse         "tidyverse"         "2.0.0"     `\
 `#> timechange        "timechange"        "0.4.0"     `\
 `#> timeDate          "timeDate"          "4052.112"  `\
-`#> tinytex           "tinytex"           "0.61.1"    `\
+`#> tinytex           "tinytex"           "0.61.4"    `\
 `#> tune              "tune"              "2.1.0"     `\
 `#> tzdb              "tzdb"              "0.5.0"     `\
 `#> ucminf            "ucminf"            "1.2.3"     `\
@@ -490,10 +491,10 @@
     #> Socket(s):                               1
     #> Stepping:                                0
     #> Frequency boost:                         enabled
-    #> CPU(s) scaling MHz:                      60%
+    #> CPU(s) scaling MHz:                      51%
     #> CPU max MHz:                             5060.9761
     #> CPU min MHz:                             1219.5129
-    #> BogoMIPS:                                4990.60
+    #> BogoMIPS:                                4990.58
     #> Flags:                                   fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm constant_tsc rep_good amd_lbr_v2 nopl xtopology nonstop_tsc cpuid extd_apicid aperfmperf rapl pni pclmulqdq monitor ssse3 fma cx16 sse4_1 sse4_2 movbe popcnt aes xsave avx f16c rdrand lahf_lm cmp_legacy svm extapic cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw ibs skinit wdt tce topoext perfctr_core perfctr_nb bpext perfctr_llc mwaitx cpb cat_l3 cdp_l3 hw_pstate ssbd mba perfmon_v2 ibrs ibpb stibp ibrs_enhanced vmmcall fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid cqm rdt_a avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 xsaves cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local user_shstk avx_vnni avx512_bf16 clzero irperf xsaveerptr rdpru wbnoinvd cppc arat npt lbrv svm_lock nrip_save tsc_scale vmcb_clean flushbyasid decodeassists pausefilter pfthreshold v_vmsave_vmload vgif x2avic v_spec_ctrl vnmi avx512vbmi umip pku ospke avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq rdpid bus_lock_detect movdiri movdir64b overflow_recov succor smca fsrm avx512_vp2intersect flush_l1d amd_lbr_pmc_freeze
     #> Virtualization:                          AMD-V
     #> L1d cache:                               768 KiB (16 instances)
@@ -524,6 +525,6 @@
 ## Memory
 
     #>                total        used        free      shared  buff/cache   available
-    #> Mem:            44Gi       5.0Gi        24Gi        44Mi        15Gi        39Gi
+    #> Mem:            44Gi       3.1Gi        29Gi        14Mi        12Gi        41Gi
     #> Swap:           22Gi          0B        22Gi
-    #> Total:          66Gi       5.0Gi        46Gi
+    #> Total:          66Gi       3.1Gi        52Gi

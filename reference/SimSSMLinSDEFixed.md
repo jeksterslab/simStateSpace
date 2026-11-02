@@ -43,13 +43,13 @@ SimSSMLinSDEFixed(
 - mu0:
 
   Numeric vector. Mean of initial latent variable values
-  (\\(\boldsymbol{\mu}\_{\boldsymbol{\eta} \mid 0}\\)).
+  (\\(\boldsymbol{\mu}\_{0}\\)).
 
 - sigma0_l:
 
   Numeric matrix. Cholesky factorization (`t(chol(sigma0))`) of the
   covariance matrix of initial latent variable values
-  (\\(\boldsymbol{\Sigma}\_{\boldsymbol{\eta} \mid 0}\\)).
+  (\\(\boldsymbol{\Sigma}\_{0}\\)).
 
 - iota:
 

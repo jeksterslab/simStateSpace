@@ -44,15 +44,13 @@ SimSSMIVary(
 - mu0:
 
   List of numeric vectors. Each element of the list is the mean of
-  initial latent variable values
-  (\\(\boldsymbol{\mu}\_{\boldsymbol{\eta} \mid 0}\\)).
+  initial latent variable values (\\(\boldsymbol{\mu}\_{0}\\)).
 
 - sigma0_l:
 
   List of numeric matrices. Each element of the list is the Cholesky
   factorization (`t(chol(sigma0))`) of the covariance matrix of initial
-  latent variable values (\\(\boldsymbol{\Sigma}\_{\boldsymbol{\eta}
-  \mid 0}\\)).
+  latent variable values (\\(\boldsymbol{\Sigma}\_{0}\\)).
 
 - alpha:
 

@@ -26,43 +26,43 @@ This tutorial does three things:
 1.  It writes the RI-CLPM as a state space model.
 2.  It simulates data from the model with
     [`SimSSMFixed()`](https://github.com/jeksterslab/simStateSpace/reference/SimSSMFixed.md).
-3.  It fits the model to the simulated data with `dynr` (state space)
-    and with `lavaan` (SEM), and compares both sets of estimates with
-    the values used to simulate the data.
+3.  It fits the model to the simulated data as a state space model with
+    `dynr` and `OpenMx` and as a structural equation model (SEM) with
+    `lavaan` and `OpenMx`, and compares every set of estimates with the
+    values used to simulate the data.
 
 No prior knowledge of state space models is needed.
 
 ## Model
 
-The measurement model is given by \\\[\begin{equation} \left(
-\begin{array}{c} Y\_{1\_{i, t}} \\\\ Y\_{2\_{i, t}} \\\\ \end{array}
-\right) = \left( \begin{array}{cccc} 1 & 0 & 1 & 0 \\\\ 0 & 1 & 0 & 1
-\\\\ \end{array} \right) \left( \begin{array}{c} \eta\_{1\_{i, t}} \\\\
-\eta\_{2\_{i, t}} \\\\ \eta\_{3\_{i, t}} \\\\ \eta\_{4\_{i, t}} \\\\
-\end{array} \right) \end{equation}\\\] where \\(Y\_{1\_{i, t}}\\) and
-\\(Y\_{2\_{i, t}}\\) are the two observed variables at time \\(t\\) and
-individual \\(i\\), \\(\eta\_{1\_{i, t}}\\) and \\(\eta\_{2\_{i, t}}\\)
-are the traits of the two variables, and \\(\eta\_{3\_{i, t}}\\) and
-\\(\eta\_{4\_{i, t}}\\) are their within-person components.
+The measurement model is given by \\\[\left( \begin{array}{c} Y\_{1\_{i,
+t}} \\\\ Y\_{2\_{i, t}} \\\\ \end{array} \right) = \left(
+\begin{array}{cccc} 1 & 0 & 1 & 0 \\\\ 0 & 1 & 0 & 1 \\\\ \end{array}
+\right) \left( \begin{array}{c} \eta\_{1\_{i, t}} \\\\ \eta\_{2\_{i, t}}
+\\\\ \eta\_{3\_{i, t}} \\\\ \eta\_{4\_{i, t}} \\\\ \end{array}
+\right)\\\] where \\(Y\_{1\_{i, t}}\\) and \\(Y\_{2\_{i, t}}\\) are the
+two observed variables at time \\(t\\) and individual \\(i\\),
+\\(\eta\_{1\_{i, t}}\\) and \\(\eta\_{2\_{i, t}}\\) are the traits of
+the two variables, and \\(\eta\_{3\_{i, t}}\\) and \\(\eta\_{4\_{i,
+t}}\\) are their within-person components.
 
 In words, each observed score is the individual’s trait plus the
 individual’s deviation from it on that occasion. As in most applications
 of the RI-CLPM, there is no measurement error.
 
-The dynamic structure is given by \\\[\begin{equation} \left(
-\begin{array}{c} \eta\_{1\_{i, t}} \\\\ \eta\_{2\_{i, t}} \\\\
-\eta\_{3\_{i, t}} \\\\ \eta\_{4\_{i, t}} \\\\ \end{array} \right) =
-\left( \begin{array}{cccc} 1 & 0 & 0 & 0 \\\\ 0 & 1 & 0 & 0 \\\\ 0 & 0 &
-\beta\_{33} & \beta\_{34} \\\\ 0 & 0 & \beta\_{43} & \beta\_{44} \\\\
-\end{array} \right) \left( \begin{array}{c} \eta\_{1\_{i, t - 1}} \\\\
-\eta\_{2\_{i, t - 1}} \\\\ \eta\_{3\_{i, t - 1}} \\\\ \eta\_{4\_{i, t -
-1}} \\\\ \end{array} \right) + \left( \begin{array}{c} 0 \\\\ 0 \\\\
-\zeta\_{3\_{i, t}} \\\\ \zeta\_{4\_{i, t}} \\\\ \end{array} \right),
-\quad \mathrm{with} \quad \left( \begin{array}{c} \zeta\_{3\_{i, t}}
-\\\\ \zeta\_{4\_{i, t}} \\\\ \end{array} \right) \sim \mathcal{N} \left(
-\mathbf{0}, \left( \begin{array}{cc} \psi\_{33} & \psi\_{34} \\\\
-\psi\_{43} & \psi\_{44} \\\\ \end{array} \right) \right) .
-\end{equation}\\\]
+The dynamic structure is given by \\\[\left( \begin{array}{c}
+\eta\_{1\_{i, t}} \\\\ \eta\_{2\_{i, t}} \\\\ \eta\_{3\_{i, t}} \\\\
+\eta\_{4\_{i, t}} \\\\ \end{array} \right) = \left( \begin{array}{cccc}
+1 & 0 & 0 & 0 \\\\ 0 & 1 & 0 & 0 \\\\ 0 & 0 & \beta\_{33} & \beta\_{34}
+\\\\ 0 & 0 & \beta\_{43} & \beta\_{44} \\\\ \end{array} \right) \left(
+\begin{array}{c} \eta\_{1\_{i, t - 1}} \\\\ \eta\_{2\_{i, t - 1}} \\\\
+\eta\_{3\_{i, t - 1}} \\\\ \eta\_{4\_{i, t - 1}} \\\\ \end{array}
+\right) + \left( \begin{array}{c} 0 \\\\ 0 \\\\ \zeta\_{3\_{i, t}} \\\\
+\zeta\_{4\_{i, t}} \\\\ \end{array} \right), \quad \mathrm{with} \quad
+\left( \begin{array}{c} \zeta\_{3\_{i, t}} \\\\ \zeta\_{4\_{i, t}} \\\\
+\end{array} \right) \sim \mathcal{N} \left( \mathbf{0}, \left(
+\begin{array}{cc} \psi\_{33} & \psi\_{34} \\\\ \psi\_{43} & \psi\_{44}
+\\\\ \end{array} \right) \right) .\\\]
 
 In words, the traits stay the same over time: the first two rows have a
 1 on the diagonal and no process noise. The within-person components
@@ -76,20 +76,16 @@ the deviation in the first variable at the next occasion, and
 \\(\psi\_{34}\\) are the variances and covariance of the new,
 unpredictable part of the deviations on each occasion.
 
-The initial condition is given by \\\[\begin{equation}
-\boldsymbol{\eta}\_{i, 0} \sim \mathcal{N} \left(
-\boldsymbol{\mu}\_{\boldsymbol{\eta} \mid 0},
-\boldsymbol{\Sigma}\_{\boldsymbol{\eta} \mid 0} \right)
-\end{equation}\\\]
+The initial condition is given by \\\[\boldsymbol{\eta}\_{i, 0} \sim
+\mathcal{N} \left( \boldsymbol{\mu}\_{0}, \boldsymbol{\Sigma}\_{0}
+\right)\\\]
 
-\\\[\begin{equation} \boldsymbol{\mu}\_{\boldsymbol{\eta} \mid 0} =
-\left( \begin{array}{c} \mu\_{1} \\\\ \mu\_{2} \\\\ 0 \\\\ 0 \\\\
-\end{array} \right) \quad \mathrm{and,} \quad
-\boldsymbol{\Sigma}\_{\boldsymbol{\eta} \mid 0} = \left(
-\begin{array}{cccc} \sigma\_{11} & \sigma\_{12} & 0 & 0 \\\\
-\sigma\_{21} & \sigma\_{22} & 0 & 0 \\\\ 0 & 0 & \sigma\_{33} &
-\sigma\_{34} \\\\ 0 & 0 & \sigma\_{43} & \sigma\_{44} \\\\ \end{array}
-\right) . \end{equation}\\\]
+\\\[\boldsymbol{\mu}\_{0} = \left( \begin{array}{c} \mu\_{1} \\\\
+\mu\_{2} \\\\ 0 \\\\ 0 \\\\ \end{array} \right) \quad \mathrm{and,}
+\quad \boldsymbol{\Sigma}\_{0} = \left( \begin{array}{cccc} \sigma\_{11}
+& \sigma\_{12} & 0 & 0 \\\\ \sigma\_{21} & \sigma\_{22} & 0 & 0 \\\\ 0 &
+0 & \sigma\_{33} & \sigma\_{34} \\\\ 0 & 0 & \sigma\_{43} & \sigma\_{44}
+\\\\ \end{array} \right) .\\\]
 
 Here, \\(\mu\_{1}\\) and \\(\mu\_{2}\\) are the average traits,
 \\(\sigma\_{11}\\), \\(\sigma\_{22}\\), and \\(\sigma\_{12}\\) are how
@@ -107,59 +103,74 @@ occasion.
 
 Path diagram of the RI-CLPM.
 
-The RI-CLPM as a path diagram, for the first three occasions. Squares
-are observed variables and circles are latent variables. The traits
-\\(\eta\_{1}\\) and \\(\eta\_{2}\\) load on every occasion with a
-loading of 1 and covary (\\(\sigma\_{12}\\)). The within-person
+The RI-CLPM as a path diagram, for the first three occasions (\\(t = 0,
+1, 2\\)). Squares are observed variables and circles are latent
+variables. The traits \\(\eta\_{1}\\) and \\(\eta\_{2}\\) load on every
+occasion with a loading of 1, have variances \\(\sigma\_{11}\\) and
+\\(\sigma\_{22}\\), and covary (\\(\sigma\_{12}\\)). The within-person
 components \\(\eta\_{3}\\) and \\(\eta\_{4}\\) carry the dynamics: the
 horizontal arrows are the autoregressive effects and the diagonal arrows
 the cross-lagged effects. \\(\zeta\_{3}\\) and \\(\zeta\_{4}\\) are the
-new parts of the deviations on each occasion, with covariance
-\\(\psi\_{34}\\), and \\(\sigma\_{34}\\) is the covariance of the
-within-person components at the first occasion.
+new parts of the deviations on each occasion, with variances
+\\(\psi\_{33}\\) and \\(\psi\_{44}\\) and covariance \\(\psi\_{34}\\);
+\\(\sigma\_{33}\\), \\(\sigma\_{44}\\), and \\(\sigma\_{34}\\) are the
+variances and covariance of the within-person components at \\(t = 0\\).
+A loop on a variable is its variance and a curved two-headed arrow a
+covariance.
 
 ![State space form of the RI-CLPM.](fig-vignettes-ri-clpm-ssm.png)
 
 State space form of the RI-CLPM.
 
-The same model in state space form. All the latent variables at one
-occasion form the state vector \\(\boldsymbol{\eta}\_{t}\\), and all the
-observed variables form \\(\mathbf{y}\_{t}\\). \\(\boldsymbol{\beta}\\)
-carries the state from one occasion to the next,
-\\(\boldsymbol{\Lambda}\\) maps the state to the observed variables, and
-\\(\boldsymbol{\Psi}\\) is the covariance matrix of the process noise
-\\(\boldsymbol{\zeta}\_{t}\\). The traits are states with a transition
-of 1 and no process noise, so they keep their values over time.
+The same model in state space form, for the first three occasions, with
+every element of the state drawn. The traits are states with a
+transition of 1 and no process noise, so they keep their values over
+time: \\(\eta\_{1, t} = \eta\_{1}\\) and \\(\eta\_{2, t} = \eta\_{2}\\)
+for all \\(t\\). Each observed variable \\(Y\_{j, t}\\) is its trait
+plus its within-person component, both with a loading of 1. The
+within-person components \\(\eta\_{3, t}\\) and \\(\eta\_{4, t}\\) carry
+the dynamics and receive the process noise \\(\zeta\_{3, t}\\) and
+\\(\zeta\_{4, t}\\) from \\(t = 1\\) on. At \\(t = 0\\), the initial
+condition \\(\boldsymbol{\eta}\_{0} \sim \mathcal{N} \left(
+\boldsymbol{\mu}\_{0}, \boldsymbol{\Sigma}\_{0} \right)\\) gives the
+variances and covariances at \\(t = 0\\): the traits and the
+within-person components do not covary. Below the diagram, all the
+latent variables at one occasion form the state vector
+\\(\boldsymbol{\eta}\_{t}\\), and all the observed variables form
+\\(\mathbf{y}\_{t}\\): \\(\boldsymbol{\beta}\\) carries the state from
+one occasion to the next, \\(\boldsymbol{\Lambda}\\) maps the state to
+the observed variables, and \\(\boldsymbol{\Psi}\\) is the covariance
+matrix of the process noise \\(\boldsymbol{\zeta}\_{t}\\).
 [`SimSSMFixed()`](https://github.com/jeksterslab/simStateSpace/reference/SimSSMFixed.md)
-takes `beta`, `lambda`, and the Cholesky factor of
-\\(\boldsymbol{\Psi}\\) (`psi_l`); `theta_l` is a matrix of zeros.
+takes `beta`, `lambda`, `mu0`, and the Cholesky factors of
+\\(\boldsymbol{\Psi}\\) and \\(\boldsymbol{\Sigma}\_{0}\\) (`psi_l` and
+`sigma0_l`); `theta_l` is a matrix of zeros.
 
 ## Data Generation
 
 ### Notation
 
-Let \\(t = 5\\) be the number of time points and \\(n = 10000\\) be the
+Let \\(t = 5\\) be the number of time points and \\(n = 2000\\) be the
 number of individuals.
 
 Let the traits have the means and the covariance matrix
 
-\\\[\begin{equation} \left( \begin{array}{c} \mu\_{1} \\\\ \mu\_{2} \\\\
-\end{array} \right) = \left( \begin{array}{c} 3 \\\\ 2 \\\\ \end{array}
-\right) \quad \mathrm{and,} \quad \left( \begin{array}{cc} \sigma\_{11}
-& \sigma\_{12} \\\\ \sigma\_{21} & \sigma\_{22} \\\\ \end{array} \right)
-= \left( \begin{array}{cc} 1 & 0.5 \\\\ 0.5 & 1 \\\\ \end{array} \right)
-. \end{equation}\\\]
+\\\[\left( \begin{array}{c} \mu\_{1} \\\\ \mu\_{2} \\\\ \end{array}
+\right) = \left( \begin{array}{c} 3 \\\\ 2 \\\\ \end{array} \right)
+\quad \mathrm{and,} \quad \left( \begin{array}{cc} \sigma\_{11} &
+\sigma\_{12} \\\\ \sigma\_{21} & \sigma\_{22} \\\\ \end{array} \right) =
+\left( \begin{array}{cc} 1 & 0.5 \\\\ 0.5 & 1 \\\\ \end{array} \right)
+.\\\]
 
 Let the autoregressive and cross-lagged effects and the process noise
 covariance matrix be
 
-\\\[\begin{equation} \left( \begin{array}{cc} \beta\_{33} & \beta\_{34}
-\\\\ \beta\_{43} & \beta\_{44} \\\\ \end{array} \right) = \left(
-\begin{array}{cc} 0.5 & 0.15 \\\\ 0.1 & 0.4 \\\\ \end{array} \right)
-\quad \mathrm{and,} \quad \left( \begin{array}{cc} \psi\_{33} &
-\psi\_{34} \\\\ \psi\_{43} & \psi\_{44} \\\\ \end{array} \right) =
-\left( \begin{array}{cc} 0.5 & 0.1 \\\\ 0.1 & 0.5 \\\\ \end{array}
-\right) . \end{equation}\\\]
+\\\[\left( \begin{array}{cc} \beta\_{33} & \beta\_{34} \\\\ \beta\_{43}
+& \beta\_{44} \\\\ \end{array} \right) = \left( \begin{array}{cc} 0.5 &
+0.15 \\\\ 0.1 & 0.4 \\\\ \end{array} \right) \quad \mathrm{and,} \quad
+\left( \begin{array}{cc} \psi\_{33} & \psi\_{34} \\\\ \psi\_{43} &
+\psi\_{44} \\\\ \end{array} \right) = \left( \begin{array}{cc} 0.5 & 0.1
+\\\\ 0.1 & 0.5 \\\\ \end{array} \right) .\\\]
 
 The within-person components start from their stationary distribution:
 their covariance matrix at the first occasion is the one they keep at
@@ -168,10 +179,10 @@ every later occasion, computed with
 from the autoregressive and cross-lagged effects and the process noise
 covariance matrix,
 
-\\\[\begin{equation} \left( \begin{array}{cc} \sigma\_{33} &
-\sigma\_{34} \\\\ \sigma\_{43} & \sigma\_{44} \\\\ \end{array} \right) =
-\left( \begin{array}{cc} 0.73 & 0.222 \\\\ 0.222 & 0.625 \\\\
-\end{array} \right) . \end{equation}\\\]
+\\\[\left( \begin{array}{cc} \sigma\_{33} & \sigma\_{34} \\\\
+\sigma\_{43} & \sigma\_{44} \\\\ \end{array} \right) = \left(
+\begin{array}{cc} 0.73 & 0.222 \\\\ 0.222 & 0.625 \\\\ \end{array}
+\right) .\\\]
 
 ### R Function Arguments
 
@@ -183,7 +194,7 @@ block by block.
 
 \
 `n`\
-`#> [1] 10000`\
+`#> [1] 2000`\
 `time`\
 `#> [1] 5`\
 `mu0`\
@@ -274,21 +285,29 @@ columns `id`, `time`, `y1`, and `y2`.
 `#> 5  1    4 3.736337  4.0710355`\
 `#> 6  2    0 3.817745 -0.2774656`\
 [`summary`](https://rdrr.io/r/base/summary.html)`(``data``)`\
-`#>        id             time         y1               y2        `\
-`#>  Min.   :    1   Min.   :0   Min.   :-2.619   Min.   :-3.135  `\
-`#>  1st Qu.: 2501   1st Qu.:1   1st Qu.: 2.091   1st Qu.: 1.140  `\
-`#>  Median : 5000   Median :2   Median : 2.984   Median : 1.978  `\
-`#>  Mean   : 5000   Mean   :2   Mean   : 2.985   Mean   : 1.993  `\
-`#>  3rd Qu.: 7500   3rd Qu.:3   3rd Qu.: 3.871   3rd Qu.: 2.838  `\
-`#>  Max.   :10000   Max.   :4   Max.   : 8.684   Max.   : 7.088`\
+`#>        id              time         y1               y2        `\
+`#>  Min.   :   1.0   Min.   :0   Min.   :-2.619   Min.   :-2.146  `\
+`#>  1st Qu.: 500.8   1st Qu.:1   1st Qu.: 2.077   1st Qu.: 1.112  `\
+`#>  Median :1000.5   Median :2   Median : 2.978   Median : 1.968  `\
+`#>  Mean   :1000.5   Mean   :2   Mean   : 2.983   Mean   : 1.988  `\
+`#>  3rd Qu.:1500.2   3rd Qu.:3   3rd Qu.: 3.902   3rd Qu.: 2.837  `\
+`#>  Max.   :2000.0   Max.   :4   Max.   : 8.071   Max.   : 6.948`\
 [`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``sim``)`
 
 ![](fig-vignettes-ri-clpm-error-ri-clpm-1.png)![](fig-vignettes-ri-clpm-error-ri-clpm-2.png)
 
 ## Model Fitting
 
-We first fit the model with `dynr`, which estimates state space models
-by maximum likelihood using the Kalman filter.
+The same simulated data are fitted as a state space model with `dynr`
+and `OpenMx` and as a structural equation model (SEM) with `lavaan` and
+`OpenMx`. All of them estimate the parameters by maximum likelihood. The
+section Population Values and Estimates compares their estimates with
+the population values.
+
+### dynr
+
+We fit the model with `dynr`, which estimates state space models by
+maximum likelihood using the Kalman filter.
 
 A `dynr` model is built from pieces that match the equations above: the
 data, the initial condition, the measurement model, the dynamic model,
@@ -297,7 +316,7 @@ and the noise. Each parameter gets a name (for example, `beta_3_4` for
 shared parameter. The starting values are set to the population values
 for convenience; with real data, they would be rough guesses.
 
-### Prepare Data
+#### Prepare Data
 
 Tell `dynr` which columns hold the individual, the time, and the
 observed variables.
@@ -310,7 +329,7 @@ observed variables.
 `  observed ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"y1"``, ``"y2"``)`\
 `)`
 
-### Prepare Initial Condition
+#### Prepare Initial Condition
 
 The means of the traits are estimated; the means of the within-person
 components are fixed at zero. The covariance matrix has two free blocks,
@@ -333,7 +352,7 @@ covariances between the blocks are fixed at zero.
 `  ``)`\
 `)`
 
-### Prepare Measurement Model
+#### Prepare Measurement Model
 
 The loadings are fixed: each observed variable is its trait plus its
 within-person component.
@@ -346,7 +365,7 @@ within-person component.
 `  obs.names ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"y1"``, ``"y2"``)`\
 `)`
 
-### Prepare Dynamic Process
+#### Prepare Dynamic Process
 
 Each formula is one row of the dynamic equation. The traits carry over
 unchanged; the within-person components have the autoregressive and
@@ -367,7 +386,7 @@ cross-lagged effects.
 `  isContinuousTime ``=`` ``FALSE`\
 `)`
 
-### Prepare Process Noise
+#### Prepare Process Noise
 
 Only the within-person components have process noise. The measurement
 error is fixed at zero.
@@ -388,7 +407,7 @@ error is fixed at zero.
 `  params.observed ``=`` `[`matrix`](https://rdrr.io/r/base/matrix.html)`(``data ``=`` ``"fixed"``, nrow ``=`` ``2``, ncol ``=`` ``2``)`\
 `)`
 
-### Prepare the Model
+#### Prepare the Model
 
 The pieces are put together into one model. `dynr` writes the model as C
 code to `outfile` and compiles it.
@@ -407,7 +426,7 @@ The plot below shows the model equations with the parameter names.
 
 ![](fig-vignettes-ri-clpm-model-ri-clpm-1.png)
 
-### Fit the Model
+#### Fit the Model
 
 \
 `results`` ``<-`` ``dynr``::`[`dynr.cook`](https://rdrr.io/pkg/dynr/man/dynr.cook.html)`(`\
@@ -423,20 +442,20 @@ The plot below shows the model equations with the parameter names.
 `#> Original exit flag:  3 `\
 `#> Modified exit flag:  3 `\
 `#> Optimization terminated successfully: ftol_rel or ftol_abs was reached. `\
-`#> Original fitted parameters:  0.4953656 0.1382549 0.08624409 0.3933535 `\
-`#> -0.6970129 0.1845781 -0.7546108 2.98493 1.993485 0.01991307 0.4917714 `\
-`#> -0.2996043 -0.3247713 0.3104393 -0.5862764 `\
+`#> Original fitted parameters:  0.4687625 0.1400854 0.06179287 0.3956198 `\
+`#> -0.6977308 0.1725888 -0.7642126 2.987923 1.991662 0.07834838 0.4952377 `\
+`#> -0.2896519 -0.3914968 0.319038 -0.5485416 `\
 `#> `\
-`#> Transformed fitted parameters:  0.4953656 0.1382549 0.08624409 0.3933535 `\
-`#> 0.4980709 0.09193299 0.4871624 2.98493 1.993485 1.020113 0.5016622 0.9878145 `\
-`#> 0.7226926 0.2243522 0.6260429 `\
+`#> Transformed fitted parameters:  0.4687625 0.1400854 0.06179287 0.3956198 `\
+`#> 0.4977134 0.08589975 0.4805258 2.987923 1.991662 1.081499 0.5355993 1.013773 `\
+`#> 0.6760442 0.2156838 0.6466032 `\
 `#> `\
 `#> Doing end processing`\
 `#> Successful trial`\
-`#> Total Time: 2.455073 `\
-`#> Backend Time: 2.449058`
+`#> Total Time: 31.0564 `\
+`#> Backend Time: 30.646`
 
-## Summary
+#### Summary
 
 The summary lists each estimate with its standard error, \\(t\\) value,
 confidence interval, and \\(p\\) value.
@@ -444,22 +463,22 @@ confidence interval, and \\(p\\) value.
 \
 [`summary`](https://rdrr.io/r/base/summary.html)`(``results``)`\
 `#> Coefficients:`\
-`#>            Estimate Std. Error t value ci.lower ci.upper            Pr(>|t|)`\
-`#> beta_3_3   0.495366   0.008877   55.81 0.477968 0.512763 <0.0000000000000002`\
-`#> beta_3_4   0.138255   0.007272   19.01 0.124002 0.152508 <0.0000000000000002`\
-`#> beta_4_3   0.086244   0.007142   12.07 0.072245 0.100243 <0.0000000000000002`\
-`#> beta_4_4   0.393354   0.008636   45.55 0.376427 0.410280 <0.0000000000000002`\
-`#> psi_3_3    0.498071   0.004670  106.65 0.488917 0.507224 <0.0000000000000002`\
-`#> psi_4_3    0.091933   0.003360   27.36 0.085348 0.098518 <0.0000000000000002`\
-`#> psi_4_4    0.487162   0.004587  106.21 0.478173 0.496152 <0.0000000000000002`\
-`#> mu0_1_1    2.984930   0.011603  257.25 2.962189 3.007672 <0.0000000000000002`\
-`#> mu0_2_1    1.993485   0.011063  180.19 1.971802 2.015168 <0.0000000000000002`\
-`#> sigma0_1_1 1.020113   0.021319   47.85 0.978329 1.061897 <0.0000000000000002`\
-`#> sigma0_2_1 0.501662   0.015649   32.06 0.470990 0.532334 <0.0000000000000002`\
-`#> sigma0_2_2 0.987815   0.018410   53.66 0.951732 1.023897 <0.0000000000000002`\
-`#> sigma0_3_3 0.722693   0.016479   43.85 0.690394 0.754991 <0.0000000000000002`\
-`#> sigma0_4_3 0.224352   0.011285   19.88 0.202235 0.246470 <0.0000000000000002`\
-`#> sigma0_4_4 0.626043   0.013221   47.35 0.600131 0.651955 <0.0000000000000002`\
+`#>            Estimate Std. Error t value ci.lower ci.upper             Pr(>|t|)`\
+`#> beta_3_3   0.468762   0.020351  23.034 0.428875 0.508650 < 0.0000000000000002`\
+`#> beta_3_4   0.140085   0.016449   8.516 0.107845 0.172326 < 0.0000000000000002`\
+`#> beta_4_3   0.061793   0.016308   3.789 0.029829 0.093757            0.0000761`\
+`#> beta_4_4   0.395620   0.019524  20.263 0.357354 0.433886 < 0.0000000000000002`\
+`#> psi_3_3    0.497713   0.010715  46.450 0.476712 0.518715 < 0.0000000000000002`\
+`#> psi_4_3    0.085900   0.007669  11.201 0.070869 0.100930 < 0.0000000000000002`\
+`#> psi_4_4    0.480526   0.010365  46.359 0.460210 0.500842 < 0.0000000000000002`\
+`#> mu0_1_1    2.987923   0.026249 113.830 2.936476 3.039370 < 0.0000000000000002`\
+`#> mu0_2_1    1.991662   0.024956  79.807 1.942748 2.040575 < 0.0000000000000002`\
+`#> sigma0_1_1 1.081499   0.047413  22.810 0.988572 1.174427 < 0.0000000000000002`\
+`#> sigma0_2_1 0.535599   0.035229  15.203 0.466552 0.604647 < 0.0000000000000002`\
+`#> sigma0_2_2 1.013773   0.041844  24.227 0.931760 1.095786 < 0.0000000000000002`\
+`#> sigma0_3_3 0.676044   0.033542  20.155 0.610303 0.741785 < 0.0000000000000002`\
+`#> sigma0_4_3 0.215684   0.023925   9.015 0.168791 0.262577 < 0.0000000000000002`\
+`#> sigma0_4_4 0.646603   0.029655  21.804 0.588480 0.704726 < 0.0000000000000002`\
 `#>               `\
 `#> beta_3_3   ***`\
 `#> beta_3_4   ***`\
@@ -479,11 +498,220 @@ confidence interval, and \\(p\\) value.
 `#> ---`\
 `#> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1`\
 `#> `\
-`#> -2 log-likelihood value at convergence = 246812.33`\
-`#> AIC = 246842.33`\
-`#> BIC = 246974.62`
+`#> -2 log-likelihood value at convergence = 49468.42`\
+`#> AIC = 49498.42`\
+`#> BIC = 49606.57`
 
-## The RI-CLPM in Structural Equation Modeling
+### OpenMx: State Space Model
+
+`OpenMx` (Neale et al., 2016) fits the same state space model with its
+own Kalman filter
+([`OpenMx::mxExpectationStateSpace()`](https://rdrr.io/pkg/OpenMx/man/mxExpectationStateSpace.html);
+Hunter (2018)). Its matrices have the names used in engineering: `A` is
+the transition matrix \\(\boldsymbol{\beta}\\), `B` holds the intercepts
+of the dynamic model, `C` is the loading matrix
+\\(\boldsymbol{\Lambda}\\), `D` holds the intercepts of the measurement
+model, `Q` is the process noise covariance matrix, and `R` is the
+measurement error covariance matrix. The parameter labels are the dynr
+names; as in dynr, a label used in two places is one shared parameter,
+and the starting values are the population values.
+
+Two details differ from dynr. First, OpenMx reads the data as a single
+time series. To start the filter again at the first occasion of every
+individual, each individual gets a group, and all groups use the
+matrices of one parent model, so every individual has the same
+parameters. Second, OpenMx starts the filter one occasion before the
+first row, so the first row has the state mean \\(\mathbf{A}
+\mathbf{x}\_{0} + \mathbf{B} \mathbf{u}\\) and the state covariance
+\\(\mathbf{A} \mathbf{P}\_{0} \mathbf{A}^{\prime} + \mathbf{Q}\\), with
+the constant input \\(\mathbf{u} = 1\\). Setting \\(\mathbf{x}\_{0} =
+\mathbf{A}^{-1} \left( \boldsymbol{\mu}\_{0} - \mathbf{B} \mathbf{u}
+\right)\\) and \\(\mathbf{P}\_{0} = \mathbf{A}^{-1} \left(
+\boldsymbol{\Sigma}\_{0} - \mathbf{Q} \right) \left( \mathbf{A}^{-1}
+\right)^{\prime}\\) gives the first occasion the initial condition of
+the model, so the likelihood is the same as in dynr. This needs an
+invertible \\(\mathbf{A}\\), which holds here.
+
+The two helper functions below are the same in every vignette of the
+package. `MxMat()` makes an OpenMx matrix from values and dynr-style
+labels (`"fixed"` marks a fixed element), and `FitMxSSM()` builds the
+groups and fits the model.
+
+\
+`MxMat`` ``<-`` ``function``(``values``, ``labels``, ``name``)`` ``{`\
+`  ``values`` ``<-`` `[`as.matrix`](https://rdrr.io/r/base/matrix.html)`(``values``)`\
+`  ``labels`` ``<-`` `[`matrix`](https://rdrr.io/r/base/matrix.html)`(`\
+`    data ``=`` ``labels``,`\
+`    nrow ``=`` `[`nrow`](https://rdrr.io/r/base/nrow.html)`(``values``)``,`\
+`    ncol ``=`` `[`ncol`](https://rdrr.io/r/base/nrow.html)`(``values``)`\
+`  ``)`\
+`  ``free`` ``<-`` ``labels`` ``!=`` ``"fixed"`\
+`  ``labels``[``!``free``]`` ``<-`` ``NA`\
+`  ``OpenMx``::`[`mxMatrix`](https://rdrr.io/pkg/OpenMx/man/mxMatrix.html)`(`\
+`    type ``=`` ``"Full"``,`\
+`    values ``=`` ``values``,`\
+`    free ``=`` ``free``,`\
+`    labels ``=`` ``labels``,`\
+`    name ``=`` ``name`\
+`  ``)`\
+`}`\
+`FitMxSSM`` ``<-`` ``function``(``data``, ``observed``, ``matrices``, ``name``)`` ``{`\
+`  ``# the groups refer to the matrices of the parent model`\
+`  ``shared`` ``<-`` ``function``(``x``)`` ``{`\
+`    `[`paste0`](https://rdrr.io/r/base/paste.html)`(``name``, ``"."``, ``x``)`\
+`  ``}`\
+`  ``expectation`` ``<-`` ``OpenMx``::`[`mxExpectationStateSpace`](https://rdrr.io/pkg/OpenMx/man/mxExpectationStateSpace.html)`(`\
+`    A ``=`` ``shared``(``"A"``)``,`\
+`    B ``=`` ``shared``(``"B"``)``,`\
+`    C ``=`` ``shared``(``"C"``)``,`\
+`    D ``=`` ``shared``(``"D"``)``,`\
+`    Q ``=`` ``shared``(``"Q"``)``,`\
+`    R ``=`` ``shared``(``"R"``)``,`\
+`    x0 ``=`` ``shared``(``"x0"``)``,`\
+`    P0 ``=`` ``shared``(``"P0"``)``,`\
+`    u ``=`` ``shared``(``"u"``)`\
+`  ``)`\
+`  ``# OpenMx needs the names of the observed variables and of the states on C`\
+`  ``for`` ``(``i`` ``in`` `[`seq_along`](https://rdrr.io/r/base/seq.html)`(``matrices``)``)`` ``{`\
+`    ``if`` ``(``matrices``[[``i``]``]``$``name`` ``==`` ``"C"``)`` ``{`\
+`      `[`dimnames`](https://rdrr.io/r/base/dimnames.html)`(``matrices``[[``i``]``]``)`` ``<-`` `[`list`](https://rdrr.io/r/base/list.html)`(`\
+`        ``observed``,`\
+`        `[`paste0`](https://rdrr.io/r/base/paste.html)`(``"eta_"``, `[`seq_len`](https://rdrr.io/r/base/seq.html)`(`[`ncol`](https://rdrr.io/r/base/nrow.html)`(``matrices``[[``i``]``]``$``values``)``)``)`\
+`      ``)`\
+`    ``}`\
+`  ``}`\
+`  ``persons`` ``<-`` `[`split`](https://rdrr.io/r/base/split.html)`(`\
+`    x ``=`` ``data``[``, ``observed``, drop ``=`` ``FALSE``]``,`\
+`    f ``=`` ``data``[``, ``"id"``]`\
+`  ``)`\
+`  ``groups`` ``<-`` `[`paste0`](https://rdrr.io/r/base/paste.html)`(``"id_"``, `[`names`](https://rdrr.io/r/base/names.html)`(``persons``)``)`\
+`  ``submodels`` ``<-`` `[`lapply`](https://rdrr.io/r/base/lapply.html)`(`\
+`    X ``=`` `[`seq_along`](https://rdrr.io/r/base/seq.html)`(``persons``)``,`\
+`    FUN ``=`` ``function``(``i``)`` ``{`\
+`      ``OpenMx``::`[`mxModel`](https://rdrr.io/pkg/OpenMx/man/mxModel.html)`(`\
+`        name ``=`` ``groups``[``i``]``,`\
+`        ``expectation``,`\
+`        ``OpenMx``::`[`mxFitFunctionML`](https://rdrr.io/pkg/OpenMx/man/mxFitFunctionML.html)`(``)``,`\
+`        ``OpenMx``::`[`mxData`](https://rdrr.io/pkg/OpenMx/man/mxData.html)`(`\
+`          observed ``=`` ``persons``[[``i``]``]``,`\
+`          type ``=`` ``"raw"`\
+`        ``)`\
+`      ``)`\
+`    ``}`\
+`  ``)`\
+`  ``model`` ``<-`` ``OpenMx``::`[`mxModel`](https://rdrr.io/pkg/OpenMx/man/mxModel.html)`(`\
+`    name ``=`` ``name``,`\
+`    ``matrices``,`\
+`    ``OpenMx``::`[`mxMatrix`](https://rdrr.io/pkg/OpenMx/man/mxMatrix.html)`(`\
+`      type ``=`` ``"Unit"``,`\
+`      nrow ``=`` ``1``,`\
+`      ncol ``=`` ``1``,`\
+`      name ``=`` ``"u"`\
+`    ``)``,`\
+`    ``# the first occasion gets the initial condition of the model`\
+`    ``OpenMx``::`[`mxAlgebra`](https://rdrr.io/pkg/OpenMx/man/mxAlgebra.html)`(`\
+`      expression ``=`` `[`solve`](https://rdrr.io/r/base/solve.html)`(``A``)`` `[`%*%`](https://rdrr.io/r/base/matmult.html)` ``(``mu0`` ``-`` ``B`` `[`%*%`](https://rdrr.io/r/base/matmult.html)` ``u``)``,`\
+`      name ``=`` ``"x0"`\
+`    ``)``,`\
+`    ``OpenMx``::`[`mxAlgebra`](https://rdrr.io/pkg/OpenMx/man/mxAlgebra.html)`(`\
+`      expression ``=`` `[`solve`](https://rdrr.io/r/base/solve.html)`(``A``)`` `[`%*%`](https://rdrr.io/r/base/matmult.html)` ``(``sigma0`` ``-`` ``Q``)`` `[`%*%`](https://rdrr.io/r/base/matmult.html)` `[`t`](https://rdrr.io/r/base/t.html)`(`[`solve`](https://rdrr.io/r/base/solve.html)`(``A``)``)``,`\
+`      name ``=`` ``"P0"`\
+`    ``)``,`\
+`    ``submodels``,`\
+`    ``OpenMx``::`[`mxFitFunctionMultigroup`](https://rdrr.io/pkg/OpenMx/man/mxFitFunctionMultigroup.html)`(``groups ``=`` ``groups``)`\
+`  ``)`\
+`  ``# retries from perturbed starting values only if the first run fails`\
+`  ``OpenMx``::`[`mxTryHard`](https://rdrr.io/pkg/OpenMx/man/mxTryHard.html)`(`\
+`    model ``=`` ``model``,`\
+`    extraTries ``=`` ``5``,`\
+`    silent ``=`` ``TRUE`\
+`  ``)`\
+`}`
+
+The matrices of the model, with the dynr labels. There is no measurement
+error (`R` is zero).
+
+\
+`labels_beta`` ``<-`` `[`matrix`](https://rdrr.io/r/base/matrix.html)`(``data ``=`` ``"fixed"``, nrow ``=`` ``4``, ncol ``=`` ``4``)`\
+`labels_beta``[``3``:``4``, ``3``:``4``]`` ``<-`` `[`c`](https://rdrr.io/r/base/c.html)`(``"beta_3_3"``, ``"beta_4_3"``, ``"beta_3_4"``, ``"beta_4_4"``)`\
+`labels_psi`` ``<-`` `[`matrix`](https://rdrr.io/r/base/matrix.html)`(``data ``=`` ``"fixed"``, nrow ``=`` ``4``, ncol ``=`` ``4``)`\
+`labels_psi``[``3``:``4``, ``3``:``4``]`` ``<-`` `[`c`](https://rdrr.io/r/base/c.html)`(``"psi_3_3"``, ``"psi_4_3"``, ``"psi_4_3"``, ``"psi_4_4"``)`\
+`labels_sigma0`` ``<-`` `[`matrix`](https://rdrr.io/r/base/matrix.html)`(``data ``=`` ``"fixed"``, nrow ``=`` ``4``, ncol ``=`` ``4``)`\
+`labels_sigma0``[``1``:``2``, ``1``:``2``]`` ``<-`` `[`c`](https://rdrr.io/r/base/c.html)`(`\
+`  ``"sigma0_1_1"``, ``"sigma0_2_1"``, ``"sigma0_2_1"``, ``"sigma0_2_2"`\
+`)`\
+`labels_sigma0``[``3``:``4``, ``3``:``4``]`` ``<-`` `[`c`](https://rdrr.io/r/base/c.html)`(`\
+`  ``"sigma0_3_3"``, ``"sigma0_4_3"``, ``"sigma0_4_3"``, ``"sigma0_4_4"`\
+`)`\
+`mx_matrices`` ``<-`` `[`list`](https://rdrr.io/r/base/list.html)`(`\
+`  ``MxMat``(``values ``=`` ``beta``, labels ``=`` ``labels_beta``, name ``=`` ``"A"``)``,`\
+`  ``MxMat``(``values ``=`` ``alpha``, labels ``=`` ``"fixed"``, name ``=`` ``"B"``)``,`\
+`  ``MxMat``(``values ``=`` ``lambda``, labels ``=`` ``"fixed"``, name ``=`` ``"C"``)``,`\
+`  ``MxMat``(``values ``=`` ``nu``, labels ``=`` ``"fixed"``, name ``=`` ``"D"``)``,`\
+`  ``MxMat``(``values ``=`` ``psi``, labels ``=`` ``labels_psi``, name ``=`` ``"Q"``)``,`\
+`  ``MxMat``(``values ``=`` ``theta``, labels ``=`` ``"fixed"``, name ``=`` ``"R"``)``,`\
+`  ``MxMat``(`\
+`    values ``=`` ``mu0``,`\
+`    labels ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"mu0_1_1"``, ``"mu0_2_1"``, ``"fixed"``, ``"fixed"``)``,`\
+`    name ``=`` ``"mu0"`\
+`  ``)``,`\
+`  ``MxMat``(``values ``=`` ``sigma0``, labels ``=`` ``labels_sigma0``, name ``=`` ``"sigma0"``)`\
+`)`
+
+``` r
+fit_mx_ssm <- FitMxSSM(
+  data = data,
+  observed = c("y1", "y2"),
+  matrices = mx_matrices,
+  name = "ri_clpm"
+)
+#> 
+Beginning initial fit attempt
+Fit attempt 0, fit=49468.4158093284, new current best! (was 49482.6738513984)
+                                                                             
+#> 
+#>  Solution found!  Final fit=49468.416 (started at 49482.674)  (1 attempt(s): 1 valid, 0 errors)
+summary(fit_mx_ssm)
+#> Summary of ri_clpm 
+#>  
+#> free parameters:
+#>          name matrix row col   Estimate   Std.Error A
+#> 1    beta_3_3      A   3   3 0.46892006 0.020362637  
+#> 2    beta_4_3      A   4   3 0.06198303 0.016315793  
+#> 3    beta_3_4      A   3   4 0.14026395 0.016449384  
+#> 4    beta_4_4      A   4   4 0.39576266 0.019513813  
+#> 5     psi_3_3      Q   3   3 0.49779783 0.010720610  
+#> 6     psi_4_3      Q   4   3 0.08599355 0.007671131  
+#> 7     psi_4_4      Q   4   4 0.48061624 0.010365544  
+#> 8     mu0_1_1    mu0   1   1 2.98803211 0.026248155  
+#> 9     mu0_2_1    mu0   2   1 1.99176556 0.024955560  
+#> 10 sigma0_1_1 sigma0   1   1 1.08131252 0.047456708  
+#> 11 sigma0_2_1 sigma0   2   1 0.53546477 0.035205384  
+#> 12 sigma0_2_2 sigma0   2   2 1.01370689 0.041786701  
+#> 13 sigma0_3_3 sigma0   3   3 0.67612300 0.033512335  
+#> 14 sigma0_4_3 sigma0   4   3 0.21577639 0.023934086  
+#> 15 sigma0_4_4 sigma0   4   4 0.64670635 0.029663499  
+#> 
+#> Model Statistics: 
+#>                |  Parameters  |  Degrees of Freedom  |  Fit (-2lnL units)
+#>        Model:             15                  19985              49468.42
+#>    Saturated:             NA                     NA                    NA
+#> Independence:             NA                     NA                    NA
+#> Number of observations/statistics: 10000/20000
+#> 
+#> Information Criteria: 
+#>       |  df Penalty  |  Parameters Penalty  |  Sample-Size Adjusted
+#> AIC:       9498.416               49498.42                 49498.46
+#> BIC:    -134600.237               49606.57                 49558.90
+#> To get additional fit indices, see help(mxRefModels)
+#> timestamp: 2026-11-02 06:41:08 
+#> Wall clock time: 30.37944 secs 
+#> optimizer:  SLSQP 
+#> OpenMx version number: 2.22.11 
+#> Need help?  See help(mxSummary)
+```
+
+### lavaan: Structural Equation Model
 
 The same model in SEM form, fitted with `lavaan`, should give nearly the
 same estimates. In SEM, each variable at each occasion is a separate
@@ -492,15 +720,15 @@ a factor with loadings of 1 on all occasions of its variable, and each
 within-person component is a factor with a loading of 1 on one observed
 variable.
 
-### Wide Data Set
+#### Wide Data Set
 
 [`as.data.frame()`](https://rdrr.io/r/base/as.data.frame.html) with
 `long = FALSE` returns the data in wide format, with the columns `y1_0`,
 `y2_0`, `y1_1`, and so on, for the variable and the occasion.
 
 \
-`data`` ``<-`` `[`as.data.frame`](https://rdrr.io/r/base/as.data.frame.html)`(``sim``, long ``=`` ``FALSE``)`\
-[`head`](https://rdrr.io/r/utils/head.html)`(``data``)`\
+`data_wide`` ``<-`` `[`as.data.frame`](https://rdrr.io/r/base/as.data.frame.html)`(``sim``, long ``=`` ``FALSE``)`\
+[`head`](https://rdrr.io/r/utils/head.html)`(``data_wide``)`\
 `#>   id     y1_0       y2_0     y1_1       y2_1     y1_2      y2_2     y1_3`\
 `#> 1  1 4.785347  3.5092972 4.758437  3.4784088 4.250888 3.0461680 4.140226`\
 `#> 2  2 3.817745 -0.2774656 2.862270  0.3853853 1.406240 0.6507028 2.209588`\
@@ -516,7 +744,7 @@ variable.
 `#> 5  2.6954513 1.660217  3.7470628`\
 `#> 6  1.0967300 3.442963 -0.2470748`
 
-### Model
+#### Model
 
 The model has the same structure for every occasion, so we write it with
 [`paste0()`](https://rdrr.io/r/base/paste.html). The parameter labels
@@ -645,30 +873,30 @@ nothing to the model by itself, so every parameter above is exactly the
 one written.
 
 \
-`fit`` ``<-`` ``lavaan``::`[`lavaan`](https://rdrr.io/pkg/lavaan/man/lavaan.html)`(`\
+`fit_lavaan`` ``<-`` ``lavaan``::`[`lavaan`](https://rdrr.io/pkg/lavaan/man/lavaan.html)`(`\
 `  model ``=`` ``model``,`\
-`  data ``=`` ``data`\
+`  data ``=`` ``data_wide`\
 `)`\
-`lavaan``::``summary``(``fit``)`\
-`#> lavaan 0.7-3 ended normally after 58 iterations`\
+`lavaan``::``summary``(``fit_lavaan``)`\
+`#> lavaan 0.7-3 ended normally after 60 iterations`\
 `#> `\
 `#>   Estimator                                         ML`\
 `#>   Optimization method                           NLMINB`\
 `#>   Number of model parameters                        36`\
 `#>   Number of equality constraints                    21`\
 `#> `\
-`#>   Number of observations                         10000`\
+`#>   Number of observations                          2000`\
 `#> `\
 `#> Model Test User Model:`\
 `#>                                                       `\
-`#>   Test statistic                                45.265`\
+`#>   Test statistic                                67.942`\
 `#>   Degrees of freedom                                50`\
-`#>   P-value (Chi-square)                           0.664`\
+`#>   P-value (Chi-square)                           0.046`\
 `#>                                                       `\
 `#>   Browne's residual (NT model-based) test             `\
-`#>   Test statistic                                45.079`\
+`#>   Test statistic                                67.650`\
 `#>   Degrees of freedom                                50`\
-`#>   P-value (Chi-square)                           0.671`\
+`#>   P-value (Chi-square)                           0.049`\
 `#> `\
 `#> Parameter Estimates:`\
 `#> `\
@@ -714,44 +942,44 @@ one written.
 `#> Regressions:`\
 `#>                    Estimate  Std.Err  z-value  P(>|z|)`\
 `#>   w1_1 ~                                              `\
-`#>     w1_0   (b_3_3)    0.496    0.009   55.606    0.000`\
-`#>     w2_0   (b_3_4)    0.139    0.007   19.093    0.000`\
+`#>     w1_0   (b_3_3)    0.469    0.020   23.716    0.000`\
+`#>     w2_0   (b_3_4)    0.140    0.016    8.659    0.000`\
 `#>   w1_2 ~                                              `\
-`#>     w1_1   (b_3_3)    0.496    0.009   55.606    0.000`\
-`#>     w2_1   (b_3_4)    0.139    0.007   19.093    0.000`\
+`#>     w1_1   (b_3_3)    0.469    0.020   23.716    0.000`\
+`#>     w2_1   (b_3_4)    0.140    0.016    8.659    0.000`\
 `#>   w1_3 ~                                              `\
-`#>     w1_2   (b_3_3)    0.496    0.009   55.606    0.000`\
-`#>     w2_2   (b_3_4)    0.139    0.007   19.093    0.000`\
+`#>     w1_2   (b_3_3)    0.469    0.020   23.716    0.000`\
+`#>     w2_2   (b_3_4)    0.140    0.016    8.659    0.000`\
 `#>   w1_4 ~                                              `\
-`#>     w1_3   (b_3_3)    0.496    0.009   55.606    0.000`\
-`#>     w2_3   (b_3_4)    0.139    0.007   19.093    0.000`\
+`#>     w1_3   (b_3_3)    0.469    0.020   23.716    0.000`\
+`#>     w2_3   (b_3_4)    0.140    0.016    8.659    0.000`\
 `#>   w2_1 ~                                              `\
-`#>     w1_0   (b_4_3)    0.087    0.007   12.095    0.000`\
-`#>     w2_0   (b_4_4)    0.393    0.009   45.583    0.000`\
+`#>     w1_0   (b_4_3)    0.062    0.016    3.876    0.000`\
+`#>     w2_0   (b_4_4)    0.396    0.019   20.603    0.000`\
 `#>   w2_2 ~                                              `\
-`#>     w1_1   (b_4_3)    0.087    0.007   12.095    0.000`\
-`#>     w2_1   (b_4_4)    0.393    0.009   45.583    0.000`\
+`#>     w1_1   (b_4_3)    0.062    0.016    3.876    0.000`\
+`#>     w2_1   (b_4_4)    0.396    0.019   20.603    0.000`\
 `#>   w2_3 ~                                              `\
-`#>     w1_2   (b_4_3)    0.087    0.007   12.095    0.000`\
-`#>     w2_2   (b_4_4)    0.393    0.009   45.583    0.000`\
+`#>     w1_2   (b_4_3)    0.062    0.016    3.876    0.000`\
+`#>     w2_2   (b_4_4)    0.396    0.019   20.603    0.000`\
 `#>   w2_4 ~                                              `\
-`#>     w1_3   (b_4_3)    0.087    0.007   12.095    0.000`\
-`#>     w2_3   (b_4_4)    0.393    0.009   45.583    0.000`\
+`#>     w1_3   (b_4_3)    0.062    0.016    3.876    0.000`\
+`#>     w2_3   (b_4_4)    0.396    0.019   20.603    0.000`\
 `#> `\
 `#> Covariances:`\
 `#>                    Estimate  Std.Err  z-value  P(>|z|)`\
 `#>   w1_0 ~~                                             `\
-`#>     w2_0    (s0_4)    0.225    0.011   19.899    0.000`\
+`#>     w2_0    (s0_4)    0.216    0.024    8.927    0.000`\
 `#>  .w1_1 ~~                                             `\
-`#>    .w2_1    (p_4_)    0.092    0.003   27.352    0.000`\
+`#>    .w2_1    (p_4_)    0.086    0.007   11.476    0.000`\
 `#>  .w1_2 ~~                                             `\
-`#>    .w2_2    (p_4_)    0.092    0.003   27.352    0.000`\
+`#>    .w2_2    (p_4_)    0.086    0.007   11.476    0.000`\
 `#>  .w1_3 ~~                                             `\
-`#>    .w2_3    (p_4_)    0.092    0.003   27.352    0.000`\
+`#>    .w2_3    (p_4_)    0.086    0.007   11.476    0.000`\
 `#>  .w1_4 ~~                                             `\
-`#>    .w2_4    (p_4_)    0.092    0.003   27.352    0.000`\
+`#>    .w2_4    (p_4_)    0.086    0.007   11.476    0.000`\
 `#>   eta_1 ~~                                            `\
-`#>     eta_2   (s0_2)    0.500    0.016   31.913    0.000`\
+`#>     eta_2   (s0_2)    0.535    0.035   15.248    0.000`\
 `#>     w1_0              0.000                           `\
 `#>     w2_0              0.000                           `\
 `#>   eta_2 ~~                                            `\
@@ -760,8 +988,8 @@ one written.
 `#> `\
 `#> Intercepts:`\
 `#>                    Estimate  Std.Err  z-value  P(>|z|)`\
-`#>     eta_1   (m0_1)    2.985    0.012  257.474    0.000`\
-`#>     eta_2   (m0_2)    1.994    0.011  180.222    0.000`\
+`#>     eta_1   (m0_1)    2.988    0.026  113.876    0.000`\
+`#>     eta_2   (m0_2)    1.992    0.025   79.841    0.000`\
 `#>    .y1_0              0.000                           `\
 `#>    .y1_1              0.000                           `\
 `#>    .y1_2              0.000                           `\
@@ -775,18 +1003,18 @@ one written.
 `#> `\
 `#> Variances:`\
 `#>                    Estimate  Std.Err  z-value  P(>|z|)`\
-`#>     w1_0    (s0_3)    0.723    0.017   43.836    0.000`\
-`#>     w2_0    (s0_4)    0.626    0.013   47.375    0.000`\
-`#>    .w1_1    (p_3_)    0.498    0.005  106.517    0.000`\
-`#>    .w1_2    (p_3_)    0.498    0.005  106.517    0.000`\
-`#>    .w1_3    (p_3_)    0.498    0.005  106.517    0.000`\
-`#>    .w1_4    (p_3_)    0.498    0.005  106.517    0.000`\
-`#>    .w2_1    (p_4_)    0.487    0.005  106.044    0.000`\
-`#>    .w2_2    (p_4_)    0.487    0.005  106.044    0.000`\
-`#>    .w2_3    (p_4_)    0.487    0.005  106.044    0.000`\
-`#>    .w2_4    (p_4_)    0.487    0.005  106.044    0.000`\
-`#>     eta_1   (s0_1)    1.018    0.021   47.571    0.000`\
-`#>     eta_2   (s0_2)    0.988    0.018   53.583    0.000`\
+`#>     w1_0    (s0_3)    0.676    0.034   19.951    0.000`\
+`#>     w2_0    (s0_4)    0.647    0.030   21.671    0.000`\
+`#>    .w1_1    (p_3_)    0.498    0.010   47.630    0.000`\
+`#>    .w1_2    (p_3_)    0.498    0.010   47.630    0.000`\
+`#>    .w1_3    (p_3_)    0.498    0.010   47.630    0.000`\
+`#>    .w1_4    (p_3_)    0.498    0.010   47.630    0.000`\
+`#>    .w2_1    (p_4_)    0.481    0.010   47.160    0.000`\
+`#>    .w2_2    (p_4_)    0.481    0.010   47.160    0.000`\
+`#>    .w2_3    (p_4_)    0.481    0.010   47.160    0.000`\
+`#>    .w2_4    (p_4_)    0.481    0.010   47.160    0.000`\
+`#>     eta_1   (s0_1)    1.081    0.047   22.808    0.000`\
+`#>     eta_2   (s0_2)    1.014    0.042   24.334    0.000`\
 `#>    .y1_0              0.000                           `\
 `#>    .y1_1              0.000                           `\
 `#>    .y1_2              0.000                           `\
@@ -798,21 +1026,151 @@ one written.
 `#>    .y2_3              0.000                           `\
 `#>    .y2_4              0.000`
 
-## Table of Parameters and Estimates
+### OpenMx: Structural Equation Model
 
-The table below puts each population value used to simulate the data
-next to its estimate. Bias is the estimate minus the population value.
-Because the model is fitted to a single simulated data set, this is the
-error of one estimate, not a Monte Carlo bias, which would average over
-many replications. The 95% confidence interval is the Wald interval,
-\\(\hat{\theta} \pm 1.96 \times \mathrm{SE}\\), and `Covers` shows
-whether it contains the population value.
+The same SEM in `OpenMx`, written with
+[`OpenMx::mxPath()`](https://rdrr.io/pkg/OpenMx/man/mxPath.html) on the
+wide data. One-headed arrows are loadings and regressions, two-headed
+arrows are variances and covariances, and arrows from `"one"` are means.
+A path that is not written is fixed at zero, so the zero residual
+variances, covariances, and intercepts of the lavaan model need no lines
+here. The labels are the dynr names, and the starting values are the
+population values.
 
 \
-`EstimatesTable`` ``<-`` ``function``(``population``, ``estimate``, ``se``)`` ``{`\
+`waves`` ``<-`` ``0``:``(``time`` ``-`` ``1``)`\
+`y1`` ``<-`` `[`paste0`](https://rdrr.io/r/base/paste.html)`(``"y1_"``, ``waves``)`\
+`y2`` ``<-`` `[`paste0`](https://rdrr.io/r/base/paste.html)`(``"y2_"``, ``waves``)`\
+`w1`` ``<-`` `[`paste0`](https://rdrr.io/r/base/paste.html)`(``"w1_"``, ``waves``)`\
+`w2`` ``<-`` `[`paste0`](https://rdrr.io/r/base/paste.html)`(``"w2_"``, ``waves``)`\
+`mx_sem`` ``<-`` ``OpenMx``::`[`mxModel`](https://rdrr.io/pkg/OpenMx/man/mxModel.html)`(`\
+`  name ``=`` ``"ri_clpm_sem"``,`\
+`  type ``=`` ``"RAM"``,`\
+`  manifestVars ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``y1``, ``y2``)``,`\
+`  latentVars ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"eta_1"``, ``"eta_2"``, ``w1``, ``w2``)``,`\
+`  ``OpenMx``::`[`mxData`](https://rdrr.io/pkg/OpenMx/man/mxData.html)`(``observed ``=`` ``data_wide``[``, `[`c`](https://rdrr.io/r/base/c.html)`(``y1``, ``y2``)``]``, type ``=`` ``"raw"``)``,`\
+`  ``# traits: loadings fixed at 1`\
+`  ``OpenMx``::`[`mxPath`](https://rdrr.io/pkg/OpenMx/man/mxPath.html)`(``from ``=`` ``"eta_1"``, to ``=`` ``y1``, free ``=`` ``FALSE``, values ``=`` ``1``)``,`\
+`  ``OpenMx``::`[`mxPath`](https://rdrr.io/pkg/OpenMx/man/mxPath.html)`(``from ``=`` ``"eta_2"``, to ``=`` ``y2``, free ``=`` ``FALSE``, values ``=`` ``1``)``,`\
+`  ``# within-person components`\
+`  ``OpenMx``::`[`mxPath`](https://rdrr.io/pkg/OpenMx/man/mxPath.html)`(``from ``=`` ``w1``, to ``=`` ``y1``, free ``=`` ``FALSE``, values ``=`` ``1``)``,`\
+`  ``OpenMx``::`[`mxPath`](https://rdrr.io/pkg/OpenMx/man/mxPath.html)`(``from ``=`` ``w2``, to ``=`` ``y2``, free ``=`` ``FALSE``, values ``=`` ``1``)``,`\
+`  ``# autoregressive and cross-lagged effects`\
+`  ``OpenMx``::`[`mxPath`](https://rdrr.io/pkg/OpenMx/man/mxPath.html)`(`\
+`    from ``=`` ``w1``[``-``time``]``, to ``=`` ``w1``[``-``1``]``, labels ``=`` ``"beta_3_3"``, values ``=`` ``beta``[``3``, ``3``]`\
+`  ``)``,`\
+`  ``OpenMx``::`[`mxPath`](https://rdrr.io/pkg/OpenMx/man/mxPath.html)`(`\
+`    from ``=`` ``w2``[``-``time``]``, to ``=`` ``w1``[``-``1``]``, labels ``=`` ``"beta_3_4"``, values ``=`` ``beta``[``3``, ``4``]`\
+`  ``)``,`\
+`  ``OpenMx``::`[`mxPath`](https://rdrr.io/pkg/OpenMx/man/mxPath.html)`(`\
+`    from ``=`` ``w1``[``-``time``]``, to ``=`` ``w2``[``-``1``]``, labels ``=`` ``"beta_4_3"``, values ``=`` ``beta``[``4``, ``3``]`\
+`  ``)``,`\
+`  ``OpenMx``::`[`mxPath`](https://rdrr.io/pkg/OpenMx/man/mxPath.html)`(`\
+`    from ``=`` ``w2``[``-``time``]``, to ``=`` ``w2``[``-``1``]``, labels ``=`` ``"beta_4_4"``, values ``=`` ``beta``[``4``, ``4``]`\
+`  ``)``,`\
+`  ``# within-person components at the first occasion`\
+`  ``OpenMx``::`[`mxPath`](https://rdrr.io/pkg/OpenMx/man/mxPath.html)`(`\
+`    from ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"w1_0"``, ``"w2_0"``, ``"w1_0"``)``,`\
+`    to ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"w1_0"``, ``"w2_0"``, ``"w2_0"``)``,`\
+`    arrows ``=`` ``2``,`\
+`    labels ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"sigma0_3_3"``, ``"sigma0_4_4"``, ``"sigma0_4_3"``)``,`\
+`    values ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``sigma0``[``3``, ``3``]``, ``sigma0``[``4``, ``4``]``, ``sigma0``[``4``, ``3``]``)`\
+`  ``)``,`\
+`  ``# process noise at later occasions`\
+`  ``OpenMx``::`[`mxPath`](https://rdrr.io/pkg/OpenMx/man/mxPath.html)`(`\
+`    from ``=`` ``w1``[``-``1``]``, arrows ``=`` ``2``, labels ``=`` ``"psi_3_3"``, values ``=`` ``psi``[``3``, ``3``]`\
+`  ``)``,`\
+`  ``OpenMx``::`[`mxPath`](https://rdrr.io/pkg/OpenMx/man/mxPath.html)`(`\
+`    from ``=`` ``w2``[``-``1``]``, arrows ``=`` ``2``, labels ``=`` ``"psi_4_4"``, values ``=`` ``psi``[``4``, ``4``]`\
+`  ``)``,`\
+`  ``OpenMx``::`[`mxPath`](https://rdrr.io/pkg/OpenMx/man/mxPath.html)`(`\
+`    from ``=`` ``w1``[``-``1``]``,`\
+`    to ``=`` ``w2``[``-``1``]``,`\
+`    arrows ``=`` ``2``,`\
+`    labels ``=`` ``"psi_4_3"``,`\
+`    values ``=`` ``psi``[``4``, ``3``]`\
+`  ``)``,`\
+`  ``# traits: means, variances, and covariance`\
+`  ``OpenMx``::`[`mxPath`](https://rdrr.io/pkg/OpenMx/man/mxPath.html)`(`\
+`    from ``=`` ``"one"``,`\
+`    to ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"eta_1"``, ``"eta_2"``)``,`\
+`    labels ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"mu0_1_1"``, ``"mu0_2_1"``)``,`\
+`    values ``=`` ``mu0``[``1``:``2``]`\
+`  ``)``,`\
+`  ``OpenMx``::`[`mxPath`](https://rdrr.io/pkg/OpenMx/man/mxPath.html)`(`\
+`    from ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"eta_1"``, ``"eta_2"``, ``"eta_1"``)``,`\
+`    to ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"eta_1"``, ``"eta_2"``, ``"eta_2"``)``,`\
+`    arrows ``=`` ``2``,`\
+`    labels ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"sigma0_1_1"``, ``"sigma0_2_2"``, ``"sigma0_2_1"``)``,`\
+`    values ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``sigma0``[``1``, ``1``]``, ``sigma0``[``2``, ``2``]``, ``sigma0``[``2``, ``1``]``)`\
+`  ``)`\
+`)`
+
+\
+`fit_mx_sem`` ``<-`` ``OpenMx``::`[`mxRun`](https://rdrr.io/pkg/OpenMx/man/mxRun.html)`(`\
+`  model ``=`` ``mx_sem``,`\
+`  silent ``=`` ``TRUE`\
+`)`\
+[`summary`](https://rdrr.io/r/base/summary.html)`(``fit_mx_sem``)`\
+`#> Summary of ri_clpm_sem `\
+`#>  `\
+`#> free parameters:`\
+`#>          name matrix   row   col   Estimate   Std.Error A`\
+`#> 1    beta_3_3      A  w1_1  w1_0 0.46892006 0.020362905  `\
+`#> 2    beta_4_3      A  w2_1  w1_0 0.06198303 0.016315971  `\
+`#> 3    beta_3_4      A  w1_1  w2_0 0.14026396 0.016450999  `\
+`#> 4    beta_4_4      A  w2_1  w2_0 0.39576267 0.019521012  `\
+`#> 5  sigma0_1_1      S eta_1 eta_1 1.08131252 0.047468108  `\
+`#> 6  sigma0_2_1      S eta_1 eta_2 0.53546476 0.035228301  `\
+`#> 7  sigma0_2_2      S eta_2 eta_2 1.01370688 0.041823534  `\
+`#> 8  sigma0_3_3      S  w1_0  w1_0 0.67612300 0.033515196  `\
+`#> 9     psi_3_3      S  w1_1  w1_1 0.49779783 0.010720938  `\
+`#> 10 sigma0_4_3      S  w1_0  w2_0 0.21577639 0.023936524  `\
+`#> 11 sigma0_4_4      S  w2_0  w2_0 0.64670635 0.029671514  `\
+`#> 12    psi_4_3      S  w1_1  w2_1 0.08599355 0.007671559  `\
+`#> 13    psi_4_4      S  w2_1  w2_1 0.48061624 0.010367020  `\
+`#> 14    mu0_1_1      M     1 eta_1 2.98803211 0.026248484  `\
+`#> 15    mu0_2_1      M     1 eta_2 1.99176556 0.024956127  `\
+`#> `\
+`#> Model Statistics: `\
+`#>                |  Parameters  |  Degrees of Freedom  |  Fit (-2lnL units)`\
+`#>        Model:             15                  19985              49468.42`\
+`#>    Saturated:             65                  19935                    NA`\
+`#> Independence:             20                  19980                    NA`\
+`#> Number of observations/statistics: 2000/20000`\
+`#> `\
+`#> Information Criteria: `\
+`#>       |  df Penalty  |  Parameters Penalty  |  Sample-Size Adjusted`\
+`#> AIC:       9498.416               49498.42                 49498.66`\
+`#> BIC:    -102435.620               49582.43                 49534.77`\
+`#> To get additional fit indices, see help(mxRefModels)`\
+`#> timestamp: 2026-11-02 06:41:48 `\
+`#> Wall clock time: 0.03179455 secs `\
+`#> optimizer:  SLSQP `\
+`#> OpenMx version number: 2.22.11 `\
+`#> Need help?  See help(mxSummary)`
+
+## Population Values and Estimates
+
+Each table below puts the population values used to simulate the data
+next to the estimates of one method. Bias is the estimate minus the
+population value. Because each model is fitted to a single simulated
+data set, this is the error of one estimate, not a Monte Carlo bias,
+which would average over many replications. The 95% confidence interval
+is the Wald interval, \\(\hat{\theta} \pm 1.96 \times \mathrm{SE}\\),
+unless the caption says otherwise, and `Covers` shows whether it
+contains the population value. The parameter names are the dynr names in
+every table.
+
+\
+`EstimatesTable`` ``<-`` ``function``(``population``, ``estimate``, ``se``, ``ll`` ``=`` ``NULL``, ``ul`` ``=`` ``NULL``)`` ``{`\
 `  ``z`` ``<-`` ``stats``::`[`qnorm`](https://rdrr.io/r/stats/Normal.html)`(``p ``=`` ``0.975``)`\
-`  ``ll`` ``<-`` ``estimate`` ``-`` ``z`` ``*`` ``se`\
-`  ``ul`` ``<-`` ``estimate`` ``+`` ``z`` ``*`` ``se`\
+`  ``if`` ``(`[`is.null`](https://rdrr.io/r/base/NULL.html)`(``ll``)``)`` ``{`\
+`    ``ll`` ``<-`` ``estimate`` ``-`` ``z`` ``*`` ``se`\
+`  ``}`\
+`  ``if`` ``(`[`is.null`](https://rdrr.io/r/base/NULL.html)`(``ul``)``)`` ``{`\
+`    ``ul`` ``<-`` ``estimate`` ``+`` ``z`` ``*`` ``se`\
+`  ``}`\
 `  `[`data.frame`](https://rdrr.io/r/base/data.frame.html)`(`\
 `    Parameter ``=`` `[`names`](https://rdrr.io/r/base/names.html)`(``population``)``,`\
 `    Population ``=`` `[`unname`](https://rdrr.io/r/base/unname.html)`(``population``)``,`\
@@ -848,14 +1206,13 @@ whether it contains the population value.
 ### dynr
 
 \
-`estimates`` ``<-`` `[`coef`](https://rdrr.io/r/stats/coef.html)`(``results``)``[`[`names`](https://rdrr.io/r/base/names.html)`(``population``)``]`\
-`se`` ``<-`` `[`sqrt`](https://rdrr.io/r/base/MathFun.html)`(`[`diag`](https://rdrr.io/r/base/diag.html)`(`[`vcov`](https://rdrr.io/r/stats/vcov.html)`(``results``)``)``)`\
-[`names`](https://rdrr.io/r/base/names.html)`(``se``)`` ``<-`` `[`names`](https://rdrr.io/r/base/names.html)`(`[`coef`](https://rdrr.io/r/stats/coef.html)`(``results``)``)`\
+`dynr_est`` ``<-`` `[`coef`](https://rdrr.io/r/stats/coef.html)`(``results``)`\
+`dynr_se`` ``<-`` `[`sqrt`](https://rdrr.io/r/base/MathFun.html)`(`[`diag`](https://rdrr.io/r/base/diag.html)`(`[`vcov`](https://rdrr.io/r/stats/vcov.html)`(``results``)``)``)`\
 `knitr``::`[`kable`](https://rdrr.io/pkg/knitr/man/kable.html)`(`\
 `  x ``=`` ``EstimatesTable``(`\
 `    population ``=`` ``population``,`\
-`    estimate ``=`` ``estimates``,`\
-`    se ``=`` ``se``[`[`names`](https://rdrr.io/r/base/names.html)`(``population``)``]`\
+`    estimate ``=`` ``dynr_est``[`[`names`](https://rdrr.io/r/base/names.html)`(``population``)``]``,`\
+`    se ``=`` ``dynr_se``[`[`names`](https://rdrr.io/r/base/names.html)`(``population``)``]`\
 `  ``)``,`\
 `  digits ``=`` ``3``,`\
 `  caption ``=`` ``"Population values and dynr estimates (one simulated data set)"`\
@@ -863,36 +1220,76 @@ whether it contains the population value.
 
 | Parameter  | Population | Estimate |    SE |   Bias |  2.5% | 97.5% | Covers |
 |:-----------|-----------:|---------:|------:|-------:|------:|------:|:-------|
-| mu0_1_1    |      3.000 |    2.985 | 0.012 | -0.015 | 2.962 | 3.008 | TRUE   |
-| mu0_2_1    |      2.000 |    1.993 | 0.011 | -0.007 | 1.972 | 2.015 | TRUE   |
-| sigma0_1_1 |      1.000 |    1.020 | 0.021 |  0.020 | 0.978 | 1.062 | TRUE   |
-| sigma0_2_1 |      0.500 |    0.502 | 0.016 |  0.002 | 0.471 | 0.532 | TRUE   |
-| sigma0_2_2 |      1.000 |    0.988 | 0.018 | -0.012 | 0.952 | 1.024 | TRUE   |
-| sigma0_3_3 |      0.730 |    0.723 | 0.016 | -0.007 | 0.690 | 0.755 | TRUE   |
-| sigma0_4_3 |      0.222 |    0.224 | 0.011 |  0.003 | 0.202 | 0.246 | TRUE   |
-| sigma0_4_4 |      0.625 |    0.626 | 0.013 |  0.001 | 0.600 | 0.652 | TRUE   |
-| beta_3_3   |      0.500 |    0.495 | 0.009 | -0.005 | 0.478 | 0.513 | TRUE   |
-| beta_3_4   |      0.150 |    0.138 | 0.007 | -0.012 | 0.124 | 0.153 | TRUE   |
-| beta_4_3   |      0.100 |    0.086 | 0.007 | -0.014 | 0.072 | 0.100 | TRUE   |
-| beta_4_4   |      0.400 |    0.393 | 0.009 | -0.007 | 0.376 | 0.410 | TRUE   |
-| psi_3_3    |      0.500 |    0.498 | 0.005 | -0.002 | 0.489 | 0.507 | TRUE   |
-| psi_4_3    |      0.100 |    0.092 | 0.003 | -0.008 | 0.085 | 0.099 | FALSE  |
-| psi_4_4    |      0.500 |    0.487 | 0.005 | -0.013 | 0.478 | 0.496 | FALSE  |
+| mu0_1_1    |      3.000 |    2.988 | 0.026 | -0.012 | 2.936 | 3.039 | TRUE   |
+| mu0_2_1    |      2.000 |    1.992 | 0.025 | -0.008 | 1.943 | 2.041 | TRUE   |
+| sigma0_1_1 |      1.000 |    1.081 | 0.047 |  0.081 | 0.989 | 1.174 | TRUE   |
+| sigma0_2_1 |      0.500 |    0.536 | 0.035 |  0.036 | 0.467 | 0.605 | TRUE   |
+| sigma0_2_2 |      1.000 |    1.014 | 0.042 |  0.014 | 0.932 | 1.096 | TRUE   |
+| sigma0_3_3 |      0.730 |    0.676 | 0.034 | -0.054 | 0.610 | 0.742 | TRUE   |
+| sigma0_4_3 |      0.222 |    0.216 | 0.024 | -0.006 | 0.169 | 0.263 | TRUE   |
+| sigma0_4_4 |      0.625 |    0.647 | 0.030 |  0.022 | 0.588 | 0.705 | TRUE   |
+| beta_3_3   |      0.500 |    0.469 | 0.020 | -0.031 | 0.429 | 0.509 | TRUE   |
+| beta_3_4   |      0.150 |    0.140 | 0.016 | -0.010 | 0.108 | 0.172 | TRUE   |
+| beta_4_3   |      0.100 |    0.062 | 0.016 | -0.038 | 0.030 | 0.094 | FALSE  |
+| beta_4_4   |      0.400 |    0.396 | 0.020 | -0.004 | 0.357 | 0.434 | TRUE   |
+| psi_3_3    |      0.500 |    0.498 | 0.011 | -0.002 | 0.477 | 0.519 | TRUE   |
+| psi_4_3    |      0.100 |    0.086 | 0.008 | -0.014 | 0.071 | 0.101 | TRUE   |
+| psi_4_4    |      0.500 |    0.481 | 0.010 | -0.019 | 0.460 | 0.501 | TRUE   |
 
 Population values and dynr estimates (one simulated data set) {.table}
 
-### lavaan
+### OpenMx: State Space Model
 
 \
-`pe`` ``<-`` ``lavaan``::`[`parameterEstimates`](https://rdrr.io/pkg/lavaan/man/parameterEstimates.html)`(``fit``)`\
-`# a label shared by several occasions is one parameter`\
-`pe`` ``<-`` ``pe``[``pe``$``label`` ``!=`` ``""`` ``&`` ``!`[`duplicated`](https://rdrr.io/r/base/duplicated.html)`(``pe``$``label``)``, ``]`\
-[`rownames`](https://rdrr.io/r/base/colnames.html)`(``pe``)`` ``<-`` ``pe``$``label`\
+`mx_ssm_est`` ``<-`` ``OpenMx``::`[`omxGetParameters`](https://rdrr.io/pkg/OpenMx/man/omxGetParameters.html)`(``fit_mx_ssm``)`\
+`mx_ssm_se`` ``<-`` ``fit_mx_ssm``$``output``$``standardErrors``[``, ``1``]`\
 `knitr``::`[`kable`](https://rdrr.io/pkg/knitr/man/kable.html)`(`\
 `  x ``=`` ``EstimatesTable``(`\
 `    population ``=`` ``population``,`\
-`    estimate ``=`` ``pe``[`[`names`](https://rdrr.io/r/base/names.html)`(``population``)``, ``"est"``]``,`\
-`    se ``=`` ``pe``[`[`names`](https://rdrr.io/r/base/names.html)`(``population``)``, ``"se"``]`\
+`    estimate ``=`` ``mx_ssm_est``[`[`names`](https://rdrr.io/r/base/names.html)`(``population``)``]``,`\
+`    se ``=`` ``mx_ssm_se``[`[`names`](https://rdrr.io/r/base/names.html)`(``population``)``]`\
+`  ``)``,`\
+`  digits ``=`` ``3``,`\
+`  caption ``=`` `[`paste`](https://rdrr.io/r/base/paste.html)`(`\
+`    ``"Population values and OpenMx state space estimates"``,`\
+`    ``"(one simulated data set)"`\
+`  ``)`\
+`)`
+
+| Parameter  | Population | Estimate |    SE |   Bias |  2.5% | 97.5% | Covers |
+|:-----------|-----------:|---------:|------:|-------:|------:|------:|:-------|
+| mu0_1_1    |      3.000 |    2.988 | 0.026 | -0.012 | 2.937 | 3.039 | TRUE   |
+| mu0_2_1    |      2.000 |    1.992 | 0.025 | -0.008 | 1.943 | 2.041 | TRUE   |
+| sigma0_1_1 |      1.000 |    1.081 | 0.047 |  0.081 | 0.988 | 1.174 | TRUE   |
+| sigma0_2_1 |      0.500 |    0.535 | 0.035 |  0.035 | 0.466 | 0.604 | TRUE   |
+| sigma0_2_2 |      1.000 |    1.014 | 0.042 |  0.014 | 0.932 | 1.096 | TRUE   |
+| sigma0_3_3 |      0.730 |    0.676 | 0.034 | -0.054 | 0.610 | 0.742 | TRUE   |
+| sigma0_4_3 |      0.222 |    0.216 | 0.024 | -0.006 | 0.169 | 0.263 | TRUE   |
+| sigma0_4_4 |      0.625 |    0.647 | 0.030 |  0.022 | 0.589 | 0.705 | TRUE   |
+| beta_3_3   |      0.500 |    0.469 | 0.020 | -0.031 | 0.429 | 0.509 | TRUE   |
+| beta_3_4   |      0.150 |    0.140 | 0.016 | -0.010 | 0.108 | 0.173 | TRUE   |
+| beta_4_3   |      0.100 |    0.062 | 0.016 | -0.038 | 0.030 | 0.094 | FALSE  |
+| beta_4_4   |      0.400 |    0.396 | 0.020 | -0.004 | 0.358 | 0.434 | TRUE   |
+| psi_3_3    |      0.500 |    0.498 | 0.011 | -0.002 | 0.477 | 0.519 | TRUE   |
+| psi_4_3    |      0.100 |    0.086 | 0.008 | -0.014 | 0.071 | 0.101 | TRUE   |
+| psi_4_4    |      0.500 |    0.481 | 0.010 | -0.019 | 0.460 | 0.501 | TRUE   |
+
+Population values and OpenMx state space estimates (one simulated data
+set) {.table}
+
+### lavaan: Structural Equation Model
+
+\
+`pe`` ``<-`` ``lavaan``::`[`parameterEstimates`](https://rdrr.io/pkg/lavaan/man/parameterEstimates.html)`(``fit_lavaan``)`\
+`# a label shared by several paths is one parameter`\
+`pe`` ``<-`` ``pe``[``pe``$``label`` ``!=`` ``""`` ``&`` ``!`[`duplicated`](https://rdrr.io/r/base/duplicated.html)`(``pe``$``label``)``, ``]`\
+`lavaan_est`` ``<-`` ``stats``::`[`setNames`](https://rdrr.io/r/stats/setNames.html)`(``object ``=`` ``pe``$``est``, nm ``=`` ``pe``$``label``)`\
+`lavaan_se`` ``<-`` ``stats``::`[`setNames`](https://rdrr.io/r/stats/setNames.html)`(``object ``=`` ``pe``$``se``, nm ``=`` ``pe``$``label``)`\
+`knitr``::`[`kable`](https://rdrr.io/pkg/knitr/man/kable.html)`(`\
+`  x ``=`` ``EstimatesTable``(`\
+`    population ``=`` ``population``,`\
+`    estimate ``=`` ``lavaan_est``[`[`names`](https://rdrr.io/r/base/names.html)`(``population``)``]``,`\
+`    se ``=`` ``lavaan_se``[`[`names`](https://rdrr.io/r/base/names.html)`(``population``)``]`\
 `  ``)``,`\
 `  digits ``=`` ``3``,`\
 `  caption ``=`` ``"Population values and lavaan estimates (one simulated data set)"`\
@@ -900,23 +1297,99 @@ Population values and dynr estimates (one simulated data set) {.table}
 
 | Parameter  | Population | Estimate |    SE |   Bias |  2.5% | 97.5% | Covers |
 |:-----------|-----------:|---------:|------:|-------:|------:|------:|:-------|
-| mu0_1_1    |      3.000 |    2.985 | 0.012 | -0.015 | 2.963 | 3.008 | TRUE   |
-| mu0_2_1    |      2.000 |    1.994 | 0.011 | -0.006 | 1.972 | 2.015 | TRUE   |
-| sigma0_1_1 |      1.000 |    1.018 | 0.021 |  0.018 | 0.976 | 1.060 | TRUE   |
-| sigma0_2_1 |      0.500 |    0.500 | 0.016 |  0.000 | 0.470 | 0.531 | TRUE   |
-| sigma0_2_2 |      1.000 |    0.988 | 0.018 | -0.012 | 0.952 | 1.024 | TRUE   |
-| sigma0_3_3 |      0.730 |    0.723 | 0.017 | -0.006 | 0.691 | 0.756 | TRUE   |
-| sigma0_4_3 |      0.222 |    0.225 | 0.011 |  0.003 | 0.203 | 0.247 | TRUE   |
-| sigma0_4_4 |      0.625 |    0.626 | 0.013 |  0.001 | 0.601 | 0.652 | TRUE   |
-| beta_3_3   |      0.500 |    0.496 | 0.009 | -0.004 | 0.478 | 0.513 | TRUE   |
-| beta_3_4   |      0.150 |    0.139 | 0.007 | -0.011 | 0.124 | 0.153 | TRUE   |
-| beta_4_3   |      0.100 |    0.087 | 0.007 | -0.013 | 0.073 | 0.101 | TRUE   |
-| beta_4_4   |      0.400 |    0.393 | 0.009 | -0.007 | 0.376 | 0.410 | TRUE   |
-| psi_3_3    |      0.500 |    0.498 | 0.005 | -0.002 | 0.489 | 0.507 | TRUE   |
-| psi_4_3    |      0.100 |    0.092 | 0.003 | -0.008 | 0.085 | 0.099 | FALSE  |
-| psi_4_4    |      0.500 |    0.487 | 0.005 | -0.013 | 0.478 | 0.496 | FALSE  |
+| mu0_1_1    |      3.000 |    2.988 | 0.026 | -0.012 | 2.937 | 3.039 | TRUE   |
+| mu0_2_1    |      2.000 |    1.992 | 0.025 | -0.008 | 1.943 | 2.041 | TRUE   |
+| sigma0_1_1 |      1.000 |    1.081 | 0.047 |  0.081 | 0.988 | 1.174 | TRUE   |
+| sigma0_2_1 |      0.500 |    0.535 | 0.035 |  0.035 | 0.467 | 0.604 | TRUE   |
+| sigma0_2_2 |      1.000 |    1.014 | 0.042 |  0.014 | 0.932 | 1.095 | TRUE   |
+| sigma0_3_3 |      0.730 |    0.676 | 0.034 | -0.054 | 0.610 | 0.743 | TRUE   |
+| sigma0_4_3 |      0.222 |    0.216 | 0.024 | -0.006 | 0.168 | 0.263 | TRUE   |
+| sigma0_4_4 |      0.625 |    0.647 | 0.030 |  0.022 | 0.588 | 0.705 | TRUE   |
+| beta_3_3   |      0.500 |    0.469 | 0.020 | -0.031 | 0.430 | 0.508 | TRUE   |
+| beta_3_4   |      0.150 |    0.140 | 0.016 | -0.010 | 0.109 | 0.172 | TRUE   |
+| beta_4_3   |      0.100 |    0.062 | 0.016 | -0.038 | 0.031 | 0.093 | FALSE  |
+| beta_4_4   |      0.400 |    0.396 | 0.019 | -0.004 | 0.358 | 0.433 | TRUE   |
+| psi_3_3    |      0.500 |    0.498 | 0.010 | -0.002 | 0.477 | 0.518 | TRUE   |
+| psi_4_3    |      0.100 |    0.086 | 0.007 | -0.014 | 0.071 | 0.101 | TRUE   |
+| psi_4_4    |      0.500 |    0.481 | 0.010 | -0.019 | 0.461 | 0.501 | TRUE   |
 
 Population values and lavaan estimates (one simulated data set) {.table}
+
+### OpenMx: Structural Equation Model
+
+\
+`mx_sem_est`` ``<-`` ``OpenMx``::`[`omxGetParameters`](https://rdrr.io/pkg/OpenMx/man/omxGetParameters.html)`(``fit_mx_sem``)`\
+`mx_sem_se`` ``<-`` ``fit_mx_sem``$``output``$``standardErrors``[``, ``1``]`\
+`knitr``::`[`kable`](https://rdrr.io/pkg/knitr/man/kable.html)`(`\
+`  x ``=`` ``EstimatesTable``(`\
+`    population ``=`` ``population``,`\
+`    estimate ``=`` ``mx_sem_est``[`[`names`](https://rdrr.io/r/base/names.html)`(``population``)``]``,`\
+`    se ``=`` ``mx_sem_se``[`[`names`](https://rdrr.io/r/base/names.html)`(``population``)``]`\
+`  ``)``,`\
+`  digits ``=`` ``3``,`\
+`  caption ``=`` ``"Population values and OpenMx SEM estimates (one simulated data set)"`\
+`)`
+
+| Parameter  | Population | Estimate |    SE |   Bias |  2.5% | 97.5% | Covers |
+|:-----------|-----------:|---------:|------:|-------:|------:|------:|:-------|
+| mu0_1_1    |      3.000 |    2.988 | 0.026 | -0.012 | 2.937 | 3.039 | TRUE   |
+| mu0_2_1    |      2.000 |    1.992 | 0.025 | -0.008 | 1.943 | 2.041 | TRUE   |
+| sigma0_1_1 |      1.000 |    1.081 | 0.047 |  0.081 | 0.988 | 1.174 | TRUE   |
+| sigma0_2_1 |      0.500 |    0.535 | 0.035 |  0.035 | 0.466 | 0.605 | TRUE   |
+| sigma0_2_2 |      1.000 |    1.014 | 0.042 |  0.014 | 0.932 | 1.096 | TRUE   |
+| sigma0_3_3 |      0.730 |    0.676 | 0.034 | -0.054 | 0.610 | 0.742 | TRUE   |
+| sigma0_4_3 |      0.222 |    0.216 | 0.024 | -0.006 | 0.169 | 0.263 | TRUE   |
+| sigma0_4_4 |      0.625 |    0.647 | 0.030 |  0.022 | 0.589 | 0.705 | TRUE   |
+| beta_3_3   |      0.500 |    0.469 | 0.020 | -0.031 | 0.429 | 0.509 | TRUE   |
+| beta_3_4   |      0.150 |    0.140 | 0.016 | -0.010 | 0.108 | 0.173 | TRUE   |
+| beta_4_3   |      0.100 |    0.062 | 0.016 | -0.038 | 0.030 | 0.094 | FALSE  |
+| beta_4_4   |      0.400 |    0.396 | 0.020 | -0.004 | 0.358 | 0.434 | TRUE   |
+| psi_3_3    |      0.500 |    0.498 | 0.011 | -0.002 | 0.477 | 0.519 | TRUE   |
+| psi_4_3    |      0.100 |    0.086 | 0.008 | -0.014 | 0.071 | 0.101 | TRUE   |
+| psi_4_4    |      0.500 |    0.481 | 0.010 | -0.019 | 0.460 | 0.501 | TRUE   |
+
+Population values and OpenMx SEM estimates (one simulated data set)
+{.table}
+
+### All Methods
+
+The estimates of every method side by side. The methods maximize the
+same likelihood, so their estimates should agree closely.
+
+\
+`knitr``::`[`kable`](https://rdrr.io/pkg/knitr/man/kable.html)`(`\
+`  x ``=`` `[`data.frame`](https://rdrr.io/r/base/data.frame.html)`(`\
+`    Parameter ``=`` `[`names`](https://rdrr.io/r/base/names.html)`(``population``)``,`\
+`    Population ``=`` `[`unname`](https://rdrr.io/r/base/unname.html)`(``population``)``,`\
+``     `dynr`  ```=`` `[`unname`](https://rdrr.io/r/base/unname.html)`(``dynr_est``[`[`names`](https://rdrr.io/r/base/names.html)`(``population``)``]``)``,`\
+``     `OpenMx (SSM)`  ```=`` `[`unname`](https://rdrr.io/r/base/unname.html)`(``mx_ssm_est``[`[`names`](https://rdrr.io/r/base/names.html)`(``population``)``]``)``,`\
+``     `lavaan`  ```=`` `[`unname`](https://rdrr.io/r/base/unname.html)`(``lavaan_est``[`[`names`](https://rdrr.io/r/base/names.html)`(``population``)``]``)``,`\
+``     `OpenMx (SEM)`  ```=`` `[`unname`](https://rdrr.io/r/base/unname.html)`(``mx_sem_est``[`[`names`](https://rdrr.io/r/base/names.html)`(``population``)``]``)``,`\
+`    check.names ``=`` ``FALSE`\
+`  ``)``,`\
+`  digits ``=`` ``3``,`\
+`  caption ``=`` ``"Population values and the estimates of every method"`\
+`)`
+
+| Parameter  | Population |  dynr | OpenMx (SSM) | lavaan | OpenMx (SEM) |
+|:-----------|-----------:|------:|-------------:|-------:|-------------:|
+| mu0_1_1    |      3.000 | 2.988 |        2.988 |  2.988 |        2.988 |
+| mu0_2_1    |      2.000 | 1.992 |        1.992 |  1.992 |        1.992 |
+| sigma0_1_1 |      1.000 | 1.081 |        1.081 |  1.081 |        1.081 |
+| sigma0_2_1 |      0.500 | 0.536 |        0.535 |  0.535 |        0.535 |
+| sigma0_2_2 |      1.000 | 1.014 |        1.014 |  1.014 |        1.014 |
+| sigma0_3_3 |      0.730 | 0.676 |        0.676 |  0.676 |        0.676 |
+| sigma0_4_3 |      0.222 | 0.216 |        0.216 |  0.216 |        0.216 |
+| sigma0_4_4 |      0.625 | 0.647 |        0.647 |  0.647 |        0.647 |
+| beta_3_3   |      0.500 | 0.469 |        0.469 |  0.469 |        0.469 |
+| beta_3_4   |      0.150 | 0.140 |        0.140 |  0.140 |        0.140 |
+| beta_4_3   |      0.100 | 0.062 |        0.062 |  0.062 |        0.062 |
+| beta_4_4   |      0.400 | 0.396 |        0.396 |  0.396 |        0.396 |
+| psi_3_3    |      0.500 | 0.498 |        0.498 |  0.498 |        0.498 |
+| psi_4_3    |      0.100 | 0.086 |        0.086 |  0.086 |        0.086 |
+| psi_4_4    |      0.500 | 0.481 |        0.481 |  0.481 |        0.481 |
+
+Population values and the estimates of every method {.table}
 
 ## References
 
@@ -930,10 +1403,21 @@ Hamaker, E. L., Kuiper, R. M., & Grasman, R. P. P. P. (2015). A critique
 of the cross-lagged panel model. *Psychological Methods*, *20*(1),
 102–116. <https://doi.org/10.1037/a0038889>
 
+Hunter, M. D. (2018). State space modeling in an open source, modular,
+structural equation modeling environment. *Structural Equation Modeling:
+A Multidisciplinary Journal*, *25*(2), 307–324.
+<https://doi.org/10.1080/10705511.2017.1369354>
+
 Mulder, J. D., & Hamaker, E. L. (2021). Three extensions of the random
 intercept cross-lagged panel model. *Structural Equation Modeling: A
 Multidisciplinary Journal*, *28*(4), 638–648.
 <https://doi.org/10.1080/10705511.2020.1784738>
+
+Neale, M. C., Hunter, M. D., Pritikin, J. N., Zahery, M., Brick, T. R.,
+Kirkpatrick, R. M., Estabrook, R., Bates, T. C., Maes, H. H., & Boker,
+S. M. (2016). OpenMx 2.0: Extended structural equation and statistical
+modeling. *Psychometrika*, *81*(2), 535–549.
+<https://doi.org/10.1007/s11336-014-9435-8>
 
 Ou, L., Hunter, M. D., & Chow, S.-M. (2019). What’s for dynr: A package
 for linear and nonlinear dynamic modeling in R. *The R Journal*,

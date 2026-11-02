@@ -28,6 +28,8 @@
   [`LinSDECovDeltaT()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDECovDeltaT.md)
   for the process noise covariance accumulated over a sampling interval
   in the linear SDE model.
+- [`LinSDE2SSM()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDE2SSM.md):
+  `delta_t` now defaults to 1.
 - [`SSM2LinSDE()`](https://github.com/jeksterslab/simStateSpace/reference/SSM2LinSDE.md)
   rejects a singular `beta` (non-finite matrix logarithm) and has a
   separate tolerance, `tol_psi_l`, for checking that `psi_l` is lower
@@ -63,6 +65,16 @@
   input checks, with informative errors for invalid dimensions,
   non-finite values, and missing covariates. The same seed gives the
   same data as before.
+- [`as.data.frame()`](https://rdrr.io/r/base/as.data.frame.html) with
+  `long = FALSE` (wide format) is faster for balanced data; the columns
+  are the same as before.
+- Help pages of
+  [`SimSSMFixed()`](https://github.com/jeksterslab/simStateSpace/reference/SimSSMFixed.md),
+  [`SimSSMIVary()`](https://github.com/jeksterslab/simStateSpace/reference/SimSSMIVary.md),
+  [`SimSSMLinGrowth()`](https://github.com/jeksterslab/simStateSpace/reference/SimSSMLinGrowth.md),
+  and the functions that inherit their arguments write the mean vector
+  and covariance matrix of the initial condition as mu_0 and Sigma_0
+  (was mu\_{eta \| 0} and Sigma\_{eta \| 0}), as the vignettes do.
 
 ## simStateSpace 1.2.16
 
