@@ -40,13 +40,13 @@ linear stochastic differential equation model.}
 
 \item{mu0}{Numeric vector.
 Mean of initial latent variable values
-(\eqn{\boldsymbol{\mu}_{\boldsymbol{\eta} \mid 0}}).}
+(\eqn{\boldsymbol{\mu}_{0}}).}
 
 \item{sigma0_l}{Numeric matrix.
 Cholesky factorization (\code{t(chol(sigma0))})
 of the covariance matrix
 of initial latent variable values
-(\eqn{\boldsymbol{\Sigma}_{\boldsymbol{\eta} \mid 0}}).}
+(\eqn{\boldsymbol{\Sigma}_{0}}).}
 
 \item{alpha}{Numeric vector.
 Vector of constant values for the dynamic model

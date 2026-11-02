@@ -6,6 +6,7 @@
 * Added `CTVAR2SSM()` for exact sampling of higher-order derivative states and `SSM2LinSDE()` for continuous-time recovery using the principal matrix logarithm, with checks for uniquely recoverable intercepts and positive-semidefinite diffusion.
 * Updated `LinSDE2SSM()` to integrate intercepts and diffusion with block matrix exponentials, supporting singular drifts and semidefinite noise. Covariance integration uses interval subdivision to avoid overflow for strongly decaying drifts.
 * Added `LinSDECovDeltaT()` for the process noise covariance accumulated over a sampling interval in the linear SDE model.
+* `LinSDE2SSM()`: `delta_t` now defaults to 1.
 * `SSM2LinSDE()` rejects a singular `beta` (non-finite matrix logarithm) and has a separate tolerance, `tol_psi_l`, for checking that `psi_l` is lower triangular; `tol` now applies only to the imaginary part of the matrix logarithm.
 * Semidefinite noise covariances are factored with an eigendecomposition, so `LinSDE2SSM()` and `SSM2LinSDE()` no longer reject rank-deficient covariances because of rounding error.
 * Added input validation to the linear SDE mean, covariance, and intercept functions and expanded transformation tests with analytic reference cases.
@@ -13,6 +14,8 @@
 * Replaced the Monte Carlo and smoke tests with exact references: the simulators are checked against a plain R state space recursion, and the moment functions against their defining equations.
 * Fixed `SimSSMLinSDEIVary()` and `SimSSMOUIVary()` failing for singular drifts, semidefinite diffusion, and undamped oscillators: they now discretize with `LinSDE2SSM()`, once per distinct parameter set.
 * All `Sim*` functions now share one simulation kernel and one set of input checks, with informative errors for invalid dimensions, non-finite values, and missing covariates. The same seed gives the same data as before.
+* `as.data.frame()` with `long = FALSE` (wide format) is faster for balanced data; the columns are the same as before.
+* Help pages of `SimSSMFixed()`, `SimSSMIVary()`, `SimSSMLinGrowth()`, and the functions that inherit their arguments write the mean vector and covariance matrix of the initial condition as mu_0 and Sigma_0 (was mu_{eta | 0} and Sigma_{eta | 0}), as the vignettes do.
 
 # simStateSpace 1.2.16
 

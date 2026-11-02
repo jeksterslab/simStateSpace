@@ -157,7 +157,7 @@ The mean vector and covariance matrix of the intercept and slope
 are captured in the mean vector and covariance matrix
 of the initial condition given by
 \deqn{
-    \boldsymbol{\mu}_{\boldsymbol{\eta} \mid 0}
+    \boldsymbol{\mu}_{0}
     =
     \left(
     \begin{array}{c}
@@ -168,7 +168,7 @@ of the initial condition given by
   }
 
 \deqn{
-    \boldsymbol{\Sigma}_{\boldsymbol{\eta} \mid 0}
+    \boldsymbol{\Sigma}_{0}
     =
     \left(
     \begin{array}{cc}

@@ -30,13 +30,13 @@
 #' @param mu0 List of numeric vectors.
 #'   Each element of the list
 #'   is the mean of initial latent variable values
-#'   (\eqn{\boldsymbol{\mu}_{\boldsymbol{\eta} \mid 0}}).
+#'   (\eqn{\boldsymbol{\mu}_{0}}).
 #' @param sigma0_l List of numeric matrices.
 #'   Each element of the list
 #'   is the Cholesky factorization (`t(chol(sigma0))`)
 #'   of the covariance matrix
 #'   of initial latent variable values
-#'   (\eqn{\boldsymbol{\Sigma}_{\boldsymbol{\eta} \mid 0}}).
+#'   (\eqn{\boldsymbol{\Sigma}_{0}}).
 #' @param alpha List of numeric vectors.
 #'   Each element of the list
 #'   is the vector of constant values for the dynamic model
