@@ -60,13 +60,22 @@ package documentation.
 
 ## Citation
 
-To cite `simStateSpace` in publications, please cite
-(**Pesigan-Russell-Chow-2025o?**).
+To cite `simStateSpace` in publications, please cite Pesigan et al.
+(2025).
 
 ## References
 
 <div id="refs" class="references csl-bib-body hanging-indent"
 data-entry-spacing="0" data-line-spacing="2">
+
+<div id="ref-Pesigan-Russell-Chow-2025a" class="csl-entry">
+
+Pesigan, I. J. A., Russell, M. A., & Chow, S.-M. (2025). Inferences and
+effect sizes for direct, indirect, and total effects in continuous-time
+mediation models. *Psychological Methods*.
+<https://doi.org/10.1037/met0000779>
+
+</div>
 
 <div id="ref-RCoreTeam-2026" class="csl-entry">
 
