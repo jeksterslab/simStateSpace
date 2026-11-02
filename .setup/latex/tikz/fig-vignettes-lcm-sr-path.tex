@@ -9,6 +9,7 @@
   noise/.style = {circle, draw, minimum size = 7mm, inner sep = 0pt},
   reg/.style = {-{Stealth[length = 2.5mm]}, thick},
   cov/.style = {{Stealth[length = 2mm]}-{Stealth[length = 2mm]}},
+  var/.style = {cov, looseness = 5},
   lab/.style = {font = \footnotesize, fill = white, inner sep = 1pt},
   dots/.style = {font = \Large}
 }
@@ -22,7 +23,7 @@
     \node[obs] (y2\t) at (\x, -5) {$Y_{2}$};
     \draw[reg] (w1\t) -- node[lab] {1} (y1\t);
     \draw[reg] (w2\t) -- node[lab] {1} (y2\t);
-    \node[font = \small] at (\x, -9.4) {$t = \t$};
+    \node[font = \small] at (\x, -10.0) {$t = \l$};
   }
   % intercepts and slopes
   \node[lat] (i1) at (1.5, 5) {$\eta_{1}$};
@@ -39,6 +40,15 @@
   \draw[cov] (i2) to[bend right = 30] node[lab] {$\sigma_{24}$} (s2);
   \draw[cov] (i1.west) .. controls (-4.5, 5) and (-4.5, -8) ..
     node[lab] {$\sigma_{12}$} (i2.west);
+  % intercept and slope variances
+  \draw[var] (i1.70) to[out = 70, in = 110]
+    node[lab, above] {$\sigma_{11}$} (i1.110);
+  \draw[var] (s1.20) to[out = 20, in = -20]
+    node[lab, right] {$\sigma_{33}$} (s1.-20);
+  \draw[var] (i2.250) to[out = 250, in = 290]
+    node[lab, below] {$\sigma_{22}$} (i2.290);
+  \draw[var] (s2.20) to[out = 20, in = -20]
+    node[lab, right] {$\sigma_{44}$} (s2.-20);
   % structured residuals
   \foreach \s/\t in {1/2, 2/3} {
     \draw[reg] (w1\s) -- node[lab, pos = 0.25] {$\beta_{55}$} (w1\t);
@@ -53,9 +63,18 @@
     \draw[reg] (z2\t) -- (w2\t);
     \draw[cov] (z1\t.east) to[out = 0, in = 0, looseness = 0.9]
       node[lab] {$\psi_{56}$} (z2\t.east);
+    \draw[var] (z1\t.60) to[out = 60, in = 120]
+      node[lab, above] {$\psi_{55}$} (z1\t.120);
+    \draw[var] (z2\t.240) to[out = 240, in = 300]
+      node[lab, below] {$\psi_{66}$} (z2\t.300);
   }
+  % initial structured residuals
   \draw[cov] (w11.west) to[out = 210, in = 150, looseness = 0.8]
     node[lab] {$\sigma_{56}$} (w21.west);
+  \draw[var] (w11.110) to[out = 110, in = 150]
+    node[lab, above left] {$\sigma_{55}$} (w11.150);
+  \draw[var] (w21.210) to[out = 210, in = 250]
+    node[lab, below left] {$\sigma_{66}$} (w21.250);
   \foreach \rr in {2, 0, -3, -5} {
     \node[dots] at (10.5, \rr) {$\cdots$};
   }

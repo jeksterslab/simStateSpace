@@ -45,8 +45,9 @@ This tutorial does three things:
 1. It writes the first-order VAR model as a state space model.
 2. It simulates data from the model with `SimSSMVARFixed()`,
    with every individual sharing the same parameters.
-3. It fits the model to the simulated data with the `dynr` package
-   and compares the estimates with the values used to simulate the data.
+3. It fits the model to the simulated data
+   with the `dynr` and `OpenMx` packages
+   and compares both sets of estimates with the values used to simulate the data.
 
 No prior knowledge of state space models is needed.
 A state space model has two parts:
@@ -59,8 +60,8 @@ so the measurement part is simple, and all the interest is in the dynamics.
 #| echo = FALSE
 options(scipen = 999)
 set.seed(42)
-n <- 10 # 100
-time <- 200 # 1000
+n <- 50
+time <- 200
 k <- p <- 3
 iden <- diag(k)
 null_vec <- rep(x = 0, times = k)
@@ -104,11 +105,11 @@ sigma0_l <- t(chol(sigma0))
 ## Model
 
 The measurement model is given by
-\begin{equation}
+$$
   \mathbf{y}_{i, t}
   =
   \boldsymbol{\eta}_{i, t}
-\end{equation}
+$$
 where $\mathbf{y}_{i, t}$
 represents a vector of observed variables
 and $\boldsymbol{\eta}_{i, t}$
@@ -119,7 +120,7 @@ we only generate data
 from the dynamic structure.
 
 The dynamic structure is given by
-\begin{equation}
+$$
   \boldsymbol{\eta}_{i, t}
   =
   \boldsymbol{\alpha}
@@ -138,7 +139,7 @@ The dynamic structure is given by
   \mathbf{0},
   \boldsymbol{\Psi}
   \right)
-\end{equation}
+$$
 where
 $\boldsymbol{\eta}_{i, t}$,
 $\boldsymbol{\eta}_{i, t - 1}$,
@@ -192,7 +193,7 @@ all eigenvalues of $\boldsymbol{\beta}$ must have modulus less than 1.
 
 An alternative representation of the dynamic noise
 is given by
-\begin{equation}
+$$
   \boldsymbol{\zeta}_{i, t}
   =
   \boldsymbol{\Psi}^{\frac{1}{2}}
@@ -207,7 +208,7 @@ is given by
   \mathbf{0},
   \mathbf{I}
   \right)
-\end{equation}
+$$
 where
 $\left( \boldsymbol{\Psi}^{\frac{1}{2}} \right) \left( \boldsymbol{\Psi}^{\frac{1}{2}} \right)^{\prime} = \boldsymbol{\Psi}$ .
 This is how the noise is simulated:
@@ -217,39 +218,42 @@ The functions in `simStateSpace` take this square root,
 the lower triangular Cholesky factor of $\boldsymbol{\Psi}$,
 as the argument `psi_l`.
 
-### Diagrams
+### Diagram
 
 ```{r}
 #| include = FALSE
-# copy the model diagrams (built by `make latex` from `.setup/latex/tikz/`)
+# copy the model diagram (built by `make latex` from `.setup/latex/tikz/`)
+# into the folder of the knit, next to the other figures
 root <- c(".", "..")[file.exists(file.path(c(".", ".."), ".setup"))][1]
-file.copy(
-  from = file.path(
-    root,
-    ".setup",
-    "latex",
-    "figures",
-    "png",
-    paste0("fig-vignettes-var-", c("path", "ssm"), ".png")
-  ),
-  to = root,
-  overwrite = TRUE
+diagrams <- file.path(
+  root,
+  ".setup",
+  "latex",
+  "figures",
+  "png",
+  "fig-vignettes-var-ssm.png"
+)
+if (!all(file.exists(diagrams))) {
+  stop("Model diagram not found: run `make latex` first.")
+}
+invisible(
+  file.copy(
+    from = diagrams,
+    to = ".",
+    overwrite = TRUE
+  )
 )
 ```
 
-![Path diagram of the VAR model.](fig-vignettes-var-path.png){width=100%}
+![State space diagram of the VAR model.](fig-vignettes-var-ssm.png){width=100%}
 
-The model as a path diagram, for the first three occasions.
-The variables are observed (squares) and have no measurement error.
-The horizontal arrows are the autoregressive effects and the diagonal arrows the cross-lagged effects; only the nonzero elements of $\boldsymbol{\beta}$ in this example are drawn.
-$\zeta_{j}$ is the process noise, with variance $\psi_{jj}$, and the curved arrows on the left are the covariances of the variables at the first occasion.
-
-![State space form of the VAR model.](fig-vignettes-var-ssm.png){width=100%}
-
-The same model in state space form.
-The observed variables are the state, $\mathbf{y}_{t} = \boldsymbol{\eta}_{t}$, so $\boldsymbol{\Lambda}$ is the identity matrix and there is no measurement error.
-$\boldsymbol{\beta}$ carries the state from one occasion to the next, and $\boldsymbol{\Psi}$ is the covariance matrix of the process noise $\boldsymbol{\zeta}_{t}$.
-`SimSSMVARFixed()` takes `beta` and the Cholesky factor of $\boldsymbol{\Psi}$ (`psi_l`).
+The model in state space form, for the first three occasions ($t = 0, 1, 2$).
+The observed variables (squares) are the state, $\mathbf{y}_{t} = \boldsymbol{\eta}_{t}$, so $\boldsymbol{\Lambda}$ is the identity matrix and there is no measurement error.
+The horizontal arrows are the autoregressive effects and the diagonal arrows the cross-lagged effects, the elements of $\boldsymbol{\beta}$; only the nonzero elements in this example are drawn.
+$\zeta_{j, t}$ is the process noise, with variance $\psi_{jj}$, from $t = 1$ on.
+A loop on a variable is its variance and a curved two-headed arrow a covariance.
+At $t = 0$, the initial condition $\boldsymbol{\eta}_{0} \sim \mathcal{N} \left( \boldsymbol{\mu}_{0}, \boldsymbol{\Sigma}_{0} \right)$ gives the variances $\sigma_{jj}$ and covariances $\sigma_{jk}$ of the variables.
+`SimSSMVARFixed()` takes `beta`, `mu0`, and the Cholesky factors of $\boldsymbol{\Psi}$ and $\boldsymbol{\Sigma}_{0}$ (`psi_l` and `sigma0_l`).
 
 ## Data Generation
 
@@ -261,12 +265,12 @@ Let the initial condition
 $\boldsymbol{\eta}_{0}$
 be given by
 
-\begin{equation}
-\boldsymbol{\eta}_{0} \sim \mathcal{N} \left( \boldsymbol{\mu}_{\boldsymbol{\eta} \mid 0}, \boldsymbol{\Sigma}_{\boldsymbol{\eta} \mid 0} \right)
-\end{equation}
+$$
+\boldsymbol{\eta}_{0} \sim \mathcal{N} \left( \boldsymbol{\mu}_{0}, \boldsymbol{\Sigma}_{0} \right)
+$$
 
-\begin{equation}
-\boldsymbol{\mu}_{\boldsymbol{\eta} \mid 0}
+$$
+\boldsymbol{\mu}_{0}
 =
 \left(
 \begin{array}{c}
@@ -275,10 +279,10 @@ be given by
   `r mu0[3]` \\
 \end{array}
 \right)
-\end{equation}
+$$
 
-\begin{equation}
-\boldsymbol{\Sigma}_{\boldsymbol{\eta} \mid 0}
+$$
+\boldsymbol{\Sigma}_{0}
 =
 \left(
 \begin{array}{ccc}
@@ -287,11 +291,11 @@ be given by
   `r sigma0[3, 1]` & `r sigma0[3, 2]` & `r sigma0[3, 3]` \\
 \end{array}
 \right) .
-\end{equation}
+$$
 
 Let the constant vector $\boldsymbol{\alpha}$ be given by
 
-\begin{equation}
+$$
 \boldsymbol{\alpha}
 =
 \left(
@@ -301,11 +305,11 @@ Let the constant vector $\boldsymbol{\alpha}$ be given by
   `r alpha[3]` \\
 \end{array}
 \right) .
-\end{equation}
+$$
 
 Let the transition matrix $\boldsymbol{\beta}$ be given by
 
-\begin{equation}
+$$
 \boldsymbol{\beta}
 =
 \left(
@@ -315,7 +319,7 @@ Let the transition matrix $\boldsymbol{\beta}$ be given by
   `r beta[3, 1]` & `r beta[3, 2]` & `r beta[3, 3]` \\
 \end{array}
 \right) .
-\end{equation}
+$$
 
 Read the columns as predictors and the rows as outcomes.
 Each variable carries over to the next occasion
@@ -330,7 +334,7 @@ so the process is stable.
 
 Let the dynamic process noise $\boldsymbol{\Psi}$ be given by
 
-\begin{equation}
+$$
 \boldsymbol{\Psi}
 =
 \left(
@@ -340,7 +344,7 @@ Let the dynamic process noise $\boldsymbol{\Psi}$ be given by
   `r psi[3, 1]` & `r psi[3, 2]` & `r psi[3, 3]` \\
 \end{array}
 \right) .
-\end{equation}
+$$
 
 The initial condition describes where each individual starts.
 Here, the mean vector and covariance matrix of $\boldsymbol{\eta}_{0}$
@@ -417,6 +421,14 @@ plot(sim)
 
 ## Model Fitting
 
+The same simulated data are fitted with two programs
+that estimate state space models by maximum likelihood
+with the Kalman filter: `dynr` and `OpenMx`.
+The section Population Values and Estimates
+compares their estimates with the population values.
+
+### dynr
+
 We fit the model with `dynr`,
 which estimates state space models by maximum likelihood
 using the Kalman filter.
@@ -428,7 +440,7 @@ and the same name used in two places means one shared parameter.
 The starting values are set to the population values for convenience;
 with real data, they would be rough guesses.
 
-### Prepare Data
+#### Prepare Data
 
 Tell `dynr` which columns hold the individual, the time, and the observed variables.
 
@@ -441,10 +453,10 @@ dynr_data <- dynr::dynr.data(
 )
 ```
 
-### Prepare Initial Condition
+#### Prepare Initial Condition
 
-The mean $\boldsymbol{\mu}_{\boldsymbol{\eta} \mid 0}$
-and covariance $\boldsymbol{\Sigma}_{\boldsymbol{\eta} \mid 0}$
+The mean $\boldsymbol{\mu}_{0}$
+and covariance $\boldsymbol{\Sigma}_{0}$
 of the initial state are estimated.
 The covariance matrix is symmetric,
 so `sigma0_2_1` appears both above and below the diagonal.
@@ -465,7 +477,7 @@ dynr_initial <- dynr::prep.initial(
 )
 ```
 
-### Prepare Measurement Model
+#### Prepare Measurement Model
 
 The measurement model $\mathbf{y}_{i, t} = \boldsymbol{\eta}_{i, t}$
 is an identity matrix of loadings,
@@ -480,7 +492,7 @@ dynr_measurement <- dynr::prep.measurement(
 )
 ```
 
-### Prepare Dynamic Process
+#### Prepare Dynamic Process
 
 Each formula is one row of the dynamic equation:
 the intercept $\alpha_{j}$ plus the effects $\beta_{jk}$ of the three variables
@@ -504,7 +516,7 @@ dynr_dynamics <- dynr::prep.formulaDynamics(
 )
 ```
 
-### Prepare Process Noise
+#### Prepare Process Noise
 
 The latent noise covariance $\boldsymbol{\Psi}$ is estimated.
 The measurement error covariance is fixed at zero,
@@ -526,7 +538,7 @@ dynr_noise <- dynr::prep.noise(
 )
 ```
 
-### Prepare the Model
+#### Prepare the Model
 
 The pieces are put together into one model.
 `dynr` writes the model as C code to `outfile` and compiles it.
@@ -553,7 +565,7 @@ dynr::plotFormula(
 )
 ```
 
-### Fit the Model
+#### Fit the Model
 
 ```{r}
 results <- dynr::dynr.cook(
@@ -563,7 +575,7 @@ results <- dynr::dynr.cook(
 )
 ```
 
-## Summary
+#### Summary
 
 The summary lists each estimate with its standard error,
 $t$ value, confidence interval, and $p$ value.
@@ -572,107 +584,222 @@ $t$ value, confidence interval, and $p$ value.
 summary(results)
 ```
 
+### OpenMx: State Space Model
+
+`OpenMx` [@Neale-Hunter-Pritikin-etal-2016] fits the same state space model
+with its own Kalman filter (`OpenMx::mxExpectationStateSpace()`; @Hunter-2018).
+Its matrices have the names used in engineering:
+`A` is the transition matrix $\boldsymbol{\beta}$,
+`B` holds the intercepts of the dynamic model,
+`C` is the loading matrix $\boldsymbol{\Lambda}$,
+`D` holds the intercepts of the measurement model,
+`Q` is the process noise covariance matrix,
+and `R` is the measurement error covariance matrix.
+The parameter labels are the dynr names;
+as in dynr, a label used in two places is one shared parameter,
+and the starting values are the population values.
+
+Two details differ from dynr.
+First, OpenMx reads the data as a single time series.
+To start the filter again at the first occasion of every individual,
+each individual gets a group,
+and all groups use the matrices of one parent model,
+so every individual has the same parameters.
+Second, OpenMx starts the filter one occasion before the first row,
+so the first row has the state mean $\mathbf{A} \mathbf{x}_{0} + \mathbf{B} \mathbf{u}$
+and the state covariance $\mathbf{A} \mathbf{P}_{0} \mathbf{A}^{\prime} + \mathbf{Q}$,
+with the constant input $\mathbf{u} = 1$.
+Setting
+$\mathbf{x}_{0} = \mathbf{A}^{-1} \left( \boldsymbol{\mu}_{0} - \mathbf{B} \mathbf{u} \right)$
+and
+$\mathbf{P}_{0} = \mathbf{A}^{-1} \left( \boldsymbol{\Sigma}_{0} - \mathbf{Q} \right) \left( \mathbf{A}^{-1} \right)^{\prime}$
+gives the first occasion the initial condition of the model,
+so the likelihood is the same as in dynr.
+This needs an invertible $\mathbf{A}$, which holds here.
+
+The two helper functions below are the same in every vignette of the package.
+`MxMat()` makes an OpenMx matrix from values and dynr-style labels
+(`"fixed"` marks a fixed element),
+and `FitMxSSM()` builds the groups and fits the model.
+
 ```{r}
-#| echo = FALSE
-estimates <- coef(results)
-mu0_hat <- unname(
-  estimates[
-    c(
-      "mu0_1_1",
-      "mu0_2_1",
-      "mu0_3_1"
-    )
-  ]
-)
-sigma0_hat <- matrix(
-  data = estimates[
-    c(
-      "sigma0_1_1",
-      "sigma0_2_1",
-      "sigma0_3_1",
-      "sigma0_2_1",
-      "sigma0_2_2",
-      "sigma0_3_2",
-      "sigma0_3_1",
-      "sigma0_3_2",
-      "sigma0_3_3"
-    )
-  ],
+MxMat <- function(values, labels, name) {
+  values <- as.matrix(values)
+  labels <- matrix(
+    data = labels,
+    nrow = nrow(values),
+    ncol = ncol(values)
+  )
+  free <- labels != "fixed"
+  labels[!free] <- NA
+  OpenMx::mxMatrix(
+    type = "Full",
+    values = values,
+    free = free,
+    labels = labels,
+    name = name
+  )
+}
+FitMxSSM <- function(data, observed, matrices, name) {
+  # the groups refer to the matrices of the parent model
+  shared <- function(x) {
+    paste0(name, ".", x)
+  }
+  expectation <- OpenMx::mxExpectationStateSpace(
+    A = shared("A"),
+    B = shared("B"),
+    C = shared("C"),
+    D = shared("D"),
+    Q = shared("Q"),
+    R = shared("R"),
+    x0 = shared("x0"),
+    P0 = shared("P0"),
+    u = shared("u")
+  )
+  # OpenMx needs the names of the observed variables and of the states on C
+  for (i in seq_along(matrices)) {
+    if (matrices[[i]]$name == "C") {
+      dimnames(matrices[[i]]) <- list(
+        observed,
+        paste0("eta_", seq_len(ncol(matrices[[i]]$values)))
+      )
+    }
+  }
+  persons <- split(
+    x = data[, observed, drop = FALSE],
+    f = data[, "id"]
+  )
+  groups <- paste0("id_", names(persons))
+  submodels <- lapply(
+    X = seq_along(persons),
+    FUN = function(i) {
+      OpenMx::mxModel(
+        name = groups[i],
+        expectation,
+        OpenMx::mxFitFunctionML(),
+        OpenMx::mxData(
+          observed = persons[[i]],
+          type = "raw"
+        )
+      )
+    }
+  )
+  model <- OpenMx::mxModel(
+    name = name,
+    matrices,
+    OpenMx::mxMatrix(
+      type = "Unit",
+      nrow = 1,
+      ncol = 1,
+      name = "u"
+    ),
+    # the first occasion gets the initial condition of the model
+    OpenMx::mxAlgebra(
+      expression = solve(A) %*% (mu0 - B %*% u),
+      name = "x0"
+    ),
+    OpenMx::mxAlgebra(
+      expression = solve(A) %*% (sigma0 - Q) %*% t(solve(A)),
+      name = "P0"
+    ),
+    submodels,
+    OpenMx::mxFitFunctionMultigroup(groups = groups)
+  )
+  # retries from perturbed starting values only if the first run fails
+  OpenMx::mxTryHard(
+    model = model,
+    extraTries = 5,
+    silent = TRUE
+  )
+}
+```
+
+The matrices of the model, with the dynr labels.
+The loadings are an identity matrix,
+and there is no measurement error (`R` is zero).
+
+```{r}
+labels_beta <- matrix(
+  data = c(
+    "beta_1_1", "beta_2_1", "beta_3_1",
+    "beta_1_2", "beta_2_2", "beta_3_2",
+    "beta_1_3", "beta_2_3", "beta_3_3"
+  ),
   nrow = 3
 )
-alpha_hat <- unname(
-  estimates[
-    c(
-      "alpha_1_1",
-      "alpha_2_1",
-      "alpha_3_1"
-    )
-  ]
-)
-beta_hat <- matrix(
-  data = estimates[
-    c(
-      "beta_1_1",
-      "beta_2_1",
-      "beta_3_1",
-      "beta_1_2",
-      "beta_2_2",
-      "beta_3_2",
-      "beta_1_3",
-      "beta_2_3",
-      "beta_3_3"
-    )
-  ],
+labels_psi <- matrix(
+  data = c(
+    "psi_1_1", "psi_2_1", "psi_3_1",
+    "psi_2_1", "psi_2_2", "psi_3_2",
+    "psi_3_1", "psi_3_2", "psi_3_3"
+  ),
   nrow = 3
 )
-psi_hat <- matrix(
-  data = estimates[
-    c(
-      "psi_1_1",
-      "psi_2_1",
-      "psi_3_1",
-      "psi_2_1",
-      "psi_2_2",
-      "psi_3_2",
-      "psi_3_1",
-      "psi_3_2",
-      "psi_3_3"
-    )
-  ],
+labels_sigma0 <- matrix(
+  data = c(
+    "sigma0_1_1", "sigma0_2_1", "sigma0_3_1",
+    "sigma0_2_1", "sigma0_2_2", "sigma0_3_2",
+    "sigma0_3_1", "sigma0_3_2", "sigma0_3_3"
+  ),
   nrow = 3
+)
+mx_matrices <- list(
+  MxMat(values = beta, labels = labels_beta, name = "A"),
+  MxMat(
+    values = alpha,
+    labels = c("alpha_1_1", "alpha_2_1", "alpha_3_1"),
+    name = "B"
+  ),
+  MxMat(values = diag(3), labels = "fixed", name = "C"),
+  MxMat(values = rep(x = 0, times = 3), labels = "fixed", name = "D"),
+  MxMat(values = psi, labels = labels_psi, name = "Q"),
+  MxMat(
+    values = matrix(data = 0, nrow = 3, ncol = 3),
+    labels = "fixed",
+    name = "R"
+  ),
+  MxMat(
+    values = mu0,
+    labels = c("mu0_1_1", "mu0_2_1", "mu0_3_1"),
+    name = "mu0"
+  ),
+  MxMat(values = sigma0, labels = labels_sigma0, name = "sigma0")
 )
 ```
 
-### Parameter Estimates
-
-The estimates arranged as the matrices in the model,
-to compare with the population values in the Data Generation section.
-
 ```{r}
-alpha_hat
-beta_hat
-psi_hat
-mu0_hat
-sigma0_hat
+fit_mx_ssm <- FitMxSSM(
+  data = data,
+  observed = c("y1", "y2", "y3"),
+  matrices = mx_matrices,
+  name = "var"
+)
+summary(fit_mx_ssm)
 ```
 
-## Table of Parameters and Estimates
+## Population Values and Estimates
 
-The table below puts each population value used to simulate the data
-next to its estimate.
+Each table below puts the population values used to simulate the data
+next to the estimates of one method.
 Bias is the estimate minus the population value.
-Because the model is fitted to a single simulated data set,
+Because each model is fitted to a single simulated data set,
 this is the error of one estimate, not a Monte Carlo bias,
 which would average over many replications.
 The 95% confidence interval is the Wald interval,
 $\hat{\theta} \pm 1.96 \times \mathrm{SE}$,
+unless the caption says otherwise,
 and `Covers` shows whether it contains the population value.
+The parameter names are the dynr names in every table.
 
 ```{r}
-EstimatesTable <- function(population, estimate, se) {
+EstimatesTable <- function(population, estimate, se, ll = NULL, ul = NULL) {
   z <- stats::qnorm(p = 0.975)
-  ll <- estimate - z * se
-  ul <- estimate + z * se
+  if (is.null(ll)) {
+    ll <- estimate - z * se
+  }
+  if (is.null(ul)) {
+    ul <- estimate + z * se
+  }
   data.frame(
     Parameter = names(population),
     Population = unname(population),
@@ -688,26 +815,70 @@ EstimatesTable <- function(population, estimate, se) {
 ```
 
 ```{r}
-estimates <- coef(results)
-se <- sqrt(diag(vcov(results)))
 # the population value for each dynr parameter name,
 # for example, "beta_1_2" is beta[1, 2] and "mu0_2_1" is mu0[2]
 population <- vapply(
-  X = strsplit(x = names(estimates), split = "_"),
+  X = strsplit(x = names(coef(results)), split = "_"),
   FUN = function(x) {
     as.matrix(get(x[1]))[as.integer(x[2]), as.integer(x[3])]
   },
   FUN.VALUE = numeric(1)
 )
-names(population) <- names(estimates)
+names(population) <- names(coef(results))
+```
+
+### dynr
+
+```{r}
+dynr_est <- coef(results)
+dynr_se <- sqrt(diag(vcov(results)))
 knitr::kable(
   x = EstimatesTable(
     population = population,
-    estimate = estimates,
-    se = se
+    estimate = dynr_est[names(population)],
+    se = dynr_se[names(population)]
   ),
   digits = 3,
   caption = "Population values and dynr estimates (one simulated data set)"
+)
+```
+
+### OpenMx: State Space Model
+
+```{r}
+mx_ssm_est <- OpenMx::omxGetParameters(fit_mx_ssm)
+mx_ssm_se <- fit_mx_ssm$output$standardErrors[, 1]
+knitr::kable(
+  x = EstimatesTable(
+    population = population,
+    estimate = mx_ssm_est[names(population)],
+    se = mx_ssm_se[names(population)]
+  ),
+  digits = 3,
+  caption = paste(
+    "Population values and OpenMx state space estimates",
+    "(one simulated data set)"
+  )
+)
+```
+
+### All Methods
+
+The estimates of every method side by side.
+The methods maximize the same likelihood,
+so their estimates should agree closely.
+
+```{r}
+knitr::kable(
+  x = data.frame(
+    Parameter = names(population),
+    Population = unname(population),
+    `dynr` = unname(dynr_est[names(population)]),
+    `OpenMx (SSM)` = unname(mx_ssm_est[names(population)]),
+    check.names = FALSE
+  ),
+  digits = 3,
+  caption = "Population values and the estimates of every method"
 )
 ```
 

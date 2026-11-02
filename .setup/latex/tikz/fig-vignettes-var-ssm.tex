@@ -8,34 +8,80 @@
   obs/.style = {rectangle, draw, thick, minimum size = 11mm, inner sep = 1pt},
   noise/.style = {circle, draw, minimum size = 8mm, inner sep = 0pt},
   reg/.style = {-{Stealth[length = 2.5mm]}, thick},
+  cov/.style = {{Stealth[length = 2mm]}-{Stealth[length = 2mm]}},
+  var/.style = {cov, looseness = 5},
   lab/.style = {font = \footnotesize, fill = white, inner sep = 1pt},
   mat/.style = {font = \small, inner sep = 2pt, align = left},
   dots/.style = {font = \Large}
 }
 \begin{document}
 \begin{tikzpicture}
-  % occasions
-  \node[lat] (e0) at (0, 0) {$\bm{\eta}_{t - 1}$};
-  \node[obs] (y0) at (0, 3) {$\mathbf{y}_{t - 1}$};
-  \draw[reg] (e0) -- node[lab] {$\bm{\Lambda}$} (y0);
-  \node[lat] (e1) at (4.5, 0) {$\bm{\eta}_{t}$};
-  \node[obs] (y1) at (4.5, 3) {$\mathbf{y}_{t}$};
-  \draw[reg] (e1) -- node[lab] {$\bm{\Lambda}$} (y1);
-  \node[noise] (z1) at (4.5, -2) {$\bm{\zeta}_{t}$};
-  \draw[reg] (z1) -- node[lab, right = 1mm] {$\bm{\Psi}$} (e1);
-  \node[lat] (e2) at (9.0, 0) {$\bm{\eta}_{t + 1}$};
-  \node[obs] (y2) at (9.0, 3) {$\mathbf{y}_{t + 1}$};
-  \draw[reg] (e2) -- node[lab] {$\bm{\Lambda}$} (y2);
-  \node[noise] (z2) at (9.0, -2) {$\bm{\zeta}_{t + 1}$};
-  \draw[reg] (z2) -- node[lab, right = 1mm] {$\bm{\Psi}$} (e2);
-  % transitions
-  \draw[reg] (e0) -- node[lab, above] {$\bm{\beta}$} (e1);
-  \draw[reg] (e1) -- node[lab, above] {$\bm{\beta}$} (e2);
-  \foreach \r in {0, 3} {
-    \node[dots] at (-1.5, \r) {$\cdots$};
-    \node[dots] at (10.5, \r) {$\cdots$};
+  % occasions: the observed variables are the states
+  \foreach \t/\x in {0/0, 1/5.5, 2/11} {
+    \foreach \j/\r in {1/0, 2/-4.6, 3/-9.2} {
+      \node[obs] (e\j\t) at (\x, \r) {$Y_{\j, \t}$};
+    }
+    \node[font = \small] at (\x, -11.4) {$t = \t$};
   }
+  % transitions
+  \foreach \s/\t in {0/1, 1/2} {
+    \foreach \j in {1, 2, 3} {
+      \draw[reg] (e\j\s) -- node[lab, pos = 0.3] {$\beta_{\j\j}$} (e\j\t);
+    }
+    \draw[reg] (e1\s) -- node[lab, pos = 0.3] {$\beta_{21}$} (e2\t);
+    \draw[reg] (e1\s) -- node[lab, pos = 0.45] {$\beta_{31}$} (e3\t);
+    \draw[reg] (e2\s) -- node[lab, pos = 0.3] {$\beta_{32}$} (e3\t);
+  }
+  % process noise
+  \foreach \t/\x in {1/5.5, 2/11} {
+    \foreach \j/\r in {1/0, 2/-4.6, 3/-9.2} {
+      \node[noise] (z\j\t) at (\x, \r - 1.4) {$\zeta_{\j, \t}$};
+      \draw[reg] (z\j\t) -- (e\j\t);
+      \draw[var] (z\j\t.160) to[out = 160, in = 200]
+        node[lab, left] {$\psi_{\j\j}$} (z\j\t.200);
+    }
+  }
+  \foreach \r in {0, -4.6, -9.2} {
+    \node[dots] at (13.3, \r) {$\cdots$};
+  }
+  % initial condition
+  \draw[var] (e10.110) to[out = 110, in = 150]
+    node[lab, above left] {$\sigma_{11}$} (e10.150);
+  \draw[var] (e20.235) to[out = 235, in = 275]
+    node[lab, below] {$\sigma_{22}$} (e20.275);
+  \draw[var] (e30.210) to[out = 210, in = 250]
+    node[lab, below left] {$\sigma_{33}$} (e30.250);
+  \draw[cov] (e10.200) to[out = 200, in = 150, looseness = 1.2]
+    node[lab, left] {$\sigma_{12}$} (e20.150);
+  \draw[cov] (e20.200) to[out = 200, in = 150, looseness = 1.2]
+    node[lab, left] {$\sigma_{23}$} (e30.160);
+  \draw[cov] (e10.west) .. controls (-4.2, 0) and (-4.2, -9.2) ..
+    node[lab] {$\sigma_{13}$} (e30.west);
   % matrices
-  \node[mat, align = center, below] at (4.5, -3.0) {$\bm{\beta} = \begin{pmatrix} \beta_{11} & 0 & 0 \\ \beta_{21} & \beta_{22} & 0 \\ \beta_{31} & \beta_{32} & \beta_{33} \end{pmatrix}$ \qquad $\bm{\Lambda} = \begin{pmatrix} 1 & 0 & 0 \\ 0 & 1 & 0 \\ 0 & 0 & 1 \end{pmatrix}$ \\[3mm] $\bm{\Psi} = \begin{pmatrix} \psi_{11} & 0 & 0 \\ 0 & \psi_{22} & 0 \\ 0 & 0 & \psi_{33} \end{pmatrix}$ \\[3mm] $\mathbf{y}_{t} = \bm{\eta}_{t} = \left( \eta_{1}, \eta_{2}, \eta_{3} \right)^{\prime}$ (observed without measurement error)};
+  \node[mat, align = center, below] at (5.5, -11.9) {%
+    $\mathbf{y}_{t} = \bm{\eta}_{t} = \left( Y_{1, t}, Y_{2, t}, Y_{3, t}
+      \right)^{\prime}$; the observed variables are the states;
+    no measurement error \\[3mm]
+    $\bm{\beta} = \begin{pmatrix}
+      \beta_{11} & 0 & 0 \\
+      \beta_{21} & \beta_{22} & 0 \\
+      \beta_{31} & \beta_{32} & \beta_{33}
+    \end{pmatrix}$
+    \qquad $\bm{\Lambda} = \begin{pmatrix}
+      1 & 0 & 0 \\ 0 & 1 & 0 \\ 0 & 0 & 1
+    \end{pmatrix}$
+    \qquad $\bm{\Psi} = \begin{pmatrix}
+      \psi_{11} & 0 & 0 \\ 0 & \psi_{22} & 0 \\ 0 & 0 & \psi_{33}
+    \end{pmatrix}$ \\[3mm]
+    $\bm{\eta}_{0} \sim \mathcal{N} \left( \bm{\mu}_{0},
+      \bm{\Sigma}_{0} \right)$, \quad
+    $\bm{\mu}_{0} = \begin{pmatrix}
+      \mu_{1} \\ \mu_{2} \\ \mu_{3}
+    \end{pmatrix}$, \quad
+    $\bm{\Sigma}_{0} = \begin{pmatrix}
+      \sigma_{11} & \sigma_{12} & \sigma_{13} \\
+      \sigma_{21} & \sigma_{22} & \sigma_{23} \\
+      \sigma_{31} & \sigma_{32} & \sigma_{33}
+    \end{pmatrix}$};
 \end{tikzpicture}
 \end{document}

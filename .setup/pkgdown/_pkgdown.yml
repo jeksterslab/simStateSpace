@@ -2,12 +2,7 @@ destination: pkgdown
 url: https://github.com/jeksterslab/simStateSpace/
 
 template:
-  bootstrap: 5
-  math-rendering: mathjax
-  bslib:
-    base_font: {google: "Roboto"}
-    heading_font: {google: "Roboto Slab"}
-    code_font: {google: "JetBrains Mono"}
+  package: rProject
 
 reference:
 - title: State Space Model

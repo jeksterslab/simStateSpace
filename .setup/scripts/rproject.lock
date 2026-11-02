@@ -1,14 +1,14 @@
 # Written by rProject::Lock() at make auto. Do not edit.
 # make project restores it (locally and in GitHub Actions);
 # make upgrade moves it forward at the next make auto.
-rproject_sha <- "3d7c371f25ee9c91550e2fac25a444bfc89822e0"
-rproject_version <- "0.0.59"
+rproject_sha <- "211d12772d720566f4138c14cd9b2435b5987f81"
+rproject_version <- "0.0.61"
 # the image: CI runs `image` (a digest), or `image_name`:latest
 # when it has no digest; packages the image lacks come from the
 # Posit Package Manager snapshot of `snapshot`
-image <- "docker.io/ijapesigan/docs@sha256:21eb9bcf14e1ba1823a0ef19a2f846f777a8faca37ec78572948f3dcb2d0e279"
+image <- "docker.io/ijapesigan/docs@sha256:e2876209ee8665df5aaf50632f778f8ee73e3e92035554ecfcbe2bfeb091bfbb"
 image_name <- "docker.io/ijapesigan/docs"
-snapshot <- "2026-10-31"
+snapshot <- "2026-11-01"
 r_version <- "4.6.2"
 # packages the project adds (project.R): version or commit
 extra_cran <- c("Rcpp" = "1.1.2", "RcppArmadillo" = "15.6.2-1", "lavaan" = "0.7-3")
@@ -17,5 +17,5 @@ extra_github <- c()
 image_local <- "docs-plus.sif"
 image_local_source <- "https://github.com/ijapesigan/docker-docs-mplus"
 image_local_proprietary <- "unknown"
-sif_sha256 <- "d3be34f38e4bf014d6ca51a507fa06f4636ff4f88612143a7a98f4e7ee3cb828"
-sif_built <- "2026-10-31"
+sif_sha256 <- "10f5645c73abe4a98d305354d6e89313e60ddd6fd06b4c826af9ecaf8e2f3a8f"
+sif_built <- "2026-11-02"

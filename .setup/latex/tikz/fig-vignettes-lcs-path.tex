@@ -9,13 +9,14 @@
   noise/.style = {circle, draw, minimum size = 7mm, inner sep = 0pt},
   reg/.style = {-{Stealth[length = 2.5mm]}, thick},
   cov/.style = {{Stealth[length = 2mm]}-{Stealth[length = 2mm]}},
+  var/.style = {cov, looseness = 5},
   lab/.style = {font = \footnotesize, fill = white, inner sep = 1pt},
   dots/.style = {font = \Large}
 }
 \begin{document}
 \begin{tikzpicture}[chg/.style = {circle, draw, thick, minimum size = 10mm, inner sep = 0pt}]
   % occasions
-  \foreach \t/\x in {1/0, 2/4.5, 3/9} {
+  \foreach \t/\x/\l in {1/0/0, 2/4.5/1, 3/9/2} {
     \node[lat] (a\t) at (\x, 4.2) {$\eta_{1}$};
     \node[lat] (b\t) at (\x, -4.2) {$\eta_{2}$};
     \node[obs] (ya\t) at (\x, 6.4) {$Y_{1}$};
@@ -24,9 +25,14 @@
     \node[noise] (ub\t) at (\x + 1.4, -6.4) {$\varepsilon_{2}$};
     \draw[reg] (a\t) -- node[lab] {1} (ya\t);
     \draw[reg] (b\t) -- node[lab] {1} (yb\t);
-    \draw[reg] (ua\t) -- node[lab, above = 0.5mm] {$\theta_{11}$} (ya\t);
-    \draw[reg] (ub\t) -- node[lab, below = 0.5mm] {$\theta_{22}$} (yb\t);
-    \node[font = \small] at (\x, -8) {$t = \t$};
+    \draw[reg] (ua\t) -- node[lab, above = 0.5mm] {1} (ya\t);
+    \draw[reg] (ub\t) -- node[lab, below = 0.5mm] {1} (yb\t);
+    % measurement error variances
+    \draw[var] (ua\t.60) to[out = 60, in = 120]
+      node[lab, above] {$\theta_{11}$} (ua\t.120);
+    \draw[var] (ub\t.240) to[out = 240, in = 300]
+      node[lab, below] {$\theta_{22}$} (ub\t.300);
+    \node[font = \small] at (\x, -8.4) {$t = \l$};
   }
   % slopes
   \node[lat] (s1) at (-2.6, 0.9) {$\eta_{3}$};
@@ -46,7 +52,16 @@
     \draw[reg] (s1) -- node[lab, pos = 0.85] {1} (da\t);
     \draw[reg] (s2) -- node[lab, pos = 0.85] {1} (db\t);
   }
-  % initial condition
+  % initial condition: variances
+  \draw[var] (a1.110) to[out = 110, in = 150]
+    node[lab, above left] {$\sigma_{11}$} (a1.150);
+  \draw[var] (b1.210) to[out = 210, in = 250]
+    node[lab, below left] {$\sigma_{22}$} (b1.250);
+  \draw[var] (s1.105) to[out = 105, in = 145]
+    node[lab, above left] {$\sigma_{33}$} (s1.145);
+  \draw[var] (s2.215) to[out = 215, in = 255]
+    node[lab, below left] {$\sigma_{44}$} (s2.255);
+  % initial condition: covariances
   \draw[cov] (a1.west) .. controls (-7, 4.2) and (-7, -4.2) ..
     node[lab, pos = 0.5] {$\sigma_{12}$} (b1.west);
   \draw[cov] (s1.west) to[out = 160, in = 200, looseness = 1.8]

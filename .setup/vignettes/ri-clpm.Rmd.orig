@@ -63,9 +63,10 @@ This tutorial does three things:
 
 1. It writes the RI-CLPM as a state space model.
 2. It simulates data from the model with `SimSSMFixed()`.
-3. It fits the model to the simulated data with `dynr` (state space)
-   and with `lavaan` (SEM),
-   and compares both sets of estimates with the values used to simulate the data.
+3. It fits the model to the simulated data
+   as a state space model with `dynr` and `OpenMx`
+   and as a structural equation model (SEM) with `lavaan` and `OpenMx`,
+   and compares every set of estimates with the values used to simulate the data.
 
 No prior knowledge of state space models is needed.
 
@@ -73,7 +74,7 @@ No prior knowledge of state space models is needed.
 #| echo = FALSE
 options(scipen = 999)
 set.seed(42)
-n <- 10000
+n <- 2000
 time <- 5
 k <- 2
 p <- 4
@@ -135,7 +136,7 @@ theta_l <- zero
 ## Model
 
 The measurement model is given by
-\begin{equation}
+$$
   \left(
   \begin{array}{c}
     Y_{1_{i, t}} \\
@@ -157,7 +158,7 @@ The measurement model is given by
     \eta_{4_{i, t}} \\
   \end{array}
   \right)
-\end{equation}
+$$
 where $Y_{1_{i, t}}$ and $Y_{2_{i, t}}$
 are the two observed variables
 at time $t$ and individual $i$,
@@ -174,7 +175,7 @@ As in most applications of the RI-CLPM,
 there is no measurement error.
 
 The dynamic structure is given by
-\begin{equation}
+$$
   \left(
   \begin{array}{c}
     \eta_{1_{i, t}} \\
@@ -229,7 +230,7 @@ The dynamic structure is given by
   \end{array}
   \right)
   \right) .
-\end{equation}
+$$
 
 In words,
 the traits stay the same over time:
@@ -247,18 +248,18 @@ are the variances and covariance of the new, unpredictable part
 of the deviations on each occasion.
 
 The initial condition is given by
-\begin{equation}
+$$
   \boldsymbol{\eta}_{i, 0}
   \sim
   \mathcal{N}
   \left(
-  \boldsymbol{\mu}_{\boldsymbol{\eta} \mid 0},
-  \boldsymbol{\Sigma}_{\boldsymbol{\eta} \mid 0}
+  \boldsymbol{\mu}_{0},
+  \boldsymbol{\Sigma}_{0}
   \right)
-\end{equation}
+$$
 
-\begin{equation}
-  \boldsymbol{\mu}_{\boldsymbol{\eta} \mid 0}
+$$
+  \boldsymbol{\mu}_{0}
   =
   \left(
   \begin{array}{c}
@@ -269,7 +270,7 @@ The initial condition is given by
   \end{array}
   \right) \quad \mathrm{and,}
   \quad
-  \boldsymbol{\Sigma}_{\boldsymbol{\eta} \mid 0}
+  \boldsymbol{\Sigma}_{0}
   =
   \left(
   \begin{array}{cccc}
@@ -279,7 +280,7 @@ The initial condition is given by
     0 & 0 & \sigma_{43} & \sigma_{44} \\
   \end{array}
   \right) .
-\end{equation}
+$$
 
 Here, $\mu_{1}$ and $\mu_{2}$ are the average traits,
 $\sigma_{11}$, $\sigma_{22}$, and $\sigma_{12}$
@@ -298,36 +299,48 @@ are their variances and covariance at the first occasion.
 ```{r}
 #| include = FALSE
 # copy the model diagrams (built by `make latex` from `.setup/latex/tikz/`)
+# into the folder of the knit, next to the other figures
 root <- c(".", "..")[file.exists(file.path(c(".", ".."), ".setup"))][1]
-file.copy(
-  from = file.path(
-    root,
-    ".setup",
-    "latex",
-    "figures",
-    "png",
-    paste0("fig-vignettes-ri-clpm-", c("path", "ssm"), ".png")
-  ),
-  to = root,
-  overwrite = TRUE
+diagrams <- file.path(
+  root,
+  ".setup",
+  "latex",
+  "figures",
+  "png",
+  paste0("fig-vignettes-ri-clpm-", c("path", "ssm"), ".png")
+)
+if (!all(file.exists(diagrams))) {
+  stop("Model diagrams not found: run `make latex` first.")
+}
+invisible(
+  file.copy(
+    from = diagrams,
+    to = ".",
+    overwrite = TRUE
+  )
 )
 ```
 
 ![Path diagram of the RI-CLPM.](fig-vignettes-ri-clpm-path.png){width=100%}
 
-The RI-CLPM as a path diagram, for the first three occasions.
+The RI-CLPM as a path diagram, for the first three occasions ($t = 0, 1, 2$).
 Squares are observed variables and circles are latent variables.
-The traits $\eta_{1}$ and $\eta_{2}$ load on every occasion with a loading of 1 and covary ($\sigma_{12}$).
+The traits $\eta_{1}$ and $\eta_{2}$ load on every occasion with a loading of 1, have variances $\sigma_{11}$ and $\sigma_{22}$, and covary ($\sigma_{12}$).
 The within-person components $\eta_{3}$ and $\eta_{4}$ carry the dynamics: the horizontal arrows are the autoregressive effects and the diagonal arrows the cross-lagged effects.
-$\zeta_{3}$ and $\zeta_{4}$ are the new parts of the deviations on each occasion, with covariance $\psi_{34}$, and $\sigma_{34}$ is the covariance of the within-person components at the first occasion.
+$\zeta_{3}$ and $\zeta_{4}$ are the new parts of the deviations on each occasion, with variances $\psi_{33}$ and $\psi_{44}$ and covariance $\psi_{34}$;
+$\sigma_{33}$, $\sigma_{44}$, and $\sigma_{34}$ are the variances and covariance of the within-person components at $t = 0$.
+A loop on a variable is its variance and a curved two-headed arrow a covariance.
 
 ![State space form of the RI-CLPM.](fig-vignettes-ri-clpm-ssm.png){width=100%}
 
-The same model in state space form.
-All the latent variables at one occasion form the state vector $\boldsymbol{\eta}_{t}$, and all the observed variables form $\mathbf{y}_{t}$.
+The same model in state space form, for the first three occasions, with every element of the state drawn.
+The traits are states with a transition of 1 and no process noise, so they keep their values over time: $\eta_{1, t} = \eta_{1}$ and $\eta_{2, t} = \eta_{2}$ for all $t$.
+Each observed variable $Y_{j, t}$ is its trait plus its within-person component, both with a loading of 1.
+The within-person components $\eta_{3, t}$ and $\eta_{4, t}$ carry the dynamics and receive the process noise $\zeta_{3, t}$ and $\zeta_{4, t}$ from $t = 1$ on.
+At $t = 0$, the initial condition $\boldsymbol{\eta}_{0} \sim \mathcal{N} \left( \boldsymbol{\mu}_{0}, \boldsymbol{\Sigma}_{0} \right)$ gives the variances and covariances at $t = 0$: the traits and the within-person components do not covary.
+Below the diagram, all the latent variables at one occasion form the state vector $\boldsymbol{\eta}_{t}$, and all the observed variables form $\mathbf{y}_{t}$:
 $\boldsymbol{\beta}$ carries the state from one occasion to the next, $\boldsymbol{\Lambda}$ maps the state to the observed variables, and $\boldsymbol{\Psi}$ is the covariance matrix of the process noise $\boldsymbol{\zeta}_{t}$.
-The traits are states with a transition of 1 and no process noise, so they keep their values over time.
-`SimSSMFixed()` takes `beta`, `lambda`, and the Cholesky factor of $\boldsymbol{\Psi}$ (`psi_l`);
+`SimSSMFixed()` takes `beta`, `lambda`, `mu0`, and the Cholesky factors of $\boldsymbol{\Psi}$ and $\boldsymbol{\Sigma}_{0}$ (`psi_l` and `sigma0_l`);
 `theta_l` is a matrix of zeros.
 
 ## Data Generation
@@ -338,7 +351,7 @@ Let $t = `r time`$ be the number of time points and $n = `r n`$ be the number of
 
 Let the traits have the means and the covariance matrix
 
-\begin{equation}
+$$
 \left(
 \begin{array}{c}
   \mu_{1} \\
@@ -366,12 +379,12 @@ Let the traits have the means and the covariance matrix
   `r sigma_trait[2, 1]` & `r sigma_trait[2, 2]` \\
 \end{array}
 \right) .
-\end{equation}
+$$
 
 Let the autoregressive and cross-lagged effects
 and the process noise covariance matrix be
 
-\begin{equation}
+$$
 \left(
 \begin{array}{cc}
   \beta_{33} & \beta_{34} \\
@@ -399,7 +412,7 @@ and the process noise covariance matrix be
   `r psi_within[2, 1]` & `r psi_within[2, 2]` \\
 \end{array}
 \right) .
-\end{equation}
+$$
 
 The within-person components start from their stationary distribution:
 their covariance matrix at the first occasion is the one they keep
@@ -407,7 +420,7 @@ at every later occasion,
 computed with `SSMCovEta()` from the autoregressive and cross-lagged effects
 and the process noise covariance matrix,
 
-\begin{equation}
+$$
 \left(
 \begin{array}{cc}
   \sigma_{33} & \sigma_{34} \\
@@ -421,7 +434,7 @@ and the process noise covariance matrix,
   `r round(sigma_within[2, 1], 3)` & `r round(sigma_within[2, 2], 3)` \\
 \end{array}
 \right) .
-\end{equation}
+$$
 
 ### R Function Arguments
 
@@ -502,7 +515,16 @@ plot(sim)
 
 ## Model Fitting
 
-We first fit the model with `dynr`,
+The same simulated data are fitted
+as a state space model with `dynr` and `OpenMx`
+and as a structural equation model (SEM) with `lavaan` and `OpenMx`.
+All of them estimate the parameters by maximum likelihood.
+The section Population Values and Estimates
+compares their estimates with the population values.
+
+### dynr
+
+We fit the model with `dynr`,
 which estimates state space models by maximum likelihood
 using the Kalman filter.
 
@@ -514,7 +536,7 @@ and the same name used in two places means one shared parameter.
 The starting values are set to the population values for convenience;
 with real data, they would be rough guesses.
 
-### Prepare Data
+#### Prepare Data
 
 Tell `dynr` which columns hold the individual, the time, and the observed variables.
 
@@ -527,7 +549,7 @@ dynr_data <- dynr::dynr.data(
 )
 ```
 
-### Prepare Initial Condition
+#### Prepare Initial Condition
 
 The means of the traits are estimated;
 the means of the within-person components are fixed at zero.
@@ -552,7 +574,7 @@ dynr_initial <- dynr::prep.initial(
 )
 ```
 
-### Prepare Measurement Model
+#### Prepare Measurement Model
 
 The loadings are fixed:
 each observed variable is its trait plus its within-person component.
@@ -566,7 +588,7 @@ dynr_measurement <- dynr::prep.measurement(
 )
 ```
 
-### Prepare Dynamic Process
+#### Prepare Dynamic Process
 
 Each formula is one row of the dynamic equation.
 The traits carry over unchanged;
@@ -589,7 +611,7 @@ dynr_dynamics <- dynr::prep.formulaDynamics(
 )
 ```
 
-### Prepare Process Noise
+#### Prepare Process Noise
 
 Only the within-person components have process noise.
 The measurement error is fixed at zero.
@@ -611,7 +633,7 @@ dynr_noise <- dynr::prep.noise(
 )
 ```
 
-### Prepare the Model
+#### Prepare the Model
 
 The pieces are put together into one model.
 `dynr` writes the model as C code to `outfile` and compiles it.
@@ -639,7 +661,7 @@ dynr::plotFormula(
 )
 ```
 
-### Fit the Model
+#### Fit the Model
 
 ```{r}
 results <- dynr::dynr.cook(
@@ -649,7 +671,7 @@ results <- dynr::dynr.cook(
 )
 ```
 
-## Summary
+#### Summary
 
 The summary lists each estimate with its standard error,
 $t$ value, confidence interval, and $p$ value.
@@ -658,7 +680,178 @@ $t$ value, confidence interval, and $p$ value.
 summary(results)
 ```
 
-## The RI-CLPM in Structural Equation Modeling
+### OpenMx: State Space Model
+
+`OpenMx` [@Neale-Hunter-Pritikin-etal-2016] fits the same state space model
+with its own Kalman filter (`OpenMx::mxExpectationStateSpace()`; @Hunter-2018).
+Its matrices have the names used in engineering:
+`A` is the transition matrix $\boldsymbol{\beta}$,
+`B` holds the intercepts of the dynamic model,
+`C` is the loading matrix $\boldsymbol{\Lambda}$,
+`D` holds the intercepts of the measurement model,
+`Q` is the process noise covariance matrix,
+and `R` is the measurement error covariance matrix.
+The parameter labels are the dynr names;
+as in dynr, a label used in two places is one shared parameter,
+and the starting values are the population values.
+
+Two details differ from dynr.
+First, OpenMx reads the data as a single time series.
+To start the filter again at the first occasion of every individual,
+each individual gets a group,
+and all groups use the matrices of one parent model,
+so every individual has the same parameters.
+Second, OpenMx starts the filter one occasion before the first row,
+so the first row has the state mean $\mathbf{A} \mathbf{x}_{0} + \mathbf{B} \mathbf{u}$
+and the state covariance $\mathbf{A} \mathbf{P}_{0} \mathbf{A}^{\prime} + \mathbf{Q}$,
+with the constant input $\mathbf{u} = 1$.
+Setting
+$\mathbf{x}_{0} = \mathbf{A}^{-1} \left( \boldsymbol{\mu}_{0} - \mathbf{B} \mathbf{u} \right)$
+and
+$\mathbf{P}_{0} = \mathbf{A}^{-1} \left( \boldsymbol{\Sigma}_{0} - \mathbf{Q} \right) \left( \mathbf{A}^{-1} \right)^{\prime}$
+gives the first occasion the initial condition of the model,
+so the likelihood is the same as in dynr.
+This needs an invertible $\mathbf{A}$, which holds here.
+
+The two helper functions below are the same in every vignette of the package.
+`MxMat()` makes an OpenMx matrix from values and dynr-style labels
+(`"fixed"` marks a fixed element),
+and `FitMxSSM()` builds the groups and fits the model.
+
+```{r}
+MxMat <- function(values, labels, name) {
+  values <- as.matrix(values)
+  labels <- matrix(
+    data = labels,
+    nrow = nrow(values),
+    ncol = ncol(values)
+  )
+  free <- labels != "fixed"
+  labels[!free] <- NA
+  OpenMx::mxMatrix(
+    type = "Full",
+    values = values,
+    free = free,
+    labels = labels,
+    name = name
+  )
+}
+FitMxSSM <- function(data, observed, matrices, name) {
+  # the groups refer to the matrices of the parent model
+  shared <- function(x) {
+    paste0(name, ".", x)
+  }
+  expectation <- OpenMx::mxExpectationStateSpace(
+    A = shared("A"),
+    B = shared("B"),
+    C = shared("C"),
+    D = shared("D"),
+    Q = shared("Q"),
+    R = shared("R"),
+    x0 = shared("x0"),
+    P0 = shared("P0"),
+    u = shared("u")
+  )
+  # OpenMx needs the names of the observed variables and of the states on C
+  for (i in seq_along(matrices)) {
+    if (matrices[[i]]$name == "C") {
+      dimnames(matrices[[i]]) <- list(
+        observed,
+        paste0("eta_", seq_len(ncol(matrices[[i]]$values)))
+      )
+    }
+  }
+  persons <- split(
+    x = data[, observed, drop = FALSE],
+    f = data[, "id"]
+  )
+  groups <- paste0("id_", names(persons))
+  submodels <- lapply(
+    X = seq_along(persons),
+    FUN = function(i) {
+      OpenMx::mxModel(
+        name = groups[i],
+        expectation,
+        OpenMx::mxFitFunctionML(),
+        OpenMx::mxData(
+          observed = persons[[i]],
+          type = "raw"
+        )
+      )
+    }
+  )
+  model <- OpenMx::mxModel(
+    name = name,
+    matrices,
+    OpenMx::mxMatrix(
+      type = "Unit",
+      nrow = 1,
+      ncol = 1,
+      name = "u"
+    ),
+    # the first occasion gets the initial condition of the model
+    OpenMx::mxAlgebra(
+      expression = solve(A) %*% (mu0 - B %*% u),
+      name = "x0"
+    ),
+    OpenMx::mxAlgebra(
+      expression = solve(A) %*% (sigma0 - Q) %*% t(solve(A)),
+      name = "P0"
+    ),
+    submodels,
+    OpenMx::mxFitFunctionMultigroup(groups = groups)
+  )
+  # retries from perturbed starting values only if the first run fails
+  OpenMx::mxTryHard(
+    model = model,
+    extraTries = 5,
+    silent = TRUE
+  )
+}
+```
+
+The matrices of the model, with the dynr labels.
+There is no measurement error (`R` is zero).
+
+```{r}
+labels_beta <- matrix(data = "fixed", nrow = 4, ncol = 4)
+labels_beta[3:4, 3:4] <- c("beta_3_3", "beta_4_3", "beta_3_4", "beta_4_4")
+labels_psi <- matrix(data = "fixed", nrow = 4, ncol = 4)
+labels_psi[3:4, 3:4] <- c("psi_3_3", "psi_4_3", "psi_4_3", "psi_4_4")
+labels_sigma0 <- matrix(data = "fixed", nrow = 4, ncol = 4)
+labels_sigma0[1:2, 1:2] <- c(
+  "sigma0_1_1", "sigma0_2_1", "sigma0_2_1", "sigma0_2_2"
+)
+labels_sigma0[3:4, 3:4] <- c(
+  "sigma0_3_3", "sigma0_4_3", "sigma0_4_3", "sigma0_4_4"
+)
+mx_matrices <- list(
+  MxMat(values = beta, labels = labels_beta, name = "A"),
+  MxMat(values = alpha, labels = "fixed", name = "B"),
+  MxMat(values = lambda, labels = "fixed", name = "C"),
+  MxMat(values = nu, labels = "fixed", name = "D"),
+  MxMat(values = psi, labels = labels_psi, name = "Q"),
+  MxMat(values = theta, labels = "fixed", name = "R"),
+  MxMat(
+    values = mu0,
+    labels = c("mu0_1_1", "mu0_2_1", "fixed", "fixed"),
+    name = "mu0"
+  ),
+  MxMat(values = sigma0, labels = labels_sigma0, name = "sigma0")
+)
+```
+
+```{r}
+fit_mx_ssm <- FitMxSSM(
+  data = data,
+  observed = c("y1", "y2"),
+  matrices = mx_matrices,
+  name = "ri_clpm"
+)
+summary(fit_mx_ssm)
+```
+
+### lavaan: Structural Equation Model
 
 The same model in SEM form, fitted with `lavaan`,
 should give nearly the same estimates.
@@ -668,18 +861,18 @@ Each trait is a factor with loadings of 1 on all occasions of its variable,
 and each within-person component is a factor
 with a loading of 1 on one observed variable.
 
-### Wide Data Set
+#### Wide Data Set
 
 `as.data.frame()` with `long = FALSE` returns the data in wide format,
 with the columns `y1_0`, `y2_0`, `y1_1`, and so on,
 for the variable and the occasion.
 
 ```{r}
-data <- as.data.frame(sim, long = FALSE)
-head(data)
+data_wide <- as.data.frame(sim, long = FALSE)
+head(data_wide)
 ```
 
-### Model
+#### Model
 
 The model has the same structure for every occasion,
 so we write it with `paste0()`.
@@ -739,30 +932,127 @@ cat(model)
 so every parameter above is exactly the one written.
 
 ```{r}
-fit <- lavaan::lavaan(
+fit_lavaan <- lavaan::lavaan(
   model = model,
-  data = data
+  data = data_wide
 )
-lavaan::summary(fit)
+lavaan::summary(fit_lavaan)
 ```
 
-## Table of Parameters and Estimates
+### OpenMx: Structural Equation Model
 
-The table below puts each population value used to simulate the data
-next to its estimate.
+The same SEM in `OpenMx`, written with `OpenMx::mxPath()`
+on the wide data.
+One-headed arrows are loadings and regressions,
+two-headed arrows are variances and covariances,
+and arrows from `"one"` are means.
+A path that is not written is fixed at zero,
+so the zero residual variances, covariances, and intercepts
+of the lavaan model need no lines here.
+The labels are the dynr names,
+and the starting values are the population values.
+
+```{r}
+waves <- 0:(time - 1)
+y1 <- paste0("y1_", waves)
+y2 <- paste0("y2_", waves)
+w1 <- paste0("w1_", waves)
+w2 <- paste0("w2_", waves)
+mx_sem <- OpenMx::mxModel(
+  name = "ri_clpm_sem",
+  type = "RAM",
+  manifestVars = c(y1, y2),
+  latentVars = c("eta_1", "eta_2", w1, w2),
+  OpenMx::mxData(observed = data_wide[, c(y1, y2)], type = "raw"),
+  # traits: loadings fixed at 1
+  OpenMx::mxPath(from = "eta_1", to = y1, free = FALSE, values = 1),
+  OpenMx::mxPath(from = "eta_2", to = y2, free = FALSE, values = 1),
+  # within-person components
+  OpenMx::mxPath(from = w1, to = y1, free = FALSE, values = 1),
+  OpenMx::mxPath(from = w2, to = y2, free = FALSE, values = 1),
+  # autoregressive and cross-lagged effects
+  OpenMx::mxPath(
+    from = w1[-time], to = w1[-1], labels = "beta_3_3", values = beta[3, 3]
+  ),
+  OpenMx::mxPath(
+    from = w2[-time], to = w1[-1], labels = "beta_3_4", values = beta[3, 4]
+  ),
+  OpenMx::mxPath(
+    from = w1[-time], to = w2[-1], labels = "beta_4_3", values = beta[4, 3]
+  ),
+  OpenMx::mxPath(
+    from = w2[-time], to = w2[-1], labels = "beta_4_4", values = beta[4, 4]
+  ),
+  # within-person components at the first occasion
+  OpenMx::mxPath(
+    from = c("w1_0", "w2_0", "w1_0"),
+    to = c("w1_0", "w2_0", "w2_0"),
+    arrows = 2,
+    labels = c("sigma0_3_3", "sigma0_4_4", "sigma0_4_3"),
+    values = c(sigma0[3, 3], sigma0[4, 4], sigma0[4, 3])
+  ),
+  # process noise at later occasions
+  OpenMx::mxPath(
+    from = w1[-1], arrows = 2, labels = "psi_3_3", values = psi[3, 3]
+  ),
+  OpenMx::mxPath(
+    from = w2[-1], arrows = 2, labels = "psi_4_4", values = psi[4, 4]
+  ),
+  OpenMx::mxPath(
+    from = w1[-1],
+    to = w2[-1],
+    arrows = 2,
+    labels = "psi_4_3",
+    values = psi[4, 3]
+  ),
+  # traits: means, variances, and covariance
+  OpenMx::mxPath(
+    from = "one",
+    to = c("eta_1", "eta_2"),
+    labels = c("mu0_1_1", "mu0_2_1"),
+    values = mu0[1:2]
+  ),
+  OpenMx::mxPath(
+    from = c("eta_1", "eta_2", "eta_1"),
+    to = c("eta_1", "eta_2", "eta_2"),
+    arrows = 2,
+    labels = c("sigma0_1_1", "sigma0_2_2", "sigma0_2_1"),
+    values = c(sigma0[1, 1], sigma0[2, 2], sigma0[2, 1])
+  )
+)
+```
+
+```{r}
+fit_mx_sem <- OpenMx::mxRun(
+  model = mx_sem,
+  silent = TRUE
+)
+summary(fit_mx_sem)
+```
+
+## Population Values and Estimates
+
+Each table below puts the population values used to simulate the data
+next to the estimates of one method.
 Bias is the estimate minus the population value.
-Because the model is fitted to a single simulated data set,
+Because each model is fitted to a single simulated data set,
 this is the error of one estimate, not a Monte Carlo bias,
 which would average over many replications.
 The 95% confidence interval is the Wald interval,
 $\hat{\theta} \pm 1.96 \times \mathrm{SE}$,
+unless the caption says otherwise,
 and `Covers` shows whether it contains the population value.
+The parameter names are the dynr names in every table.
 
 ```{r}
-EstimatesTable <- function(population, estimate, se) {
+EstimatesTable <- function(population, estimate, se, ll = NULL, ul = NULL) {
   z <- stats::qnorm(p = 0.975)
-  ll <- estimate - z * se
-  ul <- estimate + z * se
+  if (is.null(ll)) {
+    ll <- estimate - z * se
+  }
+  if (is.null(ul)) {
+    ul <- estimate + z * se
+  }
   data.frame(
     Parameter = names(population),
     Population = unname(population),
@@ -800,35 +1090,92 @@ population <- c(
 ### dynr
 
 ```{r}
-estimates <- coef(results)[names(population)]
-se <- sqrt(diag(vcov(results)))
-names(se) <- names(coef(results))
+dynr_est <- coef(results)
+dynr_se <- sqrt(diag(vcov(results)))
 knitr::kable(
   x = EstimatesTable(
     population = population,
-    estimate = estimates,
-    se = se[names(population)]
+    estimate = dynr_est[names(population)],
+    se = dynr_se[names(population)]
   ),
   digits = 3,
   caption = "Population values and dynr estimates (one simulated data set)"
 )
 ```
 
-### lavaan
+### OpenMx: State Space Model
 
 ```{r}
-pe <- lavaan::parameterEstimates(fit)
-# a label shared by several occasions is one parameter
-pe <- pe[pe$label != "" & !duplicated(pe$label), ]
-rownames(pe) <- pe$label
+mx_ssm_est <- OpenMx::omxGetParameters(fit_mx_ssm)
+mx_ssm_se <- fit_mx_ssm$output$standardErrors[, 1]
 knitr::kable(
   x = EstimatesTable(
     population = population,
-    estimate = pe[names(population), "est"],
-    se = pe[names(population), "se"]
+    estimate = mx_ssm_est[names(population)],
+    se = mx_ssm_se[names(population)]
+  ),
+  digits = 3,
+  caption = paste(
+    "Population values and OpenMx state space estimates",
+    "(one simulated data set)"
+  )
+)
+```
+
+### lavaan: Structural Equation Model
+
+```{r}
+pe <- lavaan::parameterEstimates(fit_lavaan)
+# a label shared by several paths is one parameter
+pe <- pe[pe$label != "" & !duplicated(pe$label), ]
+lavaan_est <- stats::setNames(object = pe$est, nm = pe$label)
+lavaan_se <- stats::setNames(object = pe$se, nm = pe$label)
+knitr::kable(
+  x = EstimatesTable(
+    population = population,
+    estimate = lavaan_est[names(population)],
+    se = lavaan_se[names(population)]
   ),
   digits = 3,
   caption = "Population values and lavaan estimates (one simulated data set)"
+)
+```
+
+### OpenMx: Structural Equation Model
+
+```{r}
+mx_sem_est <- OpenMx::omxGetParameters(fit_mx_sem)
+mx_sem_se <- fit_mx_sem$output$standardErrors[, 1]
+knitr::kable(
+  x = EstimatesTable(
+    population = population,
+    estimate = mx_sem_est[names(population)],
+    se = mx_sem_se[names(population)]
+  ),
+  digits = 3,
+  caption = "Population values and OpenMx SEM estimates (one simulated data set)"
+)
+```
+
+### All Methods
+
+The estimates of every method side by side.
+The methods maximize the same likelihood,
+so their estimates should agree closely.
+
+```{r}
+knitr::kable(
+  x = data.frame(
+    Parameter = names(population),
+    Population = unname(population),
+    `dynr` = unname(dynr_est[names(population)]),
+    `OpenMx (SSM)` = unname(mx_ssm_est[names(population)]),
+    `lavaan` = unname(lavaan_est[names(population)]),
+    `OpenMx (SEM)` = unname(mx_sem_est[names(population)]),
+    check.names = FALSE
+  ),
+  digits = 3,
+  caption = "Population values and the estimates of every method"
 )
 ```
 

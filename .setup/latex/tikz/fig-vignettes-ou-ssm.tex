@@ -4,44 +4,113 @@
 \usepackage{bm}
 \usetikzlibrary{arrows.meta, positioning, calc}
 \tikzset{
-  lat/.style = {circle, draw, thick, minimum size = 13mm, inner sep = 0pt},
+  lat/.style = {circle, draw, thick, minimum size = 14mm, inner sep = 0pt},
   obs/.style = {rectangle, draw, thick, minimum size = 11mm, inner sep = 1pt},
-  noise/.style = {circle, draw, minimum size = 8mm, inner sep = 0pt},
+  noise/.style = {circle, draw, minimum size = 10.5mm, inner sep = 0pt},
   reg/.style = {-{Stealth[length = 2.5mm]}, thick},
+  cov/.style = {{Stealth[length = 2mm]}-{Stealth[length = 2mm]}},
+  var/.style = {cov, looseness = 5},
   lab/.style = {font = \footnotesize, fill = white, inner sep = 1pt},
   mat/.style = {font = \small, inner sep = 2pt, align = left},
   dots/.style = {font = \Large}
 }
 \begin{document}
 \begin{tikzpicture}
-  % occasions
-  \node[lat] (e0) at (0, 0) {$\bm{\eta}_{t - 1}$};
-  \node[obs] (y0) at (0, 3) {$\mathbf{y}_{t - 1}$};
-  \draw[reg] (e0) -- node[lab] {$\bm{\Lambda}$} (y0);
-  \node[noise] (u0) at (0, 4.8) {$\bm{\varepsilon}_{t - 1}$};
-  \draw[reg] (u0) -- node[lab, right = 1mm] {$\bm{\Theta}$} (y0);
-  \node[lat] (e1) at (4.5, 0) {$\bm{\eta}_{t}$};
-  \node[obs] (y1) at (4.5, 3) {$\mathbf{y}_{t}$};
-  \draw[reg] (e1) -- node[lab] {$\bm{\Lambda}$} (y1);
-  \node[noise] (u1) at (4.5, 4.8) {$\bm{\varepsilon}_{t}$};
-  \draw[reg] (u1) -- node[lab, right = 1mm] {$\bm{\Theta}$} (y1);
-  \node[noise] (z1) at (4.5, -2) {$\bm{\zeta}_{t}$};
-  \draw[reg] (z1) -- node[lab, right = 1mm] {$\bm{\Psi}$} (e1);
-  \node[lat] (e2) at (9.0, 0) {$\bm{\eta}_{t + 1}$};
-  \node[obs] (y2) at (9.0, 3) {$\mathbf{y}_{t + 1}$};
-  \draw[reg] (e2) -- node[lab] {$\bm{\Lambda}$} (y2);
-  \node[noise] (u2) at (9.0, 4.8) {$\bm{\varepsilon}_{t + 1}$};
-  \draw[reg] (u2) -- node[lab, right = 1mm] {$\bm{\Theta}$} (y2);
-  \node[noise] (z2) at (9.0, -2) {$\bm{\zeta}_{t + 1}$};
-  \draw[reg] (z2) -- node[lab, right = 1mm] {$\bm{\Psi}$} (e2);
-  % transitions
-  \draw[reg] (e0) -- node[lab, above] {$\bm{\beta}$} (e1);
-  \draw[reg] (e1) -- node[lab, above] {$\bm{\beta}$} (e2);
-  \foreach \r in {0, 3} {
-    \node[dots] at (-1.5, \r) {$\cdots$};
-    \node[dots] at (10.5, \r) {$\cdots$};
+  % occasions: eta_j at row \r, Y_j above it, epsilon_j above Y_j
+  \foreach \t/\x/\l in {0/0/0, 1/6.5/\Delta t, 2/13/2 \Delta t} {
+    \foreach \j/\r in {1/0, 2/-7.4, 3/-14.8} {
+      \node[lat] (e\j\t) at (\x, \r) {$\eta_{\j, \l}$};
+      \node[obs] (y\j\t) at (\x, \r + 1.7) {$Y_{\j, \l}$};
+      \node[noise] (u\j\t) at (\x, \r + 3.15) {$\varepsilon_{\j, \l}$};
+      \draw[reg] (e\j\t) -- node[lab, right = 1mm] {1} (y\j\t);
+      \draw[reg] (u\j\t) -- node[lab, right = 1mm] {1} (y\j\t);
+      \draw[var] (u\j\t.60) to[out = 60, in = 120]
+        node[lab, above] {$\theta_{\j\j}$} (u\j\t.120);
+    }
+    \node[font = \small] at (\x, -17.4) {$t = \l$};
   }
+  % transitions
+  \foreach \s/\t in {0/1, 1/2} {
+    \foreach \j in {1, 2, 3} {
+      \draw[reg] (e\j\s) -- node[lab, pos = 0.3] {$\beta_{\j\j}$} (e\j\t);
+    }
+    \draw[reg] (e1\s) -- node[lab, pos = 0.3] {$\beta_{21}$} (e2\t);
+    \draw[reg] (e1\s) -- node[lab, pos = 0.45] {$\beta_{31}$} (e3\t);
+    \draw[reg] (e2\s) -- node[lab, pos = 0.3] {$\beta_{32}$} (e3\t);
+  }
+  % process noise
+  \foreach \t/\x/\l in {1/6.5/\Delta t, 2/13/2 \Delta t} {
+    \foreach \j/\r in {1/0, 2/-7.4, 3/-14.8} {
+      \node[noise] (z\j\t) at (\x, \r - 1.6) {$\zeta_{\j, \l}$};
+      \draw[reg] (z\j\t) -- (e\j\t);
+      \draw[var] (z\j\t.160) to[out = 160, in = 200]
+        node[lab, left] {$\psi_{\j\j}$} (z\j\t.200);
+    }
+    % process noise covariances (\bm{\Psi} is full)
+    \draw[cov, gray] (z1\t.east) .. controls (\x + 1.9, -1.6) and
+      (\x + 1.9, -9.0) .. node[lab, pos = 0.62] {$\psi_{12}$} (z2\t.east);
+    \draw[cov, gray] (z2\t.east) .. controls (\x + 1.9, -9.0) and
+      (\x + 1.9, -16.4) .. node[lab, pos = 0.62] {$\psi_{23}$} (z3\t.east);
+    \draw[cov, gray] (z1\t.-30) .. controls (\x + 3.2, -2.7) and
+      (\x + 3.2, -15.3) .. node[lab, pos = 0.5] {$\psi_{13}$} (z3\t.30);
+  }
+  \foreach \r in {0, 1.7, -7.4, -5.7, -14.8, -13.1} {
+    \node[dots] at (16.6, \r) {$\cdots$};
+  }
+  % initial condition
+  \draw[var] (e10.110) to[out = 110, in = 150]
+    node[lab, above left] {$\sigma_{11}$} (e10.150);
+  \draw[var] (e20.235) to[out = 235, in = 275]
+    node[lab, below] {$\sigma_{22}$} (e20.275);
+  \draw[var] (e30.210) to[out = 210, in = 250]
+    node[lab, below left] {$\sigma_{33}$} (e30.250);
+  \draw[cov] (e10.200) to[out = 200, in = 150, looseness = 1.2]
+    node[lab, left] {$\sigma_{12}$} (e20.150);
+  \draw[cov] (e20.200) to[out = 200, in = 150, looseness = 1.2]
+    node[lab, left] {$\sigma_{23}$} (e30.160);
+  \draw[cov] (e10.west) .. controls (-4.2, 0) and (-4.2, -14.8) ..
+    node[lab] {$\sigma_{13}$} (e30.west);
   % matrices
-  \node[mat, align = center, below] at (4.5, -3.0) {$\bm{\beta} = \exp \left( \bm{\Phi} \Delta t \right), \ \bm{\Phi} = \begin{pmatrix} \phi_{11} & 0 & 0 \\ \phi_{21} & \phi_{22} & 0 \\ \phi_{31} & \phi_{32} & \phi_{33} \end{pmatrix}$ \qquad $\bm{\Lambda} = \begin{pmatrix} 1 & 0 & 0 \\ 0 & 1 & 0 \\ 0 & 0 & 1 \end{pmatrix}$ \\[3mm] $\bm{\Psi} = \int_{0}^{\Delta t} \exp \left( \bm{\Phi} s \right) \bm{\Sigma} \exp \left( \bm{\Phi}^{\prime} s \right) \mathrm{d} s, \ \bm{\Sigma} = \begin{pmatrix} \sigma_{11} & \sigma_{12} & \sigma_{13} \\ \sigma_{21} & \sigma_{22} & \sigma_{23} \\ \sigma_{31} & \sigma_{32} & \sigma_{33} \end{pmatrix}$ \qquad $\bm{\Theta} = \begin{pmatrix} \theta_{11} & 0 & 0 \\ 0 & \theta_{22} & 0 \\ 0 & 0 & \theta_{33} \end{pmatrix}$ \\[3mm] $\bm{\eta}_{t} = \left( \eta_{1}, \eta_{2}, \eta_{3} \right)^{\prime}$ (latent), \quad $\mathbf{y}_{t} = \left( y_{1}, y_{2}, y_{3} \right)^{\prime}$ (observed), \quad $\Delta t$: the interval between occasions};
+  \node[mat, align = center, below] at (6.5, -17.9) {%
+    $\bm{\eta}_{t} = \left( \eta_{1, t}, \eta_{2, t}, \eta_{3, t}
+      \right)^{\prime}$ (latent), \quad
+    $\mathbf{y}_{t} = \left( Y_{1, t}, Y_{2, t}, Y_{3, t}
+      \right)^{\prime}$ (observed), \quad
+    occasions $\Delta t$ apart ($t = 0, \Delta t, 2 \Delta t, \ldots$) \\[3mm]
+    $\bm{\Phi} = \begin{pmatrix}
+      \phi_{11} & 0 & 0 \\
+      \phi_{21} & \phi_{22} & 0 \\
+      \phi_{31} & \phi_{32} & \phi_{33}
+    \end{pmatrix}$
+    \qquad $\bm{\Sigma}$: the covariance matrix of the Wiener process
+      per unit time \\[3mm]
+    $\bm{\beta} = \exp \left( \bm{\Phi} \Delta t \right) = \begin{pmatrix}
+      \beta_{11} & 0 & 0 \\
+      \beta_{21} & \beta_{22} & 0 \\
+      \beta_{31} & \beta_{32} & \beta_{33}
+    \end{pmatrix}$
+    \qquad $\bm{\Psi} = \int_{0}^{\Delta t} \exp \left( \bm{\Phi} s \right)
+      \bm{\Sigma} \exp \left( \bm{\Phi}^{\prime} s \right) \mathrm{d} s
+      = \begin{pmatrix}
+      \psi_{11} & \psi_{12} & \psi_{13} \\
+      \psi_{21} & \psi_{22} & \psi_{23} \\
+      \psi_{31} & \psi_{32} & \psi_{33}
+    \end{pmatrix}$ \\[3mm]
+    $\bm{\Lambda} = \begin{pmatrix}
+      1 & 0 & 0 \\ 0 & 1 & 0 \\ 0 & 0 & 1
+    \end{pmatrix}$
+    \qquad $\bm{\Theta} = \begin{pmatrix}
+      \theta_{11} & 0 & 0 \\ 0 & \theta_{22} & 0 \\ 0 & 0 & \theta_{33}
+    \end{pmatrix}$ \\[3mm]
+    $\bm{\eta}_{0} \sim \mathcal{N} \left( \bm{\mu}_{0},
+      \bm{\Sigma}_{0} \right)$, \quad
+    $\bm{\mu}_{0} = \begin{pmatrix}
+      \mu_{1} \\ \mu_{2} \\ \mu_{3}
+    \end{pmatrix}$, \quad
+    $\bm{\Sigma}_{0} = \begin{pmatrix}
+      \sigma_{11} & \sigma_{12} & \sigma_{13} \\
+      \sigma_{21} & \sigma_{22} & \sigma_{23} \\
+      \sigma_{31} & \sigma_{32} & \sigma_{33}
+    \end{pmatrix}$};
 \end{tikzpicture}
 \end{document}

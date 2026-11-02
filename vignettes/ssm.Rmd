@@ -1,7 +1,7 @@
 ---
 title: "The State Space Model"
 author: "Ivan Jacob Agaloos Pesigan"
-date: "2026-11-01"
+date: "2026-11-02"
 bibliography: "vignettes.bib"
 csl: https://raw.githubusercontent.com/citation-style-language/styles/master/apa.csl
 nocite: |
@@ -36,8 +36,9 @@ This tutorial does three things:
    with a first-order vector autoregressive dynamic model.
 2. It simulates data from the model with `SimSSMFixed()`,
    with every individual sharing the same parameters.
-3. It fits the model to the simulated data with the `dynr` package
-   and compares the estimates with the values used to simulate the data.
+3. It fits the model to the simulated data
+   with the `dynr` and `OpenMx` packages
+   and compares both sets of estimates with the values used to simulate the data.
 
 No prior knowledge of state space models is needed.
 If the model without measurement error is enough for you,
@@ -48,7 +49,7 @@ see the vignette on the vector autoregressive model.
 ## Model
 
 The measurement model is given by
-\begin{equation}
+$$
   \mathbf{y}_{i, t}
   =
   \boldsymbol{\nu}
@@ -67,7 +68,7 @@ The measurement model is given by
   \mathbf{0},
   \boldsymbol{\Theta}
   \right)
-\end{equation}
+$$
 where
 $\mathbf{y}_{i, t}$,
 $\boldsymbol{\eta}_{i, t}$,
@@ -112,7 +113,7 @@ while changes in the latent variables carry over in time.
 
 An alternative representation of the measurement error
 is given by
-\begin{equation}
+$$
   \boldsymbol{\varepsilon}_{i, t}
   =
   \boldsymbol{\Theta}^{\frac{1}{2}}
@@ -127,14 +128,14 @@ is given by
   \mathbf{0},
   \mathbf{I}
   \right)
-\end{equation}
+$$
 where
 $\mathbf{z}_{i, t}$ is a vector of
 independent standard normal random variables and
 $\left( \boldsymbol{\Theta}^{\frac{1}{2}} \right) \left( \boldsymbol{\Theta}^{\frac{1}{2}} \right)^{\prime} = \boldsymbol{\Theta}$ .
 
 The dynamic structure is given by
-\begin{equation}
+$$
   \boldsymbol{\eta}_{i, t}
   =
   \boldsymbol{\alpha}
@@ -153,7 +154,7 @@ The dynamic structure is given by
   \mathbf{0},
   \boldsymbol{\Psi}
   \right)
-\end{equation}
+$$
 where
 $\boldsymbol{\eta}_{i, t}$,
 $\boldsymbol{\eta}_{i, t - 1}$,
@@ -208,7 +209,7 @@ all eigenvalues of $\boldsymbol{\beta}$ must have modulus less than 1.
 
 An alternative representation of the dynamic noise
 is given by
-\begin{equation}
+$$
   \boldsymbol{\zeta}_{i, t}
   =
   \boldsymbol{\Psi}^{\frac{1}{2}}
@@ -223,7 +224,7 @@ is given by
   \mathbf{0},
   \mathbf{I}
   \right)
-\end{equation}
+$$
 where
 $\left( \boldsymbol{\Psi}^{\frac{1}{2}} \right) \left( \boldsymbol{\Psi}^{\frac{1}{2}} \right)^{\prime} = \boldsymbol{\Psi}$ .
 This is how both kinds of noise are simulated:
@@ -234,34 +235,32 @@ the lower triangular Cholesky factor,
 as the arguments `psi_l` (for $\boldsymbol{\Psi}$)
 and `theta_l` (for $\boldsymbol{\Theta}$).
 
-### Diagrams
+### Diagram
 
 
 
-![Path diagram of the state space model.](fig-vignettes-ssm-path.png){width=100%}
+![State space diagram of the state space model.](fig-vignettes-ssm-ssm.png){width=100%}
 
-The model as a path diagram, for the first three occasions.
+The model in state space form, for the first three occasions ($t = 0, 1, 2$), with every element of the state drawn.
 Squares are observed variables and circles are latent variables.
-Each latent variable $\eta_{j}$ has one indicator $y_{j}$ with a loading of 1 and measurement error $\varepsilon_{j}$ with variance $\theta_{jj}$.
-The horizontal arrows are the autoregressive effects and the diagonal arrows the cross-lagged effects; only the nonzero elements of $\boldsymbol{\beta}$ in this example are drawn ($\eta_{1}$ affects $\eta_{2}$ and $\eta_{3}$, and $\eta_{2}$ affects $\eta_{3}$).
-$\zeta_{j}$ is the process noise, with variance $\psi_{jj}$, and the curved arrows on the left are the covariances of the latent variables at the first occasion.
-
-![State space form of the state space model.](fig-vignettes-ssm-ssm.png){width=100%}
-
-The same model in state space form.
-All the latent variables at one occasion form the state vector $\boldsymbol{\eta}_{t}$, and all the observed variables form $\mathbf{y}_{t}$.
+Each latent variable $\eta_{j, t}$ has one indicator $Y_{j, t}$ with a loading of 1, and measurement error $\varepsilon_{j, t}$ with variance $\theta_{jj}$.
+The horizontal arrows are the autoregressive effects and the diagonal arrows the cross-lagged effects, the elements of $\boldsymbol{\beta}$; only the nonzero elements in this example are drawn ($\eta_{1}$ affects $\eta_{2}$ and $\eta_{3}$, and $\eta_{2}$ affects $\eta_{3}$).
+$\zeta_{j, t}$ is the process noise, with variance $\psi_{jj}$, from $t = 1$ on.
+A loop on a variable is its variance and a curved two-headed arrow a covariance.
+At $t = 0$, the initial condition $\boldsymbol{\eta}_{0} \sim \mathcal{N} \left( \boldsymbol{\mu}_{0}, \boldsymbol{\Sigma}_{0} \right)$ gives the variances $\sigma_{jj}$ and covariances $\sigma_{jk}$ of the latent variables.
+Below the diagram, all the latent variables at one occasion form the state vector $\boldsymbol{\eta}_{t}$, and all the observed variables form $\mathbf{y}_{t}$:
 $\boldsymbol{\beta}$ carries the state from one occasion to the next, $\boldsymbol{\Lambda}$ maps the state to the observed variables, $\boldsymbol{\Psi}$ is the covariance matrix of the process noise $\boldsymbol{\zeta}_{t}$, and $\boldsymbol{\Theta}$ the covariance matrix of the measurement error $\boldsymbol{\varepsilon}_{t}$.
-`SimSSMFixed()` takes `beta`, `lambda`, and the Cholesky factors of $\boldsymbol{\Psi}$ and $\boldsymbol{\Theta}$ (`psi_l` and `theta_l`).
+`SimSSMFixed()` takes `beta`, `lambda`, `mu0`, and the Cholesky factors of $\boldsymbol{\Psi}$, $\boldsymbol{\Theta}$, and $\boldsymbol{\Sigma}_{0}$ (`psi_l`, `theta_l`, and `sigma0_l`).
 
 ## Data Generation
 
 ### Notation
 
-Let $t = 200$ be the number of time points and $n = 10$ be the number of individuals.
+Let $t = 200$ be the number of time points and $n = 100$ be the number of individuals.
 
 Let the measurement model intercept vector $\boldsymbol{\nu}$ be given by
 
-\begin{equation}
+$$
 \boldsymbol{\nu}
 =
 \left(
@@ -271,11 +270,11 @@ Let the measurement model intercept vector $\boldsymbol{\nu}$ be given by
   0 \\
 \end{array}
 \right) .
-\end{equation}
+$$
 
 Let the factor loadings matrix $\boldsymbol{\Lambda}$ be given by
 
-\begin{equation}
+$$
 \boldsymbol{\Lambda}
 =
 \left(
@@ -285,11 +284,11 @@ Let the factor loadings matrix $\boldsymbol{\Lambda}$ be given by
   0 & 0 & 1 \\
 \end{array}
 \right) .
-\end{equation}
+$$
 
 Let the measurement error covariance matrix $\boldsymbol{\Theta}$ be given by
 
-\begin{equation}
+$$
 \boldsymbol{\Theta}
 =
 \left(
@@ -299,7 +298,7 @@ Let the measurement error covariance matrix $\boldsymbol{\Theta}$ be given by
   0 & 0 & 0.2 \\
 \end{array}
 \right) .
-\end{equation}
+$$
 
 With $\boldsymbol{\nu} = \mathbf{0}$ and $\boldsymbol{\Lambda} = \mathbf{I}$,
 each observed variable measures one latent variable,
@@ -310,12 +309,12 @@ Let the initial condition
 $\boldsymbol{\eta}_{0}$
 be given by
 
-\begin{equation}
-\boldsymbol{\eta}_{0} \sim \mathcal{N} \left( \boldsymbol{\mu}_{\boldsymbol{\eta} \mid 0}, \boldsymbol{\Sigma}_{\boldsymbol{\eta} \mid 0} \right)
-\end{equation}
+$$
+\boldsymbol{\eta}_{0} \sim \mathcal{N} \left( \boldsymbol{\mu}_{0}, \boldsymbol{\Sigma}_{0} \right)
+$$
 
-\begin{equation}
-\boldsymbol{\mu}_{\boldsymbol{\eta} \mid 0}
+$$
+\boldsymbol{\mu}_{0}
 =
 \left(
 \begin{array}{c}
@@ -324,10 +323,10 @@ be given by
   0 \\
 \end{array}
 \right)
-\end{equation}
+$$
 
-\begin{equation}
-\boldsymbol{\Sigma}_{\boldsymbol{\eta} \mid 0}
+$$
+\boldsymbol{\Sigma}_{0}
 =
 \left(
 \begin{array}{ccc}
@@ -336,11 +335,11 @@ be given by
   0.0298539 & 0.1381855 & 0.2663828 \\
 \end{array}
 \right) .
-\end{equation}
+$$
 
 Let the constant vector $\boldsymbol{\alpha}$ be given by
 
-\begin{equation}
+$$
 \boldsymbol{\alpha}
 =
 \left(
@@ -350,11 +349,11 @@ Let the constant vector $\boldsymbol{\alpha}$ be given by
   0 \\
 \end{array}
 \right) .
-\end{equation}
+$$
 
 Let the transition matrix $\boldsymbol{\beta}$ be given by
 
-\begin{equation}
+$$
 \boldsymbol{\beta}
 =
 \left(
@@ -364,7 +363,7 @@ Let the transition matrix $\boldsymbol{\beta}$ be given by
   -0.1 & 0.4 & 0.5 \\
 \end{array}
 \right) .
-\end{equation}
+$$
 
 Read the columns as predictors and the rows as outcomes.
 Each variable carries over to the next occasion
@@ -379,7 +378,7 @@ so the process is stable.
 
 Let the dynamic process noise $\boldsymbol{\Psi}$ be given by
 
-\begin{equation}
+$$
 \boldsymbol{\Psi}
 =
 \left(
@@ -389,7 +388,7 @@ Let the dynamic process noise $\boldsymbol{\Psi}$ be given by
   0 & 0 & 0.1 \\
 \end{array}
 \right) .
-\end{equation}
+$$
 
 The initial condition describes where each individual starts.
 Here, the mean vector and covariance matrix of $\boldsymbol{\eta}_{0}$
@@ -405,7 +404,7 @@ as lower triangular Cholesky factors (the arguments ending in `_l`).
 
 ``` r
 n
-#> [1] 10
+#> [1] 100
 time
 #> [1] 200
 mu0
@@ -500,26 +499,34 @@ head(data)
 #> 5  1    4  0.15413707 0.82591676  0.8976536
 #> 6  1    5 -0.09943698 0.67154173  0.2853507
 summary(data)
-#>        id            time              y1                  y2           
-#>  Min.   : 1.0   Min.   :  0.00   Min.   :-2.315283   Min.   :-2.092224  
-#>  1st Qu.: 3.0   1st Qu.: 49.75   1st Qu.:-0.419229   1st Qu.:-0.486763  
-#>  Median : 5.5   Median : 99.50   Median : 0.004236   Median : 0.034591  
-#>  Mean   : 5.5   Mean   : 99.50   Mean   :-0.002387   Mean   : 0.008276  
-#>  3rd Qu.: 8.0   3rd Qu.:149.25   3rd Qu.: 0.414362   3rd Qu.: 0.499517  
-#>  Max.   :10.0   Max.   :199.00   Max.   : 1.961879   Max.   : 2.398964  
-#>        y3          
-#>  Min.   :-2.34002  
-#>  1st Qu.:-0.41118  
-#>  Median : 0.02153  
-#>  Mean   : 0.02317  
-#>  3rd Qu.: 0.45024  
-#>  Max.   : 1.94049
+#>        id              time              y1                  y2           
+#>  Min.   :  1.00   Min.   :  0.00   Min.   :-2.840534   Min.   :-2.671337  
+#>  1st Qu.: 25.75   1st Qu.: 49.75   1st Qu.:-0.419270   1st Qu.:-0.500990  
+#>  Median : 50.50   Median : 99.50   Median :-0.001263   Median : 0.007650  
+#>  Mean   : 50.50   Mean   : 99.50   Mean   :-0.002412   Mean   : 0.001159  
+#>  3rd Qu.: 75.25   3rd Qu.:149.25   3rd Qu.: 0.414442   3rd Qu.: 0.501791  
+#>  Max.   :100.00   Max.   :199.00   Max.   : 2.602905   Max.   : 3.043414  
+#>        y3           
+#>  Min.   :-2.675588  
+#>  1st Qu.:-0.454266  
+#>  Median :-0.005830  
+#>  Mean   :-0.001039  
+#>  3rd Qu.: 0.455474  
+#>  Max.   : 2.553926
 plot(sim)
 ```
 
 <img src="fig-vignettes-ssm-error-ssm-1.png" alt="" width="3300" /><img src="fig-vignettes-ssm-error-ssm-2.png" alt="" width="3300" /><img src="fig-vignettes-ssm-error-ssm-3.png" alt="" width="3300" />
 
 ## Model Fitting
+
+The same simulated data are fitted with two programs
+that estimate state space models by maximum likelihood
+with the Kalman filter: `dynr` and `OpenMx`.
+The section Population Values and Estimates
+compares their estimates with the population values.
+
+### dynr
 
 We fit the model with `dynr`,
 which estimates state space models by maximum likelihood
@@ -530,12 +537,12 @@ weighing the model's prediction against the new measurement.
 A `dynr` model is built from pieces that match the equations above:
 the data, the initial condition, the measurement model,
 the dynamic model, and the noise.
-Each parameter gets a name (for example, `beta_2_1` for $\beta_{21}$`),
+Each parameter gets a name (for example, `beta_2_1` for $\beta_{21}$),
 and the same name used in two places means one shared parameter.
 The starting values are set to the population values for convenience;
 with real data, they would be rough guesses.
 
-### Prepare Data
+#### Prepare Data
 
 Tell `dynr` which columns hold the individual, the time, and the observed variables.
 
@@ -549,10 +556,10 @@ dynr_data <- dynr::dynr.data(
 )
 ```
 
-### Prepare Initial Condition
+#### Prepare Initial Condition
 
-The mean $\boldsymbol{\mu}_{\boldsymbol{\eta} \mid 0}$
-and covariance $\boldsymbol{\Sigma}_{\boldsymbol{\eta} \mid 0}$
+The mean $\boldsymbol{\mu}_{0}$
+and covariance $\boldsymbol{\Sigma}_{0}$
 of the initial state are estimated.
 The covariance matrix is symmetric,
 so `sigma0_2_1` appears both above and below the diagonal.
@@ -574,7 +581,7 @@ dynr_initial <- dynr::prep.initial(
 )
 ```
 
-### Prepare Measurement Model
+#### Prepare Measurement Model
 
 The loadings $\boldsymbol{\Lambda}$ are an identity matrix
 with no free parameters (`"fixed"`).
@@ -589,7 +596,7 @@ dynr_measurement <- dynr::prep.measurement(
 )
 ```
 
-### Prepare Dynamic Process
+#### Prepare Dynamic Process
 
 Each formula is one row of the dynamic equation:
 the intercept $\alpha_{j}$ plus the effects $\beta_{jk}$ of the three latent variables
@@ -614,7 +621,7 @@ dynr_dynamics <- dynr::prep.formulaDynamics(
 )
 ```
 
-### Prepare Process Noise
+#### Prepare Process Noise
 
 The process noise covariance $\boldsymbol{\Psi}$ is estimated in full.
 The measurement error covariance $\boldsymbol{\Theta}$ is diagonal:
@@ -645,7 +652,7 @@ dynr_noise <- dynr::prep.noise(
 )
 ```
 
-### Prepare the Model
+#### Prepare the Model
 
 The pieces are put together into one model.
 `dynr` writes the model as C code to `outfile` and compiles it.
@@ -666,7 +673,7 @@ The plot below shows the model equations with the parameter names.
 
 <img src="fig-vignettes-ssm-model-ssm-1.png" alt="" width="3300" />
 
-### Fit the Model
+#### Fit the Model
 
 
 ``` r
@@ -683,28 +690,25 @@ results <- dynr::dynr.cook(
 #> Original exit flag:  3 
 #> Modified exit flag:  3 
 #> Optimization terminated successfully: ftol_rel or ftol_abs was reached. 
-#> Original fitted parameters:  0.0005368551 0.008235204 0.01013316 0.6868813 
-#> 0.001730167 0.002913753 0.4675764 0.5965132 -0.02147487 -0.05326514 0.392605 
-#> 0.4365367 -2.256573 0.02711671 -0.1489293 -2.151777 0.006419125 -2.127149 
-#> -1.660823 -1.662211 -1.8253 -0.1725023 -0.5161966 -0.02439533 -3.778195 
-#> 0.2891854 -0.07200612 -1.639686 -0.8167291 -4.247308 
+#> Original fitted parameters:  -0.0006566288 0.00164596 -0.001510021 0.7052377 
+#> -0.006132876 0.0003878288 0.5112233 0.5887748 0.01241123 -0.08998742 0.3907879 
+#> 0.4952418 -2.32728 0.0126181 -0.03370301 -2.24728 -0.001445368 -2.352586 
+#> -1.611374 -1.660788 -1.586927 -0.0008762037 0.02978035 0.07119585 -1.830427 
+#> 0.4567187 0.06185989 -0.7307456 0.254486 -1.438148 
 #> 
-#> Transformed fitted parameters:  0.0005368551 0.008235204 0.01013316 0.6868813 
-#> 0.001730167 0.002913753 0.4675764 0.5965132 -0.02147487 -0.05326514 0.392605 
-#> 0.4365367 0.1047087 0.002839356 -0.0155942 0.1163543 0.0003235351 0.1215038 
-#> 0.1899826 0.1897191 0.1611693 -0.1725023 -0.5161966 -0.02439533 0.02286392 
-#> 0.006611912 -0.001646342 0.195953 -0.158955 0.1438555 
+#> Transformed fitted parameters:  -0.0006566288 0.00164596 -0.001510021 0.7052377 
+#> -0.006132876 0.0003878288 0.5112233 0.5887748 0.01241123 -0.08998742 0.3907879 
+#> 0.4952418 0.0975608 0.001231032 -0.003288092 0.1057019 -0.0001942451 0.0952339 
+#> 0.1996131 0.1899893 0.2045533 -0.0008762037 0.02978035 0.07119585 0.1603451 
+#> 0.07323263 0.009918933 0.5149965 0.1270778 0.2691672 
 #> 
 #> Doing end processing
-#> Warning in sqrt(diag(iHess)): NaNs produced
-#> Warning in sqrt(diag(x$inv.hessian)): NaNs produced
-#> Warning: These parameters may have untrustworthy standard errors: sigma0_2_1,
-#> sigma0_3_1.
-#> Total Time: 27.24204 
-#> Backend Time: 26.87385
+#> Successful trial
+#> Total Time: 4.779007 
+#> Backend Time: 4.771481
 ```
 
-## Summary
+#### Summary
 
 The summary lists each estimate with its standard error,
 $t$ value, confidence interval, and $p$ value.
@@ -714,128 +718,352 @@ $t$ value, confidence interval, and $p$ value.
 summary(results)
 #> Coefficients:
 #>              Estimate Std. Error t value   ci.lower   ci.upper
-#> alpha_1_1   0.0005369  0.0079154   0.068 -0.0149770  0.0160508
-#> alpha_2_1   0.0082352  0.0097799   0.842 -0.0109331  0.0274035
-#> alpha_3_1   0.0101332  0.0101409   0.999 -0.0097426  0.0300090
-#> beta_1_1    0.6868813  0.0721791   9.516  0.5454127  0.8283498
-#> beta_1_2    0.0017302  0.0446783   0.039 -0.0858378  0.0892981
-#> beta_1_3    0.0029138  0.0324108   0.090 -0.0606103  0.0664378
-#> beta_2_1    0.4675764  0.0668180   6.998  0.3366156  0.5985372
-#> beta_2_2    0.5965132  0.0516820  11.542  0.4952182  0.6978081
-#> beta_2_3   -0.0214749  0.0370979  -0.579 -0.0941854  0.0512356
-#> beta_3_1   -0.0532651  0.0548683  -0.971 -0.1608050  0.0542747
-#> beta_3_2    0.3926050  0.0585108   6.710  0.2779260  0.5072840
-#> beta_3_3    0.4365367  0.0611277   7.141  0.3167286  0.5563448
-#> psi_1_1     0.1047087  0.0234714   4.461  0.0587057  0.1507118
-#> psi_2_1     0.0028394  0.0077805   0.365 -0.0124102  0.0180889
-#> psi_3_1    -0.0155942  0.0073864  -2.111 -0.0300713 -0.0011171
-#> psi_2_2     0.1163543  0.0203383   5.721  0.0764920  0.1562166
-#> psi_3_2     0.0003235  0.0074875   0.043 -0.0143517  0.0149988
-#> psi_3_3     0.1215038  0.0290534   4.182  0.0645602  0.1784475
-#> theta_1_1   0.1899826  0.0193318   9.827  0.1520929  0.2278722
-#> theta_2_2   0.1897191  0.0193088   9.826  0.1518746  0.2275636
-#> theta_3_3   0.1611693  0.0282204   5.711  0.1058583  0.2164803
-#> mu0_1_1    -0.1725023  0.1212377  -1.423 -0.4101238  0.0651191
-#> mu0_2_1    -0.5161966  0.1843022  -2.801 -0.8774223 -0.1549710
-#> mu0_3_1    -0.0243953  0.1718595  -0.142 -0.3612338  0.3124431
-#> sigma0_1_1  0.0228639  0.0598445   0.382 -0.0944292  0.1401571
-#> sigma0_2_1  0.0066119        NaN      NA        NaN        NaN
-#> sigma0_3_1 -0.0016463        NaN      NA        NaN        NaN
-#> sigma0_2_2  0.1959530  0.1518049   1.291 -0.1015792  0.4934852
-#> sigma0_3_2 -0.1589550  0.1135795  -1.400 -0.3815667  0.0636568
-#> sigma0_3_3  0.1438555  0.1382930   1.040 -0.1271937  0.4149048
+#> alpha_1_1  -0.0006566  0.0024115  -0.272 -0.0053832  0.0040699
+#> alpha_2_1   0.0016460  0.0030958   0.532 -0.0044218  0.0077137
+#> alpha_3_1  -0.0015100  0.0029970  -0.504 -0.0073839  0.0043639
+#> beta_1_1    0.7052377  0.0218228  32.317  0.6624658  0.7480097
+#> beta_1_2   -0.0061329  0.0134549  -0.456 -0.0325039  0.0202382
+#> beta_1_3    0.0003878  0.0102911   0.038 -0.0197823  0.0205579
+#> beta_2_1    0.5112233  0.0234282  21.821  0.4653048  0.5571417
+#> beta_2_2    0.5887748  0.0180029  32.704  0.5534897  0.6240599
+#> beta_2_3    0.0124112  0.0130672   0.950 -0.0132000  0.0380224
+#> beta_3_1   -0.0899874  0.0170005  -5.293 -0.1233079 -0.0566670
+#> beta_3_2    0.3907879  0.0168012  23.260  0.3578582  0.4237176
+#> beta_3_3    0.4952418  0.0164473  30.111  0.4630056  0.5274780
+#> psi_1_1     0.0975608  0.0068530  14.236  0.0841292  0.1109924
+#> psi_2_1     0.0012310  0.0024808   0.496 -0.0036313  0.0060933
+#> psi_3_1    -0.0032881  0.0023068  -1.425 -0.0078094  0.0012332
+#> psi_2_2     0.1057019  0.0060019  17.612  0.0939384  0.1174653
+#> psi_3_2    -0.0001942  0.0023068  -0.084 -0.0047156  0.0043271
+#> psi_3_3     0.0952339  0.0067865  14.033  0.0819326  0.1085352
+#> theta_1_1   0.1996131  0.0057442  34.751  0.1883547  0.2108714
+#> theta_2_2   0.1899893  0.0058134  32.681  0.1785952  0.2013833
+#> theta_3_3   0.2045533  0.0069223  29.550  0.1909859  0.2181207
+#> mu0_1_1    -0.0008762  0.0527703  -0.017 -0.1043041  0.1025517
+#> mu0_2_1     0.0297803  0.0812463   0.367 -0.1294595  0.1890202
+#> mu0_3_1     0.0711959  0.0666440   1.068 -0.0594241  0.2018158
+#> sigma0_1_1  0.1603451  0.0401133   3.997  0.0817244  0.2389659
+#> sigma0_2_1  0.0732326  0.0444635   1.647 -0.0139141  0.1603794
+#> sigma0_3_1  0.0099189  0.0358029   0.277 -0.0602535  0.0800914
+#> sigma0_2_2  0.5149965  0.0931946   5.526  0.3323384  0.6976546
+#> sigma0_3_2  0.1270778  0.0552607   2.300  0.0187688  0.2353869
+#> sigma0_3_3  0.2691672  0.0632758   4.254  0.1451489  0.3931856
 #>                       Pr(>|t|)    
-#> alpha_1_1               0.4730    
-#> alpha_2_1               0.1999    
-#> alpha_3_1               0.1589    
+#> alpha_1_1               0.3927    
+#> alpha_2_1               0.2975    
+#> alpha_3_1               0.3072    
 #> beta_1_1   <0.0000000000000002 ***
-#> beta_1_2                0.4846    
-#> beta_1_3                0.4642    
+#> beta_1_2                0.3243    
+#> beta_1_3                0.4850    
 #> beta_2_1   <0.0000000000000002 ***
 #> beta_2_2   <0.0000000000000002 ***
-#> beta_2_3                0.2814    
-#> beta_3_1                0.1659    
+#> beta_2_3                0.1711    
+#> beta_3_1   <0.0000000000000002 ***
 #> beta_3_2   <0.0000000000000002 ***
 #> beta_3_3   <0.0000000000000002 ***
 #> psi_1_1    <0.0000000000000002 ***
-#> psi_2_1                 0.3576    
-#> psi_3_1                 0.0174 *  
+#> psi_2_1                 0.3099    
+#> psi_3_1                 0.0770 .  
 #> psi_2_2    <0.0000000000000002 ***
-#> psi_3_2                 0.4828    
+#> psi_3_2                 0.4664    
 #> psi_3_3    <0.0000000000000002 ***
 #> theta_1_1  <0.0000000000000002 ***
 #> theta_2_2  <0.0000000000000002 ***
 #> theta_3_3  <0.0000000000000002 ***
-#> mu0_1_1                 0.0775 .  
-#> mu0_2_1                 0.0026 ** 
-#> mu0_3_1                 0.4436    
-#> sigma0_1_1              0.3512    
-#> sigma0_2_1                  NA    
-#> sigma0_3_1                  NA    
-#> sigma0_2_2              0.0985 .  
-#> sigma0_3_2              0.0809 .  
-#> sigma0_3_3              0.1492    
+#> mu0_1_1                 0.4934    
+#> mu0_2_1                 0.3570    
+#> mu0_3_1                 0.1427    
+#> sigma0_1_1 <0.0000000000000002 ***
+#> sigma0_2_1              0.0498 *  
+#> sigma0_3_1              0.3909    
+#> sigma0_2_2 <0.0000000000000002 ***
+#> sigma0_3_2              0.0107 *  
+#> sigma0_3_3 <0.0000000000000002 ***
 #> ---
 #> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 #> 
-#> -2 log-likelihood value at convergence = 10423.49
-#> AIC = 10483.49
-#> BIC = 10651.52
+#> -2 log-likelihood value at convergence = 105691.54
+#> AIC = 105751.54
+#> BIC = 105988.64
 ```
 
+### OpenMx: State Space Model
 
+`OpenMx` [@Neale-Hunter-Pritikin-etal-2016] fits the same state space model
+with its own Kalman filter (`OpenMx::mxExpectationStateSpace()`; @Hunter-2018).
+Its matrices have the names used in engineering:
+`A` is the transition matrix $\boldsymbol{\beta}$,
+`B` holds the intercepts of the dynamic model,
+`C` is the loading matrix $\boldsymbol{\Lambda}$,
+`D` holds the intercepts of the measurement model,
+`Q` is the process noise covariance matrix,
+and `R` is the measurement error covariance matrix.
+The parameter labels are the dynr names;
+as in dynr, a label used in two places is one shared parameter,
+and the starting values are the population values.
 
-### Parameter Estimates
+Two details differ from dynr.
+First, OpenMx reads the data as a single time series.
+To start the filter again at the first occasion of every individual,
+each individual gets a group,
+and all groups use the matrices of one parent model,
+so every individual has the same parameters.
+Second, OpenMx starts the filter one occasion before the first row,
+so the first row has the state mean $\mathbf{A} \mathbf{x}_{0} + \mathbf{B} \mathbf{u}$
+and the state covariance $\mathbf{A} \mathbf{P}_{0} \mathbf{A}^{\prime} + \mathbf{Q}$,
+with the constant input $\mathbf{u} = 1$.
+Setting
+$\mathbf{x}_{0} = \mathbf{A}^{-1} \left( \boldsymbol{\mu}_{0} - \mathbf{B} \mathbf{u} \right)$
+and
+$\mathbf{P}_{0} = \mathbf{A}^{-1} \left( \boldsymbol{\Sigma}_{0} - \mathbf{Q} \right) \left( \mathbf{A}^{-1} \right)^{\prime}$
+gives the first occasion the initial condition of the model,
+so the likelihood is the same as in dynr.
+This needs an invertible $\mathbf{A}$, which holds here.
 
-The estimates arranged as the matrices in the model,
-to compare with the population values in the Data Generation section.
+The two helper functions below are the same in every vignette of the package.
+`MxMat()` makes an OpenMx matrix from values and dynr-style labels
+(`"fixed"` marks a fixed element),
+and `FitMxSSM()` builds the groups and fits the model.
 
 
 ``` r
-alpha_hat
-#> [1] 0.0005368551 0.0082352037 0.0101331642
-beta_hat
-#>             [,1]        [,2]         [,3]
-#> [1,]  0.68688127 0.001730167  0.002913753
-#> [2,]  0.46757639 0.596513193 -0.021474870
-#> [3,] -0.05326514 0.392605011  0.436536738
-psi_hat
-#>              [,1]         [,2]          [,3]
-#> [1,]  0.104708722 0.0028393563 -0.0155942012
-#> [2,]  0.002839356 0.1163543003  0.0003235351
-#> [3,] -0.015594201 0.0003235351  0.1215038284
-theta_hat
-#>           [,1]      [,2]      [,3]
-#> [1,] 0.1899826 0.0000000 0.0000000
-#> [2,] 0.0000000 0.1897191 0.0000000
-#> [3,] 0.0000000 0.0000000 0.1611693
-mu0_hat
-#> [1] -0.17250235 -0.51619664 -0.02439533
-sigma0_hat
-#>              [,1]         [,2]         [,3]
-#> [1,]  0.022863918  0.006611912 -0.001646342
-#> [2,]  0.006611912  0.195953006 -0.158954972
-#> [3,] -0.001646342 -0.158954972  0.143855539
+MxMat <- function(values, labels, name) {
+  values <- as.matrix(values)
+  labels <- matrix(
+    data = labels,
+    nrow = nrow(values),
+    ncol = ncol(values)
+  )
+  free <- labels != "fixed"
+  labels[!free] <- NA
+  OpenMx::mxMatrix(
+    type = "Full",
+    values = values,
+    free = free,
+    labels = labels,
+    name = name
+  )
+}
+FitMxSSM <- function(data, observed, matrices, name) {
+  # the groups refer to the matrices of the parent model
+  shared <- function(x) {
+    paste0(name, ".", x)
+  }
+  expectation <- OpenMx::mxExpectationStateSpace(
+    A = shared("A"),
+    B = shared("B"),
+    C = shared("C"),
+    D = shared("D"),
+    Q = shared("Q"),
+    R = shared("R"),
+    x0 = shared("x0"),
+    P0 = shared("P0"),
+    u = shared("u")
+  )
+  # OpenMx needs the names of the observed variables and of the states on C
+  for (i in seq_along(matrices)) {
+    if (matrices[[i]]$name == "C") {
+      dimnames(matrices[[i]]) <- list(
+        observed,
+        paste0("eta_", seq_len(ncol(matrices[[i]]$values)))
+      )
+    }
+  }
+  persons <- split(
+    x = data[, observed, drop = FALSE],
+    f = data[, "id"]
+  )
+  groups <- paste0("id_", names(persons))
+  submodels <- lapply(
+    X = seq_along(persons),
+    FUN = function(i) {
+      OpenMx::mxModel(
+        name = groups[i],
+        expectation,
+        OpenMx::mxFitFunctionML(),
+        OpenMx::mxData(
+          observed = persons[[i]],
+          type = "raw"
+        )
+      )
+    }
+  )
+  model <- OpenMx::mxModel(
+    name = name,
+    matrices,
+    OpenMx::mxMatrix(
+      type = "Unit",
+      nrow = 1,
+      ncol = 1,
+      name = "u"
+    ),
+    # the first occasion gets the initial condition of the model
+    OpenMx::mxAlgebra(
+      expression = solve(A) %*% (mu0 - B %*% u),
+      name = "x0"
+    ),
+    OpenMx::mxAlgebra(
+      expression = solve(A) %*% (sigma0 - Q) %*% t(solve(A)),
+      name = "P0"
+    ),
+    submodels,
+    OpenMx::mxFitFunctionMultigroup(groups = groups)
+  )
+  # retries from perturbed starting values only if the first run fails
+  OpenMx::mxTryHard(
+    model = model,
+    extraTries = 5,
+    silent = TRUE
+  )
+}
 ```
 
-## Table of Parameters and Estimates
+The matrices of the model, with the dynr labels.
 
-The table below puts each population value used to simulate the data
-next to its estimate.
+
+``` r
+labels_beta <- matrix(
+  data = c(
+    "beta_1_1", "beta_2_1", "beta_3_1",
+    "beta_1_2", "beta_2_2", "beta_3_2",
+    "beta_1_3", "beta_2_3", "beta_3_3"
+  ),
+  nrow = 3
+)
+labels_psi <- matrix(
+  data = c(
+    "psi_1_1", "psi_2_1", "psi_3_1",
+    "psi_2_1", "psi_2_2", "psi_3_2",
+    "psi_3_1", "psi_3_2", "psi_3_3"
+  ),
+  nrow = 3
+)
+labels_theta <- matrix(
+  data = c(
+    "theta_1_1", "fixed", "fixed",
+    "fixed", "theta_2_2", "fixed",
+    "fixed", "fixed", "theta_3_3"
+  ),
+  nrow = 3
+)
+labels_sigma0 <- matrix(
+  data = c(
+    "sigma0_1_1", "sigma0_2_1", "sigma0_3_1",
+    "sigma0_2_1", "sigma0_2_2", "sigma0_3_2",
+    "sigma0_3_1", "sigma0_3_2", "sigma0_3_3"
+  ),
+  nrow = 3
+)
+mx_matrices <- list(
+  MxMat(values = beta, labels = labels_beta, name = "A"),
+  MxMat(
+    values = alpha,
+    labels = c("alpha_1_1", "alpha_2_1", "alpha_3_1"),
+    name = "B"
+  ),
+  MxMat(values = lambda, labels = "fixed", name = "C"),
+  MxMat(values = nu, labels = "fixed", name = "D"),
+  MxMat(values = psi, labels = labels_psi, name = "Q"),
+  MxMat(values = theta, labels = labels_theta, name = "R"),
+  MxMat(
+    values = mu0,
+    labels = c("mu0_1_1", "mu0_2_1", "mu0_3_1"),
+    name = "mu0"
+  ),
+  MxMat(values = sigma0, labels = labels_sigma0, name = "sigma0")
+)
+```
+
+
+``` r
+fit_mx_ssm <- FitMxSSM(
+  data = data,
+  observed = c("y1", "y2", "y3"),
+  matrices = mx_matrices,
+  name = "ssm"
+)
+#> Beginning initial fit attemptFit attempt 0, fit=105691.534423263, new current best! (was 105714.907085852)                                                                             
+#> 
+#>  Solution found!  Final fit=105691.53 (started at 105714.91)  (1 attempt(s): 1 valid, 0 errors)
+summary(fit_mx_ssm)
+#> Summary of ssm 
+#>  
+#> free parameters:
+#>          name matrix row col      Estimate   Std.Error A
+#> 1    beta_1_1      A   1   1  0.7053981077 0.021838141  
+#> 2    beta_2_1      A   2   1  0.5112620939 0.023493351  
+#> 3    beta_3_1      A   3   1 -0.0900410232 0.017085396  
+#> 4    beta_1_2      A   1   2 -0.0061800615 0.013468019  
+#> 5    beta_2_2      A   2   2  0.5888519508 0.018093205  
+#> 6    beta_3_2      A   3   2  0.3908662892 0.016906723  
+#> 7    beta_1_3      A   1   3  0.0004417040 0.010298111  
+#> 8    beta_2_3      A   2   3  0.0123737293 0.013111506  
+#> 9    beta_3_3      A   3   3  0.4952567006 0.016525427  
+#> 10  alpha_1_1      B   1   1 -0.0006118823 0.002410796  
+#> 11  alpha_2_1      B   2   1  0.0016758350 0.003095680  
+#> 12  alpha_3_1      B   3   1 -0.0014686848 0.002996973  
+#> 13    psi_1_1      Q   1   1  0.0975097042 0.006853796  
+#> 14    psi_2_1      Q   2   1  0.0012306351 0.002479268  
+#> 15    psi_3_1      Q   3   1 -0.0032844672 0.002314293  
+#> 16    psi_2_2      Q   2   2  0.1056516849 0.006032225  
+#> 17    psi_3_2      Q   3   2 -0.0001907060 0.002309151  
+#> 18    psi_3_3      Q   3   3  0.0952071001 0.006810719  
+#> 19  theta_1_1      R   1   1  0.1996612442 0.005745493  
+#> 20  theta_2_2      R   2   2  0.1900372708 0.005845908  
+#> 21  theta_3_3      R   3   3  0.2045821252 0.006947999  
+#> 22    mu0_1_1    mu0   1   1 -0.0008607865 0.052817445  
+#> 23    mu0_2_1    mu0   2   1  0.0298171307 0.080975260  
+#> 24    mu0_3_1    mu0   3   1  0.0712427739 0.066588868  
+#> 25 sigma0_1_1 sigma0   1   1  0.1603073688 0.039618205  
+#> 26 sigma0_2_1 sigma0   2   1  0.0732247803 0.043153542  
+#> 27 sigma0_3_1 sigma0   3   1  0.0099103002 0.035256844  
+#> 28 sigma0_2_2 sigma0   2   2  0.5149410876 0.093136953  
+#> 29 sigma0_3_2 sigma0   3   2  0.1270997132 0.055085499  
+#> 30 sigma0_3_3 sigma0   3   3  0.2691550668 0.063077429  
+#> 
+#> Model Statistics: 
+#>                |  Parameters  |  Degrees of Freedom  |  Fit (-2lnL units)
+#>        Model:             30                  59970              105691.5
+#>    Saturated:             NA                     NA                    NA
+#> Independence:             NA                     NA                    NA
+#> Number of observations/statistics: 20000/60000
+#> 
+#> Information Criteria: 
+#>       |  df Penalty  |  Parameters Penalty  |  Sample-Size Adjusted
+#> AIC:      -14248.47               105751.5                 105751.6
+#> BIC:     -488220.61               105988.6                 105893.3
+#> To get additional fit indices, see help(mxRefModels)
+#> timestamp: 2026-11-02 06:48:52 
+#> Wall clock time: 122.085 secs 
+#> optimizer:  SLSQP 
+#> OpenMx version number: 2.22.11 
+#> Need help?  See help(mxSummary)
+```
+
+## Population Values and Estimates
+
+Each table below puts the population values used to simulate the data
+next to the estimates of one method.
 Bias is the estimate minus the population value.
-Because the model is fitted to a single simulated data set,
+Because each model is fitted to a single simulated data set,
 this is the error of one estimate, not a Monte Carlo bias,
 which would average over many replications.
 The 95% confidence interval is the Wald interval,
 $\hat{\theta} \pm 1.96 \times \mathrm{SE}$,
+unless the caption says otherwise,
 and `Covers` shows whether it contains the population value.
+The parameter names are the dynr names in every table.
 
 
 ``` r
-EstimatesTable <- function(population, estimate, se) {
+EstimatesTable <- function(population, estimate, se, ll = NULL, ul = NULL) {
   z <- stats::qnorm(p = 0.975)
-  ll <- estimate - z * se
-  ul <- estimate + z * se
+  if (is.null(ll)) {
+    ll <- estimate - z * se
+  }
+  if (is.null(ul)) {
+    ul <- estimate + z * se
+  }
   data.frame(
     Parameter = names(population),
     Population = unname(population),
@@ -852,24 +1080,29 @@ EstimatesTable <- function(population, estimate, se) {
 
 
 ``` r
-estimates <- coef(results)
-se <- sqrt(diag(vcov(results)))
-#> Warning in sqrt(diag(vcov(results))): NaNs produced
 # the population value for each dynr parameter name,
 # for example, "beta_1_2" is beta[1, 2] and "mu0_2_1" is mu0[2]
 population <- vapply(
-  X = strsplit(x = names(estimates), split = "_"),
+  X = strsplit(x = names(coef(results)), split = "_"),
   FUN = function(x) {
     as.matrix(get(x[1]))[as.integer(x[2]), as.integer(x[3])]
   },
   FUN.VALUE = numeric(1)
 )
-names(population) <- names(estimates)
+names(population) <- names(coef(results))
+```
+
+### dynr
+
+
+``` r
+dynr_est <- coef(results)
+dynr_se <- sqrt(diag(vcov(results)))
 knitr::kable(
   x = EstimatesTable(
     population = population,
-    estimate = estimates,
-    se = se
+    estimate = dynr_est[names(population)],
+    se = dynr_se[names(population)]
   ),
   digits = 3,
   caption = "Population values and dynr estimates (one simulated data set)"
@@ -882,36 +1115,155 @@ Table: Population values and dynr estimates (one simulated data set)
 
 |Parameter  | Population| Estimate|    SE|   Bias|   2.5%|  97.5%|Covers |
 |:----------|----------:|--------:|-----:|------:|------:|------:|:------|
-|alpha_1_1  |      0.000|    0.001| 0.008|  0.001| -0.015|  0.016|TRUE   |
-|alpha_2_1  |      0.000|    0.008| 0.010|  0.008| -0.011|  0.027|TRUE   |
-|alpha_3_1  |      0.000|    0.010| 0.010|  0.010| -0.010|  0.030|TRUE   |
-|beta_1_1   |      0.700|    0.687| 0.072| -0.013|  0.545|  0.828|TRUE   |
-|beta_1_2   |      0.000|    0.002| 0.045|  0.002| -0.086|  0.089|TRUE   |
-|beta_1_3   |      0.000|    0.003| 0.032|  0.003| -0.061|  0.066|TRUE   |
-|beta_2_1   |      0.500|    0.468| 0.067| -0.032|  0.337|  0.599|TRUE   |
-|beta_2_2   |      0.600|    0.597| 0.052| -0.003|  0.495|  0.698|TRUE   |
-|beta_2_3   |      0.000|   -0.021| 0.037| -0.021| -0.094|  0.051|TRUE   |
-|beta_3_1   |     -0.100|   -0.053| 0.055|  0.047| -0.161|  0.054|TRUE   |
-|beta_3_2   |      0.400|    0.393| 0.059| -0.007|  0.278|  0.507|TRUE   |
-|beta_3_3   |      0.500|    0.437| 0.061| -0.063|  0.317|  0.556|TRUE   |
-|psi_1_1    |      0.100|    0.105| 0.023|  0.005|  0.059|  0.151|TRUE   |
-|psi_2_1    |      0.000|    0.003| 0.008|  0.003| -0.012|  0.018|TRUE   |
-|psi_3_1    |      0.000|   -0.016| 0.007| -0.016| -0.030| -0.001|FALSE  |
-|psi_2_2    |      0.100|    0.116| 0.020|  0.016|  0.076|  0.156|TRUE   |
-|psi_3_2    |      0.000|    0.000| 0.007|  0.000| -0.014|  0.015|TRUE   |
-|psi_3_3    |      0.100|    0.122| 0.029|  0.022|  0.065|  0.178|TRUE   |
-|theta_1_1  |      0.200|    0.190| 0.019| -0.010|  0.152|  0.228|TRUE   |
-|theta_2_2  |      0.200|    0.190| 0.019| -0.010|  0.152|  0.228|TRUE   |
-|theta_3_3  |      0.200|    0.161| 0.028| -0.039|  0.106|  0.216|TRUE   |
-|mu0_1_1    |      0.000|   -0.173| 0.121| -0.173| -0.410|  0.065|TRUE   |
-|mu0_2_1    |      0.000|   -0.516| 0.184| -0.516| -0.877| -0.155|FALSE  |
-|mu0_3_1    |      0.000|   -0.024| 0.172| -0.024| -0.361|  0.312|TRUE   |
-|sigma0_1_1 |      0.196|    0.023| 0.060| -0.173| -0.094|  0.140|FALSE  |
-|sigma0_2_1 |      0.118|    0.007|   NaN| -0.112|    NaN|    NaN|NA     |
-|sigma0_3_1 |      0.030|   -0.002|   NaN| -0.032|    NaN|    NaN|NA     |
-|sigma0_2_2 |      0.344|    0.196| 0.152| -0.148| -0.102|  0.493|TRUE   |
-|sigma0_3_2 |      0.138|   -0.159| 0.114| -0.297| -0.382|  0.064|FALSE  |
-|sigma0_3_3 |      0.266|    0.144| 0.138| -0.123| -0.127|  0.415|TRUE   |
+|alpha_1_1  |      0.000|   -0.001| 0.002| -0.001| -0.005|  0.004|TRUE   |
+|alpha_2_1  |      0.000|    0.002| 0.003|  0.002| -0.004|  0.008|TRUE   |
+|alpha_3_1  |      0.000|   -0.002| 0.003| -0.002| -0.007|  0.004|TRUE   |
+|beta_1_1   |      0.700|    0.705| 0.022|  0.005|  0.662|  0.748|TRUE   |
+|beta_1_2   |      0.000|   -0.006| 0.013| -0.006| -0.033|  0.020|TRUE   |
+|beta_1_3   |      0.000|    0.000| 0.010|  0.000| -0.020|  0.021|TRUE   |
+|beta_2_1   |      0.500|    0.511| 0.023|  0.011|  0.465|  0.557|TRUE   |
+|beta_2_2   |      0.600|    0.589| 0.018| -0.011|  0.553|  0.624|TRUE   |
+|beta_2_3   |      0.000|    0.012| 0.013|  0.012| -0.013|  0.038|TRUE   |
+|beta_3_1   |     -0.100|   -0.090| 0.017|  0.010| -0.123| -0.057|TRUE   |
+|beta_3_2   |      0.400|    0.391| 0.017| -0.009|  0.358|  0.424|TRUE   |
+|beta_3_3   |      0.500|    0.495| 0.016| -0.005|  0.463|  0.527|TRUE   |
+|psi_1_1    |      0.100|    0.098| 0.007| -0.002|  0.084|  0.111|TRUE   |
+|psi_2_1    |      0.000|    0.001| 0.002|  0.001| -0.004|  0.006|TRUE   |
+|psi_3_1    |      0.000|   -0.003| 0.002| -0.003| -0.008|  0.001|TRUE   |
+|psi_2_2    |      0.100|    0.106| 0.006|  0.006|  0.094|  0.117|TRUE   |
+|psi_3_2    |      0.000|    0.000| 0.002|  0.000| -0.005|  0.004|TRUE   |
+|psi_3_3    |      0.100|    0.095| 0.007| -0.005|  0.082|  0.109|TRUE   |
+|theta_1_1  |      0.200|    0.200| 0.006|  0.000|  0.188|  0.211|TRUE   |
+|theta_2_2  |      0.200|    0.190| 0.006| -0.010|  0.179|  0.201|TRUE   |
+|theta_3_3  |      0.200|    0.205| 0.007|  0.005|  0.191|  0.218|TRUE   |
+|mu0_1_1    |      0.000|   -0.001| 0.053| -0.001| -0.104|  0.103|TRUE   |
+|mu0_2_1    |      0.000|    0.030| 0.081|  0.030| -0.129|  0.189|TRUE   |
+|mu0_3_1    |      0.000|    0.071| 0.067|  0.071| -0.059|  0.202|TRUE   |
+|sigma0_1_1 |      0.196|    0.160| 0.040| -0.036|  0.082|  0.239|TRUE   |
+|sigma0_2_1 |      0.118|    0.073| 0.044| -0.045| -0.014|  0.160|TRUE   |
+|sigma0_3_1 |      0.030|    0.010| 0.036| -0.020| -0.060|  0.080|TRUE   |
+|sigma0_2_2 |      0.344|    0.515| 0.093|  0.171|  0.332|  0.698|TRUE   |
+|sigma0_3_2 |      0.138|    0.127| 0.055| -0.011|  0.019|  0.235|TRUE   |
+|sigma0_3_3 |      0.266|    0.269| 0.063|  0.003|  0.145|  0.393|TRUE   |
+
+
+
+### OpenMx: State Space Model
+
+
+``` r
+mx_ssm_est <- OpenMx::omxGetParameters(fit_mx_ssm)
+mx_ssm_se <- fit_mx_ssm$output$standardErrors[, 1]
+knitr::kable(
+  x = EstimatesTable(
+    population = population,
+    estimate = mx_ssm_est[names(population)],
+    se = mx_ssm_se[names(population)]
+  ),
+  digits = 3,
+  caption = paste(
+    "Population values and OpenMx state space estimates",
+    "(one simulated data set)"
+  )
+)
+```
+
+
+
+Table: Population values and OpenMx state space estimates (one simulated data set)
+
+|Parameter  | Population| Estimate|    SE|   Bias|   2.5%|  97.5%|Covers |
+|:----------|----------:|--------:|-----:|------:|------:|------:|:------|
+|alpha_1_1  |      0.000|   -0.001| 0.002| -0.001| -0.005|  0.004|TRUE   |
+|alpha_2_1  |      0.000|    0.002| 0.003|  0.002| -0.004|  0.008|TRUE   |
+|alpha_3_1  |      0.000|   -0.001| 0.003| -0.001| -0.007|  0.004|TRUE   |
+|beta_1_1   |      0.700|    0.705| 0.022|  0.005|  0.663|  0.748|TRUE   |
+|beta_1_2   |      0.000|   -0.006| 0.013| -0.006| -0.033|  0.020|TRUE   |
+|beta_1_3   |      0.000|    0.000| 0.010|  0.000| -0.020|  0.021|TRUE   |
+|beta_2_1   |      0.500|    0.511| 0.023|  0.011|  0.465|  0.557|TRUE   |
+|beta_2_2   |      0.600|    0.589| 0.018| -0.011|  0.553|  0.624|TRUE   |
+|beta_2_3   |      0.000|    0.012| 0.013|  0.012| -0.013|  0.038|TRUE   |
+|beta_3_1   |     -0.100|   -0.090| 0.017|  0.010| -0.124| -0.057|TRUE   |
+|beta_3_2   |      0.400|    0.391| 0.017| -0.009|  0.358|  0.424|TRUE   |
+|beta_3_3   |      0.500|    0.495| 0.017| -0.005|  0.463|  0.528|TRUE   |
+|psi_1_1    |      0.100|    0.098| 0.007| -0.002|  0.084|  0.111|TRUE   |
+|psi_2_1    |      0.000|    0.001| 0.002|  0.001| -0.004|  0.006|TRUE   |
+|psi_3_1    |      0.000|   -0.003| 0.002| -0.003| -0.008|  0.001|TRUE   |
+|psi_2_2    |      0.100|    0.106| 0.006|  0.006|  0.094|  0.117|TRUE   |
+|psi_3_2    |      0.000|    0.000| 0.002|  0.000| -0.005|  0.004|TRUE   |
+|psi_3_3    |      0.100|    0.095| 0.007| -0.005|  0.082|  0.109|TRUE   |
+|theta_1_1  |      0.200|    0.200| 0.006|  0.000|  0.188|  0.211|TRUE   |
+|theta_2_2  |      0.200|    0.190| 0.006| -0.010|  0.179|  0.201|TRUE   |
+|theta_3_3  |      0.200|    0.205| 0.007|  0.005|  0.191|  0.218|TRUE   |
+|mu0_1_1    |      0.000|   -0.001| 0.053| -0.001| -0.104|  0.103|TRUE   |
+|mu0_2_1    |      0.000|    0.030| 0.081|  0.030| -0.129|  0.189|TRUE   |
+|mu0_3_1    |      0.000|    0.071| 0.067|  0.071| -0.059|  0.202|TRUE   |
+|sigma0_1_1 |      0.196|    0.160| 0.040| -0.036|  0.083|  0.238|TRUE   |
+|sigma0_2_1 |      0.118|    0.073| 0.043| -0.045| -0.011|  0.158|TRUE   |
+|sigma0_3_1 |      0.030|    0.010| 0.035| -0.020| -0.059|  0.079|TRUE   |
+|sigma0_2_2 |      0.344|    0.515| 0.093|  0.171|  0.332|  0.697|TRUE   |
+|sigma0_3_2 |      0.138|    0.127| 0.055| -0.011|  0.019|  0.235|TRUE   |
+|sigma0_3_3 |      0.266|    0.269| 0.063|  0.003|  0.146|  0.393|TRUE   |
+
+
+
+### All Methods
+
+The estimates of every method side by side.
+The methods maximize the same likelihood,
+so their estimates should agree closely.
+
+
+``` r
+knitr::kable(
+  x = data.frame(
+    Parameter = names(population),
+    Population = unname(population),
+    `dynr` = unname(dynr_est[names(population)]),
+    `OpenMx (SSM)` = unname(mx_ssm_est[names(population)]),
+    check.names = FALSE
+  ),
+  digits = 3,
+  caption = "Population values and the estimates of every method"
+)
+```
+
+
+
+Table: Population values and the estimates of every method
+
+|Parameter  | Population|   dynr| OpenMx (SSM)|
+|:----------|----------:|------:|------------:|
+|alpha_1_1  |      0.000| -0.001|       -0.001|
+|alpha_2_1  |      0.000|  0.002|        0.002|
+|alpha_3_1  |      0.000| -0.002|       -0.001|
+|beta_1_1   |      0.700|  0.705|        0.705|
+|beta_1_2   |      0.000| -0.006|       -0.006|
+|beta_1_3   |      0.000|  0.000|        0.000|
+|beta_2_1   |      0.500|  0.511|        0.511|
+|beta_2_2   |      0.600|  0.589|        0.589|
+|beta_2_3   |      0.000|  0.012|        0.012|
+|beta_3_1   |     -0.100| -0.090|       -0.090|
+|beta_3_2   |      0.400|  0.391|        0.391|
+|beta_3_3   |      0.500|  0.495|        0.495|
+|psi_1_1    |      0.100|  0.098|        0.098|
+|psi_2_1    |      0.000|  0.001|        0.001|
+|psi_3_1    |      0.000| -0.003|       -0.003|
+|psi_2_2    |      0.100|  0.106|        0.106|
+|psi_3_2    |      0.000|  0.000|        0.000|
+|psi_3_3    |      0.100|  0.095|        0.095|
+|theta_1_1  |      0.200|  0.200|        0.200|
+|theta_2_2  |      0.200|  0.190|        0.190|
+|theta_3_3  |      0.200|  0.205|        0.205|
+|mu0_1_1    |      0.000| -0.001|       -0.001|
+|mu0_2_1    |      0.000|  0.030|        0.030|
+|mu0_3_1    |      0.000|  0.071|        0.071|
+|sigma0_1_1 |      0.196|  0.160|        0.160|
+|sigma0_2_1 |      0.118|  0.073|        0.073|
+|sigma0_3_1 |      0.030|  0.010|        0.010|
+|sigma0_2_2 |      0.344|  0.515|        0.515|
+|sigma0_3_2 |      0.138|  0.127|        0.127|
+|sigma0_3_3 |      0.266|  0.269|        0.269|
 
 
 

@@ -55,9 +55,11 @@ This tutorial does three things:
 
 1. It writes the linear growth curve model as a state space model.
 2. It simulates data from the model with `SimSSMLinGrowth()`.
-3. It fits the model to the simulated data with `dynr` (state space)
-   and with `lavaan` (SEM),
-   and compares both sets of estimates with the values used to simulate the data.
+3. It fits the model to the simulated data
+   as a state space model with `dynr` and `OpenMx`
+   and as a structural equation model (SEM) with `lavaan` and `OpenMx`,
+   and as a multilevel model with `lme4`,
+   and compares every set of estimates with the values used to simulate the data.
 
 No prior knowledge of state space models is needed.
 
@@ -65,7 +67,7 @@ No prior knowledge of state space models is needed.
 #| echo = FALSE
 options(scipen = 999)
 set.seed(42)
-n <- 10000
+n <- 2000
 mu0 <- c(0.615, 1.006)
 sigma0 <- matrix(
   data = c(
@@ -85,7 +87,7 @@ time <- 5
 ## Model
 
 The measurement model is given by
-\begin{equation}
+$$
   Y_{i, t}
   =
   \left(
@@ -111,7 +113,7 @@ The measurement model is given by
   0,
   \theta
   \right)
-\end{equation}
+$$
 where $Y_{i, t}$, $\eta_{0_{i, t}}$,
 $\eta_{1_{i, t}}$,
 and $\boldsymbol{\varepsilon}_{i, t}$
@@ -137,7 +139,7 @@ The loading of the slope is 0, because the slope affects
 the score only through its effect on the level over time.
 
 The dynamic structure is given by
-\begin{equation}
+$$
   \left(
   \begin{array}{c}
   \eta_{0_{i, t}} \\
@@ -157,7 +159,7 @@ The dynamic structure is given by
   \eta_{1_{i, t - 1}} \\
   \end{array}
   \right) .
-\end{equation}
+$$
 
 In words,
 the level at each occasion is the previous level plus the slope,
@@ -173,8 +175,8 @@ comes from the initial condition below.
 The mean vector and covariance matrix of the intercept and slope
 are captured in the mean vector and covariance matrix
 of the initial condition given by
-\begin{equation}
-  \boldsymbol{\mu}_{\boldsymbol{\eta} \mid 0}
+$$
+  \boldsymbol{\mu}_{0}
   =
   \left(
   \begin{array}{c}
@@ -182,10 +184,10 @@ of the initial condition given by
     \mu_{\eta_{1}} \\
   \end{array}
   \right) \quad \mathrm{and,}
-\end{equation}
+$$
 
-\begin{equation}
-  \boldsymbol{\Sigma}_{\boldsymbol{\eta} \mid 0}
+$$
+  \boldsymbol{\Sigma}_{0}
   =
   \left(
   \begin{array}{cc}
@@ -195,7 +197,7 @@ of the initial condition given by
     \sigma^{2}_{\eta_{1}} \\
   \end{array}
   \right) .
-\end{equation}
+$$
 
 Here, $\mu_{\eta_{0}}$ and $\mu_{\eta_{1}}$
 are the average intercept and slope,
@@ -209,34 +211,46 @@ for example, positive if individuals who start higher also grow faster.
 ```{r}
 #| include = FALSE
 # copy the model diagrams (built by `make latex` from `.setup/latex/tikz/`)
+# into the folder of the knit, next to the other figures
 root <- c(".", "..")[file.exists(file.path(c(".", ".."), ".setup"))][1]
-file.copy(
-  from = file.path(
-    root,
-    ".setup",
-    "latex",
-    "figures",
-    "png",
-    paste0("fig-vignettes-lin-growth-", c("path", "ssm"), ".png")
-  ),
-  to = root,
-  overwrite = TRUE
+diagrams <- file.path(
+  root,
+  ".setup",
+  "latex",
+  "figures",
+  "png",
+  paste0("fig-vignettes-lin-growth-", c("path", "ssm"), ".png")
+)
+if (!all(file.exists(diagrams))) {
+  stop("Model diagrams not found: run `make latex` first.")
+}
+invisible(
+  file.copy(
+    from = diagrams,
+    to = ".",
+    overwrite = TRUE
+  )
 )
 ```
 
 ![Path diagram of the linear growth curve model.](fig-vignettes-lin-growth-path.png){width=100%}
 
-The model as a path diagram.
+The model as a path diagram, for the occasions $t = 0, 1, \ldots, T - 1$.
 The intercept $\eta_{0}$ loads on every occasion with a loading of 1, and the slope $\eta_{1}$ with loadings $0, 1, 2, \ldots, T - 1$, so the slope is the change per occasion.
-$\varepsilon_{t}$ is the measurement error, with variance $\theta$, and $\sigma_{\eta_{0}, \eta_{1}}$ is the covariance of the intercept and the slope.
+$\varepsilon_{t}$ is the measurement error, with variance $\theta$.
+A loop on a variable is its variance and a curved two-headed arrow a covariance.
+$\sigma^{2}_{\eta_{0}}$ and $\sigma^{2}_{\eta_{1}}$ are the variances of the intercept and the slope, and $\sigma_{\eta_{0}, \eta_{1}}$ their covariance.
 
 ![State space form of the linear growth curve model.](fig-vignettes-lin-growth-ssm.png){width=100%}
 
-The same model in state space form.
-The state holds the current level $\eta_{0}$ and the slope $\eta_{1}$.
-$\boldsymbol{\beta}$ adds the slope to the level at each occasion and keeps the slope, $\boldsymbol{\Lambda}$ picks the level, and $\theta$ is the measurement error variance.
+The same model in state space form, for the first three occasions ($t = 0, 1, 2$), with every element of the state drawn.
+The state holds the current level $\eta_{0, t}$ and the slope $\eta_{1, t}$.
+The transition adds the slope to the level at each occasion and keeps the slope, so $\eta_{1, t} = \eta_{1}$ for all $t$ and $\eta_{0, t} = \eta_{0} + t \eta_{1}$;
+the level is measured by $Y_{t}$ with a loading of 1 and measurement error $\varepsilon_{t}$, with variance $\theta$.
 There is no process noise: the loadings of the path diagram are produced by the transition, and the differences between individuals come from the initial condition.
-`SimSSMLinGrowth()` fixes $\boldsymbol{\beta}$ and $\boldsymbol{\Lambda}$ and takes `mu0` and the Cholesky factors of the initial covariance matrix and of $\theta$ (`sigma0_l` and `theta_l`).
+At $t = 0$, the initial condition $\boldsymbol{\eta}_{0} \sim \mathcal{N} \left( \boldsymbol{\mu}_{0}, \boldsymbol{\Sigma}_{0} \right)$ holds the means, variances, and covariance of the intercept and the slope.
+Below the diagram, $\boldsymbol{\beta}$, $\boldsymbol{\Lambda}$, and $\boldsymbol{\Theta}$ are the same matrices in compact form.
+`SimSSMLinGrowth()` fixes $\boldsymbol{\beta}$ and $\boldsymbol{\Lambda}$ and takes `mu0` and the Cholesky factors of $\boldsymbol{\Sigma}_{0}$ and of $\theta$ (`sigma0_l` and `theta_l`).
 
 ## Data Generation
 
@@ -246,28 +260,28 @@ Let $t = `r time`$ be the number of time points and $n = `r n`$ be the number of
 
 Let the measurement error variance $\theta$ be given by
 
-\begin{equation}
+$$
 \theta
 =
 `r theta` .
-\end{equation}
+$$
 
 Let the initial condition
 $\boldsymbol{\eta}_{0}$
 be given by
 
-\begin{equation}
+$$
 \boldsymbol{\eta}_{0}
 \sim
 \mathcal{N}
 \left(
-\boldsymbol{\mu}_{\boldsymbol{\eta} \mid 0},
-\boldsymbol{\Sigma}_{\boldsymbol{\eta} \mid 0}
+\boldsymbol{\mu}_{0},
+\boldsymbol{\Sigma}_{0}
 \right)
-\end{equation}
+$$
 
-\begin{equation}
-\boldsymbol{\mu}_{\boldsymbol{\eta} \mid 0}
+$$
+\boldsymbol{\mu}_{0}
 =
 \left(
 \begin{array}{c}
@@ -275,10 +289,10 @@ be given by
   `r mu0[2]` \\
 \end{array}
 \right)
-\end{equation}
+$$
 
-\begin{equation}
-\boldsymbol{\Sigma}_{\boldsymbol{\eta} \mid 0}
+$$
+\boldsymbol{\Sigma}_{0}
 =
 \left(
 \begin{array}{cc}
@@ -286,7 +300,7 @@ be given by
   `r sigma0[2, 1]` & `r sigma0[2, 2]` \\
 \end{array}
 \right) .
-\end{equation}
+$$
 
 ### R Function Arguments
 
@@ -348,7 +362,16 @@ plot(sim)
 
 ## Model Fitting
 
-We first fit the model with `dynr`,
+The same simulated data are fitted
+as a state space model with `dynr` and `OpenMx`
+and as a structural equation model (SEM) with `lavaan` and `OpenMx`, and as a multilevel model with `lme4`.
+All of them estimate the parameters by maximum likelihood.
+The section Population Values and Estimates
+compares their estimates with the population values.
+
+### dynr
+
+We fit the model with `dynr`,
 which estimates state space models by maximum likelihood
 using the Kalman filter.
 
@@ -361,7 +384,7 @@ The starting values are set to the population values for convenience;
 with real data, they would be rough guesses.
 The intercept and slope are indexed 0 and 1 in the parameter names.
 
-### Prepare Data
+#### Prepare Data
 
 Tell `dynr` which columns hold the individual, the time, and the observed variables.
 
@@ -374,7 +397,7 @@ dynr_data <- dynr::dynr.data(
 )
 ```
 
-### Prepare Initial Condition
+#### Prepare Initial Condition
 
 The mean and covariance of the initial state are
 the means, variances, and covariance of the intercept and slope,
@@ -397,7 +420,7 @@ dynr_initial <- dynr::prep.initial(
 )
 ```
 
-### Prepare Measurement Model
+#### Prepare Measurement Model
 
 The loadings $\left( 1, 0 \right)$ are fixed.
 
@@ -410,7 +433,7 @@ dynr_measurement <- dynr::prep.measurement(
 )
 ```
 
-### Prepare Dynamic Process
+#### Prepare Dynamic Process
 
 The two formulas are the two rows of the dynamic equation.
 They have no free parameters.
@@ -425,7 +448,7 @@ dynr_dynamics <- dynr::prep.formulaDynamics(
 )
 ```
 
-### Prepare Process Noise
+#### Prepare Process Noise
 
 The process noise is fixed at zero,
 and the measurement error variance $\theta$ is estimated.
@@ -439,7 +462,7 @@ dynr_noise <- dynr::prep.noise(
 )
 ```
 
-### Prepare the Model
+#### Prepare the Model
 
 The pieces are put together into one model.
 `dynr` writes the model as C code to `outfile` and compiles it.
@@ -467,7 +490,7 @@ dynr::plotFormula(
 )
 ```
 
-### Fit the Model
+#### Fit the Model
 
 ```{r}
 results <- dynr::dynr.cook(
@@ -477,7 +500,7 @@ results <- dynr::dynr.cook(
 )
 ```
 
-## Summary
+#### Summary
 
 The summary lists each estimate with its standard error,
 $t$ value, confidence interval, and $p$ value.
@@ -486,45 +509,186 @@ $t$ value, confidence interval, and $p$ value.
 summary(results)
 ```
 
+### OpenMx: State Space Model
+
+`OpenMx` [@Neale-Hunter-Pritikin-etal-2016] fits the same state space model
+with its own Kalman filter (`OpenMx::mxExpectationStateSpace()`; @Hunter-2018).
+Its matrices have the names used in engineering:
+`A` is the transition matrix $\boldsymbol{\beta}$,
+`B` holds the intercepts of the dynamic model,
+`C` is the loading matrix $\boldsymbol{\Lambda}$,
+`D` holds the intercepts of the measurement model,
+`Q` is the process noise covariance matrix,
+and `R` is the measurement error covariance matrix.
+The parameter labels are the dynr names;
+as in dynr, a label used in two places is one shared parameter,
+and the starting values are the population values.
+
+Two details differ from dynr.
+First, OpenMx reads the data as a single time series.
+To start the filter again at the first occasion of every individual,
+each individual gets a group,
+and all groups use the matrices of one parent model,
+so every individual has the same parameters.
+Second, OpenMx starts the filter one occasion before the first row,
+so the first row has the state mean $\mathbf{A} \mathbf{x}_{0} + \mathbf{B} \mathbf{u}$
+and the state covariance $\mathbf{A} \mathbf{P}_{0} \mathbf{A}^{\prime} + \mathbf{Q}$,
+with the constant input $\mathbf{u} = 1$.
+Setting
+$\mathbf{x}_{0} = \mathbf{A}^{-1} \left( \boldsymbol{\mu}_{0} - \mathbf{B} \mathbf{u} \right)$
+and
+$\mathbf{P}_{0} = \mathbf{A}^{-1} \left( \boldsymbol{\Sigma}_{0} - \mathbf{Q} \right) \left( \mathbf{A}^{-1} \right)^{\prime}$
+gives the first occasion the initial condition of the model,
+so the likelihood is the same as in dynr.
+This needs an invertible $\mathbf{A}$, which holds here.
+
+The two helper functions below are the same in every vignette of the package.
+`MxMat()` makes an OpenMx matrix from values and dynr-style labels
+(`"fixed"` marks a fixed element),
+and `FitMxSSM()` builds the groups and fits the model.
+
 ```{r}
-#| echo = FALSE
-estimates <- coef(results)
-estimates_cov <- vcov(results)
-mu0_hat <- unname(
-  estimates[
-    c(
-      "mu0_0",
-      "mu0_1"
-    )
-  ]
-)
-mu0_hat <- unname(mu0_hat)
-sigma0_hat <- matrix(
-  data = estimates[
-    c(
-      "sigma0_00",
-      "sigma0_01",
-      "sigma0_01",
-      "sigma0_11"
-    )
-  ],
-  nrow = 2
-)
-theta_hat <- estimates["theta"]
+MxMat <- function(values, labels, name) {
+  values <- as.matrix(values)
+  labels <- matrix(
+    data = labels,
+    nrow = nrow(values),
+    ncol = ncol(values)
+  )
+  free <- labels != "fixed"
+  labels[!free] <- NA
+  OpenMx::mxMatrix(
+    type = "Full",
+    values = values,
+    free = free,
+    labels = labels,
+    name = name
+  )
+}
+FitMxSSM <- function(data, observed, matrices, name) {
+  # the groups refer to the matrices of the parent model
+  shared <- function(x) {
+    paste0(name, ".", x)
+  }
+  expectation <- OpenMx::mxExpectationStateSpace(
+    A = shared("A"),
+    B = shared("B"),
+    C = shared("C"),
+    D = shared("D"),
+    Q = shared("Q"),
+    R = shared("R"),
+    x0 = shared("x0"),
+    P0 = shared("P0"),
+    u = shared("u")
+  )
+  # OpenMx needs the names of the observed variables and of the states on C
+  for (i in seq_along(matrices)) {
+    if (matrices[[i]]$name == "C") {
+      dimnames(matrices[[i]]) <- list(
+        observed,
+        paste0("eta_", seq_len(ncol(matrices[[i]]$values)))
+      )
+    }
+  }
+  persons <- split(
+    x = data[, observed, drop = FALSE],
+    f = data[, "id"]
+  )
+  groups <- paste0("id_", names(persons))
+  submodels <- lapply(
+    X = seq_along(persons),
+    FUN = function(i) {
+      OpenMx::mxModel(
+        name = groups[i],
+        expectation,
+        OpenMx::mxFitFunctionML(),
+        OpenMx::mxData(
+          observed = persons[[i]],
+          type = "raw"
+        )
+      )
+    }
+  )
+  model <- OpenMx::mxModel(
+    name = name,
+    matrices,
+    OpenMx::mxMatrix(
+      type = "Unit",
+      nrow = 1,
+      ncol = 1,
+      name = "u"
+    ),
+    # the first occasion gets the initial condition of the model
+    OpenMx::mxAlgebra(
+      expression = solve(A) %*% (mu0 - B %*% u),
+      name = "x0"
+    ),
+    OpenMx::mxAlgebra(
+      expression = solve(A) %*% (sigma0 - Q) %*% t(solve(A)),
+      name = "P0"
+    ),
+    submodels,
+    OpenMx::mxFitFunctionMultigroup(groups = groups)
+  )
+  # retries from perturbed starting values only if the first run fails
+  OpenMx::mxTryHard(
+    model = model,
+    extraTries = 5,
+    silent = TRUE
+  )
+}
 ```
 
-### Estimated Parameters
-
-The estimates arranged as the matrices in the model,
-to compare with the population values in the Data Generation section.
+The matrices of the model, with the dynr labels.
+The transition matrix carries the intercept and adds the slope,
+and there is no process noise (`Q` is zero).
 
 ```{r}
-mu0_hat
-sigma0_hat
-theta_hat
+mx_matrices <- list(
+  MxMat(
+    values = matrix(data = c(1, 0, 1, 1), nrow = 2),
+    labels = "fixed",
+    name = "A"
+  ),
+  MxMat(values = c(0, 0), labels = "fixed", name = "B"),
+  MxMat(
+    values = matrix(data = c(1, 0), nrow = 1),
+    labels = "fixed",
+    name = "C"
+  ),
+  MxMat(values = 0, labels = "fixed", name = "D"),
+  MxMat(
+    values = matrix(data = 0, nrow = 2, ncol = 2),
+    labels = "fixed",
+    name = "Q"
+  ),
+  MxMat(values = theta, labels = "theta", name = "R"),
+  MxMat(values = mu0, labels = c("mu0_0", "mu0_1"), name = "mu0"),
+  MxMat(
+    values = sigma0,
+    labels = matrix(
+      data = c(
+        "sigma0_00", "sigma0_01",
+        "sigma0_01", "sigma0_11"
+      ),
+      nrow = 2
+    ),
+    name = "sigma0"
+  )
+)
 ```
 
-## Linear Growth Curve Model in Structural Equation Modeling
+```{r}
+fit_mx_ssm <- FitMxSSM(
+  data = data,
+  observed = "y1",
+  matrices = mx_matrices,
+  name = "lin_growth"
+)
+summary(fit_mx_ssm)
+```
+
+### lavaan: Structural Equation Model
 
 The same model in SEM form, fitted with `lavaan`,
 should give nearly the same estimates.
@@ -533,16 +697,16 @@ in one row per individual (wide format).
 The intercept factor has loadings of 1 on all occasions,
 and the slope factor has loadings 0, 1, 2, 3, and 4.
 
-### Wide Data Set
+#### Wide Data Set
 
 `as.data.frame()` with `long = FALSE` returns the data in wide format.
 
 ```{r}
-data <- as.data.frame(sim, long = FALSE)
-head(data)
+data_wide <- as.data.frame(sim, long = FALSE)
+head(data_wide)
 ```
 
-### Model
+#### Model
 
 The parameter labels match the dynr names.
 Giving the five error variances the same label, `theta`,
@@ -570,70 +734,114 @@ model <- "
 ```
 
 ```{r}
-fit <- lavaan::growth(
+fit_lavaan <- lavaan::growth(
   model = model,
-  data = data
+  data = data_wide
 )
-lavaan::summary(fit)
+lavaan::summary(fit_lavaan)
+```
+
+### OpenMx: Structural Equation Model
+
+The same SEM in `OpenMx`, written with `OpenMx::mxPath()`
+on the wide data.
+One-headed arrows are loadings and regressions,
+two-headed arrows are variances and covariances,
+and arrows from `"one"` are means.
+A path that is not written is fixed at zero,
+so the zero residual variances, covariances, and intercepts
+of the lavaan model need no lines here.
+The labels are the dynr names,
+and the starting values are the population values.
+
+```{r}
+waves <- 0:(time - 1)
+manifest <- paste0("y1_", waves)
+mx_sem <- OpenMx::mxModel(
+  name = "lin_growth_sem",
+  type = "RAM",
+  manifestVars = manifest,
+  latentVars = c("eta0", "eta1"),
+  OpenMx::mxData(observed = data_wide[, manifest], type = "raw"),
+  # factor loadings
+  OpenMx::mxPath(from = "eta0", to = manifest, free = FALSE, values = 1),
+  OpenMx::mxPath(from = "eta1", to = manifest, free = FALSE, values = waves),
+  # means of latent variables
+  OpenMx::mxPath(
+    from = "one",
+    to = c("eta0", "eta1"),
+    labels = c("mu0_0", "mu0_1"),
+    values = mu0
+  ),
+  # variances and covariances of latent variables
+  OpenMx::mxPath(
+    from = c("eta0", "eta0", "eta1"),
+    to = c("eta0", "eta1", "eta1"),
+    arrows = 2,
+    labels = c("sigma0_00", "sigma0_01", "sigma0_11"),
+    values = c(sigma0[1, 1], sigma0[1, 2], sigma0[2, 2])
+  ),
+  # error variance theta, equal over time
+  OpenMx::mxPath(from = manifest, arrows = 2, labels = "theta", values = theta)
+)
 ```
 
 ```{r}
-#| echo = FALSE
-estimates <- lavaan::coef(fit)
-estimates_cov <- lavaan::vcov(fit)
-mu0_hat <- unname(
-  estimates[
-    c(
-      "mu0_0",
-      "mu0_1"
-    )
-  ]
+fit_mx_sem <- OpenMx::mxRun(
+  model = mx_sem,
+  silent = TRUE
 )
-mu0_hat <- unname(mu0_hat)
-sigma0_hat <- matrix(
-  data = estimates[
-    c(
-      "sigma0_00",
-      "sigma0_01",
-      "sigma0_01",
-      "sigma0_11"
-    )
-  ],
-  nrow = 2
-)
-theta_hat <- unname(
-  estimates["theta"]
-)
+summary(fit_mx_sem)
 ```
 
-### Estimated Parameters
+### lme4: Multilevel Model
 
-The estimates arranged as the matrices in the model,
-to compare with the population values in the Data Generation section.
+The linear growth curve model is also a multilevel (mixed-effects) model
+of the long data:
+the occasions are nested in individuals,
+the fixed intercept and slope are the means
+$\mu_{\eta_{0}}$ and $\mu_{\eta_{1}}$ (`mu0_0` and `mu0_1`),
+the random intercept and slope have the covariance matrix
+$\boldsymbol{\Sigma}_{0}$
+(`sigma0_00`, `sigma0_01`, and `sigma0_11`),
+and the residual variance is $\theta$.
+`lme4::lmer()` fits it with a random intercept and a random slope of `time`
+for each `id` [@Bates-Machler-Bolker-etal-2015].
+`REML = FALSE` gives maximum likelihood estimates,
+as in the other methods.
 
 ```{r}
-mu0_hat
-sigma0_hat
-theta_hat
+fit_lme4 <- lme4::lmer(
+  formula = y1 ~ time + (time | id),
+  data = data,
+  REML = FALSE
+)
+summary(fit_lme4)
 ```
 
-## Table of Parameters and Estimates
+## Population Values and Estimates
 
-The table below puts each population value used to simulate the data
-next to its estimate.
+Each table below puts the population values used to simulate the data
+next to the estimates of one method.
 Bias is the estimate minus the population value.
-Because the model is fitted to a single simulated data set,
+Because each model is fitted to a single simulated data set,
 this is the error of one estimate, not a Monte Carlo bias,
 which would average over many replications.
 The 95% confidence interval is the Wald interval,
 $\hat{\theta} \pm 1.96 \times \mathrm{SE}$,
+unless the caption says otherwise,
 and `Covers` shows whether it contains the population value.
+The parameter names are the dynr names in every table.
 
 ```{r}
-EstimatesTable <- function(population, estimate, se) {
+EstimatesTable <- function(population, estimate, se, ll = NULL, ul = NULL) {
   z <- stats::qnorm(p = 0.975)
-  ll <- estimate - z * se
-  ul <- estimate + z * se
+  if (is.null(ll)) {
+    ll <- estimate - z * se
+  }
+  if (is.null(ul)) {
+    ul <- estimate + z * se
+  }
   data.frame(
     Parameter = names(population),
     Population = unname(population),
@@ -662,35 +870,152 @@ population <- c(
 ### dynr
 
 ```{r}
-estimates <- coef(results)[names(population)]
-se <- sqrt(diag(vcov(results)))
-names(se) <- names(coef(results))
+dynr_est <- coef(results)
+dynr_se <- sqrt(diag(vcov(results)))
 knitr::kable(
   x = EstimatesTable(
     population = population,
-    estimate = estimates,
-    se = se[names(population)]
+    estimate = dynr_est[names(population)],
+    se = dynr_se[names(population)]
   ),
   digits = 3,
   caption = "Population values and dynr estimates (one simulated data set)"
 )
 ```
 
-### lavaan
+### OpenMx: State Space Model
 
 ```{r}
-pe <- lavaan::parameterEstimates(fit)
-# theta is one parameter shared by the five error variances
-pe <- pe[pe$label != "" & !duplicated(pe$label), ]
-rownames(pe) <- pe$label
+mx_ssm_est <- OpenMx::omxGetParameters(fit_mx_ssm)
+mx_ssm_se <- fit_mx_ssm$output$standardErrors[, 1]
 knitr::kable(
   x = EstimatesTable(
     population = population,
-    estimate = pe[names(population), "est"],
-    se = pe[names(population), "se"]
+    estimate = mx_ssm_est[names(population)],
+    se = mx_ssm_se[names(population)]
+  ),
+  digits = 3,
+  caption = paste(
+    "Population values and OpenMx state space estimates",
+    "(one simulated data set)"
+  )
+)
+```
+
+### lavaan: Structural Equation Model
+
+```{r}
+pe <- lavaan::parameterEstimates(fit_lavaan)
+# a label shared by several paths is one parameter
+pe <- pe[pe$label != "" & !duplicated(pe$label), ]
+lavaan_est <- stats::setNames(object = pe$est, nm = pe$label)
+lavaan_se <- stats::setNames(object = pe$se, nm = pe$label)
+knitr::kable(
+  x = EstimatesTable(
+    population = population,
+    estimate = lavaan_est[names(population)],
+    se = lavaan_se[names(population)]
   ),
   digits = 3,
   caption = "Population values and lavaan estimates (one simulated data set)"
+)
+```
+
+### OpenMx: Structural Equation Model
+
+```{r}
+mx_sem_est <- OpenMx::omxGetParameters(fit_mx_sem)
+mx_sem_se <- fit_mx_sem$output$standardErrors[, 1]
+knitr::kable(
+  x = EstimatesTable(
+    population = population,
+    estimate = mx_sem_est[names(population)],
+    se = mx_sem_se[names(population)]
+  ),
+  digits = 3,
+  caption = "Population values and OpenMx SEM estimates (one simulated data set)"
+)
+```
+
+### lme4: Multilevel Model
+
+lme4 gives standard errors for the fixed effects only.
+For the variances, the interval is the profile likelihood interval
+of the standard deviation, squared;
+lme4 has no interval for a covariance.
+
+```{r}
+vc <- as.data.frame(lme4::VarCorr(fit_lme4))
+random <- vc[vc$grp == "id", ]
+lme4_est <- c(
+  mu0_0 = unname(lme4::fixef(fit_lme4)["(Intercept)"]),
+  mu0_1 = unname(lme4::fixef(fit_lme4)["time"]),
+  sigma0_00 = random$vcov[random$var1 == "(Intercept)" & is.na(random$var2)],
+  sigma0_01 = random$vcov[!is.na(random$var2)],
+  sigma0_11 = random$vcov[random$var1 == "time" & is.na(random$var2)],
+  theta = vc$vcov[vc$grp == "Residual"]
+)
+lme4_se <- c(
+  sqrt(diag(as.matrix(stats::vcov(fit_lme4)))),
+  rep(x = NA, times = 4)
+)
+names(lme4_se) <- names(lme4_est)
+profile_ci <- stats::confint(
+  fit_lme4,
+  method = "profile",
+  oldNames = FALSE
+)
+z <- stats::qnorm(p = 0.975)
+lme4_ll <- c(
+  lme4_est[1:2] - z * lme4_se[1:2],
+  sigma0_00 = profile_ci["sd_(Intercept)|id", 1]^2,
+  sigma0_01 = NA,
+  sigma0_11 = profile_ci["sd_time|id", 1]^2,
+  theta = profile_ci["sigma", 1]^2
+)
+lme4_ul <- c(
+  lme4_est[1:2] + z * lme4_se[1:2],
+  sigma0_00 = profile_ci["sd_(Intercept)|id", 2]^2,
+  sigma0_01 = NA,
+  sigma0_11 = profile_ci["sd_time|id", 2]^2,
+  theta = profile_ci["sigma", 2]^2
+)
+knitr::kable(
+  x = EstimatesTable(
+    population = population,
+    estimate = lme4_est[names(population)],
+    se = lme4_se[names(population)],
+    ll = lme4_ll[names(population)],
+    ul = lme4_ul[names(population)]
+  ),
+  digits = 3,
+  caption = paste(
+    "Population values and lme4 estimates (one simulated data set);",
+    "intervals for the variances: profile likelihood"
+  )
+)
+```
+
+### All Methods
+
+The estimates of every method side by side.
+The methods maximize the same likelihood,
+so their estimates should agree closely.
+
+```{r}
+knitr::kable(
+  x = data.frame(
+    Parameter = names(population),
+    Population = unname(population),
+    `dynr` = unname(dynr_est[names(population)]),
+    `OpenMx (SSM)` = unname(mx_ssm_est[names(population)]),
+    `lavaan` = unname(lavaan_est[names(population)]),
+    `OpenMx (SEM)` = unname(mx_sem_est[names(population)]),
+    `lme4` = unname(lme4_est[names(population)]),
+    check.names = FALSE
+  ),
+  digits = 3,
+  caption = "Population values and the estimates of every method"
 )
 ```
 

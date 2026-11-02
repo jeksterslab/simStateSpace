@@ -1,5 +1,5 @@
 #!/bin/bash
-# The image job of the GitHub Actions workflows (rProject 0.0.57): reads
+# The image job of the GitHub Actions workflows (rProject 0.0.61): reads
 # .setup/scripts/rproject.lock (written by make auto) and outputs the image
 # to run (`image`), the Posit Package Manager snapshot (`snapshot`), and the
 # R version (`r_version`). A scheduled run, a manual run with `latest`, no
@@ -46,6 +46,27 @@ else
     r_version="$(field r_version)"
     echo "::warning::The lock has no image digest: running ${image}:latest. Rebuild the add-on sif from the public sif (Bootstrap: localimage)."
   fi
+fi
+
+# a snapshot Posit Package Manager has not published (a day's snapshot
+# appears only after the day ends; locks before rProject 0.0.61 record the
+# image's own date): use the newest earlier one, up to a week back
+ppm="https://packagemanager.posit.co/cran"
+published() {
+  curl -fsL -o /dev/null --max-time 30 "${ppm}/$1/src/contrib/PACKAGES"
+}
+if [[ "${snapshot:-latest}" =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}$ ]] &&
+  ! published "${snapshot}"; then
+  wanted="${snapshot}"
+  snapshot="latest"
+  for back in 1 2 3 4 5 6 7; do
+    day="$(date -u -d "${wanted} - ${back} day" +%F)"
+    if published "${day}"; then
+      snapshot="${day}"
+      break
+    fi
+  done
+  echo "::warning::Snapshot ${wanted} is not published: packages from ${snapshot}."
 fi
 
 {

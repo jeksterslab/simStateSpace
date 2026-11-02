@@ -162,7 +162,7 @@ pkg_installed <- installed[, "Package"]
 if (!("pak" %in% pkg_installed)) {
   install.packages(
     "pak",
-    repos = c(REPO_NAME = "https://packagemanager.rstudio.com/all/latest"),
+    repos = c(REPO_NAME = "https://packagemanager.posit.co/cran/latest"),
     lib = dot_library_folder,
     quiet = TRUE
   )
