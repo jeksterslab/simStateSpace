@@ -70,7 +70,7 @@ No prior knowledge of state space models is needed.
 #| echo = FALSE
 options(scipen = 999)
 set.seed(42)
-n <- 2000
+n <- 5000
 time <- 6
 k <- 2
 p <- 4

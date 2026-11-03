@@ -72,7 +72,7 @@ explains the growth part in more detail.
 #| echo = FALSE
 options(scipen = 999)
 set.seed(42)
-n <- 2000
+n <- 5000
 time <- 5
 k <- 2
 p <- 6

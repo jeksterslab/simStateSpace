@@ -61,7 +61,7 @@ see the vignette on the vector autoregressive model.
 options(scipen = 999)
 set.seed(42)
 n <- 100
-time <- 200
+time <- 1000
 k <- p <- 3
 iden <- diag(k)
 null_vec <- rep(x = 0, times = k)

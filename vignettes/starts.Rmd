@@ -1,7 +1,7 @@
 ---
 title: "The Stable Trait, Autoregressive Trait, and State Model"
 author: "Ivan Jacob Agaloos Pesigan"
-date: "2026-11-02"
+date: "2026-11-03"
 bibliography: "vignettes.bib"
 csl: https://raw.githubusercontent.com/citation-style-language/styles/master/apa.csl
 nocite: |
@@ -491,8 +491,8 @@ results <- dynr::dynr.cook(
 #> 
 #> Doing end processing
 #> Successful trial
-#> Total Time: 25.01403 
-#> Backend Time: 24.60459
+#> Total Time: 24.99586 
+#> Backend Time: 24.59805
 ```
 
 #### Summary
@@ -720,8 +720,8 @@ summary(fit_mx_ssm)
 #> AIC:       30184.19               130184.2                 130184.2
 #> BIC:     -410751.81               130237.1                 130218.0
 #> To get additional fit indices, see help(mxRefModels)
-#> timestamp: 2026-11-02 06:52:19 
-#> Wall clock time: 82.59456 secs 
+#> timestamp: 2026-11-03 16:41:04 
+#> Wall clock time: 81.59231 secs 
 #> optimizer:  SLSQP 
 #> OpenMx version number: 2.22.11 
 #> Need help?  See help(mxSummary)
@@ -1099,8 +1099,8 @@ summary(fit_mx_sem)
 #> AIC:       30184.19               130184.2                 130184.2
 #> BIC:     -295636.37               130223.3                 130204.2
 #> To get additional fit indices, see help(mxRefModels)
-#> timestamp: 2026-11-02 06:55:24 
-#> Wall clock time: 0.03077316 secs 
+#> timestamp: 2026-11-03 16:44:00 
+#> Wall clock time: 0.03069353 secs 
 #> optimizer:  SLSQP 
 #> OpenMx version number: 2.22.11 
 #> Need help?  See help(mxSummary)
