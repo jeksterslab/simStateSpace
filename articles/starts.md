@@ -33,43 +33,41 @@ No prior knowledge of state space models is needed.
 
 ## Model
 
-The measurement model is given by \\\[Y\_{i, t} = \left(
-\begin{array}{cc} 1 & 1 \\\\ \end{array} \right) \left( \begin{array}{c}
-\eta\_{1\_{i, t}} \\\\ \eta\_{2\_{i, t}} \\\\ \end{array} \right) +
-\varepsilon\_{i, t}, \quad \mathrm{with} \quad \varepsilon\_{i, t} \sim
-\mathcal{N} \left( 0, \theta \right)\\\] where \\(Y\_{i, t}\\) is the
-observed variable at time \\(t\\) and individual \\(i\\),
-\\(\eta\_{1\_{i, t}}\\) is the stable trait, \\(\eta\_{2\_{i, t}}\\) is
-the autoregressive trait, and \\(\varepsilon\_{i, t}\\) is the state.
-\\(\theta\\) is the variance of the state.
+The measurement model is given by Y\_{i, t} = \left( \begin{array}{cc} 1
+& 1 \\\\ \end{array} \right) \left( \begin{array}{c} \eta\_{1\_{i, t}}
+\\\\ \eta\_{2\_{i, t}} \\\\ \end{array} \right) + \varepsilon\_{i, t},
+\quad \mathrm{with} \quad \varepsilon\_{i, t} \sim \mathcal{N} \left( 0,
+\theta \right) where Y\_{i, t} is the observed variable at time t and
+individual i, \eta\_{1\_{i, t}} is the stable trait, \eta\_{2\_{i, t}}
+is the autoregressive trait, and \varepsilon\_{i, t} is the state.
+\theta is the variance of the state.
 
 In words, the observed score is the sum of the three parts. The state
-\\(\varepsilon\_{i, t}\\) is new on every occasion and does not carry
-over, so it plays the role of measurement error in a state space model.
+\varepsilon\_{i, t} is new on every occasion and does not carry over, so
+it plays the role of measurement error in a state space model.
 
-The dynamic structure is given by \\\[\left( \begin{array}{c}
-\eta\_{1\_{i, t}} \\\\ \eta\_{2\_{i, t}} \\\\ \end{array} \right) =
-\left( \begin{array}{cc} 1 & 0 \\\\ 0 & \beta\_{22} \\\\ \end{array}
-\right) \left( \begin{array}{c} \eta\_{1\_{i, t - 1}} \\\\ \eta\_{2\_{i,
-t - 1}} \\\\ \end{array} \right) + \left( \begin{array}{c} 0 \\\\
-\zeta\_{2\_{i, t}} \\\\ \end{array} \right), \quad \mathrm{with} \quad
-\zeta\_{2\_{i, t}} \sim \mathcal{N} \left( 0, \psi\_{22} \right) .\\\]
+The dynamic structure is given by \left( \begin{array}{c} \eta\_{1\_{i,
+t}} \\\\ \eta\_{2\_{i, t}} \\\\ \end{array} \right) = \left(
+\begin{array}{cc} 1 & 0 \\\\ 0 & \beta\_{22} \\\\ \end{array} \right)
+\left( \begin{array}{c} \eta\_{1\_{i, t - 1}} \\\\ \eta\_{2\_{i, t - 1}}
+\\\\ \end{array} \right) + \left( \begin{array}{c} 0 \\\\ \zeta\_{2\_{i,
+t}} \\\\ \end{array} \right), \quad \mathrm{with} \quad \zeta\_{2\_{i,
+t}} \sim \mathcal{N} \left( 0, \psi\_{22} \right) .
 
 In words, the stable trait stays the same over time. The autoregressive
-trait keeps a proportion \\(\beta\_{22}\\) of its previous value and
-adds a new part with variance \\(\psi\_{22}\\). The closer
-\\(\beta\_{22}\\) is to 1, the more slowly the autoregressive trait
-changes.
+trait keeps a proportion \beta\_{22} of its previous value and adds a
+new part with variance \psi\_{22}. The closer \beta\_{22} is to 1, the
+more slowly the autoregressive trait changes.
 
-The initial condition is given by \\\[\boldsymbol{\eta}\_{i, 0} \sim
+The initial condition is given by \boldsymbol{\eta}\_{i, 0} \sim
 \mathcal{N} \left( \left( \begin{array}{c} \mu\_{1} \\\\ 0 \\\\
 \end{array} \right), \left( \begin{array}{cc} \sigma\_{11} & 0 \\\\ 0 &
-\sigma\_{22} \\\\ \end{array} \right) \right) .\\\]
+\sigma\_{22} \\\\ \end{array} \right) \right) .
 
-Here, \\(\mu\_{1}\\) is the average stable trait and \\(\sigma\_{11}\\)
-is how much individuals differ in it. The autoregressive trait has mean
-zero, because the stable trait carries the mean, and \\(\sigma\_{22}\\)
-is its variance at the first occasion. The two traits are uncorrelated.
+Here, \mu\_{1} is the average stable trait and \sigma\_{11} is how much
+individuals differ in it. The autoregressive trait has mean zero,
+because the stable trait carries the mean, and \sigma\_{22} is its
+variance at the first occasion. The two traits are uncorrelated.
 
 ### Diagrams
 
@@ -77,16 +75,15 @@ is its variance at the first occasion. The two traits are uncorrelated.
 
 Path diagram of the STARTS model.
 
-The STARTS model as a path diagram, for the first three occasions (\\(t
-= 0, 1, 2\\)). The stable trait \\(\eta\_{1}\\), with variance
-\\(\sigma\_{11}\\), loads on every occasion with a loading of 1. The
-autoregressive trait \\(\eta\_{2}\\), with variance \\(\sigma\_{22}\\)
-at \\(t = 0\\), carries over from one occasion to the next with the
-autoregressive effect \\(\beta\_{22}\\) and gets a new part
-\\(\zeta\_{2}\\), with variance \\(\psi\_{22}\\), on each occasion. The
-state \\(\varepsilon\\), with variance \\(\theta\\), is new on every
-occasion. A loop on a variable is its variance and a curved two-headed
-arrow a covariance.
+The STARTS model as a path diagram, for the first three occasions (t =
+0, 1, 2). The stable trait \eta\_{1}, with variance \sigma\_{11}, loads
+on every occasion with a loading of 1. The autoregressive trait
+\eta\_{2}, with variance \sigma\_{22} at t = 0, carries over from one
+occasion to the next with the autoregressive effect \beta\_{22} and gets
+a new part \zeta\_{2}, with variance \psi\_{22}, on each occasion. The
+state \varepsilon, with variance \theta, is new on every occasion. A
+loop on a variable is its variance and a curved two-headed arrow a
+covariance.
 
 ![State space form of the STARTS model.](fig-vignettes-starts-ssm.png)
 
@@ -94,44 +91,42 @@ State space form of the STARTS model.
 
 The same model in state space form, for the first three occasions, with
 every element of the state drawn. The stable trait is a state with a
-transition of 1 and no process noise, so \\(\eta\_{1, t} = \eta\_{1}\\)
-for all \\(t\\); the autoregressive trait \\(\eta\_{2, t}\\) receives
-the process noise \\(\zeta\_{2, t}\\) from \\(t = 1\\) on; the state
-\\(\varepsilon\_{t}\\) is the measurement error of the state space
-model. Each \\(Y\_{t}\\) is the sum of the three, all with a loading
-of 1. At \\(t = 0\\), the initial condition \\(\boldsymbol{\eta}\_{0}
-\sim \mathcal{N} \left( \boldsymbol{\mu}\_{0}, \boldsymbol{\Sigma}\_{0}
-\right)\\) gives the variances \\(\sigma\_{11}\\) and \\(\sigma\_{22}\\)
-at \\(t = 0\\); the two traits do not covary. Below the diagram,
-\\(\boldsymbol{\beta}\\) carries the state from one occasion to the
-next, \\(\boldsymbol{\Lambda}\\) maps the state to the observed
-variable, \\(\boldsymbol{\Psi}\\) is the covariance matrix of the
-process noise \\(\boldsymbol{\zeta}\_{t}\\), and
-\\(\boldsymbol{\Theta}\\) is the variance of the state.
+transition of 1 and no process noise, so \eta\_{1, t} = \eta\_{1} for
+all t; the autoregressive trait \eta\_{2, t} receives the process noise
+\zeta\_{2, t} from t = 1 on; the state \varepsilon\_{t} is the
+measurement error of the state space model. Each Y\_{t} is the sum of
+the three, all with a loading of 1. At t = 0, the initial condition
+\boldsymbol{\eta}\_{0} \sim \mathcal{N} \left( \boldsymbol{\mu}\_{0},
+\boldsymbol{\Sigma}\_{0} \right) gives the variances \sigma\_{11} and
+\sigma\_{22} at t = 0; the two traits do not covary. Below the diagram,
+\boldsymbol{\beta} carries the state from one occasion to the next,
+\boldsymbol{\Lambda} maps the state to the observed variable,
+\boldsymbol{\Psi} is the covariance matrix of the process noise
+\boldsymbol{\zeta}\_{t}, and \boldsymbol{\Theta} is the variance of the
+state.
 [`SimSSMFixed()`](https://github.com/jeksterslab/simStateSpace/reference/SimSSMFixed.md)
 takes `beta`, `lambda`, `mu0`, and the Cholesky factors of
-\\(\boldsymbol{\Psi}\\), \\(\boldsymbol{\Theta}\\), and
-\\(\boldsymbol{\Sigma}\_{0}\\) (`psi_l`, `theta_l`, and `sigma0_l`).
+\boldsymbol{\Psi}, \boldsymbol{\Theta}, and \boldsymbol{\Sigma}\_{0}
+(`psi_l`, `theta_l`, and `sigma0_l`).
 
 ## Data Generation
 
 ### Notation
 
-Let \\(t = 10\\) be the number of time points and \\(n = 5000\\) be the
-number of individuals. The STARTS model needs many occasions to tell the
-three parts apart, so this example has more occasions than the other
+Let t = 10 be the number of time points and n = 5000 be the number of
+individuals. The STARTS model needs many occasions to tell the three
+parts apart, so this example has more occasions than the other
 vignettes.
 
-Let the stable trait have mean \\(\mu\_{1} = 3\\) and variance
-\\(\sigma\_{11} = 0.5\\). Let the autoregressive effect be
-\\(\beta\_{22} = 0.6\\), the process noise variance \\(\psi\_{22} =
-0.32\\), and the state variance \\(\theta = 0.3\\).
+Let the stable trait have mean \mu\_{1} = 3 and variance \sigma\_{11} =
+0.5. Let the autoregressive effect be \beta\_{22} = 0.6, the process
+noise variance \psi\_{22} = 0.32, and the state variance \theta = 0.3.
 
 The autoregressive trait starts from its stationary distribution, so its
 variance at the first occasion is the variance it keeps at every later
 occasion,
 
-\\\[\sigma\_{22} = \frac{\psi\_{22}}{1 - \beta\_{22}^{2}} = 0.5 .\\\]
+\sigma\_{22} = \frac{\psi\_{22}}{1 - \beta\_{22}^{2}} = 0.5 .
 
 With these values, the stable trait, the autoregressive trait, and the
 state contribute 0.5, 0.5, and 0.3 to the variance of the observed score
@@ -252,9 +247,9 @@ maximum likelihood using the Kalman filter.
 A `dynr` model is built from pieces that match the equations above: the
 data, the initial condition, the measurement model, the dynamic model,
 and the noise. Each parameter gets a name (for example, `beta_2_2` for
-\\(\beta\_{22}\\)), and the same name used in two places means one
-shared parameter. The starting values are set to the population values
-for convenience; with real data, they would be rough guesses.
+\beta\_{22}), and the same name used in two places means one shared
+parameter. The starting values are set to the population values for
+convenience; with real data, they would be rough guesses.
 
 #### Prepare Data
 
@@ -291,7 +286,7 @@ the covariance of the two traits are fixed at zero.
 
 #### Prepare Measurement Model
 
-The loadings \\(\left( 1, 1 \right)\\) are fixed.
+The loadings \left( 1, 1 \right) are fixed.
 
 \
 `dynr_measurement`` ``<-`` ``dynr``::`[`prep.measurement`](https://rdrr.io/pkg/dynr/man/prep.measurement.html)`(`\
@@ -304,7 +299,7 @@ The loadings \\(\left( 1, 1 \right)\\) are fixed.
 #### Prepare Dynamic Process
 
 The stable trait carries over unchanged; the autoregressive trait has
-the autoregressive effect \\(\beta\_{22}\\).
+the autoregressive effect \beta\_{22}.
 
 \
 `dynr_dynamics`` ``<-`` ``dynr``::`[`prep.formulaDynamics`](https://rdrr.io/pkg/dynr/man/prep.formulaDynamics.html)`(`\
@@ -319,7 +314,7 @@ the autoregressive effect \\(\beta\_{22}\\).
 #### Prepare Process Noise
 
 Only the autoregressive trait has process noise. The state variance
-\\(\theta\\) is estimated.
+\theta is estimated.
 
 \
 `dynr_noise`` ``<-`` ``dynr``::`[`prep.noise`](https://rdrr.io/pkg/dynr/man/prep.noise.html)`(`\
@@ -378,13 +373,13 @@ The plot below shows the model equations with the parameter names.
 `#> `\
 `#> Doing end processing`\
 `#> Successful trial`\
-`#> Total Time: 25.01403 `\
-`#> Backend Time: 24.60459`
+`#> Total Time: 24.99586 `\
+`#> Backend Time: 24.59805`
 
 #### Summary
 
-The summary lists each estimate with its standard error, \\(t\\) value,
-confidence interval, and \\(p\\) value.
+The summary lists each estimate with its standard error, t value,
+confidence interval, and p value.
 
 \
 [`summary`](https://rdrr.io/r/base/summary.html)`(``results``)`\
@@ -416,29 +411,29 @@ confidence interval, and \\(p\\) value.
 own Kalman filter
 ([`OpenMx::mxExpectationStateSpace()`](https://rdrr.io/pkg/OpenMx/man/mxExpectationStateSpace.html);
 Hunter (2018)). Its matrices have the names used in engineering: `A` is
-the transition matrix \\(\boldsymbol{\beta}\\), `B` holds the intercepts
-of the dynamic model, `C` is the loading matrix
-\\(\boldsymbol{\Lambda}\\), `D` holds the intercepts of the measurement
-model, `Q` is the process noise covariance matrix, and `R` is the
-measurement error covariance matrix. The parameter labels are the dynr
-names; as in dynr, a label used in two places is one shared parameter,
-and the starting values are the population values.
+the transition matrix \boldsymbol{\beta}, `B` holds the intercepts of
+the dynamic model, `C` is the loading matrix \boldsymbol{\Lambda}, `D`
+holds the intercepts of the measurement model, `Q` is the process noise
+covariance matrix, and `R` is the measurement error covariance matrix.
+The parameter labels are the dynr names; as in dynr, a label used in two
+places is one shared parameter, and the starting values are the
+population values.
 
 Two details differ from dynr. First, OpenMx reads the data as a single
 time series. To start the filter again at the first occasion of every
 individual, each individual gets a group, and all groups use the
 matrices of one parent model, so every individual has the same
 parameters. Second, OpenMx starts the filter one occasion before the
-first row, so the first row has the state mean \\(\mathbf{A}
-\mathbf{x}\_{0} + \mathbf{B} \mathbf{u}\\) and the state covariance
-\\(\mathbf{A} \mathbf{P}\_{0} \mathbf{A}^{\prime} + \mathbf{Q}\\), with
-the constant input \\(\mathbf{u} = 1\\). Setting \\(\mathbf{x}\_{0} =
-\mathbf{A}^{-1} \left( \boldsymbol{\mu}\_{0} - \mathbf{B} \mathbf{u}
-\right)\\) and \\(\mathbf{P}\_{0} = \mathbf{A}^{-1} \left(
-\boldsymbol{\Sigma}\_{0} - \mathbf{Q} \right) \left( \mathbf{A}^{-1}
-\right)^{\prime}\\) gives the first occasion the initial condition of
-the model, so the likelihood is the same as in dynr. This needs an
-invertible \\(\mathbf{A}\\), which holds here.
+first row, so the first row has the state mean \mathbf{A}
+\mathbf{x}\_{0} + \mathbf{B} \mathbf{u} and the state covariance
+\mathbf{A} \mathbf{P}\_{0} \mathbf{A}^{\prime} + \mathbf{Q}, with the
+constant input \mathbf{u} = 1. Setting \mathbf{x}\_{0} = \mathbf{A}^{-1}
+\left( \boldsymbol{\mu}\_{0} - \mathbf{B} \mathbf{u} \right) and
+\mathbf{P}\_{0} = \mathbf{A}^{-1} \left( \boldsymbol{\Sigma}\_{0} -
+\mathbf{Q} \right) \left( \mathbf{A}^{-1} \right)^{\prime} gives the
+first occasion the initial condition of the model, so the likelihood is
+the same as in dynr. This needs an invertible \mathbf{A}, which holds
+here.
 
 The two helper functions below are the same in every vignette of the
 package. `MxMat()` makes an OpenMx matrix from values and dynr-style
@@ -599,8 +594,8 @@ summary(fit_mx_ssm)
 #> AIC:       30184.19               130184.2                 130184.2
 #> BIC:     -410751.81               130237.1                 130218.0
 #> To get additional fit indices, see help(mxRefModels)
-#> timestamp: 2026-11-02 06:52:19 
-#> Wall clock time: 82.59456 secs 
+#> timestamp: 2026-11-03 16:41:04 
+#> Wall clock time: 81.59231 secs 
 #> optimizer:  SLSQP 
 #> OpenMx version number: 2.22.11 
 #> Need help?  See help(mxSummary)
@@ -965,8 +960,8 @@ population values.
 `#> AIC:       30184.19               130184.2                 130184.2`\
 `#> BIC:     -295636.37               130223.3                 130204.2`\
 `#> To get additional fit indices, see help(mxRefModels)`\
-`#> timestamp: 2026-11-02 06:55:24 `\
-`#> Wall clock time: 0.03077316 secs `\
+`#> timestamp: 2026-11-03 16:44:00 `\
+`#> Wall clock time: 0.03069353 secs `\
 `#> optimizer:  SLSQP `\
 `#> OpenMx version number: 2.22.11 `\
 `#> Need help?  See help(mxSummary)`
@@ -978,10 +973,9 @@ next to the estimates of one method. Bias is the estimate minus the
 population value. Because each model is fitted to a single simulated
 data set, this is the error of one estimate, not a Monte Carlo bias,
 which would average over many replications. The 95% confidence interval
-is the Wald interval, \\(\hat{\theta} \pm 1.96 \times \mathrm{SE}\\),
-unless the caption says otherwise, and `Covers` shows whether it
-contains the population value. The parameter names are the dynr names in
-every table.
+is the Wald interval, \hat{\theta} \pm 1.96 \times \mathrm{SE}, unless
+the caption says otherwise, and `Covers` shows whether it contains the
+population value. The parameter names are the dynr names in every table.
 
 \
 `EstimatesTable`` ``<-`` ``function``(``population``, ``estimate``, ``se``, ``ll`` ``=`` ``NULL``, ``ul`` ``=`` ``NULL``)`` ``{`\

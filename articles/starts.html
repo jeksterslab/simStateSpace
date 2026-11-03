@@ -5,13 +5,8 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>The Stable Trait, Autoregressive Trait, and State Model • simStateSpace</title>
-<!-- mathjax math --><script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js" integrity="sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI=" crossorigin="anonymous"></script><script>
-  window.MathJax = {
-    chtml: {
-      fontURL: "https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/output/chtml/fonts/woff-v2"
-    }
-  };
-</script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- katex math --><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" integrity="sha384-nB0miv6/jRmo5UMMR1wu3Gz6NLsoTkbqJghGIsx//Rlm+ZU03BU6SQNC66uf4l5+" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" integrity="sha384-7zkQWkzuo3B5mTepMUcHkMB5jZaolc2xDwL6VFqjFALcbeS9Ggm/Yr2r3Dy4lfFg" crossorigin="anonymous"></script><script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" integrity="sha384-43gviWU0YVjaDtb/GhzOouOXtZMP/7XUzwPTstBeZFe/+rCMvRwr4yROQP43s0Xk" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script><script src="../katex-auto.js"></script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/Roboto-0.4.10/font.css" rel="stylesheet">
 <link href="../deps/Roboto_Mono-0.4.10/font.css" rel="stylesheet">
@@ -64,7 +59,7 @@
                         <h4 data-toc-skip class="author">Ivan Jacob
 Agaloos Pesigan</h4>
             
-            <h4 data-toc-skip class="date">2026-11-02</h4>
+            <h4 data-toc-skip class="date">2026-11-03</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/jeksterslab/simStateSpace/blob/main/vignettes/starts.Rmd"><code>vignettes/starts.Rmd</code></a></small>
       <div class="d-none name"><code>starts.Rmd</code></div>
@@ -106,8 +101,7 @@ data.</li>
 <div class="section level2">
 <h2 id="model">Model<a class="anchor" aria-label="anchor" href="#model"></a>
 </h2>
-<p>The measurement model is given by <span class="math display">\[Y_{i,
-t}
+<p>The measurement model is given by <span class="math display">Y_{i, t}
   =
   \left(
   \begin{array}{cc}
@@ -131,18 +125,17 @@ t}
   \left(
   0,
   \theta
-  \right)\]</span> where <span class="math inline">\(Y_{i, t}\)</span>
-is the observed variable at time <span class="math inline">\(t\)</span>
-and individual <span class="math inline">\(i\)</span>, <span class="math inline">\(\eta_{1_{i, t}}\)</span> is the stable trait,
-<span class="math inline">\(\eta_{2_{i, t}}\)</span> is the
-autoregressive trait, and <span class="math inline">\(\varepsilon_{i,
-t}\)</span> is the state. <span class="math inline">\(\theta\)</span> is
-the variance of the state.</p>
+  \right)</span> where <span class="math inline">Y_{i, t}</span> is the
+observed variable at time <span class="math inline">t</span> and
+individual <span class="math inline">i</span>, <span class="math inline">\eta_{1_{i, t}}</span> is the stable trait, <span class="math inline">\eta_{2_{i, t}}</span> is the autoregressive trait,
+and <span class="math inline">\varepsilon_{i, t}</span> is the state.
+<span class="math inline">\theta</span> is the variance of the
+state.</p>
 <p>In words, the observed score is the sum of the three parts. The state
-<span class="math inline">\(\varepsilon_{i, t}\)</span> is new on every
+<span class="math inline">\varepsilon_{i, t}</span> is new on every
 occasion and does not carry over, so it plays the role of measurement
 error in a state space model.</p>
-<p>The dynamic structure is given by <span class="math display">\[\left(
+<p>The dynamic structure is given by <span class="math display">\left(
   \begin{array}{c}
     \eta_{1_{i, t}} \\
     \eta_{2_{i, t}} \\
@@ -177,13 +170,13 @@ error in a state space model.</p>
   \left(
   0,
   \psi_{22}
-  \right) .\]</span></p>
+  \right) .</span></p>
 <p>In words, the stable trait stays the same over time. The
-autoregressive trait keeps a proportion <span class="math inline">\(\beta_{22}\)</span> of its previous value and adds
-a new part with variance <span class="math inline">\(\psi_{22}\)</span>.
-The closer <span class="math inline">\(\beta_{22}\)</span> is to 1, the
-more slowly the autoregressive trait changes.</p>
-<p>The initial condition is given by <span class="math display">\[\boldsymbol{\eta}_{i, 0}
+autoregressive trait keeps a proportion <span class="math inline">\beta_{22}</span> of its previous value and adds a
+new part with variance <span class="math inline">\psi_{22}</span>. The
+closer <span class="math inline">\beta_{22}</span> is to 1, the more
+slowly the autoregressive trait changes.</p>
+<p>The initial condition is given by <span class="math display">\boldsymbol{\eta}_{i, 0}
   \sim
   \mathcal{N}
   \left(
@@ -199,11 +192,11 @@ more slowly the autoregressive trait changes.</p>
     0 &amp; \sigma_{22} \\
   \end{array}
   \right)
-  \right) .\]</span></p>
-<p>Here, <span class="math inline">\(\mu_{1}\)</span> is the average
-stable trait and <span class="math inline">\(\sigma_{11}\)</span> is how
-much individuals differ in it. The autoregressive trait has mean zero,
-because the stable trait carries the mean, and <span class="math inline">\(\sigma_{22}\)</span> is its variance at the first
+  \right) .</span></p>
+<p>Here, <span class="math inline">\mu_{1}</span> is the average stable
+trait and <span class="math inline">\sigma_{11}</span> is how much
+individuals differ in it. The autoregressive trait has mean zero,
+because the stable trait carries the mean, and <span class="math inline">\sigma_{22}</span> is its variance at the first
 occasion. The two traits are uncorrelated.</p>
 <div class="section level3">
 <h3 id="diagrams">Diagrams<a class="anchor" aria-label="anchor" href="#diagrams"></a>
@@ -212,33 +205,34 @@ occasion. The two traits are uncorrelated.</p>
 <img src="fig-vignettes-starts-path.png" style="width:100.0%" alt="Path diagram of the STARTS model."><div class="figcaption">Path diagram of the STARTS model.</div>
 </div>
 <p>The STARTS model as a path diagram, for the first three occasions
-(<span class="math inline">\(t = 0, 1, 2\)</span>). The stable trait
-<span class="math inline">\(\eta_{1}\)</span>, with variance <span class="math inline">\(\sigma_{11}\)</span>, loads on every occasion with
-a loading of 1. The autoregressive trait <span class="math inline">\(\eta_{2}\)</span>, with variance <span class="math inline">\(\sigma_{22}\)</span> at <span class="math inline">\(t = 0\)</span>, carries over from one occasion to
-the next with the autoregressive effect <span class="math inline">\(\beta_{22}\)</span> and gets a new part <span class="math inline">\(\zeta_{2}\)</span>, with variance <span class="math inline">\(\psi_{22}\)</span>, on each occasion. The state
-<span class="math inline">\(\varepsilon\)</span>, with variance <span class="math inline">\(\theta\)</span>, is new on every occasion. A loop
-on a variable is its variance and a curved two-headed arrow a
+(<span class="math inline">t = 0, 1, 2</span>). The stable trait <span class="math inline">\eta_{1}</span>, with variance <span class="math inline">\sigma_{11}</span>, loads on every occasion with a
+loading of 1. The autoregressive trait <span class="math inline">\eta_{2}</span>, with variance <span class="math inline">\sigma_{22}</span> at <span class="math inline">t =
+0</span>, carries over from one occasion to the next with the
+autoregressive effect <span class="math inline">\beta_{22}</span> and
+gets a new part <span class="math inline">\zeta_{2}</span>, with
+variance <span class="math inline">\psi_{22}</span>, on each occasion.
+The state <span class="math inline">\varepsilon</span>, with variance
+<span class="math inline">\theta</span>, is new on every occasion. A
+loop on a variable is its variance and a curved two-headed arrow a
 covariance.</p>
 <div class="float">
 <img src="fig-vignettes-starts-ssm.png" style="width:100.0%" alt="State space form of the STARTS model."><div class="figcaption">State space form of the STARTS model.</div>
 </div>
 <p>The same model in state space form, for the first three occasions,
 with every element of the state drawn. The stable trait is a state with
-a transition of 1 and no process noise, so <span class="math inline">\(\eta_{1, t} = \eta_{1}\)</span> for all <span class="math inline">\(t\)</span>; the autoregressive trait <span class="math inline">\(\eta_{2, t}\)</span> receives the process noise
-<span class="math inline">\(\zeta_{2, t}\)</span> from <span class="math inline">\(t = 1\)</span> on; the state <span class="math inline">\(\varepsilon_{t}\)</span> is the measurement error
-of the state space model. Each <span class="math inline">\(Y_{t}\)</span> is the sum of the three, all with a
-loading of 1. At <span class="math inline">\(t = 0\)</span>, the initial
-condition <span class="math inline">\(\boldsymbol{\eta}_{0} \sim
-\mathcal{N} \left( \boldsymbol{\mu}_{0}, \boldsymbol{\Sigma}_{0}
-\right)\)</span> gives the variances <span class="math inline">\(\sigma_{11}\)</span> and <span class="math inline">\(\sigma_{22}\)</span> at <span class="math inline">\(t = 0\)</span>; the two traits do not covary.
-Below the diagram, <span class="math inline">\(\boldsymbol{\beta}\)</span> carries the state from
-one occasion to the next, <span class="math inline">\(\boldsymbol{\Lambda}\)</span> maps the state to
-the observed variable, <span class="math inline">\(\boldsymbol{\Psi}\)</span> is the covariance
-matrix of the process noise <span class="math inline">\(\boldsymbol{\zeta}_{t}\)</span>, and <span class="math inline">\(\boldsymbol{\Theta}\)</span> is the variance of
-the state. <code><a href="../reference/SimSSMFixed.html">SimSSMFixed()</a></code> takes <code>beta</code>,
-<code>lambda</code>, <code>mu0</code>, and the Cholesky factors of <span class="math inline">\(\boldsymbol{\Psi}\)</span>, <span class="math inline">\(\boldsymbol{\Theta}\)</span>, and <span class="math inline">\(\boldsymbol{\Sigma}_{0}\)</span>
-(<code>psi_l</code>, <code>theta_l</code>, and
-<code>sigma0_l</code>).</p>
+a transition of 1 and no process noise, so <span class="math inline">\eta_{1, t} = \eta_{1}</span> for all <span class="math inline">t</span>; the autoregressive trait <span class="math inline">\eta_{2, t}</span> receives the process noise <span class="math inline">\zeta_{2, t}</span> from <span class="math inline">t
+= 1</span> on; the state <span class="math inline">\varepsilon_{t}</span> is the measurement error of
+the state space model. Each <span class="math inline">Y_{t}</span> is
+the sum of the three, all with a loading of 1. At <span class="math inline">t = 0</span>, the initial condition <span class="math inline">\boldsymbol{\eta}_{0} \sim \mathcal{N} \left(
+\boldsymbol{\mu}_{0}, \boldsymbol{\Sigma}_{0} \right)</span> gives the
+variances <span class="math inline">\sigma_{11}</span> and <span class="math inline">\sigma_{22}</span> at <span class="math inline">t =
+0</span>; the two traits do not covary. Below the diagram, <span class="math inline">\boldsymbol{\beta}</span> carries the state from one
+occasion to the next, <span class="math inline">\boldsymbol{\Lambda}</span> maps the state to the
+observed variable, <span class="math inline">\boldsymbol{\Psi}</span> is
+the covariance matrix of the process noise <span class="math inline">\boldsymbol{\zeta}_{t}</span>, and <span class="math inline">\boldsymbol{\Theta}</span> is the variance of the
+state. <code><a href="../reference/SimSSMFixed.html">SimSSMFixed()</a></code> takes <code>beta</code>,
+<code>lambda</code>, <code>mu0</code>, and the Cholesky factors of <span class="math inline">\boldsymbol{\Psi}</span>, <span class="math inline">\boldsymbol{\Theta}</span>, and <span class="math inline">\boldsymbol{\Sigma}_{0}</span> (<code>psi_l</code>,
+<code>theta_l</code>, and <code>sigma0_l</code>).</p>
 </div>
 </div>
 <div class="section level2">
@@ -247,24 +241,24 @@ the state. <code><a href="../reference/SimSSMFixed.html">SimSSMFixed()</a></code
 <div class="section level3">
 <h3 id="notation">Notation<a class="anchor" aria-label="anchor" href="#notation"></a>
 </h3>
-<p>Let <span class="math inline">\(t = 10\)</span> be the number of time
-points and <span class="math inline">\(n = 5000\)</span> be the number
-of individuals. The STARTS model needs many occasions to tell the three
+<p>Let <span class="math inline">t = 10</span> be the number of time
+points and <span class="math inline">n = 5000</span> be the number of
+individuals. The STARTS model needs many occasions to tell the three
 parts apart, so this example has more occasions than the other
 vignettes.</p>
-<p>Let the stable trait have mean <span class="math inline">\(\mu_{1} =
-3\)</span> and variance <span class="math inline">\(\sigma_{11} =
-0.5\)</span>. Let the autoregressive effect be <span class="math inline">\(\beta_{22} = 0.6\)</span>, the process noise
-variance <span class="math inline">\(\psi_{22} = 0.32\)</span>, and the
-state variance <span class="math inline">\(\theta = 0.3\)</span>.</p>
+<p>Let the stable trait have mean <span class="math inline">\mu_{1} =
+3</span> and variance <span class="math inline">\sigma_{11} =
+0.5</span>. Let the autoregressive effect be <span class="math inline">\beta_{22} = 0.6</span>, the process noise variance
+<span class="math inline">\psi_{22} = 0.32</span>, and the state
+variance <span class="math inline">\theta = 0.3</span>.</p>
 <p>The autoregressive trait starts from its stationary distribution, so
 its variance at the first occasion is the variance it keeps at every
 later occasion,</p>
-<p><span class="math display">\[\sigma_{22}
+<p><span class="math display">\sigma_{22}
 =
 \frac{\psi_{22}}{1 - \beta_{22}^{2}}
 =
-0.5 .\]</span></p>
+0.5 .</span></p>
 <p>With these values, the stable trait, the autoregressive trait, and
 the state contribute 0.5, 0.5, and 0.3 to the variance of the observed
 score on every occasion.</p>
@@ -387,10 +381,10 @@ models by maximum likelihood using the Kalman filter.</p>
 <p>A <code>dynr</code> model is built from pieces that match the
 equations above: the data, the initial condition, the measurement model,
 the dynamic model, and the noise. Each parameter gets a name (for
-example, <code>beta_2_2</code> for <span class="math inline">\(\beta_{22}\)</span>), and the same name used in
-two places means one shared parameter. The starting values are set to
-the population values for convenience; with real data, they would be
-rough guesses.</p>
+example, <code>beta_2_2</code> for <span class="math inline">\beta_{22}</span>), and the same name used in two
+places means one shared parameter. The starting values are set to the
+population values for convenience; with real data, they would be rough
+guesses.</p>
 <div class="section level4">
 <h4 id="prepare-data">Prepare Data<a class="anchor" aria-label="anchor" href="#prepare-data"></a>
 </h4>
@@ -427,8 +421,8 @@ the covariance of the two traits are fixed at zero.</p>
 <div class="section level4">
 <h4 id="prepare-measurement-model">Prepare Measurement Model<a class="anchor" aria-label="anchor" href="#prepare-measurement-model"></a>
 </h4>
-<p>The loadings <span class="math inline">\(\left( 1, 1 \right)\)</span>
-are fixed.</p>
+<p>The loadings <span class="math inline">\left( 1, 1 \right)</span> are
+fixed.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dynr_measurement</span> <span class="op">&lt;-</span> <span class="fu">dynr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/dynr/man/prep.measurement.html" class="external-link">prep.measurement</a></span><span class="op">(</span></span>
 <span>  values.load <span class="op">=</span> <span class="va">lambda</span>,</span>
@@ -441,7 +435,7 @@ are fixed.</p>
 <h4 id="prepare-dynamic-process">Prepare Dynamic Process<a class="anchor" aria-label="anchor" href="#prepare-dynamic-process"></a>
 </h4>
 <p>The stable trait carries over unchanged; the autoregressive trait has
-the autoregressive effect <span class="math inline">\(\beta_{22}\)</span>.</p>
+the autoregressive effect <span class="math inline">\beta_{22}</span>.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dynr_dynamics</span> <span class="op">&lt;-</span> <span class="fu">dynr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/dynr/man/prep.formulaDynamics.html" class="external-link">prep.formulaDynamics</a></span><span class="op">(</span></span>
 <span>  formula <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
@@ -456,7 +450,7 @@ the autoregressive effect <span class="math inline">\(\beta_{22}\)</span>.</p>
 <h4 id="prepare-process-noise">Prepare Process Noise<a class="anchor" aria-label="anchor" href="#prepare-process-noise"></a>
 </h4>
 <p>Only the autoregressive trait has process noise. The state variance
-<span class="math inline">\(\theta\)</span> is estimated.</p>
+<span class="math inline">\theta</span> is estimated.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dynr_noise</span> <span class="op">&lt;-</span> <span class="fu">dynr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/dynr/man/prep.noise.html" class="external-link">prep.noise</a></span><span class="op">(</span></span>
 <span>  values.latent <span class="op">=</span> <span class="va">psi</span>,</span>
@@ -514,13 +508,13 @@ names.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Doing end processing</span></span>
 <span><span class="co">#&gt; Successful trial</span></span>
-<span><span class="co">#&gt; Total Time: 25.01403 </span></span>
-<span><span class="co">#&gt; Backend Time: 24.60459</span></span></code></pre></div>
+<span><span class="co">#&gt; Total Time: 24.99586 </span></span>
+<span><span class="co">#&gt; Backend Time: 24.59805</span></span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="summary">Summary<a class="anchor" aria-label="anchor" href="#summary"></a>
 </h4>
-<p>The summary lists each estimate with its standard error, <span class="math inline">\(t\)</span> value, confidence interval, and <span class="math inline">\(p\)</span> value.</p>
+<p>The summary lists each estimate with its standard error, <span class="math inline">t</span> value, confidence interval, and <span class="math inline">p</span> value.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">results</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Coefficients:</span></span>
@@ -552,27 +546,27 @@ names.</p>
 <p><code>OpenMx</code> <span class="citation">(Neale et al.,
 2016)</span> fits the same state space model with its own Kalman filter
 (<code><a href="https://rdrr.io/pkg/OpenMx/man/mxExpectationStateSpace.html" class="external-link">OpenMx::mxExpectationStateSpace()</a></code>; <span class="citation">Hunter (2018)</span>). Its matrices have the names used
-in engineering: <code>A</code> is the transition matrix <span class="math inline">\(\boldsymbol{\beta}\)</span>, <code>B</code> holds
-the intercepts of the dynamic model, <code>C</code> is the loading
-matrix <span class="math inline">\(\boldsymbol{\Lambda}\)</span>,
-<code>D</code> holds the intercepts of the measurement model,
-<code>Q</code> is the process noise covariance matrix, and
-<code>R</code> is the measurement error covariance matrix. The parameter
-labels are the dynr names; as in dynr, a label used in two places is one
-shared parameter, and the starting values are the population values.</p>
+in engineering: <code>A</code> is the transition matrix <span class="math inline">\boldsymbol{\beta}</span>, <code>B</code> holds the
+intercepts of the dynamic model, <code>C</code> is the loading matrix
+<span class="math inline">\boldsymbol{\Lambda}</span>, <code>D</code>
+holds the intercepts of the measurement model, <code>Q</code> is the
+process noise covariance matrix, and <code>R</code> is the measurement
+error covariance matrix. The parameter labels are the dynr names; as in
+dynr, a label used in two places is one shared parameter, and the
+starting values are the population values.</p>
 <p>Two details differ from dynr. First, OpenMx reads the data as a
 single time series. To start the filter again at the first occasion of
 every individual, each individual gets a group, and all groups use the
 matrices of one parent model, so every individual has the same
 parameters. Second, OpenMx starts the filter one occasion before the
-first row, so the first row has the state mean <span class="math inline">\(\mathbf{A} \mathbf{x}_{0} + \mathbf{B}
-\mathbf{u}\)</span> and the state covariance <span class="math inline">\(\mathbf{A} \mathbf{P}_{0} \mathbf{A}^{\prime} +
-\mathbf{Q}\)</span>, with the constant input <span class="math inline">\(\mathbf{u} = 1\)</span>. Setting <span class="math inline">\(\mathbf{x}_{0} = \mathbf{A}^{-1} \left(
-\boldsymbol{\mu}_{0} - \mathbf{B} \mathbf{u} \right)\)</span> and <span class="math inline">\(\mathbf{P}_{0} = \mathbf{A}^{-1} \left(
+first row, so the first row has the state mean <span class="math inline">\mathbf{A} \mathbf{x}_{0} + \mathbf{B}
+\mathbf{u}</span> and the state covariance <span class="math inline">\mathbf{A} \mathbf{P}_{0} \mathbf{A}^{\prime} +
+\mathbf{Q}</span>, with the constant input <span class="math inline">\mathbf{u} = 1</span>. Setting <span class="math inline">\mathbf{x}_{0} = \mathbf{A}^{-1} \left(
+\boldsymbol{\mu}_{0} - \mathbf{B} \mathbf{u} \right)</span> and <span class="math inline">\mathbf{P}_{0} = \mathbf{A}^{-1} \left(
 \boldsymbol{\Sigma}_{0} - \mathbf{Q} \right) \left( \mathbf{A}^{-1}
-\right)^{\prime}\)</span> gives the first occasion the initial condition
+\right)^{\prime}</span> gives the first occasion the initial condition
 of the model, so the likelihood is the same as in dynr. This needs an
-invertible <span class="math inline">\(\mathbf{A}\)</span>, which holds
+invertible <span class="math inline">\mathbf{A}</span>, which holds
 here.</p>
 <p>The two helper functions below are the same in every vignette of the
 package. <code>MxMat()</code> makes an OpenMx matrix from values and
@@ -728,8 +722,8 @@ dynr-style labels (<code>"fixed"</code> marks a fixed element), and
 <span id="cb13-34"><a href="#cb13-34" tabindex="-1"></a><span class="co">#&gt; AIC:       30184.19               130184.2                 130184.2</span></span>
 <span id="cb13-35"><a href="#cb13-35" tabindex="-1"></a><span class="co">#&gt; BIC:     -410751.81               130237.1                 130218.0</span></span>
 <span id="cb13-36"><a href="#cb13-36" tabindex="-1"></a><span class="co">#&gt; To get additional fit indices, see help(mxRefModels)</span></span>
-<span id="cb13-37"><a href="#cb13-37" tabindex="-1"></a><span class="co">#&gt; timestamp: 2026-11-02 06:52:19 </span></span>
-<span id="cb13-38"><a href="#cb13-38" tabindex="-1"></a><span class="co">#&gt; Wall clock time: 82.59456 secs </span></span>
+<span id="cb13-37"><a href="#cb13-37" tabindex="-1"></a><span class="co">#&gt; timestamp: 2026-11-03 16:41:04 </span></span>
+<span id="cb13-38"><a href="#cb13-38" tabindex="-1"></a><span class="co">#&gt; Wall clock time: 81.59231 secs </span></span>
 <span id="cb13-39"><a href="#cb13-39" tabindex="-1"></a><span class="co">#&gt; optimizer:  SLSQP </span></span>
 <span id="cb13-40"><a href="#cb13-40" tabindex="-1"></a><span class="co">#&gt; OpenMx version number: 2.22.11 </span></span>
 <span id="cb13-41"><a href="#cb13-41" tabindex="-1"></a><span class="co">#&gt; Need help?  See help(mxSummary)</span></span></code></pre></div>
@@ -1091,8 +1085,8 @@ values.</p>
 <span><span class="co">#&gt; AIC:       30184.19               130184.2                 130184.2</span></span>
 <span><span class="co">#&gt; BIC:     -295636.37               130223.3                 130204.2</span></span>
 <span><span class="co">#&gt; To get additional fit indices, see help(mxRefModels)</span></span>
-<span><span class="co">#&gt; timestamp: 2026-11-02 06:55:24 </span></span>
-<span><span class="co">#&gt; Wall clock time: 0.03077316 secs </span></span>
+<span><span class="co">#&gt; timestamp: 2026-11-03 16:44:00 </span></span>
+<span><span class="co">#&gt; Wall clock time: 0.03069353 secs </span></span>
 <span><span class="co">#&gt; optimizer:  SLSQP </span></span>
 <span><span class="co">#&gt; OpenMx version number: 2.22.11 </span></span>
 <span><span class="co">#&gt; Need help?  See help(mxSummary)</span></span></code></pre></div>
@@ -1106,8 +1100,8 @@ next to the estimates of one method. Bias is the estimate minus the
 population value. Because each model is fitted to a single simulated
 data set, this is the error of one estimate, not a Monte Carlo bias,
 which would average over many replications. The 95% confidence interval
-is the Wald interval, <span class="math inline">\(\hat{\theta} \pm 1.96
-\times \mathrm{SE}\)</span>, unless the caption says otherwise, and
+is the Wald interval, <span class="math inline">\hat{\theta} \pm 1.96
+\times \mathrm{SE}</span>, unless the caption says otherwise, and
 <code>Covers</code> shows whether it contains the population value. The
 parameter names are the dynr names in every table.</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">

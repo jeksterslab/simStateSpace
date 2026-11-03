@@ -5,13 +5,8 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>The Linear Growth Curve Model • simStateSpace</title>
-<!-- mathjax math --><script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js" integrity="sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI=" crossorigin="anonymous"></script><script>
-  window.MathJax = {
-    chtml: {
-      fontURL: "https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/output/chtml/fonts/woff-v2"
-    }
-  };
-</script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- katex math --><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" integrity="sha384-nB0miv6/jRmo5UMMR1wu3Gz6NLsoTkbqJghGIsx//Rlm+ZU03BU6SQNC66uf4l5+" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" integrity="sha384-7zkQWkzuo3B5mTepMUcHkMB5jZaolc2xDwL6VFqjFALcbeS9Ggm/Yr2r3Dy4lfFg" crossorigin="anonymous"></script><script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" integrity="sha384-43gviWU0YVjaDtb/GhzOouOXtZMP/7XUzwPTstBeZFe/+rCMvRwr4yROQP43s0Xk" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script><script src="../katex-auto.js"></script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/Roboto-0.4.10/font.css" rel="stylesheet">
 <link href="../deps/Roboto_Mono-0.4.10/font.css" rel="stylesheet">
@@ -64,7 +59,7 @@
                         <h4 data-toc-skip class="author">Ivan Jacob
 Agaloos Pesigan</h4>
             
-            <h4 data-toc-skip class="date">2026-11-02</h4>
+            <h4 data-toc-skip class="date">2026-11-03</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/jeksterslab/simStateSpace/blob/main/vignettes/lin-growth.Rmd"><code>vignettes/lin-growth.Rmd</code></a></small>
       <div class="d-none name"><code>lin-growth.Rmd</code></div>
@@ -102,8 +97,7 @@ estimates with the values used to simulate the data.</li>
 <div class="section level2">
 <h2 id="model">Model<a class="anchor" aria-label="anchor" href="#model"></a>
 </h2>
-<p>The measurement model is given by <span class="math display">\[Y_{i,
-t}
+<p>The measurement model is given by <span class="math display">Y_{i, t}
   =
   \left(
   \begin{array}{cc}
@@ -127,20 +121,20 @@ t}
   \left(
   0,
   \theta
-  \right)\]</span> where <span class="math inline">\(Y_{i, t}\)</span>,
-<span class="math inline">\(\eta_{0_{i, t}}\)</span>, <span class="math inline">\(\eta_{1_{i, t}}\)</span>, and <span class="math inline">\(\boldsymbol{\varepsilon}_{i, t}\)</span> are
-random variables and <span class="math inline">\(\theta\)</span> is a
-model parameter. <span class="math inline">\(Y_{i, t}\)</span> is the
-observed random variable at time <span class="math inline">\(t\)</span>
-and individual <span class="math inline">\(i\)</span>, <span class="math inline">\(\eta_{0_{i, t}}\)</span> (intercept) and <span class="math inline">\(\eta_{1_{i, t}}\)</span> (slope) form a vector of
-latent random variables at time <span class="math inline">\(t\)</span>
-and individual <span class="math inline">\(i\)</span>, and <span class="math inline">\(\boldsymbol{\varepsilon}_{i, t}\)</span> a vector
-of random measurement errors at time <span class="math inline">\(t\)</span> and individual <span class="math inline">\(i\)</span>. <span class="math inline">\(\theta\)</span> is the variance of <span class="math inline">\(\boldsymbol{\varepsilon}\)</span>.</p>
+  \right)</span> where <span class="math inline">Y_{i, t}</span>, <span class="math inline">\eta_{0_{i, t}}</span>, <span class="math inline">\eta_{1_{i, t}}</span>, and <span class="math inline">\boldsymbol{\varepsilon}_{i, t}</span> are random
+variables and <span class="math inline">\theta</span> is a model
+parameter. <span class="math inline">Y_{i, t}</span> is the observed
+random variable at time <span class="math inline">t</span> and
+individual <span class="math inline">i</span>, <span class="math inline">\eta_{0_{i, t}}</span> (intercept) and <span class="math inline">\eta_{1_{i, t}}</span> (slope) form a vector of
+latent random variables at time <span class="math inline">t</span> and
+individual <span class="math inline">i</span>, and <span class="math inline">\boldsymbol{\varepsilon}_{i, t}</span> a vector of
+random measurement errors at time <span class="math inline">t</span> and
+individual <span class="math inline">i</span>. <span class="math inline">\theta</span> is the variance of <span class="math inline">\boldsymbol{\varepsilon}</span>.</p>
 <p>In words, the observed score is the current level of the trajectory,
-<span class="math inline">\(\eta_{0_{i, t}}\)</span>, plus measurement
+<span class="math inline">\eta_{0_{i, t}}</span>, plus measurement
 error. The loading of the slope is 0, because the slope affects the
 score only through its effect on the level over time.</p>
-<p>The dynamic structure is given by <span class="math display">\[\left(
+<p>The dynamic structure is given by <span class="math display">\left(
   \begin{array}{c}
   \eta_{0_{i, t}} \\
   \eta_{1_{i, t}} \\
@@ -158,25 +152,25 @@ score only through its effect on the level over time.</p>
   \eta_{0_{i, t - 1}} \\
   \eta_{1_{i, t - 1}} \\
   \end{array}
-  \right) .\]</span></p>
+  \right) .</span></p>
 <p>In words, the level at each occasion is the previous level plus the
-slope, <span class="math inline">\(\eta_{0_{i, t}} = \eta_{0_{i, t - 1}}
-+ \eta_{1_{i, t - 1}}\)</span>, and the slope stays the same, <span class="math inline">\(\eta_{1_{i, t}} = \eta_{1_{i, t - 1}}\)</span>.
-There is no process noise, so once an individual’s intercept and slope
-are set, the trajectory is a straight line. All the variation in the
+slope, <span class="math inline">\eta_{0_{i, t}} = \eta_{0_{i, t - 1}} +
+\eta_{1_{i, t - 1}}</span>, and the slope stays the same, <span class="math inline">\eta_{1_{i, t}} = \eta_{1_{i, t - 1}}</span>. There
+is no process noise, so once an individual’s intercept and slope are
+set, the trajectory is a straight line. All the variation in the
 trajectories between individuals comes from the initial condition
 below.</p>
 <p>The mean vector and covariance matrix of the intercept and slope are
 captured in the mean vector and covariance matrix of the initial
-condition given by <span class="math display">\[\boldsymbol{\mu}_{0}
+condition given by <span class="math display">\boldsymbol{\mu}_{0}
   =
   \left(
   \begin{array}{c}
     \mu_{\eta_{0}} \\
     \mu_{\eta_{1}} \\
   \end{array}
-  \right) \quad \mathrm{and,}\]</span></p>
-<p><span class="math display">\[\boldsymbol{\Sigma}_{0}
+  \right) \quad \mathrm{and,}</span></p>
+<p><span class="math display">\boldsymbol{\Sigma}_{0}
   =
   \left(
   \begin{array}{cc}
@@ -185,11 +179,10 @@ condition given by <span class="math display">\[\boldsymbol{\mu}_{0}
     \sigma_{\eta_{1}, \eta_{0}} &amp;
     \sigma^{2}_{\eta_{1}} \\
   \end{array}
-  \right) .\]</span></p>
-<p>Here, <span class="math inline">\(\mu_{\eta_{0}}\)</span> and <span class="math inline">\(\mu_{\eta_{1}}\)</span> are the average intercept
-and slope, <span class="math inline">\(\sigma^{2}_{\eta_{0}}\)</span>
-and <span class="math inline">\(\sigma^{2}_{\eta_{1}}\)</span> are how
-much individuals differ in them, and <span class="math inline">\(\sigma_{\eta_{0}, \eta_{1}}\)</span> is their
+  \right) .</span></p>
+<p>Here, <span class="math inline">\mu_{\eta_{0}}</span> and <span class="math inline">\mu_{\eta_{1}}</span> are the average intercept and
+slope, <span class="math inline">\sigma^{2}_{\eta_{0}}</span> and <span class="math inline">\sigma^{2}_{\eta_{1}}</span> are how much
+individuals differ in them, and <span class="math inline">\sigma_{\eta_{0}, \eta_{1}}</span> is their
 covariance, for example, positive if individuals who start higher also
 grow faster.</p>
 <div class="section level3">
@@ -199,34 +192,34 @@ grow faster.</p>
 <img src="fig-vignettes-lin-growth-path.png" style="width:100.0%" alt="Path diagram of the linear growth curve model."><div class="figcaption">Path diagram of the linear growth curve
 model.</div>
 </div>
-<p>The model as a path diagram, for the occasions <span class="math inline">\(t = 0, 1, \ldots, T - 1\)</span>. The intercept
-<span class="math inline">\(\eta_{0}\)</span> loads on every occasion
-with a loading of 1, and the slope <span class="math inline">\(\eta_{1}\)</span> with loadings <span class="math inline">\(0, 1, 2, \ldots, T - 1\)</span>, so the slope is
-the change per occasion. <span class="math inline">\(\varepsilon_{t}\)</span> is the measurement error,
-with variance <span class="math inline">\(\theta\)</span>. A loop on a
+<p>The model as a path diagram, for the occasions <span class="math inline">t = 0, 1, \ldots, T - 1</span>. The intercept <span class="math inline">\eta_{0}</span> loads on every occasion with a
+loading of 1, and the slope <span class="math inline">\eta_{1}</span>
+with loadings <span class="math inline">0, 1, 2, \ldots, T - 1</span>,
+so the slope is the change per occasion. <span class="math inline">\varepsilon_{t}</span> is the measurement error,
+with variance <span class="math inline">\theta</span>. A loop on a
 variable is its variance and a curved two-headed arrow a covariance.
-<span class="math inline">\(\sigma^{2}_{\eta_{0}}\)</span> and <span class="math inline">\(\sigma^{2}_{\eta_{1}}\)</span> are the variances
-of the intercept and the slope, and <span class="math inline">\(\sigma_{\eta_{0}, \eta_{1}}\)</span> their
+<span class="math inline">\sigma^{2}_{\eta_{0}}</span> and <span class="math inline">\sigma^{2}_{\eta_{1}}</span> are the variances of
+the intercept and the slope, and <span class="math inline">\sigma_{\eta_{0}, \eta_{1}}</span> their
 covariance.</p>
 <div class="float">
 <img src="fig-vignettes-lin-growth-ssm.png" style="width:100.0%" alt="State space form of the linear growth curve model."><div class="figcaption">State space form of the linear growth curve
 model.</div>
 </div>
 <p>The same model in state space form, for the first three occasions
-(<span class="math inline">\(t = 0, 1, 2\)</span>), with every element
-of the state drawn. The state holds the current level <span class="math inline">\(\eta_{0, t}\)</span> and the slope <span class="math inline">\(\eta_{1, t}\)</span>. The transition adds the
-slope to the level at each occasion and keeps the slope, so <span class="math inline">\(\eta_{1, t} = \eta_{1}\)</span> for all <span class="math inline">\(t\)</span> and <span class="math inline">\(\eta_{0, t} = \eta_{0} + t \eta_{1}\)</span>; the
-level is measured by <span class="math inline">\(Y_{t}\)</span> with a
-loading of 1 and measurement error <span class="math inline">\(\varepsilon_{t}\)</span>, with variance <span class="math inline">\(\theta\)</span>. There is no process noise: the
+(<span class="math inline">t = 0, 1, 2</span>), with every element of
+the state drawn. The state holds the current level <span class="math inline">\eta_{0, t}</span> and the slope <span class="math inline">\eta_{1, t}</span>. The transition adds the slope to
+the level at each occasion and keeps the slope, so <span class="math inline">\eta_{1, t} = \eta_{1}</span> for all <span class="math inline">t</span> and <span class="math inline">\eta_{0, t} =
+\eta_{0} + t \eta_{1}</span>; the level is measured by <span class="math inline">Y_{t}</span> with a loading of 1 and measurement
+error <span class="math inline">\varepsilon_{t}</span>, with variance
+<span class="math inline">\theta</span>. There is no process noise: the
 loadings of the path diagram are produced by the transition, and the
 differences between individuals come from the initial condition. At
-<span class="math inline">\(t = 0\)</span>, the initial condition <span class="math inline">\(\boldsymbol{\eta}_{0} \sim \mathcal{N} \left(
-\boldsymbol{\mu}_{0}, \boldsymbol{\Sigma}_{0} \right)\)</span> holds the
+<span class="math inline">t = 0</span>, the initial condition <span class="math inline">\boldsymbol{\eta}_{0} \sim \mathcal{N} \left(
+\boldsymbol{\mu}_{0}, \boldsymbol{\Sigma}_{0} \right)</span> holds the
 means, variances, and covariance of the intercept and the slope. Below
-the diagram, <span class="math inline">\(\boldsymbol{\beta}\)</span>,
-<span class="math inline">\(\boldsymbol{\Lambda}\)</span>, and <span class="math inline">\(\boldsymbol{\Theta}\)</span> are the same matrices
-in compact form. <code><a href="../reference/SimSSMLinGrowth.html">SimSSMLinGrowth()</a></code> fixes <span class="math inline">\(\boldsymbol{\beta}\)</span> and <span class="math inline">\(\boldsymbol{\Lambda}\)</span> and takes
-<code>mu0</code> and the Cholesky factors of <span class="math inline">\(\boldsymbol{\Sigma}_{0}\)</span> and of <span class="math inline">\(\theta\)</span> (<code>sigma0_l</code> and
+the diagram, <span class="math inline">\boldsymbol{\beta}</span>, <span class="math inline">\boldsymbol{\Lambda}</span>, and <span class="math inline">\boldsymbol{\Theta}</span> are the same matrices in
+compact form. <code><a href="../reference/SimSSMLinGrowth.html">SimSSMLinGrowth()</a></code> fixes <span class="math inline">\boldsymbol{\beta}</span> and <span class="math inline">\boldsymbol{\Lambda}</span> and takes
+<code>mu0</code> and the Cholesky factors of <span class="math inline">\boldsymbol{\Sigma}_{0}</span> and of <span class="math inline">\theta</span> (<code>sigma0_l</code> and
 <code>theta_l</code>).</p>
 </div>
 </div>
@@ -236,37 +229,37 @@ in compact form. <code><a href="../reference/SimSSMLinGrowth.html">SimSSMLinGrow
 <div class="section level3">
 <h3 id="notation">Notation<a class="anchor" aria-label="anchor" href="#notation"></a>
 </h3>
-<p>Let <span class="math inline">\(t = 5\)</span> be the number of time
-points and <span class="math inline">\(n = 2000\)</span> be the number
-of individuals.</p>
-<p>Let the measurement error variance <span class="math inline">\(\theta\)</span> be given by</p>
-<p><span class="math display">\[\theta
+<p>Let <span class="math inline">t = 5</span> be the number of time
+points and <span class="math inline">n = 5000</span> be the number of
+individuals.</p>
+<p>Let the measurement error variance <span class="math inline">\theta</span> be given by</p>
+<p><span class="math display">\theta
 =
-0.6 .\]</span></p>
-<p>Let the initial condition <span class="math inline">\(\boldsymbol{\eta}_{0}\)</span> be given by</p>
-<p><span class="math display">\[\boldsymbol{\eta}_{0}
+0.6 .</span></p>
+<p>Let the initial condition <span class="math inline">\boldsymbol{\eta}_{0}</span> be given by</p>
+<p><span class="math display">\boldsymbol{\eta}_{0}
 \sim
 \mathcal{N}
 \left(
 \boldsymbol{\mu}_{0},
 \boldsymbol{\Sigma}_{0}
-\right)\]</span></p>
-<p><span class="math display">\[\boldsymbol{\mu}_{0}
+\right)</span></p>
+<p><span class="math display">\boldsymbol{\mu}_{0}
 =
 \left(
 \begin{array}{c}
   0.615 \\
   1.006 \\
 \end{array}
-\right)\]</span></p>
-<p><span class="math display">\[\boldsymbol{\Sigma}_{0}
+\right)</span></p>
+<p><span class="math display">\boldsymbol{\Sigma}_{0}
 =
 \left(
 \begin{array}{cc}
   1.932 &amp; 0.618 \\
   0.618 &amp; 0.587 \\
 \end{array}
-\right) .\]</span></p>
+\right) .</span></p>
 </div>
 <div class="section level3">
 <h3 id="r-function-arguments">R Function Arguments<a class="anchor" aria-label="anchor" href="#r-function-arguments"></a>
@@ -275,7 +268,7 @@ of individuals.</p>
 Cholesky factors (the arguments ending in <code>_l</code>).</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">n</span></span>
-<span><span class="co">#&gt; [1] 2000</span></span>
+<span><span class="co">#&gt; [1] 5000</span></span>
 <span><span class="va">time</span></span>
 <span><span class="co">#&gt; [1] 5</span></span>
 <span><span class="va">mu0</span></span>
@@ -329,13 +322,13 @@ per individual and time point, with the columns <code>id</code>,
 <span><span class="co">#&gt; 5  1    4 5.993965</span></span>
 <span><span class="co">#&gt; 6  2    0 1.951861</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span>
-<span><span class="co">#&gt;        id              time         y1         </span></span>
-<span><span class="co">#&gt;  Min.   :   1.0   Min.   :0   Min.   :-8.1963  </span></span>
-<span><span class="co">#&gt;  1st Qu.: 500.8   1st Qu.:1   1st Qu.: 0.4226  </span></span>
-<span><span class="co">#&gt;  Median :1000.5   Median :2   Median : 2.1950  </span></span>
-<span><span class="co">#&gt;  Mean   :1000.5   Mean   :2   Mean   : 2.5922  </span></span>
-<span><span class="co">#&gt;  3rd Qu.:1500.2   3rd Qu.:3   3rd Qu.: 4.4219  </span></span>
-<span><span class="co">#&gt;  Max.   :2000.0   Max.   :4   Max.   :17.0616</span></span>
+<span><span class="co">#&gt;        id            time         y1        </span></span>
+<span><span class="co">#&gt;  Min.   :   1   Min.   :0   Min.   :-8.339  </span></span>
+<span><span class="co">#&gt;  1st Qu.:1251   1st Qu.:1   1st Qu.: 0.388  </span></span>
+<span><span class="co">#&gt;  Median :2500   Median :2   Median : 2.191  </span></span>
+<span><span class="co">#&gt;  Mean   :2500   Mean   :2   Mean   : 2.601  </span></span>
+<span><span class="co">#&gt;  3rd Qu.:3750   3rd Qu.:3   3rd Qu.: 4.469  </span></span>
+<span><span class="co">#&gt;  Max.   :5000   Max.   :4   Max.   :17.236</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">sim</span><span class="op">)</span></span></code></pre></div>
 <p><img src="fig-vignettes-lin-growth-error-lin-growth-1.png" alt="" width="3300"></p>
 </div>
@@ -357,11 +350,11 @@ models by maximum likelihood using the Kalman filter.</p>
 <p>A <code>dynr</code> model is built from pieces that match the
 equations above: the data, the initial condition, the measurement model,
 the dynamic model, and the noise. Each parameter gets a name (for
-example, <code>sigma0_01</code> for <span class="math inline">\(\sigma_{\eta_{0}, \eta_{1}}\)</span>`), and the
-same name used in two places means one shared parameter. The starting
-values are set to the population values for convenience; with real data,
-they would be rough guesses. The intercept and slope are indexed 0 and 1
-in the parameter names.</p>
+example, <code>sigma0_01</code> for <span class="math inline">\sigma_{\eta_{0}, \eta_{1}}</span>`), and the same
+name used in two places means one shared parameter. The starting values
+are set to the population values for convenience; with real data, they
+would be rough guesses. The intercept and slope are indexed 0 and 1 in
+the parameter names.</p>
 <div class="section level4">
 <h4 id="prepare-data">Prepare Data<a class="anchor" aria-label="anchor" href="#prepare-data"></a>
 </h4>
@@ -399,8 +392,8 @@ so <code>sigma0_01</code> appears both above and below the diagonal.</p>
 <div class="section level4">
 <h4 id="prepare-measurement-model">Prepare Measurement Model<a class="anchor" aria-label="anchor" href="#prepare-measurement-model"></a>
 </h4>
-<p>The loadings <span class="math inline">\(\left( 1, 0 \right)\)</span>
-are fixed.</p>
+<p>The loadings <span class="math inline">\left( 1, 0 \right)</span> are
+fixed.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dynr_measurement</span> <span class="op">&lt;-</span> <span class="fu">dynr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/dynr/man/prep.measurement.html" class="external-link">prep.measurement</a></span><span class="op">(</span></span>
 <span>  values.load <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span>data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0</span><span class="op">)</span>, nrow <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>,</span>
@@ -430,7 +423,7 @@ no free parameters.</p>
 <h4 id="prepare-process-noise">Prepare Process Noise<a class="anchor" aria-label="anchor" href="#prepare-process-noise"></a>
 </h4>
 <p>The process noise is fixed at zero, and the measurement error
-variance <span class="math inline">\(\theta\)</span> is estimated.</p>
+variance <span class="math inline">\theta</span> is estimated.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dynr_noise</span> <span class="op">&lt;-</span> <span class="fu">dynr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/dynr/man/prep.noise.html" class="external-link">prep.noise</a></span><span class="op">(</span></span>
 <span>  values.latent <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span>data <span class="op">=</span> <span class="fl">0</span>, nrow <span class="op">=</span> <span class="fl">2</span>, ncol <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>,</span>
@@ -474,37 +467,37 @@ names.</p>
 <span><span class="co">#&gt; Original exit flag:  3 </span></span>
 <span><span class="co">#&gt; Modified exit flag:  3 </span></span>
 <span><span class="co">#&gt; Optimization terminated successfully: ftol_rel or ftol_abs was reached. </span></span>
-<span><span class="co">#&gt; Original fitted parameters:  -0.5214641 0.6200474 0.9859686 0.5990437 0.3061706 </span></span>
-<span><span class="co">#&gt; -0.901686 </span></span>
+<span><span class="co">#&gt; Original fitted parameters:  -0.5187461 0.6042386 0.9983511 0.6469692 0.3102879 </span></span>
+<span><span class="co">#&gt; -0.9329893 </span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Transformed fitted parameters:  0.5936507 0.6200474 0.9859686 1.820377 </span></span>
-<span><span class="co">#&gt; 0.5573459 0.5765277 </span></span>
+<span><span class="co">#&gt; Transformed fitted parameters:  0.5952665 0.6042386 0.9983511 1.909744 </span></span>
+<span><span class="co">#&gt; 0.5925704 0.5772435 </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Doing end processing</span></span>
 <span><span class="co">#&gt; Successful trial</span></span>
-<span><span class="co">#&gt; Total Time: 5.789685 </span></span>
-<span><span class="co">#&gt; Backend Time: 5.362604</span></span></code></pre></div>
+<span><span class="co">#&gt; Total Time: 13.32967 </span></span>
+<span><span class="co">#&gt; Backend Time: 12.90673</span></span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="summary">Summary<a class="anchor" aria-label="anchor" href="#summary"></a>
 </h4>
-<p>The summary lists each estimate with its standard error, <span class="math inline">\(t\)</span> value, confidence interval, and <span class="math inline">\(p\)</span> value.</p>
+<p>The summary lists each estimate with its standard error, <span class="math inline">t</span> value, confidence interval, and <span class="math inline">p</span> value.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">results</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Coefficients:</span></span>
 <span><span class="co">#&gt;           Estimate Std. Error t value ci.lower ci.upper            Pr(&gt;|t|)    </span></span>
-<span><span class="co">#&gt; theta      0.59365    0.01084   54.78  0.57241  0.61489 &lt;0.0000000000000002 ***</span></span>
-<span><span class="co">#&gt; mu0_0      0.62005    0.03299   18.79  0.55538  0.68471 &lt;0.0000000000000002 ***</span></span>
-<span><span class="co">#&gt; mu0_1      0.98597    0.01783   55.30  0.95102  1.02091 &lt;0.0000000000000002 ***</span></span>
-<span><span class="co">#&gt; sigma0_00  1.82038    0.06912   26.34  1.68491  1.95584 &lt;0.0000000000000002 ***</span></span>
-<span><span class="co">#&gt; sigma0_01  0.55735    0.02815   19.80  0.50216  0.61253 &lt;0.0000000000000002 ***</span></span>
-<span><span class="co">#&gt; sigma0_11  0.57653    0.02014   28.63  0.53706  0.61599 &lt;0.0000000000000002 ***</span></span>
+<span><span class="co">#&gt; theta     0.595266   0.006871   86.64 0.581800 0.608733 &lt;0.0000000000000002 ***</span></span>
+<span><span class="co">#&gt; mu0_0     0.604239   0.021282   28.39 0.562527 0.645950 &lt;0.0000000000000002 ***</span></span>
+<span><span class="co">#&gt; mu0_1     0.998351   0.011284   88.47 0.976234 1.020468 &lt;0.0000000000000002 ***</span></span>
+<span><span class="co">#&gt; sigma0_00 1.909744   0.045423   42.04 1.820717 1.998771 &lt;0.0000000000000002 ***</span></span>
+<span><span class="co">#&gt; sigma0_01 0.592570   0.018306   32.37 0.556691 0.628450 &lt;0.0000000000000002 ***</span></span>
+<span><span class="co">#&gt; sigma0_11 0.577243   0.012754   45.26 0.552247 0.602240 &lt;0.0000000000000002 ***</span></span>
 <span><span class="co">#&gt; ---</span></span>
 <span><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; -2 log-likelihood value at convergence = 33425.11</span></span>
-<span><span class="co">#&gt; AIC = 33437.11</span></span>
-<span><span class="co">#&gt; BIC = 33480.37</span></span></code></pre></div>
+<span><span class="co">#&gt; -2 log-likelihood value at convergence = 83718.28</span></span>
+<span><span class="co">#&gt; AIC = 83730.28</span></span>
+<span><span class="co">#&gt; BIC = 83779.04</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level3">
@@ -513,27 +506,27 @@ names.</p>
 <p><code>OpenMx</code> <span class="citation">(Neale et al.,
 2016)</span> fits the same state space model with its own Kalman filter
 (<code><a href="https://rdrr.io/pkg/OpenMx/man/mxExpectationStateSpace.html" class="external-link">OpenMx::mxExpectationStateSpace()</a></code>; <span class="citation">Hunter (2018)</span>). Its matrices have the names used
-in engineering: <code>A</code> is the transition matrix <span class="math inline">\(\boldsymbol{\beta}\)</span>, <code>B</code> holds
-the intercepts of the dynamic model, <code>C</code> is the loading
-matrix <span class="math inline">\(\boldsymbol{\Lambda}\)</span>,
-<code>D</code> holds the intercepts of the measurement model,
-<code>Q</code> is the process noise covariance matrix, and
-<code>R</code> is the measurement error covariance matrix. The parameter
-labels are the dynr names; as in dynr, a label used in two places is one
-shared parameter, and the starting values are the population values.</p>
+in engineering: <code>A</code> is the transition matrix <span class="math inline">\boldsymbol{\beta}</span>, <code>B</code> holds the
+intercepts of the dynamic model, <code>C</code> is the loading matrix
+<span class="math inline">\boldsymbol{\Lambda}</span>, <code>D</code>
+holds the intercepts of the measurement model, <code>Q</code> is the
+process noise covariance matrix, and <code>R</code> is the measurement
+error covariance matrix. The parameter labels are the dynr names; as in
+dynr, a label used in two places is one shared parameter, and the
+starting values are the population values.</p>
 <p>Two details differ from dynr. First, OpenMx reads the data as a
 single time series. To start the filter again at the first occasion of
 every individual, each individual gets a group, and all groups use the
 matrices of one parent model, so every individual has the same
 parameters. Second, OpenMx starts the filter one occasion before the
-first row, so the first row has the state mean <span class="math inline">\(\mathbf{A} \mathbf{x}_{0} + \mathbf{B}
-\mathbf{u}\)</span> and the state covariance <span class="math inline">\(\mathbf{A} \mathbf{P}_{0} \mathbf{A}^{\prime} +
-\mathbf{Q}\)</span>, with the constant input <span class="math inline">\(\mathbf{u} = 1\)</span>. Setting <span class="math inline">\(\mathbf{x}_{0} = \mathbf{A}^{-1} \left(
-\boldsymbol{\mu}_{0} - \mathbf{B} \mathbf{u} \right)\)</span> and <span class="math inline">\(\mathbf{P}_{0} = \mathbf{A}^{-1} \left(
+first row, so the first row has the state mean <span class="math inline">\mathbf{A} \mathbf{x}_{0} + \mathbf{B}
+\mathbf{u}</span> and the state covariance <span class="math inline">\mathbf{A} \mathbf{P}_{0} \mathbf{A}^{\prime} +
+\mathbf{Q}</span>, with the constant input <span class="math inline">\mathbf{u} = 1</span>. Setting <span class="math inline">\mathbf{x}_{0} = \mathbf{A}^{-1} \left(
+\boldsymbol{\mu}_{0} - \mathbf{B} \mathbf{u} \right)</span> and <span class="math inline">\mathbf{P}_{0} = \mathbf{A}^{-1} \left(
 \boldsymbol{\Sigma}_{0} - \mathbf{Q} \right) \left( \mathbf{A}^{-1}
-\right)^{\prime}\)</span> gives the first occasion the initial condition
+\right)^{\prime}</span> gives the first occasion the initial condition
 of the model, so the likelihood is the same as in dynr. This needs an
-invertible <span class="math inline">\(\mathbf{A}\)</span>, which holds
+invertible <span class="math inline">\mathbf{A}</span>, which holds
 here.</p>
 <p>The two helper functions below are the same in every vignette of the
 package. <code>MxMat()</code> makes an OpenMx matrix from values and
@@ -673,36 +666,36 @@ noise (<code>Q</code> is zero).</p>
 <span id="cb13-6"><a href="#cb13-6" tabindex="-1"></a>)</span>
 <span id="cb13-7"><a href="#cb13-7" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb13-8"><a href="#cb13-8" tabindex="-1"></a>Beginning initial fit attempt</span>
-<span id="cb13-9"><a href="#cb13-9" tabindex="-1"></a>Fit attempt <span class="dv">0</span>, fit<span class="ot">=</span><span class="fl">33425.1055806257</span>, new current best<span class="sc">!</span> (was <span class="fl">33432.008312779</span>)</span>
-<span id="cb13-10"><a href="#cb13-10" tabindex="-1"></a>                                                                            </span>
+<span id="cb13-9"><a href="#cb13-9" tabindex="-1"></a>Fit attempt <span class="dv">0</span>, fit<span class="ot">=</span><span class="fl">83718.2828186554</span>, new current best<span class="sc">!</span> (was <span class="fl">83721.0264783941</span>)</span>
+<span id="cb13-10"><a href="#cb13-10" tabindex="-1"></a>                                                                             </span>
 <span id="cb13-11"><a href="#cb13-11" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb13-12"><a href="#cb13-12" tabindex="-1"></a><span class="co">#&gt;  Solution found!  Final fit=33425.106 (started at 33432.008)  (1 attempt(s): 1 valid, 0 errors)</span></span>
+<span id="cb13-12"><a href="#cb13-12" tabindex="-1"></a><span class="co">#&gt;  Solution found!  Final fit=83718.283 (started at 83721.026)  (1 attempt(s): 1 valid, 0 errors)</span></span>
 <span id="cb13-13"><a href="#cb13-13" tabindex="-1"></a><span class="fu">summary</span>(fit_mx_ssm)</span>
 <span id="cb13-14"><a href="#cb13-14" tabindex="-1"></a><span class="co">#&gt; Summary of lin_growth </span></span>
 <span id="cb13-15"><a href="#cb13-15" tabindex="-1"></a><span class="co">#&gt;  </span></span>
 <span id="cb13-16"><a href="#cb13-16" tabindex="-1"></a><span class="co">#&gt; free parameters:</span></span>
-<span id="cb13-17"><a href="#cb13-17" tabindex="-1"></a><span class="co">#&gt;        name matrix row col  Estimate  Std.Error A</span></span>
-<span id="cb13-18"><a href="#cb13-18" tabindex="-1"></a><span class="co">#&gt; 1     theta      R   1   1 0.5936771 0.01083943  </span></span>
-<span id="cb13-19"><a href="#cb13-19" tabindex="-1"></a><span class="co">#&gt; 2     mu0_0    mu0   1   1 0.6201697 0.03299043  </span></span>
-<span id="cb13-20"><a href="#cb13-20" tabindex="-1"></a><span class="co">#&gt; 3     mu0_1    mu0   2   1 0.9860179 0.01783248  </span></span>
-<span id="cb13-21"><a href="#cb13-21" tabindex="-1"></a><span class="co">#&gt; 4 sigma0_00 sigma0   1   1 1.8202777 0.06914596  </span></span>
-<span id="cb13-22"><a href="#cb13-22" tabindex="-1"></a><span class="co">#&gt; 5 sigma0_01 sigma0   2   1 0.5573863 0.02815680  </span></span>
-<span id="cb13-23"><a href="#cb13-23" tabindex="-1"></a><span class="co">#&gt; 6 sigma0_11 sigma0   2   2 0.5765853 0.02014077  </span></span>
+<span id="cb13-17"><a href="#cb13-17" tabindex="-1"></a><span class="co">#&gt;        name matrix row col  Estimate   Std.Error A</span></span>
+<span id="cb13-18"><a href="#cb13-18" tabindex="-1"></a><span class="co">#&gt; 1     theta      R   1   1 0.5953013 0.006874368  </span></span>
+<span id="cb13-19"><a href="#cb13-19" tabindex="-1"></a><span class="co">#&gt; 2     mu0_0    mu0   1   1 0.6043436 0.021289172  </span></span>
+<span id="cb13-20"><a href="#cb13-20" tabindex="-1"></a><span class="co">#&gt; 3     mu0_1    mu0   2   1 0.9984233 0.011286438  </span></span>
+<span id="cb13-21"><a href="#cb13-21" tabindex="-1"></a><span class="co">#&gt; 4 sigma0_00 sigma0   1   1 1.9097376 0.045538447  </span></span>
+<span id="cb13-22"><a href="#cb13-22" tabindex="-1"></a><span class="co">#&gt; 5 sigma0_01 sigma0   2   1 0.5926740 0.018313941  </span></span>
+<span id="cb13-23"><a href="#cb13-23" tabindex="-1"></a><span class="co">#&gt; 6 sigma0_11 sigma0   2   2 0.5773043 0.012755262  </span></span>
 <span id="cb13-24"><a href="#cb13-24" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb13-25"><a href="#cb13-25" tabindex="-1"></a><span class="co">#&gt; Model Statistics: </span></span>
 <span id="cb13-26"><a href="#cb13-26" tabindex="-1"></a><span class="co">#&gt;                |  Parameters  |  Degrees of Freedom  |  Fit (-2lnL units)</span></span>
-<span id="cb13-27"><a href="#cb13-27" tabindex="-1"></a><span class="co">#&gt;        Model:              6                   9994              33425.11</span></span>
+<span id="cb13-27"><a href="#cb13-27" tabindex="-1"></a><span class="co">#&gt;        Model:              6                  24994              83718.28</span></span>
 <span id="cb13-28"><a href="#cb13-28" tabindex="-1"></a><span class="co">#&gt;    Saturated:             NA                     NA                    NA</span></span>
 <span id="cb13-29"><a href="#cb13-29" tabindex="-1"></a><span class="co">#&gt; Independence:             NA                     NA                    NA</span></span>
-<span id="cb13-30"><a href="#cb13-30" tabindex="-1"></a><span class="co">#&gt; Number of observations/statistics: 10000/10000</span></span>
+<span id="cb13-30"><a href="#cb13-30" tabindex="-1"></a><span class="co">#&gt; Number of observations/statistics: 25000/25000</span></span>
 <span id="cb13-31"><a href="#cb13-31" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb13-32"><a href="#cb13-32" tabindex="-1"></a><span class="co">#&gt; Information Criteria: </span></span>
 <span id="cb13-33"><a href="#cb13-33" tabindex="-1"></a><span class="co">#&gt;       |  df Penalty  |  Parameters Penalty  |  Sample-Size Adjusted</span></span>
-<span id="cb13-34"><a href="#cb13-34" tabindex="-1"></a><span class="co">#&gt; AIC:       13437.11               33437.11                 33437.11</span></span>
-<span id="cb13-35"><a href="#cb13-35" tabindex="-1"></a><span class="co">#&gt; BIC:      -58623.04               33480.37                 33461.30</span></span>
+<span id="cb13-34"><a href="#cb13-34" tabindex="-1"></a><span class="co">#&gt; AIC:       33730.28               83730.28                 83730.29</span></span>
+<span id="cb13-35"><a href="#cb13-35" tabindex="-1"></a><span class="co">#&gt; BIC:     -169386.73               83779.04                 83759.97</span></span>
 <span id="cb13-36"><a href="#cb13-36" tabindex="-1"></a><span class="co">#&gt; To get additional fit indices, see help(mxRefModels)</span></span>
-<span id="cb13-37"><a href="#cb13-37" tabindex="-1"></a><span class="co">#&gt; timestamp: 2026-11-02 05:51:22 </span></span>
-<span id="cb13-38"><a href="#cb13-38" tabindex="-1"></a><span class="co">#&gt; Wall clock time: 17.71462 secs </span></span>
+<span id="cb13-37"><a href="#cb13-37" tabindex="-1"></a><span class="co">#&gt; timestamp: 2026-11-03 05:54:33 </span></span>
+<span id="cb13-38"><a href="#cb13-38" tabindex="-1"></a><span class="co">#&gt; Wall clock time: 73.49235 secs </span></span>
 <span id="cb13-39"><a href="#cb13-39" tabindex="-1"></a><span class="co">#&gt; optimizer:  SLSQP </span></span>
 <span id="cb13-40"><a href="#cb13-40" tabindex="-1"></a><span class="co">#&gt; OpenMx version number: 2.22.11 </span></span>
 <span id="cb13-41"><a href="#cb13-41" tabindex="-1"></a><span class="co">#&gt; Need help?  See help(mxSummary)</span></span></code></pre></div>
@@ -762,25 +755,25 @@ equal, as in the state space model.</p>
 <span>  data <span class="op">=</span> <span class="va">data_wide</span></span>
 <span><span class="op">)</span></span>
 <span><span class="fu">lavaan</span><span class="fu">::</span><span class="fu">summary</span><span class="op">(</span><span class="va">fit_lavaan</span><span class="op">)</span></span>
-<span><span class="co">#&gt; lavaan 0.7-3 ended normally after 30 iterations</span></span>
+<span><span class="co">#&gt; lavaan 0.7-3 ended normally after 38 iterations</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;   Estimator                                         ML</span></span>
 <span><span class="co">#&gt;   Optimization method                           NLMINB</span></span>
 <span><span class="co">#&gt;   Number of model parameters                        10</span></span>
 <span><span class="co">#&gt;   Number of equality constraints                     4</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;   Number of observations                          2000</span></span>
+<span><span class="co">#&gt;   Number of observations                          5000</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Model Test User Model:</span></span>
 <span><span class="co">#&gt;                                                       </span></span>
-<span><span class="co">#&gt;   Test statistic                                22.264</span></span>
+<span><span class="co">#&gt;   Test statistic                                 6.709</span></span>
 <span><span class="co">#&gt;   Degrees of freedom                                14</span></span>
-<span><span class="co">#&gt;   P-value (Chi-square)                           0.073</span></span>
+<span><span class="co">#&gt;   P-value (Chi-square)                           0.945</span></span>
 <span><span class="co">#&gt;                                                       </span></span>
 <span><span class="co">#&gt;   Browne's residual (NT model-based) test             </span></span>
-<span><span class="co">#&gt;   Test statistic                                22.030</span></span>
+<span><span class="co">#&gt;   Test statistic                                 6.702</span></span>
 <span><span class="co">#&gt;   Degrees of freedom                                14</span></span>
-<span><span class="co">#&gt;   P-value (Chi-square)                           0.078</span></span>
+<span><span class="co">#&gt;   P-value (Chi-square)                           0.946</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Parameter Estimates:</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -806,22 +799,22 @@ equal, as in the state space model.</p>
 <span><span class="co">#&gt; Covariances:</span></span>
 <span><span class="co">#&gt;                    Estimate  Std.Err  z-value  P(&gt;|z|)</span></span>
 <span><span class="co">#&gt;   eta0 ~~                                             </span></span>
-<span><span class="co">#&gt;     eta1    (s0_0)    0.557    0.028   19.794    0.000</span></span>
+<span><span class="co">#&gt;     eta1    (s0_0)    0.593    0.018   32.358    0.000</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Intercepts:</span></span>
 <span><span class="co">#&gt;                    Estimate  Std.Err  z-value  P(&gt;|z|)</span></span>
-<span><span class="co">#&gt;     eta0    (m0_0)    0.620    0.033   18.800    0.000</span></span>
-<span><span class="co">#&gt;     eta1    (m0_1)    0.986    0.018   55.295    0.000</span></span>
+<span><span class="co">#&gt;     eta0    (m0_0)    0.604    0.021   28.383    0.000</span></span>
+<span><span class="co">#&gt;     eta1    (m0_1)    0.998    0.011   88.468    0.000</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variances:</span></span>
 <span><span class="co">#&gt;                    Estimate  Std.Err  z-value  P(&gt;|z|)</span></span>
-<span><span class="co">#&gt;     eta0    (s0_0)    1.820    0.069   26.330    0.000</span></span>
-<span><span class="co">#&gt;     eta1    (s0_1)    0.577    0.020   28.629    0.000</span></span>
-<span><span class="co">#&gt;    .y1_0    (thet)    0.594    0.011   54.772    0.000</span></span>
-<span><span class="co">#&gt;    .y1_1    (thet)    0.594    0.011   54.772    0.000</span></span>
-<span><span class="co">#&gt;    .y1_2    (thet)    0.594    0.011   54.772    0.000</span></span>
-<span><span class="co">#&gt;    .y1_3    (thet)    0.594    0.011   54.772    0.000</span></span>
-<span><span class="co">#&gt;    .y1_4    (thet)    0.594    0.011   54.772    0.000</span></span></code></pre></div>
+<span><span class="co">#&gt;     eta0    (s0_0)    1.910    0.046   41.949    0.000</span></span>
+<span><span class="co">#&gt;     eta1    (s0_1)    0.577    0.013   45.260    0.000</span></span>
+<span><span class="co">#&gt;    .y1_0    (thet)    0.595    0.007   86.603    0.000</span></span>
+<span><span class="co">#&gt;    .y1_1    (thet)    0.595    0.007   86.603    0.000</span></span>
+<span><span class="co">#&gt;    .y1_2    (thet)    0.595    0.007   86.603    0.000</span></span>
+<span><span class="co">#&gt;    .y1_3    (thet)    0.595    0.007   86.603    0.000</span></span>
+<span><span class="co">#&gt;    .y1_4    (thet)    0.595    0.007   86.603    0.000</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level3">
@@ -874,28 +867,28 @@ values.</p>
 <span><span class="co">#&gt; Summary of lin_growth_sem </span></span>
 <span><span class="co">#&gt;  </span></span>
 <span><span class="co">#&gt; free parameters:</span></span>
-<span><span class="co">#&gt;        name matrix  row  col  Estimate  Std.Error A</span></span>
-<span><span class="co">#&gt; 1     theta      S y1_0 y1_0 0.5936771 0.01083906  </span></span>
-<span><span class="co">#&gt; 2 sigma0_00      S eta0 eta0 1.8202777 0.06913399  </span></span>
-<span><span class="co">#&gt; 3 sigma0_01      S eta0 eta1 0.5573863 0.02815924  </span></span>
-<span><span class="co">#&gt; 4 sigma0_11      S eta1 eta1 0.5765853 0.02013960  </span></span>
-<span><span class="co">#&gt; 5     mu0_0      M    1 eta0 0.6201697 0.03298763  </span></span>
-<span><span class="co">#&gt; 6     mu0_1      M    1 eta1 0.9860179 0.01783185  </span></span>
+<span><span class="co">#&gt;        name matrix  row  col  Estimate   Std.Error A</span></span>
+<span><span class="co">#&gt; 1     theta      S y1_0 y1_0 0.5953013 0.006873979  </span></span>
+<span><span class="co">#&gt; 2 sigma0_00      S eta0 eta0 1.9097376 0.045526232  </span></span>
+<span><span class="co">#&gt; 3 sigma0_01      S eta0 eta1 0.5926740 0.018315978  </span></span>
+<span><span class="co">#&gt; 4 sigma0_11      S eta1 eta1 0.5773043 0.012755153  </span></span>
+<span><span class="co">#&gt; 5     mu0_0      M    1 eta0 0.6043436 0.021292878  </span></span>
+<span><span class="co">#&gt; 6     mu0_1      M    1 eta1 0.9984233 0.011285675  </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Model Statistics: </span></span>
 <span><span class="co">#&gt;                |  Parameters  |  Degrees of Freedom  |  Fit (-2lnL units)</span></span>
-<span><span class="co">#&gt;        Model:              6                   9994              33425.11</span></span>
-<span><span class="co">#&gt;    Saturated:             20                   9980                    NA</span></span>
-<span><span class="co">#&gt; Independence:             10                   9990                    NA</span></span>
-<span><span class="co">#&gt; Number of observations/statistics: 2000/10000</span></span>
+<span><span class="co">#&gt;        Model:              6                  24994              83718.28</span></span>
+<span><span class="co">#&gt;    Saturated:             20                  24980                    NA</span></span>
+<span><span class="co">#&gt; Independence:             10                  24990                    NA</span></span>
+<span><span class="co">#&gt; Number of observations/statistics: 5000/25000</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Information Criteria: </span></span>
 <span><span class="co">#&gt;       |  df Penalty  |  Parameters Penalty  |  Sample-Size Adjusted</span></span>
-<span><span class="co">#&gt; AIC:       13437.11               33437.11                 33437.15</span></span>
-<span><span class="co">#&gt; BIC:      -42538.31               33470.71                 33451.65</span></span>
+<span><span class="co">#&gt; AIC:       33730.28               83730.28                 83730.30</span></span>
+<span><span class="co">#&gt; BIC:     -129160.44               83769.39                 83750.32</span></span>
 <span><span class="co">#&gt; To get additional fit indices, see help(mxRefModels)</span></span>
-<span><span class="co">#&gt; timestamp: 2026-11-02 05:52:02 </span></span>
-<span><span class="co">#&gt; Wall clock time: 0.01413393 secs </span></span>
+<span><span class="co">#&gt; timestamp: 2026-11-03 05:57:29 </span></span>
+<span><span class="co">#&gt; Wall clock time: 0.01909184 secs </span></span>
 <span><span class="co">#&gt; optimizer:  SLSQP </span></span>
 <span><span class="co">#&gt; OpenMx version number: 2.22.11 </span></span>
 <span><span class="co">#&gt; Need help?  See help(mxSummary)</span></span></code></pre></div>
@@ -905,11 +898,11 @@ values.</p>
 </h3>
 <p>The linear growth curve model is also a multilevel (mixed-effects)
 model of the long data: the occasions are nested in individuals, the
-fixed intercept and slope are the means <span class="math inline">\(\mu_{\eta_{0}}\)</span> and <span class="math inline">\(\mu_{\eta_{1}}\)</span> (<code>mu0_0</code> and
+fixed intercept and slope are the means <span class="math inline">\mu_{\eta_{0}}</span> and <span class="math inline">\mu_{\eta_{1}}</span> (<code>mu0_0</code> and
 <code>mu0_1</code>), the random intercept and slope have the covariance
-matrix <span class="math inline">\(\boldsymbol{\Sigma}_{0}\)</span>
+matrix <span class="math inline">\boldsymbol{\Sigma}_{0}</span>
 (<code>sigma0_00</code>, <code>sigma0_01</code>, and
-<code>sigma0_11</code>), and the residual variance is <span class="math inline">\(\theta\)</span>. <code><a href="https://rdrr.io/pkg/lme4/man/lmer.html" class="external-link">lme4::lmer()</a></code> fits it
+<code>sigma0_11</code>), and the residual variance is <span class="math inline">\theta</span>. <code><a href="https://rdrr.io/pkg/lme4/man/lmer.html" class="external-link">lme4::lmer()</a></code> fits it
 with a random intercept and a random slope of <code>time</code> for each
 <code>id</code> <span class="citation">(Bates et al., 2015)</span>.
 <code>REML = FALSE</code> gives maximum likelihood estimates, as in the
@@ -926,27 +919,27 @@ other methods.</p>
 <span><span class="co">#&gt;    Data: data</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;       AIC       BIC    logLik -2*log(L)  df.resid </span></span>
-<span><span class="co">#&gt;   33437.1   33480.4  -16712.6   33425.1      9994 </span></span>
+<span><span class="co">#&gt;   83730.3   83779.0  -41859.1   83718.3     24994 </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Scaled residuals: </span></span>
-<span><span class="co">#&gt;      Min       1Q   Median       3Q      Max </span></span>
-<span><span class="co">#&gt; -2.93296 -0.55042  0.01077  0.54126  3.06952 </span></span>
+<span><span class="co">#&gt;     Min      1Q  Median      3Q     Max </span></span>
+<span><span class="co">#&gt; -3.3016 -0.5536  0.0084  0.5482  3.0849 </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Random effects:</span></span>
 <span><span class="co">#&gt;  Groups   Name        Variance Std.Dev. Corr </span></span>
-<span><span class="co">#&gt;  id       (Intercept) 1.8203   1.3492        </span></span>
-<span><span class="co">#&gt;           time        0.5766   0.7593   0.54 </span></span>
-<span><span class="co">#&gt;  Residual             0.5937   0.7705        </span></span>
-<span><span class="co">#&gt; Number of obs: 10000, groups:  id, 2000</span></span>
+<span><span class="co">#&gt;  id       (Intercept) 1.9097   1.3819        </span></span>
+<span><span class="co">#&gt;           time        0.5773   0.7598   0.56 </span></span>
+<span><span class="co">#&gt;  Residual             0.5953   0.7716        </span></span>
+<span><span class="co">#&gt; Number of obs: 25000, groups:  id, 5000</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Fixed effects:</span></span>
 <span><span class="co">#&gt;             Estimate Std. Error t value</span></span>
-<span><span class="co">#&gt; (Intercept)  0.62017    0.03299    18.8</span></span>
-<span><span class="co">#&gt; time         0.98602    0.01783    55.3</span></span>
+<span><span class="co">#&gt; (Intercept)  0.60434    0.02129   28.38</span></span>
+<span><span class="co">#&gt; time         0.99842    0.01129   88.47</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Correlation of Fixed Effects:</span></span>
 <span><span class="co">#&gt;      (Intr)</span></span>
-<span><span class="co">#&gt; time 0.373</span></span></code></pre></div>
+<span><span class="co">#&gt; time 0.394</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -957,8 +950,8 @@ next to the estimates of one method. Bias is the estimate minus the
 population value. Because each model is fitted to a single simulated
 data set, this is the error of one estimate, not a Monte Carlo bias,
 which would average over many replications. The 95% confidence interval
-is the Wald interval, <span class="math inline">\(\hat{\theta} \pm 1.96
-\times \mathrm{SE}\)</span>, unless the caption says otherwise, and
+is the Wald interval, <span class="math inline">\hat{\theta} \pm 1.96
+\times \mathrm{SE}</span>, unless the caption says otherwise, and
 <code>Covers</code> shows whether it contains the population value. The
 parameter names are the dynr names in every table.</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
@@ -1023,61 +1016,61 @@ set)</caption>
 <tr class="odd">
 <td align="left">mu0_0</td>
 <td align="right">0.615</td>
-<td align="right">0.620</td>
-<td align="right">0.033</td>
-<td align="right">0.005</td>
-<td align="right">0.555</td>
-<td align="right">0.685</td>
+<td align="right">0.604</td>
+<td align="right">0.021</td>
+<td align="right">-0.011</td>
+<td align="right">0.563</td>
+<td align="right">0.646</td>
 <td align="left">TRUE</td>
 </tr>
 <tr class="even">
 <td align="left">mu0_1</td>
 <td align="right">1.006</td>
-<td align="right">0.986</td>
-<td align="right">0.018</td>
-<td align="right">-0.020</td>
-<td align="right">0.951</td>
-<td align="right">1.021</td>
+<td align="right">0.998</td>
+<td align="right">0.011</td>
+<td align="right">-0.008</td>
+<td align="right">0.976</td>
+<td align="right">1.020</td>
 <td align="left">TRUE</td>
 </tr>
 <tr class="odd">
 <td align="left">sigma0_00</td>
 <td align="right">1.932</td>
-<td align="right">1.820</td>
-<td align="right">0.069</td>
-<td align="right">-0.112</td>
-<td align="right">1.685</td>
-<td align="right">1.956</td>
+<td align="right">1.910</td>
+<td align="right">0.045</td>
+<td align="right">-0.022</td>
+<td align="right">1.821</td>
+<td align="right">1.999</td>
 <td align="left">TRUE</td>
 </tr>
 <tr class="even">
 <td align="left">sigma0_01</td>
 <td align="right">0.618</td>
+<td align="right">0.593</td>
+<td align="right">0.018</td>
+<td align="right">-0.025</td>
 <td align="right">0.557</td>
-<td align="right">0.028</td>
-<td align="right">-0.061</td>
-<td align="right">0.502</td>
-<td align="right">0.613</td>
-<td align="left">FALSE</td>
+<td align="right">0.628</td>
+<td align="left">TRUE</td>
 </tr>
 <tr class="odd">
 <td align="left">sigma0_11</td>
 <td align="right">0.587</td>
 <td align="right">0.577</td>
-<td align="right">0.020</td>
+<td align="right">0.013</td>
 <td align="right">-0.010</td>
-<td align="right">0.537</td>
-<td align="right">0.616</td>
+<td align="right">0.552</td>
+<td align="right">0.602</td>
 <td align="left">TRUE</td>
 </tr>
 <tr class="even">
 <td align="left">theta</td>
 <td align="right">0.600</td>
-<td align="right">0.594</td>
-<td align="right">0.011</td>
-<td align="right">-0.006</td>
-<td align="right">0.572</td>
-<td align="right">0.615</td>
+<td align="right">0.595</td>
+<td align="right">0.007</td>
+<td align="right">-0.005</td>
+<td align="right">0.582</td>
+<td align="right">0.609</td>
 <td align="left">TRUE</td>
 </tr>
 </tbody>
@@ -1118,61 +1111,61 @@ simulated data set)</caption>
 <tr class="odd">
 <td align="left">mu0_0</td>
 <td align="right">0.615</td>
-<td align="right">0.620</td>
-<td align="right">0.033</td>
-<td align="right">0.005</td>
-<td align="right">0.556</td>
-<td align="right">0.685</td>
+<td align="right">0.604</td>
+<td align="right">0.021</td>
+<td align="right">-0.011</td>
+<td align="right">0.563</td>
+<td align="right">0.646</td>
 <td align="left">TRUE</td>
 </tr>
 <tr class="even">
 <td align="left">mu0_1</td>
 <td align="right">1.006</td>
-<td align="right">0.986</td>
-<td align="right">0.018</td>
-<td align="right">-0.020</td>
-<td align="right">0.951</td>
+<td align="right">0.998</td>
+<td align="right">0.011</td>
+<td align="right">-0.008</td>
+<td align="right">0.976</td>
 <td align="right">1.021</td>
 <td align="left">TRUE</td>
 </tr>
 <tr class="odd">
 <td align="left">sigma0_00</td>
 <td align="right">1.932</td>
+<td align="right">1.910</td>
+<td align="right">0.046</td>
+<td align="right">-0.022</td>
 <td align="right">1.820</td>
-<td align="right">0.069</td>
-<td align="right">-0.112</td>
-<td align="right">1.685</td>
-<td align="right">1.956</td>
+<td align="right">1.999</td>
 <td align="left">TRUE</td>
 </tr>
 <tr class="even">
 <td align="left">sigma0_01</td>
 <td align="right">0.618</td>
+<td align="right">0.593</td>
+<td align="right">0.018</td>
+<td align="right">-0.025</td>
 <td align="right">0.557</td>
-<td align="right">0.028</td>
-<td align="right">-0.061</td>
-<td align="right">0.502</td>
-<td align="right">0.613</td>
-<td align="left">FALSE</td>
+<td align="right">0.629</td>
+<td align="left">TRUE</td>
 </tr>
 <tr class="odd">
 <td align="left">sigma0_11</td>
 <td align="right">0.587</td>
 <td align="right">0.577</td>
-<td align="right">0.020</td>
+<td align="right">0.013</td>
 <td align="right">-0.010</td>
-<td align="right">0.537</td>
-<td align="right">0.616</td>
+<td align="right">0.552</td>
+<td align="right">0.602</td>
 <td align="left">TRUE</td>
 </tr>
 <tr class="even">
 <td align="left">theta</td>
 <td align="right">0.600</td>
-<td align="right">0.594</td>
-<td align="right">0.011</td>
-<td align="right">-0.006</td>
-<td align="right">0.572</td>
-<td align="right">0.615</td>
+<td align="right">0.595</td>
+<td align="right">0.007</td>
+<td align="right">-0.005</td>
+<td align="right">0.582</td>
+<td align="right">0.609</td>
 <td align="left">TRUE</td>
 </tr>
 </tbody>
@@ -1213,61 +1206,61 @@ set)</caption>
 <tr class="odd">
 <td align="left">mu0_0</td>
 <td align="right">0.615</td>
-<td align="right">0.620</td>
-<td align="right">0.033</td>
-<td align="right">0.005</td>
-<td align="right">0.556</td>
-<td align="right">0.685</td>
+<td align="right">0.604</td>
+<td align="right">0.021</td>
+<td align="right">-0.011</td>
+<td align="right">0.563</td>
+<td align="right">0.646</td>
 <td align="left">TRUE</td>
 </tr>
 <tr class="even">
 <td align="left">mu0_1</td>
 <td align="right">1.006</td>
-<td align="right">0.986</td>
-<td align="right">0.018</td>
-<td align="right">-0.020</td>
-<td align="right">0.951</td>
+<td align="right">0.998</td>
+<td align="right">0.011</td>
+<td align="right">-0.008</td>
+<td align="right">0.976</td>
 <td align="right">1.021</td>
 <td align="left">TRUE</td>
 </tr>
 <tr class="odd">
 <td align="left">sigma0_00</td>
 <td align="right">1.932</td>
-<td align="right">1.820</td>
-<td align="right">0.069</td>
-<td align="right">-0.112</td>
-<td align="right">1.685</td>
-<td align="right">1.956</td>
+<td align="right">1.910</td>
+<td align="right">0.046</td>
+<td align="right">-0.022</td>
+<td align="right">1.821</td>
+<td align="right">1.999</td>
 <td align="left">TRUE</td>
 </tr>
 <tr class="even">
 <td align="left">sigma0_01</td>
 <td align="right">0.618</td>
+<td align="right">0.593</td>
+<td align="right">0.018</td>
+<td align="right">-0.025</td>
 <td align="right">0.557</td>
-<td align="right">0.028</td>
-<td align="right">-0.061</td>
-<td align="right">0.502</td>
-<td align="right">0.613</td>
-<td align="left">FALSE</td>
+<td align="right">0.629</td>
+<td align="left">TRUE</td>
 </tr>
 <tr class="odd">
 <td align="left">sigma0_11</td>
 <td align="right">0.587</td>
 <td align="right">0.577</td>
-<td align="right">0.020</td>
+<td align="right">0.013</td>
 <td align="right">-0.010</td>
-<td align="right">0.537</td>
-<td align="right">0.616</td>
+<td align="right">0.552</td>
+<td align="right">0.602</td>
 <td align="left">TRUE</td>
 </tr>
 <tr class="even">
 <td align="left">theta</td>
 <td align="right">0.600</td>
-<td align="right">0.594</td>
-<td align="right">0.011</td>
-<td align="right">-0.006</td>
-<td align="right">0.572</td>
-<td align="right">0.615</td>
+<td align="right">0.595</td>
+<td align="right">0.007</td>
+<td align="right">-0.005</td>
+<td align="right">0.582</td>
+<td align="right">0.609</td>
 <td align="left">TRUE</td>
 </tr>
 </tbody>
@@ -1305,61 +1298,61 @@ set)</caption>
 <tr class="odd">
 <td align="left">mu0_0</td>
 <td align="right">0.615</td>
-<td align="right">0.620</td>
-<td align="right">0.033</td>
-<td align="right">0.005</td>
-<td align="right">0.556</td>
-<td align="right">0.685</td>
+<td align="right">0.604</td>
+<td align="right">0.021</td>
+<td align="right">-0.011</td>
+<td align="right">0.563</td>
+<td align="right">0.646</td>
 <td align="left">TRUE</td>
 </tr>
 <tr class="even">
 <td align="left">mu0_1</td>
 <td align="right">1.006</td>
-<td align="right">0.986</td>
-<td align="right">0.018</td>
-<td align="right">-0.020</td>
-<td align="right">0.951</td>
+<td align="right">0.998</td>
+<td align="right">0.011</td>
+<td align="right">-0.008</td>
+<td align="right">0.976</td>
 <td align="right">1.021</td>
 <td align="left">TRUE</td>
 </tr>
 <tr class="odd">
 <td align="left">sigma0_00</td>
 <td align="right">1.932</td>
-<td align="right">1.820</td>
-<td align="right">0.069</td>
-<td align="right">-0.112</td>
-<td align="right">1.685</td>
-<td align="right">1.956</td>
+<td align="right">1.910</td>
+<td align="right">0.046</td>
+<td align="right">-0.022</td>
+<td align="right">1.821</td>
+<td align="right">1.999</td>
 <td align="left">TRUE</td>
 </tr>
 <tr class="even">
 <td align="left">sigma0_01</td>
 <td align="right">0.618</td>
+<td align="right">0.593</td>
+<td align="right">0.018</td>
+<td align="right">-0.025</td>
 <td align="right">0.557</td>
-<td align="right">0.028</td>
-<td align="right">-0.061</td>
-<td align="right">0.502</td>
-<td align="right">0.613</td>
-<td align="left">FALSE</td>
+<td align="right">0.629</td>
+<td align="left">TRUE</td>
 </tr>
 <tr class="odd">
 <td align="left">sigma0_11</td>
 <td align="right">0.587</td>
 <td align="right">0.577</td>
-<td align="right">0.020</td>
+<td align="right">0.013</td>
 <td align="right">-0.010</td>
-<td align="right">0.537</td>
-<td align="right">0.616</td>
+<td align="right">0.552</td>
+<td align="right">0.602</td>
 <td align="left">TRUE</td>
 </tr>
 <tr class="even">
 <td align="left">theta</td>
 <td align="right">0.600</td>
-<td align="right">0.594</td>
-<td align="right">0.011</td>
-<td align="right">-0.006</td>
-<td align="right">0.572</td>
-<td align="right">0.615</td>
+<td align="right">0.595</td>
+<td align="right">0.007</td>
+<td align="right">-0.005</td>
+<td align="right">0.582</td>
+<td align="right">0.609</td>
 <td align="left">TRUE</td>
 </tr>
 </tbody>
@@ -1440,39 +1433,39 @@ intervals for the variances: profile likelihood</caption>
 <tr class="odd">
 <td align="left">mu0_0</td>
 <td align="right">0.615</td>
-<td align="right">0.620</td>
-<td align="right">0.033</td>
-<td align="right">0.005</td>
-<td align="right">0.556</td>
-<td align="right">0.685</td>
+<td align="right">0.604</td>
+<td align="right">0.021</td>
+<td align="right">-0.011</td>
+<td align="right">0.563</td>
+<td align="right">0.646</td>
 <td align="left">TRUE</td>
 </tr>
 <tr class="even">
 <td align="left">mu0_1</td>
 <td align="right">1.006</td>
-<td align="right">0.986</td>
-<td align="right">0.018</td>
-<td align="right">-0.020</td>
-<td align="right">0.951</td>
+<td align="right">0.998</td>
+<td align="right">0.011</td>
+<td align="right">-0.008</td>
+<td align="right">0.976</td>
 <td align="right">1.021</td>
 <td align="left">TRUE</td>
 </tr>
 <tr class="odd">
 <td align="left">sigma0_00</td>
 <td align="right">1.932</td>
-<td align="right">1.820</td>
+<td align="right">1.910</td>
 <td align="right">NA</td>
-<td align="right">-0.112</td>
-<td align="right">1.690</td>
-<td align="right">1.961</td>
+<td align="right">-0.022</td>
+<td align="right">1.823</td>
+<td align="right">2.001</td>
 <td align="left">TRUE</td>
 </tr>
 <tr class="even">
 <td align="left">sigma0_01</td>
 <td align="right">0.618</td>
-<td align="right">0.557</td>
+<td align="right">0.593</td>
 <td align="right">NA</td>
-<td align="right">-0.061</td>
+<td align="right">-0.025</td>
 <td align="right">NA</td>
 <td align="right">NA</td>
 <td align="left">NA</td>
@@ -1483,18 +1476,18 @@ intervals for the variances: profile likelihood</caption>
 <td align="right">0.577</td>
 <td align="right">NA</td>
 <td align="right">-0.010</td>
-<td align="right">0.539</td>
-<td align="right">0.618</td>
+<td align="right">0.553</td>
+<td align="right">0.603</td>
 <td align="left">TRUE</td>
 </tr>
 <tr class="even">
 <td align="left">theta</td>
 <td align="right">0.600</td>
-<td align="right">0.594</td>
+<td align="right">0.595</td>
 <td align="right">NA</td>
-<td align="right">-0.006</td>
-<td align="right">0.573</td>
-<td align="right">0.615</td>
+<td align="right">-0.005</td>
+<td align="right">0.582</td>
+<td align="right">0.609</td>
 <td align="left">TRUE</td>
 </tr>
 </tbody>
@@ -1544,38 +1537,38 @@ same likelihood, so their estimates should agree closely.</p>
 <tr class="odd">
 <td align="left">mu0_0</td>
 <td align="right">0.615</td>
-<td align="right">0.620</td>
-<td align="right">0.620</td>
-<td align="right">0.620</td>
-<td align="right">0.620</td>
-<td align="right">0.620</td>
+<td align="right">0.604</td>
+<td align="right">0.604</td>
+<td align="right">0.604</td>
+<td align="right">0.604</td>
+<td align="right">0.604</td>
 </tr>
 <tr class="even">
 <td align="left">mu0_1</td>
 <td align="right">1.006</td>
-<td align="right">0.986</td>
-<td align="right">0.986</td>
-<td align="right">0.986</td>
-<td align="right">0.986</td>
-<td align="right">0.986</td>
+<td align="right">0.998</td>
+<td align="right">0.998</td>
+<td align="right">0.998</td>
+<td align="right">0.998</td>
+<td align="right">0.998</td>
 </tr>
 <tr class="odd">
 <td align="left">sigma0_00</td>
 <td align="right">1.932</td>
-<td align="right">1.820</td>
-<td align="right">1.820</td>
-<td align="right">1.820</td>
-<td align="right">1.820</td>
-<td align="right">1.820</td>
+<td align="right">1.910</td>
+<td align="right">1.910</td>
+<td align="right">1.910</td>
+<td align="right">1.910</td>
+<td align="right">1.910</td>
 </tr>
 <tr class="even">
 <td align="left">sigma0_01</td>
 <td align="right">0.618</td>
-<td align="right">0.557</td>
-<td align="right">0.557</td>
-<td align="right">0.557</td>
-<td align="right">0.557</td>
-<td align="right">0.557</td>
+<td align="right">0.593</td>
+<td align="right">0.593</td>
+<td align="right">0.593</td>
+<td align="right">0.593</td>
+<td align="right">0.593</td>
 </tr>
 <tr class="odd">
 <td align="left">sigma0_11</td>
@@ -1589,11 +1582,11 @@ same likelihood, so their estimates should agree closely.</p>
 <tr class="even">
 <td align="left">theta</td>
 <td align="right">0.600</td>
-<td align="right">0.594</td>
-<td align="right">0.594</td>
-<td align="right">0.594</td>
-<td align="right">0.594</td>
-<td align="right">0.594</td>
+<td align="right">0.595</td>
+<td align="right">0.595</td>
+<td align="right">0.595</td>
+<td align="right">0.595</td>
+<td align="right">0.595</td>
 </tr>
 </tbody>
 </table>

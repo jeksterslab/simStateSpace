@@ -5,13 +5,8 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>The State Space Model • simStateSpace</title>
-<!-- mathjax math --><script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js" integrity="sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI=" crossorigin="anonymous"></script><script>
-  window.MathJax = {
-    chtml: {
-      fontURL: "https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/output/chtml/fonts/woff-v2"
-    }
-  };
-</script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- katex math --><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" integrity="sha384-nB0miv6/jRmo5UMMR1wu3Gz6NLsoTkbqJghGIsx//Rlm+ZU03BU6SQNC66uf4l5+" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" integrity="sha384-7zkQWkzuo3B5mTepMUcHkMB5jZaolc2xDwL6VFqjFALcbeS9Ggm/Yr2r3Dy4lfFg" crossorigin="anonymous"></script><script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" integrity="sha384-43gviWU0YVjaDtb/GhzOouOXtZMP/7XUzwPTstBeZFe/+rCMvRwr4yROQP43s0Xk" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script><script src="../katex-auto.js"></script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/Roboto-0.4.10/font.css" rel="stylesheet">
 <link href="../deps/Roboto_Mono-0.4.10/font.css" rel="stylesheet">
@@ -64,7 +59,7 @@
                         <h4 data-toc-skip class="author">Ivan Jacob
 Agaloos Pesigan</h4>
             
-            <h4 data-toc-skip class="date">2026-11-02</h4>
+            <h4 data-toc-skip class="date">2026-11-03</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/jeksterslab/simStateSpace/blob/main/vignettes/ssm.Rmd"><code>vignettes/ssm.Rmd</code></a></small>
       <div class="d-none name"><code>ssm.Rmd</code></div>
@@ -98,7 +93,7 @@ vector autoregressive model.</p>
 <div class="section level2">
 <h2 id="model">Model<a class="anchor" aria-label="anchor" href="#model"></a>
 </h2>
-<p>The measurement model is given by <span class="math display">\[\mathbf{y}_{i, t}
+<p>The measurement model is given by <span class="math display">\mathbf{y}_{i, t}
   =
   \boldsymbol{\nu}
   +
@@ -115,28 +110,30 @@ vector autoregressive model.</p>
   \left(
   \mathbf{0},
   \boldsymbol{\Theta}
-  \right)\]</span> where <span class="math inline">\(\mathbf{y}_{i,
-t}\)</span>, <span class="math inline">\(\boldsymbol{\eta}_{i,
-t}\)</span>, and <span class="math inline">\(\boldsymbol{\varepsilon}_{i, t}\)</span> are
-random variables and <span class="math inline">\(\boldsymbol{\nu}\)</span>, <span class="math inline">\(\boldsymbol{\Lambda}\)</span>, and <span class="math inline">\(\boldsymbol{\Theta}\)</span> are model parameters.
-<span class="math inline">\(\mathbf{y}_{i, t}\)</span> represents a
-vector of observed random variables, <span class="math inline">\(\boldsymbol{\eta}_{i, t}\)</span> a vector of
-latent random variables, and <span class="math inline">\(\boldsymbol{\varepsilon}_{i, t}\)</span> a vector
-of random measurement errors, at time <span class="math inline">\(t\)</span> and individual <span class="math inline">\(i\)</span>. <span class="math inline">\(\boldsymbol{\nu}\)</span> denotes a vector of
-intercepts, <span class="math inline">\(\boldsymbol{\Lambda}\)</span> a
-matrix of factor loadings, and <span class="math inline">\(\boldsymbol{\Theta}\)</span> the covariance matrix
-of <span class="math inline">\(\boldsymbol{\varepsilon}\)</span>.</p>
+  \right)</span> where <span class="math inline">\mathbf{y}_{i,
+t}</span>, <span class="math inline">\boldsymbol{\eta}_{i, t}</span>,
+and <span class="math inline">\boldsymbol{\varepsilon}_{i, t}</span> are
+random variables and <span class="math inline">\boldsymbol{\nu}</span>,
+<span class="math inline">\boldsymbol{\Lambda}</span>, and <span class="math inline">\boldsymbol{\Theta}</span> are model parameters.
+<span class="math inline">\mathbf{y}_{i, t}</span> represents a vector
+of observed random variables, <span class="math inline">\boldsymbol{\eta}_{i, t}</span> a vector of latent
+random variables, and <span class="math inline">\boldsymbol{\varepsilon}_{i, t}</span> a vector of
+random measurement errors, at time <span class="math inline">t</span>
+and individual <span class="math inline">i</span>. <span class="math inline">\boldsymbol{\nu}</span> denotes a vector of
+intercepts, <span class="math inline">\boldsymbol{\Lambda}</span> a
+matrix of factor loadings, and <span class="math inline">\boldsymbol{\Theta}</span> the covariance matrix of
+<span class="math inline">\boldsymbol{\varepsilon}</span>.</p>
 <p>In words, each observed variable is an intercept plus a weighted
 combination of the latent variables plus measurement error. The latent
-variables <span class="math inline">\(\boldsymbol{\eta}_{i, t}\)</span>
-are the quantities we care about (for example, a person’s true stress
-level), and the observed variables <span class="math inline">\(\mathbf{y}_{i, t}\)</span> are noisy measurements
-of them. Separating measurement error from true change is the main
-reason to use a state space model: measurement error affects only the
-occasion it occurs on, while changes in the latent variables carry over
-in time.</p>
+variables <span class="math inline">\boldsymbol{\eta}_{i, t}</span> are
+the quantities we care about (for example, a person’s true stress
+level), and the observed variables <span class="math inline">\mathbf{y}_{i, t}</span> are noisy measurements of
+them. Separating measurement error from true change is the main reason
+to use a state space model: measurement error affects only the occasion
+it occurs on, while changes in the latent variables carry over in
+time.</p>
 <p>An alternative representation of the measurement error is given by
-<span class="math display">\[\boldsymbol{\varepsilon}_{i, t}
+<span class="math display">\boldsymbol{\varepsilon}_{i, t}
   =
   \boldsymbol{\Theta}^{\frac{1}{2}}
   \mathbf{z}_{i, t},
@@ -149,12 +146,12 @@ in time.</p>
   \left(
   \mathbf{0},
   \mathbf{I}
-  \right)\]</span> where <span class="math inline">\(\mathbf{z}_{i,
-t}\)</span> is a vector of independent standard normal random variables
-and <span class="math inline">\(\left( \boldsymbol{\Theta}^{\frac{1}{2}}
+  \right)</span> where <span class="math inline">\mathbf{z}_{i,
+t}</span> is a vector of independent standard normal random variables
+and <span class="math inline">\left( \boldsymbol{\Theta}^{\frac{1}{2}}
 \right) \left( \boldsymbol{\Theta}^{\frac{1}{2}} \right)^{\prime} =
-\boldsymbol{\Theta}\)</span> .</p>
-<p>The dynamic structure is given by <span class="math display">\[\boldsymbol{\eta}_{i, t}
+\boldsymbol{\Theta}</span> .</p>
+<p>The dynamic structure is given by <span class="math display">\boldsymbol{\eta}_{i, t}
   =
   \boldsymbol{\alpha}
   +
@@ -171,36 +168,39 @@ and <span class="math inline">\(\left( \boldsymbol{\Theta}^{\frac{1}{2}}
   \left(
   \mathbf{0},
   \boldsymbol{\Psi}
-  \right)\]</span> where <span class="math inline">\(\boldsymbol{\eta}_{i, t}\)</span>, <span class="math inline">\(\boldsymbol{\eta}_{i, t - 1}\)</span>, and <span class="math inline">\(\boldsymbol{\zeta}_{i, t}\)</span> are random
-variables, and <span class="math inline">\(\boldsymbol{\alpha}\)</span>,
-<span class="math inline">\(\boldsymbol{\beta}\)</span>, and <span class="math inline">\(\boldsymbol{\Psi}\)</span> are model parameters.
-Here, <span class="math inline">\(\boldsymbol{\eta}_{i, t}\)</span> is a
-vector of latent variables at time <span class="math inline">\(t\)</span> and individual <span class="math inline">\(i\)</span>, <span class="math inline">\(\boldsymbol{\eta}_{i, t - 1}\)</span> represents a
-vector of latent variables at time <span class="math inline">\(t -
-1\)</span> and individual <span class="math inline">\(i\)</span>, and
-<span class="math inline">\(\boldsymbol{\zeta}_{i, t}\)</span>
-represents a vector of dynamic noise at time <span class="math inline">\(t\)</span> and individual <span class="math inline">\(i\)</span>. <span class="math inline">\(\boldsymbol{\alpha}\)</span> denotes a vector of
-intercepts, <span class="math inline">\(\boldsymbol{\beta}\)</span> a
-matrix of autoregression and cross regression coefficients, and <span class="math inline">\(\boldsymbol{\Psi}\)</span> the covariance matrix
-of <span class="math inline">\(\boldsymbol{\zeta}_{i, t}\)</span>.</p>
-<p>In words, each latent variable at time <span class="math inline">\(t\)</span> is a weighted sum of all the latent
-variables at time <span class="math inline">\(t - 1\)</span>, plus an
-intercept and a random shock. The weights are the elements of <span class="math inline">\(\boldsymbol{\beta}\)</span>:</p>
+  \right)</span> where <span class="math inline">\boldsymbol{\eta}_{i,
+t}</span>, <span class="math inline">\boldsymbol{\eta}_{i, t -
+1}</span>, and <span class="math inline">\boldsymbol{\zeta}_{i,
+t}</span> are random variables, and <span class="math inline">\boldsymbol{\alpha}</span>, <span class="math inline">\boldsymbol{\beta}</span>, and <span class="math inline">\boldsymbol{\Psi}</span> are model parameters. Here,
+<span class="math inline">\boldsymbol{\eta}_{i, t}</span> is a vector of
+latent variables at time <span class="math inline">t</span> and
+individual <span class="math inline">i</span>, <span class="math inline">\boldsymbol{\eta}_{i, t - 1}</span> represents a
+vector of latent variables at time <span class="math inline">t -
+1</span> and individual <span class="math inline">i</span>, and <span class="math inline">\boldsymbol{\zeta}_{i, t}</span> represents a vector
+of dynamic noise at time <span class="math inline">t</span> and
+individual <span class="math inline">i</span>. <span class="math inline">\boldsymbol{\alpha}</span> denotes a vector of
+intercepts, <span class="math inline">\boldsymbol{\beta}</span> a matrix
+of autoregression and cross regression coefficients, and <span class="math inline">\boldsymbol{\Psi}</span> the covariance matrix of
+<span class="math inline">\boldsymbol{\zeta}_{i, t}</span>.</p>
+<p>In words, each latent variable at time <span class="math inline">t</span> is a weighted sum of all the latent
+variables at time <span class="math inline">t - 1</span>, plus an
+intercept and a random shock. The weights are the elements of <span class="math inline">\boldsymbol{\beta}</span>:</p>
 <ul>
-<li>A diagonal element <span class="math inline">\(\beta_{jj}\)</span>
-is the autoregressive effect, how much of variable <span class="math inline">\(j\)</span> carries over to the next occasion.
-Values closer to 1 mean the variable changes slowly (high inertia).</li>
-<li>An off-diagonal element <span class="math inline">\(\beta_{jk}\)</span> is the cross-lagged effect of
-variable <span class="math inline">\(k\)</span> at time <span class="math inline">\(t - 1\)</span> on variable <span class="math inline">\(j\)</span> at time <span class="math inline">\(t\)</span>. Note the order: the row is the
-outcome, the column is the predictor.</li>
+<li>A diagonal element <span class="math inline">\beta_{jj}</span> is
+the autoregressive effect, how much of variable <span class="math inline">j</span> carries over to the next occasion. Values
+closer to 1 mean the variable changes slowly (high inertia).</li>
+<li>An off-diagonal element <span class="math inline">\beta_{jk}</span>
+is the cross-lagged effect of variable <span class="math inline">k</span> at time <span class="math inline">t -
+1</span> on variable <span class="math inline">j</span> at time <span class="math inline">t</span>. Note the order: the row is the outcome,
+the column is the predictor.</li>
 </ul>
-<p>The shocks <span class="math inline">\(\boldsymbol{\zeta}_{i,
-t}\)</span> stand for everything that moves the latent variables that
-the model does not explain. Unlike measurement error, a shock carries
-over to later occasions through <span class="math inline">\(\boldsymbol{\beta}\)</span>. For the process to
-settle around a stable mean, all eigenvalues of <span class="math inline">\(\boldsymbol{\beta}\)</span> must have modulus less
+<p>The shocks <span class="math inline">\boldsymbol{\zeta}_{i, t}</span>
+stand for everything that moves the latent variables that the model does
+not explain. Unlike measurement error, a shock carries over to later
+occasions through <span class="math inline">\boldsymbol{\beta}</span>.
+For the process to settle around a stable mean, all eigenvalues of <span class="math inline">\boldsymbol{\beta}</span> must have modulus less
 than 1.</p>
-<p>An alternative representation of the dynamic noise is given by <span class="math display">\[\boldsymbol{\zeta}_{i, t}
+<p>An alternative representation of the dynamic noise is given by <span class="math display">\boldsymbol{\zeta}_{i, t}
   =
   \boldsymbol{\Psi}^{\frac{1}{2}}
   \mathbf{z}_{i, t},
@@ -213,15 +213,15 @@ than 1.</p>
   \left(
   \mathbf{0},
   \mathbf{I}
-  \right)\]</span> where <span class="math inline">\(\left(
+  \right)</span> where <span class="math inline">\left(
 \boldsymbol{\Psi}^{\frac{1}{2}} \right) \left(
 \boldsymbol{\Psi}^{\frac{1}{2}} \right)^{\prime} =
-\boldsymbol{\Psi}\)</span> . This is how both kinds of noise are
+\boldsymbol{\Psi}</span> . This is how both kinds of noise are
 simulated: independent standard normal draws are multiplied by a square
 root of the covariance matrix. The functions in
 <code>simStateSpace</code> take this square root, the lower triangular
-Cholesky factor, as the arguments <code>psi_l</code> (for <span class="math inline">\(\boldsymbol{\Psi}\)</span>) and
-<code>theta_l</code> (for <span class="math inline">\(\boldsymbol{\Theta}\)</span>).</p>
+Cholesky factor, as the arguments <code>psi_l</code> (for <span class="math inline">\boldsymbol{\Psi}</span>) and <code>theta_l</code>
+(for <span class="math inline">\boldsymbol{\Theta}</span>).</p>
 <div class="section level3">
 <h3 id="diagram">Diagram<a class="anchor" aria-label="anchor" href="#diagram"></a>
 </h3>
@@ -229,30 +229,31 @@ Cholesky factor, as the arguments <code>psi_l</code> (for <span class="math inli
 <img src="fig-vignettes-ssm-ssm.png" style="width:100.0%" alt="State space diagram of the state space model."><div class="figcaption">State space diagram of the state space
 model.</div>
 </div>
-<p>The model in state space form, for the first three occasions (<span class="math inline">\(t = 0, 1, 2\)</span>), with every element of the
-state drawn. Squares are observed variables and circles are latent
-variables. Each latent variable <span class="math inline">\(\eta_{j,
-t}\)</span> has one indicator <span class="math inline">\(Y_{j,
-t}\)</span> with a loading of 1, and measurement error <span class="math inline">\(\varepsilon_{j, t}\)</span> with variance <span class="math inline">\(\theta_{jj}\)</span>. The horizontal arrows are
-the autoregressive effects and the diagonal arrows the cross-lagged
-effects, the elements of <span class="math inline">\(\boldsymbol{\beta}\)</span>; only the nonzero
-elements in this example are drawn (<span class="math inline">\(\eta_{1}\)</span> affects <span class="math inline">\(\eta_{2}\)</span> and <span class="math inline">\(\eta_{3}\)</span>, and <span class="math inline">\(\eta_{2}\)</span> affects <span class="math inline">\(\eta_{3}\)</span>). <span class="math inline">\(\zeta_{j, t}\)</span> is the process noise, with
-variance <span class="math inline">\(\psi_{jj}\)</span>, from <span class="math inline">\(t = 1\)</span> on. A loop on a variable is its
-variance and a curved two-headed arrow a covariance. At <span class="math inline">\(t = 0\)</span>, the initial condition <span class="math inline">\(\boldsymbol{\eta}_{0} \sim \mathcal{N} \left(
-\boldsymbol{\mu}_{0}, \boldsymbol{\Sigma}_{0} \right)\)</span> gives the
-variances <span class="math inline">\(\sigma_{jj}\)</span> and
-covariances <span class="math inline">\(\sigma_{jk}\)</span> of the
-latent variables. Below the diagram, all the latent variables at one
-occasion form the state vector <span class="math inline">\(\boldsymbol{\eta}_{t}\)</span>, and all the
-observed variables form <span class="math inline">\(\mathbf{y}_{t}\)</span>: <span class="math inline">\(\boldsymbol{\beta}\)</span> carries the state from
-one occasion to the next, <span class="math inline">\(\boldsymbol{\Lambda}\)</span> maps the state to
-the observed variables, <span class="math inline">\(\boldsymbol{\Psi}\)</span> is the covariance
-matrix of the process noise <span class="math inline">\(\boldsymbol{\zeta}_{t}\)</span>, and <span class="math inline">\(\boldsymbol{\Theta}\)</span> the covariance matrix
-of the measurement error <span class="math inline">\(\boldsymbol{\varepsilon}_{t}\)</span>.
+<p>The model in state space form, for the first three occasions (<span class="math inline">t = 0, 1, 2</span>), with every element of the state
+drawn. Squares are observed variables and circles are latent variables.
+Each latent variable <span class="math inline">\eta_{j, t}</span> has
+one indicator <span class="math inline">Y_{j, t}</span> with a loading
+of 1, and measurement error <span class="math inline">\varepsilon_{j,
+t}</span> with variance <span class="math inline">\theta_{jj}</span>.
+The horizontal arrows are the autoregressive effects and the diagonal
+arrows the cross-lagged effects, the elements of <span class="math inline">\boldsymbol{\beta}</span>; only the nonzero elements
+in this example are drawn (<span class="math inline">\eta_{1}</span>
+affects <span class="math inline">\eta_{2}</span> and <span class="math inline">\eta_{3}</span>, and <span class="math inline">\eta_{2}</span> affects <span class="math inline">\eta_{3}</span>). <span class="math inline">\zeta_{j, t}</span> is the process noise, with
+variance <span class="math inline">\psi_{jj}</span>, from <span class="math inline">t = 1</span> on. A loop on a variable is its
+variance and a curved two-headed arrow a covariance. At <span class="math inline">t = 0</span>, the initial condition <span class="math inline">\boldsymbol{\eta}_{0} \sim \mathcal{N} \left(
+\boldsymbol{\mu}_{0}, \boldsymbol{\Sigma}_{0} \right)</span> gives the
+variances <span class="math inline">\sigma_{jj}</span> and covariances
+<span class="math inline">\sigma_{jk}</span> of the latent variables.
+Below the diagram, all the latent variables at one occasion form the
+state vector <span class="math inline">\boldsymbol{\eta}_{t}</span>, and
+all the observed variables form <span class="math inline">\mathbf{y}_{t}</span>: <span class="math inline">\boldsymbol{\beta}</span> carries the state from one
+occasion to the next, <span class="math inline">\boldsymbol{\Lambda}</span> maps the state to the
+observed variables, <span class="math inline">\boldsymbol{\Psi}</span>
+is the covariance matrix of the process noise <span class="math inline">\boldsymbol{\zeta}_{t}</span>, and <span class="math inline">\boldsymbol{\Theta}</span> the covariance matrix of
+the measurement error <span class="math inline">\boldsymbol{\varepsilon}_{t}</span>.
 <code><a href="../reference/SimSSMFixed.html">SimSSMFixed()</a></code> takes <code>beta</code>, <code>lambda</code>,
-<code>mu0</code>, and the Cholesky factors of <span class="math inline">\(\boldsymbol{\Psi}\)</span>, <span class="math inline">\(\boldsymbol{\Theta}\)</span>, and <span class="math inline">\(\boldsymbol{\Sigma}_{0}\)</span>
-(<code>psi_l</code>, <code>theta_l</code>, and
-<code>sigma0_l</code>).</p>
+<code>mu0</code>, and the Cholesky factors of <span class="math inline">\boldsymbol{\Psi}</span>, <span class="math inline">\boldsymbol{\Theta}</span>, and <span class="math inline">\boldsymbol{\Sigma}_{0}</span> (<code>psi_l</code>,
+<code>theta_l</code>, and <code>sigma0_l</code>).</p>
 </div>
 </div>
 <div class="section level2">
@@ -261,11 +262,11 @@ of the measurement error <span class="math inline">\(\boldsymbol{\varepsilon}_{t
 <div class="section level3">
 <h3 id="notation">Notation<a class="anchor" aria-label="anchor" href="#notation"></a>
 </h3>
-<p>Let <span class="math inline">\(t = 200\)</span> be the number of
-time points and <span class="math inline">\(n = 100\)</span> be the
-number of individuals.</p>
-<p>Let the measurement model intercept vector <span class="math inline">\(\boldsymbol{\nu}\)</span> be given by</p>
-<p><span class="math display">\[\boldsymbol{\nu}
+<p>Let <span class="math inline">t = 1000</span> be the number of time
+points and <span class="math inline">n = 100</span> be the number of
+individuals.</p>
+<p>Let the measurement model intercept vector <span class="math inline">\boldsymbol{\nu}</span> be given by</p>
+<p><span class="math display">\boldsymbol{\nu}
 =
 \left(
 \begin{array}{c}
@@ -273,9 +274,9 @@ number of individuals.</p>
   0 \\
   0 \\
 \end{array}
-\right) .\]</span></p>
-<p>Let the factor loadings matrix <span class="math inline">\(\boldsymbol{\Lambda}\)</span> be given by</p>
-<p><span class="math display">\[\boldsymbol{\Lambda}
+\right) .</span></p>
+<p>Let the factor loadings matrix <span class="math inline">\boldsymbol{\Lambda}</span> be given by</p>
+<p><span class="math display">\boldsymbol{\Lambda}
 =
 \left(
 \begin{array}{ccc}
@@ -283,9 +284,9 @@ number of individuals.</p>
   0 &amp; 1 &amp; 0 \\
   0 &amp; 0 &amp; 1 \\
 \end{array}
-\right) .\]</span></p>
-<p>Let the measurement error covariance matrix <span class="math inline">\(\boldsymbol{\Theta}\)</span> be given by</p>
-<p><span class="math display">\[\boldsymbol{\Theta}
+\right) .</span></p>
+<p>Let the measurement error covariance matrix <span class="math inline">\boldsymbol{\Theta}</span> be given by</p>
+<p><span class="math display">\boldsymbol{\Theta}
 =
 \left(
 \begin{array}{ccc}
@@ -293,17 +294,15 @@ number of individuals.</p>
   0 &amp; 0.2 &amp; 0 \\
   0 &amp; 0 &amp; 0.2 \\
 \end{array}
-\right) .\]</span></p>
-<p>With <span class="math inline">\(\boldsymbol{\nu} =
-\mathbf{0}\)</span> and <span class="math inline">\(\boldsymbol{\Lambda}
-= \mathbf{I}\)</span>, each observed variable measures one latent
-variable, and <span class="math inline">\(\boldsymbol{\Theta}\)</span>
-adds measurement error with variance 0.2 to each.</p>
-<p>Let the initial condition <span class="math inline">\(\boldsymbol{\eta}_{0}\)</span> be given by</p>
-<p><span class="math display">\[\boldsymbol{\eta}_{0} \sim \mathcal{N}
-\left( \boldsymbol{\mu}_{0}, \boldsymbol{\Sigma}_{0}
-\right)\]</span></p>
-<p><span class="math display">\[\boldsymbol{\mu}_{0}
+\right) .</span></p>
+<p>With <span class="math inline">\boldsymbol{\nu} = \mathbf{0}</span>
+and <span class="math inline">\boldsymbol{\Lambda} = \mathbf{I}</span>,
+each observed variable measures one latent variable, and <span class="math inline">\boldsymbol{\Theta}</span> adds measurement error
+with variance 0.2 to each.</p>
+<p>Let the initial condition <span class="math inline">\boldsymbol{\eta}_{0}</span> be given by</p>
+<p><span class="math display">\boldsymbol{\eta}_{0} \sim \mathcal{N}
+\left( \boldsymbol{\mu}_{0}, \boldsymbol{\Sigma}_{0} \right)</span></p>
+<p><span class="math display">\boldsymbol{\mu}_{0}
 =
 \left(
 \begin{array}{c}
@@ -311,8 +310,8 @@ adds measurement error with variance 0.2 to each.</p>
   0 \\
   0 \\
 \end{array}
-\right)\]</span></p>
-<p><span class="math display">\[\boldsymbol{\Sigma}_{0}
+\right)</span></p>
+<p><span class="math display">\boldsymbol{\Sigma}_{0}
 =
 \left(
 \begin{array}{ccc}
@@ -320,9 +319,9 @@ adds measurement error with variance 0.2 to each.</p>
   0.1183232 &amp; 0.3437711 &amp; 0.1381855 \\
   0.0298539 &amp; 0.1381855 &amp; 0.2663828 \\
 \end{array}
-\right) .\]</span></p>
-<p>Let the constant vector <span class="math inline">\(\boldsymbol{\alpha}\)</span> be given by</p>
-<p><span class="math display">\[\boldsymbol{\alpha}
+\right) .</span></p>
+<p>Let the constant vector <span class="math inline">\boldsymbol{\alpha}</span> be given by</p>
+<p><span class="math display">\boldsymbol{\alpha}
 =
 \left(
 \begin{array}{c}
@@ -330,9 +329,9 @@ adds measurement error with variance 0.2 to each.</p>
   0 \\
   0 \\
 \end{array}
-\right) .\]</span></p>
-<p>Let the transition matrix <span class="math inline">\(\boldsymbol{\beta}\)</span> be given by</p>
-<p><span class="math display">\[\boldsymbol{\beta}
+\right) .</span></p>
+<p>Let the transition matrix <span class="math inline">\boldsymbol{\beta}</span> be given by</p>
+<p><span class="math display">\boldsymbol{\beta}
 =
 \left(
 \begin{array}{ccc}
@@ -340,16 +339,16 @@ adds measurement error with variance 0.2 to each.</p>
   0.5 &amp; 0.6 &amp; 0 \\
   -0.1 &amp; 0.4 &amp; 0.5 \\
 \end{array}
-\right) .\]</span></p>
+\right) .</span></p>
 <p>Read the columns as predictors and the rows as outcomes. Each
 variable carries over to the next occasion (autoregressive effects 0.7,
-0.6, and 0.5). In addition, <span class="math inline">\(\eta_{1}\)</span> predicts later <span class="math inline">\(\eta_{2}\)</span> (0.5), <span class="math inline">\(\eta_{2}\)</span> predicts later <span class="math inline">\(\eta_{3}\)</span> (0.4), and <span class="math inline">\(\eta_{1}\)</span> has a small negative effect on
-later <span class="math inline">\(\eta_{3}\)</span> (-0.1). Because
-<span class="math inline">\(\boldsymbol{\beta}\)</span> is lower
-triangular, its eigenvalues are its diagonal elements, all less than 1,
-so the process is stable.</p>
-<p>Let the dynamic process noise <span class="math inline">\(\boldsymbol{\Psi}\)</span> be given by</p>
-<p><span class="math display">\[\boldsymbol{\Psi}
+0.6, and 0.5). In addition, <span class="math inline">\eta_{1}</span>
+predicts later <span class="math inline">\eta_{2}</span> (0.5), <span class="math inline">\eta_{2}</span> predicts later <span class="math inline">\eta_{3}</span> (0.4), and <span class="math inline">\eta_{1}</span> has a small negative effect on later
+<span class="math inline">\eta_{3}</span> (-0.1). Because <span class="math inline">\boldsymbol{\beta}</span> is lower triangular, its
+eigenvalues are its diagonal elements, all less than 1, so the process
+is stable.</p>
+<p>Let the dynamic process noise <span class="math inline">\boldsymbol{\Psi}</span> be given by</p>
+<p><span class="math display">\boldsymbol{\Psi}
 =
 \left(
 \begin{array}{ccc}
@@ -357,10 +356,10 @@ so the process is stable.</p>
   0 &amp; 0.1 &amp; 0 \\
   0 &amp; 0 &amp; 0.1 \\
 \end{array}
-\right) .\]</span></p>
+\right) .</span></p>
 <p>The initial condition describes where each individual starts. Here,
-the mean vector and covariance matrix of <span class="math inline">\(\boldsymbol{\eta}_{0}\)</span> are the
-model-implied mean and covariance of the stable process, computed with
+the mean vector and covariance matrix of <span class="math inline">\boldsymbol{\eta}_{0}</span> are the model-implied
+mean and covariance of the stable process, computed with
 <code><a href="../reference/SSMMeanEta.html">SSMMeanEta()</a></code> and <code><a href="../reference/SSMCovEta.html">SSMCovEta()</a></code>, so the data are
 stationary from the first time point.</p>
 </div>
@@ -373,7 +372,7 @@ Cholesky factors (the arguments ending in <code>_l</code>).</p>
 <code class="sourceCode R"><span><span class="va">n</span></span>
 <span><span class="co">#&gt; [1] 100</span></span>
 <span><span class="va">time</span></span>
-<span><span class="co">#&gt; [1] 200</span></span>
+<span><span class="co">#&gt; [1] 1000</span></span>
 <span><span class="va">mu0</span></span>
 <span><span class="co">#&gt; [1] 0 0 0</span></span>
 <span><span class="va">sigma0</span></span>
@@ -425,11 +424,10 @@ Cholesky factors (the arguments ending in <code>_l</code>).</p>
 <h3 id="visualizing-the-dynamics-without-process-noise-n-5-with-different-initial-condition">Visualizing the Dynamics Without Process Noise (n = 5 with Different
 Initial Condition)<a class="anchor" aria-label="anchor" href="#visualizing-the-dynamics-without-process-noise-n-5-with-different-initial-condition"></a>
 </h3>
-<p>To see what <span class="math inline">\(\boldsymbol{\beta}\)</span>
-alone does, we first simulate five individuals with the process noise
-and the measurement error set to zero. Each individual starts at a
-different point, and the trajectories return to the mean at a speed set
-by <span class="math inline">\(\boldsymbol{\beta}\)</span>.</p>
+<p>To see what <span class="math inline">\boldsymbol{\beta}</span> alone
+does, we first simulate five individuals with the process noise and the
+measurement error set to zero. Each individual starts at a different
+point, and the trajectories return to the mean at a speed set by <span class="math inline">\boldsymbol{\beta}</span>.</p>
 <p><img src="fig-vignettes-ssm-no-error-ssm-1.png" alt="" width="3300"><img src="fig-vignettes-ssm-no-error-ssm-2.png" alt="" width="3300"><img src="fig-vignettes-ssm-no-error-ssm-3.png" alt="" width="3300"></p>
 </div>
 <div class="section level3">
@@ -466,20 +464,20 @@ and <code>y3</code>.</p>
 <span><span class="co">#&gt; 5  1    4  0.15413707 0.82591676  0.8976536</span></span>
 <span><span class="co">#&gt; 6  1    5 -0.09943698 0.67154173  0.2853507</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span>
-<span><span class="co">#&gt;        id              time              y1                  y2           </span></span>
-<span><span class="co">#&gt;  Min.   :  1.00   Min.   :  0.00   Min.   :-2.840534   Min.   :-2.671337  </span></span>
-<span><span class="co">#&gt;  1st Qu.: 25.75   1st Qu.: 49.75   1st Qu.:-0.419270   1st Qu.:-0.500990  </span></span>
-<span><span class="co">#&gt;  Median : 50.50   Median : 99.50   Median :-0.001263   Median : 0.007650  </span></span>
-<span><span class="co">#&gt;  Mean   : 50.50   Mean   : 99.50   Mean   :-0.002412   Mean   : 0.001159  </span></span>
-<span><span class="co">#&gt;  3rd Qu.: 75.25   3rd Qu.:149.25   3rd Qu.: 0.414442   3rd Qu.: 0.501791  </span></span>
-<span><span class="co">#&gt;  Max.   :100.00   Max.   :199.00   Max.   : 2.602905   Max.   : 3.043414  </span></span>
+<span><span class="co">#&gt;        id              time             y1                   y2            </span></span>
+<span><span class="co">#&gt;  Min.   :  1.00   Min.   :  0.0   Min.   :-2.8405340   Min.   :-3.1732718  </span></span>
+<span><span class="co">#&gt;  1st Qu.: 25.75   1st Qu.:249.8   1st Qu.:-0.4213725   1st Qu.:-0.4999526  </span></span>
+<span><span class="co">#&gt;  Median : 50.50   Median :499.5   Median :-0.0007939   Median : 0.0031390  </span></span>
+<span><span class="co">#&gt;  Mean   : 50.50   Mean   :499.5   Mean   : 0.0001801   Mean   : 0.0009951  </span></span>
+<span><span class="co">#&gt;  3rd Qu.: 75.25   3rd Qu.:749.2   3rd Qu.: 0.4236361   3rd Qu.: 0.4990295  </span></span>
+<span><span class="co">#&gt;  Max.   :100.00   Max.   :999.0   Max.   : 2.6029049   Max.   : 3.2748708  </span></span>
 <span><span class="co">#&gt;        y3           </span></span>
-<span><span class="co">#&gt;  Min.   :-2.675588  </span></span>
-<span><span class="co">#&gt;  1st Qu.:-0.454266  </span></span>
-<span><span class="co">#&gt;  Median :-0.005830  </span></span>
-<span><span class="co">#&gt;  Mean   :-0.001039  </span></span>
-<span><span class="co">#&gt;  3rd Qu.: 0.455474  </span></span>
-<span><span class="co">#&gt;  Max.   : 2.553926</span></span>
+<span><span class="co">#&gt;  Min.   :-3.029883  </span></span>
+<span><span class="co">#&gt;  1st Qu.:-0.455867  </span></span>
+<span><span class="co">#&gt;  Median : 0.003032  </span></span>
+<span><span class="co">#&gt;  Mean   : 0.003844  </span></span>
+<span><span class="co">#&gt;  3rd Qu.: 0.465214  </span></span>
+<span><span class="co">#&gt;  Max.   : 3.016221</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">sim</span><span class="op">)</span></span></code></pre></div>
 <p><img src="fig-vignettes-ssm-error-ssm-1.png" alt="" width="3300"><img src="fig-vignettes-ssm-error-ssm-2.png" alt="" width="3300"><img src="fig-vignettes-ssm-error-ssm-3.png" alt="" width="3300"></p>
 </div>
@@ -501,10 +499,10 @@ prediction against the new measurement.</p>
 <p>A <code>dynr</code> model is built from pieces that match the
 equations above: the data, the initial condition, the measurement model,
 the dynamic model, and the noise. Each parameter gets a name (for
-example, <code>beta_2_1</code> for <span class="math inline">\(\beta_{21}\)</span>), and the same name used in
-two places means one shared parameter. The starting values are set to
-the population values for convenience; with real data, they would be
-rough guesses.</p>
+example, <code>beta_2_1</code> for <span class="math inline">\beta_{21}</span>), and the same name used in two
+places means one shared parameter. The starting values are set to the
+population values for convenience; with real data, they would be rough
+guesses.</p>
 <div class="section level4">
 <h4 id="prepare-data">Prepare Data<a class="anchor" aria-label="anchor" href="#prepare-data"></a>
 </h4>
@@ -521,9 +519,9 @@ and the observed variables.</p>
 <div class="section level4">
 <h4 id="prepare-initial-condition">Prepare Initial Condition<a class="anchor" aria-label="anchor" href="#prepare-initial-condition"></a>
 </h4>
-<p>The mean <span class="math inline">\(\boldsymbol{\mu}_{0}\)</span>
-and covariance <span class="math inline">\(\boldsymbol{\Sigma}_{0}\)</span> of the initial
-state are estimated. The covariance matrix is symmetric, so
+<p>The mean <span class="math inline">\boldsymbol{\mu}_{0}</span> and
+covariance <span class="math inline">\boldsymbol{\Sigma}_{0}</span> of
+the initial state are estimated. The covariance matrix is symmetric, so
 <code>sigma0_2_1</code> appears both above and below the diagonal.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dynr_initial</span> <span class="op">&lt;-</span> <span class="fu">dynr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/dynr/man/prep.initial.html" class="external-link">prep.initial</a></span><span class="op">(</span></span>
@@ -543,8 +541,9 @@ state are estimated. The covariance matrix is symmetric, so
 <div class="section level4">
 <h4 id="prepare-measurement-model">Prepare Measurement Model<a class="anchor" aria-label="anchor" href="#prepare-measurement-model"></a>
 </h4>
-<p>The loadings <span class="math inline">\(\boldsymbol{\Lambda}\)</span> are an identity
-matrix with no free parameters (<code>"fixed"</code>).</p>
+<p>The loadings <span class="math inline">\boldsymbol{\Lambda}</span>
+are an identity matrix with no free parameters
+(<code>"fixed"</code>).</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dynr_measurement</span> <span class="op">&lt;-</span> <span class="fu">dynr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/dynr/man/prep.measurement.html" class="external-link">prep.measurement</a></span><span class="op">(</span></span>
 <span>  values.load <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/diag.html" class="external-link">diag</a></span><span class="op">(</span><span class="fl">3</span><span class="op">)</span>,</span>
@@ -556,9 +555,9 @@ matrix with no free parameters (<code>"fixed"</code>).</p>
 <div class="section level4">
 <h4 id="prepare-dynamic-process">Prepare Dynamic Process<a class="anchor" aria-label="anchor" href="#prepare-dynamic-process"></a>
 </h4>
-<p>Each formula is one row of the dynamic equation: the intercept <span class="math inline">\(\alpha_{j}\)</span> plus the effects <span class="math inline">\(\beta_{jk}\)</span> of the three latent variables
-at the previous occasion. <code>isContinuousTime = FALSE</code> makes
-this a discrete-time model.</p>
+<p>Each formula is one row of the dynamic equation: the intercept <span class="math inline">\alpha_{j}</span> plus the effects <span class="math inline">\beta_{jk}</span> of the three latent variables at
+the previous occasion. <code>isContinuousTime = FALSE</code> makes this
+a discrete-time model.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dynr_dynamics</span> <span class="op">&lt;-</span> <span class="fu">dynr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/dynr/man/prep.formulaDynamics.html" class="external-link">prep.formulaDynamics</a></span><span class="op">(</span></span>
 <span>  formula <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
@@ -578,10 +577,10 @@ this a discrete-time model.</p>
 <div class="section level4">
 <h4 id="prepare-process-noise">Prepare Process Noise<a class="anchor" aria-label="anchor" href="#prepare-process-noise"></a>
 </h4>
-<p>The process noise covariance <span class="math inline">\(\boldsymbol{\Psi}\)</span> is estimated in full.
-The measurement error covariance <span class="math inline">\(\boldsymbol{\Theta}\)</span> is diagonal: the
-three error variances are estimated, and the error covariances are fixed
-at zero.</p>
+<p>The process noise covariance <span class="math inline">\boldsymbol{\Psi}</span> is estimated in full. The
+measurement error covariance <span class="math inline">\boldsymbol{\Theta}</span> is diagonal: the three
+error variances are estimated, and the error covariances are fixed at
+zero.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dynr_noise</span> <span class="op">&lt;-</span> <span class="fu">dynr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/dynr/man/prep.noise.html" class="external-link">prep.noise</a></span><span class="op">(</span></span>
 <span>  values.latent <span class="op">=</span> <span class="va">psi</span>,</span>
@@ -639,98 +638,98 @@ names.</p>
 <span><span class="co">#&gt; Original exit flag:  3 </span></span>
 <span><span class="co">#&gt; Modified exit flag:  3 </span></span>
 <span><span class="co">#&gt; Optimization terminated successfully: ftol_rel or ftol_abs was reached. </span></span>
-<span><span class="co">#&gt; Original fitted parameters:  -0.0006566288 0.00164596 -0.001510021 0.7052377 </span></span>
-<span><span class="co">#&gt; -0.006132876 0.0003878288 0.5112233 0.5887748 0.01241123 -0.08998742 0.3907879 </span></span>
-<span><span class="co">#&gt; 0.4952418 -2.32728 0.0126181 -0.03370301 -2.24728 -0.001445368 -2.352586 </span></span>
-<span><span class="co">#&gt; -1.611374 -1.660788 -1.586927 -0.0008762037 0.02978035 0.07119585 -1.830427 </span></span>
-<span><span class="co">#&gt; 0.4567187 0.06185989 -0.7307456 0.254486 -1.438148 </span></span>
+<span><span class="co">#&gt; Original fitted parameters:  0.00008625105 0.0004086113 0.001471603 0.7080791 </span></span>
+<span><span class="co">#&gt; 0.0006374173 0.00001946859 0.5065289 0.5921055 0.004164592 -0.1007597 0.3952978 </span></span>
+<span><span class="co">#&gt; 0.5017908 -2.338339 -0.002554286 -0.00342373 -2.267178 -0.001514531 -2.321312 </span></span>
+<span><span class="co">#&gt; -1.602984 -1.621672 -1.596002 -0.02756059 -0.08560146 0.01939691 -1.476967 </span></span>
+<span><span class="co">#&gt; 0.5750841 0.269864 -1.120811 0.2716346 -1.630752 </span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Transformed fitted parameters:  -0.0006566288 0.00164596 -0.001510021 0.7052377 </span></span>
-<span><span class="co">#&gt; -0.006132876 0.0003878288 0.5112233 0.5887748 0.01241123 -0.08998742 0.3907879 </span></span>
-<span><span class="co">#&gt; 0.4952418 0.0975608 0.001231032 -0.003288092 0.1057019 -0.0001942451 0.0952339 </span></span>
-<span><span class="co">#&gt; 0.1996131 0.1899893 0.2045533 -0.0008762037 0.02978035 0.07119585 0.1603451 </span></span>
-<span><span class="co">#&gt; 0.07323263 0.009918933 0.5149965 0.1270778 0.2691672 </span></span>
+<span><span class="co">#&gt; Transformed fitted parameters:  0.00008625105 0.0004086113 0.001471603 </span></span>
+<span><span class="co">#&gt; 0.7080791 0.0006374173 0.00001946859 0.5065289 0.5921055 0.004164592 -0.1007597 </span></span>
+<span><span class="co">#&gt; 0.3952978 0.5017908 0.09648776 -0.0002464574 -0.000330348 0.1036048 </span></span>
+<span><span class="co">#&gt; -0.0001560678 0.09814614 0.201295 0.1975681 0.2027053 -0.02756059 -0.08560146 </span></span>
+<span><span class="co">#&gt; 0.01939691 0.2283291 0.1313084 0.06161779 0.4015287 0.1239924 0.2364658 </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Doing end processing</span></span>
 <span><span class="co">#&gt; Successful trial</span></span>
-<span><span class="co">#&gt; Total Time: 4.779007 </span></span>
-<span><span class="co">#&gt; Backend Time: 4.771481</span></span></code></pre></div>
+<span><span class="co">#&gt; Total Time: 24.4143 </span></span>
+<span><span class="co">#&gt; Backend Time: 24.40728</span></span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="summary">Summary<a class="anchor" aria-label="anchor" href="#summary"></a>
 </h4>
-<p>The summary lists each estimate with its standard error, <span class="math inline">\(t\)</span> value, confidence interval, and <span class="math inline">\(p\)</span> value.</p>
+<p>The summary lists each estimate with its standard error, <span class="math inline">t</span> value, confidence interval, and <span class="math inline">p</span> value.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">results</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Coefficients:</span></span>
-<span><span class="co">#&gt;              Estimate Std. Error t value   ci.lower   ci.upper</span></span>
-<span><span class="co">#&gt; alpha_1_1  -0.0006566  0.0024115  -0.272 -0.0053832  0.0040699</span></span>
-<span><span class="co">#&gt; alpha_2_1   0.0016460  0.0030958   0.532 -0.0044218  0.0077137</span></span>
-<span><span class="co">#&gt; alpha_3_1  -0.0015100  0.0029970  -0.504 -0.0073839  0.0043639</span></span>
-<span><span class="co">#&gt; beta_1_1    0.7052377  0.0218228  32.317  0.6624658  0.7480097</span></span>
-<span><span class="co">#&gt; beta_1_2   -0.0061329  0.0134549  -0.456 -0.0325039  0.0202382</span></span>
-<span><span class="co">#&gt; beta_1_3    0.0003878  0.0102911   0.038 -0.0197823  0.0205579</span></span>
-<span><span class="co">#&gt; beta_2_1    0.5112233  0.0234282  21.821  0.4653048  0.5571417</span></span>
-<span><span class="co">#&gt; beta_2_2    0.5887748  0.0180029  32.704  0.5534897  0.6240599</span></span>
-<span><span class="co">#&gt; beta_2_3    0.0124112  0.0130672   0.950 -0.0132000  0.0380224</span></span>
-<span><span class="co">#&gt; beta_3_1   -0.0899874  0.0170005  -5.293 -0.1233079 -0.0566670</span></span>
-<span><span class="co">#&gt; beta_3_2    0.3907879  0.0168012  23.260  0.3578582  0.4237176</span></span>
-<span><span class="co">#&gt; beta_3_3    0.4952418  0.0164473  30.111  0.4630056  0.5274780</span></span>
-<span><span class="co">#&gt; psi_1_1     0.0975608  0.0068530  14.236  0.0841292  0.1109924</span></span>
-<span><span class="co">#&gt; psi_2_1     0.0012310  0.0024808   0.496 -0.0036313  0.0060933</span></span>
-<span><span class="co">#&gt; psi_3_1    -0.0032881  0.0023068  -1.425 -0.0078094  0.0012332</span></span>
-<span><span class="co">#&gt; psi_2_2     0.1057019  0.0060019  17.612  0.0939384  0.1174653</span></span>
-<span><span class="co">#&gt; psi_3_2    -0.0001942  0.0023068  -0.084 -0.0047156  0.0043271</span></span>
-<span><span class="co">#&gt; psi_3_3     0.0952339  0.0067865  14.033  0.0819326  0.1085352</span></span>
-<span><span class="co">#&gt; theta_1_1   0.1996131  0.0057442  34.751  0.1883547  0.2108714</span></span>
-<span><span class="co">#&gt; theta_2_2   0.1899893  0.0058134  32.681  0.1785952  0.2013833</span></span>
-<span><span class="co">#&gt; theta_3_3   0.2045533  0.0069223  29.550  0.1909859  0.2181207</span></span>
-<span><span class="co">#&gt; mu0_1_1    -0.0008762  0.0527703  -0.017 -0.1043041  0.1025517</span></span>
-<span><span class="co">#&gt; mu0_2_1     0.0297803  0.0812463   0.367 -0.1294595  0.1890202</span></span>
-<span><span class="co">#&gt; mu0_3_1     0.0711959  0.0666440   1.068 -0.0594241  0.2018158</span></span>
-<span><span class="co">#&gt; sigma0_1_1  0.1603451  0.0401133   3.997  0.0817244  0.2389659</span></span>
-<span><span class="co">#&gt; sigma0_2_1  0.0732326  0.0444635   1.647 -0.0139141  0.1603794</span></span>
-<span><span class="co">#&gt; sigma0_3_1  0.0099189  0.0358029   0.277 -0.0602535  0.0800914</span></span>
-<span><span class="co">#&gt; sigma0_2_2  0.5149965  0.0931946   5.526  0.3323384  0.6976546</span></span>
-<span><span class="co">#&gt; sigma0_3_2  0.1270778  0.0552607   2.300  0.0187688  0.2353869</span></span>
-<span><span class="co">#&gt; sigma0_3_3  0.2691672  0.0632758   4.254  0.1451489  0.3931856</span></span>
+<span><span class="co">#&gt;               Estimate  Std. Error t value    ci.lower    ci.upper</span></span>
+<span><span class="co">#&gt; alpha_1_1   0.00008625  0.00106731   0.081 -0.00200563  0.00217813</span></span>
+<span><span class="co">#&gt; alpha_2_1   0.00040861  0.00137288   0.298 -0.00228219  0.00309941</span></span>
+<span><span class="co">#&gt; alpha_3_1   0.00147160  0.00134818   1.092 -0.00117077  0.00411398</span></span>
+<span><span class="co">#&gt; beta_1_1    0.70807911  0.00948552  74.648  0.68948782  0.72667039</span></span>
+<span><span class="co">#&gt; beta_1_2    0.00063742  0.00588291   0.108 -0.01089288  0.01216771</span></span>
+<span><span class="co">#&gt; beta_1_3    0.00001947  0.00435669   0.004 -0.00851950  0.00855843</span></span>
+<span><span class="co">#&gt; beta_2_1    0.50652887  0.01034061  48.984  0.48626164  0.52679609</span></span>
+<span><span class="co">#&gt; beta_2_2    0.59210547  0.00801839  73.843  0.57638972  0.60782122</span></span>
+<span><span class="co">#&gt; beta_2_3    0.00416459  0.00567567   0.734 -0.00695952  0.01528871</span></span>
+<span><span class="co">#&gt; beta_3_1   -0.10075974  0.00748914 -13.454 -0.11543818 -0.08608130</span></span>
+<span><span class="co">#&gt; beta_3_2    0.39529780  0.00730401  54.121  0.38098220  0.40961340</span></span>
+<span><span class="co">#&gt; beta_3_3    0.50179084  0.00699272  71.759  0.48808537  0.51549631</span></span>
+<span><span class="co">#&gt; psi_1_1     0.09648776  0.00300222  32.139  0.09060352  0.10237200</span></span>
+<span><span class="co">#&gt; psi_2_1    -0.00024646  0.00110706  -0.223 -0.00241625  0.00192333</span></span>
+<span><span class="co">#&gt; psi_3_1    -0.00033035  0.00103558  -0.319 -0.00236005  0.00169935</span></span>
+<span><span class="co">#&gt; psi_2_2     0.10360478  0.00262521  39.465  0.09845946  0.10875010</span></span>
+<span><span class="co">#&gt; psi_3_2    -0.00015607  0.00104800  -0.149 -0.00221011  0.00189797</span></span>
+<span><span class="co">#&gt; psi_3_3     0.09814614  0.00301334  32.571  0.09224010  0.10405217</span></span>
+<span><span class="co">#&gt; theta_1_1   0.20129500  0.00254190  79.191  0.19631298  0.20627703</span></span>
+<span><span class="co">#&gt; theta_2_2   0.19756809  0.00256709  76.962  0.19253669  0.20259948</span></span>
+<span><span class="co">#&gt; theta_3_3   0.20270526  0.00304558  66.557  0.19673605  0.20867448</span></span>
+<span><span class="co">#&gt; mu0_1_1    -0.02756059  0.05920469  -0.466 -0.14359966  0.08847848</span></span>
+<span><span class="co">#&gt; mu0_2_1    -0.08560146  0.07429398  -1.152 -0.23121497  0.06001206</span></span>
+<span><span class="co">#&gt; mu0_3_1     0.01939691  0.06467747   0.300 -0.10736859  0.14616242</span></span>
+<span><span class="co">#&gt; sigma0_1_1  0.22832906  0.04921841   4.639  0.13186275  0.32479537</span></span>
+<span><span class="co">#&gt; sigma0_2_1  0.13130841  0.04730066   2.776  0.03860081  0.22401600</span></span>
+<span><span class="co">#&gt; sigma0_3_1  0.06161779  0.03861865   1.596 -0.01407337  0.13730896</span></span>
+<span><span class="co">#&gt; sigma0_2_2  0.40152865  0.08081435   4.969  0.24313544  0.55992187</span></span>
+<span><span class="co">#&gt; sigma0_3_2  0.12399243  0.05004087   2.478  0.02591413  0.22207073</span></span>
+<span><span class="co">#&gt; sigma0_3_3  0.23646577  0.06004556   3.938  0.11877863  0.35415292</span></span>
 <span><span class="co">#&gt;                       Pr(&gt;|t|)    </span></span>
-<span><span class="co">#&gt; alpha_1_1               0.3927    </span></span>
-<span><span class="co">#&gt; alpha_2_1               0.2975    </span></span>
-<span><span class="co">#&gt; alpha_3_1               0.3072    </span></span>
+<span><span class="co">#&gt; alpha_1_1               0.4678    </span></span>
+<span><span class="co">#&gt; alpha_2_1               0.3830    </span></span>
+<span><span class="co">#&gt; alpha_3_1               0.1375    </span></span>
 <span><span class="co">#&gt; beta_1_1   &lt;0.0000000000000002 ***</span></span>
-<span><span class="co">#&gt; beta_1_2                0.3243    </span></span>
-<span><span class="co">#&gt; beta_1_3                0.4850    </span></span>
+<span><span class="co">#&gt; beta_1_2                0.4569    </span></span>
+<span><span class="co">#&gt; beta_1_3                0.4982    </span></span>
 <span><span class="co">#&gt; beta_2_1   &lt;0.0000000000000002 ***</span></span>
 <span><span class="co">#&gt; beta_2_2   &lt;0.0000000000000002 ***</span></span>
-<span><span class="co">#&gt; beta_2_3                0.1711    </span></span>
+<span><span class="co">#&gt; beta_2_3                0.2315    </span></span>
 <span><span class="co">#&gt; beta_3_1   &lt;0.0000000000000002 ***</span></span>
 <span><span class="co">#&gt; beta_3_2   &lt;0.0000000000000002 ***</span></span>
 <span><span class="co">#&gt; beta_3_3   &lt;0.0000000000000002 ***</span></span>
 <span><span class="co">#&gt; psi_1_1    &lt;0.0000000000000002 ***</span></span>
-<span><span class="co">#&gt; psi_2_1                 0.3099    </span></span>
-<span><span class="co">#&gt; psi_3_1                 0.0770 .  </span></span>
+<span><span class="co">#&gt; psi_2_1                 0.4119    </span></span>
+<span><span class="co">#&gt; psi_3_1                 0.3749    </span></span>
 <span><span class="co">#&gt; psi_2_2    &lt;0.0000000000000002 ***</span></span>
-<span><span class="co">#&gt; psi_3_2                 0.4664    </span></span>
+<span><span class="co">#&gt; psi_3_2                 0.4408    </span></span>
 <span><span class="co">#&gt; psi_3_3    &lt;0.0000000000000002 ***</span></span>
 <span><span class="co">#&gt; theta_1_1  &lt;0.0000000000000002 ***</span></span>
 <span><span class="co">#&gt; theta_2_2  &lt;0.0000000000000002 ***</span></span>
 <span><span class="co">#&gt; theta_3_3  &lt;0.0000000000000002 ***</span></span>
-<span><span class="co">#&gt; mu0_1_1                 0.4934    </span></span>
-<span><span class="co">#&gt; mu0_2_1                 0.3570    </span></span>
-<span><span class="co">#&gt; mu0_3_1                 0.1427    </span></span>
+<span><span class="co">#&gt; mu0_1_1                 0.3208    </span></span>
+<span><span class="co">#&gt; mu0_2_1                 0.1246    </span></span>
+<span><span class="co">#&gt; mu0_3_1                 0.3821    </span></span>
 <span><span class="co">#&gt; sigma0_1_1 &lt;0.0000000000000002 ***</span></span>
-<span><span class="co">#&gt; sigma0_2_1              0.0498 *  </span></span>
-<span><span class="co">#&gt; sigma0_3_1              0.3909    </span></span>
+<span><span class="co">#&gt; sigma0_2_1              0.0028 ** </span></span>
+<span><span class="co">#&gt; sigma0_3_1              0.0553 .  </span></span>
 <span><span class="co">#&gt; sigma0_2_2 &lt;0.0000000000000002 ***</span></span>
-<span><span class="co">#&gt; sigma0_3_2              0.0107 *  </span></span>
+<span><span class="co">#&gt; sigma0_3_2              0.0066 ** </span></span>
 <span><span class="co">#&gt; sigma0_3_3 &lt;0.0000000000000002 ***</span></span>
 <span><span class="co">#&gt; ---</span></span>
 <span><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; -2 log-likelihood value at convergence = 105691.54</span></span>
-<span><span class="co">#&gt; AIC = 105751.54</span></span>
-<span><span class="co">#&gt; BIC = 105988.64</span></span></code></pre></div>
+<span><span class="co">#&gt; -2 log-likelihood value at convergence = 530766.20</span></span>
+<span><span class="co">#&gt; AIC = 530826.20</span></span>
+<span><span class="co">#&gt; BIC = 531111.59</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level3">
@@ -739,27 +738,27 @@ names.</p>
 <p><code>OpenMx</code> <span class="citation">(Neale et al.,
 2016)</span> fits the same state space model with its own Kalman filter
 (<code><a href="https://rdrr.io/pkg/OpenMx/man/mxExpectationStateSpace.html" class="external-link">OpenMx::mxExpectationStateSpace()</a></code>; <span class="citation">Hunter (2018)</span>). Its matrices have the names used
-in engineering: <code>A</code> is the transition matrix <span class="math inline">\(\boldsymbol{\beta}\)</span>, <code>B</code> holds
-the intercepts of the dynamic model, <code>C</code> is the loading
-matrix <span class="math inline">\(\boldsymbol{\Lambda}\)</span>,
-<code>D</code> holds the intercepts of the measurement model,
-<code>Q</code> is the process noise covariance matrix, and
-<code>R</code> is the measurement error covariance matrix. The parameter
-labels are the dynr names; as in dynr, a label used in two places is one
-shared parameter, and the starting values are the population values.</p>
+in engineering: <code>A</code> is the transition matrix <span class="math inline">\boldsymbol{\beta}</span>, <code>B</code> holds the
+intercepts of the dynamic model, <code>C</code> is the loading matrix
+<span class="math inline">\boldsymbol{\Lambda}</span>, <code>D</code>
+holds the intercepts of the measurement model, <code>Q</code> is the
+process noise covariance matrix, and <code>R</code> is the measurement
+error covariance matrix. The parameter labels are the dynr names; as in
+dynr, a label used in two places is one shared parameter, and the
+starting values are the population values.</p>
 <p>Two details differ from dynr. First, OpenMx reads the data as a
 single time series. To start the filter again at the first occasion of
 every individual, each individual gets a group, and all groups use the
 matrices of one parent model, so every individual has the same
 parameters. Second, OpenMx starts the filter one occasion before the
-first row, so the first row has the state mean <span class="math inline">\(\mathbf{A} \mathbf{x}_{0} + \mathbf{B}
-\mathbf{u}\)</span> and the state covariance <span class="math inline">\(\mathbf{A} \mathbf{P}_{0} \mathbf{A}^{\prime} +
-\mathbf{Q}\)</span>, with the constant input <span class="math inline">\(\mathbf{u} = 1\)</span>. Setting <span class="math inline">\(\mathbf{x}_{0} = \mathbf{A}^{-1} \left(
-\boldsymbol{\mu}_{0} - \mathbf{B} \mathbf{u} \right)\)</span> and <span class="math inline">\(\mathbf{P}_{0} = \mathbf{A}^{-1} \left(
+first row, so the first row has the state mean <span class="math inline">\mathbf{A} \mathbf{x}_{0} + \mathbf{B}
+\mathbf{u}</span> and the state covariance <span class="math inline">\mathbf{A} \mathbf{P}_{0} \mathbf{A}^{\prime} +
+\mathbf{Q}</span>, with the constant input <span class="math inline">\mathbf{u} = 1</span>. Setting <span class="math inline">\mathbf{x}_{0} = \mathbf{A}^{-1} \left(
+\boldsymbol{\mu}_{0} - \mathbf{B} \mathbf{u} \right)</span> and <span class="math inline">\mathbf{P}_{0} = \mathbf{A}^{-1} \left(
 \boldsymbol{\Sigma}_{0} - \mathbf{Q} \right) \left( \mathbf{A}^{-1}
-\right)^{\prime}\)</span> gives the first occasion the initial condition
+\right)^{\prime}</span> gives the first occasion the initial condition
 of the model, so the likelihood is the same as in dynr. This needs an
-invertible <span class="math inline">\(\mathbf{A}\)</span>, which holds
+invertible <span class="math inline">\mathbf{A}</span>, which holds
 here.</p>
 <p>The two helper functions below are the same in every vignette of the
 package. <code>MxMat()</code> makes an OpenMx matrix from values and
@@ -915,60 +914,60 @@ dynr-style labels (<code>"fixed"</code> marks a fixed element), and
 <span id="cb13-6"><a href="#cb13-6" tabindex="-1"></a>)</span>
 <span id="cb13-7"><a href="#cb13-7" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb13-8"><a href="#cb13-8" tabindex="-1"></a>Beginning initial fit attempt</span>
-<span id="cb13-9"><a href="#cb13-9" tabindex="-1"></a>Fit attempt <span class="dv">0</span>, fit<span class="ot">=</span><span class="fl">105691.534423263</span>, new current best<span class="sc">!</span> (was <span class="fl">105714.907085852</span>)</span>
+<span id="cb13-9"><a href="#cb13-9" tabindex="-1"></a>Fit attempt <span class="dv">0</span>, fit<span class="ot">=</span><span class="fl">530766.196230886</span>, new current best<span class="sc">!</span> (was <span class="fl">530781.853350924</span>)</span>
 <span id="cb13-10"><a href="#cb13-10" tabindex="-1"></a>                                                                             </span>
 <span id="cb13-11"><a href="#cb13-11" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb13-12"><a href="#cb13-12" tabindex="-1"></a><span class="co">#&gt;  Solution found!  Final fit=105691.53 (started at 105714.91)  (1 attempt(s): 1 valid, 0 errors)</span></span>
+<span id="cb13-12"><a href="#cb13-12" tabindex="-1"></a><span class="co">#&gt;  Solution found!  Final fit=530766.2 (started at 530781.85)  (1 attempt(s): 1 valid, 0 errors)</span></span>
 <span id="cb13-13"><a href="#cb13-13" tabindex="-1"></a><span class="fu">summary</span>(fit_mx_ssm)</span>
 <span id="cb13-14"><a href="#cb13-14" tabindex="-1"></a><span class="co">#&gt; Summary of ssm </span></span>
 <span id="cb13-15"><a href="#cb13-15" tabindex="-1"></a><span class="co">#&gt;  </span></span>
 <span id="cb13-16"><a href="#cb13-16" tabindex="-1"></a><span class="co">#&gt; free parameters:</span></span>
-<span id="cb13-17"><a href="#cb13-17" tabindex="-1"></a><span class="co">#&gt;          name matrix row col      Estimate   Std.Error A</span></span>
-<span id="cb13-18"><a href="#cb13-18" tabindex="-1"></a><span class="co">#&gt; 1    beta_1_1      A   1   1  0.7053981077 0.021838141  </span></span>
-<span id="cb13-19"><a href="#cb13-19" tabindex="-1"></a><span class="co">#&gt; 2    beta_2_1      A   2   1  0.5112620939 0.023493351  </span></span>
-<span id="cb13-20"><a href="#cb13-20" tabindex="-1"></a><span class="co">#&gt; 3    beta_3_1      A   3   1 -0.0900410232 0.017085396  </span></span>
-<span id="cb13-21"><a href="#cb13-21" tabindex="-1"></a><span class="co">#&gt; 4    beta_1_2      A   1   2 -0.0061800615 0.013468019  </span></span>
-<span id="cb13-22"><a href="#cb13-22" tabindex="-1"></a><span class="co">#&gt; 5    beta_2_2      A   2   2  0.5888519508 0.018093205  </span></span>
-<span id="cb13-23"><a href="#cb13-23" tabindex="-1"></a><span class="co">#&gt; 6    beta_3_2      A   3   2  0.3908662892 0.016906723  </span></span>
-<span id="cb13-24"><a href="#cb13-24" tabindex="-1"></a><span class="co">#&gt; 7    beta_1_3      A   1   3  0.0004417040 0.010298111  </span></span>
-<span id="cb13-25"><a href="#cb13-25" tabindex="-1"></a><span class="co">#&gt; 8    beta_2_3      A   2   3  0.0123737293 0.013111506  </span></span>
-<span id="cb13-26"><a href="#cb13-26" tabindex="-1"></a><span class="co">#&gt; 9    beta_3_3      A   3   3  0.4952567006 0.016525427  </span></span>
-<span id="cb13-27"><a href="#cb13-27" tabindex="-1"></a><span class="co">#&gt; 10  alpha_1_1      B   1   1 -0.0006118823 0.002410796  </span></span>
-<span id="cb13-28"><a href="#cb13-28" tabindex="-1"></a><span class="co">#&gt; 11  alpha_2_1      B   2   1  0.0016758350 0.003095680  </span></span>
-<span id="cb13-29"><a href="#cb13-29" tabindex="-1"></a><span class="co">#&gt; 12  alpha_3_1      B   3   1 -0.0014686848 0.002996973  </span></span>
-<span id="cb13-30"><a href="#cb13-30" tabindex="-1"></a><span class="co">#&gt; 13    psi_1_1      Q   1   1  0.0975097042 0.006853796  </span></span>
-<span id="cb13-31"><a href="#cb13-31" tabindex="-1"></a><span class="co">#&gt; 14    psi_2_1      Q   2   1  0.0012306351 0.002479268  </span></span>
-<span id="cb13-32"><a href="#cb13-32" tabindex="-1"></a><span class="co">#&gt; 15    psi_3_1      Q   3   1 -0.0032844672 0.002314293  </span></span>
-<span id="cb13-33"><a href="#cb13-33" tabindex="-1"></a><span class="co">#&gt; 16    psi_2_2      Q   2   2  0.1056516849 0.006032225  </span></span>
-<span id="cb13-34"><a href="#cb13-34" tabindex="-1"></a><span class="co">#&gt; 17    psi_3_2      Q   3   2 -0.0001907060 0.002309151  </span></span>
-<span id="cb13-35"><a href="#cb13-35" tabindex="-1"></a><span class="co">#&gt; 18    psi_3_3      Q   3   3  0.0952071001 0.006810719  </span></span>
-<span id="cb13-36"><a href="#cb13-36" tabindex="-1"></a><span class="co">#&gt; 19  theta_1_1      R   1   1  0.1996612442 0.005745493  </span></span>
-<span id="cb13-37"><a href="#cb13-37" tabindex="-1"></a><span class="co">#&gt; 20  theta_2_2      R   2   2  0.1900372708 0.005845908  </span></span>
-<span id="cb13-38"><a href="#cb13-38" tabindex="-1"></a><span class="co">#&gt; 21  theta_3_3      R   3   3  0.2045821252 0.006947999  </span></span>
-<span id="cb13-39"><a href="#cb13-39" tabindex="-1"></a><span class="co">#&gt; 22    mu0_1_1    mu0   1   1 -0.0008607865 0.052817445  </span></span>
-<span id="cb13-40"><a href="#cb13-40" tabindex="-1"></a><span class="co">#&gt; 23    mu0_2_1    mu0   2   1  0.0298171307 0.080975260  </span></span>
-<span id="cb13-41"><a href="#cb13-41" tabindex="-1"></a><span class="co">#&gt; 24    mu0_3_1    mu0   3   1  0.0712427739 0.066588868  </span></span>
-<span id="cb13-42"><a href="#cb13-42" tabindex="-1"></a><span class="co">#&gt; 25 sigma0_1_1 sigma0   1   1  0.1603073688 0.039618205  </span></span>
-<span id="cb13-43"><a href="#cb13-43" tabindex="-1"></a><span class="co">#&gt; 26 sigma0_2_1 sigma0   2   1  0.0732247803 0.043153542  </span></span>
-<span id="cb13-44"><a href="#cb13-44" tabindex="-1"></a><span class="co">#&gt; 27 sigma0_3_1 sigma0   3   1  0.0099103002 0.035256844  </span></span>
-<span id="cb13-45"><a href="#cb13-45" tabindex="-1"></a><span class="co">#&gt; 28 sigma0_2_2 sigma0   2   2  0.5149410876 0.093136953  </span></span>
-<span id="cb13-46"><a href="#cb13-46" tabindex="-1"></a><span class="co">#&gt; 29 sigma0_3_2 sigma0   3   2  0.1270997132 0.055085499  </span></span>
-<span id="cb13-47"><a href="#cb13-47" tabindex="-1"></a><span class="co">#&gt; 30 sigma0_3_3 sigma0   3   3  0.2691550668 0.063077429  </span></span>
+<span id="cb13-17"><a href="#cb13-17" tabindex="-1"></a><span class="co">#&gt;          name matrix row col       Estimate   Std.Error A</span></span>
+<span id="cb13-18"><a href="#cb13-18" tabindex="-1"></a><span class="co">#&gt; 1    beta_1_1      A   1   1  0.70820600495 0.009506777  </span></span>
+<span id="cb13-19"><a href="#cb13-19" tabindex="-1"></a><span class="co">#&gt; 2    beta_2_1      A   2   1  0.50653273042 0.010333789  </span></span>
+<span id="cb13-20"><a href="#cb13-20" tabindex="-1"></a><span class="co">#&gt; 3    beta_3_1      A   3   1 -0.10082567410 0.007427159  </span></span>
+<span id="cb13-21"><a href="#cb13-21" tabindex="-1"></a><span class="co">#&gt; 4    beta_1_2      A   1   2  0.00059307014 0.005894001  </span></span>
+<span id="cb13-22"><a href="#cb13-22" tabindex="-1"></a><span class="co">#&gt; 5    beta_2_2      A   2   2  0.59221126132 0.007984456  </span></span>
+<span id="cb13-23"><a href="#cb13-23" tabindex="-1"></a><span class="co">#&gt; 6    beta_3_2      A   3   2  0.39540216239 0.007257315  </span></span>
+<span id="cb13-24"><a href="#cb13-24" tabindex="-1"></a><span class="co">#&gt; 7    beta_1_3      A   1   3  0.00004381968 0.004357350  </span></span>
+<span id="cb13-25"><a href="#cb13-25" tabindex="-1"></a><span class="co">#&gt; 8    beta_2_3      A   2   3  0.00410472783 0.005652296  </span></span>
+<span id="cb13-26"><a href="#cb13-26" tabindex="-1"></a><span class="co">#&gt; 9    beta_3_3      A   3   3  0.50176087727 0.006967038  </span></span>
+<span id="cb13-27"><a href="#cb13-27" tabindex="-1"></a><span class="co">#&gt; 10  alpha_1_1      B   1   1  0.00012368270 0.001067073  </span></span>
+<span id="cb13-28"><a href="#cb13-28" tabindex="-1"></a><span class="co">#&gt; 11  alpha_2_1      B   2   1  0.00043130621 0.001372620  </span></span>
+<span id="cb13-29"><a href="#cb13-29" tabindex="-1"></a><span class="co">#&gt; 12  alpha_3_1      B   3   1  0.00151562714 0.001348151  </span></span>
+<span id="cb13-30"><a href="#cb13-30" tabindex="-1"></a><span class="co">#&gt; 13    psi_1_1      Q   1   1  0.09644858831 0.003008886  </span></span>
+<span id="cb13-31"><a href="#cb13-31" tabindex="-1"></a><span class="co">#&gt; 14    psi_2_1      Q   2   1 -0.00024483333 0.001103263  </span></span>
+<span id="cb13-32"><a href="#cb13-32" tabindex="-1"></a><span class="co">#&gt; 15    psi_3_1      Q   3   1 -0.00032642196 0.001028791  </span></span>
+<span id="cb13-33"><a href="#cb13-33" tabindex="-1"></a><span class="co">#&gt; 16    psi_2_2      Q   2   2  0.10355436288 0.002600437  </span></span>
+<span id="cb13-34"><a href="#cb13-34" tabindex="-1"></a><span class="co">#&gt; 17    psi_3_2      Q   3   2 -0.00015537353 0.001047698  </span></span>
+<span id="cb13-35"><a href="#cb13-35" tabindex="-1"></a><span class="co">#&gt; 18    psi_3_3      Q   3   3  0.09812572669 0.003010370  </span></span>
+<span id="cb13-36"><a href="#cb13-36" tabindex="-1"></a><span class="co">#&gt; 19  theta_1_1      R   1   1  0.20133014880 0.002546586  </span></span>
+<span id="cb13-37"><a href="#cb13-37" tabindex="-1"></a><span class="co">#&gt; 20  theta_2_2      R   2   2  0.19761653706 0.002546708  </span></span>
+<span id="cb13-38"><a href="#cb13-38" tabindex="-1"></a><span class="co">#&gt; 21  theta_3_3      R   3   3  0.20272812146 0.003043331  </span></span>
+<span id="cb13-39"><a href="#cb13-39" tabindex="-1"></a><span class="co">#&gt; 22    mu0_1_1    mu0   1   1 -0.02745063651 0.058750657  </span></span>
+<span id="cb13-40"><a href="#cb13-40" tabindex="-1"></a><span class="co">#&gt; 23    mu0_2_1    mu0   2   1 -0.08479258792 0.073412453  </span></span>
+<span id="cb13-41"><a href="#cb13-41" tabindex="-1"></a><span class="co">#&gt; 24    mu0_3_1    mu0   3   1  0.01894864509 0.063921608  </span></span>
+<span id="cb13-42"><a href="#cb13-42" tabindex="-1"></a><span class="co">#&gt; 25 sigma0_1_1 sigma0   1   1  0.22860264958 0.049158485  </span></span>
+<span id="cb13-43"><a href="#cb13-43" tabindex="-1"></a><span class="co">#&gt; 26 sigma0_2_1 sigma0   2   1  0.13137531397 0.044923230  </span></span>
+<span id="cb13-44"><a href="#cb13-44" tabindex="-1"></a><span class="co">#&gt; 27 sigma0_3_1 sigma0   3   1  0.06185999854 0.038335447  </span></span>
+<span id="cb13-45"><a href="#cb13-45" tabindex="-1"></a><span class="co">#&gt; 28 sigma0_2_2 sigma0   2   2  0.40213865074 0.076999197 !</span></span>
+<span id="cb13-46"><a href="#cb13-46" tabindex="-1"></a><span class="co">#&gt; 29 sigma0_3_2 sigma0   3   2  0.12399082263 0.048536265  </span></span>
+<span id="cb13-47"><a href="#cb13-47" tabindex="-1"></a><span class="co">#&gt; 30 sigma0_3_3 sigma0   3   3  0.23591513868 0.057781967 !</span></span>
 <span id="cb13-48"><a href="#cb13-48" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb13-49"><a href="#cb13-49" tabindex="-1"></a><span class="co">#&gt; Model Statistics: </span></span>
 <span id="cb13-50"><a href="#cb13-50" tabindex="-1"></a><span class="co">#&gt;                |  Parameters  |  Degrees of Freedom  |  Fit (-2lnL units)</span></span>
-<span id="cb13-51"><a href="#cb13-51" tabindex="-1"></a><span class="co">#&gt;        Model:             30                  59970              105691.5</span></span>
+<span id="cb13-51"><a href="#cb13-51" tabindex="-1"></a><span class="co">#&gt;        Model:             30                 299970              530766.2</span></span>
 <span id="cb13-52"><a href="#cb13-52" tabindex="-1"></a><span class="co">#&gt;    Saturated:             NA                     NA                    NA</span></span>
 <span id="cb13-53"><a href="#cb13-53" tabindex="-1"></a><span class="co">#&gt; Independence:             NA                     NA                    NA</span></span>
-<span id="cb13-54"><a href="#cb13-54" tabindex="-1"></a><span class="co">#&gt; Number of observations/statistics: 20000/60000</span></span>
+<span id="cb13-54"><a href="#cb13-54" tabindex="-1"></a><span class="co">#&gt; Number of observations/statistics: 100000/300000</span></span>
 <span id="cb13-55"><a href="#cb13-55" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb13-56"><a href="#cb13-56" tabindex="-1"></a><span class="co">#&gt; Information Criteria: </span></span>
 <span id="cb13-57"><a href="#cb13-57" tabindex="-1"></a><span class="co">#&gt;       |  df Penalty  |  Parameters Penalty  |  Sample-Size Adjusted</span></span>
-<span id="cb13-58"><a href="#cb13-58" tabindex="-1"></a><span class="co">#&gt; AIC:      -14248.47               105751.5                 105751.6</span></span>
-<span id="cb13-59"><a href="#cb13-59" tabindex="-1"></a><span class="co">#&gt; BIC:     -488220.61               105988.6                 105893.3</span></span>
+<span id="cb13-58"><a href="#cb13-58" tabindex="-1"></a><span class="co">#&gt; AIC:       -69173.8               530826.2                 530826.2</span></span>
+<span id="cb13-59"><a href="#cb13-59" tabindex="-1"></a><span class="co">#&gt; BIC:     -2922766.1               531111.6                 531016.2</span></span>
 <span id="cb13-60"><a href="#cb13-60" tabindex="-1"></a><span class="co">#&gt; To get additional fit indices, see help(mxRefModels)</span></span>
-<span id="cb13-61"><a href="#cb13-61" tabindex="-1"></a><span class="co">#&gt; timestamp: 2026-11-02 06:48:52 </span></span>
-<span id="cb13-62"><a href="#cb13-62" tabindex="-1"></a><span class="co">#&gt; Wall clock time: 122.085 secs </span></span>
+<span id="cb13-61"><a href="#cb13-61" tabindex="-1"></a><span class="co">#&gt; timestamp: 2026-11-03 16:37:44 </span></span>
+<span id="cb13-62"><a href="#cb13-62" tabindex="-1"></a><span class="co">#&gt; Wall clock time: 612.8247 secs </span></span>
 <span id="cb13-63"><a href="#cb13-63" tabindex="-1"></a><span class="co">#&gt; optimizer:  SLSQP </span></span>
 <span id="cb13-64"><a href="#cb13-64" tabindex="-1"></a><span class="co">#&gt; OpenMx version number: 2.22.11 </span></span>
 <span id="cb13-65"><a href="#cb13-65" tabindex="-1"></a><span class="co">#&gt; Need help?  See help(mxSummary)</span></span></code></pre></div>
@@ -982,8 +981,8 @@ next to the estimates of one method. Bias is the estimate minus the
 population value. Because each model is fitted to a single simulated
 data set, this is the error of one estimate, not a Monte Carlo bias,
 which would average over many replications. The 95% confidence interval
-is the Wald interval, <span class="math inline">\(\hat{\theta} \pm 1.96
-\times \mathrm{SE}\)</span>, unless the caption says otherwise, and
+is the Wald interval, <span class="math inline">\hat{\theta} \pm 1.96
+\times \mathrm{SE}</span>, unless the caption says otherwise, and
 <code>Covers</code> shows whether it contains the population value. The
 parameter names are the dynr names in every table.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
@@ -1060,301 +1059,301 @@ set)</caption>
 <tr class="odd">
 <td align="left">alpha_1_1</td>
 <td align="right">0.000</td>
-<td align="right">-0.001</td>
+<td align="right">0.000</td>
+<td align="right">0.001</td>
+<td align="right">0.000</td>
+<td align="right">-0.002</td>
 <td align="right">0.002</td>
-<td align="right">-0.001</td>
-<td align="right">-0.005</td>
-<td align="right">0.004</td>
 <td align="left">TRUE</td>
 </tr>
 <tr class="even">
 <td align="left">alpha_2_1</td>
 <td align="right">0.000</td>
-<td align="right">0.002</td>
+<td align="right">0.000</td>
+<td align="right">0.001</td>
+<td align="right">0.000</td>
+<td align="right">-0.002</td>
 <td align="right">0.003</td>
-<td align="right">0.002</td>
-<td align="right">-0.004</td>
-<td align="right">0.008</td>
 <td align="left">TRUE</td>
 </tr>
 <tr class="odd">
 <td align="left">alpha_3_1</td>
 <td align="right">0.000</td>
-<td align="right">-0.002</td>
-<td align="right">0.003</td>
-<td align="right">-0.002</td>
-<td align="right">-0.007</td>
+<td align="right">0.001</td>
+<td align="right">0.001</td>
+<td align="right">0.001</td>
+<td align="right">-0.001</td>
 <td align="right">0.004</td>
 <td align="left">TRUE</td>
 </tr>
 <tr class="even">
 <td align="left">beta_1_1</td>
 <td align="right">0.700</td>
-<td align="right">0.705</td>
-<td align="right">0.022</td>
-<td align="right">0.005</td>
-<td align="right">0.662</td>
-<td align="right">0.748</td>
+<td align="right">0.708</td>
+<td align="right">0.009</td>
+<td align="right">0.008</td>
+<td align="right">0.689</td>
+<td align="right">0.727</td>
 <td align="left">TRUE</td>
 </tr>
 <tr class="odd">
 <td align="left">beta_1_2</td>
 <td align="right">0.000</td>
-<td align="right">-0.006</td>
-<td align="right">0.013</td>
-<td align="right">-0.006</td>
-<td align="right">-0.033</td>
-<td align="right">0.020</td>
+<td align="right">0.001</td>
+<td align="right">0.006</td>
+<td align="right">0.001</td>
+<td align="right">-0.011</td>
+<td align="right">0.012</td>
 <td align="left">TRUE</td>
 </tr>
 <tr class="even">
 <td align="left">beta_1_3</td>
 <td align="right">0.000</td>
 <td align="right">0.000</td>
-<td align="right">0.010</td>
+<td align="right">0.004</td>
 <td align="right">0.000</td>
-<td align="right">-0.020</td>
-<td align="right">0.021</td>
+<td align="right">-0.009</td>
+<td align="right">0.009</td>
 <td align="left">TRUE</td>
 </tr>
 <tr class="odd">
 <td align="left">beta_2_1</td>
 <td align="right">0.500</td>
-<td align="right">0.511</td>
-<td align="right">0.023</td>
-<td align="right">0.011</td>
-<td align="right">0.465</td>
-<td align="right">0.557</td>
+<td align="right">0.507</td>
+<td align="right">0.010</td>
+<td align="right">0.007</td>
+<td align="right">0.486</td>
+<td align="right">0.527</td>
 <td align="left">TRUE</td>
 </tr>
 <tr class="even">
 <td align="left">beta_2_2</td>
 <td align="right">0.600</td>
-<td align="right">0.589</td>
-<td align="right">0.018</td>
-<td align="right">-0.011</td>
-<td align="right">0.553</td>
-<td align="right">0.624</td>
+<td align="right">0.592</td>
+<td align="right">0.008</td>
+<td align="right">-0.008</td>
+<td align="right">0.576</td>
+<td align="right">0.608</td>
 <td align="left">TRUE</td>
 </tr>
 <tr class="odd">
 <td align="left">beta_2_3</td>
 <td align="right">0.000</td>
-<td align="right">0.012</td>
-<td align="right">0.013</td>
-<td align="right">0.012</td>
-<td align="right">-0.013</td>
-<td align="right">0.038</td>
+<td align="right">0.004</td>
+<td align="right">0.006</td>
+<td align="right">0.004</td>
+<td align="right">-0.007</td>
+<td align="right">0.015</td>
 <td align="left">TRUE</td>
 </tr>
 <tr class="even">
 <td align="left">beta_3_1</td>
 <td align="right">-0.100</td>
-<td align="right">-0.090</td>
-<td align="right">0.017</td>
-<td align="right">0.010</td>
-<td align="right">-0.123</td>
-<td align="right">-0.057</td>
+<td align="right">-0.101</td>
+<td align="right">0.007</td>
+<td align="right">-0.001</td>
+<td align="right">-0.115</td>
+<td align="right">-0.086</td>
 <td align="left">TRUE</td>
 </tr>
 <tr class="odd">
 <td align="left">beta_3_2</td>
 <td align="right">0.400</td>
-<td align="right">0.391</td>
-<td align="right">0.017</td>
-<td align="right">-0.009</td>
-<td align="right">0.358</td>
-<td align="right">0.424</td>
+<td align="right">0.395</td>
+<td align="right">0.007</td>
+<td align="right">-0.005</td>
+<td align="right">0.381</td>
+<td align="right">0.410</td>
 <td align="left">TRUE</td>
 </tr>
 <tr class="even">
 <td align="left">beta_3_3</td>
 <td align="right">0.500</td>
-<td align="right">0.495</td>
-<td align="right">0.016</td>
-<td align="right">-0.005</td>
-<td align="right">0.463</td>
-<td align="right">0.527</td>
+<td align="right">0.502</td>
+<td align="right">0.007</td>
+<td align="right">0.002</td>
+<td align="right">0.488</td>
+<td align="right">0.515</td>
 <td align="left">TRUE</td>
 </tr>
 <tr class="odd">
 <td align="left">psi_1_1</td>
 <td align="right">0.100</td>
-<td align="right">0.098</td>
-<td align="right">0.007</td>
-<td align="right">-0.002</td>
-<td align="right">0.084</td>
-<td align="right">0.111</td>
+<td align="right">0.096</td>
+<td align="right">0.003</td>
+<td align="right">-0.004</td>
+<td align="right">0.091</td>
+<td align="right">0.102</td>
 <td align="left">TRUE</td>
 </tr>
 <tr class="even">
 <td align="left">psi_2_1</td>
 <td align="right">0.000</td>
+<td align="right">0.000</td>
 <td align="right">0.001</td>
+<td align="right">0.000</td>
+<td align="right">-0.002</td>
 <td align="right">0.002</td>
-<td align="right">0.001</td>
-<td align="right">-0.004</td>
-<td align="right">0.006</td>
 <td align="left">TRUE</td>
 </tr>
 <tr class="odd">
 <td align="left">psi_3_1</td>
 <td align="right">0.000</td>
-<td align="right">-0.003</td>
-<td align="right">0.002</td>
-<td align="right">-0.003</td>
-<td align="right">-0.008</td>
+<td align="right">0.000</td>
 <td align="right">0.001</td>
+<td align="right">0.000</td>
+<td align="right">-0.002</td>
+<td align="right">0.002</td>
 <td align="left">TRUE</td>
 </tr>
 <tr class="even">
 <td align="left">psi_2_2</td>
 <td align="right">0.100</td>
-<td align="right">0.106</td>
-<td align="right">0.006</td>
-<td align="right">0.006</td>
-<td align="right">0.094</td>
-<td align="right">0.117</td>
+<td align="right">0.104</td>
+<td align="right">0.003</td>
+<td align="right">0.004</td>
+<td align="right">0.098</td>
+<td align="right">0.109</td>
 <td align="left">TRUE</td>
 </tr>
 <tr class="odd">
 <td align="left">psi_3_2</td>
 <td align="right">0.000</td>
 <td align="right">0.000</td>
-<td align="right">0.002</td>
+<td align="right">0.001</td>
 <td align="right">0.000</td>
-<td align="right">-0.005</td>
-<td align="right">0.004</td>
+<td align="right">-0.002</td>
+<td align="right">0.002</td>
 <td align="left">TRUE</td>
 </tr>
 <tr class="even">
 <td align="left">psi_3_3</td>
 <td align="right">0.100</td>
-<td align="right">0.095</td>
-<td align="right">0.007</td>
-<td align="right">-0.005</td>
-<td align="right">0.082</td>
-<td align="right">0.109</td>
+<td align="right">0.098</td>
+<td align="right">0.003</td>
+<td align="right">-0.002</td>
+<td align="right">0.092</td>
+<td align="right">0.104</td>
 <td align="left">TRUE</td>
 </tr>
 <tr class="odd">
 <td align="left">theta_1_1</td>
 <td align="right">0.200</td>
-<td align="right">0.200</td>
-<td align="right">0.006</td>
-<td align="right">0.000</td>
-<td align="right">0.188</td>
-<td align="right">0.211</td>
+<td align="right">0.201</td>
+<td align="right">0.003</td>
+<td align="right">0.001</td>
+<td align="right">0.196</td>
+<td align="right">0.206</td>
 <td align="left">TRUE</td>
 </tr>
 <tr class="even">
 <td align="left">theta_2_2</td>
 <td align="right">0.200</td>
-<td align="right">0.190</td>
-<td align="right">0.006</td>
-<td align="right">-0.010</td>
-<td align="right">0.179</td>
-<td align="right">0.201</td>
+<td align="right">0.198</td>
+<td align="right">0.003</td>
+<td align="right">-0.002</td>
+<td align="right">0.193</td>
+<td align="right">0.203</td>
 <td align="left">TRUE</td>
 </tr>
 <tr class="odd">
 <td align="left">theta_3_3</td>
 <td align="right">0.200</td>
-<td align="right">0.205</td>
-<td align="right">0.007</td>
-<td align="right">0.005</td>
-<td align="right">0.191</td>
-<td align="right">0.218</td>
+<td align="right">0.203</td>
+<td align="right">0.003</td>
+<td align="right">0.003</td>
+<td align="right">0.197</td>
+<td align="right">0.209</td>
 <td align="left">TRUE</td>
 </tr>
 <tr class="even">
 <td align="left">mu0_1_1</td>
 <td align="right">0.000</td>
-<td align="right">-0.001</td>
-<td align="right">0.053</td>
-<td align="right">-0.001</td>
-<td align="right">-0.104</td>
-<td align="right">0.103</td>
+<td align="right">-0.028</td>
+<td align="right">0.059</td>
+<td align="right">-0.028</td>
+<td align="right">-0.144</td>
+<td align="right">0.088</td>
 <td align="left">TRUE</td>
 </tr>
 <tr class="odd">
 <td align="left">mu0_2_1</td>
 <td align="right">0.000</td>
-<td align="right">0.030</td>
-<td align="right">0.081</td>
-<td align="right">0.030</td>
-<td align="right">-0.129</td>
-<td align="right">0.189</td>
+<td align="right">-0.086</td>
+<td align="right">0.074</td>
+<td align="right">-0.086</td>
+<td align="right">-0.231</td>
+<td align="right">0.060</td>
 <td align="left">TRUE</td>
 </tr>
 <tr class="even">
 <td align="left">mu0_3_1</td>
 <td align="right">0.000</td>
-<td align="right">0.071</td>
-<td align="right">0.067</td>
-<td align="right">0.071</td>
-<td align="right">-0.059</td>
-<td align="right">0.202</td>
+<td align="right">0.019</td>
+<td align="right">0.065</td>
+<td align="right">0.019</td>
+<td align="right">-0.107</td>
+<td align="right">0.146</td>
 <td align="left">TRUE</td>
 </tr>
 <tr class="odd">
 <td align="left">sigma0_1_1</td>
 <td align="right">0.196</td>
-<td align="right">0.160</td>
-<td align="right">0.040</td>
-<td align="right">-0.036</td>
-<td align="right">0.082</td>
-<td align="right">0.239</td>
+<td align="right">0.228</td>
+<td align="right">0.049</td>
+<td align="right">0.032</td>
+<td align="right">0.132</td>
+<td align="right">0.325</td>
 <td align="left">TRUE</td>
 </tr>
 <tr class="even">
 <td align="left">sigma0_2_1</td>
 <td align="right">0.118</td>
-<td align="right">0.073</td>
-<td align="right">0.044</td>
-<td align="right">-0.045</td>
-<td align="right">-0.014</td>
-<td align="right">0.160</td>
+<td align="right">0.131</td>
+<td align="right">0.047</td>
+<td align="right">0.013</td>
+<td align="right">0.039</td>
+<td align="right">0.224</td>
 <td align="left">TRUE</td>
 </tr>
 <tr class="odd">
 <td align="left">sigma0_3_1</td>
 <td align="right">0.030</td>
-<td align="right">0.010</td>
-<td align="right">0.036</td>
-<td align="right">-0.020</td>
-<td align="right">-0.060</td>
-<td align="right">0.080</td>
+<td align="right">0.062</td>
+<td align="right">0.039</td>
+<td align="right">0.032</td>
+<td align="right">-0.014</td>
+<td align="right">0.137</td>
 <td align="left">TRUE</td>
 </tr>
 <tr class="even">
 <td align="left">sigma0_2_2</td>
 <td align="right">0.344</td>
-<td align="right">0.515</td>
-<td align="right">0.093</td>
-<td align="right">0.171</td>
-<td align="right">0.332</td>
-<td align="right">0.698</td>
+<td align="right">0.402</td>
+<td align="right">0.081</td>
+<td align="right">0.058</td>
+<td align="right">0.243</td>
+<td align="right">0.560</td>
 <td align="left">TRUE</td>
 </tr>
 <tr class="odd">
 <td align="left">sigma0_3_2</td>
 <td align="right">0.138</td>
-<td align="right">0.127</td>
-<td align="right">0.055</td>
-<td align="right">-0.011</td>
-<td align="right">0.019</td>
-<td align="right">0.235</td>
+<td align="right">0.124</td>
+<td align="right">0.050</td>
+<td align="right">-0.014</td>
+<td align="right">0.026</td>
+<td align="right">0.222</td>
 <td align="left">TRUE</td>
 </tr>
 <tr class="even">
 <td align="left">sigma0_3_3</td>
 <td align="right">0.266</td>
-<td align="right">0.269</td>
-<td align="right">0.063</td>
-<td align="right">0.003</td>
-<td align="right">0.145</td>
-<td align="right">0.393</td>
+<td align="right">0.236</td>
+<td align="right">0.060</td>
+<td align="right">-0.030</td>
+<td align="right">0.119</td>
+<td align="right">0.354</td>
 <td align="left">TRUE</td>
 </tr>
 </tbody>
@@ -1405,301 +1404,301 @@ simulated data set)</caption>
 <tr class="odd">
 <td align="left">alpha_1_1</td>
 <td align="right">0.000</td>
-<td align="right">-0.001</td>
+<td align="right">0.000</td>
+<td align="right">0.001</td>
+<td align="right">0.000</td>
+<td align="right">-0.002</td>
 <td align="right">0.002</td>
-<td align="right">-0.001</td>
-<td align="right">-0.005</td>
-<td align="right">0.004</td>
 <td align="left">TRUE</td>
 </tr>
 <tr class="even">
 <td align="left">alpha_2_1</td>
 <td align="right">0.000</td>
-<td align="right">0.002</td>
+<td align="right">0.000</td>
+<td align="right">0.001</td>
+<td align="right">0.000</td>
+<td align="right">-0.002</td>
 <td align="right">0.003</td>
-<td align="right">0.002</td>
-<td align="right">-0.004</td>
-<td align="right">0.008</td>
 <td align="left">TRUE</td>
 </tr>
 <tr class="odd">
 <td align="left">alpha_3_1</td>
 <td align="right">0.000</td>
+<td align="right">0.002</td>
+<td align="right">0.001</td>
+<td align="right">0.002</td>
 <td align="right">-0.001</td>
-<td align="right">0.003</td>
-<td align="right">-0.001</td>
-<td align="right">-0.007</td>
 <td align="right">0.004</td>
 <td align="left">TRUE</td>
 </tr>
 <tr class="even">
 <td align="left">beta_1_1</td>
 <td align="right">0.700</td>
-<td align="right">0.705</td>
-<td align="right">0.022</td>
-<td align="right">0.005</td>
-<td align="right">0.663</td>
-<td align="right">0.748</td>
+<td align="right">0.708</td>
+<td align="right">0.010</td>
+<td align="right">0.008</td>
+<td align="right">0.690</td>
+<td align="right">0.727</td>
 <td align="left">TRUE</td>
 </tr>
 <tr class="odd">
 <td align="left">beta_1_2</td>
 <td align="right">0.000</td>
-<td align="right">-0.006</td>
-<td align="right">0.013</td>
-<td align="right">-0.006</td>
-<td align="right">-0.033</td>
-<td align="right">0.020</td>
+<td align="right">0.001</td>
+<td align="right">0.006</td>
+<td align="right">0.001</td>
+<td align="right">-0.011</td>
+<td align="right">0.012</td>
 <td align="left">TRUE</td>
 </tr>
 <tr class="even">
 <td align="left">beta_1_3</td>
 <td align="right">0.000</td>
 <td align="right">0.000</td>
-<td align="right">0.010</td>
+<td align="right">0.004</td>
 <td align="right">0.000</td>
-<td align="right">-0.020</td>
-<td align="right">0.021</td>
+<td align="right">-0.008</td>
+<td align="right">0.009</td>
 <td align="left">TRUE</td>
 </tr>
 <tr class="odd">
 <td align="left">beta_2_1</td>
 <td align="right">0.500</td>
-<td align="right">0.511</td>
-<td align="right">0.023</td>
-<td align="right">0.011</td>
-<td align="right">0.465</td>
-<td align="right">0.557</td>
+<td align="right">0.507</td>
+<td align="right">0.010</td>
+<td align="right">0.007</td>
+<td align="right">0.486</td>
+<td align="right">0.527</td>
 <td align="left">TRUE</td>
 </tr>
 <tr class="even">
 <td align="left">beta_2_2</td>
 <td align="right">0.600</td>
-<td align="right">0.589</td>
-<td align="right">0.018</td>
-<td align="right">-0.011</td>
-<td align="right">0.553</td>
-<td align="right">0.624</td>
+<td align="right">0.592</td>
+<td align="right">0.008</td>
+<td align="right">-0.008</td>
+<td align="right">0.577</td>
+<td align="right">0.608</td>
 <td align="left">TRUE</td>
 </tr>
 <tr class="odd">
 <td align="left">beta_2_3</td>
 <td align="right">0.000</td>
-<td align="right">0.012</td>
-<td align="right">0.013</td>
-<td align="right">0.012</td>
-<td align="right">-0.013</td>
-<td align="right">0.038</td>
+<td align="right">0.004</td>
+<td align="right">0.006</td>
+<td align="right">0.004</td>
+<td align="right">-0.007</td>
+<td align="right">0.015</td>
 <td align="left">TRUE</td>
 </tr>
 <tr class="even">
 <td align="left">beta_3_1</td>
 <td align="right">-0.100</td>
-<td align="right">-0.090</td>
-<td align="right">0.017</td>
-<td align="right">0.010</td>
-<td align="right">-0.124</td>
-<td align="right">-0.057</td>
+<td align="right">-0.101</td>
+<td align="right">0.007</td>
+<td align="right">-0.001</td>
+<td align="right">-0.115</td>
+<td align="right">-0.086</td>
 <td align="left">TRUE</td>
 </tr>
 <tr class="odd">
 <td align="left">beta_3_2</td>
 <td align="right">0.400</td>
-<td align="right">0.391</td>
-<td align="right">0.017</td>
-<td align="right">-0.009</td>
-<td align="right">0.358</td>
-<td align="right">0.424</td>
+<td align="right">0.395</td>
+<td align="right">0.007</td>
+<td align="right">-0.005</td>
+<td align="right">0.381</td>
+<td align="right">0.410</td>
 <td align="left">TRUE</td>
 </tr>
 <tr class="even">
 <td align="left">beta_3_3</td>
 <td align="right">0.500</td>
-<td align="right">0.495</td>
-<td align="right">0.017</td>
-<td align="right">-0.005</td>
-<td align="right">0.463</td>
-<td align="right">0.528</td>
+<td align="right">0.502</td>
+<td align="right">0.007</td>
+<td align="right">0.002</td>
+<td align="right">0.488</td>
+<td align="right">0.515</td>
 <td align="left">TRUE</td>
 </tr>
 <tr class="odd">
 <td align="left">psi_1_1</td>
 <td align="right">0.100</td>
-<td align="right">0.098</td>
-<td align="right">0.007</td>
-<td align="right">-0.002</td>
-<td align="right">0.084</td>
-<td align="right">0.111</td>
+<td align="right">0.096</td>
+<td align="right">0.003</td>
+<td align="right">-0.004</td>
+<td align="right">0.091</td>
+<td align="right">0.102</td>
 <td align="left">TRUE</td>
 </tr>
 <tr class="even">
 <td align="left">psi_2_1</td>
 <td align="right">0.000</td>
+<td align="right">0.000</td>
 <td align="right">0.001</td>
+<td align="right">0.000</td>
+<td align="right">-0.002</td>
 <td align="right">0.002</td>
-<td align="right">0.001</td>
-<td align="right">-0.004</td>
-<td align="right">0.006</td>
 <td align="left">TRUE</td>
 </tr>
 <tr class="odd">
 <td align="left">psi_3_1</td>
 <td align="right">0.000</td>
-<td align="right">-0.003</td>
-<td align="right">0.002</td>
-<td align="right">-0.003</td>
-<td align="right">-0.008</td>
+<td align="right">0.000</td>
 <td align="right">0.001</td>
+<td align="right">0.000</td>
+<td align="right">-0.002</td>
+<td align="right">0.002</td>
 <td align="left">TRUE</td>
 </tr>
 <tr class="even">
 <td align="left">psi_2_2</td>
 <td align="right">0.100</td>
-<td align="right">0.106</td>
-<td align="right">0.006</td>
-<td align="right">0.006</td>
-<td align="right">0.094</td>
-<td align="right">0.117</td>
+<td align="right">0.104</td>
+<td align="right">0.003</td>
+<td align="right">0.004</td>
+<td align="right">0.098</td>
+<td align="right">0.109</td>
 <td align="left">TRUE</td>
 </tr>
 <tr class="odd">
 <td align="left">psi_3_2</td>
 <td align="right">0.000</td>
 <td align="right">0.000</td>
-<td align="right">0.002</td>
+<td align="right">0.001</td>
 <td align="right">0.000</td>
-<td align="right">-0.005</td>
-<td align="right">0.004</td>
+<td align="right">-0.002</td>
+<td align="right">0.002</td>
 <td align="left">TRUE</td>
 </tr>
 <tr class="even">
 <td align="left">psi_3_3</td>
 <td align="right">0.100</td>
-<td align="right">0.095</td>
-<td align="right">0.007</td>
-<td align="right">-0.005</td>
-<td align="right">0.082</td>
-<td align="right">0.109</td>
+<td align="right">0.098</td>
+<td align="right">0.003</td>
+<td align="right">-0.002</td>
+<td align="right">0.092</td>
+<td align="right">0.104</td>
 <td align="left">TRUE</td>
 </tr>
 <tr class="odd">
 <td align="left">theta_1_1</td>
 <td align="right">0.200</td>
-<td align="right">0.200</td>
-<td align="right">0.006</td>
-<td align="right">0.000</td>
-<td align="right">0.188</td>
-<td align="right">0.211</td>
+<td align="right">0.201</td>
+<td align="right">0.003</td>
+<td align="right">0.001</td>
+<td align="right">0.196</td>
+<td align="right">0.206</td>
 <td align="left">TRUE</td>
 </tr>
 <tr class="even">
 <td align="left">theta_2_2</td>
 <td align="right">0.200</td>
-<td align="right">0.190</td>
-<td align="right">0.006</td>
-<td align="right">-0.010</td>
-<td align="right">0.179</td>
-<td align="right">0.201</td>
+<td align="right">0.198</td>
+<td align="right">0.003</td>
+<td align="right">-0.002</td>
+<td align="right">0.193</td>
+<td align="right">0.203</td>
 <td align="left">TRUE</td>
 </tr>
 <tr class="odd">
 <td align="left">theta_3_3</td>
 <td align="right">0.200</td>
-<td align="right">0.205</td>
-<td align="right">0.007</td>
-<td align="right">0.005</td>
-<td align="right">0.191</td>
-<td align="right">0.218</td>
+<td align="right">0.203</td>
+<td align="right">0.003</td>
+<td align="right">0.003</td>
+<td align="right">0.197</td>
+<td align="right">0.209</td>
 <td align="left">TRUE</td>
 </tr>
 <tr class="even">
 <td align="left">mu0_1_1</td>
 <td align="right">0.000</td>
-<td align="right">-0.001</td>
-<td align="right">0.053</td>
-<td align="right">-0.001</td>
-<td align="right">-0.104</td>
-<td align="right">0.103</td>
+<td align="right">-0.027</td>
+<td align="right">0.059</td>
+<td align="right">-0.027</td>
+<td align="right">-0.143</td>
+<td align="right">0.088</td>
 <td align="left">TRUE</td>
 </tr>
 <tr class="odd">
 <td align="left">mu0_2_1</td>
 <td align="right">0.000</td>
-<td align="right">0.030</td>
-<td align="right">0.081</td>
-<td align="right">0.030</td>
-<td align="right">-0.129</td>
-<td align="right">0.189</td>
+<td align="right">-0.085</td>
+<td align="right">0.073</td>
+<td align="right">-0.085</td>
+<td align="right">-0.229</td>
+<td align="right">0.059</td>
 <td align="left">TRUE</td>
 </tr>
 <tr class="even">
 <td align="left">mu0_3_1</td>
 <td align="right">0.000</td>
-<td align="right">0.071</td>
-<td align="right">0.067</td>
-<td align="right">0.071</td>
-<td align="right">-0.059</td>
-<td align="right">0.202</td>
+<td align="right">0.019</td>
+<td align="right">0.064</td>
+<td align="right">0.019</td>
+<td align="right">-0.106</td>
+<td align="right">0.144</td>
 <td align="left">TRUE</td>
 </tr>
 <tr class="odd">
 <td align="left">sigma0_1_1</td>
 <td align="right">0.196</td>
-<td align="right">0.160</td>
-<td align="right">0.040</td>
-<td align="right">-0.036</td>
-<td align="right">0.083</td>
-<td align="right">0.238</td>
+<td align="right">0.229</td>
+<td align="right">0.049</td>
+<td align="right">0.033</td>
+<td align="right">0.132</td>
+<td align="right">0.325</td>
 <td align="left">TRUE</td>
 </tr>
 <tr class="even">
 <td align="left">sigma0_2_1</td>
 <td align="right">0.118</td>
-<td align="right">0.073</td>
+<td align="right">0.131</td>
+<td align="right">0.045</td>
+<td align="right">0.013</td>
 <td align="right">0.043</td>
-<td align="right">-0.045</td>
-<td align="right">-0.011</td>
-<td align="right">0.158</td>
+<td align="right">0.219</td>
 <td align="left">TRUE</td>
 </tr>
 <tr class="odd">
 <td align="left">sigma0_3_1</td>
 <td align="right">0.030</td>
-<td align="right">0.010</td>
-<td align="right">0.035</td>
-<td align="right">-0.020</td>
-<td align="right">-0.059</td>
-<td align="right">0.079</td>
+<td align="right">0.062</td>
+<td align="right">0.038</td>
+<td align="right">0.032</td>
+<td align="right">-0.013</td>
+<td align="right">0.137</td>
 <td align="left">TRUE</td>
 </tr>
 <tr class="even">
 <td align="left">sigma0_2_2</td>
 <td align="right">0.344</td>
-<td align="right">0.515</td>
-<td align="right">0.093</td>
-<td align="right">0.171</td>
-<td align="right">0.332</td>
-<td align="right">0.697</td>
+<td align="right">0.402</td>
+<td align="right">0.077</td>
+<td align="right">0.058</td>
+<td align="right">0.251</td>
+<td align="right">0.553</td>
 <td align="left">TRUE</td>
 </tr>
 <tr class="odd">
 <td align="left">sigma0_3_2</td>
 <td align="right">0.138</td>
-<td align="right">0.127</td>
-<td align="right">0.055</td>
-<td align="right">-0.011</td>
-<td align="right">0.019</td>
-<td align="right">0.235</td>
+<td align="right">0.124</td>
+<td align="right">0.049</td>
+<td align="right">-0.014</td>
+<td align="right">0.029</td>
+<td align="right">0.219</td>
 <td align="left">TRUE</td>
 </tr>
 <tr class="even">
 <td align="left">sigma0_3_3</td>
 <td align="right">0.266</td>
-<td align="right">0.269</td>
-<td align="right">0.063</td>
-<td align="right">0.003</td>
-<td align="right">0.146</td>
-<td align="right">0.393</td>
+<td align="right">0.236</td>
+<td align="right">0.058</td>
+<td align="right">-0.030</td>
+<td align="right">0.123</td>
+<td align="right">0.349</td>
 <td align="left">TRUE</td>
 </tr>
 </tbody>
@@ -1734,32 +1733,32 @@ same likelihood, so their estimates should agree closely.</p>
 <tr class="odd">
 <td align="left">alpha_1_1</td>
 <td align="right">0.000</td>
-<td align="right">-0.001</td>
-<td align="right">-0.001</td>
+<td align="right">0.000</td>
+<td align="right">0.000</td>
 </tr>
 <tr class="even">
 <td align="left">alpha_2_1</td>
 <td align="right">0.000</td>
-<td align="right">0.002</td>
-<td align="right">0.002</td>
+<td align="right">0.000</td>
+<td align="right">0.000</td>
 </tr>
 <tr class="odd">
 <td align="left">alpha_3_1</td>
 <td align="right">0.000</td>
-<td align="right">-0.002</td>
-<td align="right">-0.001</td>
+<td align="right">0.001</td>
+<td align="right">0.002</td>
 </tr>
 <tr class="even">
 <td align="left">beta_1_1</td>
 <td align="right">0.700</td>
-<td align="right">0.705</td>
-<td align="right">0.705</td>
+<td align="right">0.708</td>
+<td align="right">0.708</td>
 </tr>
 <tr class="odd">
 <td align="left">beta_1_2</td>
 <td align="right">0.000</td>
-<td align="right">-0.006</td>
-<td align="right">-0.006</td>
+<td align="right">0.001</td>
+<td align="right">0.001</td>
 </tr>
 <tr class="even">
 <td align="left">beta_1_3</td>
@@ -1770,62 +1769,62 @@ same likelihood, so their estimates should agree closely.</p>
 <tr class="odd">
 <td align="left">beta_2_1</td>
 <td align="right">0.500</td>
-<td align="right">0.511</td>
-<td align="right">0.511</td>
+<td align="right">0.507</td>
+<td align="right">0.507</td>
 </tr>
 <tr class="even">
 <td align="left">beta_2_2</td>
 <td align="right">0.600</td>
-<td align="right">0.589</td>
-<td align="right">0.589</td>
+<td align="right">0.592</td>
+<td align="right">0.592</td>
 </tr>
 <tr class="odd">
 <td align="left">beta_2_3</td>
 <td align="right">0.000</td>
-<td align="right">0.012</td>
-<td align="right">0.012</td>
+<td align="right">0.004</td>
+<td align="right">0.004</td>
 </tr>
 <tr class="even">
 <td align="left">beta_3_1</td>
 <td align="right">-0.100</td>
-<td align="right">-0.090</td>
-<td align="right">-0.090</td>
+<td align="right">-0.101</td>
+<td align="right">-0.101</td>
 </tr>
 <tr class="odd">
 <td align="left">beta_3_2</td>
 <td align="right">0.400</td>
-<td align="right">0.391</td>
-<td align="right">0.391</td>
+<td align="right">0.395</td>
+<td align="right">0.395</td>
 </tr>
 <tr class="even">
 <td align="left">beta_3_3</td>
 <td align="right">0.500</td>
-<td align="right">0.495</td>
-<td align="right">0.495</td>
+<td align="right">0.502</td>
+<td align="right">0.502</td>
 </tr>
 <tr class="odd">
 <td align="left">psi_1_1</td>
 <td align="right">0.100</td>
-<td align="right">0.098</td>
-<td align="right">0.098</td>
+<td align="right">0.096</td>
+<td align="right">0.096</td>
 </tr>
 <tr class="even">
 <td align="left">psi_2_1</td>
 <td align="right">0.000</td>
-<td align="right">0.001</td>
-<td align="right">0.001</td>
+<td align="right">0.000</td>
+<td align="right">0.000</td>
 </tr>
 <tr class="odd">
 <td align="left">psi_3_1</td>
 <td align="right">0.000</td>
-<td align="right">-0.003</td>
-<td align="right">-0.003</td>
+<td align="right">0.000</td>
+<td align="right">0.000</td>
 </tr>
 <tr class="even">
 <td align="left">psi_2_2</td>
 <td align="right">0.100</td>
-<td align="right">0.106</td>
-<td align="right">0.106</td>
+<td align="right">0.104</td>
+<td align="right">0.104</td>
 </tr>
 <tr class="odd">
 <td align="left">psi_3_2</td>
@@ -1836,80 +1835,80 @@ same likelihood, so their estimates should agree closely.</p>
 <tr class="even">
 <td align="left">psi_3_3</td>
 <td align="right">0.100</td>
-<td align="right">0.095</td>
-<td align="right">0.095</td>
+<td align="right">0.098</td>
+<td align="right">0.098</td>
 </tr>
 <tr class="odd">
 <td align="left">theta_1_1</td>
 <td align="right">0.200</td>
-<td align="right">0.200</td>
-<td align="right">0.200</td>
+<td align="right">0.201</td>
+<td align="right">0.201</td>
 </tr>
 <tr class="even">
 <td align="left">theta_2_2</td>
 <td align="right">0.200</td>
-<td align="right">0.190</td>
-<td align="right">0.190</td>
+<td align="right">0.198</td>
+<td align="right">0.198</td>
 </tr>
 <tr class="odd">
 <td align="left">theta_3_3</td>
 <td align="right">0.200</td>
-<td align="right">0.205</td>
-<td align="right">0.205</td>
+<td align="right">0.203</td>
+<td align="right">0.203</td>
 </tr>
 <tr class="even">
 <td align="left">mu0_1_1</td>
 <td align="right">0.000</td>
-<td align="right">-0.001</td>
-<td align="right">-0.001</td>
+<td align="right">-0.028</td>
+<td align="right">-0.027</td>
 </tr>
 <tr class="odd">
 <td align="left">mu0_2_1</td>
 <td align="right">0.000</td>
-<td align="right">0.030</td>
-<td align="right">0.030</td>
+<td align="right">-0.086</td>
+<td align="right">-0.085</td>
 </tr>
 <tr class="even">
 <td align="left">mu0_3_1</td>
 <td align="right">0.000</td>
-<td align="right">0.071</td>
-<td align="right">0.071</td>
+<td align="right">0.019</td>
+<td align="right">0.019</td>
 </tr>
 <tr class="odd">
 <td align="left">sigma0_1_1</td>
 <td align="right">0.196</td>
-<td align="right">0.160</td>
-<td align="right">0.160</td>
+<td align="right">0.228</td>
+<td align="right">0.229</td>
 </tr>
 <tr class="even">
 <td align="left">sigma0_2_1</td>
 <td align="right">0.118</td>
-<td align="right">0.073</td>
-<td align="right">0.073</td>
+<td align="right">0.131</td>
+<td align="right">0.131</td>
 </tr>
 <tr class="odd">
 <td align="left">sigma0_3_1</td>
 <td align="right">0.030</td>
-<td align="right">0.010</td>
-<td align="right">0.010</td>
+<td align="right">0.062</td>
+<td align="right">0.062</td>
 </tr>
 <tr class="even">
 <td align="left">sigma0_2_2</td>
 <td align="right">0.344</td>
-<td align="right">0.515</td>
-<td align="right">0.515</td>
+<td align="right">0.402</td>
+<td align="right">0.402</td>
 </tr>
 <tr class="odd">
 <td align="left">sigma0_3_2</td>
 <td align="right">0.138</td>
-<td align="right">0.127</td>
-<td align="right">0.127</td>
+<td align="right">0.124</td>
+<td align="right">0.124</td>
 </tr>
 <tr class="even">
 <td align="left">sigma0_3_3</td>
 <td align="right">0.266</td>
-<td align="right">0.269</td>
-<td align="right">0.269</td>
+<td align="right">0.236</td>
+<td align="right">0.236</td>
 </tr>
 </tbody>
 </table>

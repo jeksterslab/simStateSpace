@@ -30,56 +30,55 @@ No prior knowledge of state space models is needed.
 
 ## Model
 
-The measurement model is given by \\\[Y\_{i, t} = \left(
-\begin{array}{cc} 1 & 0 \\\\ \end{array} \right) \left( \begin{array}{c}
-\eta\_{0\_{i, t}} \\\\ \eta\_{1\_{i, t}} \\\\ \end{array} \right) +
+The measurement model is given by Y\_{i, t} = \left( \begin{array}{cc} 1
+& 0 \\\\ \end{array} \right) \left( \begin{array}{c} \eta\_{0\_{i, t}}
+\\\\ \eta\_{1\_{i, t}} \\\\ \end{array} \right) +
 \boldsymbol{\varepsilon}\_{i, t}, \quad \mathrm{with} \quad
 \boldsymbol{\varepsilon}\_{i, t} \sim \mathcal{N} \left( 0, \theta
-\right)\\\] where \\(Y\_{i, t}\\), \\(\eta\_{0\_{i, t}}\\),
-\\(\eta\_{1\_{i, t}}\\), and \\(\boldsymbol{\varepsilon}\_{i, t}\\) are
-random variables and \\(\theta\\) is a model parameter. \\(Y\_{i, t}\\)
-is the observed random variable at time \\(t\\) and individual \\(i\\),
-\\(\eta\_{0\_{i, t}}\\) (intercept) and \\(\eta\_{1\_{i, t}}\\) (slope)
-form a vector of latent random variables at time \\(t\\) and individual
-\\(i\\), and \\(\boldsymbol{\varepsilon}\_{i, t}\\) a vector of random
-measurement errors at time \\(t\\) and individual \\(i\\). \\(\theta\\)
-is the variance of \\(\boldsymbol{\varepsilon}\\).
+\right) where Y\_{i, t}, \eta\_{0\_{i, t}}, \eta\_{1\_{i, t}}, and
+\boldsymbol{\varepsilon}\_{i, t} are random variables and \theta is a
+model parameter. Y\_{i, t} is the observed random variable at time t and
+individual i, \eta\_{0\_{i, t}} (intercept) and \eta\_{1\_{i, t}}
+(slope) form a vector of latent random variables at time t and
+individual i, and \boldsymbol{\varepsilon}\_{i, t} a vector of random
+measurement errors at time t and individual i. \theta is the variance of
+\boldsymbol{\varepsilon}.
 
 In words, the observed score is the current level of the trajectory,
-\\(\eta\_{0\_{i, t}}\\), plus measurement error. The loading of the
-slope is 0, because the slope affects the score only through its effect
-on the level over time.
+\eta\_{0\_{i, t}}, plus measurement error. The loading of the slope is
+0, because the slope affects the score only through its effect on the
+level over time.
 
-The dynamic structure is given by \\\[\left( \begin{array}{c}
-\eta\_{0\_{i, t}} \\\\ \eta\_{1\_{i, t}} \\\\ \end{array} \right) =
-\left( \begin{array}{cc} 1 & 1 \\\\ 0 & 1 \\\\ \end{array} \right)
-\left( \begin{array}{c} \eta\_{0\_{i, t - 1}} \\\\ \eta\_{1\_{i, t - 1}}
-\\\\ \end{array} \right) .\\\]
+The dynamic structure is given by \left( \begin{array}{c} \eta\_{0\_{i,
+t}} \\\\ \eta\_{1\_{i, t}} \\\\ \end{array} \right) = \left(
+\begin{array}{cc} 1 & 1 \\\\ 0 & 1 \\\\ \end{array} \right) \left(
+\begin{array}{c} \eta\_{0\_{i, t - 1}} \\\\ \eta\_{1\_{i, t - 1}} \\\\
+\end{array} \right) .
 
 In words, the level at each occasion is the previous level plus the
-slope, \\(\eta\_{0\_{i, t}} = \eta\_{0\_{i, t - 1}} + \eta\_{1\_{i, t -
-1}}\\), and the slope stays the same, \\(\eta\_{1\_{i, t}} =
-\eta\_{1\_{i, t - 1}}\\). There is no process noise, so once an
-individual’s intercept and slope are set, the trajectory is a straight
-line. All the variation in the trajectories between individuals comes
-from the initial condition below.
+slope, \eta\_{0\_{i, t}} = \eta\_{0\_{i, t - 1}} + \eta\_{1\_{i, t -
+1}}, and the slope stays the same, \eta\_{1\_{i, t}} = \eta\_{1\_{i, t -
+1}}. There is no process noise, so once an individual’s intercept and
+slope are set, the trajectory is a straight line. All the variation in
+the trajectories between individuals comes from the initial condition
+below.
 
 The mean vector and covariance matrix of the intercept and slope are
 captured in the mean vector and covariance matrix of the initial
-condition given by \\\[\boldsymbol{\mu}\_{0} = \left( \begin{array}{c}
+condition given by \boldsymbol{\mu}\_{0} = \left( \begin{array}{c}
 \mu\_{\eta\_{0}} \\\\ \mu\_{\eta\_{1}} \\\\ \end{array} \right) \quad
-\mathrm{and,}\\\]
+\mathrm{and,}
 
-\\\[\boldsymbol{\Sigma}\_{0} = \left( \begin{array}{cc}
+\boldsymbol{\Sigma}\_{0} = \left( \begin{array}{cc}
 \sigma^{2}\_{\eta\_{0}} & \sigma\_{\eta\_{0}, \eta\_{1}} \\\\
 \sigma\_{\eta\_{1}, \eta\_{0}} & \sigma^{2}\_{\eta\_{1}} \\\\
-\end{array} \right) .\\\]
+\end{array} \right) .
 
-Here, \\(\mu\_{\eta\_{0}}\\) and \\(\mu\_{\eta\_{1}}\\) are the average
-intercept and slope, \\(\sigma^{2}\_{\eta\_{0}}\\) and
-\\(\sigma^{2}\_{\eta\_{1}}\\) are how much individuals differ in them,
-and \\(\sigma\_{\eta\_{0}, \eta\_{1}}\\) is their covariance, for
-example, positive if individuals who start higher also grow faster.
+Here, \mu\_{\eta\_{0}} and \mu\_{\eta\_{1}} are the average intercept
+and slope, \sigma^{2}\_{\eta\_{0}} and \sigma^{2}\_{\eta\_{1}} are how
+much individuals differ in them, and \sigma\_{\eta\_{0}, \eta\_{1}} is
+their covariance, for example, positive if individuals who start higher
+also grow faster.
 
 ### Diagrams
 
@@ -88,63 +87,61 @@ model.](fig-vignettes-lin-growth-path.png)
 
 Path diagram of the linear growth curve model.
 
-The model as a path diagram, for the occasions \\(t = 0, 1, \ldots, T -
-1\\). The intercept \\(\eta\_{0}\\) loads on every occasion with a
-loading of 1, and the slope \\(\eta\_{1}\\) with loadings \\(0, 1, 2,
-\ldots, T - 1\\), so the slope is the change per occasion.
-\\(\varepsilon\_{t}\\) is the measurement error, with variance
-\\(\theta\\). A loop on a variable is its variance and a curved
-two-headed arrow a covariance. \\(\sigma^{2}\_{\eta\_{0}}\\) and
-\\(\sigma^{2}\_{\eta\_{1}}\\) are the variances of the intercept and the
-slope, and \\(\sigma\_{\eta\_{0}, \eta\_{1}}\\) their covariance.
+The model as a path diagram, for the occasions t = 0, 1, \ldots, T - 1.
+The intercept \eta\_{0} loads on every occasion with a loading of 1, and
+the slope \eta\_{1} with loadings 0, 1, 2, \ldots, T - 1, so the slope
+is the change per occasion. \varepsilon\_{t} is the measurement error,
+with variance \theta. A loop on a variable is its variance and a curved
+two-headed arrow a covariance. \sigma^{2}\_{\eta\_{0}} and
+\sigma^{2}\_{\eta\_{1}} are the variances of the intercept and the
+slope, and \sigma\_{\eta\_{0}, \eta\_{1}} their covariance.
 
 ![State space form of the linear growth curve
 model.](fig-vignettes-lin-growth-ssm.png)
 
 State space form of the linear growth curve model.
 
-The same model in state space form, for the first three occasions (\\(t
-= 0, 1, 2\\)), with every element of the state drawn. The state holds
-the current level \\(\eta\_{0, t}\\) and the slope \\(\eta\_{1, t}\\).
-The transition adds the slope to the level at each occasion and keeps
-the slope, so \\(\eta\_{1, t} = \eta\_{1}\\) for all \\(t\\) and
-\\(\eta\_{0, t} = \eta\_{0} + t \eta\_{1}\\); the level is measured by
-\\(Y\_{t}\\) with a loading of 1 and measurement error
-\\(\varepsilon\_{t}\\), with variance \\(\theta\\). There is no process
-noise: the loadings of the path diagram are produced by the transition,
-and the differences between individuals come from the initial condition.
-At \\(t = 0\\), the initial condition \\(\boldsymbol{\eta}\_{0} \sim
-\mathcal{N} \left( \boldsymbol{\mu}\_{0}, \boldsymbol{\Sigma}\_{0}
-\right)\\) holds the means, variances, and covariance of the intercept
-and the slope. Below the diagram, \\(\boldsymbol{\beta}\\),
-\\(\boldsymbol{\Lambda}\\), and \\(\boldsymbol{\Theta}\\) are the same
-matrices in compact form.
+The same model in state space form, for the first three occasions (t =
+0, 1, 2), with every element of the state drawn. The state holds the
+current level \eta\_{0, t} and the slope \eta\_{1, t}. The transition
+adds the slope to the level at each occasion and keeps the slope, so
+\eta\_{1, t} = \eta\_{1} for all t and \eta\_{0, t} = \eta\_{0} + t
+\eta\_{1}; the level is measured by Y\_{t} with a loading of 1 and
+measurement error \varepsilon\_{t}, with variance \theta. There is no
+process noise: the loadings of the path diagram are produced by the
+transition, and the differences between individuals come from the
+initial condition. At t = 0, the initial condition
+\boldsymbol{\eta}\_{0} \sim \mathcal{N} \left( \boldsymbol{\mu}\_{0},
+\boldsymbol{\Sigma}\_{0} \right) holds the means, variances, and
+covariance of the intercept and the slope. Below the diagram,
+\boldsymbol{\beta}, \boldsymbol{\Lambda}, and \boldsymbol{\Theta} are
+the same matrices in compact form.
 [`SimSSMLinGrowth()`](https://github.com/jeksterslab/simStateSpace/reference/SimSSMLinGrowth.md)
-fixes \\(\boldsymbol{\beta}\\) and \\(\boldsymbol{\Lambda}\\) and takes
-`mu0` and the Cholesky factors of \\(\boldsymbol{\Sigma}\_{0}\\) and of
-\\(\theta\\) (`sigma0_l` and `theta_l`).
+fixes \boldsymbol{\beta} and \boldsymbol{\Lambda} and takes `mu0` and
+the Cholesky factors of \boldsymbol{\Sigma}\_{0} and of \theta
+(`sigma0_l` and `theta_l`).
 
 ## Data Generation
 
 ### Notation
 
-Let \\(t = 5\\) be the number of time points and \\(n = 2000\\) be the
-number of individuals.
+Let t = 5 be the number of time points and n = 5000 be the number of
+individuals.
 
-Let the measurement error variance \\(\theta\\) be given by
+Let the measurement error variance \theta be given by
 
-\\\[\theta = 0.6 .\\\]
+\theta = 0.6 .
 
-Let the initial condition \\(\boldsymbol{\eta}\_{0}\\) be given by
+Let the initial condition \boldsymbol{\eta}\_{0} be given by
 
-\\\[\boldsymbol{\eta}\_{0} \sim \mathcal{N} \left(
-\boldsymbol{\mu}\_{0}, \boldsymbol{\Sigma}\_{0} \right)\\\]
+\boldsymbol{\eta}\_{0} \sim \mathcal{N} \left( \boldsymbol{\mu}\_{0},
+\boldsymbol{\Sigma}\_{0} \right)
 
-\\\[\boldsymbol{\mu}\_{0} = \left( \begin{array}{c} 0.615 \\\\ 1.006
-\\\\ \end{array} \right)\\\]
+\boldsymbol{\mu}\_{0} = \left( \begin{array}{c} 0.615 \\\\ 1.006 \\\\
+\end{array} \right)
 
-\\\[\boldsymbol{\Sigma}\_{0} = \left( \begin{array}{cc} 1.932 & 0.618
-\\\\ 0.618 & 0.587 \\\\ \end{array} \right) .\\\]
+\boldsymbol{\Sigma}\_{0} = \left( \begin{array}{cc} 1.932 & 0.618 \\\\
+0.618 & 0.587 \\\\ \end{array} \right) .
 
 ### R Function Arguments
 
@@ -153,7 +150,7 @@ Cholesky factors (the arguments ending in `_l`).
 
 \
 `n`\
-`#> [1] 2000`\
+`#> [1] 5000`\
 `time`\
 `#> [1] 5`\
 `mu0`\
@@ -205,13 +202,13 @@ columns `id`, `time`, and `y1`.
 `#> 5  1    4 5.993965`\
 `#> 6  2    0 1.951861`\
 [`summary`](https://rdrr.io/r/base/summary.html)`(``data``)`\
-`#>        id              time         y1         `\
-`#>  Min.   :   1.0   Min.   :0   Min.   :-8.1963  `\
-`#>  1st Qu.: 500.8   1st Qu.:1   1st Qu.: 0.4226  `\
-`#>  Median :1000.5   Median :2   Median : 2.1950  `\
-`#>  Mean   :1000.5   Mean   :2   Mean   : 2.5922  `\
-`#>  3rd Qu.:1500.2   3rd Qu.:3   3rd Qu.: 4.4219  `\
-`#>  Max.   :2000.0   Max.   :4   Max.   :17.0616`\
+`#>        id            time         y1        `\
+`#>  Min.   :   1   Min.   :0   Min.   :-8.339  `\
+`#>  1st Qu.:1251   1st Qu.:1   1st Qu.: 0.388  `\
+`#>  Median :2500   Median :2   Median : 2.191  `\
+`#>  Mean   :2500   Mean   :2   Mean   : 2.601  `\
+`#>  3rd Qu.:3750   3rd Qu.:3   3rd Qu.: 4.469  `\
+`#>  Max.   :5000   Max.   :4   Max.   :17.236`\
 [`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``sim``)`
 
 ![](fig-vignettes-lin-growth-error-lin-growth-1.png)
@@ -232,8 +229,8 @@ maximum likelihood using the Kalman filter.
 A `dynr` model is built from pieces that match the equations above: the
 data, the initial condition, the measurement model, the dynamic model,
 and the noise. Each parameter gets a name (for example, `sigma0_01` for
-\\(\sigma\_{\eta\_{0}, \eta\_{1}}\\)\`), and the same name used in two
-places means one shared parameter. The starting values are set to the
+\sigma\_{\eta\_{0}, \eta\_{1}}\`), and the same name used in two places
+means one shared parameter. The starting values are set to the
 population values for convenience; with real data, they would be rough
 guesses. The intercept and slope are indexed 0 and 1 in the parameter
 names.
@@ -274,7 +271,7 @@ parameters of the growth model. The covariance matrix is symmetric, so
 
 #### Prepare Measurement Model
 
-The loadings \\(\left( 1, 0 \right)\\) are fixed.
+The loadings \left( 1, 0 \right) are fixed.
 
 \
 `dynr_measurement`` ``<-`` ``dynr``::`[`prep.measurement`](https://rdrr.io/pkg/dynr/man/prep.measurement.html)`(`\
@@ -304,7 +301,7 @@ free parameters.
 #### Prepare Process Noise
 
 The process noise is fixed at zero, and the measurement error variance
-\\(\theta\\) is estimated.
+\theta is estimated.
 
 \
 `dynr_noise`` ``<-`` ``dynr``::`[`prep.noise`](https://rdrr.io/pkg/dynr/man/prep.noise.html)`(`\
@@ -349,38 +346,38 @@ The plot below shows the model equations with the parameter names.
 `#> Original exit flag:  3 `\
 `#> Modified exit flag:  3 `\
 `#> Optimization terminated successfully: ftol_rel or ftol_abs was reached. `\
-`#> Original fitted parameters:  -0.5214641 0.6200474 0.9859686 0.5990437 0.3061706 `\
-`#> -0.901686 `\
+`#> Original fitted parameters:  -0.5187461 0.6042386 0.9983511 0.6469692 0.3102879 `\
+`#> -0.9329893 `\
 `#> `\
-`#> Transformed fitted parameters:  0.5936507 0.6200474 0.9859686 1.820377 `\
-`#> 0.5573459 0.5765277 `\
+`#> Transformed fitted parameters:  0.5952665 0.6042386 0.9983511 1.909744 `\
+`#> 0.5925704 0.5772435 `\
 `#> `\
 `#> Doing end processing`\
 `#> Successful trial`\
-`#> Total Time: 5.789685 `\
-`#> Backend Time: 5.362604`
+`#> Total Time: 13.32967 `\
+`#> Backend Time: 12.90673`
 
 #### Summary
 
-The summary lists each estimate with its standard error, \\(t\\) value,
-confidence interval, and \\(p\\) value.
+The summary lists each estimate with its standard error, t value,
+confidence interval, and p value.
 
 \
 [`summary`](https://rdrr.io/r/base/summary.html)`(``results``)`\
 `#> Coefficients:`\
 `#>           Estimate Std. Error t value ci.lower ci.upper            Pr(>|t|)    `\
-`#> theta      0.59365    0.01084   54.78  0.57241  0.61489 <0.0000000000000002 ***`\
-`#> mu0_0      0.62005    0.03299   18.79  0.55538  0.68471 <0.0000000000000002 ***`\
-`#> mu0_1      0.98597    0.01783   55.30  0.95102  1.02091 <0.0000000000000002 ***`\
-`#> sigma0_00  1.82038    0.06912   26.34  1.68491  1.95584 <0.0000000000000002 ***`\
-`#> sigma0_01  0.55735    0.02815   19.80  0.50216  0.61253 <0.0000000000000002 ***`\
-`#> sigma0_11  0.57653    0.02014   28.63  0.53706  0.61599 <0.0000000000000002 ***`\
+`#> theta     0.595266   0.006871   86.64 0.581800 0.608733 <0.0000000000000002 ***`\
+`#> mu0_0     0.604239   0.021282   28.39 0.562527 0.645950 <0.0000000000000002 ***`\
+`#> mu0_1     0.998351   0.011284   88.47 0.976234 1.020468 <0.0000000000000002 ***`\
+`#> sigma0_00 1.909744   0.045423   42.04 1.820717 1.998771 <0.0000000000000002 ***`\
+`#> sigma0_01 0.592570   0.018306   32.37 0.556691 0.628450 <0.0000000000000002 ***`\
+`#> sigma0_11 0.577243   0.012754   45.26 0.552247 0.602240 <0.0000000000000002 ***`\
 `#> ---`\
 `#> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1`\
 `#> `\
-`#> -2 log-likelihood value at convergence = 33425.11`\
-`#> AIC = 33437.11`\
-`#> BIC = 33480.37`
+`#> -2 log-likelihood value at convergence = 83718.28`\
+`#> AIC = 83730.28`\
+`#> BIC = 83779.04`
 
 ### OpenMx: State Space Model
 
@@ -388,29 +385,29 @@ confidence interval, and \\(p\\) value.
 own Kalman filter
 ([`OpenMx::mxExpectationStateSpace()`](https://rdrr.io/pkg/OpenMx/man/mxExpectationStateSpace.html);
 Hunter (2018)). Its matrices have the names used in engineering: `A` is
-the transition matrix \\(\boldsymbol{\beta}\\), `B` holds the intercepts
-of the dynamic model, `C` is the loading matrix
-\\(\boldsymbol{\Lambda}\\), `D` holds the intercepts of the measurement
-model, `Q` is the process noise covariance matrix, and `R` is the
-measurement error covariance matrix. The parameter labels are the dynr
-names; as in dynr, a label used in two places is one shared parameter,
-and the starting values are the population values.
+the transition matrix \boldsymbol{\beta}, `B` holds the intercepts of
+the dynamic model, `C` is the loading matrix \boldsymbol{\Lambda}, `D`
+holds the intercepts of the measurement model, `Q` is the process noise
+covariance matrix, and `R` is the measurement error covariance matrix.
+The parameter labels are the dynr names; as in dynr, a label used in two
+places is one shared parameter, and the starting values are the
+population values.
 
 Two details differ from dynr. First, OpenMx reads the data as a single
 time series. To start the filter again at the first occasion of every
 individual, each individual gets a group, and all groups use the
 matrices of one parent model, so every individual has the same
 parameters. Second, OpenMx starts the filter one occasion before the
-first row, so the first row has the state mean \\(\mathbf{A}
-\mathbf{x}\_{0} + \mathbf{B} \mathbf{u}\\) and the state covariance
-\\(\mathbf{A} \mathbf{P}\_{0} \mathbf{A}^{\prime} + \mathbf{Q}\\), with
-the constant input \\(\mathbf{u} = 1\\). Setting \\(\mathbf{x}\_{0} =
-\mathbf{A}^{-1} \left( \boldsymbol{\mu}\_{0} - \mathbf{B} \mathbf{u}
-\right)\\) and \\(\mathbf{P}\_{0} = \mathbf{A}^{-1} \left(
-\boldsymbol{\Sigma}\_{0} - \mathbf{Q} \right) \left( \mathbf{A}^{-1}
-\right)^{\prime}\\) gives the first occasion the initial condition of
-the model, so the likelihood is the same as in dynr. This needs an
-invertible \\(\mathbf{A}\\), which holds here.
+first row, so the first row has the state mean \mathbf{A}
+\mathbf{x}\_{0} + \mathbf{B} \mathbf{u} and the state covariance
+\mathbf{A} \mathbf{P}\_{0} \mathbf{A}^{\prime} + \mathbf{Q}, with the
+constant input \mathbf{u} = 1. Setting \mathbf{x}\_{0} = \mathbf{A}^{-1}
+\left( \boldsymbol{\mu}\_{0} - \mathbf{B} \mathbf{u} \right) and
+\mathbf{P}\_{0} = \mathbf{A}^{-1} \left( \boldsymbol{\Sigma}\_{0} -
+\mathbf{Q} \right) \left( \mathbf{A}^{-1} \right)^{\prime} gives the
+first occasion the initial condition of the model, so the likelihood is
+the same as in dynr. This needs an invertible \mathbf{A}, which holds
+here.
 
 The two helper functions below are the same in every vignette of the
 package. `MxMat()` makes an OpenMx matrix from values and dynr-style
@@ -555,36 +552,36 @@ fit_mx_ssm <- FitMxSSM(
 )
 #> 
 Beginning initial fit attempt
-Fit attempt 0, fit=33425.1055806257, new current best! (was 33432.008312779)
-                                                                            
+Fit attempt 0, fit=83718.2828186554, new current best! (was 83721.0264783941)
+                                                                             
 #> 
-#>  Solution found!  Final fit=33425.106 (started at 33432.008)  (1 attempt(s): 1 valid, 0 errors)
+#>  Solution found!  Final fit=83718.283 (started at 83721.026)  (1 attempt(s): 1 valid, 0 errors)
 summary(fit_mx_ssm)
 #> Summary of lin_growth 
 #>  
 #> free parameters:
-#>        name matrix row col  Estimate  Std.Error A
-#> 1     theta      R   1   1 0.5936771 0.01083943  
-#> 2     mu0_0    mu0   1   1 0.6201697 0.03299043  
-#> 3     mu0_1    mu0   2   1 0.9860179 0.01783248  
-#> 4 sigma0_00 sigma0   1   1 1.8202777 0.06914596  
-#> 5 sigma0_01 sigma0   2   1 0.5573863 0.02815680  
-#> 6 sigma0_11 sigma0   2   2 0.5765853 0.02014077  
+#>        name matrix row col  Estimate   Std.Error A
+#> 1     theta      R   1   1 0.5953013 0.006874368  
+#> 2     mu0_0    mu0   1   1 0.6043436 0.021289172  
+#> 3     mu0_1    mu0   2   1 0.9984233 0.011286438  
+#> 4 sigma0_00 sigma0   1   1 1.9097376 0.045538447  
+#> 5 sigma0_01 sigma0   2   1 0.5926740 0.018313941  
+#> 6 sigma0_11 sigma0   2   2 0.5773043 0.012755262  
 #> 
 #> Model Statistics: 
 #>                |  Parameters  |  Degrees of Freedom  |  Fit (-2lnL units)
-#>        Model:              6                   9994              33425.11
+#>        Model:              6                  24994              83718.28
 #>    Saturated:             NA                     NA                    NA
 #> Independence:             NA                     NA                    NA
-#> Number of observations/statistics: 10000/10000
+#> Number of observations/statistics: 25000/25000
 #> 
 #> Information Criteria: 
 #>       |  df Penalty  |  Parameters Penalty  |  Sample-Size Adjusted
-#> AIC:       13437.11               33437.11                 33437.11
-#> BIC:      -58623.04               33480.37                 33461.30
+#> AIC:       33730.28               83730.28                 83730.29
+#> BIC:     -169386.73               83779.04                 83759.97
 #> To get additional fit indices, see help(mxRefModels)
-#> timestamp: 2026-11-02 05:51:22 
-#> Wall clock time: 17.71462 secs 
+#> timestamp: 2026-11-03 05:54:33 
+#> Wall clock time: 73.49235 secs 
 #> optimizer:  SLSQP 
 #> OpenMx version number: 2.22.11 
 #> Need help?  See help(mxSummary)
@@ -646,25 +643,25 @@ the state space model.
 `  data ``=`` ``data_wide`\
 `)`\
 `lavaan``::``summary``(``fit_lavaan``)`\
-`#> lavaan 0.7-3 ended normally after 30 iterations`\
+`#> lavaan 0.7-3 ended normally after 38 iterations`\
 `#> `\
 `#>   Estimator                                         ML`\
 `#>   Optimization method                           NLMINB`\
 `#>   Number of model parameters                        10`\
 `#>   Number of equality constraints                     4`\
 `#> `\
-`#>   Number of observations                          2000`\
+`#>   Number of observations                          5000`\
 `#> `\
 `#> Model Test User Model:`\
 `#>                                                       `\
-`#>   Test statistic                                22.264`\
+`#>   Test statistic                                 6.709`\
 `#>   Degrees of freedom                                14`\
-`#>   P-value (Chi-square)                           0.073`\
+`#>   P-value (Chi-square)                           0.945`\
 `#>                                                       `\
 `#>   Browne's residual (NT model-based) test             `\
-`#>   Test statistic                                22.030`\
+`#>   Test statistic                                 6.702`\
 `#>   Degrees of freedom                                14`\
-`#>   P-value (Chi-square)                           0.078`\
+`#>   P-value (Chi-square)                           0.946`\
 `#> `\
 `#> Parameter Estimates:`\
 `#> `\
@@ -690,22 +687,22 @@ the state space model.
 `#> Covariances:`\
 `#>                    Estimate  Std.Err  z-value  P(>|z|)`\
 `#>   eta0 ~~                                             `\
-`#>     eta1    (s0_0)    0.557    0.028   19.794    0.000`\
+`#>     eta1    (s0_0)    0.593    0.018   32.358    0.000`\
 `#> `\
 `#> Intercepts:`\
 `#>                    Estimate  Std.Err  z-value  P(>|z|)`\
-`#>     eta0    (m0_0)    0.620    0.033   18.800    0.000`\
-`#>     eta1    (m0_1)    0.986    0.018   55.295    0.000`\
+`#>     eta0    (m0_0)    0.604    0.021   28.383    0.000`\
+`#>     eta1    (m0_1)    0.998    0.011   88.468    0.000`\
 `#> `\
 `#> Variances:`\
 `#>                    Estimate  Std.Err  z-value  P(>|z|)`\
-`#>     eta0    (s0_0)    1.820    0.069   26.330    0.000`\
-`#>     eta1    (s0_1)    0.577    0.020   28.629    0.000`\
-`#>    .y1_0    (thet)    0.594    0.011   54.772    0.000`\
-`#>    .y1_1    (thet)    0.594    0.011   54.772    0.000`\
-`#>    .y1_2    (thet)    0.594    0.011   54.772    0.000`\
-`#>    .y1_3    (thet)    0.594    0.011   54.772    0.000`\
-`#>    .y1_4    (thet)    0.594    0.011   54.772    0.000`
+`#>     eta0    (s0_0)    1.910    0.046   41.949    0.000`\
+`#>     eta1    (s0_1)    0.577    0.013   45.260    0.000`\
+`#>    .y1_0    (thet)    0.595    0.007   86.603    0.000`\
+`#>    .y1_1    (thet)    0.595    0.007   86.603    0.000`\
+`#>    .y1_2    (thet)    0.595    0.007   86.603    0.000`\
+`#>    .y1_3    (thet)    0.595    0.007   86.603    0.000`\
+`#>    .y1_4    (thet)    0.595    0.007   86.603    0.000`
 
 ### OpenMx: Structural Equation Model
 
@@ -758,28 +755,28 @@ population values.
 `#> Summary of lin_growth_sem `\
 `#>  `\
 `#> free parameters:`\
-`#>        name matrix  row  col  Estimate  Std.Error A`\
-`#> 1     theta      S y1_0 y1_0 0.5936771 0.01083906  `\
-`#> 2 sigma0_00      S eta0 eta0 1.8202777 0.06913399  `\
-`#> 3 sigma0_01      S eta0 eta1 0.5573863 0.02815924  `\
-`#> 4 sigma0_11      S eta1 eta1 0.5765853 0.02013960  `\
-`#> 5     mu0_0      M    1 eta0 0.6201697 0.03298763  `\
-`#> 6     mu0_1      M    1 eta1 0.9860179 0.01783185  `\
+`#>        name matrix  row  col  Estimate   Std.Error A`\
+`#> 1     theta      S y1_0 y1_0 0.5953013 0.006873979  `\
+`#> 2 sigma0_00      S eta0 eta0 1.9097376 0.045526232  `\
+`#> 3 sigma0_01      S eta0 eta1 0.5926740 0.018315978  `\
+`#> 4 sigma0_11      S eta1 eta1 0.5773043 0.012755153  `\
+`#> 5     mu0_0      M    1 eta0 0.6043436 0.021292878  `\
+`#> 6     mu0_1      M    1 eta1 0.9984233 0.011285675  `\
 `#> `\
 `#> Model Statistics: `\
 `#>                |  Parameters  |  Degrees of Freedom  |  Fit (-2lnL units)`\
-`#>        Model:              6                   9994              33425.11`\
-`#>    Saturated:             20                   9980                    NA`\
-`#> Independence:             10                   9990                    NA`\
-`#> Number of observations/statistics: 2000/10000`\
+`#>        Model:              6                  24994              83718.28`\
+`#>    Saturated:             20                  24980                    NA`\
+`#> Independence:             10                  24990                    NA`\
+`#> Number of observations/statistics: 5000/25000`\
 `#> `\
 `#> Information Criteria: `\
 `#>       |  df Penalty  |  Parameters Penalty  |  Sample-Size Adjusted`\
-`#> AIC:       13437.11               33437.11                 33437.15`\
-`#> BIC:      -42538.31               33470.71                 33451.65`\
+`#> AIC:       33730.28               83730.28                 83730.30`\
+`#> BIC:     -129160.44               83769.39                 83750.32`\
 `#> To get additional fit indices, see help(mxRefModels)`\
-`#> timestamp: 2026-11-02 05:52:02 `\
-`#> Wall clock time: 0.01413393 secs `\
+`#> timestamp: 2026-11-03 05:57:29 `\
+`#> Wall clock time: 0.01909184 secs `\
 `#> optimizer:  SLSQP `\
 `#> OpenMx version number: 2.22.11 `\
 `#> Need help?  See help(mxSummary)`
@@ -788,11 +785,10 @@ population values.
 
 The linear growth curve model is also a multilevel (mixed-effects) model
 of the long data: the occasions are nested in individuals, the fixed
-intercept and slope are the means \\(\mu\_{\eta\_{0}}\\) and
-\\(\mu\_{\eta\_{1}}\\) (`mu0_0` and `mu0_1`), the random intercept and
-slope have the covariance matrix \\(\boldsymbol{\Sigma}\_{0}\\)
-(`sigma0_00`, `sigma0_01`, and `sigma0_11`), and the residual variance
-is \\(\theta\\).
+intercept and slope are the means \mu\_{\eta\_{0}} and \mu\_{\eta\_{1}}
+(`mu0_0` and `mu0_1`), the random intercept and slope have the
+covariance matrix \boldsymbol{\Sigma}\_{0} (`sigma0_00`, `sigma0_01`,
+and `sigma0_11`), and the residual variance is \theta.
 [`lme4::lmer()`](https://rdrr.io/pkg/lme4/man/lmer.html) fits it with a
 random intercept and a random slope of `time` for each `id` (Bates et
 al., 2015). `REML = FALSE` gives maximum likelihood estimates, as in the
@@ -810,27 +806,27 @@ other methods.
 `#>    Data: data`\
 `#> `\
 `#>       AIC       BIC    logLik -2*log(L)  df.resid `\
-`#>   33437.1   33480.4  -16712.6   33425.1      9994 `\
+`#>   83730.3   83779.0  -41859.1   83718.3     24994 `\
 `#> `\
 `#> Scaled residuals: `\
-`#>      Min       1Q   Median       3Q      Max `\
-`#> -2.93296 -0.55042  0.01077  0.54126  3.06952 `\
+`#>     Min      1Q  Median      3Q     Max `\
+`#> -3.3016 -0.5536  0.0084  0.5482  3.0849 `\
 `#> `\
 `#> Random effects:`\
 `#>  Groups   Name        Variance Std.Dev. Corr `\
-`#>  id       (Intercept) 1.8203   1.3492        `\
-`#>           time        0.5766   0.7593   0.54 `\
-`#>  Residual             0.5937   0.7705        `\
-`#> Number of obs: 10000, groups:  id, 2000`\
+`#>  id       (Intercept) 1.9097   1.3819        `\
+`#>           time        0.5773   0.7598   0.56 `\
+`#>  Residual             0.5953   0.7716        `\
+`#> Number of obs: 25000, groups:  id, 5000`\
 `#> `\
 `#> Fixed effects:`\
 `#>             Estimate Std. Error t value`\
-`#> (Intercept)  0.62017    0.03299    18.8`\
-`#> time         0.98602    0.01783    55.3`\
+`#> (Intercept)  0.60434    0.02129   28.38`\
+`#> time         0.99842    0.01129   88.47`\
 `#> `\
 `#> Correlation of Fixed Effects:`\
 `#>      (Intr)`\
-`#> time 0.373`
+`#> time 0.394`
 
 ## Population Values and Estimates
 
@@ -839,10 +835,9 @@ next to the estimates of one method. Bias is the estimate minus the
 population value. Because each model is fitted to a single simulated
 data set, this is the error of one estimate, not a Monte Carlo bias,
 which would average over many replications. The 95% confidence interval
-is the Wald interval, \\(\hat{\theta} \pm 1.96 \times \mathrm{SE}\\),
-unless the caption says otherwise, and `Covers` shows whether it
-contains the population value. The parameter names are the dynr names in
-every table.
+is the Wald interval, \hat{\theta} \pm 1.96 \times \mathrm{SE}, unless
+the caption says otherwise, and `Covers` shows whether it contains the
+population value. The parameter names are the dynr names in every table.
 
 \
 `EstimatesTable`` ``<-`` ``function``(``population``, ``estimate``, ``se``, ``ll`` ``=`` ``NULL``, ``ul`` ``=`` ``NULL``)`` ``{`\
@@ -893,12 +888,12 @@ every table.
 
 | Parameter | Population | Estimate |    SE |   Bias |  2.5% | 97.5% | Covers |
 |:----------|-----------:|---------:|------:|-------:|------:|------:|:-------|
-| mu0_0     |      0.615 |    0.620 | 0.033 |  0.005 | 0.555 | 0.685 | TRUE   |
-| mu0_1     |      1.006 |    0.986 | 0.018 | -0.020 | 0.951 | 1.021 | TRUE   |
-| sigma0_00 |      1.932 |    1.820 | 0.069 | -0.112 | 1.685 | 1.956 | TRUE   |
-| sigma0_01 |      0.618 |    0.557 | 0.028 | -0.061 | 0.502 | 0.613 | FALSE  |
-| sigma0_11 |      0.587 |    0.577 | 0.020 | -0.010 | 0.537 | 0.616 | TRUE   |
-| theta     |      0.600 |    0.594 | 0.011 | -0.006 | 0.572 | 0.615 | TRUE   |
+| mu0_0     |      0.615 |    0.604 | 0.021 | -0.011 | 0.563 | 0.646 | TRUE   |
+| mu0_1     |      1.006 |    0.998 | 0.011 | -0.008 | 0.976 | 1.020 | TRUE   |
+| sigma0_00 |      1.932 |    1.910 | 0.045 | -0.022 | 1.821 | 1.999 | TRUE   |
+| sigma0_01 |      0.618 |    0.593 | 0.018 | -0.025 | 0.557 | 0.628 | TRUE   |
+| sigma0_11 |      0.587 |    0.577 | 0.013 | -0.010 | 0.552 | 0.602 | TRUE   |
+| theta     |      0.600 |    0.595 | 0.007 | -0.005 | 0.582 | 0.609 | TRUE   |
 
 Population values and dynr estimates (one simulated data set) {.table}
 
@@ -922,12 +917,12 @@ Population values and dynr estimates (one simulated data set) {.table}
 
 | Parameter | Population | Estimate |    SE |   Bias |  2.5% | 97.5% | Covers |
 |:----------|-----------:|---------:|------:|-------:|------:|------:|:-------|
-| mu0_0     |      0.615 |    0.620 | 0.033 |  0.005 | 0.556 | 0.685 | TRUE   |
-| mu0_1     |      1.006 |    0.986 | 0.018 | -0.020 | 0.951 | 1.021 | TRUE   |
-| sigma0_00 |      1.932 |    1.820 | 0.069 | -0.112 | 1.685 | 1.956 | TRUE   |
-| sigma0_01 |      0.618 |    0.557 | 0.028 | -0.061 | 0.502 | 0.613 | FALSE  |
-| sigma0_11 |      0.587 |    0.577 | 0.020 | -0.010 | 0.537 | 0.616 | TRUE   |
-| theta     |      0.600 |    0.594 | 0.011 | -0.006 | 0.572 | 0.615 | TRUE   |
+| mu0_0     |      0.615 |    0.604 | 0.021 | -0.011 | 0.563 | 0.646 | TRUE   |
+| mu0_1     |      1.006 |    0.998 | 0.011 | -0.008 | 0.976 | 1.021 | TRUE   |
+| sigma0_00 |      1.932 |    1.910 | 0.046 | -0.022 | 1.820 | 1.999 | TRUE   |
+| sigma0_01 |      0.618 |    0.593 | 0.018 | -0.025 | 0.557 | 0.629 | TRUE   |
+| sigma0_11 |      0.587 |    0.577 | 0.013 | -0.010 | 0.552 | 0.602 | TRUE   |
+| theta     |      0.600 |    0.595 | 0.007 | -0.005 | 0.582 | 0.609 | TRUE   |
 
 Population values and OpenMx state space estimates (one simulated data
 set) {.table}
@@ -952,12 +947,12 @@ set) {.table}
 
 | Parameter | Population | Estimate |    SE |   Bias |  2.5% | 97.5% | Covers |
 |:----------|-----------:|---------:|------:|-------:|------:|------:|:-------|
-| mu0_0     |      0.615 |    0.620 | 0.033 |  0.005 | 0.556 | 0.685 | TRUE   |
-| mu0_1     |      1.006 |    0.986 | 0.018 | -0.020 | 0.951 | 1.021 | TRUE   |
-| sigma0_00 |      1.932 |    1.820 | 0.069 | -0.112 | 1.685 | 1.956 | TRUE   |
-| sigma0_01 |      0.618 |    0.557 | 0.028 | -0.061 | 0.502 | 0.613 | FALSE  |
-| sigma0_11 |      0.587 |    0.577 | 0.020 | -0.010 | 0.537 | 0.616 | TRUE   |
-| theta     |      0.600 |    0.594 | 0.011 | -0.006 | 0.572 | 0.615 | TRUE   |
+| mu0_0     |      0.615 |    0.604 | 0.021 | -0.011 | 0.563 | 0.646 | TRUE   |
+| mu0_1     |      1.006 |    0.998 | 0.011 | -0.008 | 0.976 | 1.021 | TRUE   |
+| sigma0_00 |      1.932 |    1.910 | 0.046 | -0.022 | 1.821 | 1.999 | TRUE   |
+| sigma0_01 |      0.618 |    0.593 | 0.018 | -0.025 | 0.557 | 0.629 | TRUE   |
+| sigma0_11 |      0.587 |    0.577 | 0.013 | -0.010 | 0.552 | 0.602 | TRUE   |
+| theta     |      0.600 |    0.595 | 0.007 | -0.005 | 0.582 | 0.609 | TRUE   |
 
 Population values and lavaan estimates (one simulated data set) {.table}
 
@@ -978,12 +973,12 @@ Population values and lavaan estimates (one simulated data set) {.table}
 
 | Parameter | Population | Estimate |    SE |   Bias |  2.5% | 97.5% | Covers |
 |:----------|-----------:|---------:|------:|-------:|------:|------:|:-------|
-| mu0_0     |      0.615 |    0.620 | 0.033 |  0.005 | 0.556 | 0.685 | TRUE   |
-| mu0_1     |      1.006 |    0.986 | 0.018 | -0.020 | 0.951 | 1.021 | TRUE   |
-| sigma0_00 |      1.932 |    1.820 | 0.069 | -0.112 | 1.685 | 1.956 | TRUE   |
-| sigma0_01 |      0.618 |    0.557 | 0.028 | -0.061 | 0.502 | 0.613 | FALSE  |
-| sigma0_11 |      0.587 |    0.577 | 0.020 | -0.010 | 0.537 | 0.616 | TRUE   |
-| theta     |      0.600 |    0.594 | 0.011 | -0.006 | 0.572 | 0.615 | TRUE   |
+| mu0_0     |      0.615 |    0.604 | 0.021 | -0.011 | 0.563 | 0.646 | TRUE   |
+| mu0_1     |      1.006 |    0.998 | 0.011 | -0.008 | 0.976 | 1.021 | TRUE   |
+| sigma0_00 |      1.932 |    1.910 | 0.046 | -0.022 | 1.821 | 1.999 | TRUE   |
+| sigma0_01 |      0.618 |    0.593 | 0.018 | -0.025 | 0.557 | 0.629 | TRUE   |
+| sigma0_11 |      0.587 |    0.577 | 0.013 | -0.010 | 0.552 | 0.602 | TRUE   |
+| theta     |      0.600 |    0.595 | 0.007 | -0.005 | 0.582 | 0.609 | TRUE   |
 
 Population values and OpenMx SEM estimates (one simulated data set)
 {.table}
@@ -1049,12 +1044,12 @@ standard deviation, squared; lme4 has no interval for a covariance.
 
 | Parameter | Population | Estimate |    SE |   Bias |  2.5% | 97.5% | Covers |
 |:----------|-----------:|---------:|------:|-------:|------:|------:|:-------|
-| mu0_0     |      0.615 |    0.620 | 0.033 |  0.005 | 0.556 | 0.685 | TRUE   |
-| mu0_1     |      1.006 |    0.986 | 0.018 | -0.020 | 0.951 | 1.021 | TRUE   |
-| sigma0_00 |      1.932 |    1.820 |    NA | -0.112 | 1.690 | 1.961 | TRUE   |
-| sigma0_01 |      0.618 |    0.557 |    NA | -0.061 |    NA |    NA | NA     |
-| sigma0_11 |      0.587 |    0.577 |    NA | -0.010 | 0.539 | 0.618 | TRUE   |
-| theta     |      0.600 |    0.594 |    NA | -0.006 | 0.573 | 0.615 | TRUE   |
+| mu0_0     |      0.615 |    0.604 | 0.021 | -0.011 | 0.563 | 0.646 | TRUE   |
+| mu0_1     |      1.006 |    0.998 | 0.011 | -0.008 | 0.976 | 1.021 | TRUE   |
+| sigma0_00 |      1.932 |    1.910 |    NA | -0.022 | 1.823 | 2.001 | TRUE   |
+| sigma0_01 |      0.618 |    0.593 |    NA | -0.025 |    NA |    NA | NA     |
+| sigma0_11 |      0.587 |    0.577 |    NA | -0.010 | 0.553 | 0.603 | TRUE   |
+| theta     |      0.600 |    0.595 |    NA | -0.005 | 0.582 | 0.609 | TRUE   |
 
 Population values and lme4 estimates (one simulated data set); intervals
 for the variances: profile likelihood {.table}
@@ -1082,12 +1077,12 @@ same likelihood, so their estimates should agree closely.
 
 | Parameter | Population |  dynr | OpenMx (SSM) | lavaan | OpenMx (SEM) |  lme4 |
 |:----------|-----------:|------:|-------------:|-------:|-------------:|------:|
-| mu0_0     |      0.615 | 0.620 |        0.620 |  0.620 |        0.620 | 0.620 |
-| mu0_1     |      1.006 | 0.986 |        0.986 |  0.986 |        0.986 | 0.986 |
-| sigma0_00 |      1.932 | 1.820 |        1.820 |  1.820 |        1.820 | 1.820 |
-| sigma0_01 |      0.618 | 0.557 |        0.557 |  0.557 |        0.557 | 0.557 |
+| mu0_0     |      0.615 | 0.604 |        0.604 |  0.604 |        0.604 | 0.604 |
+| mu0_1     |      1.006 | 0.998 |        0.998 |  0.998 |        0.998 | 0.998 |
+| sigma0_00 |      1.932 | 1.910 |        1.910 |  1.910 |        1.910 | 1.910 |
+| sigma0_01 |      0.618 | 0.593 |        0.593 |  0.593 |        0.593 | 0.593 |
 | sigma0_11 |      0.587 | 0.577 |        0.577 |  0.577 |        0.577 | 0.577 |
-| theta     |      0.600 | 0.594 |        0.594 |  0.594 |        0.594 | 0.594 |
+| theta     |      0.600 | 0.595 |        0.595 |  0.595 |        0.595 | 0.595 |
 
 Population values and the estimates of every method {.table
 style="width:99%;"}

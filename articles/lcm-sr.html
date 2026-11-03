@@ -5,13 +5,8 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>The Latent Curve Model with Structured Residuals • simStateSpace</title>
-<!-- mathjax math --><script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js" integrity="sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI=" crossorigin="anonymous"></script><script>
-  window.MathJax = {
-    chtml: {
-      fontURL: "https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/output/chtml/fonts/woff-v2"
-    }
-  };
-</script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- katex math --><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" integrity="sha384-nB0miv6/jRmo5UMMR1wu3Gz6NLsoTkbqJghGIsx//Rlm+ZU03BU6SQNC66uf4l5+" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" integrity="sha384-7zkQWkzuo3B5mTepMUcHkMB5jZaolc2xDwL6VFqjFALcbeS9Ggm/Yr2r3Dy4lfFg" crossorigin="anonymous"></script><script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" integrity="sha384-43gviWU0YVjaDtb/GhzOouOXtZMP/7XUzwPTstBeZFe/+rCMvRwr4yROQP43s0Xk" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script><script src="../katex-auto.js"></script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/Roboto-0.4.10/font.css" rel="stylesheet">
 <link href="../deps/Roboto_Mono-0.4.10/font.css" rel="stylesheet">
@@ -64,7 +59,7 @@
                         <h4 data-toc-skip class="author">Ivan Jacob
 Agaloos Pesigan</h4>
             
-            <h4 data-toc-skip class="date">2026-11-02</h4>
+            <h4 data-toc-skip class="date">2026-11-03</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/jeksterslab/simStateSpace/blob/main/vignettes/lcm-sr.Rmd"><code>vignettes/lcm-sr.Rmd</code></a></small>
       <div class="d-none name"><code>lcm-sr.Rmd</code></div>
@@ -109,7 +104,7 @@ detail.</p>
 <div class="section level2">
 <h2 id="model">Model<a class="anchor" aria-label="anchor" href="#model"></a>
 </h2>
-<p>The measurement model is given by <span class="math display">\[\left(
+<p>The measurement model is given by <span class="math display">\left(
   \begin{array}{c}
     Y_{1_{i, t}} \\
     Y_{2_{i, t}} \\
@@ -131,19 +126,19 @@ detail.</p>
     \eta_{5_{i, t}} \\
     \eta_{6_{i, t}} \\
   \end{array}
-  \right)\]</span> where <span class="math inline">\(Y_{1_{i,
-t}}\)</span> and <span class="math inline">\(Y_{2_{i, t}}\)</span> are
-the two observed variables at time <span class="math inline">\(t\)</span> and individual <span class="math inline">\(i\)</span>, <span class="math inline">\(\eta_{1_{i, t}}\)</span> and <span class="math inline">\(\eta_{2_{i, t}}\)</span> are the current levels of
-the two trajectories, <span class="math inline">\(\eta_{3_{i,
-t}}\)</span> and <span class="math inline">\(\eta_{4_{i, t}}\)</span>
-are their slopes, and <span class="math inline">\(\eta_{5_{i,
-t}}\)</span> and <span class="math inline">\(\eta_{6_{i, t}}\)</span>
-are the structured residuals.</p>
+  \right)</span> where <span class="math inline">Y_{1_{i, t}}</span> and
+<span class="math inline">Y_{2_{i, t}}</span> are the two observed
+variables at time <span class="math inline">t</span> and individual
+<span class="math inline">i</span>, <span class="math inline">\eta_{1_{i, t}}</span> and <span class="math inline">\eta_{2_{i, t}}</span> are the current levels of the
+two trajectories, <span class="math inline">\eta_{3_{i, t}}</span> and
+<span class="math inline">\eta_{4_{i, t}}</span> are their slopes, and
+<span class="math inline">\eta_{5_{i, t}}</span> and <span class="math inline">\eta_{6_{i, t}}</span> are the structured
+residuals.</p>
 <p>In words, each observed score is the point on the individual’s
 trajectory plus the individual’s deviation from it on that occasion. As
 in most applications of the LCM-SR, there is no separate measurement
 error.</p>
-<p>The dynamic structure is given by <span class="math display">\[\left(
+<p>The dynamic structure is given by <span class="math display">\left(
   \begin{array}{c}
     \eta_{1_{i, t}} \\
     \eta_{2_{i, t}} \\
@@ -204,18 +199,18 @@ error.</p>
     \psi_{65} &amp; \psi_{66} \\
   \end{array}
   \right)
-  \right) .\]</span></p>
+  \right) .</span></p>
 <p>In words, the first four rows are the linear growth curve model for
 each variable: the level at each occasion is the previous level plus the
 slope, and the slope stays the same, with no process noise. The last two
-rows are a vector autoregressive model for the residuals: <span class="math inline">\(\beta_{55}\)</span> and <span class="math inline">\(\beta_{66}\)</span> are the autoregressive
-effects, how much of a deviation from the trajectory carries over to the
-next occasion, and <span class="math inline">\(\beta_{56}\)</span> and
-<span class="math inline">\(\beta_{65}\)</span> are the cross-lagged
-effects: <span class="math inline">\(\beta_{56}\)</span> is the effect
-of a deviation in the second variable on the deviation in the first
-variable at the next occasion, and <span class="math inline">\(\beta_{65}\)</span> the reverse. <span class="math inline">\(\psi_{55}\)</span>, <span class="math inline">\(\psi_{66}\)</span>, and <span class="math inline">\(\psi_{56}\)</span> are the variances and
-covariance of the new part of the deviations.</p>
+rows are a vector autoregressive model for the residuals: <span class="math inline">\beta_{55}</span> and <span class="math inline">\beta_{66}</span> are the autoregressive effects,
+how much of a deviation from the trajectory carries over to the next
+occasion, and <span class="math inline">\beta_{56}</span> and <span class="math inline">\beta_{65}</span> are the cross-lagged effects:
+<span class="math inline">\beta_{56}</span> is the effect of a deviation
+in the second variable on the deviation in the first variable at the
+next occasion, and <span class="math inline">\beta_{65}</span> the
+reverse. <span class="math inline">\psi_{55}</span>, <span class="math inline">\psi_{66}</span>, and <span class="math inline">\psi_{56}</span> are the variances and covariance of
+the new part of the deviations.</p>
 <p>The initial condition holds the means, variances, and covariances of
 the intercepts and slopes (the levels at the first occasion are the
 intercepts), and the variances and covariance of the residuals at the

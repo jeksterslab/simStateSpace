@@ -5,13 +5,8 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>The Ornstein-Uhlenbeck Model • simStateSpace</title>
-<!-- mathjax math --><script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js" integrity="sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI=" crossorigin="anonymous"></script><script>
-  window.MathJax = {
-    chtml: {
-      fontURL: "https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/output/chtml/fonts/woff-v2"
-    }
-  };
-</script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- katex math --><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" integrity="sha384-nB0miv6/jRmo5UMMR1wu3Gz6NLsoTkbqJghGIsx//Rlm+ZU03BU6SQNC66uf4l5+" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" integrity="sha384-7zkQWkzuo3B5mTepMUcHkMB5jZaolc2xDwL6VFqjFALcbeS9Ggm/Yr2r3Dy4lfFg" crossorigin="anonymous"></script><script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" integrity="sha384-43gviWU0YVjaDtb/GhzOouOXtZMP/7XUzwPTstBeZFe/+rCMvRwr4yROQP43s0Xk" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script><script src="../katex-auto.js"></script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/Roboto-0.4.10/font.css" rel="stylesheet">
 <link href="../deps/Roboto_Mono-0.4.10/font.css" rel="stylesheet">
@@ -64,7 +59,7 @@
                         <h4 data-toc-skip class="author">Ivan Jacob
 Agaloos Pesigan</h4>
             
-            <h4 data-toc-skip class="date">2026-11-02</h4>
+            <h4 data-toc-skip class="date">2026-11-03</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/jeksterslab/simStateSpace/blob/main/vignettes/ou.Rmd"><code>vignettes/ou.Rmd</code></a></small>
       <div class="d-none name"><code>ou.Rmd</code></div>
@@ -102,7 +97,7 @@ discrete-time versions.</p>
 <div class="section level2">
 <h2 id="model">Model<a class="anchor" aria-label="anchor" href="#model"></a>
 </h2>
-<p>The measurement model is given by <span class="math display">\[\mathbf{y}_{i, t}
+<p>The measurement model is given by <span class="math display">\mathbf{y}_{i, t}
   =
   \boldsymbol{\nu}
   +
@@ -119,28 +114,30 @@ discrete-time versions.</p>
   \left(
   \mathbf{0},
   \boldsymbol{\Theta}
-  \right)\]</span> where <span class="math inline">\(\mathbf{y}_{i,
-t}\)</span>, <span class="math inline">\(\boldsymbol{\eta}_{i,
-t}\)</span>, and <span class="math inline">\(\boldsymbol{\varepsilon}_{i, t}\)</span> are
-random variables and <span class="math inline">\(\boldsymbol{\nu}\)</span>, <span class="math inline">\(\boldsymbol{\Lambda}\)</span>, and <span class="math inline">\(\boldsymbol{\Theta}\)</span> are model parameters.
-<span class="math inline">\(\mathbf{y}_{i, t}\)</span> represents a
-vector of observed random variables, <span class="math inline">\(\boldsymbol{\eta}_{i, t}\)</span> a vector of
-latent random variables, and <span class="math inline">\(\boldsymbol{\varepsilon}_{i, t}\)</span> a vector
-of random measurement errors, at time <span class="math inline">\(t\)</span> and individual <span class="math inline">\(i\)</span>. <span class="math inline">\(\boldsymbol{\nu}\)</span> denotes a vector of
-intercepts, <span class="math inline">\(\boldsymbol{\Lambda}\)</span> a
-matrix of factor loadings, and <span class="math inline">\(\boldsymbol{\Theta}\)</span> the covariance matrix
-of <span class="math inline">\(\boldsymbol{\varepsilon}\)</span>.</p>
+  \right)</span> where <span class="math inline">\mathbf{y}_{i,
+t}</span>, <span class="math inline">\boldsymbol{\eta}_{i, t}</span>,
+and <span class="math inline">\boldsymbol{\varepsilon}_{i, t}</span> are
+random variables and <span class="math inline">\boldsymbol{\nu}</span>,
+<span class="math inline">\boldsymbol{\Lambda}</span>, and <span class="math inline">\boldsymbol{\Theta}</span> are model parameters.
+<span class="math inline">\mathbf{y}_{i, t}</span> represents a vector
+of observed random variables, <span class="math inline">\boldsymbol{\eta}_{i, t}</span> a vector of latent
+random variables, and <span class="math inline">\boldsymbol{\varepsilon}_{i, t}</span> a vector of
+random measurement errors, at time <span class="math inline">t</span>
+and individual <span class="math inline">i</span>. <span class="math inline">\boldsymbol{\nu}</span> denotes a vector of
+intercepts, <span class="math inline">\boldsymbol{\Lambda}</span> a
+matrix of factor loadings, and <span class="math inline">\boldsymbol{\Theta}</span> the covariance matrix of
+<span class="math inline">\boldsymbol{\varepsilon}</span>.</p>
 <p>In words, each observed variable is an intercept plus a weighted
 combination of the latent variables plus measurement error. The latent
-variables <span class="math inline">\(\boldsymbol{\eta}_{i, t}\)</span>
-are the quantities we care about (for example, a person’s true stress
-level), and the observed variables <span class="math inline">\(\mathbf{y}_{i, t}\)</span> are noisy measurements
-of them. Separating measurement error from true change is the main
-reason to use a state space model: measurement error affects only the
-occasion it occurs on, while changes in the latent variables carry over
-in time.</p>
+variables <span class="math inline">\boldsymbol{\eta}_{i, t}</span> are
+the quantities we care about (for example, a person’s true stress
+level), and the observed variables <span class="math inline">\mathbf{y}_{i, t}</span> are noisy measurements of
+them. Separating measurement error from true change is the main reason
+to use a state space model: measurement error affects only the occasion
+it occurs on, while changes in the latent variables carry over in
+time.</p>
 <p>An alternative representation of the measurement error is given by
-<span class="math display">\[\boldsymbol{\varepsilon}_{i, t}
+<span class="math display">\boldsymbol{\varepsilon}_{i, t}
   =
   \boldsymbol{\Theta}^{\frac{1}{2}}
   \mathbf{z}_{i, t},
@@ -153,12 +150,12 @@ in time.</p>
   \left(
   \mathbf{0},
   \mathbf{I}
-  \right)\]</span> where <span class="math inline">\(\mathbf{z}_{i,
-t}\)</span> is a vector of independent standard normal random variables
-and <span class="math inline">\(\left( \boldsymbol{\Theta}^{\frac{1}{2}}
+  \right)</span> where <span class="math inline">\mathbf{z}_{i,
+t}</span> is a vector of independent standard normal random variables
+and <span class="math inline">\left( \boldsymbol{\Theta}^{\frac{1}{2}}
 \right) \left( \boldsymbol{\Theta}^{\frac{1}{2}} \right)^{\prime} =
-\boldsymbol{\Theta}\)</span> .</p>
-<p>The dynamic structure is given by <span class="math display">\[\mathrm{d} \boldsymbol{\eta}_{i, t}
+\boldsymbol{\Theta}</span> .</p>
+<p>The dynamic structure is given by <span class="math display">\mathrm{d} \boldsymbol{\eta}_{i, t}
   =
   \boldsymbol{\Phi}
   \left(
@@ -170,34 +167,33 @@ and <span class="math inline">\(\left( \boldsymbol{\Theta}^{\frac{1}{2}}
   +
   \boldsymbol{\Sigma}^{\frac{1}{2}}
   \mathrm{d}
-  \mathbf{W}_{i, t}\]</span> where <span class="math inline">\(\boldsymbol{\mu}\)</span> is the long-term mean or
-equilibrium level, <span class="math inline">\(\boldsymbol{\Phi}\)</span> is the rate of mean
-reversion, determining how quickly the variable returns to its mean,
-<span class="math inline">\(\boldsymbol{\Sigma}\)</span> is the matrix
-of volatility or randomness in the process, and <span class="math inline">\(\mathrm{d}\boldsymbol{W}\)</span> is a Wiener
-process or Brownian motion, which represents random fluctuations.</p>
-<p>In words, <span class="math inline">\(\mathrm{d}
-\boldsymbol{\eta}_{i, t}\)</span> is the change in the latent variables
-over a very short time <span class="math inline">\(\mathrm{d}t\)</span>.
-The change has two parts: a pull toward the equilibrium <span class="math inline">\(\boldsymbol{\mu}\)</span>, proportional to the
-distance <span class="math inline">\(\boldsymbol{\eta}_{i, t} -
-\boldsymbol{\mu}\)</span>, and random fluctuations with covariance <span class="math inline">\(\boldsymbol{\Sigma}\)</span> per unit time.</p>
+  \mathbf{W}_{i, t}</span> where <span class="math inline">\boldsymbol{\mu}</span> is the long-term mean or
+equilibrium level, <span class="math inline">\boldsymbol{\Phi}</span> is
+the rate of mean reversion, determining how quickly the variable returns
+to its mean, <span class="math inline">\boldsymbol{\Sigma}</span> is the
+matrix of volatility or randomness in the process, and <span class="math inline">\mathrm{d}\boldsymbol{W}</span> is a Wiener process
+or Brownian motion, which represents random fluctuations.</p>
+<p>In words, <span class="math inline">\mathrm{d} \boldsymbol{\eta}_{i,
+t}</span> is the change in the latent variables over a very short time
+<span class="math inline">\mathrm{d}t</span>. The change has two parts:
+a pull toward the equilibrium <span class="math inline">\boldsymbol{\mu}</span>, proportional to the
+distance <span class="math inline">\boldsymbol{\eta}_{i, t} -
+\boldsymbol{\mu}</span>, and random fluctuations with covariance <span class="math inline">\boldsymbol{\Sigma}</span> per unit time.</p>
 <ul>
-<li>With this sign convention, a diagonal element <span class="math inline">\(\phi_{jj}\)</span> is negative for a variable that
+<li>With this sign convention, a diagonal element <span class="math inline">\phi_{jj}</span> is negative for a variable that
 returns to its equilibrium. The more negative it is, the faster the
 return.</li>
-<li>An off-diagonal element <span class="math inline">\(\phi_{jk}\)</span> is the effect of the distance
-of variable <span class="math inline">\(k\)</span> from its equilibrium
-on the rate of change of variable <span class="math inline">\(j\)</span>. As in the discrete-time models, the
-row is the outcome and the column is the predictor.</li>
+<li>An off-diagonal element <span class="math inline">\phi_{jk}</span>
+is the effect of the distance of variable <span class="math inline">k</span> from its equilibrium on the rate of change
+of variable <span class="math inline">j</span>. As in the discrete-time
+models, the row is the outcome and the column is the predictor.</li>
 </ul>
-<p>For the process to settle around <span class="math inline">\(\boldsymbol{\mu}\)</span>, all eigenvalues of
-<span class="math inline">\(\boldsymbol{\Phi}\)</span> must have
-negative real parts.</p>
-<p>Over a time interval <span class="math inline">\(\Delta t\)</span>,
-the OU model implies a discrete-time vector autoregressive model with
-transition matrix <span class="math inline">\(\boldsymbol{\beta} = \exp
-\left( \boldsymbol{\Phi} \Delta t \right)\)</span>, the matrix
+<p>For the process to settle around <span class="math inline">\boldsymbol{\mu}</span>, all eigenvalues of <span class="math inline">\boldsymbol{\Phi}</span> must have negative real
+parts.</p>
+<p>Over a time interval <span class="math inline">\Delta t</span>, the
+OU model implies a discrete-time vector autoregressive model with
+transition matrix <span class="math inline">\boldsymbol{\beta} = \exp
+\left( \boldsymbol{\Phi} \Delta t \right)</span>, the matrix
 exponential. <code><a href="../reference/SimSSMOUFixed.html">SimSSMOUFixed()</a></code> uses this exact discretization
 to simulate the data, so no approximation error is introduced.</p>
 <div class="section level3">
@@ -207,27 +203,27 @@ to simulate the data, so no approximation error is introduced.</p>
 <img src="fig-vignettes-ou-ssm.png" style="width:100.0%" alt="State space diagram of the OU model."><div class="figcaption">State space diagram of the OU model.</div>
 </div>
 <p>The model in state space form, at the first three occasions of
-measurement, <span class="math inline">\(\Delta t\)</span> apart (<span class="math inline">\(t = 0, \Delta t, 2 \Delta t\)</span>), with every
+measurement, <span class="math inline">\Delta t</span> apart (<span class="math inline">t = 0, \Delta t, 2 \Delta t</span>), with every
 element of the state drawn. Squares are observed variables and circles
-are latent variables. Each latent variable <span class="math inline">\(\eta_{j, t}\)</span> has one indicator <span class="math inline">\(Y_{j, t}\)</span> with a loading of 1, and
-measurement error <span class="math inline">\(\varepsilon_{j,
-t}\)</span> with variance <span class="math inline">\(\theta_{jj}\)</span>. The arrows between occasions
-are the elements of <span class="math inline">\(\boldsymbol{\beta} =
-\exp \left( \boldsymbol{\Phi} \Delta t \right)\)</span>. Because <span class="math inline">\(\boldsymbol{\Phi}\)</span> is lower triangular in
-this example, so is <span class="math inline">\(\boldsymbol{\beta}\)</span>: <span class="math inline">\(\eta_{1}\)</span> affects <span class="math inline">\(\eta_{2}\)</span> and <span class="math inline">\(\eta_{3}\)</span>, and <span class="math inline">\(\eta_{2}\)</span> affects <span class="math inline">\(\eta_{3}\)</span>. <span class="math inline">\(\zeta_{j, t}\)</span> is the process noise from
-<span class="math inline">\(t = \Delta t\)</span> on. Its covariance
-matrix <span class="math inline">\(\boldsymbol{\Psi}\)</span> follows
-from <span class="math inline">\(\boldsymbol{\Phi}\)</span>, <span class="math inline">\(\boldsymbol{\Sigma}\)</span>, and <span class="math inline">\(\Delta t\)</span> and is full, so the process
-noise terms covary (the gray arrows <span class="math inline">\(\psi_{jk}\)</span>). A loop on a variable is its
-variance and a curved two-headed arrow a covariance. At <span class="math inline">\(t = 0\)</span>, the initial condition <span class="math inline">\(\boldsymbol{\eta}_{0} \sim \mathcal{N} \left(
-\boldsymbol{\mu}_{0}, \boldsymbol{\Sigma}_{0} \right)\)</span> gives the
-variances <span class="math inline">\(\sigma_{jj}\)</span> and
-covariances <span class="math inline">\(\sigma_{jk}\)</span> of the
-latent variables. The exact discretization gives <span class="math inline">\(\boldsymbol{\beta}\)</span> and <span class="math inline">\(\boldsymbol{\Psi}\)</span> from <span class="math inline">\(\boldsymbol{\Phi}\)</span>, <span class="math inline">\(\boldsymbol{\Sigma}\)</span>, and <span class="math inline">\(\Delta t\)</span>; <span class="math inline">\(\boldsymbol{\Lambda}\)</span> maps the state to
-the observed variables, and <span class="math inline">\(\boldsymbol{\Theta}\)</span> is the covariance
-matrix of the measurement error. <code><a href="../reference/SimSSMOUFixed.html">SimSSMOUFixed()</a></code> takes
+are latent variables. Each latent variable <span class="math inline">\eta_{j, t}</span> has one indicator <span class="math inline">Y_{j, t}</span> with a loading of 1, and measurement
+error <span class="math inline">\varepsilon_{j, t}</span> with variance
+<span class="math inline">\theta_{jj}</span>. The arrows between
+occasions are the elements of <span class="math inline">\boldsymbol{\beta} = \exp \left( \boldsymbol{\Phi}
+\Delta t \right)</span>. Because <span class="math inline">\boldsymbol{\Phi}</span> is lower triangular in this
+example, so is <span class="math inline">\boldsymbol{\beta}</span>:
+<span class="math inline">\eta_{1}</span> affects <span class="math inline">\eta_{2}</span> and <span class="math inline">\eta_{3}</span>, and <span class="math inline">\eta_{2}</span> affects <span class="math inline">\eta_{3}</span>. <span class="math inline">\zeta_{j,
+t}</span> is the process noise from <span class="math inline">t = \Delta
+t</span> on. Its covariance matrix <span class="math inline">\boldsymbol{\Psi}</span> follows from <span class="math inline">\boldsymbol{\Phi}</span>, <span class="math inline">\boldsymbol{\Sigma}</span>, and <span class="math inline">\Delta t</span> and is full, so the process noise
+terms covary (the gray arrows <span class="math inline">\psi_{jk}</span>). A loop on a variable is its
+variance and a curved two-headed arrow a covariance. At <span class="math inline">t = 0</span>, the initial condition <span class="math inline">\boldsymbol{\eta}_{0} \sim \mathcal{N} \left(
+\boldsymbol{\mu}_{0}, \boldsymbol{\Sigma}_{0} \right)</span> gives the
+variances <span class="math inline">\sigma_{jj}</span> and covariances
+<span class="math inline">\sigma_{jk}</span> of the latent variables.
+The exact discretization gives <span class="math inline">\boldsymbol{\beta}</span> and <span class="math inline">\boldsymbol{\Psi}</span> from <span class="math inline">\boldsymbol{\Phi}</span>, <span class="math inline">\boldsymbol{\Sigma}</span>, and <span class="math inline">\Delta t</span>; <span class="math inline">\boldsymbol{\Lambda}</span> maps the state to the
+observed variables, and <span class="math inline">\boldsymbol{\Theta}</span> is the covariance matrix
+of the measurement error. <code><a href="../reference/SimSSMOUFixed.html">SimSSMOUFixed()</a></code> takes
 <code>phi</code>, <code>lambda</code>, <code>delta_t</code>,
-<code>mu0</code>, and the Cholesky factors of <span class="math inline">\(\boldsymbol{\Sigma}\)</span>, <span class="math inline">\(\boldsymbol{\Theta}\)</span>, and <span class="math inline">\(\boldsymbol{\Sigma}_{0}\)</span>
+<code>mu0</code>, and the Cholesky factors of <span class="math inline">\boldsymbol{\Sigma}</span>, <span class="math inline">\boldsymbol{\Theta}</span>, and <span class="math inline">\boldsymbol{\Sigma}_{0}</span>
 (<code>sigma_l</code>, <code>theta_l</code>, and <code>sigma0_l</code>),
 and does the discretization itself.</p>
 </div>
@@ -238,11 +234,11 @@ and does the discretization itself.</p>
 <div class="section level3">
 <h3 id="notation">Notation<a class="anchor" aria-label="anchor" href="#notation"></a>
 </h3>
-<p>Let <span class="math inline">\(t = 1000\)</span> be the number of
-time points and <span class="math inline">\(n = 100\)</span> be the
-number of individuals.</p>
-<p>Let the measurement model intercept vector <span class="math inline">\(\boldsymbol{\nu}\)</span> be given by</p>
-<p><span class="math display">\[\boldsymbol{\nu}
+<p>Let <span class="math inline">t = 1000</span> be the number of time
+points and <span class="math inline">n = 100</span> be the number of
+individuals.</p>
+<p>Let the measurement model intercept vector <span class="math inline">\boldsymbol{\nu}</span> be given by</p>
+<p><span class="math display">\boldsymbol{\nu}
 =
 \left(
 \begin{array}{c}
@@ -250,9 +246,9 @@ number of individuals.</p>
   0 \\
   0 \\
 \end{array}
-\right) .\]</span></p>
-<p>Let the factor loadings matrix <span class="math inline">\(\boldsymbol{\Lambda}\)</span> be given by</p>
-<p><span class="math display">\[\boldsymbol{\Lambda}
+\right) .</span></p>
+<p>Let the factor loadings matrix <span class="math inline">\boldsymbol{\Lambda}</span> be given by</p>
+<p><span class="math display">\boldsymbol{\Lambda}
 =
 \left(
 \begin{array}{ccc}
@@ -260,9 +256,9 @@ number of individuals.</p>
   0 &amp; 1 &amp; 0 \\
   0 &amp; 0 &amp; 1 \\
 \end{array}
-\right) .\]</span></p>
-<p>Let the measurement error covariance matrix <span class="math inline">\(\boldsymbol{\Theta}\)</span> be given by</p>
-<p><span class="math display">\[\boldsymbol{\Theta}
+\right) .</span></p>
+<p>Let the measurement error covariance matrix <span class="math inline">\boldsymbol{\Theta}</span> be given by</p>
+<p><span class="math display">\boldsymbol{\Theta}
 =
 \left(
 \begin{array}{ccc}
@@ -270,17 +266,15 @@ number of individuals.</p>
   0 &amp; 0.2 &amp; 0 \\
   0 &amp; 0 &amp; 0.2 \\
 \end{array}
-\right) .\]</span></p>
-<p>With <span class="math inline">\(\boldsymbol{\nu} =
-\mathbf{0}\)</span> and <span class="math inline">\(\boldsymbol{\Lambda}
-= \mathbf{I}\)</span>, each observed variable measures one latent
-variable, and <span class="math inline">\(\boldsymbol{\Theta}\)</span>
-adds measurement error with variance 0.2 to each.</p>
-<p>Let the initial condition <span class="math inline">\(\boldsymbol{\eta}_{0}\)</span> be given by</p>
-<p><span class="math display">\[\boldsymbol{\eta}_{0} \sim \mathcal{N}
-\left( \boldsymbol{\mu}_{0}, \boldsymbol{\Sigma}_{0}
-\right)\]</span></p>
-<p><span class="math display">\[\boldsymbol{\mu}_{0}
+\right) .</span></p>
+<p>With <span class="math inline">\boldsymbol{\nu} = \mathbf{0}</span>
+and <span class="math inline">\boldsymbol{\Lambda} = \mathbf{I}</span>,
+each observed variable measures one latent variable, and <span class="math inline">\boldsymbol{\Theta}</span> adds measurement error
+with variance 0.2 to each.</p>
+<p>Let the initial condition <span class="math inline">\boldsymbol{\eta}_{0}</span> be given by</p>
+<p><span class="math display">\boldsymbol{\eta}_{0} \sim \mathcal{N}
+\left( \boldsymbol{\mu}_{0}, \boldsymbol{\Sigma}_{0} \right)</span></p>
+<p><span class="math display">\boldsymbol{\mu}_{0}
 =
 \left(
 \begin{array}{c}
@@ -288,8 +282,8 @@ adds measurement error with variance 0.2 to each.</p>
   0 \\
   0 \\
 \end{array}
-\right)\]</span></p>
-<p><span class="math display">\[\boldsymbol{\Sigma}_{0}
+\right)</span></p>
+<p><span class="math display">\boldsymbol{\Sigma}_{0}
 =
 \left(
 \begin{array}{ccc}
@@ -297,9 +291,9 @@ adds measurement error with variance 0.2 to each.</p>
   0.3296023 &amp; 0.5664625 &amp; 0.2545955 \\
   0.0343817 &amp; 0.2545955 &amp; 0.2999909 \\
 \end{array}
-\right) .\]</span></p>
-<p>Let the long-term mean vector <span class="math inline">\(\boldsymbol{\mu}\)</span> be given by</p>
-<p><span class="math display">\[\boldsymbol{\mu}
+\right) .</span></p>
+<p>Let the long-term mean vector <span class="math inline">\boldsymbol{\mu}</span> be given by</p>
+<p><span class="math display">\boldsymbol{\mu}
 =
 \left(
 \begin{array}{c}
@@ -307,9 +301,9 @@ adds measurement error with variance 0.2 to each.</p>
   0 \\
   0 \\
 \end{array}
-\right) .\]</span></p>
-<p>Let the rate of mean reversion matrix <span class="math inline">\(\boldsymbol{\Phi}\)</span> be given by</p>
-<p><span class="math display">\[\boldsymbol{\Phi}
+\right) .</span></p>
+<p>Let the rate of mean reversion matrix <span class="math inline">\boldsymbol{\Phi}</span> be given by</p>
+<p><span class="math display">\boldsymbol{\Phi}
 =
 \left(
 \begin{array}{ccc}
@@ -317,15 +311,15 @@ adds measurement error with variance 0.2 to each.</p>
   0.771 &amp; -0.511 &amp; 0 \\
   -0.45 &amp; 0.729 &amp; -0.693 \\
 \end{array}
-\right) .\]</span></p>
+\right) .</span></p>
 <p>Read the columns as predictors and the rows as outcomes. The diagonal
 elements are all negative, so each variable returns to its equilibrium.
-In addition, <span class="math inline">\(\eta_{1}\)</span> pushes up the
-change in <span class="math inline">\(\eta_{2}\)</span> (0.771), <span class="math inline">\(\eta_{2}\)</span> pushes up the change in <span class="math inline">\(\eta_{3}\)</span> (0.729), and <span class="math inline">\(\eta_{1}\)</span> pushes down the change in <span class="math inline">\(\eta_{3}\)</span> (-0.45). Because <span class="math inline">\(\boldsymbol{\Phi}\)</span> is lower triangular,
-its eigenvalues are its diagonal elements, all negative, so the process
-is stable.</p>
-<p>Let the dynamic process noise covariance matrix <span class="math inline">\(\boldsymbol{\Sigma}\)</span> be given by</p>
-<p><span class="math display">\[\boldsymbol{\Sigma}
+In addition, <span class="math inline">\eta_{1}</span> pushes up the
+change in <span class="math inline">\eta_{2}</span> (0.771), <span class="math inline">\eta_{2}</span> pushes up the change in <span class="math inline">\eta_{3}</span> (0.729), and <span class="math inline">\eta_{1}</span> pushes down the change in <span class="math inline">\eta_{3}</span> (-0.45). Because <span class="math inline">\boldsymbol{\Phi}</span> is lower triangular, its
+eigenvalues are its diagonal elements, all negative, so the process is
+stable.</p>
+<p>Let the dynamic process noise covariance matrix <span class="math inline">\boldsymbol{\Sigma}</span> be given by</p>
+<p><span class="math display">\boldsymbol{\Sigma}
 =
 \left(
 \begin{array}{ccc}
@@ -333,13 +327,13 @@ is stable.</p>
   0.0220159 &amp; 0.070678 &amp; 0.0153946 \\
   -0.0500476 &amp; 0.0153946 &amp; 0.0755306 \\
 \end{array}
-\right) .\]</span></p>
-<p>Let <span class="math inline">\(\Delta t = 0.1\)</span>.</p>
+\right) .</span></p>
+<p>Let <span class="math inline">\Delta t = 0.1</span>.</p>
 <p>The data are measured every 0.1 time units. For example, if the time
 unit is one day, the 1000 occasions span 99.9 days.</p>
 <p>The initial condition describes where each individual starts. Here,
-the mean vector and covariance matrix of <span class="math inline">\(\boldsymbol{\eta}_{0}\)</span> are the
-model-implied mean and covariance of the stable process, computed with
+the mean vector and covariance matrix of <span class="math inline">\boldsymbol{\eta}_{0}</span> are the model-implied
+mean and covariance of the stable process, computed with
 <code><a href="../reference/LinSDEMeanEta.html">LinSDEMeanEta()</a></code> and <code><a href="../reference/LinSDECovEta.html">LinSDECovEta()</a></code>, so the
 data are stationary from the first time point.</p>
 </div>
@@ -406,11 +400,11 @@ Cholesky factors (the arguments ending in <code>_l</code>).</p>
 <h3 id="visualizing-the-dynamics-without-measurement-error-and-process-noise-n-5-with-different-initial-condition">Visualizing the Dynamics Without Measurement Error and Process Noise
 (n = 5 with Different Initial Condition)<a class="anchor" aria-label="anchor" href="#visualizing-the-dynamics-without-measurement-error-and-process-noise-n-5-with-different-initial-condition"></a>
 </h3>
-<p>To see what <span class="math inline">\(\boldsymbol{\Phi}\)</span>
-alone does, we first simulate five individuals with the process noise
-and the measurement error set to zero. Each individual starts at a
-different point, and the trajectories return to the equilibrium at a
-speed set by <span class="math inline">\(\boldsymbol{\Phi}\)</span>.</p>
+<p>To see what <span class="math inline">\boldsymbol{\Phi}</span> alone
+does, we first simulate five individuals with the process noise and the
+measurement error set to zero. Each individual starts at a different
+point, and the trajectories return to the equilibrium at a speed set by
+<span class="math inline">\boldsymbol{\Phi}</span>.</p>
 <p><img src="fig-vignettes-ou-no-error-ou-1.png" alt="" width="3300"><img src="fig-vignettes-ou-no-error-ou-2.png" alt="" width="3300"><img src="fig-vignettes-ou-no-error-ou-3.png" alt="" width="3300"></p>
 </div>
 <div class="section level3">
@@ -486,10 +480,10 @@ filter.</p>
 <p>A <code>dynr</code> model is built from pieces that match the
 equations above: the data, the initial condition, the measurement model,
 the dynamic model, and the noise. Each parameter gets a name (for
-example, <code>phi_2_1</code> for <span class="math inline">\(\phi_{21}\)</span>`), and the same name used in
-two places means one shared parameter. The starting values are set to
-the population values for convenience; with real data, they would be
-rough guesses.</p>
+example, <code>phi_2_1</code> for <span class="math inline">\phi_{21}</span>`), and the same name used in two
+places means one shared parameter. The starting values are set to the
+population values for convenience; with real data, they would be rough
+guesses.</p>
 <div class="section level4">
 <h4 id="prepare-data">Prepare Data<a class="anchor" aria-label="anchor" href="#prepare-data"></a>
 </h4>
@@ -506,9 +500,9 @@ and the observed variables.</p>
 <div class="section level4">
 <h4 id="prepare-initial-condition">Prepare Initial Condition<a class="anchor" aria-label="anchor" href="#prepare-initial-condition"></a>
 </h4>
-<p>The mean <span class="math inline">\(\boldsymbol{\mu}_{0}\)</span>
-and covariance <span class="math inline">\(\boldsymbol{\Sigma}_{0}\)</span> of the initial
-state are estimated. The covariance matrix is symmetric, so
+<p>The mean <span class="math inline">\boldsymbol{\mu}_{0}</span> and
+covariance <span class="math inline">\boldsymbol{\Sigma}_{0}</span> of
+the initial state are estimated. The covariance matrix is symmetric, so
 <code>sigma0_2_1</code> appears both above and below the diagonal.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dynr_initial</span> <span class="op">&lt;-</span> <span class="fu">dynr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/dynr/man/prep.initial.html" class="external-link">prep.initial</a></span><span class="op">(</span></span>
@@ -528,8 +522,9 @@ state are estimated. The covariance matrix is symmetric, so
 <div class="section level4">
 <h4 id="prepare-measurement-model">Prepare Measurement Model<a class="anchor" aria-label="anchor" href="#prepare-measurement-model"></a>
 </h4>
-<p>The loadings <span class="math inline">\(\boldsymbol{\Lambda}\)</span> are an identity
-matrix with no free parameters (<code>"fixed"</code>).</p>
+<p>The loadings <span class="math inline">\boldsymbol{\Lambda}</span>
+are an identity matrix with no free parameters
+(<code>"fixed"</code>).</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dynr_measurement</span> <span class="op">&lt;-</span> <span class="fu">dynr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/dynr/man/prep.measurement.html" class="external-link">prep.measurement</a></span><span class="op">(</span></span>
 <span>  values.load <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/diag.html" class="external-link">diag</a></span><span class="op">(</span><span class="fl">3</span><span class="op">)</span>,</span>
@@ -542,10 +537,9 @@ matrix with no free parameters (<code>"fixed"</code>).</p>
 <h4 id="prepare-dynamic-process">Prepare Dynamic Process<a class="anchor" aria-label="anchor" href="#prepare-dynamic-process"></a>
 </h4>
 <p>Each formula is the rate of change of one latent variable: the
-effects <span class="math inline">\(\phi_{jk}\)</span> of the distances
-of the three latent variables from their equilibria <span class="math inline">\(\mu_{k}\)</span>.
-<code>isContinuousTime = TRUE</code> makes this a continuous-time
-model.</p>
+effects <span class="math inline">\phi_{jk}</span> of the distances of
+the three latent variables from their equilibria <span class="math inline">\mu_{k}</span>. <code>isContinuousTime = TRUE</code>
+makes this a continuous-time model.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dynr_dynamics</span> <span class="op">&lt;-</span> <span class="fu">dynr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/dynr/man/prep.formulaDynamics.html" class="external-link">prep.formulaDynamics</a></span><span class="op">(</span></span>
 <span>  formula <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>  </span>
@@ -565,10 +559,10 @@ model.</p>
 <div class="section level4">
 <h4 id="prepare-process-noise">Prepare Process Noise<a class="anchor" aria-label="anchor" href="#prepare-process-noise"></a>
 </h4>
-<p>The diffusion covariance <span class="math inline">\(\boldsymbol{\Sigma}\)</span> is estimated in full.
-The measurement error covariance <span class="math inline">\(\boldsymbol{\Theta}\)</span> is diagonal: the
-three error variances are estimated, and the error covariances are fixed
-at zero.</p>
+<p>The diffusion covariance <span class="math inline">\boldsymbol{\Sigma}</span> is estimated in full. The
+measurement error covariance <span class="math inline">\boldsymbol{\Theta}</span> is diagonal: the three
+error variances are estimated, and the error covariances are fixed at
+zero.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dynr_noise</span> <span class="op">&lt;-</span> <span class="fu">dynr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/dynr/man/prep.noise.html" class="external-link">prep.noise</a></span><span class="op">(</span></span>
 <span>  values.latent <span class="op">=</span> <span class="va">sigma</span>,</span>
@@ -605,8 +599,8 @@ the model as C code to <code>outfile</code> and compiles it.</p>
 <span>  noise <span class="op">=</span> <span class="va">dynr_noise</span>,</span>
 <span>  outfile <span class="op">=</span> <span class="st">"ou.c"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p>Add lower and upper bounds on the elements of <span class="math inline">\(\boldsymbol{\Phi}\)</span> to keep the optimizer
-away from implausible values.</p>
+<p>Add lower and upper bounds on the elements of <span class="math inline">\boldsymbol{\Phi}</span> to keep the optimizer away
+from implausible values.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">model</span><span class="op">$</span><span class="va">lb</span><span class="op">[</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
@@ -669,13 +663,13 @@ names.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Doing end processing</span></span>
 <span><span class="co">#&gt; Successful trial</span></span>
-<span><span class="co">#&gt; Total Time: 36.85892 </span></span>
-<span><span class="co">#&gt; Backend Time: 36.85161</span></span></code></pre></div>
+<span><span class="co">#&gt; Total Time: 37.25873 </span></span>
+<span><span class="co">#&gt; Backend Time: 37.25129</span></span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="summary">Summary<a class="anchor" aria-label="anchor" href="#summary"></a>
 </h4>
-<p>The summary lists each estimate with its standard error, <span class="math inline">\(t\)</span> value, confidence interval, and <span class="math inline">\(p\)</span> value.</p>
+<p>The summary lists each estimate with its standard error, <span class="math inline">t</span> value, confidence interval, and <span class="math inline">p</span> value.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">results</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Coefficients:</span></span>
@@ -755,27 +749,27 @@ names.</p>
 <p><code>OpenMx</code> <span class="citation">(Neale et al.,
 2016)</span> fits the same state space model with its own Kalman filter
 (<code><a href="https://rdrr.io/pkg/OpenMx/man/mxExpectationStateSpace.html" class="external-link">OpenMx::mxExpectationStateSpace()</a></code>; <span class="citation">Hunter (2018)</span>). Its matrices have the names used
-in engineering: <code>A</code> is the transition matrix <span class="math inline">\(\boldsymbol{\beta}\)</span>, <code>B</code> holds
-the intercepts of the dynamic model, <code>C</code> is the loading
-matrix <span class="math inline">\(\boldsymbol{\Lambda}\)</span>,
-<code>D</code> holds the intercepts of the measurement model,
-<code>Q</code> is the process noise covariance matrix, and
-<code>R</code> is the measurement error covariance matrix. The parameter
-labels are the dynr names; as in dynr, a label used in two places is one
-shared parameter, and the starting values are the population values.</p>
+in engineering: <code>A</code> is the transition matrix <span class="math inline">\boldsymbol{\beta}</span>, <code>B</code> holds the
+intercepts of the dynamic model, <code>C</code> is the loading matrix
+<span class="math inline">\boldsymbol{\Lambda}</span>, <code>D</code>
+holds the intercepts of the measurement model, <code>Q</code> is the
+process noise covariance matrix, and <code>R</code> is the measurement
+error covariance matrix. The parameter labels are the dynr names; as in
+dynr, a label used in two places is one shared parameter, and the
+starting values are the population values.</p>
 <p>Two details differ from dynr. First, OpenMx reads the data as a
 single time series. To start the filter again at the first occasion of
 every individual, each individual gets a group, and all groups use the
 matrices of one parent model, so every individual has the same
 parameters. Second, OpenMx starts the filter one occasion before the
-first row, so the first row has the state mean <span class="math inline">\(\mathbf{A} \mathbf{x}_{0} + \mathbf{B}
-\mathbf{u}\)</span> and the state covariance <span class="math inline">\(\mathbf{A} \mathbf{P}_{0} \mathbf{A}^{\prime} +
-\mathbf{Q}\)</span>, with the constant input <span class="math inline">\(\mathbf{u} = 1\)</span>. Setting <span class="math inline">\(\mathbf{x}_{0} = \mathbf{A}^{-1} \left(
-\boldsymbol{\mu}_{0} - \mathbf{B} \mathbf{u} \right)\)</span> and <span class="math inline">\(\mathbf{P}_{0} = \mathbf{A}^{-1} \left(
+first row, so the first row has the state mean <span class="math inline">\mathbf{A} \mathbf{x}_{0} + \mathbf{B}
+\mathbf{u}</span> and the state covariance <span class="math inline">\mathbf{A} \mathbf{P}_{0} \mathbf{A}^{\prime} +
+\mathbf{Q}</span>, with the constant input <span class="math inline">\mathbf{u} = 1</span>. Setting <span class="math inline">\mathbf{x}_{0} = \mathbf{A}^{-1} \left(
+\boldsymbol{\mu}_{0} - \mathbf{B} \mathbf{u} \right)</span> and <span class="math inline">\mathbf{P}_{0} = \mathbf{A}^{-1} \left(
 \boldsymbol{\Sigma}_{0} - \mathbf{Q} \right) \left( \mathbf{A}^{-1}
-\right)^{\prime}\)</span> gives the first occasion the initial condition
+\right)^{\prime}</span> gives the first occasion the initial condition
 of the model, so the likelihood is the same as in dynr. This needs an
-invertible <span class="math inline">\(\mathbf{A}\)</span>, which holds
+invertible <span class="math inline">\mathbf{A}</span>, which holds
 here.</p>
 <p>The two helper functions below are the same in every vignette of the
 package. <code>MxMat()</code> makes an OpenMx matrix from values and
@@ -873,18 +867,19 @@ dynr-style labels (<code>"fixed"</code> marks a fixed element), and
 <span><span class="op">}</span></span></code></pre></div>
 <p>The model is in continuous time, so the discrete-time matrices
 <code>A</code>, <code>B</code>, and <code>Q</code> are the exact
-discretization of the drift matrix <span class="math inline">\(\boldsymbol{\Phi}\)</span>, the equilibrium <span class="math inline">\(\boldsymbol{\mu}\)</span>, and the diffusion
-matrix <span class="math inline">\(\boldsymbol{\Sigma}\)</span> over the
-interval <span class="math inline">\(\Delta_{t}\)</span>, written as
-OpenMx algebras: <span class="math inline">\(\mathbf{A} = \exp \left(
-\boldsymbol{\Phi} \Delta_{t} \right)\)</span>, <span class="math inline">\(\mathbf{B} = \left( \mathbf{I} - \mathbf{A}
-\right) \boldsymbol{\mu}\)</span>, and <span class="math inline">\(\mathbf{Q}\)</span> from the matrix exponential of
-a block matrix <span class="citation">(Van Loan, 1978)</span>. The free
-parameters are still <span class="math inline">\(\boldsymbol{\Phi}\)</span>, <span class="math inline">\(\boldsymbol{\mu}\)</span>, and <span class="math inline">\(\boldsymbol{\Sigma}\)</span>, with the dynr
-labels. We use the discrete-time expectation with these algebras rather
-than <code><a href="https://rdrr.io/pkg/OpenMx/man/mxExpectationStateSpaceContinuousTime.html" class="external-link">OpenMx::mxExpectationStateSpaceContinuousTime()</a></code>: in
-our checks with OpenMx 2.22.11, its process noise covariance over an
-interval did not match the exact one when <span class="math inline">\(\boldsymbol{\Phi}\)</span> is not symmetric. The
+discretization of the drift matrix <span class="math inline">\boldsymbol{\Phi}</span>, the equilibrium <span class="math inline">\boldsymbol{\mu}</span>, and the diffusion matrix
+<span class="math inline">\boldsymbol{\Sigma}</span> over the interval
+<span class="math inline">\Delta_{t}</span>, written as OpenMx algebras:
+<span class="math inline">\mathbf{A} = \exp \left( \boldsymbol{\Phi}
+\Delta_{t} \right)</span>, <span class="math inline">\mathbf{B} = \left(
+\mathbf{I} - \mathbf{A} \right) \boldsymbol{\mu}</span>, and <span class="math inline">\mathbf{Q}</span> from the matrix exponential of a
+block matrix <span class="citation">(Van Loan, 1978)</span>. The free
+parameters are still <span class="math inline">\boldsymbol{\Phi}</span>,
+<span class="math inline">\boldsymbol{\mu}</span>, and <span class="math inline">\boldsymbol{\Sigma}</span>, with the dynr labels. We
+use the discrete-time expectation with these algebras rather than
+<code><a href="https://rdrr.io/pkg/OpenMx/man/mxExpectationStateSpaceContinuousTime.html" class="external-link">OpenMx::mxExpectationStateSpaceContinuousTime()</a></code>: in our
+checks with OpenMx 2.22.11, its process noise covariance over an
+interval did not match the exact one when <span class="math inline">\boldsymbol{\Phi}</span> is not symmetric. The
 matrix exponential <code><a href="https://rdrr.io/pkg/OpenMx/man/expm.html" class="external-link">omxExponential()</a></code> in the algebras is also
 evaluated in R, so OpenMx is attached.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
@@ -1028,8 +1023,8 @@ evaluated in R, so OpenMx is attached.</p>
 <span id="cb14-58"><a href="#cb14-58" tabindex="-1"></a><span class="co">#&gt; AIC:      -170777.7               429222.3                 429222.3</span></span>
 <span id="cb14-59"><a href="#cb14-59" tabindex="-1"></a><span class="co">#&gt; BIC:     -3024370.0               429507.6                 429412.3</span></span>
 <span id="cb14-60"><a href="#cb14-60" tabindex="-1"></a><span class="co">#&gt; To get additional fit indices, see help(mxRefModels)</span></span>
-<span id="cb14-61"><a href="#cb14-61" tabindex="-1"></a><span class="co">#&gt; timestamp: 2026-11-02 06:39:38 </span></span>
-<span id="cb14-62"><a href="#cb14-62" tabindex="-1"></a><span class="co">#&gt; Wall clock time: 593.974 secs </span></span>
+<span id="cb14-61"><a href="#cb14-61" tabindex="-1"></a><span class="co">#&gt; timestamp: 2026-11-03 06:46:07 </span></span>
+<span id="cb14-62"><a href="#cb14-62" tabindex="-1"></a><span class="co">#&gt; Wall clock time: 614.3967 secs </span></span>
 <span id="cb14-63"><a href="#cb14-63" tabindex="-1"></a><span class="co">#&gt; optimizer:  SLSQP </span></span>
 <span id="cb14-64"><a href="#cb14-64" tabindex="-1"></a><span class="co">#&gt; OpenMx version number: 2.22.11 </span></span>
 <span id="cb14-65"><a href="#cb14-65" tabindex="-1"></a><span class="co">#&gt; Need help?  See help(mxSummary)</span></span></code></pre></div>
@@ -1043,8 +1038,8 @@ next to the estimates of one method. Bias is the estimate minus the
 population value. Because each model is fitted to a single simulated
 data set, this is the error of one estimate, not a Monte Carlo bias,
 which would average over many replications. The 95% confidence interval
-is the Wald interval, <span class="math inline">\(\hat{\theta} \pm 1.96
-\times \mathrm{SE}\)</span>, unless the caption says otherwise, and
+is the Wald interval, <span class="math inline">\hat{\theta} \pm 1.96
+\times \mathrm{SE}</span>, unless the caption says otherwise, and
 <code>Covers</code> shows whether it contains the population value. The
 parameter names are the dynr names in every table.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">

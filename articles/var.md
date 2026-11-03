@@ -27,61 +27,56 @@ the interest is in the dynamics.
 
 ## Model
 
-The measurement model is given by \\\[\mathbf{y}\_{i, t} =
-\boldsymbol{\eta}\_{i, t}\\\] where \\(\mathbf{y}\_{i, t}\\) represents
-a vector of observed variables and \\(\boldsymbol{\eta}\_{i, t}\\) a
-vector of latent variables for individual \\(i\\) and time \\(t\\).
-Since the observed and latent variables are equal, we only generate data
-from the dynamic structure.
+The measurement model is given by \mathbf{y}\_{i, t} =
+\boldsymbol{\eta}\_{i, t} where \mathbf{y}\_{i, t} represents a vector
+of observed variables and \boldsymbol{\eta}\_{i, t} a vector of latent
+variables for individual i and time t. Since the observed and latent
+variables are equal, we only generate data from the dynamic structure.
 
-The dynamic structure is given by \\\[\boldsymbol{\eta}\_{i, t} =
+The dynamic structure is given by \boldsymbol{\eta}\_{i, t} =
 \boldsymbol{\alpha} + \boldsymbol{\beta} \boldsymbol{\eta}\_{i, t - 1} +
 \boldsymbol{\zeta}\_{i, t}, \quad \mathrm{with} \quad
 \boldsymbol{\zeta}\_{i, t} \sim \mathcal{N} \left( \mathbf{0},
-\boldsymbol{\Psi} \right)\\\] where \\(\boldsymbol{\eta}\_{i, t}\\),
-\\(\boldsymbol{\eta}\_{i, t - 1}\\), and \\(\boldsymbol{\zeta}\_{i,
-t}\\) are random variables, and \\(\boldsymbol{\alpha}\\),
-\\(\boldsymbol{\beta}\\), and \\(\boldsymbol{\Psi}\\) are model
-parameters. Here, \\(\boldsymbol{\eta}\_{i, t}\\) is a vector of latent
-variables at time \\(t\\) and individual \\(i\\),
-\\(\boldsymbol{\eta}\_{i, t - 1}\\) represents a vector of latent
-variables at time \\(t - 1\\) and individual \\(i\\), and
-\\(\boldsymbol{\zeta}\_{i, t}\\) represents a vector of dynamic noise at
-time \\(t\\) and individual \\(i\\). \\(\boldsymbol{\alpha}\\) denotes a
-vector of intercepts, \\(\boldsymbol{\beta}\\) a matrix of
-autoregression and cross regression coefficients, and
-\\(\boldsymbol{\Psi}\\) the covariance matrix of
-\\(\boldsymbol{\zeta}\_{i, t}\\).
+\boldsymbol{\Psi} \right) where \boldsymbol{\eta}\_{i, t},
+\boldsymbol{\eta}\_{i, t - 1}, and \boldsymbol{\zeta}\_{i, t} are random
+variables, and \boldsymbol{\alpha}, \boldsymbol{\beta}, and
+\boldsymbol{\Psi} are model parameters. Here, \boldsymbol{\eta}\_{i, t}
+is a vector of latent variables at time t and individual i,
+\boldsymbol{\eta}\_{i, t - 1} represents a vector of latent variables at
+time t - 1 and individual i, and \boldsymbol{\zeta}\_{i, t} represents a
+vector of dynamic noise at time t and individual i. \boldsymbol{\alpha}
+denotes a vector of intercepts, \boldsymbol{\beta} a matrix of
+autoregression and cross regression coefficients, and \boldsymbol{\Psi}
+the covariance matrix of \boldsymbol{\zeta}\_{i, t}.
 
-In words, each variable at time \\(t\\) is a weighted sum of all the
-variables at time \\(t - 1\\), plus an intercept and a random shock. The
-weights are the elements of \\(\boldsymbol{\beta}\\):
+In words, each variable at time t is a weighted sum of all the variables
+at time t - 1, plus an intercept and a random shock. The weights are the
+elements of \boldsymbol{\beta}:
 
-- A diagonal element \\(\beta\_{jj}\\) is the autoregressive effect, how
-  much of variable \\(j\\) carries over to the next occasion. Values
-  closer to 1 mean the variable changes slowly (high inertia).
-- An off-diagonal element \\(\beta\_{jk}\\) is the cross-lagged effect
-  of variable \\(k\\) at time \\(t - 1\\) on variable \\(j\\) at time
-  \\(t\\). Note the order: the row is the outcome, the column is the
-  predictor.
+- A diagonal element \beta\_{jj} is the autoregressive effect, how much
+  of variable j carries over to the next occasion. Values closer to 1
+  mean the variable changes slowly (high inertia).
+- An off-diagonal element \beta\_{jk} is the cross-lagged effect of
+  variable k at time t - 1 on variable j at time t. Note the order: the
+  row is the outcome, the column is the predictor.
 
-The shocks \\(\boldsymbol{\zeta}\_{i, t}\\) stand for everything that
-moves the variables that the model does not explain, for example, events
-that happen between occasions. For the process to settle around a stable
-mean, all eigenvalues of \\(\boldsymbol{\beta}\\) must have modulus less
-than 1.
+The shocks \boldsymbol{\zeta}\_{i, t} stand for everything that moves
+the variables that the model does not explain, for example, events that
+happen between occasions. For the process to settle around a stable
+mean, all eigenvalues of \boldsymbol{\beta} must have modulus less than
+1.
 
 An alternative representation of the dynamic noise is given by
-\\\[\boldsymbol{\zeta}\_{i, t} = \boldsymbol{\Psi}^{\frac{1}{2}}
+\boldsymbol{\zeta}\_{i, t} = \boldsymbol{\Psi}^{\frac{1}{2}}
 \mathbf{z}\_{i, t}, \quad \mathrm{with} \quad \mathbf{z}\_{i, t} \sim
-\mathcal{N} \left( \mathbf{0}, \mathbf{I} \right)\\\] where \\(\left(
+\mathcal{N} \left( \mathbf{0}, \mathbf{I} \right) where \left(
 \boldsymbol{\Psi}^{\frac{1}{2}} \right) \left(
-\boldsymbol{\Psi}^{\frac{1}{2}} \right)^{\prime} = \boldsymbol{\Psi}\\)
-. This is how the noise is simulated: independent standard normal draws
-\\(\mathbf{z}\_{i, t}\\) are multiplied by a square root of
-\\(\boldsymbol{\Psi}\\). The functions in `simStateSpace` take this
-square root, the lower triangular Cholesky factor of
-\\(\boldsymbol{\Psi}\\), as the argument `psi_l`.
+\boldsymbol{\Psi}^{\frac{1}{2}} \right)^{\prime} = \boldsymbol{\Psi} .
+This is how the noise is simulated: independent standard normal draws
+\mathbf{z}\_{i, t} are multiplied by a square root of \boldsymbol{\Psi}.
+The functions in `simStateSpace` take this square root, the lower
+triangular Cholesky factor of \boldsymbol{\Psi}, as the argument
+`psi_l`.
 
 ### Diagram
 
@@ -89,71 +84,67 @@ square root, the lower triangular Cholesky factor of
 
 State space diagram of the VAR model.
 
-The model in state space form, for the first three occasions (\\(t = 0,
-1, 2\\)). The observed variables (squares) are the state,
-\\(\mathbf{y}\_{t} = \boldsymbol{\eta}\_{t}\\), so
-\\(\boldsymbol{\Lambda}\\) is the identity matrix and there is no
-measurement error. The horizontal arrows are the autoregressive effects
-and the diagonal arrows the cross-lagged effects, the elements of
-\\(\boldsymbol{\beta}\\); only the nonzero elements in this example are
-drawn. \\(\zeta\_{j, t}\\) is the process noise, with variance
-\\(\psi\_{jj}\\), from \\(t = 1\\) on. A loop on a variable is its
-variance and a curved two-headed arrow a covariance. At \\(t = 0\\), the
-initial condition \\(\boldsymbol{\eta}\_{0} \sim \mathcal{N} \left(
-\boldsymbol{\mu}\_{0}, \boldsymbol{\Sigma}\_{0} \right)\\) gives the
-variances \\(\sigma\_{jj}\\) and covariances \\(\sigma\_{jk}\\) of the
-variables.
+The model in state space form, for the first three occasions (t = 0, 1,
+2). The observed variables (squares) are the state, \mathbf{y}\_{t} =
+\boldsymbol{\eta}\_{t}, so \boldsymbol{\Lambda} is the identity matrix
+and there is no measurement error. The horizontal arrows are the
+autoregressive effects and the diagonal arrows the cross-lagged effects,
+the elements of \boldsymbol{\beta}; only the nonzero elements in this
+example are drawn. \zeta\_{j, t} is the process noise, with variance
+\psi\_{jj}, from t = 1 on. A loop on a variable is its variance and a
+curved two-headed arrow a covariance. At t = 0, the initial condition
+\boldsymbol{\eta}\_{0} \sim \mathcal{N} \left( \boldsymbol{\mu}\_{0},
+\boldsymbol{\Sigma}\_{0} \right) gives the variances \sigma\_{jj} and
+covariances \sigma\_{jk} of the variables.
 [`SimSSMVARFixed()`](https://github.com/jeksterslab/simStateSpace/reference/SimSSMVARFixed.md)
-takes `beta`, `mu0`, and the Cholesky factors of \\(\boldsymbol{\Psi}\\)
-and \\(\boldsymbol{\Sigma}\_{0}\\) (`psi_l` and `sigma0_l`).
+takes `beta`, `mu0`, and the Cholesky factors of \boldsymbol{\Psi} and
+\boldsymbol{\Sigma}\_{0} (`psi_l` and `sigma0_l`).
 
 ## Data Generation
 
 ### Notation
 
-Let \\(t = 200\\) be the number of time points and \\(n = 50\\) be the
-number of individuals.
+Let t = 1000 be the number of time points and n = 100 be the number of
+individuals.
 
-Let the initial condition \\(\boldsymbol{\eta}\_{0}\\) be given by
+Let the initial condition \boldsymbol{\eta}\_{0} be given by
 
-\\\[\boldsymbol{\eta}\_{0} \sim \mathcal{N} \left(
-\boldsymbol{\mu}\_{0}, \boldsymbol{\Sigma}\_{0} \right)\\\]
+\boldsymbol{\eta}\_{0} \sim \mathcal{N} \left( \boldsymbol{\mu}\_{0},
+\boldsymbol{\Sigma}\_{0} \right)
 
-\\\[\boldsymbol{\mu}\_{0} = \left( \begin{array}{c} 0 \\\\ 0 \\\\ 0 \\\\
-\end{array} \right)\\\]
+\boldsymbol{\mu}\_{0} = \left( \begin{array}{c} 0 \\\\ 0 \\\\ 0 \\\\
+\end{array} \right)
 
-\\\[\boldsymbol{\Sigma}\_{0} = \left( \begin{array}{ccc} 0.1960784 &
+\boldsymbol{\Sigma}\_{0} = \left( \begin{array}{ccc} 0.1960784 &
 0.1183232 & 0.0298539 \\\\ 0.1183232 & 0.3437711 & 0.1381855 \\\\
-0.0298539 & 0.1381855 & 0.2663828 \\\\ \end{array} \right) .\\\]
+0.0298539 & 0.1381855 & 0.2663828 \\\\ \end{array} \right) .
 
-Let the constant vector \\(\boldsymbol{\alpha}\\) be given by
+Let the constant vector \boldsymbol{\alpha} be given by
 
-\\\[\boldsymbol{\alpha} = \left( \begin{array}{c} 0 \\\\ 0 \\\\ 0 \\\\
-\end{array} \right) .\\\]
+\boldsymbol{\alpha} = \left( \begin{array}{c} 0 \\\\ 0 \\\\ 0 \\\\
+\end{array} \right) .
 
-Let the transition matrix \\(\boldsymbol{\beta}\\) be given by
+Let the transition matrix \boldsymbol{\beta} be given by
 
-\\\[\boldsymbol{\beta} = \left( \begin{array}{ccc} 0.7 & 0 & 0 \\\\ 0.5
-& 0.6 & 0 \\\\ -0.1 & 0.4 & 0.5 \\\\ \end{array} \right) .\\\]
+\boldsymbol{\beta} = \left( \begin{array}{ccc} 0.7 & 0 & 0 \\\\ 0.5 &
+0.6 & 0 \\\\ -0.1 & 0.4 & 0.5 \\\\ \end{array} \right) .
 
 Read the columns as predictors and the rows as outcomes. Each variable
 carries over to the next occasion (autoregressive effects 0.7, 0.6, and
-0.5). In addition, \\(\eta\_{1}\\) predicts later \\(\eta\_{2}\\) (0.5),
-\\(\eta\_{2}\\) predicts later \\(\eta\_{3}\\) (0.4), and
-\\(\eta\_{1}\\) has a small negative effect on later \\(\eta\_{3}\\)
-(-0.1). Because \\(\boldsymbol{\beta}\\) is lower triangular, its
-eigenvalues are its diagonal elements, all less than 1, so the process
-is stable.
+0.5). In addition, \eta\_{1} predicts later \eta\_{2} (0.5), \eta\_{2}
+predicts later \eta\_{3} (0.4), and \eta\_{1} has a small negative
+effect on later \eta\_{3} (-0.1). Because \boldsymbol{\beta} is lower
+triangular, its eigenvalues are its diagonal elements, all less than 1,
+so the process is stable.
 
-Let the dynamic process noise \\(\boldsymbol{\Psi}\\) be given by
+Let the dynamic process noise \boldsymbol{\Psi} be given by
 
-\\\[\boldsymbol{\Psi} = \left( \begin{array}{ccc} 0.1 & 0 & 0 \\\\ 0 &
-0.1 & 0 \\\\ 0 & 0 & 0.1 \\\\ \end{array} \right) .\\\]
+\boldsymbol{\Psi} = \left( \begin{array}{ccc} 0.1 & 0 & 0 \\\\ 0 & 0.1 &
+0 \\\\ 0 & 0 & 0.1 \\\\ \end{array} \right) .
 
 The initial condition describes where each individual starts. Here, the
-mean vector and covariance matrix of \\(\boldsymbol{\eta}\_{0}\\) are
-the model-implied mean and covariance of the stable process, computed
-with
+mean vector and covariance matrix of \boldsymbol{\eta}\_{0} are the
+model-implied mean and covariance of the stable process, computed with
 [`SSMMeanEta()`](https://github.com/jeksterslab/simStateSpace/reference/SSMMeanEta.md)
 and
 [`SSMCovEta()`](https://github.com/jeksterslab/simStateSpace/reference/SSMCovEta.md),
@@ -166,9 +157,9 @@ Cholesky factors (the arguments ending in `_l`).
 
 \
 `n`\
-`#> [1] 50`\
+`#> [1] 100`\
 `time`\
-`#> [1] 200`\
+`#> [1] 1000`\
 `mu0`\
 `#> [1] 0 0 0`\
 `sigma0`\
@@ -201,10 +192,10 @@ Cholesky factors (the arguments ending in `_l`).
 
 ### Visualizing the Dynamics Without Process Noise (n = 5 with Different Initial Condition)
 
-To see what \\(\boldsymbol{\beta}\\) alone does, we first simulate five
+To see what \boldsymbol{\beta} alone does, we first simulate five
 individuals with the process noise set to zero. Each individual starts
 at a different point, and the trajectories return to the mean at a speed
-set by \\(\boldsymbol{\beta}\\).
+set by \boldsymbol{\beta}.
 
 ![](fig-vignettes-var-no-error-var-1.png)![](fig-vignettes-var-no-error-var-2.png)![](fig-vignettes-var-no-error-var-3.png)
 
@@ -236,20 +227,20 @@ columns `id`, `time`, `y1`, `y2`, and `y3`.
 `#> 5  1    4 -0.04104160 -0.72769549 -0.19238403`\
 `#> 6  1    5  0.18907246 -0.81602072 -0.73831208`\
 [`summary`](https://rdrr.io/r/base/summary.html)`(``data``)`\
-`#>        id            time              y1                   y2           `\
-`#>  Min.   : 1.0   Min.   :  0.00   Min.   :-1.5605680   Min.   :-2.136497  `\
-`#>  1st Qu.:13.0   1st Qu.: 49.75   1st Qu.:-0.2988210   1st Qu.:-0.399645  `\
-`#>  Median :25.5   Median : 99.50   Median :-0.0007190   Median : 0.005257  `\
-`#>  Mean   :25.5   Mean   : 99.50   Mean   :-0.0009849   Mean   : 0.002916  `\
-`#>  3rd Qu.:38.0   3rd Qu.:149.25   3rd Qu.: 0.2933423   3rd Qu.: 0.400716  `\
-`#>  Max.   :50.0   Max.   :199.00   Max.   : 1.5653685   Max.   : 2.065411  `\
+`#>        id              time             y1                   y2            `\
+`#>  Min.   :  1.00   Min.   :  0.0   Min.   :-1.9239387   Min.   :-2.6896682  `\
+`#>  1st Qu.: 25.75   1st Qu.:249.8   1st Qu.:-0.2991519   1st Qu.:-0.3940385  `\
+`#>  Median : 50.50   Median :499.5   Median :-0.0029441   Median : 0.0008316  `\
+`#>  Mean   : 50.50   Mean   :499.5   Mean   :-0.0005164   Mean   : 0.0004548  `\
+`#>  3rd Qu.: 75.25   3rd Qu.:749.2   3rd Qu.: 0.2957664   3rd Qu.: 0.3976987  `\
+`#>  Max.   :100.00   Max.   :999.0   Max.   : 1.9753039   Max.   : 2.3189032  `\
 `#>        y3           `\
-`#>  Min.   :-1.824302  `\
-`#>  1st Qu.:-0.339985  `\
-`#>  Median : 0.008929  `\
-`#>  Mean   : 0.011512  `\
-`#>  3rd Qu.: 0.363642  `\
-`#>  Max.   : 1.913883`\
+`#>  Min.   :-2.185100  `\
+`#>  1st Qu.:-0.343439  `\
+`#>  Median : 0.001899  `\
+`#>  Mean   : 0.002713  `\
+`#>  3rd Qu.: 0.351819  `\
+`#>  Max.   : 2.113439`\
 [`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``sim``)`
 
 ![](fig-vignettes-var-error-var-1.png)![](fig-vignettes-var-error-var-2.png)![](fig-vignettes-var-error-var-3.png)
@@ -267,10 +258,10 @@ We fit the model with `dynr`, which estimates state space models by
 maximum likelihood using the Kalman filter. A `dynr` model is built from
 pieces that match the equations above: the data, the initial condition,
 the measurement model, the dynamic model, and the noise. Each parameter
-gets a name (for example, `beta_2_1` for \\(\beta\_{21}\\)), and the
-same name used in two places means one shared parameter. The starting
-values are set to the population values for convenience; with real data,
-they would be rough guesses.
+gets a name (for example, `beta_2_1` for \beta\_{21}), and the same name
+used in two places means one shared parameter. The starting values are
+set to the population values for convenience; with real data, they would
+be rough guesses.
 
 #### Prepare Data
 
@@ -287,10 +278,9 @@ observed variables.
 
 #### Prepare Initial Condition
 
-The mean \\(\boldsymbol{\mu}\_{0}\\) and covariance
-\\(\boldsymbol{\Sigma}\_{0}\\) of the initial state are estimated. The
-covariance matrix is symmetric, so `sigma0_2_1` appears both above and
-below the diagonal.
+The mean \boldsymbol{\mu}\_{0} and covariance \boldsymbol{\Sigma}\_{0}
+of the initial state are estimated. The covariance matrix is symmetric,
+so `sigma0_2_1` appears both above and below the diagonal.
 
 \
 `dynr_initial`` ``<-`` ``dynr``::`[`prep.initial`](https://rdrr.io/pkg/dynr/man/prep.initial.html)`(`\
@@ -309,9 +299,8 @@ below the diagonal.
 
 #### Prepare Measurement Model
 
-The measurement model \\(\mathbf{y}\_{i, t} = \boldsymbol{\eta}\_{i,
-t}\\) is an identity matrix of loadings, with no free parameters
-(`"fixed"`).
+The measurement model \mathbf{y}\_{i, t} = \boldsymbol{\eta}\_{i, t} is
+an identity matrix of loadings, with no free parameters (`"fixed"`).
 
 \
 `dynr_measurement`` ``<-`` ``dynr``::`[`prep.measurement`](https://rdrr.io/pkg/dynr/man/prep.measurement.html)`(`\
@@ -324,9 +313,9 @@ t}\\) is an identity matrix of loadings, with no free parameters
 #### Prepare Dynamic Process
 
 Each formula is one row of the dynamic equation: the intercept
-\\(\alpha\_{j}\\) plus the effects \\(\beta\_{jk}\\) of the three
-variables at the previous occasion. `isContinuousTime = FALSE` makes
-this a discrete-time model.
+\alpha\_{j} plus the effects \beta\_{jk} of the three variables at the
+previous occasion. `isContinuousTime = FALSE` makes this a discrete-time
+model.
 
 \
 `dynr_dynamics`` ``<-`` ``dynr``::`[`prep.formulaDynamics`](https://rdrr.io/pkg/dynr/man/prep.formulaDynamics.html)`(`\
@@ -346,7 +335,7 @@ this a discrete-time model.
 
 #### Prepare Process Noise
 
-The latent noise covariance \\(\boldsymbol{\Psi}\\) is estimated. The
+The latent noise covariance \boldsymbol{\Psi} is estimated. The
 measurement error covariance is fixed at zero, because the variables are
 measured without error in this model.
 
@@ -399,93 +388,93 @@ equations with the parameter names.
 `#> Original exit flag:  3 `\
 `#> Modified exit flag:  3 `\
 `#> Optimization terminated successfully: ftol_rel or ftol_abs was reached. `\
-`#> Original fitted parameters:  0.00002663477 0.001631891 0.004238975 0.6866125 `\
-`#> 0.01194593 -0.01225832 0.4887006 0.6133306 0.003168878 -0.1093111 0.4124866 `\
-`#> 0.4950797 -2.300106 -0.009644434 -0.01412868 -2.312356 0.00605374 -2.303423 `\
-`#> -0.04988252 -0.02863863 0.02786683 -1.899028 0.4447028 0.05947617 -1.140395 `\
-`#> 0.2969417 -1.901927 `\
+`#> Original fitted parameters:  -0.0002106182 0.000261195 0.0009243715 0.6972056 `\
+`#> 0.0006123385 0.002917166 0.4995238 0.6005427 -0.00177082 -0.1015684 0.4031293 `\
+`#> 0.4972227 -2.301822 -0.003746233 0.001270917 -2.306638 0.002932055 -2.304454 `\
+`#> -0.034054 0.080811 0.1345955 -1.449063 0.6212102 0.0249533 -1.163541 0.3906055 `\
+`#> -1.54021 `\
 `#> `\
-`#> Transformed fitted parameters:  0.00002663477 0.001631891 0.004238975 0.6866125 `\
-`#> 0.01194593 -0.01225832 0.4887006 0.6133306 0.003168878 -0.1093111 0.4124866 `\
-`#> 0.4950797 0.1002482 -0.0009668374 -0.001416375 0.09903696 0.0006131477 `\
-`#> 0.09993993 -0.04988252 -0.02863863 0.02786683 0.1497141 0.06657829 0.008904422 `\
-`#> 0.3493004 0.09888994 0.177999 `\
+`#> Transformed fitted parameters:  -0.0002106182 0.000261195 0.0009243715 `\
+`#> 0.6972056 0.0006123385 0.002917166 0.4995238 0.6005427 -0.00177082 -0.1015684 `\
+`#> 0.4031293 0.4972227 0.1000764 -0.0003749095 0.0001271888 0.09959695 `\
+`#> 0.0002915431 0.09981433 -0.034054 0.080811 0.1345955 0.2347903 0.1458541 `\
+`#> 0.005858792 0.4029842 0.1256562 0.2621428 `\
 `#> `\
 `#> Doing end processing`\
 `#> Successful trial`\
-`#> Total Time: 2.080689 `\
-`#> Backend Time: 2.072147`
+`#> Total Time: 20.456 `\
+`#> Backend Time: 20.44765`
 
 #### Summary
 
-The summary lists each estimate with its standard error, \\(t\\) value,
-confidence interval, and \\(p\\) value.
+The summary lists each estimate with its standard error, t value,
+confidence interval, and p value.
 
 \
 [`summary`](https://rdrr.io/r/base/summary.html)`(``results``)`\
 `#> Coefficients:`\
-`#>               Estimate  Std. Error t value    ci.lower    ci.upper`\
-`#> alpha_1_1   0.00002663  0.00317501   0.008 -0.00619628  0.00624955`\
-`#> alpha_2_1   0.00163189  0.00315577   0.517 -0.00455331  0.00781709`\
-`#> alpha_3_1   0.00423897  0.00317014   1.337 -0.00197438  0.01045233`\
-`#> beta_1_1    0.68661253  0.00813341  84.419  0.67067135  0.70255372`\
-`#> beta_1_2    0.01194593  0.00683576   1.748 -0.00145192  0.02534378`\
-`#> beta_1_3   -0.01225832  0.00692588  -1.770 -0.02583279  0.00131615`\
-`#> beta_2_1    0.48870056  0.00808421  60.451  0.47285581  0.50454532`\
-`#> beta_2_2    0.61333060  0.00679435  90.271  0.60001392  0.62664729`\
-`#> beta_2_3    0.00316888  0.00688386   0.460 -0.01032324  0.01666100`\
-`#> beta_3_1   -0.10931114  0.00812080 -13.461 -0.12522761 -0.09339467`\
-`#> beta_3_2    0.41248661  0.00682532  60.435  0.39910923  0.42586399`\
-`#> beta_3_3    0.49507968  0.00691521  71.593  0.48152612  0.50863324`\
-`#> psi_1_1     0.10024823  0.00142126  70.535  0.09746260  0.10303385`\
-`#> psi_2_1    -0.00096684  0.00099896  -0.968 -0.00292476  0.00099108`\
-`#> psi_3_1    -0.00141637  0.00100354  -1.411 -0.00338328  0.00055053`\
-`#> psi_2_2     0.09903696  0.00140409  70.534  0.09628499  0.10178894`\
-`#> psi_3_2     0.00061315  0.00099738   0.615 -0.00134168  0.00256798`\
-`#> psi_3_3     0.09993993  0.00141691  70.534  0.09716284  0.10271702`\
-`#> mu0_1_1    -0.04988252  0.05472083  -0.912 -0.15713337  0.05736833`\
-`#> mu0_2_1    -0.02863863  0.08357415  -0.343 -0.19244095  0.13516370`\
-`#> mu0_3_1     0.02786683  0.05966621   0.467 -0.08907679  0.14481045`\
-`#> sigma0_1_1  0.14971412  0.02993649   5.001  0.09103968  0.20838856`\
-`#> sigma0_2_1  0.06657829  0.03367421   1.977  0.00057806  0.13257853`\
-`#> sigma0_3_1  0.00890442  0.02311409   0.385 -0.03639836  0.05420720`\
-`#> sigma0_2_2  0.34930036  0.06985425   5.000  0.21238855  0.48621217`\
-`#> sigma0_3_2  0.09888994  0.03792208   2.608  0.02456402  0.17321586`\
-`#> sigma0_3_3  0.17799895  0.03559223   5.001  0.10823946  0.24775844`\
+`#>              Estimate Std. Error t value   ci.lower   ci.upper`\
+`#> alpha_1_1  -0.0002106  0.0010009  -0.210 -0.0021723  0.0017511`\
+`#> alpha_2_1   0.0002612  0.0009985   0.262 -0.0016958  0.0022182`\
+`#> alpha_3_1   0.0009244  0.0009996   0.925 -0.0010348  0.0028835`\
+`#> beta_1_1    0.6972056  0.0025522 273.182  0.6922034  0.7022077`\
+`#> beta_1_2    0.0006123  0.0021517   0.285 -0.0036048  0.0048295`\
+`#> beta_1_3    0.0029172  0.0021942   1.329 -0.0013834  0.0072177`\
+`#> beta_2_1    0.4995238  0.0025463 196.175  0.4945331  0.5045145`\
+`#> beta_2_2    0.6005427  0.0021466 279.758  0.5963353  0.6047500`\
+`#> beta_2_3   -0.0017708  0.0021888  -0.809 -0.0060609  0.0025192`\
+`#> beta_3_1   -0.1015684  0.0025490 -39.846 -0.1065644 -0.0965724`\
+`#> beta_3_2    0.4031293  0.0021489 187.595  0.3989175  0.4073411`\
+`#> beta_3_3    0.4972227  0.0021913 226.912  0.4929279  0.5015175`\
+`#> psi_1_1     0.1000764  0.0004477 223.510  0.0991988  0.1009539`\
+`#> psi_2_1    -0.0003749  0.0003159  -1.187 -0.0009940  0.0002441`\
+`#> psi_3_1     0.0001272  0.0003162   0.402 -0.0004925  0.0007469`\
+`#> psi_2_2     0.0995969  0.0004456 223.504  0.0987236  0.1004703`\
+`#> psi_3_2     0.0002915  0.0003154   0.924 -0.0003267  0.0009098`\
+`#> psi_3_3     0.0998143  0.0004466 223.503  0.0989390  0.1006896`\
+`#> mu0_1_1    -0.0340540  0.0484225  -0.703 -0.1289603  0.0608523`\
+`#> mu0_2_1     0.0808110  0.0635000   1.273 -0.0436468  0.2052688`\
+`#> mu0_3_1     0.1345955  0.0511762   2.630  0.0342920  0.2348990`\
+`#> sigma0_1_1  0.2347903  0.0332779   7.055  0.1695667  0.3000138`\
+`#> sigma0_2_1  0.1458541  0.0340614   4.282  0.0790950  0.2126132`\
+`#> sigma0_3_1  0.0058588  0.0248510   0.236 -0.0428483  0.0545659`\
+`#> sigma0_2_2  0.4029842  0.0571383   7.053  0.2909952  0.5149731`\
+`#> sigma0_3_2  0.1256562  0.0349783   3.592  0.0571000  0.1942124`\
+`#> sigma0_3_3  0.2621428  0.0371329   7.060  0.1893635  0.3349220`\
 `#>                       Pr(>|t|)    `\
-`#> alpha_1_1               0.4967    `\
-`#> alpha_2_1               0.3025    `\
-`#> alpha_3_1               0.0906 .  `\
+`#> alpha_1_1               0.4167    `\
+`#> alpha_2_1               0.3968    `\
+`#> alpha_3_1               0.1775    `\
 `#> beta_1_1   <0.0000000000000002 ***`\
-`#> beta_1_2                0.0403 *  `\
-`#> beta_1_3                0.0384 *  `\
+`#> beta_1_2                0.3880    `\
+`#> beta_1_3                0.0918 .  `\
 `#> beta_2_1   <0.0000000000000002 ***`\
 `#> beta_2_2   <0.0000000000000002 ***`\
-`#> beta_2_3                0.3226    `\
+`#> beta_2_3                0.2093    `\
 `#> beta_3_1   <0.0000000000000002 ***`\
 `#> beta_3_2   <0.0000000000000002 ***`\
 `#> beta_3_3   <0.0000000000000002 ***`\
 `#> psi_1_1    <0.0000000000000002 ***`\
-`#> psi_2_1                 0.1666    `\
-`#> psi_3_1                 0.0791 .  `\
+`#> psi_2_1                 0.1176    `\
+`#> psi_3_1                 0.3437    `\
 `#> psi_2_2    <0.0000000000000002 ***`\
-`#> psi_3_2                 0.2694    `\
+`#> psi_3_2                 0.1777    `\
 `#> psi_3_3    <0.0000000000000002 ***`\
-`#> mu0_1_1                 0.1810    `\
-`#> mu0_2_1                 0.3659    `\
-`#> mu0_3_1                 0.3202    `\
+`#> mu0_1_1                 0.2409    `\
+`#> mu0_2_1                 0.1016    `\
+`#> mu0_3_1                 0.0043 ** `\
 `#> sigma0_1_1 <0.0000000000000002 ***`\
-`#> sigma0_2_1              0.0240 *  `\
-`#> sigma0_3_1              0.3500    `\
+`#> sigma0_2_1 <0.0000000000000002 ***`\
+`#> sigma0_3_1              0.4068    `\
 `#> sigma0_2_2 <0.0000000000000002 ***`\
-`#> sigma0_3_2              0.0046 ** `\
+`#> sigma0_3_2              0.0002 ***`\
 `#> sigma0_3_3 <0.0000000000000002 ***`\
 `#> ---`\
 `#> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1`\
 `#> `\
-`#> -2 log-likelihood value at convergence = 16078.14`\
-`#> AIC = 16132.14`\
-`#> BIC = 16326.82`
+`#> -2 log-likelihood value at convergence = 160369.89`\
+`#> AIC = 160423.89`\
+`#> BIC = 160680.73`
 
 ### OpenMx: State Space Model
 
@@ -493,29 +482,29 @@ confidence interval, and \\(p\\) value.
 own Kalman filter
 ([`OpenMx::mxExpectationStateSpace()`](https://rdrr.io/pkg/OpenMx/man/mxExpectationStateSpace.html);
 Hunter (2018)). Its matrices have the names used in engineering: `A` is
-the transition matrix \\(\boldsymbol{\beta}\\), `B` holds the intercepts
-of the dynamic model, `C` is the loading matrix
-\\(\boldsymbol{\Lambda}\\), `D` holds the intercepts of the measurement
-model, `Q` is the process noise covariance matrix, and `R` is the
-measurement error covariance matrix. The parameter labels are the dynr
-names; as in dynr, a label used in two places is one shared parameter,
-and the starting values are the population values.
+the transition matrix \boldsymbol{\beta}, `B` holds the intercepts of
+the dynamic model, `C` is the loading matrix \boldsymbol{\Lambda}, `D`
+holds the intercepts of the measurement model, `Q` is the process noise
+covariance matrix, and `R` is the measurement error covariance matrix.
+The parameter labels are the dynr names; as in dynr, a label used in two
+places is one shared parameter, and the starting values are the
+population values.
 
 Two details differ from dynr. First, OpenMx reads the data as a single
 time series. To start the filter again at the first occasion of every
 individual, each individual gets a group, and all groups use the
 matrices of one parent model, so every individual has the same
 parameters. Second, OpenMx starts the filter one occasion before the
-first row, so the first row has the state mean \\(\mathbf{A}
-\mathbf{x}\_{0} + \mathbf{B} \mathbf{u}\\) and the state covariance
-\\(\mathbf{A} \mathbf{P}\_{0} \mathbf{A}^{\prime} + \mathbf{Q}\\), with
-the constant input \\(\mathbf{u} = 1\\). Setting \\(\mathbf{x}\_{0} =
-\mathbf{A}^{-1} \left( \boldsymbol{\mu}\_{0} - \mathbf{B} \mathbf{u}
-\right)\\) and \\(\mathbf{P}\_{0} = \mathbf{A}^{-1} \left(
-\boldsymbol{\Sigma}\_{0} - \mathbf{Q} \right) \left( \mathbf{A}^{-1}
-\right)^{\prime}\\) gives the first occasion the initial condition of
-the model, so the likelihood is the same as in dynr. This needs an
-invertible \\(\mathbf{A}\\), which holds here.
+first row, so the first row has the state mean \mathbf{A}
+\mathbf{x}\_{0} + \mathbf{B} \mathbf{u} and the state covariance
+\mathbf{A} \mathbf{P}\_{0} \mathbf{A}^{\prime} + \mathbf{Q}, with the
+constant input \mathbf{u} = 1. Setting \mathbf{x}\_{0} = \mathbf{A}^{-1}
+\left( \boldsymbol{\mu}\_{0} - \mathbf{B} \mathbf{u} \right) and
+\mathbf{P}\_{0} = \mathbf{A}^{-1} \left( \boldsymbol{\Sigma}\_{0} -
+\mathbf{Q} \right) \left( \mathbf{A}^{-1} \right)^{\prime} gives the
+first occasion the initial condition of the model, so the likelihood is
+the same as in dynr. This needs an invertible \mathbf{A}, which holds
+here.
 
 The two helper functions below are the same in every vignette of the
 package. `MxMat()` makes an OpenMx matrix from values and dynr-style
@@ -673,57 +662,57 @@ fit_mx_ssm <- FitMxSSM(
 )
 #> 
 Beginning initial fit attempt
-Fit attempt 0, fit=16078.140497466, new current best! (was 16107.4834291)
-                                                                         
+Fit attempt 0, fit=160369.869850976, new current best! (was 160395.003347781)
+                                                                             
 #> 
-#>  Solution found!  Final fit=16078.14 (started at 16107.483)  (1 attempt(s): 1 valid, 0 errors)
+#>  Solution found!  Final fit=160369.87 (started at 160395)  (1 attempt(s): 1 valid, 0 errors)
 summary(fit_mx_ssm)
 #> Summary of var 
 #>  
 #> free parameters:
-#>          name matrix row col       Estimate    Std.Error A
-#> 1    beta_1_1      A   1   1  0.68663796749 0.0081334007  
-#> 2    beta_2_1      A   2   1  0.48872939162 0.0080841358  
-#> 3    beta_3_1      A   3   1 -0.10927939922 0.0081208930  
-#> 4    beta_1_2      A   1   2  0.01197339824 0.0068357556  
-#> 5    beta_2_2      A   2   2  0.61335544074 0.0067943678  
-#> 6    beta_3_2      A   3   2  0.41251182715 0.0068252498  
-#> 7    beta_1_3      A   1   3 -0.01222816186 0.0069258862  
-#> 8    beta_2_3      A   2   3  0.00320099711 0.0068839400  
-#> 9    beta_3_3      A   3   3  0.49510940525 0.0069152335  
-#> 10  alpha_1_1      B   1   1  0.00007504572 0.0031751067  
-#> 11  alpha_2_1      B   2   1  0.00168129658 0.0031558674  
-#> 12  alpha_3_1      B   3   1  0.00428820276 0.0031702182  
-#> 13    psi_1_1      Q   1   1  0.10025472180 0.0014213739  
-#> 14    psi_2_1      Q   2   1 -0.00096149313 0.0009990194  
-#> 15    psi_3_1      Q   3   1 -0.00141147222 0.0010036154  
-#> 16    psi_2_2      Q   2   2  0.09904341629 0.0014042004  
-#> 17    psi_3_2      Q   3   2  0.00061820131 0.0009974541  
-#> 18    psi_3_3      Q   3   3  0.09994625411 0.0014170005  
-#> 19    mu0_1_1    mu0   1   1 -0.04981241282 0.0547202963  
-#> 20    mu0_2_1    mu0   2   1 -0.02851434154 0.0835823195  
-#> 21    mu0_3_1    mu0   3   1  0.02794753260 0.0596701639  
-#> 22 sigma0_1_1 sigma0   1   1  0.14972318006 0.0299443858  
-#> 23 sigma0_2_1 sigma0   2   1  0.06659576518 0.0336870128  
-#> 24 sigma0_3_1 sigma0   3   1  0.00891707790 0.0231232159  
-#> 25 sigma0_2_2 sigma0   2   2  0.34933327396 0.0698687508  
-#> 26 sigma0_3_2 sigma0   3   2  0.09891587079 0.0379407484  
-#> 27 sigma0_3_3 sigma0   3   3  0.17801981930 0.0356038305  
+#>          name matrix row col      Estimate    Std.Error A
+#> 1    beta_1_1      A   1   1  0.6972237920 0.0025525563  
+#> 2    beta_2_1      A   2   1  0.4995472386 0.0025464048  
+#> 3    beta_3_1      A   3   1 -0.1015496972 0.0025491922  
+#> 4    beta_1_2      A   1   2  0.0006471480 0.0021518767  
+#> 5    beta_2_2      A   2   2  0.6005728491 0.0021466896  
+#> 6    beta_3_2      A   3   2  0.4031599054 0.0021490392  
+#> 7    beta_1_3      A   1   3  0.0029432067 0.0021943277  
+#> 8    beta_2_3      A   2   3 -0.0017459428 0.0021890309  
+#> 9    beta_3_3      A   3   3  0.4972480365 0.0021914301  
+#> 10  alpha_1_1      B   1   1 -0.0001643356 0.0010009442  
+#> 11  alpha_2_1      B   2   1  0.0003127692 0.0009985290  
+#> 12  alpha_3_1      B   3   1  0.0009726495 0.0009996220  
+#> 13    psi_1_1      Q   1   1  0.1000854780 0.0004478198  
+#> 14    psi_2_1      Q   2   1 -0.0003684564 0.0003158945  
+#> 15    psi_3_1      Q   3   1  0.0001314732 0.0003162384  
+#> 16    psi_2_2      Q   2   2  0.0996030177 0.0004456611  
+#> 17    psi_3_2      Q   3   2  0.0002954868 0.0003154764  
+#> 18    psi_3_3      Q   3   3  0.0998212256 0.0004466375  
+#> 19    mu0_1_1    mu0   1   1 -0.0337610679 0.0484615187  
+#> 20    mu0_2_1    mu0   2   1  0.0807387686 0.0635130381  
+#> 21    mu0_3_1    mu0   3   1  0.1344571751 0.0512344181  
+#> 22 sigma0_1_1 sigma0   1   1  0.2346746474 0.0331935664  
+#> 23 sigma0_2_1 sigma0   2   1  0.1457558232 0.0340386288  
+#> 24 sigma0_3_1 sigma0   3   1  0.0057781197 0.0248193988  
+#> 25 sigma0_2_2 sigma0   2   2  0.4028205457 0.0569862803  
+#> 26 sigma0_3_2 sigma0   3   2  0.1256301601 0.0348578644  
+#> 27 sigma0_3_3 sigma0   3   3  0.2622837822 0.0371009366  
 #> 
 #> Model Statistics: 
 #>                |  Parameters  |  Degrees of Freedom  |  Fit (-2lnL units)
-#>        Model:             27                  29973              16078.14
+#>        Model:             27                 299973              160369.9
 #>    Saturated:             NA                     NA                    NA
 #> Independence:             NA                     NA                    NA
-#> Number of observations/statistics: 10000/30000
+#> Number of observations/statistics: 100000/300000
 #> 
 #> Information Criteria: 
 #>       |  df Penalty  |  Parameters Penalty  |  Sample-Size Adjusted
-#> AIC:      -43867.86               16132.14                 16132.29
-#> BIC:     -259983.39               16326.82                 16241.02
+#> AIC:      -439576.1               160423.9                 160423.9
+#> BIC:     -3293196.9               160680.7                 160594.9
 #> To get additional fit indices, see help(mxRefModels)
-#> timestamp: 2026-11-02 06:58:33 
-#> Wall clock time: 52.02811 secs 
+#> timestamp: 2026-11-03 17:13:33 
+#> Wall clock time: 515.5614 secs 
 #> optimizer:  SLSQP 
 #> OpenMx version number: 2.22.11 
 #> Need help?  See help(mxSummary)
@@ -736,10 +725,9 @@ next to the estimates of one method. Bias is the estimate minus the
 population value. Because each model is fitted to a single simulated
 data set, this is the error of one estimate, not a Monte Carlo bias,
 which would average over many replications. The 95% confidence interval
-is the Wald interval, \\(\hat{\theta} \pm 1.96 \times \mathrm{SE}\\),
-unless the caption says otherwise, and `Covers` shows whether it
-contains the population value. The parameter names are the dynr names in
-every table.
+is the Wald interval, \hat{\theta} \pm 1.96 \times \mathrm{SE}, unless
+the caption says otherwise, and `Covers` shows whether it contains the
+population value. The parameter names are the dynr names in every table.
 
 \
 `EstimatesTable`` ``<-`` ``function``(``population``, ``estimate``, ``se``, ``ll`` ``=`` ``NULL``, ``ul`` ``=`` ``NULL``)`` ``{`\
@@ -792,33 +780,33 @@ every table.
 
 | Parameter  | Population | Estimate |    SE |   Bias |   2.5% |  97.5% | Covers |
 |:-----------|-----------:|---------:|------:|-------:|-------:|-------:|:-------|
-| alpha_1_1  |      0.000 |    0.000 | 0.003 |  0.000 | -0.006 |  0.006 | TRUE   |
-| alpha_2_1  |      0.000 |    0.002 | 0.003 |  0.002 | -0.005 |  0.008 | TRUE   |
-| alpha_3_1  |      0.000 |    0.004 | 0.003 |  0.004 | -0.002 |  0.010 | TRUE   |
-| beta_1_1   |      0.700 |    0.687 | 0.008 | -0.013 |  0.671 |  0.703 | TRUE   |
-| beta_1_2   |      0.000 |    0.012 | 0.007 |  0.012 | -0.001 |  0.025 | TRUE   |
-| beta_1_3   |      0.000 |   -0.012 | 0.007 | -0.012 | -0.026 |  0.001 | TRUE   |
-| beta_2_1   |      0.500 |    0.489 | 0.008 | -0.011 |  0.473 |  0.505 | TRUE   |
-| beta_2_2   |      0.600 |    0.613 | 0.007 |  0.013 |  0.600 |  0.627 | FALSE  |
-| beta_2_3   |      0.000 |    0.003 | 0.007 |  0.003 | -0.010 |  0.017 | TRUE   |
-| beta_3_1   |     -0.100 |   -0.109 | 0.008 | -0.009 | -0.125 | -0.093 | TRUE   |
-| beta_3_2   |      0.400 |    0.412 | 0.007 |  0.012 |  0.399 |  0.426 | TRUE   |
-| beta_3_3   |      0.500 |    0.495 | 0.007 | -0.005 |  0.482 |  0.509 | TRUE   |
-| psi_1_1    |      0.100 |    0.100 | 0.001 |  0.000 |  0.097 |  0.103 | TRUE   |
-| psi_2_1    |      0.000 |   -0.001 | 0.001 | -0.001 | -0.003 |  0.001 | TRUE   |
-| psi_3_1    |      0.000 |   -0.001 | 0.001 | -0.001 | -0.003 |  0.001 | TRUE   |
-| psi_2_2    |      0.100 |    0.099 | 0.001 | -0.001 |  0.096 |  0.102 | TRUE   |
-| psi_3_2    |      0.000 |    0.001 | 0.001 |  0.001 | -0.001 |  0.003 | TRUE   |
-| psi_3_3    |      0.100 |    0.100 | 0.001 |  0.000 |  0.097 |  0.103 | TRUE   |
-| mu0_1_1    |      0.000 |   -0.050 | 0.055 | -0.050 | -0.157 |  0.057 | TRUE   |
-| mu0_2_1    |      0.000 |   -0.029 | 0.084 | -0.029 | -0.192 |  0.135 | TRUE   |
-| mu0_3_1    |      0.000 |    0.028 | 0.060 |  0.028 | -0.089 |  0.145 | TRUE   |
-| sigma0_1_1 |      0.196 |    0.150 | 0.030 | -0.046 |  0.091 |  0.208 | TRUE   |
-| sigma0_2_1 |      0.118 |    0.067 | 0.034 | -0.052 |  0.001 |  0.133 | TRUE   |
-| sigma0_3_1 |      0.030 |    0.009 | 0.023 | -0.021 | -0.036 |  0.054 | TRUE   |
-| sigma0_2_2 |      0.344 |    0.349 | 0.070 |  0.006 |  0.212 |  0.486 | TRUE   |
-| sigma0_3_2 |      0.138 |    0.099 | 0.038 | -0.039 |  0.025 |  0.173 | TRUE   |
-| sigma0_3_3 |      0.266 |    0.178 | 0.036 | -0.088 |  0.108 |  0.248 | FALSE  |
+| alpha_1_1  |      0.000 |    0.000 | 0.001 |  0.000 | -0.002 |  0.002 | TRUE   |
+| alpha_2_1  |      0.000 |    0.000 | 0.001 |  0.000 | -0.002 |  0.002 | TRUE   |
+| alpha_3_1  |      0.000 |    0.001 | 0.001 |  0.001 | -0.001 |  0.003 | TRUE   |
+| beta_1_1   |      0.700 |    0.697 | 0.003 | -0.003 |  0.692 |  0.702 | TRUE   |
+| beta_1_2   |      0.000 |    0.001 | 0.002 |  0.001 | -0.004 |  0.005 | TRUE   |
+| beta_1_3   |      0.000 |    0.003 | 0.002 |  0.003 | -0.001 |  0.007 | TRUE   |
+| beta_2_1   |      0.500 |    0.500 | 0.003 |  0.000 |  0.495 |  0.505 | TRUE   |
+| beta_2_2   |      0.600 |    0.601 | 0.002 |  0.001 |  0.596 |  0.605 | TRUE   |
+| beta_2_3   |      0.000 |   -0.002 | 0.002 | -0.002 | -0.006 |  0.003 | TRUE   |
+| beta_3_1   |     -0.100 |   -0.102 | 0.003 | -0.002 | -0.107 | -0.097 | TRUE   |
+| beta_3_2   |      0.400 |    0.403 | 0.002 |  0.003 |  0.399 |  0.407 | TRUE   |
+| beta_3_3   |      0.500 |    0.497 | 0.002 | -0.003 |  0.493 |  0.502 | TRUE   |
+| psi_1_1    |      0.100 |    0.100 | 0.000 |  0.000 |  0.099 |  0.101 | TRUE   |
+| psi_2_1    |      0.000 |    0.000 | 0.000 |  0.000 | -0.001 |  0.000 | TRUE   |
+| psi_3_1    |      0.000 |    0.000 | 0.000 |  0.000 |  0.000 |  0.001 | TRUE   |
+| psi_2_2    |      0.100 |    0.100 | 0.000 |  0.000 |  0.099 |  0.100 | TRUE   |
+| psi_3_2    |      0.000 |    0.000 | 0.000 |  0.000 |  0.000 |  0.001 | TRUE   |
+| psi_3_3    |      0.100 |    0.100 | 0.000 |  0.000 |  0.099 |  0.101 | TRUE   |
+| mu0_1_1    |      0.000 |   -0.034 | 0.048 | -0.034 | -0.129 |  0.061 | TRUE   |
+| mu0_2_1    |      0.000 |    0.081 | 0.064 |  0.081 | -0.044 |  0.205 | TRUE   |
+| mu0_3_1    |      0.000 |    0.135 | 0.051 |  0.135 |  0.034 |  0.235 | FALSE  |
+| sigma0_1_1 |      0.196 |    0.235 | 0.033 |  0.039 |  0.170 |  0.300 | TRUE   |
+| sigma0_2_1 |      0.118 |    0.146 | 0.034 |  0.028 |  0.079 |  0.213 | TRUE   |
+| sigma0_3_1 |      0.030 |    0.006 | 0.025 | -0.024 | -0.043 |  0.055 | TRUE   |
+| sigma0_2_2 |      0.344 |    0.403 | 0.057 |  0.059 |  0.291 |  0.515 | TRUE   |
+| sigma0_3_2 |      0.138 |    0.126 | 0.035 | -0.013 |  0.057 |  0.194 | TRUE   |
+| sigma0_3_3 |      0.266 |    0.262 | 0.037 | -0.004 |  0.189 |  0.335 | TRUE   |
 
 Population values and dynr estimates (one simulated data set) {.table
 style="width:99%;"}
@@ -843,33 +831,33 @@ style="width:99%;"}
 
 | Parameter  | Population | Estimate |    SE |   Bias |   2.5% |  97.5% | Covers |
 |:-----------|-----------:|---------:|------:|-------:|-------:|-------:|:-------|
-| alpha_1_1  |      0.000 |    0.000 | 0.003 |  0.000 | -0.006 |  0.006 | TRUE   |
-| alpha_2_1  |      0.000 |    0.002 | 0.003 |  0.002 | -0.005 |  0.008 | TRUE   |
-| alpha_3_1  |      0.000 |    0.004 | 0.003 |  0.004 | -0.002 |  0.011 | TRUE   |
-| beta_1_1   |      0.700 |    0.687 | 0.008 | -0.013 |  0.671 |  0.703 | TRUE   |
-| beta_1_2   |      0.000 |    0.012 | 0.007 |  0.012 | -0.001 |  0.025 | TRUE   |
-| beta_1_3   |      0.000 |   -0.012 | 0.007 | -0.012 | -0.026 |  0.001 | TRUE   |
-| beta_2_1   |      0.500 |    0.489 | 0.008 | -0.011 |  0.473 |  0.505 | TRUE   |
-| beta_2_2   |      0.600 |    0.613 | 0.007 |  0.013 |  0.600 |  0.627 | FALSE  |
-| beta_2_3   |      0.000 |    0.003 | 0.007 |  0.003 | -0.010 |  0.017 | TRUE   |
-| beta_3_1   |     -0.100 |   -0.109 | 0.008 | -0.009 | -0.125 | -0.093 | TRUE   |
-| beta_3_2   |      0.400 |    0.413 | 0.007 |  0.013 |  0.399 |  0.426 | TRUE   |
-| beta_3_3   |      0.500 |    0.495 | 0.007 | -0.005 |  0.482 |  0.509 | TRUE   |
-| psi_1_1    |      0.100 |    0.100 | 0.001 |  0.000 |  0.097 |  0.103 | TRUE   |
-| psi_2_1    |      0.000 |   -0.001 | 0.001 | -0.001 | -0.003 |  0.001 | TRUE   |
-| psi_3_1    |      0.000 |   -0.001 | 0.001 | -0.001 | -0.003 |  0.001 | TRUE   |
-| psi_2_2    |      0.100 |    0.099 | 0.001 | -0.001 |  0.096 |  0.102 | TRUE   |
-| psi_3_2    |      0.000 |    0.001 | 0.001 |  0.001 | -0.001 |  0.003 | TRUE   |
-| psi_3_3    |      0.100 |    0.100 | 0.001 |  0.000 |  0.097 |  0.103 | TRUE   |
-| mu0_1_1    |      0.000 |   -0.050 | 0.055 | -0.050 | -0.157 |  0.057 | TRUE   |
-| mu0_2_1    |      0.000 |   -0.029 | 0.084 | -0.029 | -0.192 |  0.135 | TRUE   |
-| mu0_3_1    |      0.000 |    0.028 | 0.060 |  0.028 | -0.089 |  0.145 | TRUE   |
-| sigma0_1_1 |      0.196 |    0.150 | 0.030 | -0.046 |  0.091 |  0.208 | TRUE   |
-| sigma0_2_1 |      0.118 |    0.067 | 0.034 | -0.052 |  0.001 |  0.133 | TRUE   |
-| sigma0_3_1 |      0.030 |    0.009 | 0.023 | -0.021 | -0.036 |  0.054 | TRUE   |
-| sigma0_2_2 |      0.344 |    0.349 | 0.070 |  0.006 |  0.212 |  0.486 | TRUE   |
-| sigma0_3_2 |      0.138 |    0.099 | 0.038 | -0.039 |  0.025 |  0.173 | TRUE   |
-| sigma0_3_3 |      0.266 |    0.178 | 0.036 | -0.088 |  0.108 |  0.248 | FALSE  |
+| alpha_1_1  |      0.000 |    0.000 | 0.001 |  0.000 | -0.002 |  0.002 | TRUE   |
+| alpha_2_1  |      0.000 |    0.000 | 0.001 |  0.000 | -0.002 |  0.002 | TRUE   |
+| alpha_3_1  |      0.000 |    0.001 | 0.001 |  0.001 | -0.001 |  0.003 | TRUE   |
+| beta_1_1   |      0.700 |    0.697 | 0.003 | -0.003 |  0.692 |  0.702 | TRUE   |
+| beta_1_2   |      0.000 |    0.001 | 0.002 |  0.001 | -0.004 |  0.005 | TRUE   |
+| beta_1_3   |      0.000 |    0.003 | 0.002 |  0.003 | -0.001 |  0.007 | TRUE   |
+| beta_2_1   |      0.500 |    0.500 | 0.003 |  0.000 |  0.495 |  0.505 | TRUE   |
+| beta_2_2   |      0.600 |    0.601 | 0.002 |  0.001 |  0.596 |  0.605 | TRUE   |
+| beta_2_3   |      0.000 |   -0.002 | 0.002 | -0.002 | -0.006 |  0.003 | TRUE   |
+| beta_3_1   |     -0.100 |   -0.102 | 0.003 | -0.002 | -0.107 | -0.097 | TRUE   |
+| beta_3_2   |      0.400 |    0.403 | 0.002 |  0.003 |  0.399 |  0.407 | TRUE   |
+| beta_3_3   |      0.500 |    0.497 | 0.002 | -0.003 |  0.493 |  0.502 | TRUE   |
+| psi_1_1    |      0.100 |    0.100 | 0.000 |  0.000 |  0.099 |  0.101 | TRUE   |
+| psi_2_1    |      0.000 |    0.000 | 0.000 |  0.000 | -0.001 |  0.000 | TRUE   |
+| psi_3_1    |      0.000 |    0.000 | 0.000 |  0.000 |  0.000 |  0.001 | TRUE   |
+| psi_2_2    |      0.100 |    0.100 | 0.000 |  0.000 |  0.099 |  0.100 | TRUE   |
+| psi_3_2    |      0.000 |    0.000 | 0.000 |  0.000 |  0.000 |  0.001 | TRUE   |
+| psi_3_3    |      0.100 |    0.100 | 0.000 |  0.000 |  0.099 |  0.101 | TRUE   |
+| mu0_1_1    |      0.000 |   -0.034 | 0.048 | -0.034 | -0.129 |  0.061 | TRUE   |
+| mu0_2_1    |      0.000 |    0.081 | 0.064 |  0.081 | -0.044 |  0.205 | TRUE   |
+| mu0_3_1    |      0.000 |    0.134 | 0.051 |  0.134 |  0.034 |  0.235 | FALSE  |
+| sigma0_1_1 |      0.196 |    0.235 | 0.033 |  0.039 |  0.170 |  0.300 | TRUE   |
+| sigma0_2_1 |      0.118 |    0.146 | 0.034 |  0.027 |  0.079 |  0.212 | TRUE   |
+| sigma0_3_1 |      0.030 |    0.006 | 0.025 | -0.024 | -0.043 |  0.054 | TRUE   |
+| sigma0_2_2 |      0.344 |    0.403 | 0.057 |  0.059 |  0.291 |  0.515 | TRUE   |
+| sigma0_3_2 |      0.138 |    0.126 | 0.035 | -0.013 |  0.057 |  0.194 | TRUE   |
+| sigma0_3_3 |      0.266 |    0.262 | 0.037 | -0.004 |  0.190 |  0.335 | TRUE   |
 
 Population values and OpenMx state space estimates (one simulated data
 set) {.table style="width:99%;"}
@@ -895,32 +883,32 @@ same likelihood, so their estimates should agree closely.
 | Parameter  | Population |   dynr | OpenMx (SSM) |
 |:-----------|-----------:|-------:|-------------:|
 | alpha_1_1  |      0.000 |  0.000 |        0.000 |
-| alpha_2_1  |      0.000 |  0.002 |        0.002 |
-| alpha_3_1  |      0.000 |  0.004 |        0.004 |
-| beta_1_1   |      0.700 |  0.687 |        0.687 |
-| beta_1_2   |      0.000 |  0.012 |        0.012 |
-| beta_1_3   |      0.000 | -0.012 |       -0.012 |
-| beta_2_1   |      0.500 |  0.489 |        0.489 |
-| beta_2_2   |      0.600 |  0.613 |        0.613 |
-| beta_2_3   |      0.000 |  0.003 |        0.003 |
-| beta_3_1   |     -0.100 | -0.109 |       -0.109 |
-| beta_3_2   |      0.400 |  0.412 |        0.413 |
-| beta_3_3   |      0.500 |  0.495 |        0.495 |
+| alpha_2_1  |      0.000 |  0.000 |        0.000 |
+| alpha_3_1  |      0.000 |  0.001 |        0.001 |
+| beta_1_1   |      0.700 |  0.697 |        0.697 |
+| beta_1_2   |      0.000 |  0.001 |        0.001 |
+| beta_1_3   |      0.000 |  0.003 |        0.003 |
+| beta_2_1   |      0.500 |  0.500 |        0.500 |
+| beta_2_2   |      0.600 |  0.601 |        0.601 |
+| beta_2_3   |      0.000 | -0.002 |       -0.002 |
+| beta_3_1   |     -0.100 | -0.102 |       -0.102 |
+| beta_3_2   |      0.400 |  0.403 |        0.403 |
+| beta_3_3   |      0.500 |  0.497 |        0.497 |
 | psi_1_1    |      0.100 |  0.100 |        0.100 |
-| psi_2_1    |      0.000 | -0.001 |       -0.001 |
-| psi_3_1    |      0.000 | -0.001 |       -0.001 |
-| psi_2_2    |      0.100 |  0.099 |        0.099 |
-| psi_3_2    |      0.000 |  0.001 |        0.001 |
+| psi_2_1    |      0.000 |  0.000 |        0.000 |
+| psi_3_1    |      0.000 |  0.000 |        0.000 |
+| psi_2_2    |      0.100 |  0.100 |        0.100 |
+| psi_3_2    |      0.000 |  0.000 |        0.000 |
 | psi_3_3    |      0.100 |  0.100 |        0.100 |
-| mu0_1_1    |      0.000 | -0.050 |       -0.050 |
-| mu0_2_1    |      0.000 | -0.029 |       -0.029 |
-| mu0_3_1    |      0.000 |  0.028 |        0.028 |
-| sigma0_1_1 |      0.196 |  0.150 |        0.150 |
-| sigma0_2_1 |      0.118 |  0.067 |        0.067 |
-| sigma0_3_1 |      0.030 |  0.009 |        0.009 |
-| sigma0_2_2 |      0.344 |  0.349 |        0.349 |
-| sigma0_3_2 |      0.138 |  0.099 |        0.099 |
-| sigma0_3_3 |      0.266 |  0.178 |        0.178 |
+| mu0_1_1    |      0.000 | -0.034 |       -0.034 |
+| mu0_2_1    |      0.000 |  0.081 |        0.081 |
+| mu0_3_1    |      0.000 |  0.135 |        0.134 |
+| sigma0_1_1 |      0.196 |  0.235 |        0.235 |
+| sigma0_2_1 |      0.118 |  0.146 |        0.146 |
+| sigma0_3_1 |      0.030 |  0.006 |        0.006 |
+| sigma0_2_2 |      0.344 |  0.403 |        0.403 |
+| sigma0_3_2 |      0.138 |  0.126 |        0.126 |
+| sigma0_3_3 |      0.266 |  0.262 |        0.262 |
 
 Population values and the estimates of every method {.table}
 

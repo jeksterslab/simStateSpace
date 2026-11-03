@@ -30,47 +30,47 @@
 `#> [1] stats     graphics  grDevices utils     datasets  methods   base     `\
 `#> `\
 `#> other attached packages:`\
-`#> [1] OpenMx_2.22.11       simStateSpace_1.2.17`\
+`#> [1] simStateSpace_1.2.17`\
 `#> `\
 `#> loaded via a namespace (and not attached):`\
 `#>  [1] tidyselect_1.2.1    hdrcde_3.5.0        dplyr_1.2.1        `\
 `#>  [4] farver_2.1.2        S7_0.2.2            latex2exp_0.9.8    `\
 `#>  [7] pracma_2.4.6        digest_0.6.39       rpart_4.1.27       `\
-`#> [10] lifecycle_1.0.5     cluster_2.1.8.3     survival_3.8-12    `\
-`#> [13] magrittr_2.0.5      compiler_4.6.2      rlang_1.3.0        `\
-`#> [16] tools_4.6.2         rProject_0.0.61     knitr_1.52         `\
-`#> [19] labeling_0.4.3      mclust_6.1.3        mnormt_2.1.2       `\
-`#> [22] plyr_1.8.9          dynr_0.1.16-112     RColorBrewer_1.1-3 `\
-`#> [25] rainbow_3.8         abind_1.4-8         KernSmooth_2.23-27 `\
-`#> [28] fda_6.3.0           withr_3.0.3         purrr_1.2.2        `\
-`#> [31] numDeriv_2016.8-1.1 nnet_7.3-21         grid_4.6.2         `\
-`#> [34] pcaPP_2.0-7         stats4_4.6.2        lavaan_0.7-3       `\
-`#> [37] jomo_2.7-6          xtable_1.8-8        colorspace_2.1-4   `\
-`#> [40] mice_3.19.0         ggplot2_4.0.3       scales_1.4.0       `\
-`#> [43] iterators_1.0.14    MASS_7.3-66         cli_3.6.6.9000     `\
-`#> [46] mvtnorm_1.4-2       reformulas_0.4.4    generics_0.1.4     `\
-`#> [49] otel_0.2.0          RcppParallel_6.2.1  reshape2_1.4.5     `\
-`#> [52] fds_2.0             minqa_1.2.8         stringr_1.6.0      `\
-`#> [55] splines_4.6.2       parallel_4.6.2      vctrs_0.7.3        `\
-`#> [58] boot_1.3-32         glmnet_5.2          Matrix_1.7-6       `\
-`#> [61] carData_3.0-6       car_3.1-5           mitml_0.4-5        `\
-`#> [64] Formula_1.2-6       foreach_1.5.2       tidyr_1.3.2        `\
-`#> [67] glue_1.8.1          nloptr_2.2.1        pan_2.0            `\
-`#> [70] codetools_0.2-20    stringi_1.8.9       shape_1.4.6.1      `\
-`#> [73] gtable_0.3.6        quadprog_1.5-8      lme4_2.1-0         `\
-`#> [76] tibble_3.3.1        pillar_1.11.1       deSolve_1.42       `\
-`#> [79] R6_2.6.1            Rdpack_2.6.6        ks_1.15.3          `\
-`#> [82] pbivnorm_0.6.0      evaluate_1.0.5      lattice_0.23-1     `\
-`#> [85] rbibutils_2.4.1     backports_1.5.1     broom_1.0.13       `\
-`#> [88] Rcpp_1.1.2          nlme_3.1-171        xfun_0.62          `\
-`#> [91] pkgconfig_2.0.3`
+`#> [10] OpenMx_2.22.11      lifecycle_1.0.5     cluster_2.1.8.3    `\
+`#> [13] survival_3.8-12     magrittr_2.0.5      compiler_4.6.2     `\
+`#> [16] rlang_1.3.0         tools_4.6.2         rProject_0.0.62    `\
+`#> [19] knitr_1.52          labeling_0.4.3      mclust_6.1.3       `\
+`#> [22] mnormt_2.1.2        plyr_1.8.9          dynr_0.1.16-112    `\
+`#> [25] RColorBrewer_1.1-3  rainbow_3.8         abind_1.4-8        `\
+`#> [28] KernSmooth_2.23-27  fda_6.3.0           withr_3.0.3        `\
+`#> [31] purrr_1.2.2         numDeriv_2016.8-1.1 nnet_7.3-21        `\
+`#> [34] grid_4.6.2          pcaPP_2.0-7         stats4_4.6.2       `\
+`#> [37] lavaan_0.7-3        jomo_2.7-6          xtable_1.8-8       `\
+`#> [40] colorspace_2.1-4    mice_3.19.0         ggplot2_4.0.3      `\
+`#> [43] scales_1.4.0        iterators_1.0.14    MASS_7.3-66        `\
+`#> [46] cli_3.6.6.9000      mvtnorm_1.4-2       reformulas_0.4.4   `\
+`#> [49] generics_0.1.4      otel_0.2.0          RcppParallel_6.2.1 `\
+`#> [52] reshape2_1.4.5      fds_2.0             minqa_1.2.8        `\
+`#> [55] stringr_1.6.0       splines_4.6.2       parallel_4.6.2     `\
+`#> [58] vctrs_0.7.3         boot_1.3-32         glmnet_5.2         `\
+`#> [61] Matrix_1.7-6        carData_3.0-6       car_3.1-5          `\
+`#> [64] mitml_0.4-5         Formula_1.2-6       foreach_1.5.2      `\
+`#> [67] tidyr_1.3.2         glue_1.8.1          nloptr_2.2.1       `\
+`#> [70] pan_2.0             codetools_0.2-20    stringi_1.8.9      `\
+`#> [73] shape_1.4.6.1       gtable_0.3.6        quadprog_1.5-8     `\
+`#> [76] lme4_2.1-0          tibble_3.3.1        pillar_1.11.1      `\
+`#> [79] deSolve_1.42        R6_2.6.1            Rdpack_2.6.6       `\
+`#> [82] ks_1.15.3           pbivnorm_0.6.0      evaluate_1.0.5     `\
+`#> [85] lattice_0.23-1      rbibutils_2.4.1     backports_1.5.1    `\
+`#> [88] broom_1.0.13        Rcpp_1.1.2          nlme_3.1-171       `\
+`#> [91] xfun_0.62           pkgconfig_2.0.3`
 
 ## Packages
 
 \
 [`installed.packages`](https://rdrr.io/r/utils/installed.packages.html)`(``)``[``, `[`c`](https://rdrr.io/r/base/c.html)`(``"Package"``, ``"Version"``)``]`\
 `#>                   Package             Version     `\
-`#> rProject          "rProject"          "0.0.61"    `\
+`#> rProject          "rProject"          "0.0.62"    `\
 `#> simStateSpace     "simStateSpace"     "1.2.17"    `\
 `#> abind             "abind"             "1.4-8"     `\
 `#> Amelia            "Amelia"            "1.8.3"     `\
@@ -286,7 +286,7 @@
 `#> pak               "pak"               "0.11.1"    `\
 `#> pan               "pan"               "2.0"       `\
 `#> pander            "pander"            "0.6.6"     `\
-`#> parallelly        "parallelly"        "1.48.0"    `\
+`#> parallelly        "parallelly"        "1.50.0"    `\
 `#> parsnip           "parsnip"           "1.6.1"     `\
 `#> patchwork         "patchwork"         "1.3.2"     `\
 `#> pbapply           "pbapply"           "1.7-5"     `\
@@ -365,7 +365,7 @@
 `#> roxygen2          "roxygen2"          "8.1.1.9000"`\
 `#> rpf               "rpf"               "1.0.15"    `\
 `#> RPostgres         "RPostgres"         "1.4.10"    `\
-`#> rProject          "rProject"          "0.0.60"    `\
+`#> rProject          "rProject"          "0.0.62"    `\
 `#> rprojroot         "rprojroot"         "2.1.1"     `\
 `#> rsample           "rsample"           "1.3.2"     `\
 `#> RSQLite           "RSQLite"           "3.53.3"    `\
@@ -491,10 +491,10 @@
     #> Socket(s):                               1
     #> Stepping:                                0
     #> Frequency boost:                         enabled
-    #> CPU(s) scaling MHz:                      51%
+    #> CPU(s) scaling MHz:                      53%
     #> CPU max MHz:                             5060.9761
     #> CPU min MHz:                             1219.5129
-    #> BogoMIPS:                                4990.58
+    #> BogoMIPS:                                4990.68
     #> Flags:                                   fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm constant_tsc rep_good amd_lbr_v2 nopl xtopology nonstop_tsc cpuid extd_apicid aperfmperf rapl pni pclmulqdq monitor ssse3 fma cx16 sse4_1 sse4_2 movbe popcnt aes xsave avx f16c rdrand lahf_lm cmp_legacy svm extapic cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw ibs skinit wdt tce topoext perfctr_core perfctr_nb bpext perfctr_llc mwaitx cpb cat_l3 cdp_l3 hw_pstate ssbd mba perfmon_v2 ibrs ibpb stibp ibrs_enhanced vmmcall fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid cqm rdt_a avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 xsaves cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local user_shstk avx_vnni avx512_bf16 clzero irperf xsaveerptr rdpru wbnoinvd cppc arat npt lbrv svm_lock nrip_save tsc_scale vmcb_clean flushbyasid decodeassists pausefilter pfthreshold v_vmsave_vmload vgif x2avic v_spec_ctrl vnmi avx512vbmi umip pku ospke avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq rdpid bus_lock_detect movdiri movdir64b overflow_recov succor smca fsrm avx512_vp2intersect flush_l1d amd_lbr_pmc_freeze
     #> Virtualization:                          AMD-V
     #> L1d cache:                               768 KiB (16 instances)
@@ -525,6 +525,6 @@
 ## Memory
 
     #>                total        used        free      shared  buff/cache   available
-    #> Mem:            44Gi       3.1Gi        29Gi        14Mi        12Gi        41Gi
+    #> Mem:            44Gi       3.5Gi        30Gi        19Mi        10Gi        40Gi
     #> Swap:           22Gi          0B        22Gi
-    #> Total:          66Gi       3.1Gi        52Gi
+    #> Total:          66Gi       3.5Gi        53Gi

@@ -31,73 +31,69 @@ discrete-time versions.
 
 ## Model
 
-The measurement model is given by \\\[\mathbf{y}\_{i, t} =
+The measurement model is given by \mathbf{y}\_{i, t} =
 \boldsymbol{\nu} + \boldsymbol{\Lambda} \boldsymbol{\eta}\_{i, t} +
 \boldsymbol{\varepsilon}\_{i, t}, \quad \mathrm{with} \quad
 \boldsymbol{\varepsilon}\_{i, t} \sim \mathcal{N} \left( \mathbf{0},
-\boldsymbol{\Theta} \right)\\\] where \\(\mathbf{y}\_{i, t}\\),
-\\(\boldsymbol{\eta}\_{i, t}\\), and \\(\boldsymbol{\varepsilon}\_{i,
-t}\\) are random variables and \\(\boldsymbol{\nu}\\),
-\\(\boldsymbol{\Lambda}\\), and \\(\boldsymbol{\Theta}\\) are model
-parameters. \\(\mathbf{y}\_{i, t}\\) represents a vector of observed
-random variables, \\(\boldsymbol{\eta}\_{i, t}\\) a vector of latent
-random variables, and \\(\boldsymbol{\varepsilon}\_{i, t}\\) a vector of
-random measurement errors, at time \\(t\\) and individual \\(i\\).
-\\(\boldsymbol{\nu}\\) denotes a vector of intercepts,
-\\(\boldsymbol{\Lambda}\\) a matrix of factor loadings, and
-\\(\boldsymbol{\Theta}\\) the covariance matrix of
-\\(\boldsymbol{\varepsilon}\\).
+\boldsymbol{\Theta} \right) where \mathbf{y}\_{i, t},
+\boldsymbol{\eta}\_{i, t}, and \boldsymbol{\varepsilon}\_{i, t} are
+random variables and \boldsymbol{\nu}, \boldsymbol{\Lambda}, and
+\boldsymbol{\Theta} are model parameters. \mathbf{y}\_{i, t} represents
+a vector of observed random variables, \boldsymbol{\eta}\_{i, t} a
+vector of latent random variables, and \boldsymbol{\varepsilon}\_{i, t}
+a vector of random measurement errors, at time t and individual i.
+\boldsymbol{\nu} denotes a vector of intercepts, \boldsymbol{\Lambda} a
+matrix of factor loadings, and \boldsymbol{\Theta} the covariance matrix
+of \boldsymbol{\varepsilon}.
 
 In words, each observed variable is an intercept plus a weighted
 combination of the latent variables plus measurement error. The latent
-variables \\(\boldsymbol{\eta}\_{i, t}\\) are the quantities we care
-about (for example, a person’s true stress level), and the observed
-variables \\(\mathbf{y}\_{i, t}\\) are noisy measurements of them.
-Separating measurement error from true change is the main reason to use
-a state space model: measurement error affects only the occasion it
-occurs on, while changes in the latent variables carry over in time.
+variables \boldsymbol{\eta}\_{i, t} are the quantities we care about
+(for example, a person’s true stress level), and the observed variables
+\mathbf{y}\_{i, t} are noisy measurements of them. Separating
+measurement error from true change is the main reason to use a state
+space model: measurement error affects only the occasion it occurs on,
+while changes in the latent variables carry over in time.
 
 An alternative representation of the measurement error is given by
-\\\[\boldsymbol{\varepsilon}\_{i, t} = \boldsymbol{\Theta}^{\frac{1}{2}}
+\boldsymbol{\varepsilon}\_{i, t} = \boldsymbol{\Theta}^{\frac{1}{2}}
 \mathbf{z}\_{i, t}, \quad \mathrm{with} \quad \mathbf{z}\_{i, t} \sim
-\mathcal{N} \left( \mathbf{0}, \mathbf{I} \right)\\\] where
-\\(\mathbf{z}\_{i, t}\\) is a vector of independent standard normal
-random variables and \\(\left( \boldsymbol{\Theta}^{\frac{1}{2}} \right)
-\left( \boldsymbol{\Theta}^{\frac{1}{2}} \right)^{\prime} =
-\boldsymbol{\Theta}\\) .
+\mathcal{N} \left( \mathbf{0}, \mathbf{I} \right) where \mathbf{z}\_{i,
+t} is a vector of independent standard normal random variables and
+\left( \boldsymbol{\Theta}^{\frac{1}{2}} \right) \left(
+\boldsymbol{\Theta}^{\frac{1}{2}} \right)^{\prime} = \boldsymbol{\Theta}
+.
 
-The dynamic structure is given by \\\[\mathrm{d} \boldsymbol{\eta}\_{i,
-t} = \boldsymbol{\Phi} \left( \boldsymbol{\eta}\_{i, t} -
-\boldsymbol{\mu} \right) \mathrm{d}t + \boldsymbol{\Sigma}^{\frac{1}{2}}
-\mathrm{d} \mathbf{W}\_{i, t}\\\] where \\(\boldsymbol{\mu}\\) is the
-long-term mean or equilibrium level, \\(\boldsymbol{\Phi}\\) is the rate
-of mean reversion, determining how quickly the variable returns to its
-mean, \\(\boldsymbol{\Sigma}\\) is the matrix of volatility or
-randomness in the process, and \\(\mathrm{d}\boldsymbol{W}\\) is a
-Wiener process or Brownian motion, which represents random fluctuations.
+The dynamic structure is given by \mathrm{d} \boldsymbol{\eta}\_{i, t} =
+\boldsymbol{\Phi} \left( \boldsymbol{\eta}\_{i, t} - \boldsymbol{\mu}
+\right) \mathrm{d}t + \boldsymbol{\Sigma}^{\frac{1}{2}} \mathrm{d}
+\mathbf{W}\_{i, t} where \boldsymbol{\mu} is the long-term mean or
+equilibrium level, \boldsymbol{\Phi} is the rate of mean reversion,
+determining how quickly the variable returns to its mean,
+\boldsymbol{\Sigma} is the matrix of volatility or randomness in the
+process, and \mathrm{d}\boldsymbol{W} is a Wiener process or Brownian
+motion, which represents random fluctuations.
 
-In words, \\(\mathrm{d} \boldsymbol{\eta}\_{i, t}\\) is the change in
-the latent variables over a very short time \\(\mathrm{d}t\\). The
-change has two parts: a pull toward the equilibrium
-\\(\boldsymbol{\mu}\\), proportional to the distance
-\\(\boldsymbol{\eta}\_{i, t} - \boldsymbol{\mu}\\), and random
-fluctuations with covariance \\(\boldsymbol{\Sigma}\\) per unit time.
+In words, \mathrm{d} \boldsymbol{\eta}\_{i, t} is the change in the
+latent variables over a very short time \mathrm{d}t. The change has two
+parts: a pull toward the equilibrium \boldsymbol{\mu}, proportional to
+the distance \boldsymbol{\eta}\_{i, t} - \boldsymbol{\mu}, and random
+fluctuations with covariance \boldsymbol{\Sigma} per unit time.
 
-- With this sign convention, a diagonal element \\(\phi\_{jj}\\) is
-  negative for a variable that returns to its equilibrium. The more
-  negative it is, the faster the return.
-- An off-diagonal element \\(\phi\_{jk}\\) is the effect of the distance
-  of variable \\(k\\) from its equilibrium on the rate of change of
-  variable \\(j\\). As in the discrete-time models, the row is the
-  outcome and the column is the predictor.
+- With this sign convention, a diagonal element \phi\_{jj} is negative
+  for a variable that returns to its equilibrium. The more negative it
+  is, the faster the return.
+- An off-diagonal element \phi\_{jk} is the effect of the distance of
+  variable k from its equilibrium on the rate of change of variable j.
+  As in the discrete-time models, the row is the outcome and the column
+  is the predictor.
 
-For the process to settle around \\(\boldsymbol{\mu}\\), all eigenvalues
-of \\(\boldsymbol{\Phi}\\) must have negative real parts.
+For the process to settle around \boldsymbol{\mu}, all eigenvalues of
+\boldsymbol{\Phi} must have negative real parts.
 
-Over a time interval \\(\Delta t\\), the OU model implies a
-discrete-time vector autoregressive model with transition matrix
-\\(\boldsymbol{\beta} = \exp \left( \boldsymbol{\Phi} \Delta t
-\right)\\), the matrix exponential.
+Over a time interval \Delta t, the OU model implies a discrete-time
+vector autoregressive model with transition matrix \boldsymbol{\beta} =
+\exp \left( \boldsymbol{\Phi} \Delta t \right), the matrix exponential.
 [`SimSSMOUFixed()`](https://github.com/jeksterslab/simStateSpace/reference/SimSSMOUFixed.md)
 uses this exact discretization to simulate the data, so no approximation
 error is introduced.
@@ -109,115 +105,105 @@ error is introduced.
 State space diagram of the OU model.
 
 The model in state space form, at the first three occasions of
-measurement, \\(\Delta t\\) apart (\\(t = 0, \Delta t, 2 \Delta t\\)),
-with every element of the state drawn. Squares are observed variables
-and circles are latent variables. Each latent variable \\(\eta\_{j,
-t}\\) has one indicator \\(Y\_{j, t}\\) with a loading of 1, and
-measurement error \\(\varepsilon\_{j, t}\\) with variance
-\\(\theta\_{jj}\\). The arrows between occasions are the elements of
-\\(\boldsymbol{\beta} = \exp \left( \boldsymbol{\Phi} \Delta t
-\right)\\). Because \\(\boldsymbol{\Phi}\\) is lower triangular in this
-example, so is \\(\boldsymbol{\beta}\\): \\(\eta\_{1}\\) affects
-\\(\eta\_{2}\\) and \\(\eta\_{3}\\), and \\(\eta\_{2}\\) affects
-\\(\eta\_{3}\\). \\(\zeta\_{j, t}\\) is the process noise from \\(t =
-\Delta t\\) on. Its covariance matrix \\(\boldsymbol{\Psi}\\) follows
-from \\(\boldsymbol{\Phi}\\), \\(\boldsymbol{\Sigma}\\), and \\(\Delta
-t\\) and is full, so the process noise terms covary (the gray arrows
-\\(\psi\_{jk}\\)). A loop on a variable is its variance and a curved
-two-headed arrow a covariance. At \\(t = 0\\), the initial condition
-\\(\boldsymbol{\eta}\_{0} \sim \mathcal{N} \left( \boldsymbol{\mu}\_{0},
-\boldsymbol{\Sigma}\_{0} \right)\\) gives the variances
-\\(\sigma\_{jj}\\) and covariances \\(\sigma\_{jk}\\) of the latent
-variables. The exact discretization gives \\(\boldsymbol{\beta}\\) and
-\\(\boldsymbol{\Psi}\\) from \\(\boldsymbol{\Phi}\\),
-\\(\boldsymbol{\Sigma}\\), and \\(\Delta t\\);
-\\(\boldsymbol{\Lambda}\\) maps the state to the observed variables, and
-\\(\boldsymbol{\Theta}\\) is the covariance matrix of the measurement
-error.
+measurement, \Delta t apart (t = 0, \Delta t, 2 \Delta t), with every
+element of the state drawn. Squares are observed variables and circles
+are latent variables. Each latent variable \eta\_{j, t} has one
+indicator Y\_{j, t} with a loading of 1, and measurement error
+\varepsilon\_{j, t} with variance \theta\_{jj}. The arrows between
+occasions are the elements of \boldsymbol{\beta} = \exp \left(
+\boldsymbol{\Phi} \Delta t \right). Because \boldsymbol{\Phi} is lower
+triangular in this example, so is \boldsymbol{\beta}: \eta\_{1} affects
+\eta\_{2} and \eta\_{3}, and \eta\_{2} affects \eta\_{3}. \zeta\_{j, t}
+is the process noise from t = \Delta t on. Its covariance matrix
+\boldsymbol{\Psi} follows from \boldsymbol{\Phi}, \boldsymbol{\Sigma},
+and \Delta t and is full, so the process noise terms covary (the gray
+arrows \psi\_{jk}). A loop on a variable is its variance and a curved
+two-headed arrow a covariance. At t = 0, the initial condition
+\boldsymbol{\eta}\_{0} \sim \mathcal{N} \left( \boldsymbol{\mu}\_{0},
+\boldsymbol{\Sigma}\_{0} \right) gives the variances \sigma\_{jj} and
+covariances \sigma\_{jk} of the latent variables. The exact
+discretization gives \boldsymbol{\beta} and \boldsymbol{\Psi} from
+\boldsymbol{\Phi}, \boldsymbol{\Sigma}, and \Delta t;
+\boldsymbol{\Lambda} maps the state to the observed variables, and
+\boldsymbol{\Theta} is the covariance matrix of the measurement error.
 [`SimSSMOUFixed()`](https://github.com/jeksterslab/simStateSpace/reference/SimSSMOUFixed.md)
 takes `phi`, `lambda`, `delta_t`, `mu0`, and the Cholesky factors of
-\\(\boldsymbol{\Sigma}\\), \\(\boldsymbol{\Theta}\\), and
-\\(\boldsymbol{\Sigma}\_{0}\\) (`sigma_l`, `theta_l`, and `sigma0_l`),
-and does the discretization itself.
+\boldsymbol{\Sigma}, \boldsymbol{\Theta}, and \boldsymbol{\Sigma}\_{0}
+(`sigma_l`, `theta_l`, and `sigma0_l`), and does the discretization
+itself.
 
 ## Data Generation
 
 ### Notation
 
-Let \\(t = 1000\\) be the number of time points and \\(n = 100\\) be the
-number of individuals.
+Let t = 1000 be the number of time points and n = 100 be the number of
+individuals.
 
-Let the measurement model intercept vector \\(\boldsymbol{\nu}\\) be
-given by
+Let the measurement model intercept vector \boldsymbol{\nu} be given by
 
-\\\[\boldsymbol{\nu} = \left( \begin{array}{c} 0 \\\\ 0 \\\\ 0 \\\\
-\end{array} \right) .\\\]
+\boldsymbol{\nu} = \left( \begin{array}{c} 0 \\\\ 0 \\\\ 0 \\\\
+\end{array} \right) .
 
-Let the factor loadings matrix \\(\boldsymbol{\Lambda}\\) be given by
+Let the factor loadings matrix \boldsymbol{\Lambda} be given by
 
-\\\[\boldsymbol{\Lambda} = \left( \begin{array}{ccc} 1 & 0 & 0 \\\\ 0 &
-1 & 0 \\\\ 0 & 0 & 1 \\\\ \end{array} \right) .\\\]
+\boldsymbol{\Lambda} = \left( \begin{array}{ccc} 1 & 0 & 0 \\\\ 0 & 1 &
+0 \\\\ 0 & 0 & 1 \\\\ \end{array} \right) .
 
-Let the measurement error covariance matrix \\(\boldsymbol{\Theta}\\) be
-given by
-
-\\\[\boldsymbol{\Theta} = \left( \begin{array}{ccc} 0.2 & 0 & 0 \\\\ 0 &
-0.2 & 0 \\\\ 0 & 0 & 0.2 \\\\ \end{array} \right) .\\\]
-
-With \\(\boldsymbol{\nu} = \mathbf{0}\\) and \\(\boldsymbol{\Lambda} =
-\mathbf{I}\\), each observed variable measures one latent variable, and
-\\(\boldsymbol{\Theta}\\) adds measurement error with variance 0.2 to
-each.
-
-Let the initial condition \\(\boldsymbol{\eta}\_{0}\\) be given by
-
-\\\[\boldsymbol{\eta}\_{0} \sim \mathcal{N} \left(
-\boldsymbol{\mu}\_{0}, \boldsymbol{\Sigma}\_{0} \right)\\\]
-
-\\\[\boldsymbol{\mu}\_{0} = \left( \begin{array}{c} 0 \\\\ 0 \\\\ 0 \\\\
-\end{array} \right)\\\]
-
-\\\[\boldsymbol{\Sigma}\_{0} = \left( \begin{array}{ccc} 0.3425148 &
-0.3296023 & 0.0343817 \\\\ 0.3296023 & 0.5664625 & 0.2545955 \\\\
-0.0343817 & 0.2545955 & 0.2999909 \\\\ \end{array} \right) .\\\]
-
-Let the long-term mean vector \\(\boldsymbol{\mu}\\) be given by
-
-\\\[\boldsymbol{\mu} = \left( \begin{array}{c} 0 \\\\ 0 \\\\ 0 \\\\
-\end{array} \right) .\\\]
-
-Let the rate of mean reversion matrix \\(\boldsymbol{\Phi}\\) be given
+Let the measurement error covariance matrix \boldsymbol{\Theta} be given
 by
 
-\\\[\boldsymbol{\Phi} = \left( \begin{array}{ccc} -0.357 & 0 & 0 \\\\
-0.771 & -0.511 & 0 \\\\ -0.45 & 0.729 & -0.693 \\\\ \end{array} \right)
-.\\\]
+\boldsymbol{\Theta} = \left( \begin{array}{ccc} 0.2 & 0 & 0 \\\\ 0 & 0.2
+& 0 \\\\ 0 & 0 & 0.2 \\\\ \end{array} \right) .
+
+With \boldsymbol{\nu} = \mathbf{0} and \boldsymbol{\Lambda} =
+\mathbf{I}, each observed variable measures one latent variable, and
+\boldsymbol{\Theta} adds measurement error with variance 0.2 to each.
+
+Let the initial condition \boldsymbol{\eta}\_{0} be given by
+
+\boldsymbol{\eta}\_{0} \sim \mathcal{N} \left( \boldsymbol{\mu}\_{0},
+\boldsymbol{\Sigma}\_{0} \right)
+
+\boldsymbol{\mu}\_{0} = \left( \begin{array}{c} 0 \\\\ 0 \\\\ 0 \\\\
+\end{array} \right)
+
+\boldsymbol{\Sigma}\_{0} = \left( \begin{array}{ccc} 0.3425148 &
+0.3296023 & 0.0343817 \\\\ 0.3296023 & 0.5664625 & 0.2545955 \\\\
+0.0343817 & 0.2545955 & 0.2999909 \\\\ \end{array} \right) .
+
+Let the long-term mean vector \boldsymbol{\mu} be given by
+
+\boldsymbol{\mu} = \left( \begin{array}{c} 0 \\\\ 0 \\\\ 0 \\\\
+\end{array} \right) .
+
+Let the rate of mean reversion matrix \boldsymbol{\Phi} be given by
+
+\boldsymbol{\Phi} = \left( \begin{array}{ccc} -0.357 & 0 & 0 \\\\ 0.771
+& -0.511 & 0 \\\\ -0.45 & 0.729 & -0.693 \\\\ \end{array} \right) .
 
 Read the columns as predictors and the rows as outcomes. The diagonal
 elements are all negative, so each variable returns to its equilibrium.
-In addition, \\(\eta\_{1}\\) pushes up the change in \\(\eta\_{2}\\)
-(0.771), \\(\eta\_{2}\\) pushes up the change in \\(\eta\_{3}\\)
-(0.729), and \\(\eta\_{1}\\) pushes down the change in \\(\eta\_{3}\\)
-(-0.45). Because \\(\boldsymbol{\Phi}\\) is lower triangular, its
-eigenvalues are its diagonal elements, all negative, so the process is
-stable.
+In addition, \eta\_{1} pushes up the change in \eta\_{2} (0.771),
+\eta\_{2} pushes up the change in \eta\_{3} (0.729), and \eta\_{1}
+pushes down the change in \eta\_{3} (-0.45). Because \boldsymbol{\Phi}
+is lower triangular, its eigenvalues are its diagonal elements, all
+negative, so the process is stable.
 
-Let the dynamic process noise covariance matrix
-\\(\boldsymbol{\Sigma}\\) be given by
+Let the dynamic process noise covariance matrix \boldsymbol{\Sigma} be
+given by
 
-\\\[\boldsymbol{\Sigma} = \left( \begin{array}{ccc} 0.2445556 &
-0.0220159 & -0.0500476 \\\\ 0.0220159 & 0.070678 & 0.0153946 \\\\
--0.0500476 & 0.0153946 & 0.0755306 \\\\ \end{array} \right) .\\\]
+\boldsymbol{\Sigma} = \left( \begin{array}{ccc} 0.2445556 & 0.0220159 &
+-0.0500476 \\\\ 0.0220159 & 0.070678 & 0.0153946 \\\\ -0.0500476 &
+0.0153946 & 0.0755306 \\\\ \end{array} \right) .
 
-Let \\(\Delta t = 0.1\\).
+Let \Delta t = 0.1.
 
 The data are measured every 0.1 time units. For example, if the time
 unit is one day, the 1000 occasions span 99.9 days.
 
 The initial condition describes where each individual starts. Here, the
-mean vector and covariance matrix of \\(\boldsymbol{\eta}\_{0}\\) are
-the model-implied mean and covariance of the stable process, computed
-with
+mean vector and covariance matrix of \boldsymbol{\eta}\_{0} are the
+model-implied mean and covariance of the stable process, computed with
 [`LinSDEMeanEta()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDEMeanEta.md)
 and
 [`LinSDECovEta()`](https://github.com/jeksterslab/simStateSpace/reference/LinSDECovEta.md),
@@ -284,10 +270,10 @@ Cholesky factors (the arguments ending in `_l`).
 
 ### Visualizing the Dynamics Without Measurement Error and Process Noise (n = 5 with Different Initial Condition)
 
-To see what \\(\boldsymbol{\Phi}\\) alone does, we first simulate five
+To see what \boldsymbol{\Phi} alone does, we first simulate five
 individuals with the process noise and the measurement error set to
 zero. Each individual starts at a different point, and the trajectories
-return to the equilibrium at a speed set by \\(\boldsymbol{\Phi}\\).
+return to the equilibrium at a speed set by \boldsymbol{\Phi}.
 
 ![](fig-vignettes-ou-no-error-ou-1.png)![](fig-vignettes-ou-no-error-ou-2.png)![](fig-vignettes-ou-no-error-ou-3.png)
 
@@ -362,9 +348,9 @@ interval, then applies the Kalman filter.
 A `dynr` model is built from pieces that match the equations above: the
 data, the initial condition, the measurement model, the dynamic model,
 and the noise. Each parameter gets a name (for example, `phi_2_1` for
-\\(\phi\_{21}\\)\`), and the same name used in two places means one
-shared parameter. The starting values are set to the population values
-for convenience; with real data, they would be rough guesses.
+\phi\_{21}\`), and the same name used in two places means one shared
+parameter. The starting values are set to the population values for
+convenience; with real data, they would be rough guesses.
 
 #### Prepare Data
 
@@ -381,10 +367,9 @@ observed variables.
 
 #### Prepare Initial Condition
 
-The mean \\(\boldsymbol{\mu}\_{0}\\) and covariance
-\\(\boldsymbol{\Sigma}\_{0}\\) of the initial state are estimated. The
-covariance matrix is symmetric, so `sigma0_2_1` appears both above and
-below the diagonal.
+The mean \boldsymbol{\mu}\_{0} and covariance \boldsymbol{\Sigma}\_{0}
+of the initial state are estimated. The covariance matrix is symmetric,
+so `sigma0_2_1` appears both above and below the diagonal.
 
 \
 `dynr_initial`` ``<-`` ``dynr``::`[`prep.initial`](https://rdrr.io/pkg/dynr/man/prep.initial.html)`(`\
@@ -403,8 +388,8 @@ below the diagonal.
 
 #### Prepare Measurement Model
 
-The loadings \\(\boldsymbol{\Lambda}\\) are an identity matrix with no
-free parameters (`"fixed"`).
+The loadings \boldsymbol{\Lambda} are an identity matrix with no free
+parameters (`"fixed"`).
 
 \
 `dynr_measurement`` ``<-`` ``dynr``::`[`prep.measurement`](https://rdrr.io/pkg/dynr/man/prep.measurement.html)`(`\
@@ -417,8 +402,8 @@ free parameters (`"fixed"`).
 #### Prepare Dynamic Process
 
 Each formula is the rate of change of one latent variable: the effects
-\\(\phi\_{jk}\\) of the distances of the three latent variables from
-their equilibria \\(\mu\_{k}\\). `isContinuousTime = TRUE` makes this a
+\phi\_{jk} of the distances of the three latent variables from their
+equilibria \mu\_{k}. `isContinuousTime = TRUE` makes this a
 continuous-time model.
 
 \
@@ -439,10 +424,10 @@ continuous-time model.
 
 #### Prepare Process Noise
 
-The diffusion covariance \\(\boldsymbol{\Sigma}\\) is estimated in full.
-The measurement error covariance \\(\boldsymbol{\Theta}\\) is diagonal:
-the three error variances are estimated, and the error covariances are
-fixed at zero.
+The diffusion covariance \boldsymbol{\Sigma} is estimated in full. The
+measurement error covariance \boldsymbol{\Theta} is diagonal: the three
+error variances are estimated, and the error covariances are fixed at
+zero.
 
 \
 `dynr_noise`` ``<-`` ``dynr``::`[`prep.noise`](https://rdrr.io/pkg/dynr/man/prep.noise.html)`(`\
@@ -481,8 +466,8 @@ code to `outfile` and compiles it.
 `  outfile ``=`` ``"ou.c"`\
 `)`
 
-Add lower and upper bounds on the elements of \\(\boldsymbol{\Phi}\\) to
-keep the optimizer away from implausible values.
+Add lower and upper bounds on the elements of \boldsymbol{\Phi} to keep
+the optimizer away from implausible values.
 
 \
 `model``$``lb``[`\
@@ -546,13 +531,13 @@ The plot below shows the model equations with the parameter names.
 `#> `\
 `#> Doing end processing`\
 `#> Successful trial`\
-`#> Total Time: 36.85892 `\
-`#> Backend Time: 36.85161`
+`#> Total Time: 37.25873 `\
+`#> Backend Time: 37.25129`
 
 #### Summary
 
-The summary lists each estimate with its standard error, \\(t\\) value,
-confidence interval, and \\(p\\) value.
+The summary lists each estimate with its standard error, t value,
+confidence interval, and p value.
 
 \
 [`summary`](https://rdrr.io/r/base/summary.html)`(``results``)`\
@@ -632,29 +617,29 @@ confidence interval, and \\(p\\) value.
 own Kalman filter
 ([`OpenMx::mxExpectationStateSpace()`](https://rdrr.io/pkg/OpenMx/man/mxExpectationStateSpace.html);
 Hunter (2018)). Its matrices have the names used in engineering: `A` is
-the transition matrix \\(\boldsymbol{\beta}\\), `B` holds the intercepts
-of the dynamic model, `C` is the loading matrix
-\\(\boldsymbol{\Lambda}\\), `D` holds the intercepts of the measurement
-model, `Q` is the process noise covariance matrix, and `R` is the
-measurement error covariance matrix. The parameter labels are the dynr
-names; as in dynr, a label used in two places is one shared parameter,
-and the starting values are the population values.
+the transition matrix \boldsymbol{\beta}, `B` holds the intercepts of
+the dynamic model, `C` is the loading matrix \boldsymbol{\Lambda}, `D`
+holds the intercepts of the measurement model, `Q` is the process noise
+covariance matrix, and `R` is the measurement error covariance matrix.
+The parameter labels are the dynr names; as in dynr, a label used in two
+places is one shared parameter, and the starting values are the
+population values.
 
 Two details differ from dynr. First, OpenMx reads the data as a single
 time series. To start the filter again at the first occasion of every
 individual, each individual gets a group, and all groups use the
 matrices of one parent model, so every individual has the same
 parameters. Second, OpenMx starts the filter one occasion before the
-first row, so the first row has the state mean \\(\mathbf{A}
-\mathbf{x}\_{0} + \mathbf{B} \mathbf{u}\\) and the state covariance
-\\(\mathbf{A} \mathbf{P}\_{0} \mathbf{A}^{\prime} + \mathbf{Q}\\), with
-the constant input \\(\mathbf{u} = 1\\). Setting \\(\mathbf{x}\_{0} =
-\mathbf{A}^{-1} \left( \boldsymbol{\mu}\_{0} - \mathbf{B} \mathbf{u}
-\right)\\) and \\(\mathbf{P}\_{0} = \mathbf{A}^{-1} \left(
-\boldsymbol{\Sigma}\_{0} - \mathbf{Q} \right) \left( \mathbf{A}^{-1}
-\right)^{\prime}\\) gives the first occasion the initial condition of
-the model, so the likelihood is the same as in dynr. This needs an
-invertible \\(\mathbf{A}\\), which holds here.
+first row, so the first row has the state mean \mathbf{A}
+\mathbf{x}\_{0} + \mathbf{B} \mathbf{u} and the state covariance
+\mathbf{A} \mathbf{P}\_{0} \mathbf{A}^{\prime} + \mathbf{Q}, with the
+constant input \mathbf{u} = 1. Setting \mathbf{x}\_{0} = \mathbf{A}^{-1}
+\left( \boldsymbol{\mu}\_{0} - \mathbf{B} \mathbf{u} \right) and
+\mathbf{P}\_{0} = \mathbf{A}^{-1} \left( \boldsymbol{\Sigma}\_{0} -
+\mathbf{Q} \right) \left( \mathbf{A}^{-1} \right)^{\prime} gives the
+first occasion the initial condition of the model, so the likelihood is
+the same as in dynr. This needs an invertible \mathbf{A}, which holds
+here.
 
 The two helper functions below are the same in every vignette of the
 package. `MxMat()` makes an OpenMx matrix from values and dynr-style
@@ -754,19 +739,18 @@ groups and fits the model.
 
 The model is in continuous time, so the discrete-time matrices `A`, `B`,
 and `Q` are the exact discretization of the drift matrix
-\\(\boldsymbol{\Phi}\\), the equilibrium \\(\boldsymbol{\mu}\\), and the
-diffusion matrix \\(\boldsymbol{\Sigma}\\) over the interval
-\\(\Delta\_{t}\\), written as OpenMx algebras: \\(\mathbf{A} = \exp
-\left( \boldsymbol{\Phi} \Delta\_{t} \right)\\), \\(\mathbf{B} = \left(
-\mathbf{I} - \mathbf{A} \right) \boldsymbol{\mu}\\), and
-\\(\mathbf{Q}\\) from the matrix exponential of a block matrix (Van
-Loan, 1978). The free parameters are still \\(\boldsymbol{\Phi}\\),
-\\(\boldsymbol{\mu}\\), and \\(\boldsymbol{\Sigma}\\), with the dynr
-labels. We use the discrete-time expectation with these algebras rather
-than
+\boldsymbol{\Phi}, the equilibrium \boldsymbol{\mu}, and the diffusion
+matrix \boldsymbol{\Sigma} over the interval \Delta\_{t}, written as
+OpenMx algebras: \mathbf{A} = \exp \left( \boldsymbol{\Phi} \Delta\_{t}
+\right), \mathbf{B} = \left( \mathbf{I} - \mathbf{A} \right)
+\boldsymbol{\mu}, and \mathbf{Q} from the matrix exponential of a block
+matrix (Van Loan, 1978). The free parameters are still
+\boldsymbol{\Phi}, \boldsymbol{\mu}, and \boldsymbol{\Sigma}, with the
+dynr labels. We use the discrete-time expectation with these algebras
+rather than
 [`OpenMx::mxExpectationStateSpaceContinuousTime()`](https://rdrr.io/pkg/OpenMx/man/mxExpectationStateSpaceContinuousTime.html):
 in our checks with OpenMx 2.22.11, its process noise covariance over an
-interval did not match the exact one when \\(\boldsymbol{\Phi}\\) is not
+interval did not match the exact one when \boldsymbol{\Phi} is not
 symmetric. The matrix exponential
 [`omxExponential()`](https://rdrr.io/pkg/OpenMx/man/expm.html) in the
 algebras is also evaluated in R, so OpenMx is attached.
@@ -914,8 +898,8 @@ summary(fit_mx_ssm)
 #> AIC:      -170777.7               429222.3                 429222.3
 #> BIC:     -3024370.0               429507.6                 429412.3
 #> To get additional fit indices, see help(mxRefModels)
-#> timestamp: 2026-11-02 06:39:38 
-#> Wall clock time: 593.974 secs 
+#> timestamp: 2026-11-03 06:46:07 
+#> Wall clock time: 614.3967 secs 
 #> optimizer:  SLSQP 
 #> OpenMx version number: 2.22.11 
 #> Need help?  See help(mxSummary)
@@ -928,10 +912,9 @@ next to the estimates of one method. Bias is the estimate minus the
 population value. Because each model is fitted to a single simulated
 data set, this is the error of one estimate, not a Monte Carlo bias,
 which would average over many replications. The 95% confidence interval
-is the Wald interval, \\(\hat{\theta} \pm 1.96 \times \mathrm{SE}\\),
-unless the caption says otherwise, and `Covers` shows whether it
-contains the population value. The parameter names are the dynr names in
-every table.
+is the Wald interval, \hat{\theta} \pm 1.96 \times \mathrm{SE}, unless
+the caption says otherwise, and `Covers` shows whether it contains the
+population value. The parameter names are the dynr names in every table.
 
 \
 `EstimatesTable`` ``<-`` ``function``(``population``, ``estimate``, ``se``, ``ll`` ``=`` ``NULL``, ``ul`` ``=`` ``NULL``)`` ``{`\
