@@ -402,8 +402,8 @@ equations with the parameter names.
 `#> `\
 `#> Doing end processing`\
 `#> Successful trial`\
-`#> Total Time: 20.456 `\
-`#> Backend Time: 20.44765`
+`#> Total Time: 20.71834 `\
+`#> Backend Time: 20.70897`
 
 #### Summary
 
@@ -711,8 +711,8 @@ summary(fit_mx_ssm)
 #> AIC:      -439576.1               160423.9                 160423.9
 #> BIC:     -3293196.9               160680.7                 160594.9
 #> To get additional fit indices, see help(mxRefModels)
-#> timestamp: 2026-11-03 17:13:33 
-#> Wall clock time: 515.5614 secs 
+#> timestamp: 2026-11-05 07:52:43 
+#> Wall clock time: 503.6521 secs 
 #> optimizer:  SLSQP 
 #> OpenMx version number: 2.22.11 
 #> Need help?  See help(mxSummary)

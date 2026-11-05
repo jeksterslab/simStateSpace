@@ -531,8 +531,8 @@ The plot below shows the model equations with the parameter names.
 `#> `\
 `#> Doing end processing`\
 `#> Successful trial`\
-`#> Total Time: 37.25873 `\
-`#> Backend Time: 37.25129`
+`#> Total Time: 37.3343 `\
+`#> Backend Time: 37.32591`
 
 #### Summary
 
@@ -898,8 +898,8 @@ summary(fit_mx_ssm)
 #> AIC:      -170777.7               429222.3                 429222.3
 #> BIC:     -3024370.0               429507.6                 429412.3
 #> To get additional fit indices, see help(mxRefModels)
-#> timestamp: 2026-11-03 06:46:07 
-#> Wall clock time: 614.3967 secs 
+#> timestamp: 2026-11-05 06:31:43 
+#> Wall clock time: 593.3018 secs 
 #> optimizer:  SLSQP 
 #> OpenMx version number: 2.22.11 
 #> Need help?  See help(mxSummary)

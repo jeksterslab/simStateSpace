@@ -318,10 +318,7 @@ observed variables.
 `  id ``=`` ``"id"``,`\
 `  time ``=`` ``"time"``,`\
 `  observed ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"y1"``, ``"y2"``)`\
-`)`\
-`#> Registered S3 method overwritten by 'car':`\
-`#>   method           from`\
-`#>   na.action.merMod lme4`
+`)`
 
 #### Prepare Initial Condition
 
@@ -446,8 +443,8 @@ The plot below shows the model equations with the parameter names.
 `#> `\
 `#> Doing end processing`\
 `#> Successful trial`\
-`#> Total Time: 1.316988 `\
-`#> Backend Time: 1.310892`
+`#> Total Time: 1.372211 `\
+`#> Backend Time: 1.362676`
 
 #### Summary
 
@@ -698,8 +695,8 @@ summary(fit_mx_ssm)
 #> AIC:       23405.56               123405.6                 123405.6
 #> BIC:     -382804.09               123527.5                 123479.8
 #> To get additional fit indices, see help(mxRefModels)
-#> timestamp: 2026-11-03 15:59:03 
-#> Wall clock time: 119.3972 secs 
+#> timestamp: 2026-11-05 06:37:12 
+#> Wall clock time: 131.5413 secs 
 #> optimizer:  SLSQP 
 #> OpenMx version number: 2.22.11 
 #> Need help?  See help(mxSummary)
@@ -1138,8 +1135,8 @@ population values.
 `#> AIC:       23405.56               123405.6                 123405.7`\
 `#> BIC:     -302356.34               123503.3                 123455.7`\
 `#> To get additional fit indices, see help(mxRefModels)`\
-`#> timestamp: 2026-11-03 16:02:32 `\
-`#> Wall clock time: 0.05221152 secs `\
+`#> timestamp: 2026-11-05 06:40:37 `\
+`#> Wall clock time: 0.04505324 secs `\
 `#> optimizer:  SLSQP `\
 `#> OpenMx version number: 2.22.11 `\
 `#> Need help?  See help(mxSummary)`

@@ -59,7 +59,7 @@
                         <h4 data-toc-skip class="author">Ivan Jacob
 Agaloos Pesigan</h4>
             
-            <h4 data-toc-skip class="date">2026-11-03</h4>
+            <h4 data-toc-skip class="date">2026-11-05</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/jeksterslab/simStateSpace/blob/main/vignettes/lcm-sr.Rmd"><code>vignettes/lcm-sr.Rmd</code></a></small>
       <div class="d-none name"><code>lcm-sr.Rmd</code></div>
@@ -217,9 +217,2593 @@ intercepts), and the variances and covariance of the residuals at the
 first occasion. The residuals have mean zero, because they are
 deviations from the trajectories, and are uncorrelated with the
 intercepts and slopes.</p>
-<div class="section level3 unnumbered">
-<h3 class="unnumbered" id="diagrams">Diagrams<a class="anchor" aria-label="anchor" href="#diagrams"></a>
+<div class="section level3">
+<h3 id="diagrams">Diagrams<a class="anchor" aria-label="anchor" href="#diagrams"></a>
 </h3>
+<div class="float">
+<img src="fig-vignettes-lcm-sr-path.png" style="width:100.0%" alt="Path diagram of the LCM-SR."><div class="figcaption">Path diagram of the LCM-SR.</div>
+</div>
+<p>The LCM-SR as a path diagram, for the first three occasions (<span class="math inline">t = 0, 1, 2</span>). The intercepts <span class="math inline">\eta_{1}</span> and <span class="math inline">\eta_{2}</span> load on every occasion with a
+loading of 1, and the slopes <span class="math inline">\eta_{3}</span>
+and <span class="math inline">\eta_{4}</span> with loadings <span class="math inline">0, 1, 2, \ldots</span>. The structured residuals
+<span class="math inline">\eta_{5}</span> and <span class="math inline">\eta_{6}</span> carry the dynamics: the horizontal
+arrows are the autoregressive effects and the diagonal arrows the
+cross-lagged effects. <span class="math inline">\zeta_{5}</span> and
+<span class="math inline">\zeta_{6}</span> are the new parts of the
+residuals on each occasion, with variances <span class="math inline">\psi_{55}</span> and <span class="math inline">\psi_{66}</span> and covariance <span class="math inline">\psi_{56}</span>; <span class="math inline">\sigma_{55}</span>, <span class="math inline">\sigma_{66}</span>, and <span class="math inline">\sigma_{56}</span> are the variances and covariance
+of the structured residuals at <span class="math inline">t = 0</span>. A
+loop on a variable is its variance and a curved two-headed arrow a
+covariance. The intercepts and slopes have variances <span class="math inline">\sigma_{11}</span> to <span class="math inline">\sigma_{44}</span> and all covary; to keep the
+diagram readable, only the covariances <span class="math inline">\sigma_{12}</span>, <span class="math inline">\sigma_{13}</span>, and <span class="math inline">\sigma_{24}</span> are drawn.</p>
+<div class="float">
+<img src="fig-vignettes-lcm-sr-ssm.png" style="width:100.0%" alt="State space form of the LCM-SR."><div class="figcaption">State space form of the LCM-SR.</div>
+</div>
+<p>The same model in state space form, for the first three occasions,
+with every element of the state drawn. In the state space form, <span class="math inline">\eta_{1, t}</span> and <span class="math inline">\eta_{2, t}</span> are the current levels of the
+trajectories (the intercepts at <span class="math inline">t = 0</span>):
+the transition adds the slope to the level at each occasion, and the
+slopes are states with a transition of 1, so <span class="math inline">\eta_{3, t} = \eta_{3}</span> and <span class="math inline">\eta_{4, t} = \eta_{4}</span> for all <span class="math inline">t</span>. Each observed variable <span class="math inline">Y_{j, t}</span> is its level plus its structured
+residual, both with a loading of 1. Only the structured residuals <span class="math inline">\eta_{5, t}</span> and <span class="math inline">\eta_{6, t}</span> receive process noise, from <span class="math inline">t = 1</span> on. At <span class="math inline">t =
+0</span>, the initial condition <span class="math inline">\boldsymbol{\eta}_{0} \sim \mathcal{N} \left(
+\boldsymbol{\mu}_{0}, \boldsymbol{\Sigma}_{0} \right)</span> gives the
+variances and covariances at <span class="math inline">t = 0</span>: the
+intercepts and slopes all covary, and the structured residuals covary
+with each other but not with the growth part. Below the diagram, all the
+latent variables at one occasion form the state vector <span class="math inline">\boldsymbol{\eta}_{t}</span>, and all the observed
+variables form <span class="math inline">\mathbf{y}_{t}</span>: <span class="math inline">\boldsymbol{\beta}</span> carries the state from one
+occasion to the next, <span class="math inline">\boldsymbol{\Lambda}</span> maps the state to the
+observed variables, and <span class="math inline">\boldsymbol{\Psi}</span> is the covariance matrix of
+the process noise <span class="math inline">\boldsymbol{\zeta}_{t}</span>.
+<code><a href="../reference/SimSSMFixed.html">SimSSMFixed()</a></code> takes <code>beta</code>, <code>lambda</code>,
+<code>mu0</code>, and the Cholesky factors of <span class="math inline">\boldsymbol{\Psi}</span> and <span class="math inline">\boldsymbol{\Sigma}_{0}</span> (<code>psi_l</code>
+and <code>sigma0_l</code>); <code>theta_l</code> is a matrix of
+zeros.</p>
+</div>
+</div>
+<div class="section level2">
+<h2 id="data-generation">Data Generation<a class="anchor" aria-label="anchor" href="#data-generation"></a>
+</h2>
+<div class="section level3">
+<h3 id="notation">Notation<a class="anchor" aria-label="anchor" href="#notation"></a>
+</h3>
+<p>Let <span class="math inline">t = 5</span> be the number of time
+points and <span class="math inline">n = 5000</span> be the number of
+individuals.</p>
+<p>Let the means and the covariance matrix of the intercepts and slopes,
+in the order intercept 1, intercept 2, slope 1, and slope 2, be</p>
+<p><span class="math display">\left(
+\begin{array}{c}
+  2 \\
+  1 \\
+  0.5 \\
+  0.3 \\
+\end{array}
+\right)
+\quad \mathrm{and,} \quad
+\left(
+\begin{array}{cccc}
+  1 &amp; 0.4 &amp; 0.1 &amp; 0.05 \\
+  0.4 &amp; 1 &amp; 0.05 &amp; 0.1 \\
+  0.1 &amp; 0.05 &amp; 0.1 &amp; 0.03 \\
+  0.05 &amp; 0.1 &amp; 0.03 &amp; 0.1 \\
+\end{array}
+\right) .</span></p>
+<p>Let the autoregressive and cross-lagged effects of the residuals and
+their process noise covariance matrix be</p>
+<p><span class="math display">\left(
+\begin{array}{cc}
+  \beta_{55} &amp; \beta_{56} \\
+  \beta_{65} &amp; \beta_{66} \\
+\end{array}
+\right)
+=
+\left(
+\begin{array}{cc}
+  0.4 &amp; 0.1 \\
+  0.15 &amp; 0.3 \\
+\end{array}
+\right)
+\quad \mathrm{and,} \quad
+\left(
+\begin{array}{cc}
+  \psi_{55} &amp; \psi_{56} \\
+  \psi_{65} &amp; \psi_{66} \\
+\end{array}
+\right)
+=
+\left(
+\begin{array}{cc}
+  0.4 &amp; 0.1 \\
+  0.1 &amp; 0.4 \\
+\end{array}
+\right) .</span></p>
+<p>The residuals start from their stationary distribution: their
+covariance matrix at the first occasion is the one they keep at every
+later occasion, computed with <code><a href="../reference/SSMCovEta.html">SSMCovEta()</a></code>,</p>
+<p><span class="math display">\left(
+\begin{array}{cc}
+  \sigma_{55} &amp; \sigma_{56} \\
+  \sigma_{65} &amp; \sigma_{66} \\
+\end{array}
+\right)
+=
+\left(
+\begin{array}{cc}
+  0.498 &amp; 0.166 \\
+  0.166 &amp; 0.468 \\
+\end{array}
+\right) .</span></p>
+</div>
+<div class="section level3">
+<h3 id="r-function-arguments">R Function Arguments<a class="anchor" aria-label="anchor" href="#r-function-arguments"></a>
+</h3>
+<p>The simulation functions take covariance matrices as lower triangular
+Cholesky factors (the arguments ending in <code>_l</code>). Because the
+intercepts and slopes have no process noise and there is no measurement
+error, <code>psi</code> and <code>theta</code> have rows and columns of
+zeros, and their Cholesky factors are built block by block.</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">n</span></span>
+<span><span class="co">#&gt; [1] 5000</span></span>
+<span><span class="va">time</span></span>
+<span><span class="co">#&gt; [1] 5</span></span>
+<span><span class="va">mu0</span></span>
+<span><span class="co">#&gt; [1] 2.0 1.0 0.5 0.3 0.0 0.0</span></span>
+<span><span class="va">sigma0</span></span>
+<span><span class="co">#&gt;      [,1] [,2] [,3] [,4]      [,5]      [,6]</span></span>
+<span><span class="co">#&gt; [1,] 1.00 0.40 0.10 0.05 0.0000000 0.0000000</span></span>
+<span><span class="co">#&gt; [2,] 0.40 1.00 0.05 0.10 0.0000000 0.0000000</span></span>
+<span><span class="co">#&gt; [3,] 0.10 0.05 0.10 0.03 0.0000000 0.0000000</span></span>
+<span><span class="co">#&gt; [4,] 0.05 0.10 0.03 0.10 0.0000000 0.0000000</span></span>
+<span><span class="co">#&gt; [5,] 0.00 0.00 0.00 0.00 0.4976100 0.1663655</span></span>
+<span><span class="co">#&gt; [6,] 0.00 0.00 0.00 0.00 0.1663655 0.4683177</span></span>
+<span><span class="va">sigma0_l</span> <span class="co"># sigma0_l &lt;- t(chol(sigma0))</span></span>
+<span><span class="co">#&gt;      [,1]       [,2]      [,3]     [,4]      [,5]      [,6]</span></span>
+<span><span class="co">#&gt; [1,] 1.00 0.00000000 0.0000000 0.000000 0.0000000 0.0000000</span></span>
+<span><span class="co">#&gt; [2,] 0.40 0.91651514 0.0000000 0.000000 0.0000000 0.0000000</span></span>
+<span><span class="co">#&gt; [3,] 0.10 0.01091089 0.2998015 0.000000 0.0000000 0.0000000</span></span>
+<span><span class="co">#&gt; [4,] 0.05 0.08728716 0.0802118 0.288872 0.0000000 0.0000000</span></span>
+<span><span class="co">#&gt; [5,] 0.00 0.00000000 0.0000000 0.000000 0.7054148 0.0000000</span></span>
+<span><span class="co">#&gt; [6,] 0.00 0.00000000 0.0000000 0.000000 0.2358406 0.6424149</span></span>
+<span><span class="va">alpha</span></span>
+<span><span class="co">#&gt; [1] 0 0 0 0 0 0</span></span>
+<span><span class="va">beta</span></span>
+<span><span class="co">#&gt;      [,1] [,2] [,3] [,4] [,5] [,6]</span></span>
+<span><span class="co">#&gt; [1,]    1    0    1    0 0.00  0.0</span></span>
+<span><span class="co">#&gt; [2,]    0    1    0    1 0.00  0.0</span></span>
+<span><span class="co">#&gt; [3,]    0    0    1    0 0.00  0.0</span></span>
+<span><span class="co">#&gt; [4,]    0    0    0    1 0.00  0.0</span></span>
+<span><span class="co">#&gt; [5,]    0    0    0    0 0.40  0.1</span></span>
+<span><span class="co">#&gt; [6,]    0    0    0    0 0.15  0.3</span></span>
+<span><span class="va">psi</span></span>
+<span><span class="co">#&gt;      [,1] [,2] [,3] [,4] [,5] [,6]</span></span>
+<span><span class="co">#&gt; [1,]    0    0    0    0  0.0  0.0</span></span>
+<span><span class="co">#&gt; [2,]    0    0    0    0  0.0  0.0</span></span>
+<span><span class="co">#&gt; [3,]    0    0    0    0  0.0  0.0</span></span>
+<span><span class="co">#&gt; [4,]    0    0    0    0  0.0  0.0</span></span>
+<span><span class="co">#&gt; [5,]    0    0    0    0  0.4  0.1</span></span>
+<span><span class="co">#&gt; [6,]    0    0    0    0  0.1  0.4</span></span>
+<span><span class="va">psi_l</span></span>
+<span><span class="co">#&gt;      [,1] [,2] [,3] [,4]      [,5]      [,6]</span></span>
+<span><span class="co">#&gt; [1,]    0    0    0    0 0.0000000 0.0000000</span></span>
+<span><span class="co">#&gt; [2,]    0    0    0    0 0.0000000 0.0000000</span></span>
+<span><span class="co">#&gt; [3,]    0    0    0    0 0.0000000 0.0000000</span></span>
+<span><span class="co">#&gt; [4,]    0    0    0    0 0.0000000 0.0000000</span></span>
+<span><span class="co">#&gt; [5,]    0    0    0    0 0.6324555 0.0000000</span></span>
+<span><span class="co">#&gt; [6,]    0    0    0    0 0.1581139 0.6123724</span></span>
+<span><span class="va">nu</span></span>
+<span><span class="co">#&gt; [1] 0 0</span></span>
+<span><span class="va">lambda</span></span>
+<span><span class="co">#&gt;      [,1] [,2] [,3] [,4] [,5] [,6]</span></span>
+<span><span class="co">#&gt; [1,]    1    0    0    0    1    0</span></span>
+<span><span class="co">#&gt; [2,]    0    1    0    0    0    1</span></span>
+<span><span class="va">theta</span></span>
+<span><span class="co">#&gt;      [,1] [,2]</span></span>
+<span><span class="co">#&gt; [1,]    0    0</span></span>
+<span><span class="co">#&gt; [2,]    0    0</span></span>
+<span><span class="va">theta_l</span></span>
+<span><span class="co">#&gt;      [,1] [,2]</span></span>
+<span><span class="co">#&gt; [1,]    0    0</span></span>
+<span><span class="co">#&gt; [2,]    0    0</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="visualizing-the-dynamics-without-process-noise-n-5-with-different-initial-condition">Visualizing the Dynamics Without Process Noise (n = 5 with Different
+Initial Condition)<a class="anchor" aria-label="anchor" href="#visualizing-the-dynamics-without-process-noise-n-5-with-different-initial-condition"></a>
+</h3>
+<p>Without process noise, the residuals shrink toward zero, so each
+trajectory approaches the individual’s straight line.</p>
+<p><img src="fig-vignettes-lcm-sr-no-error-lcm-sr-1.png" alt="" width="3300"><img src="fig-vignettes-lcm-sr-no-error-lcm-sr-2.png" alt="" width="3300"></p>
+</div>
+<div class="section level3">
+<h3 id="using-the-simssmfixed-function-from-the-simstatespace-package-to-simulate-data">Using the <code>SimSSMFixed</code> Function from the
+<code>simStateSpace</code> Package to Simulate Data<a class="anchor" aria-label="anchor" href="#using-the-simssmfixed-function-from-the-simstatespace-package-to-simulate-data"></a>
+</h3>
+<p>Now we add the process noise and simulate the full data set.
+<code><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame()</a></code> returns the data in long format, one row
+per individual and time point, with the columns <code>id</code>,
+<code>time</code>, <code>y1</code>, and <code>y2</code>.</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/jeksterslab/simStateSpace">simStateSpace</a></span><span class="op">)</span></span>
+<span><span class="va">sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/SimSSMFixed.html">SimSSMFixed</a></span><span class="op">(</span></span>
+<span>  n <span class="op">=</span> <span class="va">n</span>,</span>
+<span>  time <span class="op">=</span> <span class="va">time</span>,</span>
+<span>  mu0 <span class="op">=</span> <span class="va">mu0</span>,</span>
+<span>  sigma0_l <span class="op">=</span> <span class="va">sigma0_l</span>,</span>
+<span>  alpha <span class="op">=</span> <span class="va">alpha</span>,</span>
+<span>  beta <span class="op">=</span> <span class="va">beta</span>,</span>
+<span>  psi_l <span class="op">=</span> <span class="va">psi_l</span>,</span>
+<span>  nu <span class="op">=</span> <span class="va">nu</span>,</span>
+<span>  lambda <span class="op">=</span> <span class="va">lambda</span>,</span>
+<span>  theta_l <span class="op">=</span> <span class="va">theta_l</span>,</span>
+<span>  type <span class="op">=</span> <span class="fl">0</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">sim</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span>
+<span><span class="co">#&gt;   id time          y1         y2</span></span>
+<span><span class="co">#&gt; 1  1    0  2.37388906 -0.1726676</span></span>
+<span><span class="co">#&gt; 2  1    1  3.28150344  0.5992761</span></span>
+<span><span class="co">#&gt; 3  1    2  3.16895848  0.5420004</span></span>
+<span><span class="co">#&gt; 4  1    3  2.71113187  0.5169754</span></span>
+<span><span class="co">#&gt; 5  1    4  3.48742737  1.2647509</span></span>
+<span><span class="co">#&gt; 6  2    0 -0.01604581 -0.1810905</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span>
+<span><span class="co">#&gt;        id            time         y1               y2         </span></span>
+<span><span class="co">#&gt;  Min.   :   1   Min.   :0   Min.   :-2.960   Min.   :-6.1187  </span></span>
+<span><span class="co">#&gt;  1st Qu.:1251   1st Qu.:1   1st Qu.: 1.810   1st Qu.: 0.5105  </span></span>
+<span><span class="co">#&gt;  Median :2500   Median :2   Median : 2.878   Median : 1.4937  </span></span>
+<span><span class="co">#&gt;  Mean   :2500   Mean   :2   Mean   : 2.987   Mean   : 1.5868  </span></span>
+<span><span class="co">#&gt;  3rd Qu.:3750   3rd Qu.:3   3rd Qu.: 4.079   3rd Qu.: 2.5951  </span></span>
+<span><span class="co">#&gt;  Max.   :5000   Max.   :4   Max.   :11.177   Max.   : 9.0230</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">sim</span><span class="op">)</span></span></code></pre></div>
+<p><img src="fig-vignettes-lcm-sr-error-lcm-sr-1.png" alt="" width="3300"><img src="fig-vignettes-lcm-sr-error-lcm-sr-2.png" alt="" width="3300"></p>
+</div>
+</div>
+<div class="section level2">
+<h2 id="model-fitting">Model Fitting<a class="anchor" aria-label="anchor" href="#model-fitting"></a>
+</h2>
+<p>The same simulated data are fitted as a state space model with
+<code>dynr</code> and <code>OpenMx</code> and as a structural equation
+model (SEM) with <code>lavaan</code> and <code>OpenMx</code>. All of
+them estimate the parameters by maximum likelihood. The section
+Population Values and Estimates compares their estimates with the
+population values.</p>
+<div class="section level3">
+<h3 id="dynr">dynr<a class="anchor" aria-label="anchor" href="#dynr"></a>
+</h3>
+<p>We fit the model with <code>dynr</code>, which estimates state space
+models by maximum likelihood using the Kalman filter.</p>
+<p>A <code>dynr</code> model is built from pieces that match the
+equations above: the data, the initial condition, the measurement model,
+the dynamic model, and the noise. Each parameter gets a name (for
+example, <code>beta_5_6</code> for <span class="math inline">\beta_{56}</span>), and the same name used in two
+places means one shared parameter. The starting values are set to the
+population values for convenience; with real data, they would be rough
+guesses.</p>
+<div class="section level4">
+<h4 id="prepare-data">Prepare Data<a class="anchor" aria-label="anchor" href="#prepare-data"></a>
+</h4>
+<p>Tell <code>dynr</code> which columns hold the individual, the time,
+and the observed variables.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">dynr_data</span> <span class="op">&lt;-</span> <span class="fu">dynr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/dynr/man/dynr.data.html" class="external-link">dynr.data</a></span><span class="op">(</span></span>
+<span>  dataframe <span class="op">=</span> <span class="va">data</span>,</span>
+<span>  id <span class="op">=</span> <span class="st">"id"</span>,</span>
+<span>  time <span class="op">=</span> <span class="st">"time"</span>,</span>
+<span>  observed <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"y1"</span>, <span class="st">"y2"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; Registered S3 method overwritten by 'car':</span></span>
+<span><span class="co">#&gt;   method           from</span></span>
+<span><span class="co">#&gt;   na.action.merMod lme4</span></span></code></pre></div>
+</div>
+<div class="section level4">
+<h4 id="prepare-initial-condition">Prepare Initial Condition<a class="anchor" aria-label="anchor" href="#prepare-initial-condition"></a>
+</h4>
+<p>The means, variances, and covariances of the intercepts and slopes,
+and the variances and covariance of the residuals at the first occasion,
+are estimated. The means of the residuals and their covariances with the
+intercepts and slopes are fixed at zero.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">params_sigma0</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span>data <span class="op">=</span> <span class="st">"fixed"</span>, nrow <span class="op">=</span> <span class="va">p</span>, ncol <span class="op">=</span> <span class="va">p</span><span class="op">)</span></span>
+<span><span class="va">params_sigma0</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>  <span class="st">"sigma0_1_1"</span>, <span class="st">"sigma0_2_1"</span>, <span class="st">"sigma0_3_1"</span>, <span class="st">"sigma0_4_1"</span>,</span>
+<span>  <span class="st">"sigma0_2_1"</span>, <span class="st">"sigma0_2_2"</span>, <span class="st">"sigma0_3_2"</span>, <span class="st">"sigma0_4_2"</span>,</span>
+<span>  <span class="st">"sigma0_3_1"</span>, <span class="st">"sigma0_3_2"</span>, <span class="st">"sigma0_3_3"</span>, <span class="st">"sigma0_4_3"</span>,</span>
+<span>  <span class="st">"sigma0_4_1"</span>, <span class="st">"sigma0_4_2"</span>, <span class="st">"sigma0_4_3"</span>, <span class="st">"sigma0_4_4"</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">params_sigma0</span><span class="op">[</span><span class="fl">5</span><span class="op">:</span><span class="fl">6</span>, <span class="fl">5</span><span class="op">:</span><span class="fl">6</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>  <span class="st">"sigma0_5_5"</span>, <span class="st">"sigma0_6_5"</span>,</span>
+<span>  <span class="st">"sigma0_6_5"</span>, <span class="st">"sigma0_6_6"</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">params_sigma0</span></span>
+<span><span class="co">#&gt;      [,1]         [,2]         [,3]         [,4]         [,5]        </span></span>
+<span><span class="co">#&gt; [1,] "sigma0_1_1" "sigma0_2_1" "sigma0_3_1" "sigma0_4_1" "fixed"     </span></span>
+<span><span class="co">#&gt; [2,] "sigma0_2_1" "sigma0_2_2" "sigma0_3_2" "sigma0_4_2" "fixed"     </span></span>
+<span><span class="co">#&gt; [3,] "sigma0_3_1" "sigma0_3_2" "sigma0_3_3" "sigma0_4_3" "fixed"     </span></span>
+<span><span class="co">#&gt; [4,] "sigma0_4_1" "sigma0_4_2" "sigma0_4_3" "sigma0_4_4" "fixed"     </span></span>
+<span><span class="co">#&gt; [5,] "fixed"      "fixed"      "fixed"      "fixed"      "sigma0_5_5"</span></span>
+<span><span class="co">#&gt; [6,] "fixed"      "fixed"      "fixed"      "fixed"      "sigma0_6_5"</span></span>
+<span><span class="co">#&gt;      [,6]        </span></span>
+<span><span class="co">#&gt; [1,] "fixed"     </span></span>
+<span><span class="co">#&gt; [2,] "fixed"     </span></span>
+<span><span class="co">#&gt; [3,] "fixed"     </span></span>
+<span><span class="co">#&gt; [4,] "fixed"     </span></span>
+<span><span class="co">#&gt; [5,] "sigma0_6_5"</span></span>
+<span><span class="co">#&gt; [6,] "sigma0_6_6"</span></span>
+<span><span class="va">dynr_initial</span> <span class="op">&lt;-</span> <span class="fu">dynr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/dynr/man/prep.initial.html" class="external-link">prep.initial</a></span><span class="op">(</span></span>
+<span>  values.inistate <span class="op">=</span> <span class="va">mu0</span>,</span>
+<span>  params.inistate <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>    <span class="st">"mu0_1_1"</span>, <span class="st">"mu0_2_1"</span>, <span class="st">"mu0_3_1"</span>, <span class="st">"mu0_4_1"</span>, <span class="st">"fixed"</span>, <span class="st">"fixed"</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  values.inicov <span class="op">=</span> <span class="va">sigma0</span>,</span>
+<span>  params.inicov <span class="op">=</span> <span class="va">params_sigma0</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level4">
+<h4 id="prepare-measurement-model">Prepare Measurement Model<a class="anchor" aria-label="anchor" href="#prepare-measurement-model"></a>
+</h4>
+<p>The loadings are fixed.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">dynr_measurement</span> <span class="op">&lt;-</span> <span class="fu">dynr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/dynr/man/prep.measurement.html" class="external-link">prep.measurement</a></span><span class="op">(</span></span>
+<span>  values.load <span class="op">=</span> <span class="va">lambda</span>,</span>
+<span>  params.load <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span>data <span class="op">=</span> <span class="st">"fixed"</span>, nrow <span class="op">=</span> <span class="fl">2</span>, ncol <span class="op">=</span> <span class="fl">6</span><span class="op">)</span>,</span>
+<span>  state.names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"eta_"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">6</span><span class="op">)</span>,</span>
+<span>  obs.names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"y1"</span>, <span class="st">"y2"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level4">
+<h4 id="prepare-dynamic-process">Prepare Dynamic Process<a class="anchor" aria-label="anchor" href="#prepare-dynamic-process"></a>
+</h4>
+<p>The first four formulas are the growth part, with no free parameters;
+the last two are the residual dynamics.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">dynr_dynamics</span> <span class="op">&lt;-</span> <span class="fu">dynr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/dynr/man/prep.formulaDynamics.html" class="external-link">prep.formulaDynamics</a></span><span class="op">(</span></span>
+<span>  formula <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>    <span class="va">eta_1</span> <span class="op">~</span> <span class="va">eta_1</span> <span class="op">+</span> <span class="va">eta_3</span>,</span>
+<span>    <span class="va">eta_2</span> <span class="op">~</span> <span class="va">eta_2</span> <span class="op">+</span> <span class="va">eta_4</span>,</span>
+<span>    <span class="va">eta_3</span> <span class="op">~</span> <span class="va">eta_3</span>,</span>
+<span>    <span class="va">eta_4</span> <span class="op">~</span> <span class="va">eta_4</span>,</span>
+<span>    <span class="va">eta_5</span> <span class="op">~</span> <span class="va">beta_5_5</span> <span class="op">*</span> <span class="va">eta_5</span> <span class="op">+</span> <span class="va">beta_5_6</span> <span class="op">*</span> <span class="va">eta_6</span>,</span>
+<span>    <span class="va">eta_6</span> <span class="op">~</span> <span class="va">beta_6_5</span> <span class="op">*</span> <span class="va">eta_5</span> <span class="op">+</span> <span class="va">beta_6_6</span> <span class="op">*</span> <span class="va">eta_6</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  startval <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>    beta_5_5 <span class="op">=</span> <span class="va">beta</span><span class="op">[</span><span class="fl">5</span>, <span class="fl">5</span><span class="op">]</span>, beta_5_6 <span class="op">=</span> <span class="va">beta</span><span class="op">[</span><span class="fl">5</span>, <span class="fl">6</span><span class="op">]</span>,</span>
+<span>    beta_6_5 <span class="op">=</span> <span class="va">beta</span><span class="op">[</span><span class="fl">6</span>, <span class="fl">5</span><span class="op">]</span>, beta_6_6 <span class="op">=</span> <span class="va">beta</span><span class="op">[</span><span class="fl">6</span>, <span class="fl">6</span><span class="op">]</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  isContinuousTime <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level4">
+<h4 id="prepare-process-noise">Prepare Process Noise<a class="anchor" aria-label="anchor" href="#prepare-process-noise"></a>
+</h4>
+<p>Only the residuals have process noise. The measurement error is fixed
+at zero.</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">params_psi</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span>data <span class="op">=</span> <span class="st">"fixed"</span>, nrow <span class="op">=</span> <span class="va">p</span>, ncol <span class="op">=</span> <span class="va">p</span><span class="op">)</span></span>
+<span><span class="va">params_psi</span><span class="op">[</span><span class="fl">5</span><span class="op">:</span><span class="fl">6</span>, <span class="fl">5</span><span class="op">:</span><span class="fl">6</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>  <span class="st">"psi_5_5"</span>, <span class="st">"psi_6_5"</span>,</span>
+<span>  <span class="st">"psi_6_5"</span>, <span class="st">"psi_6_6"</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">dynr_noise</span> <span class="op">&lt;-</span> <span class="fu">dynr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/dynr/man/prep.noise.html" class="external-link">prep.noise</a></span><span class="op">(</span></span>
+<span>  values.latent <span class="op">=</span> <span class="va">psi</span>,</span>
+<span>  params.latent <span class="op">=</span> <span class="va">params_psi</span>,</span>
+<span>  values.observed <span class="op">=</span> <span class="va">theta</span>,</span>
+<span>  params.observed <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span>data <span class="op">=</span> <span class="st">"fixed"</span>, nrow <span class="op">=</span> <span class="fl">2</span>, ncol <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level4">
+<h4 id="prepare-the-model">Prepare the Model<a class="anchor" aria-label="anchor" href="#prepare-the-model"></a>
+</h4>
+<p>The pieces are put together into one model. <code>dynr</code> writes
+the model as C code to <code>outfile</code> and compiles it.</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu">dynr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/dynr/man/dynr.model.html" class="external-link">dynr.model</a></span><span class="op">(</span></span>
+<span>  data <span class="op">=</span> <span class="va">dynr_data</span>,</span>
+<span>  initial <span class="op">=</span> <span class="va">dynr_initial</span>,</span>
+<span>  measurement <span class="op">=</span> <span class="va">dynr_measurement</span>,</span>
+<span>  dynamics <span class="op">=</span> <span class="va">dynr_dynamics</span>,</span>
+<span>  noise <span class="op">=</span> <span class="va">dynr_noise</span>,</span>
+<span>  outfile <span class="op">=</span> <span class="st">"lcm-sr.c"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p>The plot below shows the model equations with the parameter
+names.</p>
+<p><img src="fig-vignettes-lcm-sr-model-lcm-sr-1.png" alt="" width="3300"></p>
+</div>
+<div class="section level4">
+<h4 id="fit-the-model">Fit the Model<a class="anchor" aria-label="anchor" href="#fit-the-model"></a>
+</h4>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">results</span> <span class="op">&lt;-</span> <span class="fu">dynr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/dynr/man/dynr.cook.html" class="external-link">dynr.cook</a></span><span class="op">(</span></span>
+<span>  <span class="va">model</span>,</span>
+<span>  debug_flag <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "Get ready!!!!"</span></span>
+<span><span class="co">#&gt; using C compiler: ‘gcc (Ubuntu 15.2.0-16ubuntu1) 15.2.0’</span></span>
+<span><span class="co">#&gt; Optimization function called.</span></span>
+<span><span class="co">#&gt; Starting Hessian calculation ...</span></span>
+<span><span class="co">#&gt; Finished Hessian calculation.</span></span>
+<span><span class="co">#&gt; Original exit flag:  3 </span></span>
+<span><span class="co">#&gt; Modified exit flag:  3 </span></span>
+<span><span class="co">#&gt; Optimization terminated successfully: ftol_rel or ftol_abs was reached. </span></span>
+<span><span class="co">#&gt; Original fitted parameters:  0.384417 0.09479975 0.153095 0.327768 -0.9403327 </span></span>
+<span><span class="co">#&gt; 0.2488269 -0.9749139 1.990267 0.9891803 0.4991346 0.2990298 0.0142687 0.3642215 </span></span>
+<span><span class="co">#&gt; 0.08682443 0.05249978 -0.1859039 0.01475746 0.09116218 -2.372037 0.2606286 </span></span>
+<span><span class="co">#&gt; -2.485062 -0.6950005 0.3588237 -0.8986049 </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Transformed fitted parameters:  0.384417 0.09479975 0.153095 0.327768 0.3904979 </span></span>
+<span><span class="co">#&gt; 0.09716638 0.4014024 1.990267 0.9891803 0.4991346 0.2990298 1.014371 0.3694558 </span></span>
+<span><span class="co">#&gt; 0.08807218 0.05325425 0.9649171 0.04433169 0.09509317 0.1011182 0.03005504 </span></span>
+<span><span class="co">#&gt; 0.0993539 0.4990742 0.1790796 0.4713953 </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Doing end processing</span></span>
+<span><span class="co">#&gt; Successful trial</span></span>
+<span><span class="co">#&gt; Total Time: 3.40476 </span></span>
+<span><span class="co">#&gt; Backend Time: 3.398337</span></span></code></pre></div>
+</div>
+<div class="section level4">
+<h4 id="summary">Summary<a class="anchor" aria-label="anchor" href="#summary"></a>
+</h4>
+<p>The summary lists each estimate with its standard error, <span class="math inline">t</span> value, confidence interval, and <span class="math inline">p</span> value.</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">results</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Coefficients:</span></span>
+<span><span class="co">#&gt;            Estimate Std. Error t value ci.lower ci.upper             Pr(&gt;|t|)</span></span>
+<span><span class="co">#&gt; beta_5_5   0.384417   0.020962  18.339 0.343333 0.425501 &lt; 0.0000000000000002</span></span>
+<span><span class="co">#&gt; beta_5_6   0.094800   0.015378   6.165 0.064660 0.124939        0.00000000036</span></span>
+<span><span class="co">#&gt; beta_6_5   0.153095   0.016160   9.474 0.121423 0.184767 &lt; 0.0000000000000002</span></span>
+<span><span class="co">#&gt; beta_6_6   0.327768   0.019410  16.886 0.289725 0.365811 &lt; 0.0000000000000002</span></span>
+<span><span class="co">#&gt; psi_5_5    0.390498   0.008167  47.815 0.374491 0.406505 &lt; 0.0000000000000002</span></span>
+<span><span class="co">#&gt; psi_6_5    0.097166   0.005984  16.238 0.085438 0.108895 &lt; 0.0000000000000002</span></span>
+<span><span class="co">#&gt; psi_6_6    0.401402   0.007883  50.921 0.385952 0.416853 &lt; 0.0000000000000002</span></span>
+<span><span class="co">#&gt; mu0_1_1    1.990267   0.016933 117.541 1.957080 2.023454 &lt; 0.0000000000000002</span></span>
+<span><span class="co">#&gt; mu0_2_1    0.989180   0.016484  60.009 0.956873 1.021488 &lt; 0.0000000000000002</span></span>
+<span><span class="co">#&gt; mu0_3_1    0.499135   0.005613  88.917 0.488132 0.510137 &lt; 0.0000000000000002</span></span>
+<span><span class="co">#&gt; mu0_4_1    0.299030   0.005557  53.816 0.288139 0.309921 &lt; 0.0000000000000002</span></span>
+<span><span class="co">#&gt; sigma0_1_1 1.014371   0.042257  24.005 0.931549 1.097193 &lt; 0.0000000000000002</span></span>
+<span><span class="co">#&gt; sigma0_2_1 0.369456   0.032319  11.432 0.306112 0.432800 &lt; 0.0000000000000002</span></span>
+<span><span class="co">#&gt; sigma0_3_1 0.088072   0.009661   9.116 0.069137 0.107008 &lt; 0.0000000000000002</span></span>
+<span><span class="co">#&gt; sigma0_4_1 0.053254   0.008552   6.227 0.036492 0.070017        0.00000000024</span></span>
+<span><span class="co">#&gt; sigma0_2_2 0.964917   0.038300  25.194 0.889850 1.039984 &lt; 0.0000000000000002</span></span>
+<span><span class="co">#&gt; sigma0_3_2 0.044332   0.008521   5.203 0.027631 0.061032        0.00000009893</span></span>
+<span><span class="co">#&gt; sigma0_4_2 0.095093   0.009053  10.504 0.077349 0.112837 &lt; 0.0000000000000002</span></span>
+<span><span class="co">#&gt; sigma0_3_3 0.101118   0.004092  24.712 0.093098 0.109138 &lt; 0.0000000000000002</span></span>
+<span><span class="co">#&gt; sigma0_4_3 0.030055   0.003052   9.849 0.024074 0.036036 &lt; 0.0000000000000002</span></span>
+<span><span class="co">#&gt; sigma0_4_4 0.099354   0.003920  25.348 0.091672 0.107036 &lt; 0.0000000000000002</span></span>
+<span><span class="co">#&gt; sigma0_5_5 0.499074   0.034694  14.385 0.431074 0.567074 &lt; 0.0000000000000002</span></span>
+<span><span class="co">#&gt; sigma0_6_5 0.179080   0.027121   6.603 0.125923 0.232236        0.00000000002</span></span>
+<span><span class="co">#&gt; sigma0_6_6 0.471395   0.031358  15.033 0.409934 0.532856 &lt; 0.0000000000000002</span></span>
+<span><span class="co">#&gt;               </span></span>
+<span><span class="co">#&gt; beta_5_5   ***</span></span>
+<span><span class="co">#&gt; beta_5_6   ***</span></span>
+<span><span class="co">#&gt; beta_6_5   ***</span></span>
+<span><span class="co">#&gt; beta_6_6   ***</span></span>
+<span><span class="co">#&gt; psi_5_5    ***</span></span>
+<span><span class="co">#&gt; psi_6_5    ***</span></span>
+<span><span class="co">#&gt; psi_6_6    ***</span></span>
+<span><span class="co">#&gt; mu0_1_1    ***</span></span>
+<span><span class="co">#&gt; mu0_2_1    ***</span></span>
+<span><span class="co">#&gt; mu0_3_1    ***</span></span>
+<span><span class="co">#&gt; mu0_4_1    ***</span></span>
+<span><span class="co">#&gt; sigma0_1_1 ***</span></span>
+<span><span class="co">#&gt; sigma0_2_1 ***</span></span>
+<span><span class="co">#&gt; sigma0_3_1 ***</span></span>
+<span><span class="co">#&gt; sigma0_4_1 ***</span></span>
+<span><span class="co">#&gt; sigma0_2_2 ***</span></span>
+<span><span class="co">#&gt; sigma0_3_2 ***</span></span>
+<span><span class="co">#&gt; sigma0_4_2 ***</span></span>
+<span><span class="co">#&gt; sigma0_3_3 ***</span></span>
+<span><span class="co">#&gt; sigma0_4_3 ***</span></span>
+<span><span class="co">#&gt; sigma0_4_4 ***</span></span>
+<span><span class="co">#&gt; sigma0_5_5 ***</span></span>
+<span><span class="co">#&gt; sigma0_6_5 ***</span></span>
+<span><span class="co">#&gt; sigma0_6_6 ***</span></span>
+<span><span class="co">#&gt; ---</span></span>
+<span><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; -2 log-likelihood value at convergence = 127121.91</span></span>
+<span><span class="co">#&gt; AIC = 127169.91</span></span>
+<span><span class="co">#&gt; BIC = 127364.95</span></span></code></pre></div>
+</div>
+</div>
+<div class="section level3">
+<h3 id="openmx-state-space-model">OpenMx: State Space Model<a class="anchor" aria-label="anchor" href="#openmx-state-space-model"></a>
+</h3>
+<p><code>OpenMx</code> <span class="citation">(Neale et al.,
+2016)</span> fits the same state space model with its own Kalman filter
+(<code><a href="https://rdrr.io/pkg/OpenMx/man/mxExpectationStateSpace.html" class="external-link">OpenMx::mxExpectationStateSpace()</a></code>; <span class="citation">Hunter (2018)</span>). Its matrices have the names used
+in engineering: <code>A</code> is the transition matrix <span class="math inline">\boldsymbol{\beta}</span>, <code>B</code> holds the
+intercepts of the dynamic model, <code>C</code> is the loading matrix
+<span class="math inline">\boldsymbol{\Lambda}</span>, <code>D</code>
+holds the intercepts of the measurement model, <code>Q</code> is the
+process noise covariance matrix, and <code>R</code> is the measurement
+error covariance matrix. The parameter labels are the dynr names; as in
+dynr, a label used in two places is one shared parameter, and the
+starting values are the population values.</p>
+<p>Two details differ from dynr. First, OpenMx reads the data as a
+single time series. To start the filter again at the first occasion of
+every individual, each individual gets a group, and all groups use the
+matrices of one parent model, so every individual has the same
+parameters. Second, OpenMx starts the filter one occasion before the
+first row, so the first row has the state mean <span class="math inline">\mathbf{A} \mathbf{x}_{0} + \mathbf{B}
+\mathbf{u}</span> and the state covariance <span class="math inline">\mathbf{A} \mathbf{P}_{0} \mathbf{A}^{\prime} +
+\mathbf{Q}</span>, with the constant input <span class="math inline">\mathbf{u} = 1</span>. Setting <span class="math inline">\mathbf{x}_{0} = \mathbf{A}^{-1} \left(
+\boldsymbol{\mu}_{0} - \mathbf{B} \mathbf{u} \right)</span> and <span class="math inline">\mathbf{P}_{0} = \mathbf{A}^{-1} \left(
+\boldsymbol{\Sigma}_{0} - \mathbf{Q} \right) \left( \mathbf{A}^{-1}
+\right)^{\prime}</span> gives the first occasion the initial condition
+of the model, so the likelihood is the same as in dynr. This needs an
+invertible <span class="math inline">\mathbf{A}</span>, which holds
+here.</p>
+<p>The two helper functions below are the same in every vignette of the
+package. <code>MxMat()</code> makes an OpenMx matrix from values and
+dynr-style labels (<code>"fixed"</code> marks a fixed element), and
+<code>FitMxSSM()</code> builds the groups and fits the model.</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">MxMat</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">values</span>, <span class="va">labels</span>, <span class="va">name</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">values</span><span class="op">)</span></span>
+<span>  <span class="va">labels</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span></span>
+<span>    data <span class="op">=</span> <span class="va">labels</span>,</span>
+<span>    nrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">values</span><span class="op">)</span>,</span>
+<span>    ncol <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">values</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span>  <span class="va">free</span> <span class="op">&lt;-</span> <span class="va">labels</span> <span class="op">!=</span> <span class="st">"fixed"</span></span>
+<span>  <span class="va">labels</span><span class="op">[</span><span class="op">!</span><span class="va">free</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="cn">NA</span></span>
+<span>  <span class="fu">OpenMx</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/OpenMx/man/mxMatrix.html" class="external-link">mxMatrix</a></span><span class="op">(</span></span>
+<span>    type <span class="op">=</span> <span class="st">"Full"</span>,</span>
+<span>    values <span class="op">=</span> <span class="va">values</span>,</span>
+<span>    free <span class="op">=</span> <span class="va">free</span>,</span>
+<span>    labels <span class="op">=</span> <span class="va">labels</span>,</span>
+<span>    name <span class="op">=</span> <span class="va">name</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span><span class="va">FitMxSSM</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">data</span>, <span class="va">observed</span>, <span class="va">matrices</span>, <span class="va">name</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="co"># the groups refer to the matrices of the parent model</span></span>
+<span>  <span class="va">shared</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">name</span>, <span class="st">"."</span>, <span class="va">x</span><span class="op">)</span></span>
+<span>  <span class="op">}</span></span>
+<span>  <span class="va">expectation</span> <span class="op">&lt;-</span> <span class="fu">OpenMx</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/OpenMx/man/mxExpectationStateSpace.html" class="external-link">mxExpectationStateSpace</a></span><span class="op">(</span></span>
+<span>    A <span class="op">=</span> <span class="fu">shared</span><span class="op">(</span><span class="st">"A"</span><span class="op">)</span>,</span>
+<span>    B <span class="op">=</span> <span class="fu">shared</span><span class="op">(</span><span class="st">"B"</span><span class="op">)</span>,</span>
+<span>    C <span class="op">=</span> <span class="fu">shared</span><span class="op">(</span><span class="st">"C"</span><span class="op">)</span>,</span>
+<span>    D <span class="op">=</span> <span class="fu">shared</span><span class="op">(</span><span class="st">"D"</span><span class="op">)</span>,</span>
+<span>    Q <span class="op">=</span> <span class="fu">shared</span><span class="op">(</span><span class="st">"Q"</span><span class="op">)</span>,</span>
+<span>    R <span class="op">=</span> <span class="fu">shared</span><span class="op">(</span><span class="st">"R"</span><span class="op">)</span>,</span>
+<span>    x0 <span class="op">=</span> <span class="fu">shared</span><span class="op">(</span><span class="st">"x0"</span><span class="op">)</span>,</span>
+<span>    P0 <span class="op">=</span> <span class="fu">shared</span><span class="op">(</span><span class="st">"P0"</span><span class="op">)</span>,</span>
+<span>    u <span class="op">=</span> <span class="fu">shared</span><span class="op">(</span><span class="st">"u"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span>  <span class="co"># OpenMx needs the names of the observed variables and of the states on C</span></span>
+<span>  <span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_along</a></span><span class="op">(</span><span class="va">matrices</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="kw">if</span> <span class="op">(</span><span class="va">matrices</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">name</span> <span class="op">==</span> <span class="st">"C"</span><span class="op">)</span> <span class="op">{</span></span>
+<span>      <span class="fu"><a href="https://rdrr.io/r/base/dimnames.html" class="external-link">dimnames</a></span><span class="op">(</span><span class="va">matrices</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>        <span class="va">observed</span>,</span>
+<span>        <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"eta_"</span>, <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">matrices</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">values</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span>      <span class="op">)</span></span>
+<span>    <span class="op">}</span></span>
+<span>  <span class="op">}</span></span>
+<span>  <span class="va">persons</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/split.html" class="external-link">split</a></span><span class="op">(</span></span>
+<span>    x <span class="op">=</span> <span class="va">data</span><span class="op">[</span>, <span class="va">observed</span>, drop <span class="op">=</span> <span class="cn">FALSE</span><span class="op">]</span>,</span>
+<span>    f <span class="op">=</span> <span class="va">data</span><span class="op">[</span>, <span class="st">"id"</span><span class="op">]</span></span>
+<span>  <span class="op">)</span></span>
+<span>  <span class="va">groups</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"id_"</span>, <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">persons</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="va">submodels</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span></span>
+<span>    X <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_along</a></span><span class="op">(</span><span class="va">persons</span><span class="op">)</span>,</span>
+<span>    FUN <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">i</span><span class="op">)</span> <span class="op">{</span></span>
+<span>      <span class="fu">OpenMx</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/OpenMx/man/mxModel.html" class="external-link">mxModel</a></span><span class="op">(</span></span>
+<span>        name <span class="op">=</span> <span class="va">groups</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>,</span>
+<span>        <span class="va">expectation</span>,</span>
+<span>        <span class="fu">OpenMx</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/OpenMx/man/mxFitFunctionML.html" class="external-link">mxFitFunctionML</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>        <span class="fu">OpenMx</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/OpenMx/man/mxData.html" class="external-link">mxData</a></span><span class="op">(</span></span>
+<span>          observed <span class="op">=</span> <span class="va">persons</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span>,</span>
+<span>          type <span class="op">=</span> <span class="st">"raw"</span></span>
+<span>        <span class="op">)</span></span>
+<span>      <span class="op">)</span></span>
+<span>    <span class="op">}</span></span>
+<span>  <span class="op">)</span></span>
+<span>  <span class="va">model</span> <span class="op">&lt;-</span> <span class="fu">OpenMx</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/OpenMx/man/mxModel.html" class="external-link">mxModel</a></span><span class="op">(</span></span>
+<span>    name <span class="op">=</span> <span class="va">name</span>,</span>
+<span>    <span class="va">matrices</span>,</span>
+<span>    <span class="fu">OpenMx</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/OpenMx/man/mxMatrix.html" class="external-link">mxMatrix</a></span><span class="op">(</span></span>
+<span>      type <span class="op">=</span> <span class="st">"Unit"</span>,</span>
+<span>      nrow <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>      ncol <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>      name <span class="op">=</span> <span class="st">"u"</span></span>
+<span>    <span class="op">)</span>,</span>
+<span>    <span class="co"># the first occasion gets the initial condition of the model</span></span>
+<span>    <span class="fu">OpenMx</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/OpenMx/man/mxAlgebra.html" class="external-link">mxAlgebra</a></span><span class="op">(</span></span>
+<span>      expression <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/solve.html" class="external-link">solve</a></span><span class="op">(</span><span class="va">A</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span> <span class="op">(</span><span class="va">mu0</span> <span class="op">-</span> <span class="va">B</span> <span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span> <span class="va">u</span><span class="op">)</span>,</span>
+<span>      name <span class="op">=</span> <span class="st">"x0"</span></span>
+<span>    <span class="op">)</span>,</span>
+<span>    <span class="fu">OpenMx</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/OpenMx/man/mxAlgebra.html" class="external-link">mxAlgebra</a></span><span class="op">(</span></span>
+<span>      expression <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/solve.html" class="external-link">solve</a></span><span class="op">(</span><span class="va">A</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span> <span class="op">(</span><span class="va">sigma0</span> <span class="op">-</span> <span class="va">Q</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/solve.html" class="external-link">solve</a></span><span class="op">(</span><span class="va">A</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>      name <span class="op">=</span> <span class="st">"P0"</span></span>
+<span>    <span class="op">)</span>,</span>
+<span>    <span class="va">submodels</span>,</span>
+<span>    <span class="fu">OpenMx</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/OpenMx/man/mxFitFunctionMultigroup.html" class="external-link">mxFitFunctionMultigroup</a></span><span class="op">(</span>groups <span class="op">=</span> <span class="va">groups</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span>  <span class="co"># retries from perturbed starting values only if the first run fails</span></span>
+<span>  <span class="fu">OpenMx</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/OpenMx/man/mxTryHard.html" class="external-link">mxTryHard</a></span><span class="op">(</span></span>
+<span>    model <span class="op">=</span> <span class="va">model</span>,</span>
+<span>    extraTries <span class="op">=</span> <span class="fl">5</span>,</span>
+<span>    silent <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+<p>The matrices of the model, with the dynr labels
+(<code>params_sigma0</code> and <code>params_psi</code> are the label
+matrices made for dynr). There is no measurement error (<code>R</code>
+is zero).</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">labels_beta</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span>data <span class="op">=</span> <span class="st">"fixed"</span>, nrow <span class="op">=</span> <span class="va">p</span>, ncol <span class="op">=</span> <span class="va">p</span><span class="op">)</span></span>
+<span><span class="va">labels_beta</span><span class="op">[</span><span class="fl">5</span><span class="op">:</span><span class="fl">6</span>, <span class="fl">5</span><span class="op">:</span><span class="fl">6</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"beta_5_5"</span>, <span class="st">"beta_6_5"</span>, <span class="st">"beta_5_6"</span>, <span class="st">"beta_6_6"</span><span class="op">)</span></span>
+<span><span class="va">mx_matrices</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>  <span class="fu">MxMat</span><span class="op">(</span>values <span class="op">=</span> <span class="va">beta</span>, labels <span class="op">=</span> <span class="va">labels_beta</span>, name <span class="op">=</span> <span class="st">"A"</span><span class="op">)</span>,</span>
+<span>  <span class="fu">MxMat</span><span class="op">(</span>values <span class="op">=</span> <span class="va">alpha</span>, labels <span class="op">=</span> <span class="st">"fixed"</span>, name <span class="op">=</span> <span class="st">"B"</span><span class="op">)</span>,</span>
+<span>  <span class="fu">MxMat</span><span class="op">(</span>values <span class="op">=</span> <span class="va">lambda</span>, labels <span class="op">=</span> <span class="st">"fixed"</span>, name <span class="op">=</span> <span class="st">"C"</span><span class="op">)</span>,</span>
+<span>  <span class="fu">MxMat</span><span class="op">(</span>values <span class="op">=</span> <span class="va">nu</span>, labels <span class="op">=</span> <span class="st">"fixed"</span>, name <span class="op">=</span> <span class="st">"D"</span><span class="op">)</span>,</span>
+<span>  <span class="fu">MxMat</span><span class="op">(</span>values <span class="op">=</span> <span class="va">psi</span>, labels <span class="op">=</span> <span class="va">params_psi</span>, name <span class="op">=</span> <span class="st">"Q"</span><span class="op">)</span>,</span>
+<span>  <span class="fu">MxMat</span><span class="op">(</span>values <span class="op">=</span> <span class="va">theta</span>, labels <span class="op">=</span> <span class="st">"fixed"</span>, name <span class="op">=</span> <span class="st">"R"</span><span class="op">)</span>,</span>
+<span>  <span class="fu">MxMat</span><span class="op">(</span></span>
+<span>    values <span class="op">=</span> <span class="va">mu0</span>,</span>
+<span>    labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>      <span class="st">"mu0_1_1"</span>, <span class="st">"mu0_2_1"</span>, <span class="st">"mu0_3_1"</span>, <span class="st">"mu0_4_1"</span>, <span class="st">"fixed"</span>, <span class="st">"fixed"</span></span>
+<span>    <span class="op">)</span>,</span>
+<span>    name <span class="op">=</span> <span class="st">"mu0"</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  <span class="fu">MxMat</span><span class="op">(</span>values <span class="op">=</span> <span class="va">sigma0</span>, labels <span class="op">=</span> <span class="va">params_sigma0</span>, name <span class="op">=</span> <span class="st">"sigma0"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a>fit_mx_ssm <span class="ot">&lt;-</span> <span class="fu">FitMxSSM</span>(</span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a>  <span class="at">data =</span> data,</span>
+<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a>  <span class="at">observed =</span> <span class="fu">c</span>(<span class="st">"y1"</span>, <span class="st">"y2"</span>),</span>
+<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a>  <span class="at">matrices =</span> mx_matrices,</span>
+<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a>  <span class="at">name =</span> <span class="st">"lcm_sr"</span></span>
+<span id="cb13-6"><a href="#cb13-6" tabindex="-1"></a>)</span>
+<span id="cb13-7"><a href="#cb13-7" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb13-8"><a href="#cb13-8" tabindex="-1"></a>Beginning initial fit attempt</span>
+<span id="cb13-9"><a href="#cb13-9" tabindex="-1"></a>Fit attempt <span class="dv">0</span>, fit<span class="ot">=</span><span class="fl">127121.905417101</span>, new current best<span class="sc">!</span> (was <span class="fl">127140.637002899</span>)</span>
+<span id="cb13-10"><a href="#cb13-10" tabindex="-1"></a>                                                                             </span>
+<span id="cb13-11"><a href="#cb13-11" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb13-12"><a href="#cb13-12" tabindex="-1"></a><span class="co">#&gt;  Solution found!  Final fit=127121.91 (started at 127140.64)  (1 attempt(s): 1 valid, 0 errors)</span></span>
+<span id="cb13-13"><a href="#cb13-13" tabindex="-1"></a><span class="fu">summary</span>(fit_mx_ssm)</span>
+<span id="cb13-14"><a href="#cb13-14" tabindex="-1"></a><span class="co">#&gt; Summary of lcm_sr </span></span>
+<span id="cb13-15"><a href="#cb13-15" tabindex="-1"></a><span class="co">#&gt;  </span></span>
+<span id="cb13-16"><a href="#cb13-16" tabindex="-1"></a><span class="co">#&gt; free parameters:</span></span>
+<span id="cb13-17"><a href="#cb13-17" tabindex="-1"></a><span class="co">#&gt;          name matrix row col   Estimate   Std.Error A</span></span>
+<span id="cb13-18"><a href="#cb13-18" tabindex="-1"></a><span class="co">#&gt; 1    beta_5_5      A   5   5 0.38508305 0.020988727  </span></span>
+<span id="cb13-19"><a href="#cb13-19" tabindex="-1"></a><span class="co">#&gt; 2    beta_6_5      A   6   5 0.15377680 0.016178499  </span></span>
+<span id="cb13-20"><a href="#cb13-20" tabindex="-1"></a><span class="co">#&gt; 3    beta_5_6      A   5   6 0.09546418 0.015384829  </span></span>
+<span id="cb13-21"><a href="#cb13-21" tabindex="-1"></a><span class="co">#&gt; 4    beta_6_6      A   6   6 0.32839423 0.019480947  </span></span>
+<span id="cb13-22"><a href="#cb13-22" tabindex="-1"></a><span class="co">#&gt; 5     psi_5_5      Q   5   5 0.39078647 0.008178950  </span></span>
+<span id="cb13-23"><a href="#cb13-23" tabindex="-1"></a><span class="co">#&gt; 6     psi_6_5      Q   6   5 0.09745437 0.005993483  </span></span>
+<span id="cb13-24"><a href="#cb13-24" tabindex="-1"></a><span class="co">#&gt; 7     psi_6_6      Q   6   6 0.40168283 0.007907617  </span></span>
+<span id="cb13-25"><a href="#cb13-25" tabindex="-1"></a><span class="co">#&gt; 8     mu0_1_1    mu0   1   1 1.99034260 0.016932161  </span></span>
+<span id="cb13-26"><a href="#cb13-26" tabindex="-1"></a><span class="co">#&gt; 9     mu0_2_1    mu0   2   1 0.98925223 0.016470357  </span></span>
+<span id="cb13-27"><a href="#cb13-27" tabindex="-1"></a><span class="co">#&gt; 10    mu0_3_1    mu0   3   1 0.49921095 0.005613790  </span></span>
+<span id="cb13-28"><a href="#cb13-28" tabindex="-1"></a><span class="co">#&gt; 11    mu0_4_1    mu0   4   1 0.29910688 0.005556419  </span></span>
+<span id="cb13-29"><a href="#cb13-29" tabindex="-1"></a><span class="co">#&gt; 12 sigma0_1_1 sigma0   1   1 1.01280945 0.042267658  </span></span>
+<span id="cb13-30"><a href="#cb13-30" tabindex="-1"></a><span class="co">#&gt; 13 sigma0_2_1 sigma0   2   1 0.36793304 0.032545818  </span></span>
+<span id="cb13-31"><a href="#cb13-31" tabindex="-1"></a><span class="co">#&gt; 14 sigma0_3_1 sigma0   3   1 0.08844527 0.009697372  </span></span>
+<span id="cb13-32"><a href="#cb13-32" tabindex="-1"></a><span class="co">#&gt; 15 sigma0_4_1 sigma0   4   1 0.05362276 0.008583419  </span></span>
+<span id="cb13-33"><a href="#cb13-33" tabindex="-1"></a><span class="co">#&gt; 16 sigma0_2_2 sigma0   2   2 0.96339690 0.038860029  </span></span>
+<span id="cb13-34"><a href="#cb13-34" tabindex="-1"></a><span class="co">#&gt; 17 sigma0_3_2 sigma0   3   2 0.04472970 0.008541466  </span></span>
+<span id="cb13-35"><a href="#cb13-35" tabindex="-1"></a><span class="co">#&gt; 18 sigma0_4_2 sigma0   4   2 0.09548767 0.009089283  </span></span>
+<span id="cb13-36"><a href="#cb13-36" tabindex="-1"></a><span class="co">#&gt; 19 sigma0_3_3 sigma0   3   3 0.10100716 0.004107999  </span></span>
+<span id="cb13-37"><a href="#cb13-37" tabindex="-1"></a><span class="co">#&gt; 20 sigma0_4_3 sigma0   4   3 0.02994125 0.003069591  </span></span>
+<span id="cb13-38"><a href="#cb13-38" tabindex="-1"></a><span class="co">#&gt; 21 sigma0_4_4 sigma0   4   4 0.09924228 0.003933967  </span></span>
+<span id="cb13-39"><a href="#cb13-39" tabindex="-1"></a><span class="co">#&gt; 22 sigma0_5_5 sigma0   5   5 0.50055428 0.034960357  </span></span>
+<span id="cb13-40"><a href="#cb13-40" tabindex="-1"></a><span class="co">#&gt; 23 sigma0_6_5 sigma0   6   5 0.18056852 0.027323310  </span></span>
+<span id="cb13-41"><a href="#cb13-41" tabindex="-1"></a><span class="co">#&gt; 24 sigma0_6_6 sigma0   6   6 0.47288815 0.031625373  </span></span>
+<span id="cb13-42"><a href="#cb13-42" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb13-43"><a href="#cb13-43" tabindex="-1"></a><span class="co">#&gt; Model Statistics: </span></span>
+<span id="cb13-44"><a href="#cb13-44" tabindex="-1"></a><span class="co">#&gt;                |  Parameters  |  Degrees of Freedom  |  Fit (-2lnL units)</span></span>
+<span id="cb13-45"><a href="#cb13-45" tabindex="-1"></a><span class="co">#&gt;        Model:             24                  49976              127121.9</span></span>
+<span id="cb13-46"><a href="#cb13-46" tabindex="-1"></a><span class="co">#&gt;    Saturated:             NA                     NA                    NA</span></span>
+<span id="cb13-47"><a href="#cb13-47" tabindex="-1"></a><span class="co">#&gt; Independence:             NA                     NA                    NA</span></span>
+<span id="cb13-48"><a href="#cb13-48" tabindex="-1"></a><span class="co">#&gt; Number of observations/statistics: 25000/50000</span></span>
+<span id="cb13-49"><a href="#cb13-49" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb13-50"><a href="#cb13-50" tabindex="-1"></a><span class="co">#&gt; Information Criteria: </span></span>
+<span id="cb13-51"><a href="#cb13-51" tabindex="-1"></a><span class="co">#&gt;       |  df Penalty  |  Parameters Penalty  |  Sample-Size Adjusted</span></span>
+<span id="cb13-52"><a href="#cb13-52" tabindex="-1"></a><span class="co">#&gt; AIC:       27169.91               127169.9                 127170.0</span></span>
+<span id="cb13-53"><a href="#cb13-53" tabindex="-1"></a><span class="co">#&gt; BIC:     -378966.61               127364.9                 127288.7</span></span>
+<span id="cb13-54"><a href="#cb13-54" tabindex="-1"></a><span class="co">#&gt; To get additional fit indices, see help(mxRefModels)</span></span>
+<span id="cb13-55"><a href="#cb13-55" tabindex="-1"></a><span class="co">#&gt; timestamp: 2026-11-05 05:22:19 </span></span>
+<span id="cb13-56"><a href="#cb13-56" tabindex="-1"></a><span class="co">#&gt; Wall clock time: 212.6431 secs </span></span>
+<span id="cb13-57"><a href="#cb13-57" tabindex="-1"></a><span class="co">#&gt; optimizer:  SLSQP </span></span>
+<span id="cb13-58"><a href="#cb13-58" tabindex="-1"></a><span class="co">#&gt; OpenMx version number: 2.22.11 </span></span>
+<span id="cb13-59"><a href="#cb13-59" tabindex="-1"></a><span class="co">#&gt; Need help?  See help(mxSummary)</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="lavaan-structural-equation-model">lavaan: Structural Equation Model<a class="anchor" aria-label="anchor" href="#lavaan-structural-equation-model"></a>
+</h3>
+<p>The same model in SEM form, fitted with <code>lavaan</code>, should
+give nearly the same estimates. In SEM, each variable at each occasion
+is a separate observed variable in one row per individual (wide format).
+Each variable has an intercept factor with loadings of 1, a slope factor
+with loadings 0, 1, 2, 3, and 4, and one residual factor per occasion
+with a loading of 1.</p>
+<div class="section level4">
+<h4 id="wide-data-set">Wide Data Set<a class="anchor" aria-label="anchor" href="#wide-data-set"></a>
+</h4>
+<p><code><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame()</a></code> with <code>long = FALSE</code> returns
+the data in wide format.</p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">data_wide</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">sim</span>, long <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">data_wide</span><span class="op">)</span></span>
+<span><span class="co">#&gt;   id        y1_0           y2_0      y1_1       y2_1     y1_2       y2_2</span></span>
+<span><span class="co">#&gt; 1  1  2.37388906 -0.17266755503 3.2815034  0.5992761 3.168958  0.5420004</span></span>
+<span><span class="co">#&gt; 2  2 -0.01604581 -0.18109050141 0.6828646 -0.1135152 1.700621 -1.8224976</span></span>
+<span><span class="co">#&gt; 3  3  3.26382925  1.52047814091 5.8037340  2.7814303 6.188715  3.4654056</span></span>
+<span><span class="co">#&gt; 4  4  1.94339676 -0.13444204172 1.9723843 -0.1755396 1.899682  0.9515669</span></span>
+<span><span class="co">#&gt; 5  5  0.87525257 -2.33329417436 1.9247151 -0.3515431 2.077691 -0.2428386</span></span>
+<span><span class="co">#&gt; 6  6  0.04156401 -0.00005003437 0.5462923  1.5357655 1.735087  1.9415441</span></span>
+<span><span class="co">#&gt;       y1_3       y2_3     y1_4       y2_4</span></span>
+<span><span class="co">#&gt; 1 2.711132  0.5169754 3.487427  1.2647509</span></span>
+<span><span class="co">#&gt; 2 2.239767 -1.1882699 2.280529 -3.1482622</span></span>
+<span><span class="co">#&gt; 3 7.522857  4.3100330 7.272734  5.4493969</span></span>
+<span><span class="co">#&gt; 4 1.482315 -0.5940969 1.966155 -0.1135456</span></span>
+<span><span class="co">#&gt; 5 2.488611  0.2684330 2.861655  0.1558327</span></span>
+<span><span class="co">#&gt; 6 2.369504  3.4956264 2.910286  5.2712928</span></span></code></pre></div>
+</div>
+<div class="section level4">
+<h4 id="model-1">Model<a class="anchor" aria-label="anchor" href="#model-1"></a>
+</h4>
+<p>The model has the same structure for every occasion, so we write it
+with <code><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0()</a></code>. The parameter labels match the dynr names.
+Giving the residual effects and the process noise the same label on
+every occasion constrains them to be equal over time, as in the state
+space model.</p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">waves</span> <span class="op">&lt;-</span> <span class="fl">0</span><span class="op">:</span><span class="op">(</span><span class="va">time</span> <span class="op">-</span> <span class="fl">1</span><span class="op">)</span></span>
+<span><span class="va">now</span> <span class="op">&lt;-</span> <span class="va">waves</span><span class="op">[</span><span class="op">-</span><span class="fl">1</span><span class="op">]</span></span>
+<span><span class="va">before</span> <span class="op">&lt;-</span> <span class="va">waves</span><span class="op">[</span><span class="op">-</span><span class="va">time</span><span class="op">]</span></span>
+<span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>    <span class="st">"# growth factors"</span>,</span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"i1 =~ "</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"1 * y1_"</span>, <span class="va">waves</span>, collapse <span class="op">=</span> <span class="st">" + "</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"i2 =~ "</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"1 * y2_"</span>, <span class="va">waves</span>, collapse <span class="op">=</span> <span class="st">" + "</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"s1 =~ "</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">waves</span>, <span class="st">" * y1_"</span>, <span class="va">waves</span>, collapse <span class="op">=</span> <span class="st">" + "</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"s2 =~ "</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">waves</span>, <span class="st">" * y2_"</span>, <span class="va">waves</span>, collapse <span class="op">=</span> <span class="st">" + "</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>    <span class="st">"# structured residuals"</span>,</span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"r1_"</span>, <span class="va">waves</span>, <span class="st">" =~ 1 * y1_"</span>, <span class="va">waves</span><span class="op">)</span>,</span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"r2_"</span>, <span class="va">waves</span>, <span class="st">" =~ 1 * y2_"</span>, <span class="va">waves</span><span class="op">)</span>,</span>
+<span>    <span class="st">"# autoregressive and cross-lagged effects of the residuals"</span>,</span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span></span>
+<span>      <span class="st">"r1_"</span>, <span class="va">now</span>, <span class="st">" ~ beta_5_5 * r1_"</span>, <span class="va">before</span>, <span class="st">" + beta_5_6 * r2_"</span>, <span class="va">before</span></span>
+<span>    <span class="op">)</span>,</span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span></span>
+<span>      <span class="st">"r2_"</span>, <span class="va">now</span>, <span class="st">" ~ beta_6_5 * r1_"</span>, <span class="va">before</span>, <span class="st">" + beta_6_6 * r2_"</span>, <span class="va">before</span></span>
+<span>    <span class="op">)</span>,</span>
+<span>    <span class="st">"# residuals at the first occasion"</span>,</span>
+<span>    <span class="st">"r1_0 ~~ sigma0_5_5 * r1_0"</span>,</span>
+<span>    <span class="st">"r2_0 ~~ sigma0_6_6 * r2_0"</span>,</span>
+<span>    <span class="st">"r1_0 ~~ sigma0_6_5 * r2_0"</span>,</span>
+<span>    <span class="st">"# process noise at later occasions"</span>,</span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"r1_"</span>, <span class="va">now</span>, <span class="st">" ~~ psi_5_5 * r1_"</span>, <span class="va">now</span><span class="op">)</span>,</span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"r2_"</span>, <span class="va">now</span>, <span class="st">" ~~ psi_6_6 * r2_"</span>, <span class="va">now</span><span class="op">)</span>,</span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"r1_"</span>, <span class="va">now</span>, <span class="st">" ~~ psi_6_5 * r2_"</span>, <span class="va">now</span><span class="op">)</span>,</span>
+<span>    <span class="st">"# growth factors: means"</span>,</span>
+<span>    <span class="st">"i1 ~ mu0_1_1 * 1"</span>,</span>
+<span>    <span class="st">"i2 ~ mu0_2_1 * 1"</span>,</span>
+<span>    <span class="st">"s1 ~ mu0_3_1 * 1"</span>,</span>
+<span>    <span class="st">"s2 ~ mu0_4_1 * 1"</span>,</span>
+<span>    <span class="st">"# growth factors: variances and covariances"</span>,</span>
+<span>    <span class="st">"i1 ~~ sigma0_1_1 * i1"</span>,</span>
+<span>    <span class="st">"i2 ~~ sigma0_2_2 * i2"</span>,</span>
+<span>    <span class="st">"s1 ~~ sigma0_3_3 * s1"</span>,</span>
+<span>    <span class="st">"s2 ~~ sigma0_4_4 * s2"</span>,</span>
+<span>    <span class="st">"i1 ~~ sigma0_2_1 * i2"</span>,</span>
+<span>    <span class="st">"i1 ~~ sigma0_3_1 * s1"</span>,</span>
+<span>    <span class="st">"i1 ~~ sigma0_4_1 * s2"</span>,</span>
+<span>    <span class="st">"i2 ~~ sigma0_3_2 * s1"</span>,</span>
+<span>    <span class="st">"i2 ~~ sigma0_4_2 * s2"</span>,</span>
+<span>    <span class="st">"s1 ~~ sigma0_4_3 * s2"</span>,</span>
+<span>    <span class="st">"# growth factors are uncorrelated with the first residuals"</span>,</span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"i1"</span>, <span class="st">"i2"</span>, <span class="st">"s1"</span>, <span class="st">"s2"</span><span class="op">)</span>, <span class="st">" ~~ 0 * r1_0 + 0 * r2_0"</span><span class="op">)</span>,</span>
+<span>    <span class="st">"# no measurement error and no observed intercepts"</span>,</span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"y1_"</span>, <span class="va">waves</span>, <span class="st">" ~~ 0 * y1_"</span>, <span class="va">waves</span><span class="op">)</span>,</span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"y2_"</span>, <span class="va">waves</span>, <span class="st">" ~~ 0 * y2_"</span>, <span class="va">waves</span><span class="op">)</span>,</span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"y1_"</span>, <span class="va">waves</span>, <span class="st">" ~ 0 * 1"</span><span class="op">)</span>,</span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"y2_"</span>, <span class="va">waves</span>, <span class="st">" ~ 0 * 1"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  collapse <span class="op">=</span> <span class="st">"\n"</span></span>
+<span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # growth factors</span></span>
+<span><span class="co">#&gt; i1 =~ 1 * y1_0 + 1 * y1_1 + 1 * y1_2 + 1 * y1_3 + 1 * y1_4</span></span>
+<span><span class="co">#&gt; i2 =~ 1 * y2_0 + 1 * y2_1 + 1 * y2_2 + 1 * y2_3 + 1 * y2_4</span></span>
+<span><span class="co">#&gt; s1 =~ 0 * y1_0 + 1 * y1_1 + 2 * y1_2 + 3 * y1_3 + 4 * y1_4</span></span>
+<span><span class="co">#&gt; s2 =~ 0 * y2_0 + 1 * y2_1 + 2 * y2_2 + 3 * y2_3 + 4 * y2_4</span></span>
+<span><span class="co">#&gt; # structured residuals</span></span>
+<span><span class="co">#&gt; r1_0 =~ 1 * y1_0</span></span>
+<span><span class="co">#&gt; r1_1 =~ 1 * y1_1</span></span>
+<span><span class="co">#&gt; r1_2 =~ 1 * y1_2</span></span>
+<span><span class="co">#&gt; r1_3 =~ 1 * y1_3</span></span>
+<span><span class="co">#&gt; r1_4 =~ 1 * y1_4</span></span>
+<span><span class="co">#&gt; r2_0 =~ 1 * y2_0</span></span>
+<span><span class="co">#&gt; r2_1 =~ 1 * y2_1</span></span>
+<span><span class="co">#&gt; r2_2 =~ 1 * y2_2</span></span>
+<span><span class="co">#&gt; r2_3 =~ 1 * y2_3</span></span>
+<span><span class="co">#&gt; r2_4 =~ 1 * y2_4</span></span>
+<span><span class="co">#&gt; # autoregressive and cross-lagged effects of the residuals</span></span>
+<span><span class="co">#&gt; r1_1 ~ beta_5_5 * r1_0 + beta_5_6 * r2_0</span></span>
+<span><span class="co">#&gt; r1_2 ~ beta_5_5 * r1_1 + beta_5_6 * r2_1</span></span>
+<span><span class="co">#&gt; r1_3 ~ beta_5_5 * r1_2 + beta_5_6 * r2_2</span></span>
+<span><span class="co">#&gt; r1_4 ~ beta_5_5 * r1_3 + beta_5_6 * r2_3</span></span>
+<span><span class="co">#&gt; r2_1 ~ beta_6_5 * r1_0 + beta_6_6 * r2_0</span></span>
+<span><span class="co">#&gt; r2_2 ~ beta_6_5 * r1_1 + beta_6_6 * r2_1</span></span>
+<span><span class="co">#&gt; r2_3 ~ beta_6_5 * r1_2 + beta_6_6 * r2_2</span></span>
+<span><span class="co">#&gt; r2_4 ~ beta_6_5 * r1_3 + beta_6_6 * r2_3</span></span>
+<span><span class="co">#&gt; # residuals at the first occasion</span></span>
+<span><span class="co">#&gt; r1_0 ~~ sigma0_5_5 * r1_0</span></span>
+<span><span class="co">#&gt; r2_0 ~~ sigma0_6_6 * r2_0</span></span>
+<span><span class="co">#&gt; r1_0 ~~ sigma0_6_5 * r2_0</span></span>
+<span><span class="co">#&gt; # process noise at later occasions</span></span>
+<span><span class="co">#&gt; r1_1 ~~ psi_5_5 * r1_1</span></span>
+<span><span class="co">#&gt; r1_2 ~~ psi_5_5 * r1_2</span></span>
+<span><span class="co">#&gt; r1_3 ~~ psi_5_5 * r1_3</span></span>
+<span><span class="co">#&gt; r1_4 ~~ psi_5_5 * r1_4</span></span>
+<span><span class="co">#&gt; r2_1 ~~ psi_6_6 * r2_1</span></span>
+<span><span class="co">#&gt; r2_2 ~~ psi_6_6 * r2_2</span></span>
+<span><span class="co">#&gt; r2_3 ~~ psi_6_6 * r2_3</span></span>
+<span><span class="co">#&gt; r2_4 ~~ psi_6_6 * r2_4</span></span>
+<span><span class="co">#&gt; r1_1 ~~ psi_6_5 * r2_1</span></span>
+<span><span class="co">#&gt; r1_2 ~~ psi_6_5 * r2_2</span></span>
+<span><span class="co">#&gt; r1_3 ~~ psi_6_5 * r2_3</span></span>
+<span><span class="co">#&gt; r1_4 ~~ psi_6_5 * r2_4</span></span>
+<span><span class="co">#&gt; # growth factors: means</span></span>
+<span><span class="co">#&gt; i1 ~ mu0_1_1 * 1</span></span>
+<span><span class="co">#&gt; i2 ~ mu0_2_1 * 1</span></span>
+<span><span class="co">#&gt; s1 ~ mu0_3_1 * 1</span></span>
+<span><span class="co">#&gt; s2 ~ mu0_4_1 * 1</span></span>
+<span><span class="co">#&gt; # growth factors: variances and covariances</span></span>
+<span><span class="co">#&gt; i1 ~~ sigma0_1_1 * i1</span></span>
+<span><span class="co">#&gt; i2 ~~ sigma0_2_2 * i2</span></span>
+<span><span class="co">#&gt; s1 ~~ sigma0_3_3 * s1</span></span>
+<span><span class="co">#&gt; s2 ~~ sigma0_4_4 * s2</span></span>
+<span><span class="co">#&gt; i1 ~~ sigma0_2_1 * i2</span></span>
+<span><span class="co">#&gt; i1 ~~ sigma0_3_1 * s1</span></span>
+<span><span class="co">#&gt; i1 ~~ sigma0_4_1 * s2</span></span>
+<span><span class="co">#&gt; i2 ~~ sigma0_3_2 * s1</span></span>
+<span><span class="co">#&gt; i2 ~~ sigma0_4_2 * s2</span></span>
+<span><span class="co">#&gt; s1 ~~ sigma0_4_3 * s2</span></span>
+<span><span class="co">#&gt; # growth factors are uncorrelated with the first residuals</span></span>
+<span><span class="co">#&gt; i1 ~~ 0 * r1_0 + 0 * r2_0</span></span>
+<span><span class="co">#&gt; i2 ~~ 0 * r1_0 + 0 * r2_0</span></span>
+<span><span class="co">#&gt; s1 ~~ 0 * r1_0 + 0 * r2_0</span></span>
+<span><span class="co">#&gt; s2 ~~ 0 * r1_0 + 0 * r2_0</span></span>
+<span><span class="co">#&gt; # no measurement error and no observed intercepts</span></span>
+<span><span class="co">#&gt; y1_0 ~~ 0 * y1_0</span></span>
+<span><span class="co">#&gt; y1_1 ~~ 0 * y1_1</span></span>
+<span><span class="co">#&gt; y1_2 ~~ 0 * y1_2</span></span>
+<span><span class="co">#&gt; y1_3 ~~ 0 * y1_3</span></span>
+<span><span class="co">#&gt; y1_4 ~~ 0 * y1_4</span></span>
+<span><span class="co">#&gt; y2_0 ~~ 0 * y2_0</span></span>
+<span><span class="co">#&gt; y2_1 ~~ 0 * y2_1</span></span>
+<span><span class="co">#&gt; y2_2 ~~ 0 * y2_2</span></span>
+<span><span class="co">#&gt; y2_3 ~~ 0 * y2_3</span></span>
+<span><span class="co">#&gt; y2_4 ~~ 0 * y2_4</span></span>
+<span><span class="co">#&gt; y1_0 ~ 0 * 1</span></span>
+<span><span class="co">#&gt; y1_1 ~ 0 * 1</span></span>
+<span><span class="co">#&gt; y1_2 ~ 0 * 1</span></span>
+<span><span class="co">#&gt; y1_3 ~ 0 * 1</span></span>
+<span><span class="co">#&gt; y1_4 ~ 0 * 1</span></span>
+<span><span class="co">#&gt; y2_0 ~ 0 * 1</span></span>
+<span><span class="co">#&gt; y2_1 ~ 0 * 1</span></span>
+<span><span class="co">#&gt; y2_2 ~ 0 * 1</span></span>
+<span><span class="co">#&gt; y2_3 ~ 0 * 1</span></span>
+<span><span class="co">#&gt; y2_4 ~ 0 * 1</span></span></code></pre></div>
+<p><code><a href="https://rdrr.io/pkg/lavaan/man/lavaan.html" class="external-link">lavaan::lavaan()</a></code> adds nothing to the model by itself, so
+every parameter above is exactly the one written.</p>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">fit_lavaan</span> <span class="op">&lt;-</span> <span class="fu">lavaan</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/lavaan.html" class="external-link">lavaan</a></span><span class="op">(</span></span>
+<span>  model <span class="op">=</span> <span class="va">model</span>,</span>
+<span>  data <span class="op">=</span> <span class="va">data_wide</span></span>
+<span><span class="op">)</span></span>
+<span><span class="fu">lavaan</span><span class="fu">::</span><span class="fu">summary</span><span class="op">(</span><span class="va">fit_lavaan</span><span class="op">)</span></span>
+<span><span class="co">#&gt; lavaan 0.7-3 ended normally after 64 iterations</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;   Estimator                                         ML</span></span>
+<span><span class="co">#&gt;   Optimization method                           NLMINB</span></span>
+<span><span class="co">#&gt;   Number of model parameters                        45</span></span>
+<span><span class="co">#&gt;   Number of equality constraints                    21</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;   Number of observations                          5000</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Model Test User Model:</span></span>
+<span><span class="co">#&gt;                                                       </span></span>
+<span><span class="co">#&gt;   Test statistic                                41.457</span></span>
+<span><span class="co">#&gt;   Degrees of freedom                                41</span></span>
+<span><span class="co">#&gt;   P-value (Chi-square)                           0.451</span></span>
+<span><span class="co">#&gt;                                                       </span></span>
+<span><span class="co">#&gt;   Browne's residual (NT model-based) test             </span></span>
+<span><span class="co">#&gt;   Test statistic                                41.357</span></span>
+<span><span class="co">#&gt;   Degrees of freedom                                41</span></span>
+<span><span class="co">#&gt;   P-value (Chi-square)                           0.455</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Parameter Estimates:</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;   Standard errors                             Standard</span></span>
+<span><span class="co">#&gt;   Information                                 Expected</span></span>
+<span><span class="co">#&gt;   Information saturated (h1) model          Structured</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Latent Variables:</span></span>
+<span><span class="co">#&gt;                    Estimate  Std.Err  z-value  P(&gt;|z|)</span></span>
+<span><span class="co">#&gt;   i1 =~                                               </span></span>
+<span><span class="co">#&gt;     y1_0              1.000                           </span></span>
+<span><span class="co">#&gt;     y1_1              1.000                           </span></span>
+<span><span class="co">#&gt;     y1_2              1.000                           </span></span>
+<span><span class="co">#&gt;     y1_3              1.000                           </span></span>
+<span><span class="co">#&gt;     y1_4              1.000                           </span></span>
+<span><span class="co">#&gt;   i2 =~                                               </span></span>
+<span><span class="co">#&gt;     y2_0              1.000                           </span></span>
+<span><span class="co">#&gt;     y2_1              1.000                           </span></span>
+<span><span class="co">#&gt;     y2_2              1.000                           </span></span>
+<span><span class="co">#&gt;     y2_3              1.000                           </span></span>
+<span><span class="co">#&gt;     y2_4              1.000                           </span></span>
+<span><span class="co">#&gt;   s1 =~                                               </span></span>
+<span><span class="co">#&gt;     y1_0              0.000                           </span></span>
+<span><span class="co">#&gt;     y1_1              1.000                           </span></span>
+<span><span class="co">#&gt;     y1_2              2.000                           </span></span>
+<span><span class="co">#&gt;     y1_3              3.000                           </span></span>
+<span><span class="co">#&gt;     y1_4              4.000                           </span></span>
+<span><span class="co">#&gt;   s2 =~                                               </span></span>
+<span><span class="co">#&gt;     y2_0              0.000                           </span></span>
+<span><span class="co">#&gt;     y2_1              1.000                           </span></span>
+<span><span class="co">#&gt;     y2_2              2.000                           </span></span>
+<span><span class="co">#&gt;     y2_3              3.000                           </span></span>
+<span><span class="co">#&gt;     y2_4              4.000                           </span></span>
+<span><span class="co">#&gt;   r1_0 =~                                             </span></span>
+<span><span class="co">#&gt;     y1_0              1.000                           </span></span>
+<span><span class="co">#&gt;   r1_1 =~                                             </span></span>
+<span><span class="co">#&gt;     y1_1              1.000                           </span></span>
+<span><span class="co">#&gt;   r1_2 =~                                             </span></span>
+<span><span class="co">#&gt;     y1_2              1.000                           </span></span>
+<span><span class="co">#&gt;   r1_3 =~                                             </span></span>
+<span><span class="co">#&gt;     y1_3              1.000                           </span></span>
+<span><span class="co">#&gt;   r1_4 =~                                             </span></span>
+<span><span class="co">#&gt;     y1_4              1.000                           </span></span>
+<span><span class="co">#&gt;   r2_0 =~                                             </span></span>
+<span><span class="co">#&gt;     y2_0              1.000                           </span></span>
+<span><span class="co">#&gt;   r2_1 =~                                             </span></span>
+<span><span class="co">#&gt;     y2_1              1.000                           </span></span>
+<span><span class="co">#&gt;   r2_2 =~                                             </span></span>
+<span><span class="co">#&gt;     y2_2              1.000                           </span></span>
+<span><span class="co">#&gt;   r2_3 =~                                             </span></span>
+<span><span class="co">#&gt;     y2_3              1.000                           </span></span>
+<span><span class="co">#&gt;   r2_4 =~                                             </span></span>
+<span><span class="co">#&gt;     y2_4              1.000                           </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Regressions:</span></span>
+<span><span class="co">#&gt;                    Estimate  Std.Err  z-value  P(&gt;|z|)</span></span>
+<span><span class="co">#&gt;   r1_1 ~                                              </span></span>
+<span><span class="co">#&gt;     r1_0   (b_5_5)    0.385    0.021   18.365    0.000</span></span>
+<span><span class="co">#&gt;     r2_0   (b_5_6)    0.095    0.015    6.194    0.000</span></span>
+<span><span class="co">#&gt;   r1_2 ~                                              </span></span>
+<span><span class="co">#&gt;     r1_1   (b_5_5)    0.385    0.021   18.365    0.000</span></span>
+<span><span class="co">#&gt;     r2_1   (b_5_6)    0.095    0.015    6.194    0.000</span></span>
+<span><span class="co">#&gt;   r1_3 ~                                              </span></span>
+<span><span class="co">#&gt;     r1_2   (b_5_5)    0.385    0.021   18.365    0.000</span></span>
+<span><span class="co">#&gt;     r2_2   (b_5_6)    0.095    0.015    6.194    0.000</span></span>
+<span><span class="co">#&gt;   r1_4 ~                                              </span></span>
+<span><span class="co">#&gt;     r1_3   (b_5_5)    0.385    0.021   18.365    0.000</span></span>
+<span><span class="co">#&gt;     r2_3   (b_5_6)    0.095    0.015    6.194    0.000</span></span>
+<span><span class="co">#&gt;   r2_1 ~                                              </span></span>
+<span><span class="co">#&gt;     r1_0   (b_6_5)    0.154    0.016    9.504    0.000</span></span>
+<span><span class="co">#&gt;     r2_0   (b_6_6)    0.328    0.019   16.861    0.000</span></span>
+<span><span class="co">#&gt;   r2_2 ~                                              </span></span>
+<span><span class="co">#&gt;     r1_1   (b_6_5)    0.154    0.016    9.504    0.000</span></span>
+<span><span class="co">#&gt;     r2_1   (b_6_6)    0.328    0.019   16.861    0.000</span></span>
+<span><span class="co">#&gt;   r2_3 ~                                              </span></span>
+<span><span class="co">#&gt;     r1_2   (b_6_5)    0.154    0.016    9.504    0.000</span></span>
+<span><span class="co">#&gt;     r2_2   (b_6_6)    0.328    0.019   16.861    0.000</span></span>
+<span><span class="co">#&gt;   r2_4 ~                                              </span></span>
+<span><span class="co">#&gt;     r1_3   (b_6_5)    0.154    0.016    9.504    0.000</span></span>
+<span><span class="co">#&gt;     r2_3   (b_6_6)    0.328    0.019   16.861    0.000</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Covariances:</span></span>
+<span><span class="co">#&gt;                    Estimate  Std.Err  z-value  P(&gt;|z|)</span></span>
+<span><span class="co">#&gt;   r1_0 ~~                                             </span></span>
+<span><span class="co">#&gt;     r2_0    (s0_6)    0.181    0.028    6.425    0.000</span></span>
+<span><span class="co">#&gt;  .r1_1 ~~                                             </span></span>
+<span><span class="co">#&gt;    .r2_1    (p_6_)    0.097    0.006   16.205    0.000</span></span>
+<span><span class="co">#&gt;  .r1_2 ~~                                             </span></span>
+<span><span class="co">#&gt;    .r2_2    (p_6_)    0.097    0.006   16.205    0.000</span></span>
+<span><span class="co">#&gt;  .r1_3 ~~                                             </span></span>
+<span><span class="co">#&gt;    .r2_3    (p_6_)    0.097    0.006   16.205    0.000</span></span>
+<span><span class="co">#&gt;  .r1_4 ~~                                             </span></span>
+<span><span class="co">#&gt;    .r2_4    (p_6_)    0.097    0.006   16.205    0.000</span></span>
+<span><span class="co">#&gt;   i1 ~~                                               </span></span>
+<span><span class="co">#&gt;     i2      (s0_2)    0.368    0.033   11.062    0.000</span></span>
+<span><span class="co">#&gt;     s1    (s0_3_1)    0.088    0.010    8.936    0.000</span></span>
+<span><span class="co">#&gt;     s2    (s0_4_1)    0.054    0.009    6.168    0.000</span></span>
+<span><span class="co">#&gt;   i2 ~~                                               </span></span>
+<span><span class="co">#&gt;     s1    (s0_3_2)    0.045    0.009    5.149    0.000</span></span>
+<span><span class="co">#&gt;     s2    (s0_4_2)    0.095    0.009   10.371    0.000</span></span>
+<span><span class="co">#&gt;   s1 ~~                                               </span></span>
+<span><span class="co">#&gt;     s2    (s0_4_3)    0.030    0.003    9.628    0.000</span></span>
+<span><span class="co">#&gt;   i1 ~~                                               </span></span>
+<span><span class="co">#&gt;     r1_0              0.000                           </span></span>
+<span><span class="co">#&gt;     r2_0              0.000                           </span></span>
+<span><span class="co">#&gt;   i2 ~~                                               </span></span>
+<span><span class="co">#&gt;     r1_0              0.000                           </span></span>
+<span><span class="co">#&gt;     r2_0              0.000                           </span></span>
+<span><span class="co">#&gt;   s1 ~~                                               </span></span>
+<span><span class="co">#&gt;     r1_0              0.000                           </span></span>
+<span><span class="co">#&gt;     r2_0              0.000                           </span></span>
+<span><span class="co">#&gt;   s2 ~~                                               </span></span>
+<span><span class="co">#&gt;     r1_0              0.000                           </span></span>
+<span><span class="co">#&gt;     r2_0              0.000                           </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Intercepts:</span></span>
+<span><span class="co">#&gt;                    Estimate  Std.Err  z-value  P(&gt;|z|)</span></span>
+<span><span class="co">#&gt;     i1      (m0_1)    1.990    0.017  117.548    0.000</span></span>
+<span><span class="co">#&gt;     i2      (m0_2)    0.989    0.016   60.023    0.000</span></span>
+<span><span class="co">#&gt;     s1      (m0_3)    0.499    0.006   88.932    0.000</span></span>
+<span><span class="co">#&gt;     s2      (m0_4)    0.299    0.006   53.834    0.000</span></span>
+<span><span class="co">#&gt;    .y1_0              0.000                           </span></span>
+<span><span class="co">#&gt;    .y1_1              0.000                           </span></span>
+<span><span class="co">#&gt;    .y1_2              0.000                           </span></span>
+<span><span class="co">#&gt;    .y1_3              0.000                           </span></span>
+<span><span class="co">#&gt;    .y1_4              0.000                           </span></span>
+<span><span class="co">#&gt;    .y2_0              0.000                           </span></span>
+<span><span class="co">#&gt;    .y2_1              0.000                           </span></span>
+<span><span class="co">#&gt;    .y2_2              0.000                           </span></span>
+<span><span class="co">#&gt;    .y2_3              0.000                           </span></span>
+<span><span class="co">#&gt;    .y2_4              0.000                           </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Variances:</span></span>
+<span><span class="co">#&gt;                    Estimate  Std.Err  z-value  P(&gt;|z|)</span></span>
+<span><span class="co">#&gt;     r1_0    (s0_5)    0.501    0.036   13.876    0.000</span></span>
+<span><span class="co">#&gt;     r2_0    (s0_6)    0.473    0.032   14.687    0.000</span></span>
+<span><span class="co">#&gt;    .r1_1    (p_5_)    0.391    0.008   47.825    0.000</span></span>
+<span><span class="co">#&gt;    .r1_2    (p_5_)    0.391    0.008   47.825    0.000</span></span>
+<span><span class="co">#&gt;    .r1_3    (p_5_)    0.391    0.008   47.825    0.000</span></span>
+<span><span class="co">#&gt;    .r1_4    (p_5_)    0.391    0.008   47.825    0.000</span></span>
+<span><span class="co">#&gt;    .r2_1    (p_6_)    0.402    0.008   50.775    0.000</span></span>
+<span><span class="co">#&gt;    .r2_2    (p_6_)    0.402    0.008   50.775    0.000</span></span>
+<span><span class="co">#&gt;    .r2_3    (p_6_)    0.402    0.008   50.775    0.000</span></span>
+<span><span class="co">#&gt;    .r2_4    (p_6_)    0.402    0.008   50.775    0.000</span></span>
+<span><span class="co">#&gt;     i1      (s0_1)    1.013    0.043   23.405    0.000</span></span>
+<span><span class="co">#&gt;     i2      (s0_2)    0.963    0.039   24.440    0.000</span></span>
+<span><span class="co">#&gt;     s1      (s0_3)    0.101    0.004   24.312    0.000</span></span>
+<span><span class="co">#&gt;     s2      (s0_4)    0.099    0.004   25.054    0.000</span></span>
+<span><span class="co">#&gt;    .y1_0              0.000                           </span></span>
+<span><span class="co">#&gt;    .y1_1              0.000                           </span></span>
+<span><span class="co">#&gt;    .y1_2              0.000                           </span></span>
+<span><span class="co">#&gt;    .y1_3              0.000                           </span></span>
+<span><span class="co">#&gt;    .y1_4              0.000                           </span></span>
+<span><span class="co">#&gt;    .y2_0              0.000                           </span></span>
+<span><span class="co">#&gt;    .y2_1              0.000                           </span></span>
+<span><span class="co">#&gt;    .y2_2              0.000                           </span></span>
+<span><span class="co">#&gt;    .y2_3              0.000                           </span></span>
+<span><span class="co">#&gt;    .y2_4              0.000</span></span></code></pre></div>
+</div>
+</div>
+<div class="section level3">
+<h3 id="openmx-structural-equation-model">OpenMx: Structural Equation Model<a class="anchor" aria-label="anchor" href="#openmx-structural-equation-model"></a>
+</h3>
+<p>The same SEM in <code>OpenMx</code>, written with
+<code><a href="https://rdrr.io/pkg/OpenMx/man/mxPath.html" class="external-link">OpenMx::mxPath()</a></code> on the wide data. One-headed arrows are
+loadings and regressions, two-headed arrows are variances and
+covariances, and arrows from <code>"one"</code> are means. A path that
+is not written is fixed at zero, so the zero residual variances,
+covariances, and intercepts of the lavaan model need no lines here. The
+labels are the dynr names, and the starting values are the population
+values.</p>
+<p><code>connect = "unique.pairs"</code> adds every variance and
+covariance among the growth factors; their labels and values are the
+lower triangle of the first four rows and columns of the label matrix
+and of <span class="math inline">\boldsymbol{\Sigma}_{0}</span>, in the
+same order.</p>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">waves</span> <span class="op">&lt;-</span> <span class="fl">0</span><span class="op">:</span><span class="op">(</span><span class="va">time</span> <span class="op">-</span> <span class="fl">1</span><span class="op">)</span></span>
+<span><span class="va">y1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"y1_"</span>, <span class="va">waves</span><span class="op">)</span></span>
+<span><span class="va">y2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"y2_"</span>, <span class="va">waves</span><span class="op">)</span></span>
+<span><span class="va">r1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"r1_"</span>, <span class="va">waves</span><span class="op">)</span></span>
+<span><span class="va">r2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"r2_"</span>, <span class="va">waves</span><span class="op">)</span></span>
+<span><span class="va">growth</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"i1"</span>, <span class="st">"i2"</span>, <span class="st">"s1"</span>, <span class="st">"s2"</span><span class="op">)</span></span>
+<span><span class="va">labels_growth</span> <span class="op">&lt;-</span> <span class="va">params_sigma0</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">]</span></span>
+<span><span class="va">sigma_growth</span> <span class="op">&lt;-</span> <span class="va">sigma0</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">]</span></span>
+<span><span class="va">mx_sem</span> <span class="op">&lt;-</span> <span class="fu">OpenMx</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/OpenMx/man/mxModel.html" class="external-link">mxModel</a></span><span class="op">(</span></span>
+<span>  name <span class="op">=</span> <span class="st">"lcm_sr_sem"</span>,</span>
+<span>  type <span class="op">=</span> <span class="st">"RAM"</span>,</span>
+<span>  manifestVars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">y1</span>, <span class="va">y2</span><span class="op">)</span>,</span>
+<span>  latentVars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">growth</span>, <span class="va">r1</span>, <span class="va">r2</span><span class="op">)</span>,</span>
+<span>  <span class="fu">OpenMx</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/OpenMx/man/mxData.html" class="external-link">mxData</a></span><span class="op">(</span>observed <span class="op">=</span> <span class="va">data_wide</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">y1</span>, <span class="va">y2</span><span class="op">)</span><span class="op">]</span>, type <span class="op">=</span> <span class="st">"raw"</span><span class="op">)</span>,</span>
+<span>  <span class="co"># growth factors</span></span>
+<span>  <span class="fu">OpenMx</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/OpenMx/man/mxPath.html" class="external-link">mxPath</a></span><span class="op">(</span>from <span class="op">=</span> <span class="st">"i1"</span>, to <span class="op">=</span> <span class="va">y1</span>, free <span class="op">=</span> <span class="cn">FALSE</span>, values <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>,</span>
+<span>  <span class="fu">OpenMx</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/OpenMx/man/mxPath.html" class="external-link">mxPath</a></span><span class="op">(</span>from <span class="op">=</span> <span class="st">"i2"</span>, to <span class="op">=</span> <span class="va">y2</span>, free <span class="op">=</span> <span class="cn">FALSE</span>, values <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>,</span>
+<span>  <span class="fu">OpenMx</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/OpenMx/man/mxPath.html" class="external-link">mxPath</a></span><span class="op">(</span>from <span class="op">=</span> <span class="st">"s1"</span>, to <span class="op">=</span> <span class="va">y1</span>, free <span class="op">=</span> <span class="cn">FALSE</span>, values <span class="op">=</span> <span class="va">waves</span><span class="op">)</span>,</span>
+<span>  <span class="fu">OpenMx</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/OpenMx/man/mxPath.html" class="external-link">mxPath</a></span><span class="op">(</span>from <span class="op">=</span> <span class="st">"s2"</span>, to <span class="op">=</span> <span class="va">y2</span>, free <span class="op">=</span> <span class="cn">FALSE</span>, values <span class="op">=</span> <span class="va">waves</span><span class="op">)</span>,</span>
+<span>  <span class="co"># structured residuals</span></span>
+<span>  <span class="fu">OpenMx</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/OpenMx/man/mxPath.html" class="external-link">mxPath</a></span><span class="op">(</span>from <span class="op">=</span> <span class="va">r1</span>, to <span class="op">=</span> <span class="va">y1</span>, free <span class="op">=</span> <span class="cn">FALSE</span>, values <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>,</span>
+<span>  <span class="fu">OpenMx</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/OpenMx/man/mxPath.html" class="external-link">mxPath</a></span><span class="op">(</span>from <span class="op">=</span> <span class="va">r2</span>, to <span class="op">=</span> <span class="va">y2</span>, free <span class="op">=</span> <span class="cn">FALSE</span>, values <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>,</span>
+<span>  <span class="co"># autoregressive and cross-lagged effects of the residuals</span></span>
+<span>  <span class="fu">OpenMx</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/OpenMx/man/mxPath.html" class="external-link">mxPath</a></span><span class="op">(</span></span>
+<span>    from <span class="op">=</span> <span class="va">r1</span><span class="op">[</span><span class="op">-</span><span class="va">time</span><span class="op">]</span>, to <span class="op">=</span> <span class="va">r1</span><span class="op">[</span><span class="op">-</span><span class="fl">1</span><span class="op">]</span>, labels <span class="op">=</span> <span class="st">"beta_5_5"</span>, values <span class="op">=</span> <span class="va">beta</span><span class="op">[</span><span class="fl">5</span>, <span class="fl">5</span><span class="op">]</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  <span class="fu">OpenMx</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/OpenMx/man/mxPath.html" class="external-link">mxPath</a></span><span class="op">(</span></span>
+<span>    from <span class="op">=</span> <span class="va">r2</span><span class="op">[</span><span class="op">-</span><span class="va">time</span><span class="op">]</span>, to <span class="op">=</span> <span class="va">r1</span><span class="op">[</span><span class="op">-</span><span class="fl">1</span><span class="op">]</span>, labels <span class="op">=</span> <span class="st">"beta_5_6"</span>, values <span class="op">=</span> <span class="va">beta</span><span class="op">[</span><span class="fl">5</span>, <span class="fl">6</span><span class="op">]</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  <span class="fu">OpenMx</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/OpenMx/man/mxPath.html" class="external-link">mxPath</a></span><span class="op">(</span></span>
+<span>    from <span class="op">=</span> <span class="va">r1</span><span class="op">[</span><span class="op">-</span><span class="va">time</span><span class="op">]</span>, to <span class="op">=</span> <span class="va">r2</span><span class="op">[</span><span class="op">-</span><span class="fl">1</span><span class="op">]</span>, labels <span class="op">=</span> <span class="st">"beta_6_5"</span>, values <span class="op">=</span> <span class="va">beta</span><span class="op">[</span><span class="fl">6</span>, <span class="fl">5</span><span class="op">]</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  <span class="fu">OpenMx</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/OpenMx/man/mxPath.html" class="external-link">mxPath</a></span><span class="op">(</span></span>
+<span>    from <span class="op">=</span> <span class="va">r2</span><span class="op">[</span><span class="op">-</span><span class="va">time</span><span class="op">]</span>, to <span class="op">=</span> <span class="va">r2</span><span class="op">[</span><span class="op">-</span><span class="fl">1</span><span class="op">]</span>, labels <span class="op">=</span> <span class="st">"beta_6_6"</span>, values <span class="op">=</span> <span class="va">beta</span><span class="op">[</span><span class="fl">6</span>, <span class="fl">6</span><span class="op">]</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  <span class="co"># residuals at the first occasion</span></span>
+<span>  <span class="fu">OpenMx</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/OpenMx/man/mxPath.html" class="external-link">mxPath</a></span><span class="op">(</span></span>
+<span>    from <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"r1_0"</span>, <span class="st">"r2_0"</span>, <span class="st">"r1_0"</span><span class="op">)</span>,</span>
+<span>    to <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"r1_0"</span>, <span class="st">"r2_0"</span>, <span class="st">"r2_0"</span><span class="op">)</span>,</span>
+<span>    arrows <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>    labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"sigma0_5_5"</span>, <span class="st">"sigma0_6_6"</span>, <span class="st">"sigma0_6_5"</span><span class="op">)</span>,</span>
+<span>    values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">sigma0</span><span class="op">[</span><span class="fl">5</span>, <span class="fl">5</span><span class="op">]</span>, <span class="va">sigma0</span><span class="op">[</span><span class="fl">6</span>, <span class="fl">6</span><span class="op">]</span>, <span class="va">sigma0</span><span class="op">[</span><span class="fl">6</span>, <span class="fl">5</span><span class="op">]</span><span class="op">)</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  <span class="co"># process noise at later occasions</span></span>
+<span>  <span class="fu">OpenMx</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/OpenMx/man/mxPath.html" class="external-link">mxPath</a></span><span class="op">(</span></span>
+<span>    from <span class="op">=</span> <span class="va">r1</span><span class="op">[</span><span class="op">-</span><span class="fl">1</span><span class="op">]</span>, arrows <span class="op">=</span> <span class="fl">2</span>, labels <span class="op">=</span> <span class="st">"psi_5_5"</span>, values <span class="op">=</span> <span class="va">psi</span><span class="op">[</span><span class="fl">5</span>, <span class="fl">5</span><span class="op">]</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  <span class="fu">OpenMx</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/OpenMx/man/mxPath.html" class="external-link">mxPath</a></span><span class="op">(</span></span>
+<span>    from <span class="op">=</span> <span class="va">r2</span><span class="op">[</span><span class="op">-</span><span class="fl">1</span><span class="op">]</span>, arrows <span class="op">=</span> <span class="fl">2</span>, labels <span class="op">=</span> <span class="st">"psi_6_6"</span>, values <span class="op">=</span> <span class="va">psi</span><span class="op">[</span><span class="fl">6</span>, <span class="fl">6</span><span class="op">]</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  <span class="fu">OpenMx</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/OpenMx/man/mxPath.html" class="external-link">mxPath</a></span><span class="op">(</span></span>
+<span>    from <span class="op">=</span> <span class="va">r1</span><span class="op">[</span><span class="op">-</span><span class="fl">1</span><span class="op">]</span>,</span>
+<span>    to <span class="op">=</span> <span class="va">r2</span><span class="op">[</span><span class="op">-</span><span class="fl">1</span><span class="op">]</span>,</span>
+<span>    arrows <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>    labels <span class="op">=</span> <span class="st">"psi_6_5"</span>,</span>
+<span>    values <span class="op">=</span> <span class="va">psi</span><span class="op">[</span><span class="fl">6</span>, <span class="fl">5</span><span class="op">]</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  <span class="co"># growth factors: means</span></span>
+<span>  <span class="fu">OpenMx</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/OpenMx/man/mxPath.html" class="external-link">mxPath</a></span><span class="op">(</span></span>
+<span>    from <span class="op">=</span> <span class="st">"one"</span>,</span>
+<span>    to <span class="op">=</span> <span class="va">growth</span>,</span>
+<span>    labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mu0_1_1"</span>, <span class="st">"mu0_2_1"</span>, <span class="st">"mu0_3_1"</span>, <span class="st">"mu0_4_1"</span><span class="op">)</span>,</span>
+<span>    values <span class="op">=</span> <span class="va">mu0</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">]</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  <span class="co"># growth factors: variances and covariances</span></span>
+<span>  <span class="fu">OpenMx</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/OpenMx/man/mxPath.html" class="external-link">mxPath</a></span><span class="op">(</span></span>
+<span>    from <span class="op">=</span> <span class="va">growth</span>,</span>
+<span>    arrows <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>    connect <span class="op">=</span> <span class="st">"unique.pairs"</span>,</span>
+<span>    labels <span class="op">=</span> <span class="va">labels_growth</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/lower.tri.html" class="external-link">lower.tri</a></span><span class="op">(</span><span class="va">labels_growth</span>, diag <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">]</span>,</span>
+<span>    values <span class="op">=</span> <span class="va">sigma_growth</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/lower.tri.html" class="external-link">lower.tri</a></span><span class="op">(</span><span class="va">sigma_growth</span>, diag <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">]</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">fit_mx_sem</span> <span class="op">&lt;-</span> <span class="fu">OpenMx</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/OpenMx/man/mxRun.html" class="external-link">mxRun</a></span><span class="op">(</span></span>
+<span>  model <span class="op">=</span> <span class="va">mx_sem</span>,</span>
+<span>  silent <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">fit_mx_sem</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Summary of lcm_sr_sem </span></span>
+<span><span class="co">#&gt;  </span></span>
+<span><span class="co">#&gt; free parameters:</span></span>
+<span><span class="co">#&gt;          name matrix  row  col   Estimate   Std.Error A</span></span>
+<span><span class="co">#&gt; 1    beta_5_5      A r1_1 r1_0 0.38508306 0.021133060  </span></span>
+<span><span class="co">#&gt; 2    beta_6_5      A r2_1 r1_0 0.15377680 0.016244283  </span></span>
+<span><span class="co">#&gt; 3    beta_5_6      A r1_1 r2_0 0.09546419 0.015449083  </span></span>
+<span><span class="co">#&gt; 4    beta_6_6      A r2_1 r2_0 0.32839424 0.019514514  </span></span>
+<span><span class="co">#&gt; 5  sigma0_1_1      S   i1   i1 1.01280944 0.042845107  </span></span>
+<span><span class="co">#&gt; 6  sigma0_2_1      S   i1   i2 0.36793303 0.032900921  </span></span>
+<span><span class="co">#&gt; 7  sigma0_2_2      S   i2   i2 0.96339688 0.039066881  </span></span>
+<span><span class="co">#&gt; 8  sigma0_3_1      S   i1   s1 0.08844527 0.009764722  </span></span>
+<span><span class="co">#&gt; 9  sigma0_3_2      S   i2   s1 0.04472970 0.008587179  </span></span>
+<span><span class="co">#&gt; 10 sigma0_3_3      S   s1   s1 0.10100716 0.004127982  </span></span>
+<span><span class="co">#&gt; 11 sigma0_4_1      S   i1   s2 0.05362276 0.008621507  </span></span>
+<span><span class="co">#&gt; 12 sigma0_4_2      S   i2   s2 0.09548767 0.009115657  </span></span>
+<span><span class="co">#&gt; 13 sigma0_4_3      S   s1   s2 0.02994125 0.003083819  </span></span>
+<span><span class="co">#&gt; 14 sigma0_4_4      S   s2   s2 0.09924227 0.003941789  </span></span>
+<span><span class="co">#&gt; 15 sigma0_5_5      S r1_0 r1_0 0.50055429 0.035366474  </span></span>
+<span><span class="co">#&gt; 16    psi_5_5      S r1_1 r1_1 0.39078647 0.008225116  </span></span>
+<span><span class="co">#&gt; 17 sigma0_6_5      S r1_0 r2_0 0.18056854 0.027624589  </span></span>
+<span><span class="co">#&gt; 18 sigma0_6_6      S r2_0 r2_0 0.47288817 0.031818939  </span></span>
+<span><span class="co">#&gt; 19    psi_6_5      S r1_1 r2_1 0.09745437 0.006019823  </span></span>
+<span><span class="co">#&gt; 20    psi_6_6      S r2_1 r2_1 0.40168284 0.007920034  </span></span>
+<span><span class="co">#&gt; 21    mu0_1_1      M    1   i1 1.99034260 0.016932863  </span></span>
+<span><span class="co">#&gt; 22    mu0_2_1      M    1   i2 0.98925223 0.016481779  </span></span>
+<span><span class="co">#&gt; 23    mu0_3_1      M    1   s1 0.49921095 0.005613897  </span></span>
+<span><span class="co">#&gt; 24    mu0_4_1      M    1   s2 0.29910688 0.005556583  </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Model Statistics: </span></span>
+<span><span class="co">#&gt;                |  Parameters  |  Degrees of Freedom  |  Fit (-2lnL units)</span></span>
+<span><span class="co">#&gt;        Model:             24                  49976              127121.9</span></span>
+<span><span class="co">#&gt;    Saturated:             65                  49935                    NA</span></span>
+<span><span class="co">#&gt; Independence:             20                  49980                    NA</span></span>
+<span><span class="co">#&gt; Number of observations/statistics: 5000/50000</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Information Criteria: </span></span>
+<span><span class="co">#&gt;       |  df Penalty  |  Parameters Penalty  |  Sample-Size Adjusted</span></span>
+<span><span class="co">#&gt; AIC:       27169.91               127169.9                 127170.1</span></span>
+<span><span class="co">#&gt; BIC:     -298533.34               127326.3                 127250.1</span></span>
+<span><span class="co">#&gt; To get additional fit indices, see help(mxRefModels)</span></span>
+<span><span class="co">#&gt; timestamp: 2026-11-05 05:26:02 </span></span>
+<span><span class="co">#&gt; Wall clock time: 0.07439446 secs </span></span>
+<span><span class="co">#&gt; optimizer:  SLSQP </span></span>
+<span><span class="co">#&gt; OpenMx version number: 2.22.11 </span></span>
+<span><span class="co">#&gt; Need help?  See help(mxSummary)</span></span></code></pre></div>
+</div>
+</div>
+<div class="section level2">
+<h2 id="population-values-and-estimates">Population Values and Estimates<a class="anchor" aria-label="anchor" href="#population-values-and-estimates"></a>
+</h2>
+<p>Each table below puts the population values used to simulate the data
+next to the estimates of one method. Bias is the estimate minus the
+population value. Because each model is fitted to a single simulated
+data set, this is the error of one estimate, not a Monte Carlo bias,
+which would average over many replications. The 95% confidence interval
+is the Wald interval, <span class="math inline">\hat{\theta} \pm 1.96
+\times \mathrm{SE}</span>, unless the caption says otherwise, and
+<code>Covers</code> shows whether it contains the population value. The
+parameter names are the dynr names in every table.</p>
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">EstimatesTable</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">population</span>, <span class="va">estimate</span>, <span class="va">se</span>, <span class="va">ll</span> <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">ul</span> <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">z</span> <span class="op">&lt;-</span> <span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">qnorm</a></span><span class="op">(</span>p <span class="op">=</span> <span class="fl">0.975</span><span class="op">)</span></span>
+<span>  <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="va">ll</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">ll</span> <span class="op">&lt;-</span> <span class="va">estimate</span> <span class="op">-</span> <span class="va">z</span> <span class="op">*</span> <span class="va">se</span></span>
+<span>  <span class="op">}</span></span>
+<span>  <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="va">ul</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">ul</span> <span class="op">&lt;-</span> <span class="va">estimate</span> <span class="op">+</span> <span class="va">z</span> <span class="op">*</span> <span class="va">se</span></span>
+<span>  <span class="op">}</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>    Parameter <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">population</span><span class="op">)</span>,</span>
+<span>    Population <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unname.html" class="external-link">unname</a></span><span class="op">(</span><span class="va">population</span><span class="op">)</span>,</span>
+<span>    Estimate <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unname.html" class="external-link">unname</a></span><span class="op">(</span><span class="va">estimate</span><span class="op">)</span>,</span>
+<span>    SE <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unname.html" class="external-link">unname</a></span><span class="op">(</span><span class="va">se</span><span class="op">)</span>,</span>
+<span>    Bias <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unname.html" class="external-link">unname</a></span><span class="op">(</span><span class="va">estimate</span> <span class="op">-</span> <span class="va">population</span><span class="op">)</span>,</span>
+<span>    `2.5%` <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unname.html" class="external-link">unname</a></span><span class="op">(</span><span class="va">ll</span><span class="op">)</span>,</span>
+<span>    `97.5%` <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unname.html" class="external-link">unname</a></span><span class="op">(</span><span class="va">ul</span><span class="op">)</span>,</span>
+<span>    Covers <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unname.html" class="external-link">unname</a></span><span class="op">(</span><span class="va">population</span> <span class="op">&gt;=</span> <span class="va">ll</span> <span class="op">&amp;</span> <span class="va">population</span> <span class="op">&lt;=</span> <span class="va">ul</span><span class="op">)</span>,</span>
+<span>    check.names <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">population</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>  mu0_1_1 <span class="op">=</span> <span class="va">mu0</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>,</span>
+<span>  mu0_2_1 <span class="op">=</span> <span class="va">mu0</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>,</span>
+<span>  mu0_3_1 <span class="op">=</span> <span class="va">mu0</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span>,</span>
+<span>  mu0_4_1 <span class="op">=</span> <span class="va">mu0</span><span class="op">[</span><span class="fl">4</span><span class="op">]</span>,</span>
+<span>  sigma0_1_1 <span class="op">=</span> <span class="va">sigma0</span><span class="op">[</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">]</span>,</span>
+<span>  sigma0_2_1 <span class="op">=</span> <span class="va">sigma0</span><span class="op">[</span><span class="fl">2</span>, <span class="fl">1</span><span class="op">]</span>,</span>
+<span>  sigma0_3_1 <span class="op">=</span> <span class="va">sigma0</span><span class="op">[</span><span class="fl">3</span>, <span class="fl">1</span><span class="op">]</span>,</span>
+<span>  sigma0_4_1 <span class="op">=</span> <span class="va">sigma0</span><span class="op">[</span><span class="fl">4</span>, <span class="fl">1</span><span class="op">]</span>,</span>
+<span>  sigma0_2_2 <span class="op">=</span> <span class="va">sigma0</span><span class="op">[</span><span class="fl">2</span>, <span class="fl">2</span><span class="op">]</span>,</span>
+<span>  sigma0_3_2 <span class="op">=</span> <span class="va">sigma0</span><span class="op">[</span><span class="fl">3</span>, <span class="fl">2</span><span class="op">]</span>,</span>
+<span>  sigma0_4_2 <span class="op">=</span> <span class="va">sigma0</span><span class="op">[</span><span class="fl">4</span>, <span class="fl">2</span><span class="op">]</span>,</span>
+<span>  sigma0_3_3 <span class="op">=</span> <span class="va">sigma0</span><span class="op">[</span><span class="fl">3</span>, <span class="fl">3</span><span class="op">]</span>,</span>
+<span>  sigma0_4_3 <span class="op">=</span> <span class="va">sigma0</span><span class="op">[</span><span class="fl">4</span>, <span class="fl">3</span><span class="op">]</span>,</span>
+<span>  sigma0_4_4 <span class="op">=</span> <span class="va">sigma0</span><span class="op">[</span><span class="fl">4</span>, <span class="fl">4</span><span class="op">]</span>,</span>
+<span>  sigma0_5_5 <span class="op">=</span> <span class="va">sigma0</span><span class="op">[</span><span class="fl">5</span>, <span class="fl">5</span><span class="op">]</span>,</span>
+<span>  sigma0_6_5 <span class="op">=</span> <span class="va">sigma0</span><span class="op">[</span><span class="fl">6</span>, <span class="fl">5</span><span class="op">]</span>,</span>
+<span>  sigma0_6_6 <span class="op">=</span> <span class="va">sigma0</span><span class="op">[</span><span class="fl">6</span>, <span class="fl">6</span><span class="op">]</span>,</span>
+<span>  beta_5_5 <span class="op">=</span> <span class="va">beta</span><span class="op">[</span><span class="fl">5</span>, <span class="fl">5</span><span class="op">]</span>,</span>
+<span>  beta_5_6 <span class="op">=</span> <span class="va">beta</span><span class="op">[</span><span class="fl">5</span>, <span class="fl">6</span><span class="op">]</span>,</span>
+<span>  beta_6_5 <span class="op">=</span> <span class="va">beta</span><span class="op">[</span><span class="fl">6</span>, <span class="fl">5</span><span class="op">]</span>,</span>
+<span>  beta_6_6 <span class="op">=</span> <span class="va">beta</span><span class="op">[</span><span class="fl">6</span>, <span class="fl">6</span><span class="op">]</span>,</span>
+<span>  psi_5_5 <span class="op">=</span> <span class="va">psi</span><span class="op">[</span><span class="fl">5</span>, <span class="fl">5</span><span class="op">]</span>,</span>
+<span>  psi_6_5 <span class="op">=</span> <span class="va">psi</span><span class="op">[</span><span class="fl">6</span>, <span class="fl">5</span><span class="op">]</span>,</span>
+<span>  psi_6_6 <span class="op">=</span> <span class="va">psi</span><span class="op">[</span><span class="fl">6</span>, <span class="fl">6</span><span class="op">]</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<div class="section level3">
+<h3 id="dynr-1">dynr<a class="anchor" aria-label="anchor" href="#dynr-1"></a>
+</h3>
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">dynr_est</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">results</span><span class="op">)</span></span>
+<span><span class="va">dynr_se</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/diag.html" class="external-link">diag</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/vcov.html" class="external-link">vcov</a></span><span class="op">(</span><span class="va">results</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span></span>
+<span>  x <span class="op">=</span> <span class="fu">EstimatesTable</span><span class="op">(</span></span>
+<span>    population <span class="op">=</span> <span class="va">population</span>,</span>
+<span>    estimate <span class="op">=</span> <span class="va">dynr_est</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">population</span><span class="op">)</span><span class="op">]</span>,</span>
+<span>    se <span class="op">=</span> <span class="va">dynr_se</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">population</span><span class="op">)</span><span class="op">]</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  digits <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>  caption <span class="op">=</span> <span class="st">"Population values and dynr estimates (one simulated data set)"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<table class="table">
+<caption>Population values and dynr estimates (one simulated data
+set)</caption>
+<thead><tr class="header">
+<th align="left">Parameter</th>
+<th align="right">Population</th>
+<th align="right">Estimate</th>
+<th align="right">SE</th>
+<th align="right">Bias</th>
+<th align="right">2.5%</th>
+<th align="right">97.5%</th>
+<th align="left">Covers</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">mu0_1_1</td>
+<td align="right">2.000</td>
+<td align="right">1.990</td>
+<td align="right">0.017</td>
+<td align="right">-0.010</td>
+<td align="right">1.957</td>
+<td align="right">2.023</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">mu0_2_1</td>
+<td align="right">1.000</td>
+<td align="right">0.989</td>
+<td align="right">0.016</td>
+<td align="right">-0.011</td>
+<td align="right">0.957</td>
+<td align="right">1.021</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="left">mu0_3_1</td>
+<td align="right">0.500</td>
+<td align="right">0.499</td>
+<td align="right">0.006</td>
+<td align="right">-0.001</td>
+<td align="right">0.488</td>
+<td align="right">0.510</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">mu0_4_1</td>
+<td align="right">0.300</td>
+<td align="right">0.299</td>
+<td align="right">0.006</td>
+<td align="right">-0.001</td>
+<td align="right">0.288</td>
+<td align="right">0.310</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="left">sigma0_1_1</td>
+<td align="right">1.000</td>
+<td align="right">1.014</td>
+<td align="right">0.042</td>
+<td align="right">0.014</td>
+<td align="right">0.932</td>
+<td align="right">1.097</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">sigma0_2_1</td>
+<td align="right">0.400</td>
+<td align="right">0.369</td>
+<td align="right">0.032</td>
+<td align="right">-0.031</td>
+<td align="right">0.306</td>
+<td align="right">0.433</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="left">sigma0_3_1</td>
+<td align="right">0.100</td>
+<td align="right">0.088</td>
+<td align="right">0.010</td>
+<td align="right">-0.012</td>
+<td align="right">0.069</td>
+<td align="right">0.107</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">sigma0_4_1</td>
+<td align="right">0.050</td>
+<td align="right">0.053</td>
+<td align="right">0.009</td>
+<td align="right">0.003</td>
+<td align="right">0.036</td>
+<td align="right">0.070</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="left">sigma0_2_2</td>
+<td align="right">1.000</td>
+<td align="right">0.965</td>
+<td align="right">0.038</td>
+<td align="right">-0.035</td>
+<td align="right">0.890</td>
+<td align="right">1.040</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">sigma0_3_2</td>
+<td align="right">0.050</td>
+<td align="right">0.044</td>
+<td align="right">0.009</td>
+<td align="right">-0.006</td>
+<td align="right">0.028</td>
+<td align="right">0.061</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="left">sigma0_4_2</td>
+<td align="right">0.100</td>
+<td align="right">0.095</td>
+<td align="right">0.009</td>
+<td align="right">-0.005</td>
+<td align="right">0.077</td>
+<td align="right">0.113</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">sigma0_3_3</td>
+<td align="right">0.100</td>
+<td align="right">0.101</td>
+<td align="right">0.004</td>
+<td align="right">0.001</td>
+<td align="right">0.093</td>
+<td align="right">0.109</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="left">sigma0_4_3</td>
+<td align="right">0.030</td>
+<td align="right">0.030</td>
+<td align="right">0.003</td>
+<td align="right">0.000</td>
+<td align="right">0.024</td>
+<td align="right">0.036</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">sigma0_4_4</td>
+<td align="right">0.100</td>
+<td align="right">0.099</td>
+<td align="right">0.004</td>
+<td align="right">-0.001</td>
+<td align="right">0.092</td>
+<td align="right">0.107</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="left">sigma0_5_5</td>
+<td align="right">0.498</td>
+<td align="right">0.499</td>
+<td align="right">0.035</td>
+<td align="right">0.001</td>
+<td align="right">0.431</td>
+<td align="right">0.567</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">sigma0_6_5</td>
+<td align="right">0.166</td>
+<td align="right">0.179</td>
+<td align="right">0.027</td>
+<td align="right">0.013</td>
+<td align="right">0.126</td>
+<td align="right">0.232</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="left">sigma0_6_6</td>
+<td align="right">0.468</td>
+<td align="right">0.471</td>
+<td align="right">0.031</td>
+<td align="right">0.003</td>
+<td align="right">0.410</td>
+<td align="right">0.533</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">beta_5_5</td>
+<td align="right">0.400</td>
+<td align="right">0.384</td>
+<td align="right">0.021</td>
+<td align="right">-0.016</td>
+<td align="right">0.343</td>
+<td align="right">0.426</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="left">beta_5_6</td>
+<td align="right">0.100</td>
+<td align="right">0.095</td>
+<td align="right">0.015</td>
+<td align="right">-0.005</td>
+<td align="right">0.065</td>
+<td align="right">0.125</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">beta_6_5</td>
+<td align="right">0.150</td>
+<td align="right">0.153</td>
+<td align="right">0.016</td>
+<td align="right">0.003</td>
+<td align="right">0.121</td>
+<td align="right">0.185</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="left">beta_6_6</td>
+<td align="right">0.300</td>
+<td align="right">0.328</td>
+<td align="right">0.019</td>
+<td align="right">0.028</td>
+<td align="right">0.290</td>
+<td align="right">0.366</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">psi_5_5</td>
+<td align="right">0.400</td>
+<td align="right">0.390</td>
+<td align="right">0.008</td>
+<td align="right">-0.010</td>
+<td align="right">0.374</td>
+<td align="right">0.407</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="left">psi_6_5</td>
+<td align="right">0.100</td>
+<td align="right">0.097</td>
+<td align="right">0.006</td>
+<td align="right">-0.003</td>
+<td align="right">0.085</td>
+<td align="right">0.109</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">psi_6_6</td>
+<td align="right">0.400</td>
+<td align="right">0.401</td>
+<td align="right">0.008</td>
+<td align="right">0.001</td>
+<td align="right">0.386</td>
+<td align="right">0.417</td>
+<td align="left">TRUE</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section level3">
+<h3 id="openmx-state-space-model-1">OpenMx: State Space Model<a class="anchor" aria-label="anchor" href="#openmx-state-space-model-1"></a>
+</h3>
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">mx_ssm_est</span> <span class="op">&lt;-</span> <span class="fu">OpenMx</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/OpenMx/man/omxGetParameters.html" class="external-link">omxGetParameters</a></span><span class="op">(</span><span class="va">fit_mx_ssm</span><span class="op">)</span></span>
+<span><span class="va">mx_ssm_se</span> <span class="op">&lt;-</span> <span class="va">fit_mx_ssm</span><span class="op">$</span><span class="va">output</span><span class="op">$</span><span class="va">standardErrors</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span></span>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span></span>
+<span>  x <span class="op">=</span> <span class="fu">EstimatesTable</span><span class="op">(</span></span>
+<span>    population <span class="op">=</span> <span class="va">population</span>,</span>
+<span>    estimate <span class="op">=</span> <span class="va">mx_ssm_est</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">population</span><span class="op">)</span><span class="op">]</span>,</span>
+<span>    se <span class="op">=</span> <span class="va">mx_ssm_se</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">population</span><span class="op">)</span><span class="op">]</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  digits <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>  caption <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span></span>
+<span>    <span class="st">"Population values and OpenMx state space estimates"</span>,</span>
+<span>    <span class="st">"(one simulated data set)"</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<table class="table">
+<caption>Population values and OpenMx state space estimates (one
+simulated data set)</caption>
+<thead><tr class="header">
+<th align="left">Parameter</th>
+<th align="right">Population</th>
+<th align="right">Estimate</th>
+<th align="right">SE</th>
+<th align="right">Bias</th>
+<th align="right">2.5%</th>
+<th align="right">97.5%</th>
+<th align="left">Covers</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">mu0_1_1</td>
+<td align="right">2.000</td>
+<td align="right">1.990</td>
+<td align="right">0.017</td>
+<td align="right">-0.010</td>
+<td align="right">1.957</td>
+<td align="right">2.024</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">mu0_2_1</td>
+<td align="right">1.000</td>
+<td align="right">0.989</td>
+<td align="right">0.016</td>
+<td align="right">-0.011</td>
+<td align="right">0.957</td>
+<td align="right">1.022</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="left">mu0_3_1</td>
+<td align="right">0.500</td>
+<td align="right">0.499</td>
+<td align="right">0.006</td>
+<td align="right">-0.001</td>
+<td align="right">0.488</td>
+<td align="right">0.510</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">mu0_4_1</td>
+<td align="right">0.300</td>
+<td align="right">0.299</td>
+<td align="right">0.006</td>
+<td align="right">-0.001</td>
+<td align="right">0.288</td>
+<td align="right">0.310</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="left">sigma0_1_1</td>
+<td align="right">1.000</td>
+<td align="right">1.013</td>
+<td align="right">0.042</td>
+<td align="right">0.013</td>
+<td align="right">0.930</td>
+<td align="right">1.096</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">sigma0_2_1</td>
+<td align="right">0.400</td>
+<td align="right">0.368</td>
+<td align="right">0.033</td>
+<td align="right">-0.032</td>
+<td align="right">0.304</td>
+<td align="right">0.432</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="left">sigma0_3_1</td>
+<td align="right">0.100</td>
+<td align="right">0.088</td>
+<td align="right">0.010</td>
+<td align="right">-0.012</td>
+<td align="right">0.069</td>
+<td align="right">0.107</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">sigma0_4_1</td>
+<td align="right">0.050</td>
+<td align="right">0.054</td>
+<td align="right">0.009</td>
+<td align="right">0.004</td>
+<td align="right">0.037</td>
+<td align="right">0.070</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="left">sigma0_2_2</td>
+<td align="right">1.000</td>
+<td align="right">0.963</td>
+<td align="right">0.039</td>
+<td align="right">-0.037</td>
+<td align="right">0.887</td>
+<td align="right">1.040</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">sigma0_3_2</td>
+<td align="right">0.050</td>
+<td align="right">0.045</td>
+<td align="right">0.009</td>
+<td align="right">-0.005</td>
+<td align="right">0.028</td>
+<td align="right">0.061</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="left">sigma0_4_2</td>
+<td align="right">0.100</td>
+<td align="right">0.095</td>
+<td align="right">0.009</td>
+<td align="right">-0.005</td>
+<td align="right">0.078</td>
+<td align="right">0.113</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">sigma0_3_3</td>
+<td align="right">0.100</td>
+<td align="right">0.101</td>
+<td align="right">0.004</td>
+<td align="right">0.001</td>
+<td align="right">0.093</td>
+<td align="right">0.109</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="left">sigma0_4_3</td>
+<td align="right">0.030</td>
+<td align="right">0.030</td>
+<td align="right">0.003</td>
+<td align="right">0.000</td>
+<td align="right">0.024</td>
+<td align="right">0.036</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">sigma0_4_4</td>
+<td align="right">0.100</td>
+<td align="right">0.099</td>
+<td align="right">0.004</td>
+<td align="right">-0.001</td>
+<td align="right">0.092</td>
+<td align="right">0.107</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="left">sigma0_5_5</td>
+<td align="right">0.498</td>
+<td align="right">0.501</td>
+<td align="right">0.035</td>
+<td align="right">0.003</td>
+<td align="right">0.432</td>
+<td align="right">0.569</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">sigma0_6_5</td>
+<td align="right">0.166</td>
+<td align="right">0.181</td>
+<td align="right">0.027</td>
+<td align="right">0.014</td>
+<td align="right">0.127</td>
+<td align="right">0.234</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="left">sigma0_6_6</td>
+<td align="right">0.468</td>
+<td align="right">0.473</td>
+<td align="right">0.032</td>
+<td align="right">0.005</td>
+<td align="right">0.411</td>
+<td align="right">0.535</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">beta_5_5</td>
+<td align="right">0.400</td>
+<td align="right">0.385</td>
+<td align="right">0.021</td>
+<td align="right">-0.015</td>
+<td align="right">0.344</td>
+<td align="right">0.426</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="left">beta_5_6</td>
+<td align="right">0.100</td>
+<td align="right">0.095</td>
+<td align="right">0.015</td>
+<td align="right">-0.005</td>
+<td align="right">0.065</td>
+<td align="right">0.126</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">beta_6_5</td>
+<td align="right">0.150</td>
+<td align="right">0.154</td>
+<td align="right">0.016</td>
+<td align="right">0.004</td>
+<td align="right">0.122</td>
+<td align="right">0.185</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="left">beta_6_6</td>
+<td align="right">0.300</td>
+<td align="right">0.328</td>
+<td align="right">0.019</td>
+<td align="right">0.028</td>
+<td align="right">0.290</td>
+<td align="right">0.367</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">psi_5_5</td>
+<td align="right">0.400</td>
+<td align="right">0.391</td>
+<td align="right">0.008</td>
+<td align="right">-0.009</td>
+<td align="right">0.375</td>
+<td align="right">0.407</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="left">psi_6_5</td>
+<td align="right">0.100</td>
+<td align="right">0.097</td>
+<td align="right">0.006</td>
+<td align="right">-0.003</td>
+<td align="right">0.086</td>
+<td align="right">0.109</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">psi_6_6</td>
+<td align="right">0.400</td>
+<td align="right">0.402</td>
+<td align="right">0.008</td>
+<td align="right">0.002</td>
+<td align="right">0.386</td>
+<td align="right">0.417</td>
+<td align="left">TRUE</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section level3">
+<h3 id="lavaan-structural-equation-model-1">lavaan: Structural Equation Model<a class="anchor" aria-label="anchor" href="#lavaan-structural-equation-model-1"></a>
+</h3>
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">pe</span> <span class="op">&lt;-</span> <span class="fu">lavaan</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/parameterEstimates.html" class="external-link">parameterEstimates</a></span><span class="op">(</span><span class="va">fit_lavaan</span><span class="op">)</span></span>
+<span><span class="co"># a label shared by several paths is one parameter</span></span>
+<span><span class="va">pe</span> <span class="op">&lt;-</span> <span class="va">pe</span><span class="op">[</span><span class="va">pe</span><span class="op">$</span><span class="va">label</span> <span class="op">!=</span> <span class="st">""</span> <span class="op">&amp;</span> <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/duplicated.html" class="external-link">duplicated</a></span><span class="op">(</span><span class="va">pe</span><span class="op">$</span><span class="va">label</span><span class="op">)</span>, <span class="op">]</span></span>
+<span><span class="va">lavaan_est</span> <span class="op">&lt;-</span> <span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/setNames.html" class="external-link">setNames</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">pe</span><span class="op">$</span><span class="va">est</span>, nm <span class="op">=</span> <span class="va">pe</span><span class="op">$</span><span class="va">label</span><span class="op">)</span></span>
+<span><span class="va">lavaan_se</span> <span class="op">&lt;-</span> <span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/setNames.html" class="external-link">setNames</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">pe</span><span class="op">$</span><span class="va">se</span>, nm <span class="op">=</span> <span class="va">pe</span><span class="op">$</span><span class="va">label</span><span class="op">)</span></span>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span></span>
+<span>  x <span class="op">=</span> <span class="fu">EstimatesTable</span><span class="op">(</span></span>
+<span>    population <span class="op">=</span> <span class="va">population</span>,</span>
+<span>    estimate <span class="op">=</span> <span class="va">lavaan_est</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">population</span><span class="op">)</span><span class="op">]</span>,</span>
+<span>    se <span class="op">=</span> <span class="va">lavaan_se</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">population</span><span class="op">)</span><span class="op">]</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  digits <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>  caption <span class="op">=</span> <span class="st">"Population values and lavaan estimates (one simulated data set)"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<table class="table">
+<caption>Population values and lavaan estimates (one simulated data
+set)</caption>
+<thead><tr class="header">
+<th align="left">Parameter</th>
+<th align="right">Population</th>
+<th align="right">Estimate</th>
+<th align="right">SE</th>
+<th align="right">Bias</th>
+<th align="right">2.5%</th>
+<th align="right">97.5%</th>
+<th align="left">Covers</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">mu0_1_1</td>
+<td align="right">2.000</td>
+<td align="right">1.990</td>
+<td align="right">0.017</td>
+<td align="right">-0.010</td>
+<td align="right">1.957</td>
+<td align="right">2.024</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">mu0_2_1</td>
+<td align="right">1.000</td>
+<td align="right">0.989</td>
+<td align="right">0.016</td>
+<td align="right">-0.011</td>
+<td align="right">0.957</td>
+<td align="right">1.022</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="left">mu0_3_1</td>
+<td align="right">0.500</td>
+<td align="right">0.499</td>
+<td align="right">0.006</td>
+<td align="right">-0.001</td>
+<td align="right">0.488</td>
+<td align="right">0.510</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">mu0_4_1</td>
+<td align="right">0.300</td>
+<td align="right">0.299</td>
+<td align="right">0.006</td>
+<td align="right">-0.001</td>
+<td align="right">0.288</td>
+<td align="right">0.310</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="left">sigma0_1_1</td>
+<td align="right">1.000</td>
+<td align="right">1.013</td>
+<td align="right">0.043</td>
+<td align="right">0.013</td>
+<td align="right">0.928</td>
+<td align="right">1.098</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">sigma0_2_1</td>
+<td align="right">0.400</td>
+<td align="right">0.368</td>
+<td align="right">0.033</td>
+<td align="right">-0.032</td>
+<td align="right">0.303</td>
+<td align="right">0.433</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="left">sigma0_3_1</td>
+<td align="right">0.100</td>
+<td align="right">0.088</td>
+<td align="right">0.010</td>
+<td align="right">-0.012</td>
+<td align="right">0.069</td>
+<td align="right">0.108</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">sigma0_4_1</td>
+<td align="right">0.050</td>
+<td align="right">0.054</td>
+<td align="right">0.009</td>
+<td align="right">0.004</td>
+<td align="right">0.037</td>
+<td align="right">0.071</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="left">sigma0_2_2</td>
+<td align="right">1.000</td>
+<td align="right">0.963</td>
+<td align="right">0.039</td>
+<td align="right">-0.037</td>
+<td align="right">0.886</td>
+<td align="right">1.041</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">sigma0_3_2</td>
+<td align="right">0.050</td>
+<td align="right">0.045</td>
+<td align="right">0.009</td>
+<td align="right">-0.005</td>
+<td align="right">0.028</td>
+<td align="right">0.062</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="left">sigma0_4_2</td>
+<td align="right">0.100</td>
+<td align="right">0.095</td>
+<td align="right">0.009</td>
+<td align="right">-0.005</td>
+<td align="right">0.077</td>
+<td align="right">0.114</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">sigma0_3_3</td>
+<td align="right">0.100</td>
+<td align="right">0.101</td>
+<td align="right">0.004</td>
+<td align="right">0.001</td>
+<td align="right">0.093</td>
+<td align="right">0.109</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="left">sigma0_4_3</td>
+<td align="right">0.030</td>
+<td align="right">0.030</td>
+<td align="right">0.003</td>
+<td align="right">0.000</td>
+<td align="right">0.024</td>
+<td align="right">0.036</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">sigma0_4_4</td>
+<td align="right">0.100</td>
+<td align="right">0.099</td>
+<td align="right">0.004</td>
+<td align="right">-0.001</td>
+<td align="right">0.091</td>
+<td align="right">0.107</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="left">sigma0_5_5</td>
+<td align="right">0.498</td>
+<td align="right">0.501</td>
+<td align="right">0.036</td>
+<td align="right">0.003</td>
+<td align="right">0.430</td>
+<td align="right">0.571</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">sigma0_6_5</td>
+<td align="right">0.166</td>
+<td align="right">0.181</td>
+<td align="right">0.028</td>
+<td align="right">0.014</td>
+<td align="right">0.125</td>
+<td align="right">0.236</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="left">sigma0_6_6</td>
+<td align="right">0.468</td>
+<td align="right">0.473</td>
+<td align="right">0.032</td>
+<td align="right">0.005</td>
+<td align="right">0.410</td>
+<td align="right">0.536</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">beta_5_5</td>
+<td align="right">0.400</td>
+<td align="right">0.385</td>
+<td align="right">0.021</td>
+<td align="right">-0.015</td>
+<td align="right">0.344</td>
+<td align="right">0.426</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="left">beta_5_6</td>
+<td align="right">0.100</td>
+<td align="right">0.095</td>
+<td align="right">0.015</td>
+<td align="right">-0.005</td>
+<td align="right">0.065</td>
+<td align="right">0.126</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">beta_6_5</td>
+<td align="right">0.150</td>
+<td align="right">0.154</td>
+<td align="right">0.016</td>
+<td align="right">0.004</td>
+<td align="right">0.122</td>
+<td align="right">0.185</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="left">beta_6_6</td>
+<td align="right">0.300</td>
+<td align="right">0.328</td>
+<td align="right">0.019</td>
+<td align="right">0.028</td>
+<td align="right">0.290</td>
+<td align="right">0.367</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">psi_5_5</td>
+<td align="right">0.400</td>
+<td align="right">0.391</td>
+<td align="right">0.008</td>
+<td align="right">-0.009</td>
+<td align="right">0.375</td>
+<td align="right">0.407</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="left">psi_6_5</td>
+<td align="right">0.100</td>
+<td align="right">0.097</td>
+<td align="right">0.006</td>
+<td align="right">-0.003</td>
+<td align="right">0.086</td>
+<td align="right">0.109</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">psi_6_6</td>
+<td align="right">0.400</td>
+<td align="right">0.402</td>
+<td align="right">0.008</td>
+<td align="right">0.002</td>
+<td align="right">0.386</td>
+<td align="right">0.417</td>
+<td align="left">TRUE</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section level3">
+<h3 id="openmx-structural-equation-model-1">OpenMx: Structural Equation Model<a class="anchor" aria-label="anchor" href="#openmx-structural-equation-model-1"></a>
+</h3>
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">mx_sem_est</span> <span class="op">&lt;-</span> <span class="fu">OpenMx</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/OpenMx/man/omxGetParameters.html" class="external-link">omxGetParameters</a></span><span class="op">(</span><span class="va">fit_mx_sem</span><span class="op">)</span></span>
+<span><span class="va">mx_sem_se</span> <span class="op">&lt;-</span> <span class="va">fit_mx_sem</span><span class="op">$</span><span class="va">output</span><span class="op">$</span><span class="va">standardErrors</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span></span>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span></span>
+<span>  x <span class="op">=</span> <span class="fu">EstimatesTable</span><span class="op">(</span></span>
+<span>    population <span class="op">=</span> <span class="va">population</span>,</span>
+<span>    estimate <span class="op">=</span> <span class="va">mx_sem_est</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">population</span><span class="op">)</span><span class="op">]</span>,</span>
+<span>    se <span class="op">=</span> <span class="va">mx_sem_se</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">population</span><span class="op">)</span><span class="op">]</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  digits <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>  caption <span class="op">=</span> <span class="st">"Population values and OpenMx SEM estimates (one simulated data set)"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<table class="table">
+<caption>Population values and OpenMx SEM estimates (one simulated data
+set)</caption>
+<thead><tr class="header">
+<th align="left">Parameter</th>
+<th align="right">Population</th>
+<th align="right">Estimate</th>
+<th align="right">SE</th>
+<th align="right">Bias</th>
+<th align="right">2.5%</th>
+<th align="right">97.5%</th>
+<th align="left">Covers</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">mu0_1_1</td>
+<td align="right">2.000</td>
+<td align="right">1.990</td>
+<td align="right">0.017</td>
+<td align="right">-0.010</td>
+<td align="right">1.957</td>
+<td align="right">2.024</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">mu0_2_1</td>
+<td align="right">1.000</td>
+<td align="right">0.989</td>
+<td align="right">0.016</td>
+<td align="right">-0.011</td>
+<td align="right">0.957</td>
+<td align="right">1.022</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="left">mu0_3_1</td>
+<td align="right">0.500</td>
+<td align="right">0.499</td>
+<td align="right">0.006</td>
+<td align="right">-0.001</td>
+<td align="right">0.488</td>
+<td align="right">0.510</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">mu0_4_1</td>
+<td align="right">0.300</td>
+<td align="right">0.299</td>
+<td align="right">0.006</td>
+<td align="right">-0.001</td>
+<td align="right">0.288</td>
+<td align="right">0.310</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="left">sigma0_1_1</td>
+<td align="right">1.000</td>
+<td align="right">1.013</td>
+<td align="right">0.043</td>
+<td align="right">0.013</td>
+<td align="right">0.929</td>
+<td align="right">1.097</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">sigma0_2_1</td>
+<td align="right">0.400</td>
+<td align="right">0.368</td>
+<td align="right">0.033</td>
+<td align="right">-0.032</td>
+<td align="right">0.303</td>
+<td align="right">0.432</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="left">sigma0_3_1</td>
+<td align="right">0.100</td>
+<td align="right">0.088</td>
+<td align="right">0.010</td>
+<td align="right">-0.012</td>
+<td align="right">0.069</td>
+<td align="right">0.108</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">sigma0_4_1</td>
+<td align="right">0.050</td>
+<td align="right">0.054</td>
+<td align="right">0.009</td>
+<td align="right">0.004</td>
+<td align="right">0.037</td>
+<td align="right">0.071</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="left">sigma0_2_2</td>
+<td align="right">1.000</td>
+<td align="right">0.963</td>
+<td align="right">0.039</td>
+<td align="right">-0.037</td>
+<td align="right">0.887</td>
+<td align="right">1.040</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">sigma0_3_2</td>
+<td align="right">0.050</td>
+<td align="right">0.045</td>
+<td align="right">0.009</td>
+<td align="right">-0.005</td>
+<td align="right">0.028</td>
+<td align="right">0.062</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="left">sigma0_4_2</td>
+<td align="right">0.100</td>
+<td align="right">0.095</td>
+<td align="right">0.009</td>
+<td align="right">-0.005</td>
+<td align="right">0.078</td>
+<td align="right">0.113</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">sigma0_3_3</td>
+<td align="right">0.100</td>
+<td align="right">0.101</td>
+<td align="right">0.004</td>
+<td align="right">0.001</td>
+<td align="right">0.093</td>
+<td align="right">0.109</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="left">sigma0_4_3</td>
+<td align="right">0.030</td>
+<td align="right">0.030</td>
+<td align="right">0.003</td>
+<td align="right">0.000</td>
+<td align="right">0.024</td>
+<td align="right">0.036</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">sigma0_4_4</td>
+<td align="right">0.100</td>
+<td align="right">0.099</td>
+<td align="right">0.004</td>
+<td align="right">-0.001</td>
+<td align="right">0.092</td>
+<td align="right">0.107</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="left">sigma0_5_5</td>
+<td align="right">0.498</td>
+<td align="right">0.501</td>
+<td align="right">0.035</td>
+<td align="right">0.003</td>
+<td align="right">0.431</td>
+<td align="right">0.570</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">sigma0_6_5</td>
+<td align="right">0.166</td>
+<td align="right">0.181</td>
+<td align="right">0.028</td>
+<td align="right">0.014</td>
+<td align="right">0.126</td>
+<td align="right">0.235</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="left">sigma0_6_6</td>
+<td align="right">0.468</td>
+<td align="right">0.473</td>
+<td align="right">0.032</td>
+<td align="right">0.005</td>
+<td align="right">0.411</td>
+<td align="right">0.535</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">beta_5_5</td>
+<td align="right">0.400</td>
+<td align="right">0.385</td>
+<td align="right">0.021</td>
+<td align="right">-0.015</td>
+<td align="right">0.344</td>
+<td align="right">0.427</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="left">beta_5_6</td>
+<td align="right">0.100</td>
+<td align="right">0.095</td>
+<td align="right">0.015</td>
+<td align="right">-0.005</td>
+<td align="right">0.065</td>
+<td align="right">0.126</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">beta_6_5</td>
+<td align="right">0.150</td>
+<td align="right">0.154</td>
+<td align="right">0.016</td>
+<td align="right">0.004</td>
+<td align="right">0.122</td>
+<td align="right">0.186</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="left">beta_6_6</td>
+<td align="right">0.300</td>
+<td align="right">0.328</td>
+<td align="right">0.020</td>
+<td align="right">0.028</td>
+<td align="right">0.290</td>
+<td align="right">0.367</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">psi_5_5</td>
+<td align="right">0.400</td>
+<td align="right">0.391</td>
+<td align="right">0.008</td>
+<td align="right">-0.009</td>
+<td align="right">0.375</td>
+<td align="right">0.407</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="left">psi_6_5</td>
+<td align="right">0.100</td>
+<td align="right">0.097</td>
+<td align="right">0.006</td>
+<td align="right">-0.003</td>
+<td align="right">0.086</td>
+<td align="right">0.109</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">psi_6_6</td>
+<td align="right">0.400</td>
+<td align="right">0.402</td>
+<td align="right">0.008</td>
+<td align="right">0.002</td>
+<td align="right">0.386</td>
+<td align="right">0.417</td>
+<td align="left">TRUE</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section level3">
+<h3 id="all-methods">All Methods<a class="anchor" aria-label="anchor" href="#all-methods"></a>
+</h3>
+<p>The estimates of every method side by side. The methods maximize the
+same likelihood, so their estimates should agree closely.</p>
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span></span>
+<span>  x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>    Parameter <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">population</span><span class="op">)</span>,</span>
+<span>    Population <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unname.html" class="external-link">unname</a></span><span class="op">(</span><span class="va">population</span><span class="op">)</span>,</span>
+<span>    `dynr` <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unname.html" class="external-link">unname</a></span><span class="op">(</span><span class="va">dynr_est</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">population</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>,</span>
+<span>    `OpenMx (SSM)` <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unname.html" class="external-link">unname</a></span><span class="op">(</span><span class="va">mx_ssm_est</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">population</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>,</span>
+<span>    `lavaan` <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unname.html" class="external-link">unname</a></span><span class="op">(</span><span class="va">lavaan_est</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">population</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>,</span>
+<span>    `OpenMx (SEM)` <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unname.html" class="external-link">unname</a></span><span class="op">(</span><span class="va">mx_sem_est</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">population</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>,</span>
+<span>    check.names <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  digits <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>  caption <span class="op">=</span> <span class="st">"Population values and the estimates of every method"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<table class="table">
+<caption>Population values and the estimates of every method</caption>
+<thead><tr class="header">
+<th align="left">Parameter</th>
+<th align="right">Population</th>
+<th align="right">dynr</th>
+<th align="right">OpenMx (SSM)</th>
+<th align="right">lavaan</th>
+<th align="right">OpenMx (SEM)</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">mu0_1_1</td>
+<td align="right">2.000</td>
+<td align="right">1.990</td>
+<td align="right">1.990</td>
+<td align="right">1.990</td>
+<td align="right">1.990</td>
+</tr>
+<tr class="even">
+<td align="left">mu0_2_1</td>
+<td align="right">1.000</td>
+<td align="right">0.989</td>
+<td align="right">0.989</td>
+<td align="right">0.989</td>
+<td align="right">0.989</td>
+</tr>
+<tr class="odd">
+<td align="left">mu0_3_1</td>
+<td align="right">0.500</td>
+<td align="right">0.499</td>
+<td align="right">0.499</td>
+<td align="right">0.499</td>
+<td align="right">0.499</td>
+</tr>
+<tr class="even">
+<td align="left">mu0_4_1</td>
+<td align="right">0.300</td>
+<td align="right">0.299</td>
+<td align="right">0.299</td>
+<td align="right">0.299</td>
+<td align="right">0.299</td>
+</tr>
+<tr class="odd">
+<td align="left">sigma0_1_1</td>
+<td align="right">1.000</td>
+<td align="right">1.014</td>
+<td align="right">1.013</td>
+<td align="right">1.013</td>
+<td align="right">1.013</td>
+</tr>
+<tr class="even">
+<td align="left">sigma0_2_1</td>
+<td align="right">0.400</td>
+<td align="right">0.369</td>
+<td align="right">0.368</td>
+<td align="right">0.368</td>
+<td align="right">0.368</td>
+</tr>
+<tr class="odd">
+<td align="left">sigma0_3_1</td>
+<td align="right">0.100</td>
+<td align="right">0.088</td>
+<td align="right">0.088</td>
+<td align="right">0.088</td>
+<td align="right">0.088</td>
+</tr>
+<tr class="even">
+<td align="left">sigma0_4_1</td>
+<td align="right">0.050</td>
+<td align="right">0.053</td>
+<td align="right">0.054</td>
+<td align="right">0.054</td>
+<td align="right">0.054</td>
+</tr>
+<tr class="odd">
+<td align="left">sigma0_2_2</td>
+<td align="right">1.000</td>
+<td align="right">0.965</td>
+<td align="right">0.963</td>
+<td align="right">0.963</td>
+<td align="right">0.963</td>
+</tr>
+<tr class="even">
+<td align="left">sigma0_3_2</td>
+<td align="right">0.050</td>
+<td align="right">0.044</td>
+<td align="right">0.045</td>
+<td align="right">0.045</td>
+<td align="right">0.045</td>
+</tr>
+<tr class="odd">
+<td align="left">sigma0_4_2</td>
+<td align="right">0.100</td>
+<td align="right">0.095</td>
+<td align="right">0.095</td>
+<td align="right">0.095</td>
+<td align="right">0.095</td>
+</tr>
+<tr class="even">
+<td align="left">sigma0_3_3</td>
+<td align="right">0.100</td>
+<td align="right">0.101</td>
+<td align="right">0.101</td>
+<td align="right">0.101</td>
+<td align="right">0.101</td>
+</tr>
+<tr class="odd">
+<td align="left">sigma0_4_3</td>
+<td align="right">0.030</td>
+<td align="right">0.030</td>
+<td align="right">0.030</td>
+<td align="right">0.030</td>
+<td align="right">0.030</td>
+</tr>
+<tr class="even">
+<td align="left">sigma0_4_4</td>
+<td align="right">0.100</td>
+<td align="right">0.099</td>
+<td align="right">0.099</td>
+<td align="right">0.099</td>
+<td align="right">0.099</td>
+</tr>
+<tr class="odd">
+<td align="left">sigma0_5_5</td>
+<td align="right">0.498</td>
+<td align="right">0.499</td>
+<td align="right">0.501</td>
+<td align="right">0.501</td>
+<td align="right">0.501</td>
+</tr>
+<tr class="even">
+<td align="left">sigma0_6_5</td>
+<td align="right">0.166</td>
+<td align="right">0.179</td>
+<td align="right">0.181</td>
+<td align="right">0.181</td>
+<td align="right">0.181</td>
+</tr>
+<tr class="odd">
+<td align="left">sigma0_6_6</td>
+<td align="right">0.468</td>
+<td align="right">0.471</td>
+<td align="right">0.473</td>
+<td align="right">0.473</td>
+<td align="right">0.473</td>
+</tr>
+<tr class="even">
+<td align="left">beta_5_5</td>
+<td align="right">0.400</td>
+<td align="right">0.384</td>
+<td align="right">0.385</td>
+<td align="right">0.385</td>
+<td align="right">0.385</td>
+</tr>
+<tr class="odd">
+<td align="left">beta_5_6</td>
+<td align="right">0.100</td>
+<td align="right">0.095</td>
+<td align="right">0.095</td>
+<td align="right">0.095</td>
+<td align="right">0.095</td>
+</tr>
+<tr class="even">
+<td align="left">beta_6_5</td>
+<td align="right">0.150</td>
+<td align="right">0.153</td>
+<td align="right">0.154</td>
+<td align="right">0.154</td>
+<td align="right">0.154</td>
+</tr>
+<tr class="odd">
+<td align="left">beta_6_6</td>
+<td align="right">0.300</td>
+<td align="right">0.328</td>
+<td align="right">0.328</td>
+<td align="right">0.328</td>
+<td align="right">0.328</td>
+</tr>
+<tr class="even">
+<td align="left">psi_5_5</td>
+<td align="right">0.400</td>
+<td align="right">0.390</td>
+<td align="right">0.391</td>
+<td align="right">0.391</td>
+<td align="right">0.391</td>
+</tr>
+<tr class="odd">
+<td align="left">psi_6_5</td>
+<td align="right">0.100</td>
+<td align="right">0.097</td>
+<td align="right">0.097</td>
+<td align="right">0.097</td>
+<td align="right">0.097</td>
+</tr>
+<tr class="even">
+<td align="left">psi_6_6</td>
+<td align="right">0.400</td>
+<td align="right">0.401</td>
+<td align="right">0.402</td>
+<td align="right">0.402</td>
+<td align="right">0.402</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section level2 unnumbered">
+<h2 class="unnumbered" id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</h2>
 <div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0" line-spacing="2">
 <div id="ref-Chow-Ho-Hamaker-etal-2010" class="csl-entry">
 Chow, S.-M., Ho, M. R., Hamaker, E. L., &amp; Dolan, C. V. (2010).
@@ -234,6 +2818,18 @@ within-person components of individual change over time: A latent curve
 model with structured residuals. <em>Journal of Consulting and Clinical
 Psychology</em>, <em>82</em>(5), 879–894. <a href="https://doi.org/10.1037/a0035297" class="external-link">https://doi.org/10.1037/a0035297</a>
 </div>
+<div id="ref-Hunter-2018" class="csl-entry">
+Hunter, M. D. (2018). State space modeling in an open source, modular,
+structural equation modeling environment. <em>Structural Equation
+Modeling: A Multidisciplinary Journal</em>, <em>25</em>(2), 307–324. <a href="https://doi.org/10.1080/10705511.2017.1369354" class="external-link">https://doi.org/10.1080/10705511.2017.1369354</a>
+</div>
+<div id="ref-Neale-Hunter-Pritikin-etal-2016" class="csl-entry">
+Neale, M. C., Hunter, M. D., Pritikin, J. N., Zahery, M., Brick, T. R.,
+Kirkpatrick, R. M., Estabrook, R., Bates, T. C., Maes, H. H., &amp;
+Boker, S. M. (2016). <span>OpenMx</span> 2.0: Extended structural
+equation and statistical modeling. <em>Psychometrika</em>,
+<em>81</em>(2), 535–549. <a href="https://doi.org/10.1007/s11336-014-9435-8" class="external-link">https://doi.org/10.1007/s11336-014-9435-8</a>
+</div>
 <div id="ref-Ou-Hunter-Chow-2019" class="csl-entry">
 Ou, L., Hunter, M. D., &amp; Chow, S.-M. (2019). What’s for <span class="nocase">dynr</span>: A package for linear and nonlinear dynamic
 modeling in <span>R</span>. <em>The R Journal</em>, <em>11</em>(1), 91.
@@ -247,7 +2843,6 @@ statistical computing</em>. R Foundation for Statistical Computing. <a href="htt
 Rosseel, Y. (2012). <span class="nocase">lavaan</span>: An
 <span>R</span> package for structural equation modeling. <em>Journal of
 Statistical Software</em>, <em>48</em>(2). <a href="https://doi.org/10.18637/jss.v048.i02" class="external-link">https://doi.org/10.18637/jss.v048.i02</a>
-</div>
 </div>
 </div>
 </div>
